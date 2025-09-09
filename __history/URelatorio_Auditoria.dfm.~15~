@@ -1,0 +1,3580 @@
+object FrmRelatorio_Auditoria: TFrmRelatorio_Auditoria
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Auditoria do sistema'
+  ClientHeight = 124
+  ClientWidth = 431
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Scaled = False
+  Visible = True
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 6
+    Top = 9
+    Width = 36
+    Height = 13
+    Caption = 'Per'#237'odo'
+  end
+  object Bevel1: TBevel
+    Left = 6
+    Top = 71
+    Width = 356
+    Height = 7
+    Shape = bsTopLine
+  end
+  object Label4: TLabel
+    Left = 6
+    Top = 39
+    Width = 32
+    Height = 13
+    Caption = 'Tabela'
+  end
+  object Dtmen: TDateEdit
+    Left = 53
+    Top = 6
+    Width = 90
+    Height = 21
+    CheckOnExit = True
+    DialogTitle = 'Selecione a Data'
+    NumGlyphs = 2
+    TabOrder = 0
+    OnEnter = DtmenEnter
+    OnKeyDown = DtmenKeyDown
+  end
+  object Dtmai: TDateEdit
+    Left = 242
+    Top = 6
+    Width = 90
+    Height = 21
+    CheckOnExit = True
+    DialogTitle = 'Selecione a Data'
+    NumGlyphs = 2
+    TabOrder = 1
+    OnEnter = DtmenEnter
+    OnKeyDown = DtmenKeyDown
+  end
+  object Orcamentos: TQuickRep
+    Left = -573
+    Top = 1000
+    Width = 1217
+    Height = 892
+    DataSet = QRel
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Style = []
+    Functions.Strings = (
+      'PAGENUMBER'
+      'COLUMNNUMBER'
+      'REPORTTITLE')
+    Functions.DATA = (
+      '0'
+      '0'
+      #39#39)
+    Options = [FirstPageHeader, LastPageFooter]
+    Page.Columns = 1
+    Page.Orientation = poLandscape
+    Page.PaperSize = A4Extra
+    Page.Continuous = False
+    Page.Values = (
+      127.000000000000000000
+      2360.000000000000000000
+      127.000000000000000000
+      3220.000000000000000000
+      150.000000000000000000
+      127.000000000000000000
+      0.000000000000000000)
+    PrinterSettings.Copies = 1
+    PrinterSettings.OutputBin = Auto
+    PrinterSettings.Duplex = False
+    PrinterSettings.FirstPage = 0
+    PrinterSettings.LastPage = 0
+    PrinterSettings.UseStandardprinter = False
+    PrinterSettings.UseCustomBinCode = False
+    PrinterSettings.CustomBinCode = 0
+    PrinterSettings.ExtendedDuplex = 0
+    PrinterSettings.UseCustomPaperCode = False
+    PrinterSettings.CustomPaperCode = 0
+    PrinterSettings.PrintMetaFile = False
+    PrinterSettings.PrintQuality = 0
+    PrinterSettings.Collate = 0
+    PrinterSettings.ColorOption = 0
+    PrintIfEmpty = True
+    ReportTitle = 'Relat'#243'rio de Or'#231'amentos'
+    SnapToGrid = True
+    Units = MM
+    Zoom = 100
+    PrevFormStyle = fsNormal
+    PreviewInitialState = wsMaximized
+    PreviewWidth = 500
+    PreviewHeight = 500
+    PrevInitialZoom = qrZoomToWidth
+    PreviewDefaultSaveType = stQRP
+    PreviewLeft = 0
+    PreviewTop = 0
+    object ColumnHeaderBand1: TQRBand
+      Left = 57
+      Top = 48
+      Width = 1112
+      Height = 94
+      AlignToBottom = False
+      TransparentBand = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Style = []
+      ForceNewColumn = False
+      ForceNewPage = False
+      ParentFont = False
+      Size.Values = (
+        248.708333333333300000
+        2942.166666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbColumnHeader
+      object QRDBText3: TQRDBText
+        Left = 0
+        Top = 1
+        Width = 36
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          2.645833333333333000
+          95.250000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = True
+        Color = clWhite
+        DataSet = FrmPrincipal.QEmpresa
+        DataField = 'RAZAO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRSysData1: TQRSysData
+        Left = 0
+        Top = 16
+        Width = 162
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          42.333333333333330000
+          428.625000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = True
+        Color = clWhite
+        Data = qrsDateTime
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Text = 'Data/Hora : '
+        Transparent = False
+        ExportAs = exptText
+        FontSize = 8
+      end
+      object QRLabel3: TQRLabel
+        Left = 496
+        Top = 31
+        Width = 120
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1312.333333333333000000
+          82.020833333333330000
+          317.500000000000000000)
+        XLColumn = 0
+        Alignment = taCenter
+        AlignToBand = True
+        Caption = '*** AUDITORIA ***'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel1: TQRLabel
+        Left = 0
+        Top = 48
+        Width = 57
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          127.000000000000000000
+          150.812500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = True
+        Caption = 'Per'#237'odo:'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRShape1: TQRShape
+        Left = 0
+        Top = 68
+        Width = 993
+        Height = 2
+        Size.Values = (
+          5.291666666666667000
+          0.000000000000000000
+          179.916666666666700000
+          2627.312500000000000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRShape3: TQRShape
+        Left = 1
+        Top = 88
+        Width = 992
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          2.645833333333333000
+          232.833333333333300000
+          2624.666666666667000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object Cabec: TQRLabel
+        Left = 715
+        Top = 1
+        Width = 253
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1891.770833333333000000
+          2.645833333333333000
+          669.395833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        BiDiMode = bdLeftToRight
+        ParentBiDiMode = False
+        Caption = 'Sistema de Adm. de Empresas - Eficaz'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRSysData2: TQRSysData
+        Left = 854
+        Top = 16
+        Width = 113
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          2259.541666666667000000
+          42.333333333333330000
+          298.979166666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        Color = clWhite
+        Data = qrsPageNumber
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Text = 'P'#225'gina : '
+        Transparent = False
+        ExportAs = exptText
+        FontSize = 8
+      end
+      object QRLabel10: TQRLabel
+        Left = 395
+        Top = 73
+        Width = 64
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1045.104166666667000000
+          193.145833333333300000
+          169.333333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Data/Hora'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel4: TQRLabel
+        Left = 600
+        Top = 73
+        Width = 78
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1587.500000000000000000
+          193.145833333333300000
+          206.375000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Funcionario'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel9: TQRLabel
+        Left = 78
+        Top = 73
+        Width = 49
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          206.375000000000000000
+          193.145833333333300000
+          129.645833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Tabela'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel2: TQRLabel
+        Left = 3
+        Top = 73
+        Width = 49
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          7.937500000000000000
+          193.145833333333300000
+          129.645833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'ID'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel5: TQRLabel
+        Left = 210
+        Top = 73
+        Width = 29
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          555.625000000000000000
+          193.145833333333300000
+          76.729166666666670000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Tipo'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+    end
+    object QRBand1: TQRBand
+      Left = 57
+      Top = 142
+      Width = 1112
+      Height = 188
+      AlignToBottom = False
+      BeforePrint = QRBand1BeforePrint
+      TransparentBand = False
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Arial'
+      Font.Style = []
+      ForceNewColumn = False
+      ForceNewPage = False
+      ParentFont = False
+      Size.Values = (
+        497.416666666666700000
+        2942.166666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbDetail
+      object QRDBText13: TQRDBText
+        Left = 395
+        Top = 4
+        Width = 49
+        Height = 17
+        Size.Values = (
+          44.979166666666670000
+          1045.104166666667000000
+          10.583333333333330000
+          129.645833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'DT_LOG'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+      object QRDBText15: TQRDBText
+        Left = 600
+        Top = 4
+        Width = 393
+        Height = 17
+        Size.Values = (
+          44.979166666666670000
+          1587.500000000000000000
+          10.583333333333330000
+          1039.812500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'nome'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+      object QRDBText1: TQRDBText
+        Left = 78
+        Top = 4
+        Width = 126
+        Height = 17
+        Size.Values = (
+          44.979166666666670000
+          206.375000000000000000
+          10.583333333333330000
+          333.375000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'tabela'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+      object QRShape2: TQRShape
+        Left = 0
+        Top = 178
+        Width = 993
+        Height = 2
+        Size.Values = (
+          5.291666666666667000
+          0.000000000000000000
+          470.958333333333300000
+          2627.312500000000000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRMemo1: TQRMemo
+        Left = 0
+        Top = 37
+        Width = 990
+        Height = 135
+        Size.Values = (
+          357.187500000000000000
+          0.000000000000000000
+          97.895833333333330000
+          2619.375000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = True
+        AutoSize = False
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+      object QRDBText2: TQRDBText
+        Left = 3
+        Top = 4
+        Width = 59
+        Height = 17
+        Size.Values = (
+          44.979166666666670000
+          7.937500000000000000
+          10.583333333333330000
+          156.104166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'id'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+      object QRDBText4: TQRDBText
+        Left = 210
+        Top = 4
+        Width = 33
+        Height = 17
+        Size.Values = (
+          44.979166666666670000
+          555.625000000000000000
+          10.583333333333330000
+          87.312500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'TIPO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -13
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+    end
+  end
+  object btnRetorna: TBitBtn
+    Left = 281
+    Top = 84
+    Width = 75
+    Height = 25
+    Caption = '&Retorna'
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+      F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+      000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+      337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+      45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+      3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+      F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+      000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+      337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+      4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+      7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+      333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+      0000}
+    NumGlyphs = 2
+    TabOrder = 4
+    OnClick = btnRetornaClick
+  end
+  object btnExecuta: TBitBtn
+    Left = 150
+    Top = 84
+    Width = 75
+    Height = 25
+    Caption = '&OK'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333333333333333333333330000333333333333333333333333F33333333333
+      00003333344333333333333333377F3333333333000033334224333333333333
+      337337F3333333330000333422224333333333333733337F3333333300003342
+      222224333333333373333337F3333333000034222A22224333333337F337F333
+      7F33333300003222A3A2224333333337F3737F337F33333300003A2A333A2224
+      33333337F73337F337F33333000033A33333A222433333337333337F337F3333
+      0000333333333A222433333333333337F337F33300003333333333A222433333
+      333333337F337F33000033333333333A222433333333333337F337F300003333
+      33333333A222433333333333337F337F00003333333333333A22433333333333
+      3337F37F000033333333333333A223333333333333337F730000333333333333
+      333A333333333333333337330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+    ParentFont = False
+    TabOrder = 3
+    OnClick = btnExecutaClick
+  end
+  object Tipo_Ordem: TComboBox
+    Left = 53
+    Top = 39
+    Width = 172
+    Height = 21
+    TabOrder = 2
+    Text = 'PRODUTO'
+    OnKeyDown = Tipo_OrdemKeyDown
+    Items.Strings = (
+      'PRODUTO'
+      'CLIENTE'
+      'FORNECEDOR'
+      'RECEBIMENTO'
+      'PAGAMENTO'
+      'COMPRA'
+      'VENDA'
+      'LIBERACAO')
+  end
+  object Button1: TButton
+    Left = -2
+    Top = 164
+    Width = 128
+    Height = 57
+    Caption = 'Salva Relat'#243'rio no Bd'
+    TabOrder = 6
+    OnClick = Button1Click
+  end
+  object HR_MEM: TsTimePicker
+    Left = 148
+    Top = 6
+    Width = 69
+    Height = 21
+    TabOrder = 7
+    Text = '00:00:00'
+  end
+  object HR_MAI: TsTimePicker
+    Left = 338
+    Top = 6
+    Width = 69
+    Height = 21
+    TabOrder = 8
+    Text = '23:59:29'
+    Date = 0.999641203703703700
+    Value = 0.999641203703703700
+    Time = 0.999641203703703700
+  end
+  object QRel: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      
+        'SELECT AUDITORIA.*, FUNCIONARIOS.NOME,PRODUTOS.DESCRICAO ,CLIENT' +
+        'ES.NOME CLIENTE,FORNECEDORES.NOME FORNECEDOR '
+      'FROM AUDITORIA'
+      
+        'LEFT JOIN FUNCIONARIOS ON FUNCIONARIOS.FUNCIONARIO_ID = AUDITORI' +
+        'A.FUNCIONARIO_ID'
+      'LEFT JOIN PRODUTOS ON PRODUTOS.PRODUTO_ID = AUDITORIA.TABELA_ID'
+      'LEFT JOIN CLIENTES ON CLIENTES.CLIENTE_ID = AUDITORIA.TABELA_ID'
+      
+        'LEFT JOIN FORNECEDORES ON FORNECEDORES.FORNECEDOR_ID = AUDITORIA' +
+        '.TABELA_ID'
+      'WHERE CAST(DT_LOG AS DATE) BETWEEN :DT_INICIAL AND :DT_FINAL'
+      'AND CAST(HR_LOG AS TIME) BETWEEN :HR_INICIAL AND :HR_FINAL'
+      'AND TABELA = :TABELA ORDER BY FUNCIONARIO_ID')
+    Left = 8
+    Top = 82
+    ParamData = <
+      item
+        Name = 'DT_INICIAL'
+        DataType = ftDateTime
+        ParamType = ptInput
+        Value = 45200d
+      end
+      item
+        Name = 'DT_FINAL'
+        DataType = ftDateTime
+        ParamType = ptInput
+        Value = 45229d
+      end
+      item
+        Name = 'HR_INICIAL'
+        DataType = ftTime
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'HR_FINAL'
+        DataType = ftTime
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'TABELA'
+        DataType = ftString
+        ParamType = ptInput
+        Value = 'FORNECEDORES'
+      end>
+  end
+  object Relatorio_Principal: TfrxReport
+    Version = '6.9.3'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 44552.376017997700000000
+    ReportOptions.LastChange = 45209.367034652780000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      ''
+      'procedure SysMemo1OnBeforePrint(Sender: TfrxComponent);'
+      'begin'
+      ''
+      'end;'
+      ''
+      'procedure Memo11OnBeforePrint(Sender: TfrxComponent);'
+      'begin'
+      '  '
+      'end;'
+      ''
+      'begin'
+      ''
+      'end.')
+    OnLoadTemplate = Relatorio_PrincipalLoadTemplate
+    Left = 304
+    Top = 152
+    Datasets = <
+      item
+        DataSet = FastReportQRel
+        DataSetName = 'QAuditoria'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page2: TfrxReportPage
+      Orientation = poLandscape
+      PaperWidth = 295.000000000000000000
+      PaperHeight = 220.000000000000000000
+      PaperSize = 256
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      Frame.Typ = []
+      MirrorMode = []
+      object b_cabecalho: TfrxPageHeader
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 113.031540000000000000
+        Top = 18.897650000000000000
+        Width = 1039.370750000000000000
+        object b_cabecalho_data_hora_atual: TfrxMemoView
+          AllowVectorExport = True
+          Left = 871.291900000000000000
+          Top = 41.677180000000000000
+          Width = 167.000000000000000000
+          Height = 15.000000000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Data / Hora - [Now]')
+          ParentFont = False
+        end
+        object b_cabecalho_contador_pagina: TfrxMemoView
+          AllowVectorExport = True
+          Left = 12.511440000000000000
+          Top = 79.133890000000000000
+          Width = 118.000000000000000000
+          Height = 15.000000000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          Memo.UTF8W = (
+            'P'#225'gina - [Page#]')
+          ParentFont = False
+        end
+        object Memo1: TfrxMemoView
+          AllowVectorExport = True
+          Left = 408.315090000000000000
+          Top = 75.236240000000000000
+          Width = 238.543290000000000000
+          Height = 33.897650000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -24
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          Memo.UTF8W = (
+            'Relat'#243'rio Auditoria')
+          ParentFont = False
+        end
+        object b_cabecalho_periodo_analisado: TfrxMemoView
+          AllowVectorExport = True
+          Left = 895.748610000000000000
+          Top = 22.543290000000000000
+          Width = 139.559060000000000000
+          Height = 15.000000000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Per'#237'odo Analisado:')
+          ParentFont = False
+        end
+        object b_cabecalho_razao_social: TfrxMemoView
+          AllowVectorExport = True
+          Left = 805.039890000000000000
+          Top = 0.220470000000000000
+          Width = 229.976500000000000000
+          Height = 18.779530000000000000
+          AutoWidth = True
+          DataSetName = 'QEmpresa'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          HAlign = haRight
+          Memo.UTF8W = (
+            'LUCIA RODRIGUES DA SILVA')
+          ParentFont = False
+        end
+        object b_cabecalho_logo: TfrxPictureView
+          Align = baCenter
+          AllowVectorExport = True
+          Left = 472.169760000000000000
+          Top = -2.220470000000000000
+          Width = 95.031230000000000000
+          Height = 67.401360000000000000
+          Frame.Typ = []
+          Picture.Data = {
+            0A54504E474F626A65637489504E470D0A1A0A0000000D49484452000001FB00
+            0001900806000000A9B8C94B00000A3769434350735247422049454336313936
+            362D322E310000789C9D96775453D91687CFBD37BD5092108A94D06B68520248
+            0DBD48912E2A3109104AC090002236445470445191A6083228E080A34391B122
+            8A850151B1EB041944D47170141B964964AD19DFBC79EFCD9BDF1FF77E6B9FBD
+            CFDD67EF7DD6BA0090FC8305C24C5809800CA15814E1E7C5888D8B676007010C
+            F000036C00E070B3B34216F8460299027CD88C6C9913F817BDBA0E20F9FB2AD3
+            3F8CC100FF9F94B95922310050988CE7F2F8D95C1917C9383D579C25B74FC998
+            B6344DCE304ACE22598232569373F22C5B7CF699650F39F332843C19CB73CEE2
+            65F0E4DC27E38D3912BE8C91601917E708F8B932BE26638374498640C66FE4B1
+            197C4E36002892DC2EE67353646C2D63922832822DE37900E048C95FF0D22F58
+            CCCF13CB0FC5CECC5A2E1224A78819265C53868D93138BE1CFCF4DE78BC5CC30
+            0E378D23E231D89919591CE1720066CFFC5914796D19B2223BD8383938306D2D
+            6DBE28D47F5DFC9B92F776965E847FEE19441FF8C3F6577E990D00B0A665B5D9
+            FA876D6915005DEB0150BBFD87CD602F008AB2BE750E7D711EBA7C5E52C4E22C
+            672BABDCDC5C4B019F6B292FE8EFFA9F0E7F435F7CCF52BEDDEFE56178F39338
+            927431435E376E667AA644C4C8CEE270F90CE69F87F81F07FE751E1611FC24BE
+            882F944544CBA64C204C96B55BC813880599428640F89F9AF80FC3FEA4D9B996
+            89DAF811D0965802A5211A407E1E00282A1120097B642BD0EF7D0BC64703F9CD
+            8BD199989DFBCF82FE7D57B84CFEC816247F8E63474432B81251CEEC9AFC5A02
+            342000454003EA401BE80313C004B6C011B8000FE0030241288804716031E082
+            1490014420171480B5A0189482AD6027A80675A0113483367018748163E03438
+            072E81CB6004DC0152300E9E8029F00ACC40108485C810155287742043C81CB2
+            8558901BE403054311501C940825434248021540EBA052A81CAA86EAA166E85B
+            E828741ABA000D43B7A0516812FA157A07233009A6C15AB0116C05B3604F3808
+            8E8417C1C9F032381F2E82B7C09570037C10EE844FC397E011580A3F81A71180
+            10113AA28B301116C24642917824091121AB9012A4026940DA901EA41FB98A48
+            91A7C85B1406454531504C940BCA1F1585E2A296A156A136A3AA5107509DA83E
+            D455D4286A0AF5114D466BA2CDD1CEE800742C3A199D8B2E4657A09BD01DE8B3
+            E811F438FA150683A1638C318E187F4C1C2615B302B319B31BD38E398519C68C
+            61A6B158AC3AD61CEB8A0DC572B0626C31B60A7B107B127B053B8E7D8323E274
+            70B6385F5C3C4E882BC455E05A702770577013B819BC12DE10EF8C0FC5F3F0CB
+            F165F8467C0F7E083F8E9F2128138C09AE8448422A612DA192D046384BB84B78
+            412412F5884EC470A280B88658493C443C4F1C25BE255148662436298124216D
+            21ED279D22DD22BD2093C946640F723C594CDE426E269F21DF27BF51A02A582A
+            0428F014562BD428742A5C5178A688573454F4545CAC98AF58A178447148F1A9
+            125EC94889ADC4515AA554A37454E986D2B43255D9463954394379B3728BF205
+            E547142CC588E243E1518A28FB286728635484AA4F6553B9D475D446EA59EA38
+            0D4333A605D05269A5B46F6883B429158A8A9D4AB44A9E4A8DCA7115291DA11B
+            D103E8E9F432FA61FA75FA3B552D554F55BEEA26D536D52BAAAFD5E6A879A8F1
+            D54AD4DAD546D4DEA933D47DD4D3D4B7A977A9DFD340699869846BE46AECD138
+            ABF1740E6D8ECB1CEE9C923987E7DCD68435CD3423345768EED31CD09CD6D2D6
+            F2D3CAD2AAD23AA3F5549BAEEDA19DAABD43FB84F6A40E55C74D47A0B343E7A4
+            CE63860AC39391CEA864F431A6743575FD7525BAF5BA83BA337AC67A517A857A
+            ED7AF7F409FA2CFD24FD1DFABDFA53063A0621060506AD06B70DF1862CC314C3
+            5D86FD86AF8D8C8D628C361875193D3256330E30CE376E35BE6B423671375966
+            D26072CD1463CA324D33DD6D7AD90C36B3374B31AB311B3287CD1DCC05E6BBCD
+            872DD0164E16428B068B1B4C12D39399C36C658E5AD22D832D0B2DBB2C9F5919
+            58C55B6DB3EAB7FA686D6F9D6EDD687DC7866213685368D363F3ABAD992DD7B6
+            C6F6DA5CF25CDFB9ABE776CF7D6E676EC7B7DB6377D39E6A1F62BFC1BED7FE83
+            83A383C8A1CD61D2D1C031D1B1D6F1068BC60A636D669D77423B7939AD763AE6
+            F4D6D9C159EC7CD8F91717A64B9A4B8BCBA379C6F3F8F31AE78DB9EAB9725CEB
+            5DA56E0CB744B7BD6E52775D778E7B83FB030F7D0F9E4793C784A7A967AAE741
+            CF675ED65E22AF0EAFD76C67F64AF6296FC4DBCFBBC47BD087E213E553ED73DF
+            57CF37D9B7D577CACFDE6F85DF297FB47F90FF36FF1B015A01DC80E680A940C7
+            C095817D41A4A00541D5410F82CD8245C13D21704860C8F690BBF30DE70BE777
+            8582D080D0EDA1F7C28CC396857D1F8E090F0BAF097F1861135110D1BF80BA60
+            C9829605AF22BD22CB22EF44994449A27AA315A313A29BA35FC778C794C74863
+            AD6257C65E8AD38813C475C763E3A3E39BE2A717FA2CDCB9703CC13EA138E1FA
+            22E345798B2E2CD6589CBEF8F812C5259C254712D18931892D89EF39A19C06CE
+            F4D280A5B54BA7B86CEE2EEE139E076F076F92EFCA2FE74F24B92695273D4A76
+            4DDE9E3C99E29E5291F254C016540B9EA7FAA7D6A5BE4E0B4DDB9FF6293D26BD
+            3D0397919871544811A609FB32B533F33287B3CCB38AB3A4CB9C97ED5C36250A
+            12356543D98BB2BBC534D9CFD480C444B25E329AE3965393F326373AF7489E72
+            9E306F60B9D9F24DCB27F27DF3BF5E815AC15DD15BA05BB0B66074A5E7CAFA55
+            D0AAA5AB7A57EBAF2E5A3DBEC66FCD81B584B5696B7F28B42E2C2F7CB92E665D
+            4F9156D19AA2B1F57EEB5B8B158A45C53736B86CA8DB88DA28D838B869EEA6AA
+            4D1F4B7825174BAD4B2B4ADF6FE66EBEF895CD57955F7DDA92B465B0CCA16CCF
+            56CC56E1D6EBDBDCB71D28572ECF2F1FDB1EB2BD73076347C98E973B97ECBC50
+            615751B78BB04BB24B5A195CD95D6550B5B5EA7D754AF5488D574D7BAD66EDA6
+            DAD7BB79BBAFECF1D8D356A755575AF76EAF60EFCD7ABFFACE06A3868A7D987D
+            39FB1E364637F67FCDFABAB949A3A9B4E9C37EE17EE98188037DCD8ECDCD2D9A
+            2D65AD70ABA475F260C2C1CBDF787FD3DDC66CAB6FA7B7971E028724871E7F9B
+            F8EDF5C341877B8FB08EB47D67F85D6D07B5A3A413EA5CDE39D595D225ED8EEB
+            1E3E1A78B4B7C7A5A7E37BCBEFF71FD33D56735CE578D909C289A2139F4EE69F
+            9C3E9575EAE9E9E4D363BD4B7AEF9C893D73AD2FBC6FF06CD0D9F3E77CCF9DE9
+            F7EC3F79DEF5FCB10BCE178E5E645DECBAE470A973C07EA0E307FB1F3A061D06
+            3B871C87BA2F3B5DEE199E377CE28AFB95D357BDAF9EBB1670EDD2C8FC91E1EB
+            51D76FDE48B821BDC9BBF9E856FAADE7B7736ECFDC5973177DB7E49ED2BD8AFB
+            9AF71B7E34FDB15DEA203D3EEA3D3AF060C1833B63DCB1273F65FFF47EBCE821
+            F961C584CE44F323DB47C7267D272F3F5EF878FC49D69399A7C53F2BFF5CFBCC
+            E4D977BF78FC3230153B35FE5CF4FCD3AF9B5FA8BFD8FFD2EE65EF74D8F4FD57
+            19AF665E97BC517F73E02DEB6DFFBB98771333B9EFB1EF2B3F987EE8F918F4F1
+            EEA78C4F9F7E03F784F3FB8F70662A000000097048597300002E2300002E2301
+            78A53F7600003A8E4944415478DAEDDD099C1C55B9FEF1F754F7CC64232C61DF
+            51BCEC88B88010F64510080949488040160212F6B089B8040288B88081C845BD
+            821816E31F2E2A8808E215171011088B6C82C8BE06C83E33DD5DEFFF743749A7
+            2BDD33DDD3D5D3A7AA7E5F3E3353E7D4A9676AAA937AD24D326354550000C960
+            6ECDEC2026B5BBA8F9A41D6E2946D6B76F43ECF680D2A28F3EAAF876DB5F315E
+            256CC5965F783355F797C6CB332BED2F3FCEFFE84D7AC92DE5F5C65B29B3A7DC
+            6A5FF7AAE75B9E57FA3CB57EDD293B3FCCAE1F545821B2C8BE2DB06FCF89EA73
+            36FA0179FBF9BFE9986DBB6BFAFA7A60287B00883773B32DF8F6F424BB39D6BE
+            6D525329F734EEEB7135E79AC672FAFD7C9B99AB4BED1F03EEB6C53F479E79FC
+            377AC2CE19E903CA1E0062CAFC22BBBB7DF238C396C6FEF6AD5429CE971C655F
+            799DBE6CCBFF5BF2C6B3D7D5FB6C9FB2078098313F5BB6910C18F07D5B16634A
+            932B2F081E50E738AC1CCABE6FB9AACFDA67FAA7E9EEA9DF4B8D287B008811F3
+            0B7FAC2DCB1FDACD35CB7754D9EECB38AC1CCABEC15CBD56BA5F99AE7B6DD629
+            BDA0EC012006CC451779B2F5372E174FCEA9BCA0CA765FC661E550F68DE7AA3E
+            2AFEB24375F8A037A507943D00449CB9E8FEB46CB3E70D76F3E89A8AC3F992A3
+            ECEB3B4E5F926CE60BBA47FBBFA45A14650F00D1653CCFC8CF73F9A23FB63851
+            6D6195EDBE8CC3CAA1EC43CCD557C474EEA6BB0E7CBD6214650F00D165E6EAA5
+            F6A67F4169A2DAC22ADB7D19879543D9879CAB4F49D77B9FD7BDD659BC4A1465
+            0F00D164E6E646D8A7F6BF94956FFB947D044AB999B97AA3EE6A8E5D258AB207
+            80E831372C5D5F060C7CD2DEE0D72EDF51ED801ED6385772947D4339BE3F5E77
+            F3E696EDA2EC01207ACC5CBDC37E38B44FC5D1EA32EA3597B26F2C47DF900F3F
+            D8460F5A6BE18A5D943D00448BB9C59F2C9EB9AE3808EEAC76500F6B9C2B39CA
+            BEE11CD54BF5F3E66B2B7651F600101D664EE7A6D2DEF1A4DD1C5A9C082EA876
+            600F6B9C2B39CABEF11C5D204B166CA6FBADB1A0B08BB207806828FC33BB5B72
+            F7DACDFD4A93C145D50EEE618D732547D98793E39FA5BB7A57167651F600100D
+            E666FF144999D9E593C145D50EAEE39896971C651F4EAECED35DCCA78A9B943D
+            0038CFDCD4B5A5A4DAE7D91BFAE0F21DC185D502EA38A6E52547D987969BE9DE
+            4A87B73F4FD90380E3CCB85B53326AF4FD7673F7508AC3A532AA984BD98796AB
+            FE34DDD5BB96B20700C7995BFC736D017EBB3808EEEC655C69DEA532AA984BD9
+            8797ABB7E82EE668CA1E001C667E9ED94E24FD0FBB39A038115CD0CBB8D2BC53
+            65542997B20F2D57F571DDD5EC44D90380A3CC8F1F6D93D53EF5A0DDFC746932
+            B8A89771A57997CAA8622E651F5EAE2E95CFA78650F600E028738B5E686FD833
+            CA27838B7A19579A77AA8C2AE552F6A1E676BEBB1A650F000E32B764EDB3F9D4
+            83F686DD56BE23B8B09771A579D7CA68955CCA3ED4DCCEA51B50F600E01873C3
+            CB03A47DD3FCFFA7DFAE29C5E15A19AD924BD9879ADBDDB929650F008E3137EB
+            B7ED8DFADCE220B8B3CE71A579D7CA68955CCA3ED4DC258BD6A6EC01C021E6E6
+            ECEE6252F7DBCD547122B8A0CE71A579D7CA68955CCA3EBC5CCDC8ABB70DA4EC
+            01C011E6C6B7074B6ADD797673CBD26470519DE34AF34E9551A55CCA3EB45CD5
+            977457F331CA1E001C616ED6D9F6067D4AF96470519DE34AF32E9551C55CCA3E
+            BC5CFDB5EE620EA7EC01C001E6E6DC7E22DEBDF6065D7ECBA6EC2370BE2EE7FA
+            5FD35DBC4B297B00683173F3FB4345D6CCFF8CFA4DFBA5389C2AA34AB9947D78
+            B9D95D7597F443943D00B498B959AFB31F261707C19D0D8E2BCD3B5546957229
+            FB7072F575B97BE6A63A63864FD903400B999B73878A78779426820B1A1C579A
+            77A68CAAE552F6E1E4EA777417735E7193B20780963073160D93D490A7ECE6FA
+            A5C9E0A206C795E69D29A36AB9947DE3399A934CF727748F8E970ABB287B0068
+            0D73B3FEDC7E18573E195CD4E0B8D2BC136524947D5373F566DDD51CB3621765
+            0F00FDCFDCECDB92373F5F7547C8E34AF34E949150F64DCBD52EF1BBB7D3DD3A
+            5E5CB18BB20780FE656E58BABEB40DCCBF7C3F6CD59D218F2BCDB7BC8C7ACBA5
+            EC1BCA51BD483F6F2E2CDB45D90340FF3237E9AFED8DF9B0CA3B431E579A6F75
+            19F59A4BD9F73D47FF291FBEF8693D68CBAEB25D943D00F41F73933FD9BEBFAE
+            A5C5E17CC951F67DCBD1ACF8B9CFEB6EE97FAC1245D90340FF30733A3715AFE3
+            09BBB93A652F947DE8B97AB1EE6ABE51318AB20780E6339E67644EEE1EBBB97F
+            71A2DAC290C795E69D2F39CABEFEE3F43179EAB15DF4849D3315A3287B00683E
+            33C73F4D3C735569A2DAC290C795E69D2F39CABEBEE3B44B32D9CFEA9E6D4F4A
+            B528CA1E009ACBDC90D941D2E987ECE6C0D264B5C5218F2BCD3B5F72947D5DC7
+            A97F81EEE65D263DA0EC01A089CC8F17AF2D0307FFCDDE983F5EBEA3DA01218F
+            2BCD3B5F72947DEDC7E943F2FA6DBBEB983139E901650F004D62AE9FBF9AB4AD
+            75AFDDDCC5A9E270BEE428FBDA8ED3A5A2999D75B7F6E7A417943D003481B976
+            E19A3264B53BEDE66EC589E0826A07863CAE34EF7CC951F6B5ADF34FD3DDBCD9
+            5203CA1E004266E674FF9798B65FDACD6D4A93C145D50E0E795C69DEF992A3EC
+            7B5DA77A9BEC911AABBE5F538953F600102273837FAC7866B6BD310F2DDF115C
+            582D20E471A579E74B8EB2EF719DEAC3B2F49D7DF480F596488D287B000881B9
+            BE7B2B49B57DDFDE900F2A4E0417F432AE751D65EFE0F9F667AE3E2E9D8BF7D3
+            7D579B2F75A0EC01A001E6A7DDDB8A693B5B3C39CE0ED3A51DC185BD8CFB7A1C
+            65EFC0F9F657AEDE2FBA6894EE3EF403A913650F00753237746D6E0BFE105133
+            DEDE9077CF4F45AA389C3F57CA7E9579D51FC85BCF9CA563B6ED963E08B5ECCD
+            610BD79441833E2129B3A93DB3CD7B5CECF512E6892F6ADF6A5D5F4DAAD7CF53
+            52FC7C7E9F3EDF2A9FA74A40E5E9D2D75ACFF936B6CE2F5CE386BEC63E7C4EA9
+            F039C3FA9AABE756FEBCCDFA3515FC9CB5ADEFEBE729FF9C46EBBFBE7DFF7CCB
+            8FF325B7D2F54DF739A7F1F5A6CA635D8FF2F34FD9E2C97F239C356CB16F6CF3
+            B7B6DB9FB56F9B46BA389C3F57CABE34AFAFDB5FD2D374F7D41DD28086CADEEC
+            FBF200596FE3FCF7793EDCBE0DB76F5B55F8F36D3F5C0C1773AB04BB78BE91BB
+            B6E4369E6B227ADEE452F62E9E6F337275B19D9F25F3DFBF5C470C5B240DEA53
+            D99B719DF64FB56DA7D8CDA9F664D66ADDC5703997B227D7E55CCA3ED1B9CE9F
+            6B92CB5E9F17D5EB65D9E21FE98143DF9790D455F666DC425BEC83BF6A4F2C5F
+            F41DADBB1851C8A5ECC9753997B24F74AEF3E79AA4B2D777EC789E2DF83F8BE6
+            7EA37BB63D264D5073D99B71B911F6C30FED49ADDFFF17238AB9943DB92EE752
+            F689CE75FF5CF37FEFE2295179D4B6D4B3F6E36BE2E9023BD72539BBB7B7BF6F
+            D45F7F6FA42F9FDFCFFF7D295D5A78995E96BEA67BADFE61489FB547BD96BDD9
+            F7FEB4AC3DFC0A7B794F2B4E0417F432AE755DEC72297B725DCEA5EC139DEBE6
+            B966EDDBDDF619EE2D925DF23B1D59DFBF2347CF7A2C7BB3EFBB43649D356FB7
+            5BFB9726838B7A19F7F5B8C8E752F6E4BA9C4BD9273AD7AD735D669FB9FFD03E
+            69BF520F1DF08AA029AA96BD39E4FDA13268F5BBC42BFC1BD295760417F632EE
+            EB7191CFA5ECC9753997B24F74AE2BE72A72A3F89D5FD61103DF103455C5B22F
+            BC743F6CF73B6D617DC1995F1491CBA5ECC9753997B24F746EEBCFF51D517F8A
+            1E96FA8DA05F542EFBB1B959F64139BD3808EEAC73DCD7E3229F4BD993EB722E
+            659FE8DCD69EEBC392E93C42470D7C4DD06F56297B5BF45FB40F48FE6730171F
+            9628FD02762A97B227D7E55CCA3ED1B9AD3A5791DFC9827746EB84DA7F5A1BC2
+            5156F666D4FCD5A46D8DE7ECE606A5C9E011758EC3CA895C2E654FAECBB9947D
+            A2735B73AEF7CAFBAF8CD0899B750AFA5D79D98FCD5D661F9CF3CB57048FA873
+            1C564EE472297B725DCEA5EC139DDBFFE7FA84E8FBC3C3F8B6AFE89B15656F46
+            2F5957BC01FFB10FCEC0F215C123EA1C879513B95CCA9E5C977329FB44E7F6EF
+            B97E2899EE4FEB111DFF16B44CA9ECC7E666DA0F5F8FF42F60A772297B725DCE
+            A5EC139DDB9FE7EAEB717AB83747D05285B237DEAD29193DEA55C9FFBFFA28FF
+            02762A97B227D7E55CCA3ED1B9FD77AEBFD1C3CCA182962B96FDE8DCBEE2C97D
+            C599E08A06C761E5442E97B227D7E55CCA3ED1B9FD73AE1F4877E70E3A66E0EB
+            82962B96FDD8DC15767B7A7126B8A2C171583991CBA5ECC9753997B24F746EBF
+            9CAB4ED411DECF044E2896FD98DC23F641DAB938135CD1E038AC9CC8E552F6E4
+            BA9C4BD9273AB7F9E7FA6B1D610E1738C3C8F6FF6C97ADB75A2ACB7FB85F947F
+            013B954BD993EB722E659FE8DCE69EEBFB925BB6BD8E1AF4A6C01946C6746D6D
+            7BFE999566822B1A1B273697B227D7E55CCA3ED1B94D3D579DA023BC9B044EB1
+            659FFD82E47F86706926B8A2B1716273297B725DCEA5EC139DDBBC73FDA58E30
+            A304CE317244F758F1BC5FAC34135CD1D838B1B9943DB92EE752F689CE6DCEB9
+            CE97CCB2ED75CCA0B704CEB1CFECBB278978D7AF34135CD1D838B1B9943DB92E
+            E752F689CE6D46A6EA513AD2FBB9C049F967F6C7D867F637AE34135CD1D838B1
+            B9943DB92EE752F689CE0D3FF3363DDC8C1138CB967DF650F1E48E9566822B1A
+            1B273697B227D7E55CCA3ED1B9E166BE2BBA747B1D39F81D81B3F22FE37F4AC4
+            7B74A599E08AC6C689CDA5ECC9753997B24F746E9899AA47EA48EFFF099C6664
+            9F7786C8B0B516CAF28733CABF809DCAA5ECC9753997B24F746E7899BFD0C3CD
+            3881F3967FBBDC67EDF656C599E08A06C761E5442E97B227D7E55CCA3ED1B9E1
+            64BE239D4BB6D3F143DE13386FF9B7CBFDB17D30A71667822B1A1C879513B95C
+            CA9E5C977329FB44E78691E9FB63F488D46D824858FECC7EA4DDBEBD38135CD1
+            E038AC9CC8E552F6E4BA9C4BD9273AB7F1CC9FEB48739420328A65BFFB6B0365
+            C30DDEB0E33522FD0BD8A95CCA9E5C977329FB44E73696F996C8E2ED75E46AF3
+            05915128FBC2C6D8DC6CFBE19448FF02762A97B227D7E55CCA3ED1B98D64FAFE
+            283D22F54B41A4AC54F6DD9F28FC401CF3D14FBF5BB12278449DE3B07222974B
+            D993EB722E659FE8DCBE67DEA423CD0441E4AC28FBC2606CEEA7F6419D58BE22
+            78449DE3B07222974BD993EB722E659FE8DCBE65BE29D945DBEB98A1EF0B22A7
+            BCEC0FEFDA423AD24FD8CD21A5C9E011758EC3CA895C2E654FAECBB9947DA273
+            FB92E9FB23F488D41D82482A2BFBC2C491D993EDFB1F94268247D4390E2B2772
+            B9943DB92EE752F689CEAD3FF3673AD24C1444D6AA65EF79464677DF63CB6AFF
+            E244F0883AC77D3D2EF2B9943DB92EE752F689CEAD2FE375E95CB4831E35F403
+            4164AD52F685C9C33B37958EB627EDE6D048FD02762A97B227D7E55CCA3ED1B9
+            7565F887EAA8D46F049156B1EC0B3B8ECC4C15F17E1CA95FC04EE552F6E4BA9C
+            4BD9273AB7F68CEB7594992288BCEA655F7C39FFB7E2992F94EF082EEC65DCD7
+            E3229F4BD993EB722E659FE8DCDA325E93DC82ED75CC1A0B049157B5EC0B3B47
+            756E22ED8597F3572F4D0617F532EEEB7191CFA5ECC9753997B24F746EEF19B6
+            18FC2FEAA8D4DD8258E8B1EC0B0B8ECC4CB64FF3AF2B4D0417F432EEEB7191CF
+            A5ECC9753997B24F746EEF19FFA3A3CC0982D8E8B5EC0B8BC665EFB4EF0F290E
+            823B7B19D7BA2E76B9943DB92EE752F689CEEDE9189517A5EB839DF5E8B5160A
+            62A3C6B25FB691487BFEE5FC359DFE05EC542E654FAECBB9947DA273AB1F9311
+            CDEDADA3D30F0862A5A6B22F2C3C32739C18EF06A77F013B954BD993EB722E65
+            9FE8DC6AC7A89EA1A3BDAB04B15373D917168FCBFECA96D888F2C9E0A26A0787
+            3C763E97B227D7E55CCA3ED1B9958FB9528F30670962A9CEB25FBABE988E7FDA
+            CDB54A93C145D50E0E79EC7C2E654FAECBB9947DA273573D66968C494D57DFAF
+            BD10102975957DE1802333C788E7DD589A082EA87660C863E773297B725DCEA5
+            EC139D5BDAF645F4021DED5D2E88B5BACBBE70D0F8ECEDF6FDC8E220B8B3DA41
+            218F9DCFA5ECC9753997B24F746E71FB0D517F928E49DD2B88BDBE95FDC825EB
+            C980014FD9CDB59DFA05EC542E654FAECBB9947D82737DBB7D9D2C5D7CBE1EBB
+            DA7C4122F4A9EC0B071E99192F9E778B43BF801DCBA5ECC9753997B24F60AE6F
+            DFFF4AFCEC457A64DBE38244E973D9170E1E9FBDD596DAE8F2C96A8B431E3B9F
+            4BD993EB722E659FA0DCE74465AE68F7CF745CC78B82446AACEC472F5957DA0B
+            2FE7AF539AACB638E4B1F3B9943DB92EE73A5DF6BE145F6AAE2D470B6BFD3ACE
+            D7FFE873D47ABEE5EB7B3FCE2F9C9357C7FA9ECE27782E26702EA5F59DF6F32E
+            B09FF74DBBFD82F8FAB864337FD1633A5E10245E43655F08382A3356C4FB4569
+            A2DAC290C7CEE746B2ECFF6DEF9C0FD889E7247FB310FD505417D8FD998A9F53
+            B5FC26D526D569951B66356D5ACF7AFFA373A95531BBA3D6E5F9EC9AF3EB595B
+            67B65F6776CE2FBED52A6BD776D7B87E895DF76E1DD97FF475C68C7A1E230021
+            6AB8EC0B21E373736D211C591C545B14F2D8F9DCC894FD3CFB364724F3BF7A45
+            C77F0400103BE194FDE18BD7964103F32FE7AF17BD526E56AED3659F7FD07F2B
+            C6FFA65E91FEAB0000622D94B22F041D953BC27EB82D7AA5DCAC5C67CBFE1951
+            3D45BF9FFA3F0100244268655F081B9FBB593C39AAF2CE90C7CEE73A57F66A4B
+            FE7BF2E6735FD5B9DB760B002031C22DFBD18B8649C7A0FCCBF9EBAFBA33E4B1
+            F3B94E95FD625BF447EBACD41D0200489C50CBBE10383E37D23EBBBF7DD51D21
+            8F9DCF75A6ECDF95AC7F88CE4E3F2C0080440ABDEC0BA147E56EB465734CF964
+            70518363E7739D28FB0592CDEDADB3DBE6090020B19A53F6E316AE25A9C1F997
+            F337284D06173538763EB7E5659F11F50FD059E9FB050090684D29FB42F0F8DC
+            61E2C9AF4B13C1050D8E9DCF6D79D99FABDFF7BE2B0080C46B5AD917C28FCADD
+            604BE7B8E220B8B3C1715839F12CFBDFCBD5E903D5F79BF7E0020022A3B9657F
+            C48235A463C853B6883672B7949B95DBB2B2EF123FBBA35EDDFEBC0000204D2E
+            FBC227382A77B02DA2BBDC2DE566E5B6AAECF57B3A2B758E0000F091A6977DE1
+            931C9DFB892DA329E593C145758EC3CA8957D92F935CE7C774F6A0B70400808F
+            F44FD98FFB707549AFF6A4DDDCA434195C54E738AC9C3895BDEA4FF4AAD45401
+            006025FD52F6854F343EF70549C96F65795D3953CACDCA6D41D9FBFE5E7A75FA
+            4F0200C04AFAADEC0B9FECE8DC8F6C299D501C0477D639EEEB71F12DFBD7E5EA
+            F426FC0D7C004050FF96FD21EF0F9535567FC26E6EE64E29372BB7BFCB5EE7E8
+            ACD47102004040BF967DE1138ECFED2F29B9C79656796D51F68D9EEFF13ACBBB
+            4E000008E8F7B22F7CD2A373FF2D9E9C543E195CD4CBB8AFC7C5B6ECFD5D7456
+            FAEF020040406BCA7EDCBB43A46DADFCCBF95B9426838B7A19F7F5B8B896FDE2
+            456BEA75AB7F28000004B4A4EC0B9F78426E1FFBE13EE9EBDFCEAF755D32CABE
+            4BAFF20608000015B4ACEC0B9F7C42EE6AFBE1D4E220B8B39771ADEB9250F62A
+            EFE9D5DE3A02004005AD2DFB83DE1E2CC3D67EDC16D8C729FB06CE57E5755BF6
+            1B0B000015B4B4EC0B277074760FF1CC1F6D8979E53B820BAB05843C0E2DB75F
+            5FC69FAF57796B0B000015B4BCEC0B273121F77D5B6267944F0617553B38E471
+            68B9FD5AF6BE3CF5E70EFDC35E59010020C08DB23FFCCD413274DD7976F313A5
+            C9E0A26A07873C0E2DB79FFF367E36B3855ED3F11F010020C089B22F9CC8B1D9
+            DDEDFBFCF7752FBE9C4FD9D777BEAA87E8D5A9BB0400800067CABE7032C7E6BE
+            673F9C551C0477563B28E47168B9FD5CF6A217E955A90B05008000B7CA7EDC6B
+            03A57D83C7ECE656947D9DE72BF227BDCADB4B00000870AAEC0B27746C7657FB
+            FE2FB6D452E53BAA1D10F238B4DC7EFFDEF859E95ABA815E3BE43D01006025CE
+            957DE1A48ECD5D6ECBEBBCF2C96A8B431E8796DBEF659F779ACEF2660B00002B
+            71B3ECF77D79806CBCF1237673DBD264B5C5218F43CB6D41D9ABFC5366A777E0
+            67DA030056E664D9174E6C42F673E299BFDACD7471A2DAC290C7A1E5B6E499BD
+            A5237456EA0E0100E023CE967DE1E48ECD7DD396D8578A836A8B421E8796DBA2
+            B25799679FDDEFCCB37B00C0726E97FD212F74C8B02DFE6137B7A7ECEB385F5F
+            4ED5ABBD1F080000E278D9174E7042F6D3E299076D99B5555E10F238B4DC1696
+            BDC81291CC277556C78B0200483CE7CBBE7092C7E566DA32FB7AE59D218F43CB
+            6D69D9E7C77F92AB2EDE47FD19BE0000122D1A653FEEE97619B0D5C37673C755
+            77863C0E2DB7E5659F77817EDFBB4C0000891689B22F9CE884CC4E92F2FE6E37
+            CB5FCEA7EC7B5A97959C7E51AF4EDD2B0080C48A4CD9174EF6B8EC0C5BA21796
+            4F061735380E2DD789B2CFFB5034B7AFCE6A7B4C00008914ADB2FFECA36DB2ED
+            271FB29B9F2A4D061735380E2DD799B2CF7B4FC43F48BF9F7E4400008913A9B2
+            2F9CF031991D25EDE5FFFF7D7B7122B8A0C17158396E957D7EBC48448FD62B53
+            770A0020512257F685939E98FD9A7D7F717110DCD9E038AC1CF7CA3ECF17D5CB
+            E5CDE72ED4B9DB760B002011A259F6FBDE9F964D863F68373F43D9F7E9B879A2
+            FE29FAFDF403020088BD48967DE1C42766B617F1FE614BACA37C4770619DE3B0
+            72DC2EFBFC38FFC0DF2E92BB54AF687B540000B115D9B22F9CFC71D9F3C533E5
+            FF8E9CB2AF7F6CE42FE2CBCF4496FD5AAF1CFCB600006225DA659F7F397FD3E1
+            F99F8CF7B9D26470519DE3B072A255F6CBE5BFDBDE13A2FAA03DFFA7ECAF8EFF
+            D8EDF7C4F71788A73969968EC62322F579AB199090AFBF199FD7D85FBB26BB58
+            967DB048CFDC78598BBE32C059912EFBC21730B17B1B31A9FCCBD0C55BA50BE5
+            591847B2ECDD3F577243CA35113DEF9AC6EFD9B7E7A5F807D7FBA56BE97D7AEA
+            90770548B0C8977DE18B98943DD7BEFF767110DC59E7B8AFC751F6712A8B04E4
+            C6BAEC83F359FBFE6E11FF7A79ED925FEA0C7E5E0492271E653FEED6940C1CF5
+            67BBF979776E3C943DB92EE726AAEC57F6AC885E2A27A46F52DF8FFECD0FA851
+            2CCABEF0851CD7BD9578A9C7EC6FEC81E53B820B7B19F7F538CADEB59B3AB93D
+            8E135BF6CBC77F11C94ED3296D4F099000B129FBC21733297B962DD9EF954F06
+            17F532EEEB7194BDAB37757229FB6AE34EF175BA4EF5AE1520E6E255F6DE459E
+            1CF7B5FBED6FE6E1A5C9E0A25EC67D3D8EB277F9A64EEE2A63CA7EA5F18FE5EE
+            DBA6E9DC31CDFB1727408BC5AAEC0B5FD084EE4F485B6A9EDD1C549C082EE865
+            5CEB3ACA3E8A377572578C29FBC0F876C93E364E4FD83923400CC5AEEC0B5FD4
+            E4ECE9F6FDACE220B8B39771ADEB28FBA8DED4C9A5EC2B8F556E9657671ECBDF
+            D6471CC5B3EC8B2FE7FFC1FE26DE8BB2AF61ECEACD97DC26E652F615C72A97E8
+            14F37501622696655FF8C226777D5C24FDB8FD8D3CB87C477061B58046C7943D
+            B92EE752F655C6F659BD7FB04E4EDD23408CC4B6EC0B5FDCE4EC29B67467974F
+            0617553BB8D131654FAECBB9947D0FE3D745DFDF46270F5B24404CC4BBEC3DCF
+            C8A4EEDFDBAD7D4B93C145D50E6E744CD993EB722E65DFE358E50A9D6CCE1620
+            26625DF6852F704AD7E622E927ECE66AC589E0826A07363AA6ECC9753997B2EF
+            65DC2DD2B5A54E1AF0AA003110FBB22F7C9193B25F12CF14BF710665BFEA381A
+            375F7229FBFECEBD4A27993304888164947DF1E5FC7BECD6FE947D8571746EBE
+            E486964BD9D7305E281FBEBE3E3F3217719088B22F7CA1933A3715AFED49FB1B
+            7968F98E6A07343AA6ECC9753997B2AF69ECEB513AC5FBB900119798B22F7CB1
+            93325325E5FDB87CB2DAE246C7943DB92EE752F6358E7FA193CC3801222E5965
+            5F7C39FF2E5BC4079526AB2D6E744CD993EB722E655FD358E51D393EB53E3F0E
+            175197A8B22F7CC1C72EDB58DADBF33FD672F5E244B5858D8E297B725DCEA5EC
+            6B1E67335BE9D4F6E70588B0C4957DE18B3E3E3359C4BBAE38A8B6A8D131654F
+            AECBB9947DCD63F50FD7C9A95F0B1061892CFBC2173E257BA72DE44328FB2665
+            92EB782E655FFB58CFD689DE1502445872CBFEE8651BCAC0F6A7EC6FEC352B2F
+            68744CD993EB722E655FC7F8629D68BE21408425B6EC0B5FFC94CCB1E2793FAB
+            BCB3D131654FAECBB9947D1DE3EFDBB29F2E408425BAEC0B17606AF657F6FD88
+            5577343AA6ECC9753997B2AF23E74A9D64CE1220C228FB294BD717AF23FFB7F3
+            8795EF082EAC774CD993EB722E655FC7F812FBCC9E9F718F484B7CD9172EC294
+            CCD1E27937954F0617D53BA6ECC9753997B2AF7DACA7E844EF1A01228CB2FF88
+            999AFD5FFB7E546922B8A0DE31654FAECBB9947DED39FE213A297597001146D9
+            7FC41CB3643D193820FF72FEDAC589E0827AC7943DB92EE752F6358FB573239D
+            3CF00D01228CB25F89999A3952C49B5B1C0477D63BA6ECC9753997B2AF69ACF2
+            8A4E369B091071947D80999AFD857D3F96B277F45CC90D2997B2AF71FC239D64
+            BE2440C451F601E6F8C5EB881998FF663BEB96EF082EEC6D4CD993EB722E655F
+            D358FD2FE8E4D43D02441C655F81999A1B6D7FC3DF5A3E195CD4DB98B227D7E5
+            5CCABE86F16BF2DBDB36D7B9637202441C655F853921778BFD30BE34115CD0DB
+            98B227D7E55CCABEF7B19EAF93BCCB058801CABE0A3369D130691B94FFDBF9EB
+            1727820B7A1B53F6E4BA9C4BD9F7327E4F320BB6D413D65820400C50F63DB0CF
+            EE47DA0FB71707C19DBD8D297B725DCEA5EC7B1EEB19F659FD5502C40465DF0B
+            5BF873EC870994BD23E74A6E48B9947D0FE387E5B7B77D9EFF578F38A1EC7B61
+            4E58B896C8E027ED0D60C3F21DC185C131654FAECBB9947D957197E4B29FD6A9
+            6DFF14204628FB1A98E373874A4AEE289F0C2E0A8E297B725DCEA5EC2B8E7DFD
+            B21EEF7D5B8098A1EC6B644EC8FDD4DE14269626820B8263CA9E5C977329FB0A
+            E307E4EEDBF6E4E57BC411655F233365C11A921E92FFDBF91B1527820B8263CA
+            9E5C977329FBC078A964323BE989EDFF12208628FB3A98A9B983C593DFE43729
+            FB169D2BB921E552F66563D5D3748A375B8098A2ECEB644ECCFD8FFD703C65DF
+            A2732537A45CCA7EA5F17D727CEA00F57D6E86882DCABE4E66DC87ABCBD0D59E
+            B4CFF03729DF115C48D993EB722E65FF9185225D3BEA94012F0B1063947D1F98
+            A9B903252577CBCAB70DCADEF59B3AB96563CABE40758A1EEF5D2F40CC51F67D
+            644ECCFDD0DE344E2C4D041750F6E4BA9C4BD95B73758A192F400250F67D64A6
+            CE5F4D526B3C6137372F4E041750F6E4BA9C9BF8B27F4C3E78670F3D7BBD2502
+            240065DF0073426E3FF1E4DEFC2665DF4FE74A6E48B9892EFB17A46BD91E3A6D
+            D05B02240465DF207362EE1A7BF39846D9F7D3B9921B526E62CBFE9FD2D979A0
+            9E32F00D011284B26F9019F7EE105963AD27EC0D658BF21D943DB92EE726B2EC
+            7F2BFE82A3F8B1B54822CA3E04F6D9FDDEE2C97D76D32B4D52F6E4BA9C9BA8B2
+            EF12D10BE5B58BBFAD3366F8022410651F12F3A5DC55F6A6725A6982B227D7E5
+            DC8494BDCADDE265CED2E3DB9F1120C128FB9098896F0F96816B3F6E373F5E9C
+            A0ECC9753937D6659F7FF67E97F8B9EFE889E93F0900CA3E4CE6C4EC1EE2993F
+            4AFEE57CCA9E5CA7736357F6593BFE87A8DE29B9CC2D7A52C7BF05C00A947DC8
+            CC49B92BED873329FB58E57E60DF3F2F2AF34574A1FDA35C674DC72DE7496D82
+            EBFA9A5BD3715E95F93A72C23EEFDA73D5FED769C7F9C7E375FB44FE695934FF
+            11FECD3C501D651F3233EEB581B2E606F36CD9FF57E505218FC3C8894F298733
+            5679D3BEFB5FBBF54791CE3FE98CC1EF0800441865DF04E64BD9DDC4F3F2FFAF
+            30B5EACE90C761E444B594C3CD553BFEADF87A953C73FBEF75EE989C00404C50
+            F64D62A6E5BE63DF9FB3EA8E90C761E444AB949B917BBFF8FED97A51FA110180
+            18A2EC9BC44C797980746CF298DDDCBA7C47706183E33072A253CA61E77E609F
+            CF9F2133D337F2B3CC01C41965DF44E6A4EC2E62BCBFCACA2FE7BB5374CDCD74
+            3FF7EFE267C6EBCC8E970400628EB26F32332DF72DFBFECBA589E08206C761E4
+            B85DCACDC8FD952C7AE328FDDEC6CB04001280B26F3273C80B1DB2C9C71EB145
+            B35D7122B8A0C1711839EE96721372F52679E6F689FC053C004942D9F703332D
+            FB1911EF41BB9976B2409D2CE526E4E6BFABDADBF346EAB53B6704001284B2EF
+            27E6A4DC2562CC579D2C50D74AB939B9CFC9FCF99FD1D9EB2C16004818CABE9F
+            98714FB7CB5A5B3F6C0B68C7F21DC185758EC3C871AB949B91DB2592DB452F6A
+            7B5C00208128FB7E644ECAEC2C5EEA6F76B3AD34195C54E7388C1C774AB939B9
+            AA17EBCCD4370400128AB2EF67665AEE2231A6543C2E14A82BA5DC9CDC97E4D5
+            57B7D5EB36EB14004828CABE9F99931E6D136FA7BFDBCD9D8A13C105758EFB7A
+            5C52CA5EE5449DE9FD580020C128FB16305FCAEC24A9D44376B3DD890275A194
+            9B93FBBA3CFBECC774EEB6DD02000946D9B78839D9FFBAFD30D389026D7D2937
+            2757F4329D99BA400020E128FB1629BC9C6F76FA9B78B273F98EE0C25EC67D3D
+            2E09659FCB6EA797B63F2D009070947D0B999333DB8B49FDC36E769426838B7A
+            19F7F5B8F897FD4B3AD3FB98000028FB5633A7F8F997992F2D4D0417F432EEEB
+            71712F7BD5EBF4E2D4F10200A0EC5BCDEC7B7F5AB6D9E301BBF9D9E24470412F
+            E35AD725AEEC659A5EEC5D2B0000CADE05665AF7B6E2A51FB19B0328FB90727D
+            DD572F49FD9F0000287B579893FDF36C595D4ED987949BCD6CA1DFECF88F0000
+            287B579871B7A664ED23FE620B6BD7F21DC185D5021A18C7B1EC972C1EA6DF1B
+            FABE0000287B979893BAB79674FA51BB39B034195C54EDE006C6712CFB05FF1E
+            A0B3B6EC12000065EF1A73B27FB678F2DDD2447041B5031B18C7B1EC3BDF1DA2
+            DF5E6F890000287BD77CF472FEFDB6B8762F4E0417543BB081711CCBBEAB7303
+            BD7CD05B0200A0EC5D64A6757F4252E97976731065DFC7DCACFF19FD66E15F38
+            0040E251F68E32A7F867DAF2BA92B2EF63AE2F47E925DECF050040D9BBCA7817
+            7932EDEB7F144FF628DF51ED8006C6712C7BD1CB7566EA7C010050F62E332775
+            7D5CDADA1EB79B834B93D51637308E65D9CB833AD3DB4D000094BDEBCCA9FEA9
+            B6C4AE2E4D545BD8C0389E659F95654B37D0EF0C794F0020E1287BC719CF3372
+            4AF63EBBB94F71A2DAC206C6F12CFBBC13EDB3FB1F0B00241C651F01E64B5D5B
+            487BDB13767308655F47AEC8DF6DD9EF22009070947D4498D3FC69F6C335947D
+            9DB9BEBF875E9CFE8B00408251F611517839FFE4EC3DE2C9FE9517343076A194
+            9B977B9F5EE4ED2F009060947D8498D33A3713D39E7F397FE8AA3B1B18BB51CA
+            CDCB553D4C67A6EE14004828CA3E62CCA9FE09F6D9FD8F56DDD1C0D895526E5E
+            EE4B327FFE8E3A7B9DC502000944D9474CE1E5FC53B3BFB59B5F28DF115C58C7
+            D89D526E5EAEEA7FDB67F7270B002410651F41E6D4CE4DC46B7FD26EAE5E9A0C
+            2EAA63EC5229372F57EDAFF6C3F4C2D46F04001286B28F28739A3FC596D94F4A
+            13C105758CDD2AE566E6CE173FB38BCEEC785100204128FB0833A7FBF9BF7476
+            487110DC59C7D8BD526E66EEB39259BAA75E3AE45D018084A0EC23CC9CBC6C23
+            49773C6537D7A0ECEB3A6E9E2DFC03297C004941D9479C39D53F4E3CB981B2AF
+            FBB8E7C4640ED5191D2F0800C41C651F03E674FF57B6C846944F0617F53076BB
+            949B99FBA1A84ED10B53B70B00C418651F03E6A4A51B48C780FCCBF96B952683
+            8B7A18BB5FCA4DCED59B44BACED11983DE12008821CA3E26CC19FE31F6C38DA5
+            89E0821EC69129E5A6E62EB4E32B4417CDD219AB7F28001023947D8CD8C2CFBF
+            1C3DB23808EEEC611CAD526E76EE62FB4CFF46C9E9CFE4E2F6BFA9EFF31B0440
+            E451F631624E5CB29E0C1C987F397F6DCA3E94DCB744F53EBBE3EFF60F00F6BA
+            66FF23B2E43D9127978AFCD117D9DB935679FA5DD5B963722DFBFC002285B28F
+            19FBEC7E9CFDF073CA3E11B9DDF6FD22FBF6AAFD43C9B376629E88FF7FF28F5F
+            3EC21F0400AC8CB28F2173BA7FAB7832BA7C32B8A8877DB51CD39731B9FD953B
+            5F446F91AC7F9D7EB9ED31019078947D0C993316AF2366D03FEDE63AA5C9E0A2
+            2ADBD2C3BCFB2547EEAAF3F788FA33F59CF45F05406251F631654ECF8D16CFDC
+            5A9A082EA8B22D3DCC47ABE4C82D8D55D43ED3EFEE3A47BF32E84D019038947D
+            8C993373B7D8F7E38B83E0CE2ADBD2C37CF44A8EDCF2F17BE2EB443D27759700
+            4814CA3EC6CC498BD7960183F27F3B7F3DCA9EDC8FA81D7F5DA77B970A80C4A0
+            EC63CE9C9E1B299EB99DB227B76CAC66B69C933A9DEF23002403659F00E6CCDC
+            8D62CC31E59355B6A587F938941CB91F8D0BEFBEADD3CD970540EC51F609604E
+            58B8960C19927F397F83D2E4CA0BAA1D18F2985C8772CD471F759A9EE95D2B00
+            628DB24F087346EE30F1CCAF4B132BEFAC7650C863721DCA5D5EF6D2257EF6F3
+            7A16FF1E1F8833CA3E41CCF4DC0DF6FD71C5C1CA3BAA1D10F2985C8772CDCAF3
+            4FCB82673EA533B6ED1600B144D9278899B2600D597DB5FCCBF91B51F649CF35
+            8179FD8A9EE97D4B00C412659F30E6F4DCC192327751F649CF0D967DFE7BEC2F
+            DA5CCF1CFABE00881DCA3E81CCF4DC4FC49829A5896A0B431E93EB50AEA9347F
+            919E612E1400B143D9279039E9C3D565D0D027EDE626C5896A0B431E93EB506E
+            C5B27F479E796C63BD76E78C008815CA3EA1CC19B9032565EECE6FBA5946E4B6
+            A0EC457CFF309D9EBA5300C40A659F60667AEE4762CC096E9611B92D297B919F
+            EA1966B2008815CA3EC1CCD4F9ABC9D0359FB437F9CD2A2F08794CAE43B955CB
+            FE155BF6957F3D00882CCA3EE1CC19B9FD256DEE914AD511CB9223B797B217E9
+            EADA4CCF1BF08A00880DCA1E62CECA5D23C64C5B7547C863721DCAEDA1EC73FE
+            417A56EA77022036287B8839F5DD21D231EC09BBB945F98EE0C206C7E43A94DB
+            43D9AB9EA6677AB305406C50F6283067E6F69194B94F56AE8058961CB93594FD
+            85B6EC2F1200B141D9630573566EB618734A6922B8A0C131B90EE5F654F6F23D
+            3DD39C23006283B2C70A66E2DB8365D83A8FDB9BFEC78B13C1050D8EC3CA2137
+            84DC1ECBFE4A5BF6670980D8A0EC51C69C9DDD4BC4FB83DDF4E25972E4F65AF6
+            2297EA19E66B022036287BACC29C9D9B65DF9F1ECF922397BFA007240F658F55
+            9893DE1C2483D69B679FDB7FA27C4770619DE3B072C80D21B7A7B2F747E899A9
+            3B04406C50F6A8C84CCF0E979477BFE45FCE5F31195C54E738AC1C7243C8EDE9
+            DFD9776DAE670D785900C406658FAACCD9B92BC498E9A589E0823AC761E5901B
+            426E95B2577943CF341B098058A1EC519539FBB581221B3E664B60ABE2447041
+            9DE3BE1E476E1372AB3EB39FA36798E30440AC50F6E8913927BB9B88F727BB99
+            8A47C991DBF3337B7FA49E99FA95008815CA1EBD32E7E4BE937F1F8F9223B787
+            B27F47FEFDE2A63A6BCB2E01102B943D7A65A6BC3C40D6DAE4515B06DB94EF08
+            2EEC65DCD7E3C86D42AEA974FC37F54CF35501103B943D6A62A6677791B4F757
+            C9BF9CBF6232B8A897715F8F23B709B9AB94FD12E95CB2859E3FE45D01103B94
+            3D6A66CECD5D66DF9F5F9A082EE865DCD7E3C86D426EB0EC75869EE9CD1400B1
+            44D9A366E68C173AA4ED638FD892D8AE38115CD0CBB8D675E4F6436E59D9BF24
+            0B5ED956676CD629006289B2475DCCD9D9CF88E73D6837D3D12C39720365EF4B
+            CEDF4FCF4EFD5100C416658FBA9973729788315F8D66C9915B56F62A57EB7473
+            BA008835CA1E7533E39E6E974DB77ED896C58EE53B820BAB05843C26B70FC715
+            DEFD4B16BEB593CED860A9008835CA1E7D62CECAEC2CE9D4DFEC665B6932B8A8
+            DAC1218FC9EDC3712627B9DC5E7A4EFAAF0220F6287BF499392F77A17D3FA334
+            115C50EDC090C7E4F6E138F35D9D6ECE15008940D9A3CFCC498FB6C9D09DFE6E
+            37772A4E0417543B30E431B9F51EF78C2C7C7567FEF63D901C943D1A62CECBEC
+            28927AD86EB647A0E4C815C94ACEDF5DCF4DFF5D002406658F869973FDAFD942
+            B9D8F19223B7402FD1B3525F17008942D9A36166DCAD29D9F4887BC5937DCA77
+            543B20E431B9B5AE7B489E9FB7875EBB734600240A658F5098F396AC2B66E043
+            7673F3D264B5C5218FC9AD65DD9B92EBFA9C9E3BF035019038943D4263CEEDDE
+            5ABCF49FECE63AC5896A0B431E93DBDBBA0F259BDB5BCF6B7B5C002412658F50
+            99B3333B482AF53B5B301B385072E48ABC27C63F48CF4A3F2200128BB247E8CC
+            B99D9B89D7FEEB55BEC3DE8A05218FC9AD36FF9C68F6303DA7FD5F0220D1287B
+            348539E9CD41B2C6BA57DAAD1324584BD12DCF08E5EA8DE27F78B29E3B6C9100
+            483CCA1E4D65CECF1D206AAEB205B4756932B8A8C131B9252A2FD8DFD5D3F59C
+            D49D02001FA1ECD17466DFFBD3F2D93D26D8CD2F174A3F4AE5199DDC176DD17F
+            57963E7B9DCED8B65B006025943DFA8DF13C23E765F6B52575B41D1D6AA7D62D
+            EE082EAC73DCD7E3A29FFBBE7D2A7F97DDBA49965C728FCE98E10B005440D9A3
+            258C7791275FBE603BF1539F154FB7B1531B8B31F9F21F28C15AF38207570BED
+            E593F696D3DFB9B5E7E47F9376DAF17CBBF99AA8795A72B98765DEAF9ED4B963
+            7235A6034830CA1E008098A3EC01008839CA1E008098A3EC01008839CA1E0080
+            98A3EC01008839CA1E008098A3EC01008839CA1E008098A3EC01008839CA1E00
+            8098A3EC01008839CA1E008098A3EC01008839CA1E008098A3EC01008839CA1E
+            008098A3EC01008839CA1E008098A3EC01008839CA1E008098A3EC01008839CA
+            1E008098A3EC01008839CA1E008098A3EC01008839CA1E008098A3EC01008839
+            CA1E008098A3EC01008839CA1E008098A3EC01008839CA1E008098A3EC010088
+            39CA1E008098A3EC01008839CA1E008098A3EC01008839CA1E008098A3EC0100
+            8839CA1E008098A3EC01008839CA1E008098A3EC01008839CA1E008098A3EC81
+            2A8CE719B9A06B3B49A57693946E236D662B31324C3C192A6949896716D9F70B
+            ECDC8BE2E9B362FC87E49DE7FFAE33B6ED6EF5B96355E682AE2DA5A36DB87D2C
+            B7B38FDDD6F6715CD7BE0DB18F65C78AC7D29397EC63F99CBD33FE4352EF3CA0
+            276CB0B4D5E70D8481B207565228F8B3BB77979439D616C0485B00EBDA37B125
+            20D2F6D1C7FC5B61CEC88A7D2BE664A97DBBCFFECEBA51BC577FAD1337EB6CF5
+            D79464E6CB999D24ED4DB48FD568FBF86C1278AC7A7B2CBBEDDB5FEC1F0EE688
+            FFC16D3A79D8A2567F3D405F51F68065C6DD9A920D8F18676FF25FB137F8ED2B
+            DCF86B2DFB95B7DFB5BFC3AE92DCA2D93A71F50F5BFD352645E10F6C67650E11
+            63BE629FB5EFD6C3E353CF63B9488CFCB7E4965DA91307BDD5EAAF11A817658F
+            C433A766874BCABBC6DED0775871930FA7EC976FBF6F7FA77D459EBDF87F74C6
+            0CBFD55F6F9C9953323B4A7BEA1A7BCD77EFBDE0A52F8FE552FB585E2AA967BF
+            AB63F8DF35880ECA1E8965A6BC3C40066CFC3D499969F6466ECA6EECE196FDF2
+            EDBF8A741DAD6306BCD2EAAF3D6E0AAFCCAC73C4D7ECB5FE9ABDCEE91E1FC7C6
+            CA7EF9C7A7C464C7EB116DFF6CF5D70ED482B2472299295D9B4B7BFA767B93DF
+            A9CACD3CFCB22F7E7C5FC43F4647A5EE6EF535880B3369D1301934F817F6FAEE
+            5BD3E3184ED917FF7E86E8341DE5FDACD5D700E80D658FC43153323B48DABBDB
+            DEAC37AC7A936F5ED9E7DF3292D2E3F5506F4EABAF45D499E33B379174DBEF24
+            65B6A9F9710CAFECF3D4DE452FD091DEB75A7D2D809E50F648143339B39D78DE
+            9FECCD7AADE20DBC25659FDFCE97C4543DC4BBAED5D724AACCE4651B495BFB5F
+            EDF5DCACAEC731DCB2FF68AC33EC1FDE66B6FA9A00D550F6480C33AE735319D4
+            F680BD396F54BA81B7ACECF31FB362FC517A70EACE565F9BA831472C5843D61C
+            92FF43DB0E753F8E4D29FBFC49E934FB87B76B5B7D6D804A287B248219F774BB
+            B46FF56749CBE7CA6FE0AD2C7B7BBCA70B2597F98C1ED2FEAF565FA3A828FCD3
+            BA89DDBFB4D76F449F1EC766957DFE7FCF486E6FFD62FA81565F232088B24722
+            98637257DA1BF299AB9640ABCB3EBFADF364C133BBF04FB96A632664A74B9BB9
+            A2CF8F63D3CADEE4EFA8AF4A6AD14E7AE0D0F75B7D9D809551F6883D7354F6B3
+            92327FB33765CFCDB2CF6FFB17E87EDE65ADBE56AE33633A3793416D4FDB6B36
+            C8C9B22FACD36BF54033ADD5D70A5819658F582BBCE43B2EF390BD197FB67209
+            B852F6BA44725DDBE881035E6DF53573997D567F9BBD6E4734F43836BBEC53EA
+            8BE43EA707A41F69F5F50296A3EC116B665C2EFFFF757F55BD045C29FBFC9BFE
+            40F731A7B6FA9AB9CA8CCBEC246DDEA392FF06484E977D7E5BEFD0FDCC88565F
+            336039CA1EB166CBFE417BF3DD3512659FD265E22FDD42F71DFC76ABAF9B8BCC
+            D1B9B9F63A1DD9F0E3D83F65AF62B23BE9BE6D4FB4FABA0179943D62CB8CC97C
+            5252DEBC9E4BC0A5B2CF7FF4CFD33DBDEFB4FADAB9C68C5BBC8EA406BE6EAF53
+            5B34CA3EFFA6B3751F735AABAF1D9047D923B6CC98DC77ED8DF7EC6895BD3EA9
+            7B9A1D5B7DED5C638ECC9E2E69332B94C7B1BFCA3EA5EFC9BF1EDB504FD839D3
+            EAEB0750F6882D3336F7BCBDE97E225A659F3FF1AE8FE91E1D2FB5FAFAB9C496
+            FDEF6DD9EF17ADB2CFEFCCEEAD7BA7EF6FF5F503287BC4921955F89EE9AFF45E
+            BC2E96BD3F55F7F07ED2EA6BE80A73C80B1D32648B0FECF51918B9B2373A53F7
+            32335A7D0D01CA1EB164C6668EB477DCB9912C7B4F7FA2C3CDD4565F43579831
+            D95D25651E0CED71ECCFB2F7F45EDDD31CD8EA6B0850F688253336FB0DFBFEA2
+            8896FD5F6DD90F6FF5357485FD83DB44F1BC9F46B4EC5FB565BF69ABAF2140D9
+            2396CCD8DC1CFB614224CBDEE83BBA8759AFD5D7D015F6B1BCC45E97AF46B4EC
+            55DE797DB08ED97859ABAF23928DB2472C9931D93BC598432259F69E66EC33FB
+            F6565F4357D8B2BFC65E9769D12C7BFBD6BD6C23DD7FE01BADBE8E4836CA1EB1
+            640B22FF37A0F78C66D9DBB7B75E1BC4B3C1A2C2AB349E4C886CD97BDD5BE9F0
+            F6E75B7D1D916C943D62C916C49FED87E1912DFB0FDF1CAC876EB0B4D5D7D105
+            F6B1BCD15E9363225BF6DABD8DEED5FE6CABAF23928DB2472C99B1D9BBECFB83
+            A359F69A933D536DEAFBFCE69442D9FFB7BD2E2745B6EC73CB36D67D06BEDEEA
+            EB8864A3EC114BB6206EB61F8E8A68D9CFD7E166ED565F4357D8C7F2327B5DCE
+            8F6CD977BD3D440F586F49ABAF23928DB2472CD98298693F7C3DA265FF902DFB
+            5D5B7D0D5D61C664A64ACAFB7134CB5EDFD43DCD86ADBE8600658F5832A333C7
+            88E7DD18C9B237FA33DDC34C6CF5357485199D1D2E69F3E78896FD1F6DD9EFD3
+            EA6B0850F6882533B26B4B694BFF2B92652FFE29BAA7774DABAFA12BCC416F0F
+            96D5D77EDF5E9FF6C895BDD1CB752F737EABAF2140D923B6CCD8DCCBF6A6BB69
+            E4CA9EBFBDBD0A332E977F663F3C7265AFB92FE83EA97B5A7DFD00CA1EB115FA
+            3763E99F1F71FBA2EE69B66CF5B5738D19973D5F52E6B26895BD2E94F75E5F9F
+            EF97001750F6882D333AFB79499B072255F6462FD2BDCC85ADBE76AE29FC14C3
+            816DFFB1D7C98B50D95FAF7B9B29ADBE76401E658FD8329EBDFB8ECD3C656FBE
+            DB46A3EC352B99EEFFD203F859F69598A3B3BFB5D7ECA0C894BD97DD5DF7493F
+            D0EAEB06E451F6883533363341DABC391129FB39F699E071ADBE66AE324765F7
+            9494B93F1A65AFF7EB7E66EF565F336039CA1EB166F6BD3F2DEB0F7FD2DE84B7
+            76BBEC35235E6607DDA7FDB9565F33979909D9DFDBEBB69FFB659FDB47F74BFD
+            B1D5D70B588EB247EC99F1B9FD252DF73A5DF646BFA3FB9BF35A7DAD5C678EC9
+            6C2729EF317BCDDADC2D7B9DAB0798F1ADBE56C0CA287B2482392637C7DE9027
+            3859F69EFE5B16BEF7491DB3CEE2565FA72830C7E52EB5D7EF0237CB5EDF975C
+            E78E7A08DF0B1F6EA1EC910866D4FCD564B5351EB637E5ADDC2A7BED12CD0DD7
+            83D3FF68F5358A8AC2FF9AD96CF81FEC75DCC3ADB21715E38FD0835377B6FA1A
+            0141943D12A3F01270BBF7177B535EC38DB2CF97831EAF077BD7B7FADA448D39
+            7AD98632A0FD4149CBA6EE94BD5EA85FF42E6AF5B5012AA1EC9128665276B8A4
+            CC3DF6E63CB0F565AF5FB5E5F0CD565F93A83213BBB7918ED49FEDF51CE640D9
+            FF480F355F6AF53501AAA1EC9138664A6E6FFB8CF097F626BD7A8BCA5E25A517
+            E8A1DEB75A7D2DA2CE4CC9EC206DDEDDF60F701BB6ACEC8DFC401E9F79BACE98
+            E1B7FA7A00D550F648245B123BD992F8A52D89CDFAB9EC3BED33FA697AB8F7D3
+            565F83B8305FEADA42BCB65FD93FC0EDD0CF659F13D1AFEB28EFB2565F03A037
+            943D12CB9CB0702D691B72BDBD718FE8A7B27F5E343B4EC7B4CD6BF5D71E3766
+            DC6B0365DD0DAEB28FC9D47E2AFB3744FC637434FF961ED140D923F1CC69FE91
+            F6067E857DDBA84965DF653F5E2EDEEBDFE287A23497392D7780A4CD6C7BCDFF
+            AB49659FB31F7F28CB167E5527AEFE61ABBF5EA056943D609953DF1D22E96127
+            4B5AA6DB9BF9FA21957DA718F9A948F7B77502DFEFBEBF98335EE890F4C726DB
+            EB7FAE7D3C3F1652D9E7EC633957247B994E687BAAD55F23502FCA1E588999F2
+            F200597B9391F6E67EACBDC91F603FB6F5A1EC1F9394DE28D96537E9F183DF6E
+            F5D79454857F8FFFD9E107D967FA13ED637248E95F60483D65FFBC783A47FCEE
+            393A65C0CBADFE9A80BEA2EC812A0ACFF6575F6B4F5BF2C36D196C659F257EC2
+            96C0305B0043EDC7949D5B64DF2FB0CFF85E2CFCFFF8943E2CDAF57FFA25BE7B
+            9A6B0A7F88DB78E3DD6CF1EF61CB7B6B4999FCCF4A58D73E7643ECE3DAB1E2B1
+            F4E4A542C11B7D4C24F3073DA9E3DFAD3E77200CFF1F9F5B206909A6387A0000
+            000049454E44AE426082}
+          HightQuality = False
+          Transparent = False
+          TransparentColor = clWhite
+        end
+        object b_cabecalho_texto_groupheader: TfrxMemoView
+          AllowVectorExport = True
+          Width = 94.897650000000000000
+          Height = 18.779530000000000000
+          Visible = False
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'GroupHeader')
+          ParentFont = False
+        end
+        object b_cabecalho_texto_masterdata: TfrxMemoView
+          AllowVectorExport = True
+          Left = 102.047310000000000000
+          Top = 3.779530000000000000
+          Width = 67.118120000000000000
+          Height = 15.000000000000000000
+          Visible = False
+          DataSetName = 'DataSetIQuery'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'MasterData')
+          ParentFont = False
+        end
+        object b_cabecalho_texto_groupfooter: TfrxMemoView
+          AllowVectorExport = True
+          Left = 177.637910000000000000
+          Top = 1.559060000000000000
+          Width = 79.779530000000000000
+          Height = 18.779530000000000000
+          Visible = False
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -13
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'GroupFooter')
+          ParentFont = False
+        end
+      end
+      object b_cabecalho_titulo_itens: TfrxColumnHeader
+        FillType = ftBrush
+        Fill.BackColor = clWindowFrame
+        Frame.Typ = []
+        Height = 29.456707560000000000
+        Top = 154.960730000000000000
+        Width = 1039.370750000000000000
+        object b_cabecalho_titulo_item_texto: TfrxMemoView
+          AllowVectorExport = True
+          Left = 7.559060000000000000
+          Top = 2.000000000000000000
+          Width = 56.338590000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Funcion'#225'rio')
+          ParentFont = False
+        end
+        object Shape1: TfrxShapeView
+          AllowVectorExport = True
+          Top = 25.677180000000000000
+          Width = 1088.504640000000000000
+          Height = 3.779527560000000000
+          Fill.BackColor = clWhite
+          Frame.Color = clNone
+          Frame.Typ = []
+        end
+        object Memo10: TfrxMemoView
+          AllowVectorExport = True
+          Left = 355.275820000000000000
+          Top = 2.779530000000000000
+          Width = 79.015770000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Tabela')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          AllowVectorExport = True
+          Left = 600.945270000000000000
+          Top = 2.779530000000000000
+          Width = 71.456710000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Produto')
+          ParentFont = False
+        end
+        object Memo12: TfrxMemoView
+          AllowVectorExport = True
+          Left = 702.992580000000000000
+          Top = 2.779530000000000000
+          Width = 79.015770000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'A'#231#227'o')
+          ParentFont = False
+        end
+        object Memo13: TfrxMemoView
+          AllowVectorExport = True
+          Left = 841.732840000000000000
+          Top = 2.779530000000000000
+          Width = 79.015770000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Data')
+          ParentFont = False
+        end
+        object Memo14: TfrxMemoView
+          AllowVectorExport = True
+          Left = 958.898270000000000000
+          Top = 2.779530000000000000
+          Width = 82.795300000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Hora')
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 18.897637800000000000
+        Top = 245.669450000000000000
+        Width = 1039.370750000000000000
+        DataSet = FastReportQRel
+        DataSetName = 'QAuditoria'
+        RowCount = 0
+        object Memo18: TfrxMemoView
+          AllowVectorExport = True
+          Left = 7.559060000000000000
+          Top = 1.000000000000000000
+          Width = 263.653680000000000000
+          Height = 15.000000000000000000
+          DataField = 'funcionario_id'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."funcionario_id"]')
+          ParentFont = False
+        end
+        object Memo2: TfrxMemoView
+          AllowVectorExport = True
+          Left = 355.275820000000000000
+          Top = 1.000000000000000000
+          Width = 176.724490000000000000
+          Height = 15.000000000000000000
+          DataField = 'tabela'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."tabela"]')
+          ParentFont = False
+        end
+        object Memo19: TfrxMemoView
+          AllowVectorExport = True
+          Left = 600.945270000000000000
+          Top = 1.000000000000000000
+          Width = 55.779530000000000000
+          Height = 15.000000000000000000
+          DataField = 'tabela_id'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."tabela_id"]')
+          ParentFont = False
+        end
+        object QAuditoriaacao: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 687.874460000000000000
+          Width = 136.063080000000000000
+          Height = 18.897650000000000000
+          DataField = 'acao'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."acao"]')
+        end
+        object QAuditoriadt_log: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 846.614720000000000000
+          Width = 79.370130000000000000
+          Height = 18.897650000000000000
+          DataField = 'dt_log'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."dt_log"]')
+        end
+        object QAuditoriahr_log: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 975.118740000000000000
+          Width = 64.252010000000000000
+          Height = 18.897650000000000000
+          DataField = 'funcionario_id'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."funcionario_id"]')
+        end
+      end
+      object b_rel_simples_landscape_report_Summary: TfrxReportSummary
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 41.456710000000000000
+        Top = 449.764070000000000000
+        Visible = False
+        Width = 1039.370750000000000000
+        object Shape2: TfrxShapeView
+          AllowVectorExport = True
+          Width = 1084.725110000000000000
+          Height = 7.559060000000000000
+          Fill.BackColor = clWindowFrame
+          Frame.Color = clNone
+          Frame.Typ = []
+        end
+      end
+      object DetailData1: TfrxDetailData
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 102.047310000000000000
+        Top = 287.244280000000000000
+        Width = 1039.370750000000000000
+        DataSet = FastReportQRel
+        DataSetName = 'QAuditoria'
+        Filter = '<QAuditoria."tabela_id">'
+        RowCount = 0
+        object QAuditoriacampo: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 15.118120000000000000
+          Top = 3.779530000000000000
+          Width = 400.630180000000000000
+          Height = 18.897650000000000000
+          DataField = 'campo'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."campo"]')
+        end
+        object QAuditoriavalor_campo: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 15.118120000000000000
+          Top = 60.472480000000000000
+          Width = 400.630180000000000000
+          Height = 18.897650000000000000
+          DataField = 'valor_campo'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."valor_campo"]')
+        end
+        object QAuditoriavalor_campo_antes: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 15.118120000000000000
+          Top = 30.236240000000000000
+          Width = 400.630180000000000000
+          Height = 18.897650000000000000
+          DataField = 'valor_campo_antes'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."valor_campo_antes"]')
+        end
+      end
+    end
+  end
+  object Relatorio_Editar: TfrxReport
+    Version = '6.9.3'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 44552.376017997700000000
+    ReportOptions.LastChange = 45216.732599444450000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      ''
+      'procedure SysMemo1OnBeforePrint(Sender: TfrxComponent);'
+      'begin'
+      ''
+      'end;'
+      ''
+      'procedure Memo11OnBeforePrint(Sender: TfrxComponent);'
+      'begin'
+      ''
+      'end;'
+      ''
+      'procedure MasterData1OnBeforePrint(Sender: TfrxComponent);'
+      'begin'
+      ''
+      'end;'
+      ''
+      'begin'
+      ''
+      'end.')
+    Left = 216
+    Top = 152
+    Datasets = <
+      item
+        DataSet = FastReportQRel
+        DataSetName = 'QAuditoria'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page2: TfrxReportPage
+      Orientation = poLandscape
+      PaperWidth = 295.000000000000000000
+      PaperHeight = 220.000000000000000000
+      PaperSize = 256
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      Frame.Typ = []
+      MirrorMode = []
+      object b_cabecalho: TfrxPageHeader
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 113.031540000000000000
+        Top = 18.897650000000000000
+        Width = 1039.370750000000000000
+        object b_cabecalho_data_hora_atual: TfrxMemoView
+          AllowVectorExport = True
+          Left = 871.291900000000000000
+          Top = 41.677180000000000000
+          Width = 167.000000000000000000
+          Height = 15.000000000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Data / Hora - [Now]')
+          ParentFont = False
+        end
+        object b_cabecalho_contador_pagina: TfrxMemoView
+          AllowVectorExport = True
+          Left = 12.511440000000000000
+          Top = 79.133890000000000000
+          Width = 118.000000000000000000
+          Height = 15.000000000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          Memo.UTF8W = (
+            'P'#225'gina - [Page#]')
+          ParentFont = False
+        end
+        object Memo1: TfrxMemoView
+          AllowVectorExport = True
+          Left = 408.315090000000000000
+          Top = 75.236240000000000000
+          Width = 212.086580000000000000
+          Height = 33.897650000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -24
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          Memo.UTF8W = (
+            'Relat'#243'rio Auditoria')
+          ParentFont = False
+        end
+        object b_cabecalho_periodo_analisado: TfrxMemoView
+          AllowVectorExport = True
+          Left = 895.748610000000000000
+          Top = 22.543290000000000000
+          Width = 139.559060000000000000
+          Height = 15.000000000000000000
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          HAlign = haRight
+          Memo.UTF8W = (
+            'Per'#237'odo Analisado:')
+          ParentFont = False
+        end
+        object b_cabecalho_razao_social: TfrxMemoView
+          AllowVectorExport = True
+          Left = 805.039890000000000000
+          Top = 0.220470000000000000
+          Width = 229.976500000000000000
+          Height = 18.779530000000000000
+          AutoWidth = True
+          DataSetName = 'QEmpresa'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Fill.BackColor = clWhite
+          HAlign = haRight
+          Memo.UTF8W = (
+            'LUCIA RODRIGUES DA SILVA')
+          ParentFont = False
+        end
+        object b_cabecalho_logo: TfrxPictureView
+          Align = baCenter
+          AllowVectorExport = True
+          Left = 443.823285000000000000
+          Top = -2.220470000000000000
+          Width = 151.724180000000000000
+          Height = 67.401360000000000000
+          Frame.Typ = []
+          Picture.Data = {
+            07544269746D6170E67C0000424DE67C00000000000036000000280000008C00
+            0000390000000100200000000000B07C00000000000000000000000000000000
+            0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FEFEFD00F5EFE900F4ED
+            E700F4EDE700F4EDE700F4EDE700F4EDE700F4EDE700F4EDE700F4EDE700F4ED
+            E700F4ECE600FBF8F500FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00C7A386008D440900914A1000914A1100914A1100914A1100914A
+            1100914A1100914A1100914A1100914A110090480F0098562000C6A28500FCF9
+            F800FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF009C5D350083340000883C
+            0000883C0000883C0000883C0000883C0000883C0000883C0000883C0000883C
+            0000883C000087390000812F0000AC774C00FCFAF800FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00B7896500802E0000853600008536000085360000853600008536
+            00008536000085360000853600008536000084340000873A01008A3F02008130
+            0000BE947400FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F9F5F300DDC6B400D9C1
+            AE00DBC4B100DBC4B100DBC4B100DBC4B100DBC4B100DBC4B100DBC4B100DDC7
+            B500D2B69E009957250086390000893C00008C420B00EEE4DB00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00EDE1D800924B1300883C
+            000083330000CDAD9500FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DCC5
+            B300A3673800A0623200A1643400A1643400A1643400A1643400A1643400A164
+            3400A1643400A4693A0090480F00893D010084350000B07D5600FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00F0E6DE008D440F008333000086380000863800008638
+            0000863800008638000086380000863800008638000086380000893E02008A3F
+            0300873A000097542000FAF6F300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FEFEFE00DAC2B100D3B6A000D4B8A300D4B8A300D4B8
+            A300D4B8A300D4B8A300D4B8A300D4B8A300D2B49E00E5D4C700FFFFFF00FFFF
+            FF00FCFAF900D8BEAB00D3B7A100D3B6A000DAC2B100FEFEFE00FFFFFF00FFFF
+            FF00FFFFFF00EEE3DB00D2B49E00D4B8A300D2B49E00EBDED500FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00EEE4DC00CBAA9000B7896500B3835D00B688
+            6300C5A08300E4D3C600FFFFFF00FFFFFF00FFFFFF00EADDD300C0987900B381
+            5C00B88B6800DBC4B200FFFFFF00E8D8CD00D2B49E00D4B7A200D5B9A500FAF7
+            F500F9F5F200D4B8A400D4B8A200D4B8A300D4B8A300D4B8A300D4B8A300D4B8
+            A300D4B8A300D4B8A300D4B7A200D5BAA600F9F6F300FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C29B7D008232
+            00008B400300873A0100893C02008B4003008739010084330000853500008A3E
+            03008B40030086370100853600008A3F03008A3E0200873B0000E4D3C600FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFA009551
+            2600812E00008434000084340000843400008434000084340000843400008434
+            00007D280000B3836400FFFFFF00FFFFFF00F6F1EE008E45160082300000812E
+            000095512600FCFBFA00FFFFFF00FFFFFF00FFFFFF00CEAE9B007D2900008434
+            00007D280000C6A18A00FFFFFF00FFFFFF00FFFFFF00FDFCFC00C19979008B40
+            07008231000083330000843300008333000082300000873A0100E9DBD000FFFF
+            FF00D9C2AF008A3F070082300000843300008230000081300000BC916F00B98B
+            6E007E2900008332000086380500F1E8E200EBDFDA0082300100833300008434
+            000084340000843400008434000084340000843400008434000083320000883A
+            0800EFE5DE00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00F9F5F10097542100873A0000883B00009B5B2A00955019008638
+            0000A1643400B98B6700B17E56008D430900873A0000A8704400AA734900883C
+            00008A3F030083330000C6A18600FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009A5A2800873800008A3E02008A3E02008738
+            0000863700008637000086370000863700007F2C0000B4856400FFFFFF00FFFF
+            FF00F7F2EE00934E1800883A0000873800009A5A2800FCFBFB00FFFFFF00FFFF
+            FF00FFFFFF00D0B29D00833300008A3E020083320000C9A68B00FFFFFF00FFFF
+            FF00FFFFFF00B6866300812E0000883B00008A3E020085350000843300008536
+            00008332000083330000E8D9CE00FFFFFF0097532500853500008B3F02008738
+            00008B3F06008B40070082310300914A14008A3D0000893C00008C410700EFE5
+            DE00FBF9F80099562700853600008A3E02008A3E02008A3F0200863700008331
+            000083320000833200008230000087380800EFE4DE00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00D3B7A200843500008A3E
+            0200883B0000E0CBBB00A87043007E2C0000CCAB9100FFFFFF00FAF7F4009753
+            1E0082310000DDC7B500F9F5F200914A1100883C000085360000A8704600FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFB009A5A
+            2800873800008A3E01008B3F04009E5E2D00A1633400A0623300A0623300A062
+            33009B592700C59F8300FFFFFF00FFFFFF00F7F2EE00934E1800883A00008738
+            00009A5A2800FCFBFB00FFFFFF00FFFFFF00FFFFFF00D0B29D00833300008A3E
+            020083320000C9A68B00FFFFFF00FFFFFF00D7BDAA00833200008A3D01008A3E
+            010086370000AA734900D5BAA500DEC9B800CCAB9200A1643500EADDD200EBDE
+            D600873A00008A3D000086370000A56B3E00EDE1D900F0E7E100BA8E6D008535
+            00008A3E0100893C00008C410700EDE2DA00FFFFFF00E4D3C5008B3F0900883A
+            00008A3E0200883A0000B5876400CDAD9600C8A58B00C8A58B00C8A48A00CAA8
+            8F00F8F3F000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00A4693D00853700008A3E02008B410600A66D3F0090491000873A
+            00009A592500AC754B00A66B3E008C420600883C00009F602F00AA7348008E46
+            0C00893E0100883C0000914A1400F4EDE800FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009A5A280087380000893B00008F460C00F2E9
+            E300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00F7F2EE00934E1800883A0000873800009A5A2800FCFBFB00FFFFFF00FFFF
+            FF00FFFFFF00D0B29D00833300008A3E020083320000C9A68B00FFFFFF00FFFF
+            FF00A76F4700843400008A3E020084350000B88A6800FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FCF9F800FFFFFF00E5D4C800873900008A3D010084340000D3B7
+            A100FFFFFF00FFFFFF00FFFFFF00A66D400085360000893C00008C410700EDE2
+            DA00FFFFFF00FFFFFF00CFB09900843400008A3D010086380000A56B3E00FBF9
+            F700FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E3D1C400883B00008A3E0100893D
+            020085360000802E0000883B02008B410300843601007E2C0000802F0000893E
+            03008B400300833301007F2C0000853600008A3F03008A3F020085370000DCC6
+            B500FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFB009A5A
+            280087380000893B00008F460C00F2E9E300FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F7F2EE00934E1800883A00008738
+            00009A5A2800FCFBFB00FFFFFF00FFFFFF00FFFFFF00D0B29D00833300008A3E
+            020083320000C9A68B00FFFFFF00F8F4F200944F1B00883A0000893C00008E44
+            0B00EEE4DC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F4ED
+            E9008F471300883A000085360000B07C5500FBFAF800FFFFFF00FFFFFF00C098
+            7A0083320000893C00008C410700EDE2DA00FFFFFF00FFFFFF00FFFFFF00B88B
+            6A00823100008B3F020083310000B3825F00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00B4835F0083340000893D00008F470F00AB754B00AB764B0090491000873A
+            00009C5C2900AE7A5000A87043008C420700883B0000A0633200AE7A5000A66D
+            40008A3F04008A3F020083330000BD927200FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009A5A280087380000893B00008F460C00F2E9
+            E300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00F7F2EE00934E1800883A0000873800009A5A2800FCFBFB00FFFFFF00FFFF
+            FF00FFFFFF00D0B29D00833300008A3E020083320000C9A68B00FFFFFF00F3EC
+            E80090481100883B00008739000099582500FCFAF900FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C39C7F00802E0000863800008637
+            000095511D00AA734800BB8F6E00A56B3F0087390000893C00008C410700EDE2
+            DA00FFFFFF00FFFFFF00FFFFFF00FBF9F700A3683E00843400008A3E01008333
+            0000CBAA9100FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00EFE5DE008E450E00883C000084350000BC91
+            6F00FFFFFF00FFFFFF00A26737007E2C0000CBAA8F00FFFFFF00F9F6F3009653
+            1D0082320000DAC2AF00FFFFFF00FCF9F7009A5A26008739000086380000A165
+            3600FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFB009A5A
+            280087380000893C00008E440A00DAC3B200E6D8CD00E4D4C800E4D4C800E3D2
+            C600EBDFD600FFFFFF00FFFFFF00FFFFFF00F7F2EE00934E1800883A00008738
+            00009A5A2800FCFBFB00FFFFFF00FFFFFF00FFFFFF00D0B29D00833300008A3E
+            020083320000C9A68B00FFFFFF00F7F1EE00934D1700883A0000873900009653
+            1E00F9F6F300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00CCAC940098562200883B0100823000007E2900007C2600008434
+            01008B3F0200893C00008C410700EDE2DA00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00EFE5DD00934C1A0086380000883B0000893D0700E1CFC000FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00F5EEE900EBDED400FDFBFA00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C59F
+            8300833300008A3F0300893C00009D5E2B00A76F4200A56C3E008F470D00883B
+            000096531D00A7704300A26737008B410600883C00009B5C2900A76F4200A66D
+            400090491000893D0100893D00008D430A00EEE4DB00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009A5A2800873800008A3E02008A3E0200883B
+            0000883B0000883B0000883B000083330000A46B4000FFFFFF00FFFFFF00FFFF
+            FF00F7F2EF00934E1800883A0000873800009A5A2800FCFBFB00FFFFFF00FFFF
+            FF00FFFFFF00D0B29D00833300008A3E020083320000C9A68B00FFFFFF00FFFF
+            FF00A0623500863700008A3D0100883A0000E0CCBD00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FBF9F700E8D9
+            CE00D8BFAC00C9A78C00BC9170009D5D2C00883A0000893C00008C410800EDE3
+            DB00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DEC8B800883B0400893C
+            00008637000096522200F3ECE600FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00E0CCBC00924B130086390000AF7C5300FDFC
+            FA00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FAF7F40099572500873A00008A3F0300853700008130
+            00007F2C00007F2D0000883C02008B410300853601007E2C0000802E0000893E
+            03008B400300833301007E2C00007F2D000083340000893E02008A3F03008435
+            0000D4B8A300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFB009A5A
+            2800873800008A3E02008A3E0200873A00008739000087390000873900008230
+            0000A4694000FFFFFF00FFFFFF00FFFFFF00F7F2EF00944E1800883A00008738
+            00009B5A2900FCFBFB00FFFFFF00FFFFFF00FFFFFF00D0B29D00833300008A3E
+            020083320000C9A68B00FFFFFF00FFFFFF00C39C8100823000008A3F02008638
+            00009C5C2C00EEE4DC00FFFFFF00FFFFFF00FFFFFF00EDE1D900F4EDE800FFFF
+            FF00F8F4F100DFCBBD00FEFDFC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00B484
+            5F0084340000883A0000914A1500F6F0EC00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00CAA78D00863800008A3E010083320000AA734B00FEFE
+            FE00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A164
+            380083330000893D000082320000DEC9B900FFFFFF00FFFFFF00FFFFFF00FFFF
+            FE00E4D2C400D9C1AD00F5EEE900FFFFFF00FFFFFF00FFFFFF00D5BAA5008435
+            00008A3F0200893D0200A8704400B17E5600AF7D5400AF7C5300914B12008739
+            00009E602E00B2815900AD784E008D450A00883B0000A3683800B17F5700B07D
+            5400AD794F008D450C00893E010083340000B4846000FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009A5A2800873800008A3E02008B3F0300944F
+            180095521C0095511B0095511B00914A1100AE7B5400FFFFFF00F4EEE900AE79
+            5200A86F44008D430800893D0000893C00008F460D00AA734A00A76E4300C49D
+            8100FFFFFF00D0B39D00833300008A3E020083320000C9A68B00FFFFFF00FFFF
+            FF00F4EEE90095502000853500008B3F0200863700008F451000AE7A5200BB8F
+            6D00AC774E008D430C00E5D3C800FFFFFF00F6F0ED0090481600A0623200C7A2
+            8700DCC4B300E0CCBE00C09879008B3F05008A3D000083330000A9714A00FFFF
+            FF00FFFFFF00CFB09A009F5F2D00A4683900A4683900A56A3B00A4693B008C40
+            05008A3D01008A3E020083310000C1997C00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00E3D0C200873A00008A3E02008A3F030083340000D9C0
+            AF00FFFFFF00FFFFFF00FFFFFF00CDAD930084350000813000009E602F00F9F4
+            F100FFFFFF00FFFFFF00AD78500084350000863900009E602E00FDFBFA00FFFF
+            FF00FFFFFF00FFFFFF00A26737007E2C0000CCAB9100FFFFFF00FAF7F5009754
+            1F0082310000DAC2AF00FFFFFF00FFFFFF00FFFFFF00A9724600853600008739
+            00009A592700FCFAF800FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFB009A5A
+            280087380000893C00008E450B00ECE0D600FBF9F700F8F4F100F8F4F100F8F4
+            F100FAF7F500FFFFFF00EFE4DE0086380800823000008A3D02008A3E02008A3E
+            0200893C0200833200007D280000A76F4C00FFFFFF00CFB29C0081300000883B
+            0000812F0000C8A58A00FFFFFF00FFFFFF00FFFFFF00E4D3C600914A16008231
+            0000883B0000883B000084340000833300008433000085350000E6D6CA00FFFF
+            FF00F6F1EE008D4316007F2C000082300000853500008636000084340000893C
+            000085350000883B0500E2CFC100FFFFFF00FFFFFF00BE957C007D2700008433
+            0000843300008433000085340000883B0000883B0000883B0000863700008E45
+            1400F5F0EC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BD9373008333
+            00008A3F0300883C00008F471000F0E7E000FFFFFF00FFFFFF00F8F4F0009550
+            1D00863900008A3F030082320000DBC4B300FFFFFF00FFFFFF00A16436008638
+            0000893D0000934E1600A4693A00A2663600A2663600A26636008F460D00883B
+            000097541E00A4693A00A06333008C420700883C00009A592500A3683900A266
+            3600A4693A0095501A00893D0000893E0100893D0200E8D8CD00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009A5A280087380000893B00008F460C00F2E9
+            E300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F0E7E000934D
+            16008E440A008B3F03008A3E02008A3E02008B3F040090470E008B3E0200B17E
+            5600FFFFFF00D3B6A2008A3D010090470E00893C0000CBAA9100FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00F0E6DF00B4835E009048100086380000843400008434
+            0000853500008F460E00ECDFD500FFFFFF00FEFDFD00C5A084009C5C2B008C42
+            0700853600008434000084340000883A00009C5C2A00DDC7B700FFFFFF00FFFF
+            FF00FFFFFF00C59F8400893C000090470E0090470E0090470E0090470E009047
+            0E0090470E0090470E008E440A0096521E00F5EEEA00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00A1653700863800008A3F030084350000B3825D00FFFF
+            FF00FFFFFF00FFFFFF00D8BFAC00843500008A3F03008A3F020084360000DDC6
+            B600FFFFFF00FFFFFF00A2653900853700008A3F0300893D0200863800008638
+            00008638000086380000893E02008B400300883B010086380000863800008A3E
+            03008A400300873A0100863800008638000086380000893C02008A3F03008A3F
+            030083330000CBAA9000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFB009A5A
+            280087380000893B00008F460C00F2E9E300FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FEFDFC00F6EFEA00EBDFD600924C1600883A00008739
+            000099572500F1E8E100F4ECE600F7F1ED00FFFFFF00FAF7F500F3EBE500F5EF
+            E900F3ECE600FAF6F300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00F5EEEA00E1CDBF00D7BDA900D6BCA800DEC9B900F2EAE400FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FEFCFC00EFE5DD00DEC9B900D6BCA700D8BFAC00E7D8
+            CC00FCFAF800FFFFFF00FFFFFF00FFFFFF00FFFFFF00F9F5F200F2EAE400F3EB
+            E500F3EBE500F3EBE500F3EBE500F3EBE500F3EBE500F3EBE500F3EBE500F4ED
+            E700FEFDFD00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F6EFEB00924C1400883C
+            00008A3F030084350000D6BBA700FFFFFF00FFFFFF00FFFFFF00BC9070008333
+            00008A3F0300873A000099582600FAF7F400FFFFFF00FFFFFF00C6A285007F2C
+            0000883A01008A4003008A3F03008A3E030085370000883B01008A4003008A3F
+            03008A3F0300893D020085370000853700008537000085370000873901008A3F
+            03008A3F03008A3F03008A3F03008A3F030084350000AC784F00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009A5A280087380000893C00008E440A00DDC8
+            B800EADDD400E7D9CF00E7D9CF00E7D9CF00E7D8CE00FAF7F400FFFFFF00FFFF
+            FF00F7F2EF00934D1800883A0000873800009A592600FCFAFA00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFEFE00FAF7F500FEFDFD00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00EADDD3008A3E0300893E0100893D01008B400600ECDFD600FFFF
+            FF00FFFFFF00FFFFFF00AD784E00843500008A3F030083340000BD927000FFFF
+            FF00FFFFFF00FFFFFF00FDFCFB00CDAD9200944F1B00883B0000893E02008D44
+            0A00A8704300944F1C00873900008A3F0300893C000094501900AA744800A66D
+            3F00A66D3F00A8714400A1653500893D01008A3F03008A3F030086380000893D
+            0200883B000094501A00F7F2EE00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FCFBFB009A5A
+            2800873800008A3E02008A3E0200893D0100893D0100893D0100893D0100893C
+            000087390000E4D3C600FFFFFF00FFFFFF00FBF9F8009754230087390000893C
+            00008D430900E9DBD100FFFFFF00FFFEFE00FFFFFF00F2E9E300A76F43009048
+            10009F613100E8D9CE00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E7D8CC00883C00008A3E
+            0200883B0000934E1600F6F0EC00FFFFFF00FFFFFF00FFFFFF00A26637008638
+            00008A3F030083330000CCAB9100FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00D3B6A10084350000893D00008A3F0400EADCD200ECE0D6008F460E00883C
+            0000883B0000934E1700EDE1D700FFFFFF00FFFFFF00FFFFFF00B68761008537
+            00008A3F030085370000B07D5600934E1800883C000086390000E1CDBE00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FCFBFB009957260085340000883A0000883A00008739
+            00008739000087390000873900008738000085350000E4D2C600FFFFFF00FFFF
+            FF00FFFFFF00B3836000823000008B3F0200873A000096532000B4845E00AD78
+            5000FBF9F800BA8D6E007F2B0000883B0000802D0000A76F4800FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00E8D8CC00883C0000893E0200873A000097552000FBF8F500FFFF
+            FF00FFFFFF00FFFFFF00AB744B00843600008A3F030083340000BE947300FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FBF8F6009A592800873900008434
+            0000B3815C00FFFFFF00CDAD9400853700008A3F0300853600009F613300F9F6
+            F200FFFFFF00CAA78C00843400008A3F020083340000A8704600FFFFFF00A66D
+            41008537000083330000C29A7C00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FDFBFB00A166
+            37008F470D00924C1400924C1400924C1400924C1400924C1400924C1400924B
+            130090480F00E6D6CA00FFFFFF00FFFFFF00FFFFFF00EEE3DB00924B19008331
+            0000893D000087390000812F00008C421100FBF8F700BB8F71007E2A00008739
+            0000802C0000A9714A00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E7D7CC00883C00008A3E
+            0200883C0000914A1200F4EDE800FFFFFF00FFFFFF00FFFFFF00B88A68008334
+            00008A3F0300863900009C5D2B00FCFAF800FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00C9A68C0083330000893D000090481200BC916E009B5B2700893D
+            01008A3F03008A3F030082320000B88A6700E1CDBD00893D0600893D00008638
+            000095511F00F2EAE300FFFFFF00C39C7F008333000085370000A56B3E00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00F8F2EF00F6F0EC00F6F0EC00F6F0EC00F6F0
+            EC00F6F0EC00F6F0EC00F6F0EC00F6F0EC00F6F0EC00FDFCFB00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00EADDD400A76F43008B3F040085360000833200009049
+            1400F8F3F000F5EFEA00AB764C00944F1A00A56B3D00EADDD400FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00EBDED5008A3F0400893E0100893E0100893E0200E8D8CD00FFFF
+            FF00FFFFFF00FFFFFF00D4B8A300833400008A3F03008A3F030085360000C8A5
+            8A00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F5EFEA00934E1900883B
+            0000893D020084340000873B01008A3F020087390000883B01008A3F0300893D
+            05008C420C00883C0100883C0000893E0600E1CEBE00FFFFFF00FFFFFF00E0CC
+            BE0086380000883C00008C430900E9DACF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FEFE
+            FE00EDE2DA00DDC8B800DBC5B400E9DAD000FFFEFE00FFFFFF00FFFEFE00FBF8
+            F700FEFEFD00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F7F1ED00934D1700883B
+            00008A3F030083340000CFB09800FFFFFF00FFFFFF00FFFFFF00F5EEE800914B
+            1600883B00008A3F0300893D0100883B0300C59F8100FDFBFA00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00BF967700823300008A3F03008A3E0200853700008435
+            00009D5D2A00944F1C00873A00008A3F0300893D02008A3F020083340000CCAA
+            9100FFFFFF00FFFFFF00FFFFFF00F9F5F20095511F00873A0000883B0000944F
+            1900A56C3D00B88B6600FBF8F600FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00A56C4000853700008A3F030084360000AB764C00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00C1997B00823100008A3F03008A3F0300893D
+            0200802F0000B07D5500FFFFFF00FFFFFF00FFFFFF00FFFFFF00F0E6DD008D43
+            0E00802E0000873A0100A56B3C00D6BBA600FFFFFF00E2CEBF00893D0600883C
+            00008A40030082320000B5856100FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00C1997A00802F00008A3F0200883B0100853600007F2D0000DBC3B200FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00C29B7E008332
+            00008A3F0300893D00008B410800EADCD100FFFFFF00FFFFFF00FFFFFF00FAF6
+            F3009E603100833400008A4003008A3F0300893D0000893D0500EDE2D900FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00E0CCBC00C6A08200E2D0C100FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00CBAA9000813000007E2B0000A1643600FAF7F300FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FAF7F500AA744700823100008332
+            00008232000081300000E0CBBB00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00E8D9CD00893D0300893E01008A3F030084350000B07D
+            5700FFFFFF00FFFFFF00FFFFFF00FFFFFF00EEE2D90098552300823200008A3E
+            0100883B00008B400A00F0E7E000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00CDAD
+            9400BB8F6C00EFE5DD00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FCFAF800D7BCA700BB906D00B88B6700CEAE9400FFFEFE00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A870
+            4600843500008A3F03008A3E020085370000D3B6A000FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00F3EBE500AF7B5200883B000085370000BC916F00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00DEC9B90086380000893E01008A3F0300883B
+            00008B400900DCC6B400FFFFFF00FFFFFF00FFFFFF00FFFFFF00FEFDFD00EBDD
+            D200E9DBCF00FDFCFB00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00B2815C00833200008A3F03008A3F0300873A00008A3F0900D1B39B00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F4EEE70097542200853700008A40
+            03008A3F0300883C010083340000B17F5700FCFBF900FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00E6D6C8008E451000863800008A4003008A3F03008A3E0200802F
+            0000D6BBA800FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E3D1C200914B
+            1600843400008A3F03008A40030081310000CAA79000FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00EEE3DA00A4693A008232000081300000893D
+            0600E8DACD00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FCF9F800D2B49D00BF967500E0CCBC00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+            FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00}
+          HightQuality = False
+          Transparent = False
+          TransparentColor = clWhite
+        end
+        object b_cabecalho_texto_groupheader: TfrxMemoView
+          AllowVectorExport = True
+          Width = 94.897650000000000000
+          Height = 18.779530000000000000
+          Visible = False
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'GroupHeader')
+          ParentFont = False
+        end
+        object b_cabecalho_texto_masterdata: TfrxMemoView
+          AllowVectorExport = True
+          Left = 102.047310000000000000
+          Top = 3.779530000000000000
+          Width = 67.118120000000000000
+          Height = 15.000000000000000000
+          Visible = False
+          DataSetName = 'DataSetIQuery'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'MasterData')
+          ParentFont = False
+        end
+        object b_cabecalho_texto_groupfooter: TfrxMemoView
+          AllowVectorExport = True
+          Left = 177.637910000000000000
+          Top = 1.559060000000000000
+          Width = 79.779530000000000000
+          Height = 18.779530000000000000
+          Visible = False
+          AutoWidth = True
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clGray
+          Font.Height = -13
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'GroupFooter')
+          ParentFont = False
+        end
+      end
+      object b_cabecalho_titulo_itens: TfrxColumnHeader
+        FillType = ftBrush
+        Fill.BackColor = clWindowFrame
+        Frame.Typ = []
+        Height = 33.236237560000000000
+        Top = 154.960730000000000000
+        Width = 1039.370750000000000000
+        object Shape1: TfrxShapeView
+          AllowVectorExport = True
+          Top = 25.677180000000000000
+          Width = 1088.504640000000000000
+          Height = 3.779527560000000000
+          Fill.BackColor = clWhite
+          Frame.Color = clNone
+          Frame.Typ = []
+        end
+        object Memo11: TfrxMemoView
+          AllowVectorExport = True
+          Left = 132.283550000000000000
+          Top = 4.000000000000000000
+          Width = 60.118120000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Campo')
+          ParentFont = False
+        end
+        object Memo12: TfrxMemoView
+          AllowVectorExport = True
+          Left = 7.559060000000000000
+          Top = 3.779530000000000000
+          Width = 52.559060000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'A'#231#227'o')
+          ParentFont = False
+        end
+      end
+      object MasterData1: TfrxMasterData
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 23.677180000000000000
+        Top = 359.055350000000000000
+        Width = 1039.370750000000000000
+        OnBeforePrint = 'MasterData1OnBeforePrint'
+        DataSet = FastReportQRel
+        DataSetName = 'QAuditoria'
+        RowCount = 0
+        object QAuditoriacampo: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 128.504020000000000000
+          Top = 3.779530000000000000
+          Width = 154.960730000000000000
+          Height = 18.897650000000000000
+          DataField = 'campo'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."campo"]')
+        end
+        object QAuditoriavalor_campo: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 374.173470000000000000
+          Top = 4.779530000000000000
+          Width = 279.685220000000000000
+          Height = 18.897650000000000000
+          DataField = 'valor_campo'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."valor_campo"]')
+        end
+        object QAuditoriavalor_campo_antes: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 755.906000000000000000
+          Top = 3.779530000000000000
+          Width = 200.315090000000000000
+          Height = 18.897650000000000000
+          DataField = 'valor_campo_antes'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."valor_campo_antes"]')
+        end
+        object Memo6: TfrxMemoView
+          AllowVectorExport = True
+          Left = 291.023810000000000000
+          Top = 3.779530000000000000
+          Width = 75.590600000000000000
+          Height = 18.897637800000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Valor Atual:')
+        end
+        object Memo7: TfrxMemoView
+          AllowVectorExport = True
+          Left = 665.197280000000000000
+          Top = 3.779530000000000000
+          Width = 83.149660000000000000
+          Height = 18.897637800000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Valor Antigo:')
+        end
+        object QAuditoriaacao: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 3.779530000000000000
+          Top = 3.779530000000000000
+          Width = 117.165430000000000000
+          Height = 18.897650000000000000
+          DataField = 'acao'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."acao"]')
+          ParentFont = False
+        end
+        object QAuditoriahr_log: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 960.000620000000000000
+          Top = 4.559060000000000000
+          Width = 98.267780000000000000
+          Height = 15.118110240000000000
+          DataField = 'hr_log'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."hr_log"]')
+          ParentFont = False
+        end
+      end
+      object b_rel_simples_landscape_report_Summary: TfrxReportSummary
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 56.574830000000000000
+        Top = 483.779840000000000000
+        Visible = False
+        Width = 1039.370750000000000000
+        object Shape2: TfrxShapeView
+          AllowVectorExport = True
+          Width = 1084.725110000000000000
+          Height = 7.559060000000000000
+          Fill.BackColor = clWindowFrame
+          Frame.Color = clNone
+          Frame.Typ = []
+        end
+      end
+      object Group5: TfrxGroupHeader
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 33.259862050000000000
+        Top = 249.448980000000000000
+        Width = 1039.370750000000000000
+        Condition = '<QAuditoria."funcionario_id">'
+        object b_rel_simples_shape1: TfrxShapeView
+          AllowVectorExport = True
+          Width = 1039.370078740000000000
+          Height = 29.480332050000000000
+          Fill.BackColor = clWindowFrame
+          Frame.Color = clNone
+          Frame.Typ = []
+        end
+        object QAuditorianome: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 98.267780000000000000
+          Top = 3.779530000000000000
+          Width = 328.819110000000000000
+          Height = 18.897650000000000000
+          DataField = 'nome'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."nome"]')
+          ParentFont = False
+        end
+        object Memo10: TfrxMemoView
+          AllowVectorExport = True
+          Left = 415.748300000000000000
+          Top = 3.779530000000000000
+          Width = 52.559060000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Tabela:')
+          ParentFont = False
+        end
+        object Memo4: TfrxMemoView
+          AllowVectorExport = True
+          Left = 480.000310000000000000
+          Top = 3.779530000000000000
+          Width = 203.740260000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            
+              '[(IIF(<QAuditoria."tabela"> = '#39'RECEBIMENTO'#39','#39'Cliente'#39',IIF(<QAudi' +
+              'toria."tabela"> = '#39'PAGAMENTO'#39','#39'Fornecedor'#39',IIF(<QAuditoria."tabe' +
+              'la"> = '#39'PRODUTO'#39','#39'Produto'#39',IIF(<QAuditoria."tabela"> = '#39'CLIENTE'#39 +
+              ','#39'Cliente'#39',IIF(<QAuditoria."tabela"> = '#39'FORNECEDOR'#39','#39'Fornecedor'#39 +
+              ',IIF(<QAuditoria."tabela"> = '#39'COMPRA'#39','#39'Fornecedor'#39',IIF(<QAuditor' +
+              'ia."tabela"> = '#39'VENDA'#39','#39'Cliente'#39',IIF(<QAuditoria."tabela"> = '#39'LI' +
+              'BERACAO'#39','#39'Cliente/Fornecedor'#39','#39#39')))))))))]')
+          ParentFont = False
+        end
+        object b_cabecalho_titulo_item_texto: TfrxMemoView
+          AllowVectorExport = True
+          Left = 7.559055118110236000
+          Top = 3.779530000000000000
+          Width = 90.354360000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Funcion'#225'rio')
+          ParentFont = False
+        end
+      end
+      object GroupFooter1: TfrxGroupFooter
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 18.897650000000000000
+        Top = 404.409710000000000000
+        Width = 1039.370750000000000000
+      end
+      object Group1: TfrxGroupHeader
+        FillType = ftBrush
+        Fill.BackColor = clWhite
+        Frame.Typ = []
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Height = 31.236240000000000000
+        ParentFont = False
+        Top = 306.141930000000000000
+        Width = 1039.370750000000000000
+        Condition = 'QAuditoria."tabela_id"'
+        object b_rel_agrupado1_shape2: TfrxShapeView
+          AllowVectorExport = True
+          Width = 1039.370078740157000000
+          Height = 29.480332050000000000
+          Fill.BackColor = clWindowFrame
+          Frame.Color = clNone
+          Frame.Typ = []
+        end
+        object QAuditoriadt_log: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 786.142240000000000000
+          Top = 5.559060000000000000
+          Width = 102.047310000000000000
+          Height = 15.118110236220470000
+          DataField = 'dt_log'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."dt_log"]')
+          ParentFont = False
+        end
+        object Memo2: TfrxMemoView
+          AllowVectorExport = True
+          Left = 264.567100000000000000
+          Top = 7.559060000000000000
+          Width = 116.252010000000000000
+          Height = 15.000000000000000000
+          DataField = 'tabela'
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -12
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[QAuditoria."tabela"]')
+          ParentFont = False
+        end
+        object QAuditoriadescricao: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 396.850650000000000000
+          Top = 6.779530000000000000
+          Width = 294.803340000000000000
+          Height = 15.118110240000000000
+          DataSet = FastReportQRel
+          DataSetName = 'QAuditoria'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWhite
+          Font.Height = -13
+          Font.Name = 'Arial'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            
+              '[(IIF(<QAuditoria."tabela"> = '#39'PRODUTO'#39',<QAuditoria."descricao">' +
+              ' , (IIF(<QAuditoria."tabela"> = '#39'CLIENTE'#39',<QAuditoria."CLIENTE">' +
+              ' , (IIF(<QAuditoria."tabela"> = '#39'FORNECEDOR'#39',<QAuditoria."FORNEC' +
+              'EDOR"> ,(IIF(<QAuditoria."tabela"> = '#39'RECEBIMENTO'#39',<QAuditoria."' +
+              'CLIENTE"> ,(IIF(<QAuditoria."tabela"> = '#39'PAGAMENTO'#39',<QAuditoria.' +
+              '"FORNECEDOR"> ,(IIF(<QAuditoria."tabela"> = '#39'COMPRA'#39',<QAuditoria' +
+              '."FORNECEDOR"> ,(IIF(<QAuditoria."tabela"> = '#39'VENDA'#39',<QAuditoria' +
+              '."CLIENTE"> ,(IIF(<QAuditoria."tabela"> = '#39'LIBERACAO'#39',<QAuditori' +
+              'a."CLIENTE"> ,'#39#39'  ))  ))  ))  ))  ))  )) ))  ))]')
+          ParentFont = False
+        end
+        object Memo8: TfrxMemoView
+          AllowVectorExport = True
+          Left = 132.283550000000000000
+          Top = 3.779530000000000000
+          Width = 60.118120000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Campo')
+          ParentFont = False
+        end
+        object Memo9: TfrxMemoView
+          AllowVectorExport = True
+          Left = 7.559060000000000000
+          Top = 3.779530000000000000
+          Width = 52.559060000000000000
+          Height = 18.779530000000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'A'#231#227'o')
+          ParentFont = False
+        end
+        object Memo13: TfrxMemoView
+          AllowVectorExport = True
+          Left = 733.228820000000000000
+          Top = 5.559060000000000000
+          Width = 45.000000000000000000
+          Height = 15.118110240000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Data:')
+          ParentFont = False
+        end
+        object Memo14: TfrxMemoView
+          AllowVectorExport = True
+          Left = 975.118740000000000000
+          Top = 5.559060000000000000
+          Width = 41.220470000000000000
+          Height = 15.118110240000000000
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clWhite
+          Font.Height = -15
+          Font.Name = 'Roboto'
+          Font.Style = [fsBold]
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Hora:')
+          ParentFont = False
+        end
+      end
+    end
+  end
+  object FastReportQRel: TfrxDBDataset
+    UserName = 'QAuditoria'
+    CloseDataSource = False
+    DataSet = QRel
+    BCDToCurrency = False
+    Left = 136
+    Top = 152
+  end
+  object QLayoutFastReport: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 40
+    Top = 147
+  end
+end

@@ -1,0 +1,220 @@
+unit USeleciona_Devedores;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, IBCustomDataSet, IBQuery, Grids, DBGrids, StdCtrls, Buttons,
+  ExtCtrls, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmSeleciona_Devedores = class(TForm)
+    Panel1: TPanel;
+    btnRetorna: TBitBtn;
+    Contas: TDBGrid;
+    DataTabela: TDataSource;
+    btnPesquisa: TBitBtn;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label2: TLabel;
+    QTabela: TFDQuery;
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure ContasKeyPress(Sender: TObject; var Key: Char);
+    procedure ContasDblClick(Sender: TObject);
+    procedure ContasKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ContasColEnter(Sender: TObject);
+    procedure ContasKeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Correcao;
+  end;
+
+var
+  FrmSeleciona_Devedores: TFrmSeleciona_Devedores;
+
+implementation
+
+uses
+  UData, UPrincipal, UGerente;
+
+{$R *.dfm}
+
+procedure TFrmSeleciona_Devedores.Correcao;
+var
+Dif, Correc: Double;
+begin
+  Label1.Visible := False;
+  Label2.Visible := False;
+  Label3.Visible := False;
+
+  if not QTabela.IsEmpty then
+  begin
+    if (date > QTabela.FieldByName('DT_VENCIMENTO').AsDateTime) and (FrmPrincipal.Config.FieldByName('JUROS_MENSAL').AsFloat > 0) then
+    begin
+      Dif     := date - QTabela.FieldByName('DT_VENCIMENTO').AsDateTime;
+      Correc  := ((((QTabela.FieldByName('VALOR').AsFloat * FrmPrincipal.Config.FieldByName('JUROS_MENSAL').AsFloat) / 100) / 30) * DIF);
+
+      Label1.Caption := 'Dias em Atraso : ' + FormatFloat('#,##0', DIF) + ' Dias';
+      Label2.Caption := 'Valor Corrigido : ' + FormatFloat('#,##0.00', Correc + QTabela.FieldByName('VALOR').AsFloat);
+      Label3.Caption := 'Valor Juros : ' + FormatFloat('#,##0.00', Correc);
+      Label1.Visible := True;
+      Label2.Visible := True;
+      Label3.Visible := True;
+    end;
+
+    if (date < QTabela.FieldByName('DT_VENCIMENTO').AsDateTime) and (FrmPrincipal.Config.FieldByName('DESCONTO_MENSAL').AsFloat > 0) then
+    begin
+      Dif     := QTabela.FieldByName('DT_VENCIMENTO').AsDateTime - date;
+      Correc  := ((((QTabela.FieldByName('VALOR').AsFloat * FrmPrincipal.Config.FieldByName('DESCONTO_MENSAL').AsFloat) / 100) / 30) * DIF);
+
+      Label1.Caption := 'Dias Antecipados : ' + FormatFloat('#,##0', DIF) + ' Dias';
+      Label2.Caption := 'Valor Corrigido : ' + FormatFloat('#,##0.00', QTabela.FieldByName('VALOR').AsFloat - Correc);
+      Label3.Caption := 'Valor Desconto : ' + FormatFloat('#,##0.00', Correc);
+      Label1.Visible := True;
+      Label2.Visible := True;
+      Label3.Visible := True;
+    end;
+  end;
+end;
+
+procedure TFrmSeleciona_Devedores.btnPesquisaClick(Sender: TObject);
+var
+Tx: String;
+ClicOK: Boolean;
+CODIGO:INTEGER;
+begin
+  Tx     := '';
+  ClicOK := InputQuery(PChar(Msg_Title), 'Digite o Nome ou Código:', Tx);
+
+  if ClicOK then
+  begin
+   try
+
+    Codigo := StrToInt(TX);
+
+    QTabela.Sql.Clear;
+    QTabela.Sql.Add('SELECT CLIENTES.CLIENTE_ID, CLIENTES.NOME NOME, CLIENTES.CNPJ, TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, TRANSACOES.CLIENTE_ID, TRANSACOES.CONTA_ID, TRANSACOES.EMPRESA_ID, ' +
+                    'TRANSPARCELAS.TRANSACAO_ID, TRANSPARCELAS.PARCELA_ID, TRANSPARCELAS.DUPLICATA, TRANSPARCELAS.DT_VENCIMENTO, TRANSPARCELAS.VALOR, TRANSPARCELAS.ESPECIE');
+    QTabela.Sql.Add('FROM TRANSPARCELAS');
+    QTabela.Sql.Add('INNER JOIN TRANSACOES');
+    QTabela.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QTabela.Sql.Add('INNER JOIN CLIENTES');
+    QTabela.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QTabela.Sql.Add('WHERE');
+    QTabela.Sql.Add('((CLIENTES.CLIENTE_ID = :CLIENTE_ID))');
+    QTabela.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+    QTabela.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QTabela.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QTabela.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QTabela.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+    QTabela.Sql.Add('AND (TRANSPARCELAS.VALOR > 0)');
+    QTabela.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+    QTabela.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+    QTabela.Sql.Add('ORDER BY TRANSPARCELAS.DT_VENCIMENTO, CLIENTES.NOME');
+
+    QTabela.ParamByName('CLIENTE_ID').AsInteger    := Codigo;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('CONDUTA').AsString        := '01';
+    QTabela.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QTabela.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QTabela.prepare;
+    QTabela.Open;
+
+    except
+
+    QTabela.Sql.Clear;
+    QTabela.Sql.Add('SELECT CLIENTES.CLIENTE_ID,  CLIENTES.NOME NOME, CLIENTES.CNPJ, TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, TRANSACOES.CLIENTE_ID, TRANSACOES.CONTA_ID, TRANSACOES.EMPRESA_ID, ' +
+                    'TRANSPARCELAS.TRANSACAO_ID, TRANSPARCELAS.PARCELA_ID, TRANSPARCELAS.DUPLICATA, TRANSPARCELAS.DT_VENCIMENTO, TRANSPARCELAS.VALOR, TRANSPARCELAS.ESPECIE');
+    QTabela.Sql.Add('FROM TRANSPARCELAS');
+    QTabela.Sql.Add('INNER JOIN TRANSACOES');
+    QTabela.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QTabela.Sql.Add('INNER JOIN CLIENTES');
+    QTabela.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QTabela.Sql.Add('WHERE');
+    QTabela.Sql.Add('((CLIENTES.NOME LIKE :NOME))');
+    QTabela.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+    QTabela.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QTabela.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QTabela.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QTabela.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+    QTabela.Sql.Add('AND (TRANSPARCELAS.VALOR > 0)');
+    QTabela.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+    QTabela.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+    QTabela.Sql.Add('ORDER BY TRANSPARCELAS.DT_VENCIMENTO, CLIENTES.NOME');
+
+    QTabela.ParamByName('NOME').AsString           := '%' + UpperCase(Tx) + '%';
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('CONDUTA').AsString        := '01';
+    QTabela.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QTabela.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QTabela.prepare;
+    QTabela.Open;
+
+   end;
+
+
+    Contas.SetFocus;
+  end;
+end;
+
+procedure TFrmSeleciona_Devedores.ContasColEnter(Sender: TObject);
+begin
+  Correcao;
+end;
+
+procedure TFrmSeleciona_Devedores.ContasDblClick(Sender: TObject);
+begin
+  ModalResult := mrOk;
+end;
+
+procedure TFrmSeleciona_Devedores.ContasKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_F7 then
+    btnPesquisaClick(Self);
+end;
+
+procedure TFrmSeleciona_Devedores.ContasKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #13 then
+    ModalResult := mrOk;
+  
+  if Key = #27 then
+    ModalResult := mrCancel;
+end;
+
+procedure TFrmSeleciona_Devedores.ContasKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  Correcao;
+end;
+
+procedure TFrmSeleciona_Devedores.FormCreate(Sender: TObject);
+begin
+  Contas.Columns[0].Width := 43;
+  Contas.Columns[1].Width := 43;
+  Contas.Columns[2].Width := 216;
+  Contas.Columns[3].Width := 110;
+  Contas.Columns[4].Width := 90;
+  Contas.Columns[5].Width := 90;
+  Contas.Columns[6].Width := 67;
+  Contas.Columns[7].Width := 82;
+end;
+
+procedure TFrmSeleciona_Devedores.FormShow(Sender: TObject);
+begin
+  btnPesquisaClick(Self);
+end;
+
+end.
+
+

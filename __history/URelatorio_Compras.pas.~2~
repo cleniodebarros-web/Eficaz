@@ -1,0 +1,1233 @@
+unit URelatorio_Compras;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Mask, rxToolEdit, DB, IBCustomDataSet, IBQuery,
+  QuickRpt, QRCtrls, Buttons, rxCurrEdit, DBCtrls, RDprint, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client,QRExport;
+
+type
+  TFrmRelatorio_Compras = class(TForm)
+    Label1: TLabel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Bevel1: TBevel;
+    Label2: TLabel;
+    Ordem: TComboBox;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Label3: TLabel;
+    SrcList: TListBox;
+    DstList: TListBox;
+    IncludeBtn: TSpeedButton;
+    IncAllBtn: TSpeedButton;
+    ExcludeBtn: TSpeedButton;
+    ExAllBtn: TSpeedButton;
+    DBText1: TDBText;
+    btnFornecedor: TSpeedButton;
+    Label4: TLabel;
+    btnGrupo: TSpeedButton;
+    DBText2: TDBText;
+    Label5: TLabel;
+    btnLocalizacao: TSpeedButton;
+    btnFamilia: TSpeedButton;
+    DBText3: TDBText;
+    btnProd_Inicial: TSpeedButton;
+    DBText4: TDBText;
+    DBText5: TDBText;
+    btnSub_Tipo: TSpeedButton;
+    Label6: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    btnProd_final: TSpeedButton;
+    Label10: TLabel;
+    BtnTributacao: TSpeedButton;
+    DBText6: TDBText;
+    Fornecedor: TCurrencyEdit;
+    GRUPO_ID: TCurrencyEdit;
+    FAMILIA_ID: TCurrencyEdit;
+    Prod_Inicial: TCurrencyEdit;
+    SubTipo: TCurrencyEdit;
+    Prod_Final: TCurrencyEdit;
+    Tributacao: TCurrencyEdit;
+    Localizacao: TCurrencyEdit;
+    DataGrupo: TDataSource;
+    DataFamilia: TDataSource;
+    DataLocalizacao: TDataSource;
+    DataSubtipo: TDataSource;
+    DataTributos: TDataSource;
+    DataFornecedor: TDataSource;
+    Tipo_Rel: TComboBox;
+    Label11: TLabel;
+    Fim: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel6: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel7: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape4: TQRShape;
+    QRLabel11: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRGroup1: TQRGroup;
+    QRDBText3: TQRDBText;
+    QRBand2: TQRBand;
+    QRShape3: TQRShape;
+    QRLabel2: TQRLabel;
+    QRExpr4: TQRExpr;
+    RDprint1: TRDprint;
+    Label12: TLabel;
+    TIPO_COMPRA: TComboBox;
+    QFamilia: TFDQuery;
+    QFornecedor: TFDQuery;
+    QProduto_Final: TFDQuery;
+    QTributos: TFDQuery;
+    QCfop: TFDQuery;
+    QProduto_Inicial: TFDQuery;
+    QRel: TFDQuery;
+    QSubTipo: TFDQuery;
+    QGrupo: TFDQuery;
+    QLocalizacao: TFDQuery;
+    chk_exportar: TCheckBox;
+    Label13: TLabel;
+    Produto_id: TCurrencyEdit;
+    SpeedButton1: TSpeedButton;
+    DBText7: TDBText;
+    QProduto: TFDQuery;
+    DataProduto: TDataSource;
+    QRBand7: TQRBand;
+    QRSysData5: TQRSysData;
+    QRLabel22: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRLabel23: TQRLabel;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRLabel26: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRBand8: TQRBand;
+    QRDBText18: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRDBText22: TQRDBText;
+    QRDBText23: TQRDBText;
+    QRDBText24: TQRDBText;
+    QRBand9: TQRBand;
+    QRShape11: TQRShape;
+    QRLabel32: TQRLabel;
+    QRExpr5: TQRExpr;
+    QRGroup3: TQRGroup;
+    QRDBText25: TQRDBText;
+    QRBand10: TQRBand;
+    QRShape12: TQRShape;
+    QRLabel33: TQRLabel;
+    QRExpr6: TQRExpr;
+    Rel_Compras_Analitico_prod: TQuickRep;
+    QRDBText7: TQRDBText;
+    Rel_Compras_Analitico: TQuickRep;
+    QRBand3: TQRBand;
+    QRSysData3: TQRSysData;
+    QRLabel1: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel5: TQRLabel;
+    QRShape5: TQRShape;
+    QRShape6: TQRShape;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRBand4: TQRBand;
+    QRDBText10: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRBand5: TQRBand;
+    QRShape7: TQRShape;
+    QRLabel20: TQRLabel;
+    QRExpr2: TQRExpr;
+    QRGroup2: TQRGroup;
+    QRDBText26: TQRDBText;
+    QRBand6: TQRBand;
+    QRShape8: TQRShape;
+    QRLabel21: TQRLabel;
+    QRExpr3: TQRExpr;
+    QRDBText27: TQRDBText;
+    procedure FormCreate(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure OrdemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+    procedure IncludeBtnClick(Sender: TObject);
+    procedure IncAllBtnClick(Sender: TObject);
+    procedure ExcludeBtnClick(Sender: TObject);
+    procedure ExAllBtnClick(Sender: TObject);
+    procedure FornecedorKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FornecedorChange(Sender: TObject);
+    procedure btnFornecedorClick(Sender: TObject);
+    procedure GRUPO_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure GRUPO_IDChange(Sender: TObject);
+    procedure GRUPO_IDExit(Sender: TObject);
+    procedure btnGrupoClick(Sender: TObject);
+    procedure FAMILIA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FAMILIA_IDChange(Sender: TObject);
+    procedure FAMILIA_IDExit(Sender: TObject);
+    procedure btnFamiliaClick(Sender: TObject);
+    procedure SubTipoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure SubTipoChange(Sender: TObject);
+    procedure SubTipoExit(Sender: TObject);
+    procedure btnSub_TipoClick(Sender: TObject);
+    procedure LocalizacaoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure LocalizacaoChange(Sender: TObject);
+    procedure LocalizacaoExit(Sender: TObject);
+    procedure btnLocalizacaoClick(Sender: TObject);
+    procedure TributacaoExit(Sender: TObject);
+    procedure BtnTributacaoClick(Sender: TObject);
+    procedure Prod_InicialKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Prod_InicialExit(Sender: TObject);
+    procedure btnProd_InicialClick(Sender: TObject);
+    procedure Prod_FinalKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnProd_finalClick(Sender: TObject);
+    procedure FornecedorExit(Sender: TObject);
+    procedure TributacaoChange(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure Tipo_RelChange(Sender: TObject);
+    procedure SpeedButton1Click(Sender: TObject);
+    procedure Produto_idChange(Sender: TObject);
+  private
+    procedure MoveSelected(List: TCustomListBox; Items: TStrings);
+    procedure SetItem(List: TListBox; Index: Integer);
+    procedure SrcListClick(Sender: TObject);
+    function GetFirstSelection(List: TCustomListBox): Integer;
+    procedure SetButtons;
+    procedure DetailSearch(Tabela: String);
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRelatorio_Compras: TFrmRelatorio_Compras;
+  Pagina, Linha : Integer;
+
+implementation
+
+uses
+  UData, UPrincipal, UConsulta;
+
+{$R *.dfm}
+
+procedure TFrmRelatorio_Compras.btnExecutaClick(Sender: TObject);
+var
+I : Integer;
+Parametro, Grupo : string;
+Total_Qtd, Total_Valor : Real;
+begin
+// 125
+
+// 325
+
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+    QRel.Sql.Clear;
+
+    if Tipo_Rel.Text = 'Sintético' then
+       QRel.Sql.Add('SELECT GRUPO, SUM(QTD_COMPRA) QTD_COMPRA, SUM(VR_TOTAL) VR_TOTAL FROM(');
+
+    if Tipo_Rel.Text = 'Analítico' then
+     QRel.Sql.Add('SELECT TRANSACOES.NUM_DOC,TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, TRANSACOES.DT_ENT_SAI, TABELAS.DESCRICAO GRUPO, SUM(TRANSITENS.QUANTIDADE) QTD_COMPRA, ' +
+                 'SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI + TRANSITENS.VR_FCPST + TRANSITENS.VR_FCP - TRANSITENS.DESC_RODAPE) VR_TOTAL, TRANSITENS.VR_UNITARIO, FORNECEDORES.NOME FORNECEDOR')
+    else
+    QRel.Sql.Add('SELECT TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, PRODUTOS.COD_BARRA, TABELAS.DESCRICAO GRUPO, SUM(TRANSITENS.QUANTIDADE) QTD_COMPRA, ' +
+                 'SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI + TRANSITENS.VR_FCPST + TRANSITENS.VR_FCP - TRANSITENS.DESC_RODAPE) VR_TOTAL');
+
+    QRel.Sql.Add('FROM TRANSITENS');
+    QRel.Sql.Add('INNER JOIN TRANSACOES');
+    QRel.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QRel.Sql.Add('LEFT JOIN PRODUTOS');
+    QRel.Sql.Add('ON (TRANSITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+    QRel.Sql.Add('INNER JOIN FORNECEDORES');
+    QRel.Sql.Add('ON (FORNECEDORES.FORNECEDOR_ID = TRANSACOES.FORNECEDOR_ID)');
+    QRel.Sql.Add('LEFT JOIN TABELAS');
+    QRel.Sql.Add('ON (PRODUTOS.GRUPO_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QRel.Sql.Add('LEFT JOIN NOTAS_CANCELADAS');
+    QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = NOTAS_CANCELADAS.TRANSACAO_ID)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB) AND (TRANSITENS.TP_PROD_SERV = ''P'')');
+
+    if TIPO_COMPRA.Text <> '' then
+    begin
+      QRel.Sql.Add('AND (TRANSACOES.TIPO_COMPRA = :TIPO_COMPRA)');
+      QRel.ParamByName('TIPO_COMPRA').AsString := TIPO_COMPRA.Text;
+    end;
+
+
+
+    if (Tipo_Rel.Text = 'Resumido') then
+    begin
+
+          if (StrToInt(Prod_Inicial.Text) = 0)
+            AND (StrToInt(Tributacao.Text) = 0 )
+            AND (StrToInt(Localizacao.Text) = 0 )
+            AND (StrToInt(SubTipo.Text) = 0 )
+            AND (StrToInt(FAMILIA_ID.Text) = 0 )
+            AND (StrToInt(GRUPO_ID.Text) = 0 )
+            AND (StrToInt(Fornecedor.Text) = 0 )
+          then
+          begin
+             QRGroup1.Enabled   := False;
+             QRLabel2.Enabled   := False;
+             QRExpr4.Enabled    := False;
+             QRShape3.Enabled   := False;
+             QRBand2.Enabled    := False;
+          end
+          else
+          begin
+              QRGroup1.Enabled := True;
+              QRLabel2.Enabled := True;
+              QRExpr4.Enabled := True;
+              QRShape3.Enabled := True;
+              QRBand2.Enabled := True;
+          end;
+    end
+    else
+    begin
+             QRGroup1.Enabled := True;
+             QRLabel2.Enabled := True;
+             QRExpr4.Enabled := True;
+             QRShape3.Enabled := True;
+             QRBand2.Enabled := True;
+    end;
+
+    QRel.Sql.Add('AND (NOTAS_CANCELADAS.TRANSACAO_ID IS NULL)');
+
+    if StrToInt(Fornecedor.Text) > 0 then
+    begin
+      QRel.Sql.Add('AND (TRANSACOES.FORNECEDOR_ID = :FORNECEDOR_ID)');
+      QRel.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Fornecedor.Text);
+    end;
+
+    if StrToInt(GRUPO_ID.Text) > 0 then
+    begin
+      QRel.Sql.Add('AND (PRODUTOS.GRUPO_ID = :GRUPO_ID)');
+      QRel.ParamByName('GRUPO_ID').AsInteger := StrToInt(GRUPO_ID.Text);
+    end;
+
+    if StrToInt(FAMILIA_ID.Text) > 0 then
+    begin
+      QRel.Sql.Add('AND (PRODUTOS.SUBTIPO_ID = :SUBTIPO_ID)');
+      QRel.ParamByName('SUBTIPO_ID').AsInteger := StrToInt(FAMILIA_ID.Text);
+    end;
+
+    if StrToInt(Localizacao.Text) > 0 then
+    begin
+      QRel.Sql.Add('AND (PRODUTOS.LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+      QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(Localizacao.Text);
+    end;
+
+    if StrToInt(Tributacao.Text) > 0 then
+    begin
+      QRel.Sql.Add('AND (PRODUTOS.TRIBUTO_ID = :TRIBUTO_ID)');
+      QRel.ParamByName('TRIBUTO_ID').AsInteger := StrToInt(Tributacao.Text);
+    end;
+
+    if (StrToInt(Prod_Final.Text) > 0) then
+    begin
+      QRel.Sql.Add('AND (PRODUTOS.PRODUTO_ID BETWEEN :PRODUTO_INICIAL AND :PRODUTO_FINAL)');
+      QRel.ParamByName('PRODUTO_INICIAL').AsInteger := StrToInt(Prod_Inicial.Text);
+      QRel.ParamByName('PRODUTO_FINAL').AsInteger   := StrToInt(Prod_Final.Text);
+    end;
+
+    if (StrToInt(Produto_id.Text) > 0) then
+    begin
+      QRel.Sql.Add('AND (PRODUTOS.PRODUTO_ID = :PRODUTO_ID)');
+      QRel.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Produto_id.Text);
+    end;
+
+
+        if ( DstList.Items.Count > 0 ) then
+        begin
+          QRel.Sql.Add('AND((');
+
+            for I := 0 to (DstList.Items.Count - 1) do
+            begin
+                if DstList.Items.Strings[I] <> '' then
+                begin
+
+                   {
+                     if I = 0 then
+                      begin
+                       QRel.Sql.Add('TRANSITENS.CFOP = :CODIGO');
+                       QRel.ParamByName('CODIGO').AsString := Copy( DstList.Items.Strings[I], 1, 4 );
+                      end
+                     else
+                      Begin
+                       QRel.Sql.Add('OR (TRANSITENS.CFOP = :CODIGO)');
+                       QRel.ParamByName('CODIGO').AsString := Copy( DstList.Items.Strings[I], 1, 4 );
+                     End;
+                    }
+
+                     Parametro := 'CODIGO_'+IntToStr(I);
+
+                     if I = 0 then
+                      begin
+                       QRel.Sql.Add('(TRANSITENS.CFOP= :'+Parametro+') ');
+                       QRel.ParamByName(Parametro).AsString := Copy( DstList.Items.Strings[I], 1, 4 );
+                      end
+                     else
+                     begin
+                       QRel.Sql.Add( 'OR (TRANSITENS.CFOP=:'+ Parametro + ')');
+                       QRel.ParamByName(Parametro).AsString := Copy( DstList.Items.Strings[I], 1, 4 );
+                     End;
+
+                end;
+            end;
+
+            QRel.Sql.Add('))');
+        end;
+
+
+
+    if Tipo_Rel.Text = 'Analítico' then
+    QRel.Sql.Add('GROUP BY TRANSACOES.NUM_DOC,TRANSACOES.DT_ENT_SAI,TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, PRODUTOS.COD_BARRA, TABELAS.DESCRICAO,TRANSITENS.VR_UNITARIO, FORNECEDORES.NOME')
+    Else
+    QRel.Sql.Add('GROUP BY TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, PRODUTOS.COD_BARRA, TABELAS.DESCRICAO');
+
+   if Tipo_Rel.Text = 'Analítico' then
+   Begin
+
+    if Ordem.Text = 'CÓDIGO' then
+      QRel.Sql.Add('ORDER BY 7, 3')
+    else if Ordem.Text = 'DESCRIÇÃO' then
+      QRel.Sql.Add('ORDER BY PRODUTOS.DESCRICAO, TRANSACOES.DT_ENT_SAI ')
+    else if Ordem.Text = 'QUANTIDADE' then
+      QRel.Sql.Add('ORDER BY 7, 8 DESC')
+     else if Ordem.Text = 'DATA COMPRA' then
+      QRel.Sql.Add('ORDER BY TRANSACOES.DT_ENT_SAI')
+    else if Ordem.Text = 'VALOR COMPRA' then
+      QRel.Sql.Add('ORDER BY 7, 9 DESC');
+
+   End
+   else
+
+   begin
+
+    if Ordem.Text = 'CÓDIGO' then
+      QRel.Sql.Add('ORDER BY 4, 1')
+    else if Ordem.Text = 'DESCRIÇÃO' then
+      QRel.Sql.Add('ORDER BY 4, 2')
+    else if Ordem.Text = 'QUANTIDADE' then
+      QRel.Sql.Add('ORDER BY 4, 5 DESC')
+    else if Ordem.Text = 'VALOR COMPRA' then
+      QRel.Sql.Add('ORDER BY 4, 6 DESC');
+   end;
+
+    if Tipo_Rel.Text = 'Sintético' then
+       QRel.Sql.Add(') AS TESTE GROUP BY GRUPO');
+
+
+    QRel.ParamByName('TIPO_TABELA').AsString  := '7';
+    QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+    QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+    QRel.ParamByName('CONDUTA').AsString      := '02';
+    QRel.ParamByName('DEPTO').AsString        := '07';
+    QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QRLabel10.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+
+    if QRel.IsEmpty then
+      Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+    else
+      begin
+
+        if Tipo_Rel.Text = 'Sintético' then
+          begin
+
+
+          RDprint1.TamanhoQteColunas:=80;
+          RDprint1.OpcoesPreview.Preview     := True;
+          RDprint1.MostrarProgresso          := True;
+          RDprint1.Acentuacao                := SemAcento;
+          RDprint1.TamanhoQteLinhas          := 1;
+          RDprint1.Abrir;
+
+              if linha > 66 then
+              begin
+                RDprint1.novapagina;
+                Pagina := Pagina + 1;
+              end;
+
+              Pagina:= 1;
+              QRel.First;
+
+
+                  RDprint1.ImpF(linha, 01, 'GRUPO', [negrito]);
+                  RDprint1.ImpF(linha, 45, 'Qtd. Compra', [negrito]);
+                  RDprint1.ImpF(linha, 61, 'Vr. Compra', [negrito]);
+                  Inc(linha);
+                  RDprint1.LinhaH(linha,01,80,0,false);
+
+                  Inc(linha);
+
+                  Total_Qtd   := 0;
+                  Total_Valor := 0;
+
+             while not QRel.Eof do
+             Begin
+
+                RDprint1.ImpF(linha, 01, QRel.FieldByName('GRUPO').AsString, []);
+                RDprint1.ImpVal(linha, 45, ',###,##0.00', QRel.FieldByName('QTD_COMPRA').AsFloat,[]);
+                RDprint1.ImpVal(linha, 60, ',###,##0.00', QRel.FieldByName('VR_TOTAL').AsFloat,[]);
+
+                Total_Qtd := Total_Qtd + QRel.FieldByName('QTD_COMPRA').AsFloat;
+                Total_Valor := Total_Valor + QRel.FieldByName('VR_TOTAL').AsFloat;
+
+                Inc(linha);
+
+                if linha > 63 then
+                begin
+                  RDprint1.novapagina;
+                  Pagina := Pagina + 1;
+                end;
+                QRel.Next;
+             End;
+
+              Inc(linha);
+
+              RDprint1.LinhaH(linha,45,55,0,false);
+              RDprint1.LinhaH(linha,60,70,0,false);
+              Inc(linha);
+              RDprint1.ImpVal(linha, 45, ',###,##0.00', Total_Qtd,[]);
+              RDprint1.ImpVal(linha, 60, ',###,##0.00', Total_Valor,[]);
+
+
+              Application.ProcessMessages;
+              RDprint1.TamanhoQteLinhas:= 66;
+              RDprint1.Fechar;
+
+          end
+        else  if Tipo_Rel.Text = 'Analítico' then
+        Begin
+        if PRODUTO_ID.VALUE > 0 Then
+         Begin
+
+         Rel_Compras_Analitico_Prod.Prepare;
+         Rel_Compras_Analitico_Prod.PreviewModal;
+
+         End
+         Else
+         Begin
+         Rel_Compras_Analitico.Prepare;
+         Rel_Compras_Analitico.PreviewModal;
+
+         End;
+        End
+        else
+        Begin
+        Fim.Prepare;
+        Fim.PreviewModal;
+        if chk_exportar.Checked Then
+         Begin
+         Fim.ExportToFilter(TQRXLSFilter.Create(ExtractFilePath(ParamStr(0)) + 'Exportados\Rel_Compras_' + Copy(Dtmen.Text,1,2) + Copy(Dtmen.Text,4,2) + Copy(Dtmen.Text,7,4) + '_' + Copy(Dtmai.Text,1,2) + Copy(Dtmai.Text,4,2) + Copy(Dtmai.Text,7,4)  + '.xls'));
+         Application.MessageBox(PChar('Arquivo exportado para : ' + ExtractFilePath(ParamStr(0)) + 'Exportados\Rel_Compras_' + Copy(Dtmen.Text,1,2) + Copy(Dtmen.Text,4,2) + Copy(Dtmen.Text,7,4) + '_' +Copy(Dtmai.Text,1,2) + Copy(Dtmai.Text,4,2) + Copy(Dtmai.Text,7,4)  + '.xls') , PChar(Msg_Title), mb_IconInformation);
+         End;
+        End;
+
+      end;
+
+
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+end;
+
+procedure TFrmRelatorio_Compras.btnFamiliaClick(Sender: TObject);
+begin
+    try
+      FAMILIA_ID.Value := GetConsulta('FAMÍLIA', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0 , StrToInt(GRUPO_ID.Text));
+    except
+      FAMILIA_ID.Value := GetConsulta('FAMÍLIA', 0, 0, 0);
+    end;
+end;
+
+procedure TFrmRelatorio_Compras.btnFornecedorClick(Sender: TObject);
+begin
+  try
+      Fornecedor.Value := GetConsulta('FORNECEDORES', 0, 0, StrToInt(Fornecedor.Text));
+    except
+      Fornecedor.Value := GetConsulta('FORNECEDORES', 0, 0, 0);
+    end;
+end;
+
+procedure TFrmRelatorio_Compras.btnGrupoClick(Sender: TObject);
+begin
+  try
+       GRUPO_ID.Value := GetConsulta('GRUPOS', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0 , StrToInt(GRUPO_ID.Text));
+     except
+       GRUPO_ID.Value := GetConsulta('GRUPOS', 0, 0, 0);
+     end;
+end;
+
+procedure TFrmRelatorio_Compras.btnLocalizacaoClick(Sender: TObject);
+begin
+     try
+    Localizacao.Value := GetConsulta('LOCAIS', 0, 0, StrToInt(Localizacao.Text));
+  except
+    Localizacao.Value := GetConsulta('LOCAIS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRelatorio_Compras.btnProd_finalClick(Sender: TObject);
+begin
+    try
+      Prod_Final.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Prod_Final.Text));
+     except
+      Prod_Final.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, 0);
+     end;
+end;
+
+procedure TFrmRelatorio_Compras.btnProd_InicialClick(Sender: TObject);
+begin
+  try
+    Prod_Inicial.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Prod_Inicial.Text));
+  except
+    Prod_Inicial.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, 0);
+  end;
+end;
+
+procedure TFrmRelatorio_Compras.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmRelatorio_Compras.btnSub_TipoClick(Sender: TObject);
+begin
+    try
+     SubTipo.Value := GetConsulta('SUBTIPOS', 0, 0, StrToInt(SubTipo.Text));
+    except
+     SubTipo.Value := GetConsulta('SUBTIPOS', 0, 0, 0);
+    end;
+end;
+
+procedure TFrmRelatorio_Compras.BtnTributacaoClick(Sender: TObject);
+begin
+   try
+    Tributacao.Value := GetConsulta('TRIBUTOS', 0, 0, StrToInt(Localizacao.Text));
+  except
+    Tributacao.Value := GetConsulta('TRIBUTOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRelatorio_Compras.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmRelatorio_Compras.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   // Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmRelatorio_Compras.ExAllBtnClick(Sender: TObject);
+var
+I: Integer;
+begin
+  QCfop.Close;
+
+  for I := 0 to DstList.Items.Count - 1 do
+    SrcList.Items.AddObject(DstList.Items[I], DstList.Items.Objects[I]);
+
+  DstList.Items.Clear;
+  SetItem(DstList, 0);
+
+end;
+
+procedure TFrmRelatorio_Compras.ExcludeBtnClick(Sender: TObject);
+var
+Index: Integer;
+begin
+    QCfop.Close;
+    Index := GetFirstSelection(DstList);
+    MoveSelected(DstList, SrcList.Items);
+    SetItem(DstList, Index);
+end;
+
+
+procedure TFrmRelatorio_Compras.DetailSearch(Tabela: String);
+begin
+
+ if ((Tabela = '') or (Tabela = 'Fornecedor')) and (Fornecedor.Text <> '') then
+  begin
+    QFornecedor.Close;
+    QFornecedor.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Fornecedor.Text);
+    QFornecedor.Prepare;
+    QFornecedor.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Grupo')) and (GRUPO_ID.Text <> '') then
+  begin
+    QGrupo.Close;
+    QGrupo.ParamByName('TABELA_ID').AsInteger := StrToInt(GRUPO_ID.Text);
+    QGrupo.Prepare;
+    QGrupo.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Subtipo')) and (SubTipo.Text <> '') then
+  begin
+    QSubtipo.Close;
+    QSubtipo.ParamByName('TABELA_ID').AsInteger := StrToInt(SubTipo.Text);
+    QSubtipo.Prepare;
+    QSubtipo.Open;
+  end;
+
+
+  if ((Tabela = '') or (Tabela = 'Tributação')) and (Tributacao.Text <> '') then
+  begin
+    QTributos.Close;
+    QTributos.ParamByName('TRIBUTO_ID').AsInteger := StrToInt(Tributacao.Text);
+    QTributos.Prepare;
+    QTributos.Open;
+  end;
+
+
+  if ((Tabela = '') or (Tabela = 'Localização')) and (Localizacao.Text <> '') then
+  begin
+    QLocalizacao.Close;
+    QLocalizacao.ParamByName('TABELA_ID').AsInteger := StrToInt(Localizacao.Text);
+    QLocalizacao.Prepare;
+    QLocalizacao.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Produto Inicial')) and (Prod_Inicial.Text <> '') then
+  begin
+    QProduto_Inicial.Close;
+    QProduto_Inicial.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Prod_Inicial.Text);
+    QProduto_Inicial.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QProduto_Inicial.Prepare;
+    QProduto_Inicial.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Produto Final')) and (Prod_Final.Text <> '') then
+  begin
+    QProduto_Final.Close;
+    QProduto_Final.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Prod_Final.Text);
+    QProduto_Final.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QProduto_Final.Prepare;
+    QProduto_Final.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Produtos')) and (Produto_id.Text <> '') then
+  begin
+    QProduto.Close;
+    QProduto.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Produto_id.Text);
+    QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QProduto.Prepare;
+    QProduto.Open;
+  end;
+
+
+  if ((Tabela = '') or (Tabela = 'Familia')) and (FAMILIA_ID.Text <> '') then
+  begin
+    QFamilia.Close;
+    QFamilia.ParamByName('TABELA_ID').AsInteger := StrToInt(FAMILIA_ID.Text);
+    QFamilia.Prepare;
+    QFamilia.Open;
+  end;
+
+
+end;
+
+
+
+procedure TFrmRelatorio_Compras.FAMILIA_IDChange(Sender: TObject);
+begin
+   DetailSearch('Familia');
+end;
+
+procedure TFrmRelatorio_Compras.FAMILIA_IDExit(Sender: TObject);
+begin
+   DetailSearch('Familia');
+end;
+
+procedure TFrmRelatorio_Compras.FAMILIA_IDKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+    if (Key = Vk_F7) and (Sender = FAMILIA_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if (Key = Vk_F7) and (Sender = GRUPO_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = SubTipo) then
+    btnSub_TipoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Localizacao) then
+    btnLocalizacaoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Inicial) then
+    btnProd_InicialClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Final) then
+    btnProd_FinalClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmRelatorio_Compras.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmRelatorio_Compras.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+  QCfop.Prepare;
+  QCfop.Open;
+
+  QCfop.First;
+
+  while not QCfop.Eof do
+  begin
+     SrcList.Items.Add(QCfop.FieldByName('COD_CFOP').AsString + ' - ' + Copy(QCfop.FieldByName('DESC_CFOP').AsString, 1,35));
+
+     QCfop.Next;
+  end;
+
+end;
+
+procedure TFrmRelatorio_Compras.FormShow(Sender: TObject);
+begin
+   if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor') <> '' then
+    Fornecedor.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor'));
+
+  if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo') <> '' then
+    GRUPO_ID.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo'));
+
+  if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') <> '' then
+    SubTipo.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo'));
+
+  if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Família') <> '' then
+     FAMILIA_ID.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Família'));
+
+  if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização') <> '' then
+    Localizacao.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização'));
+
+  if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Tributação') <> '' then
+    Tributacao.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Tributação'));
+
+  if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial') <> '' then
+    Prod_Inicial.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial'));
+
+  if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Final') <> '' then
+    Prod_Final.Value := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Final'));
+end;
+
+procedure TFrmRelatorio_Compras.FornecedorChange(Sender: TObject);
+begin
+  DetailSearch('Fornecedor');
+end;
+
+procedure TFrmRelatorio_Compras.FornecedorExit(Sender: TObject);
+begin
+    DetailSearch('Fornecedor');
+end;
+
+procedure TFrmRelatorio_Compras.FornecedorKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+    if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0)
+end;
+
+procedure TFrmRelatorio_Compras.IncAllBtnClick(Sender: TObject);
+var
+I: Integer;
+begin
+    QCfop.Close;
+    for I := 0 to SrcList.Items.Count - 1 do
+      DstList.Items.AddObject(SrcList.Items[I], SrcList.Items.Objects[I]);
+
+    SrcList.Items.Clear;
+    SetItem(SrcList, 0);
+
+end;
+
+procedure TFrmRelatorio_Compras.IncludeBtnClick(Sender: TObject);
+var
+Index: Integer;
+begin
+    QCfop.Close;
+    Index := GetFirstSelection(SrcList);
+    MoveSelected(SrcList, DstList.Items);
+    SetItem(SrcList, Index);
+
+end;
+
+procedure TFrmRelatorio_Compras.LocalizacaoChange(Sender: TObject);
+begin
+    DetailSearch('Localização');
+end;
+
+procedure TFrmRelatorio_Compras.LocalizacaoExit(Sender: TObject);
+begin
+    DetailSearch('Localização');
+end;
+
+procedure TFrmRelatorio_Compras.LocalizacaoKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+     if (Key = Vk_F7) and (Sender = FAMILIA_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if (Key = Vk_F7) and (Sender = GRUPO_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = SubTipo) then
+    btnSub_TipoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Localizacao) then
+    btnLocalizacaoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Inicial) then
+    btnProd_InicialClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Final) then
+    btnProd_FinalClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmRelatorio_Compras.GetFirstSelection(List: TCustomListBox): Integer;
+begin
+  for Result := 0 to List.Items.Count - 1 do
+  begin
+    if List.Selected[Result] then
+      exit;
+  end;
+  Result := LB_ERR;
+end;
+
+
+procedure TFrmRelatorio_Compras.GRUPO_IDChange(Sender: TObject);
+begin
+   DetailSearch('Grupo');
+end;
+
+procedure TFrmRelatorio_Compras.GRUPO_IDExit(Sender: TObject);
+begin
+       DetailSearch('Grupo');
+end;
+
+procedure TFrmRelatorio_Compras.GRUPO_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+    if (Key = Vk_F7) and (Sender = GRUPO_ID) then
+     btnGrupoClick(Self);
+
+      if Key = Vk_Return then
+         Perform(Wm_NextDlgctl, 0, 0);
+
+end;
+
+procedure TFrmRelatorio_Compras.MoveSelected(List: TCustomListBox; Items: TStrings);
+var
+I: Integer;
+begin
+  for I := List.Items.Count - 1 downto 0 do
+  begin
+    if List.Selected[I] then
+    begin
+      Items.AddObject(List.Items[I], List.Items.Objects[I]);
+      List.Items.Delete(I);
+    end;
+  end;
+end;
+
+procedure TFrmRelatorio_Compras.SetButtons;
+var
+SrcEmpty, DstEmpty: Boolean;
+begin
+  SrcEmpty           := SrcList.Items.Count = 0;
+  DstEmpty           := DstList.Items.Count = 0;
+  IncludeBtn.Enabled := not SrcEmpty;
+  IncAllBtn.Enabled  := not SrcEmpty;
+  ExcludeBtn.Enabled := not DstEmpty;
+  ExAllBtn.Enabled   := not DstEmpty;
+end;
+
+
+procedure TFrmRelatorio_Compras.SetItem(List: TListBox; Index: Integer);
+var
+MaxIndex: Integer;
+begin
+  with List do
+  begin
+    SetFocus;
+    MaxIndex := List.Items.Count - 1;
+
+    if Index = LB_ERR then
+      Index := 0
+    else if Index > MaxIndex then
+      Index := MaxIndex;
+
+    Selected[Index] := True;
+  end;
+
+  SetButtons;
+end;
+
+procedure TFrmRelatorio_Compras.SpeedButton1Click(Sender: TObject);
+begin
+try
+    Produto_id.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Produto_id.Text));
+  except
+    Produto_id.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, 0);
+  end;
+
+end;
+
+procedure TFrmRelatorio_Compras.SrcListClick(Sender: TObject);
+var
+I: Integer;
+begin
+  for I := 0 to (SrcList.Items.Count - 1) do
+  begin
+    if SrcList.Selected[I] then
+    begin
+      if SrcList.Items.Strings[I] <> '' then
+      begin
+        QCfop.Sql.Clear;
+        QCfop.Sql.Add('SELECT * FROM CFOP');
+        QCfop.Sql.Add('WHERE');
+        QCfop.Sql.Add('(COD_CFOP = :CODIGO)');
+
+        QCfop.ParamByName('CODIGO').AsInteger := StrToInt(Copy(SrcList.Items.Strings[I], (length(SrcList.Items.Strings[I]) - 10), 11));
+
+        QCfop.Prepare;
+        QCfop.Open;
+      end;
+    end;
+  end;
+end;
+
+
+
+procedure TFrmRelatorio_Compras.SubTipoChange(Sender: TObject);
+begin
+     DetailSearch('Subtipo');
+end;
+
+procedure TFrmRelatorio_Compras.SubTipoExit(Sender: TObject);
+begin
+     DetailSearch('Subtipo');
+end;
+
+procedure TFrmRelatorio_Compras.SubTipoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+   if (Key = Vk_F7) and (Sender = FAMILIA_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if (Key = Vk_F7) and (Sender = GRUPO_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = SubTipo) then
+    btnSub_TipoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Localizacao) then
+    btnLocalizacaoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Inicial) then
+    btnProd_InicialClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Final) then
+    btnProd_FinalClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmRelatorio_Compras.Tipo_RelChange(Sender: TObject);
+begin
+ if Tipo_Rel.Text <> 'Sintético' then
+ chk_exportar.Visible := True
+ else
+ chk_exportar.Visible := False;
+end;
+
+procedure TFrmRelatorio_Compras.TributacaoChange(Sender: TObject);
+begin
+  DetailSearch('Tributação');
+end;
+
+procedure TFrmRelatorio_Compras.TributacaoExit(Sender: TObject);
+begin
+   DetailSearch('Tributação');
+end;
+
+procedure TFrmRelatorio_Compras.OrdemKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmRelatorio_Compras.Produto_idChange(Sender: TObject);
+begin
+  DetailSearch('Produtos');
+end;
+
+procedure TFrmRelatorio_Compras.Prod_FinalKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+            if (Key = Vk_F7) and (Sender = FAMILIA_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if (Key = Vk_F7) and (Sender = GRUPO_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = SubTipo) then
+    btnSub_TipoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Localizacao) then
+    btnLocalizacaoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Inicial) then
+    btnProd_InicialClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Final) then
+    btnProd_FinalClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmRelatorio_Compras.Prod_InicialExit(Sender: TObject);
+begin
+     DetailSearch('Produto Inicial');
+end;
+
+procedure TFrmRelatorio_Compras.Prod_InicialKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+   if (Key = Vk_F7) and (Sender = FAMILIA_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if (Key = Vk_F7) and (Sender = GRUPO_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = SubTipo) then
+    btnSub_TipoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Localizacao) then
+    btnLocalizacaoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Inicial) then
+    btnProd_InicialClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Prod_Final) then
+    btnProd_FinalClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmRelatorio_Compras.RDprint1NewPage(Sender: TObject;
+  Pagina: Integer);
+begin
+
+            RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+            RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 80, 'Sistema de Automação de empresas Eficaz', []);
+            RDprint1.Imp(02, 01, 'Data/Hora: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+            RDprint1.impDir(02, 80, 80, 'Página: ' + IntToStr(Pagina), []);
+            RDprint1.impF(03, 26, '*** RELATÓRIO DE COMPRAS ***',[negrito]);
+            RDprint1.imp(04, 01, 'Período:'+ datetoStr(dtmen.date) + ' à ' + datetoStr(dtmai.date));
+            RDprint1.LinhaH(05,01,80,0,false);
+
+            Linha := 06;
+
+end;
+
+end.

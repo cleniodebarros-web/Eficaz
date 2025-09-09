@@ -1,0 +1,1521 @@
+unit UCotacao;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBCtrls, ExtCtrls, ComCtrls, ToolWin, Grids, DBGrids,
+  Buttons, DB, DBTables, Menus, IBCustomDataSet, IBQuery, Math, QRCtrls,
+  QuickRpt, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataMove;
+
+type
+  TFrmCotacao = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    IncludeBtn: TSpeedButton;
+    IncAllBtn: TSpeedButton;
+    ExcludeBtn: TSpeedButton;
+    ExAllBtn: TSpeedButton;
+    DBGrid2: TDBGrid;
+    StatusBar1: TStatusBar;
+    SrcList: TListBox;
+    DstList: TListBox;
+    ToolBar1: TToolBar;
+    btnCria: TToolButton;
+    btnAbre: TToolButton;
+    btnFecha: TToolButton;
+    btnRel: TToolButton;
+    btnPed: TToolButton;
+    btnSai: TToolButton;
+    TabSheet2: TTabSheet;
+    DBGrid3: TDBGrid;
+    Panel3: TPanel;
+    DBText5: TDBText;
+    PopupMenu1: TPopupMenu;
+    Requisio1: TMenuItem;
+    PropostadeFornecimento1: TMenuItem;
+    Mapa1: TMenuItem;
+    CriarArqWEB1: TMenuItem;
+    DataCotacao: TDataSource;
+    DataProdutos: TDataSource;
+    Mapa: TQuickRep;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    Pr3: TQRLabel;
+    Pr4: TQRLabel;
+    Pr5: TQRLabel;
+    Pr6: TQRLabel;
+    Pr7: TQRLabel;
+    Pr8: TQRLabel;
+    Pr9: TQRLabel;
+    Pr10: TQRLabel;
+    QRShape3: TQRShape;
+    QRShape4: TQRShape;
+    QRShape5: TQRShape;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    QRShape11: TQRShape;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRShape12: TQRShape;
+    QRShape13: TQRShape;
+    QRShape14: TQRShape;
+    Pr2: TQRLabel;
+    Pr1: TQRLabel;
+    Pr11: TQRLabel;
+    Pr12: TQRLabel;
+    Pr13: TQRLabel;
+    Pr14: TQRLabel;
+    Pr15: TQRLabel;
+    QRShape2: TQRShape;
+    QRShape15: TQRShape;
+    QRShape16: TQRShape;
+    QRShape17: TQRShape;
+    ColumnHeaderBand1: TQRBand;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRSysData1: TQRSysData;
+    QRShape1: TQRShape;
+    QRLabel4: TQRLabel;
+    QRLabel6: TQRLabel;
+    Forne6: TQRLabel;
+    Forne7: TQRLabel;
+    Forne8: TQRLabel;
+    Forne9: TQRLabel;
+    Forne10: TQRLabel;
+    Forne5: TQRLabel;
+    Forne4: TQRLabel;
+    Forne3: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel7: TQRLabel;
+    Forne2: TQRLabel;
+    Forne1: TQRLabel;
+    Forne11: TQRLabel;
+    Forne12: TQRLabel;
+    Forne13: TQRLabel;
+    Forne14: TQRLabel;
+    Forne15: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRBand1: TQRBand;
+    Pedido_Cotacao: TQuickRep;
+    QRBand2: TQRBand;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRExpr2: TQRExpr;
+    PageFooterBand1: TQRBand;
+    QRLabel10: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRMemo1: TQRMemo;
+    QRShape18: TQRShape;
+    QRBand3: TQRBand;
+    QRLabel1: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRLabel14: TQRLabel;
+    QRDBText13: TQRDBText;
+    QRGroup1: TQRGroup;
+    QRShape19: TQRShape;
+    QRShape20: TQRShape;
+    QRLabel2: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRDBText14: TQRDBText;
+    Requisicao_Abastecimento: TQuickRep;
+    PageHeaderBand1: TQRBand;
+    QRLabel17: TQRLabel;
+    QRShape21: TQRShape;
+    QRLabel18: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRShape22: TQRShape;
+    QRShape23: TQRShape;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRShape24: TQRShape;
+    QRShape25: TQRShape;
+    QRShape26: TQRShape;
+    QRShape27: TQRShape;
+    QRSysData3: TQRSysData;
+    QRBand4: TQRBand;
+    QRShape28: TQRShape;
+    QRShape29: TQRShape;
+    QRShape30: TQRShape;
+    QRShape31: TQRShape;
+    QRDBText16: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRSysData4: TQRSysData;
+    QRDBText19: TQRDBText;
+    SummaryBand1: TQRBand;
+    QRShape32: TQRShape;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRShape33: TQRShape;
+    QRShape34: TQRShape;
+    QRShape35: TQRShape;
+    QRShape36: TQRShape;
+    QRShape37: TQRShape;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel35: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRLabel38: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    Proposta_Fornecimento: TQuickRep;
+    QRBand5: TQRBand;
+    QRShape38: TQRShape;
+    QRShape39: TQRShape;
+    QRShape40: TQRShape;
+    QRShape41: TQRShape;
+    QRShape42: TQRShape;
+    QRSysData5: TQRSysData;
+    QRDBText20: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRDBText22: TQRDBText;
+    QRBand6: TQRBand;
+    QRShape43: TQRShape;
+    QRLabel42: TQRLabel;
+    QRShape44: TQRShape;
+    QRLabel43: TQRLabel;
+    QRLabel44: TQRLabel;
+    QRLabel45: TQRLabel;
+    QRLabel46: TQRLabel;
+    QRLabel47: TQRLabel;
+    QRLabel48: TQRLabel;
+    QRLabel49: TQRLabel;
+    QRLabel50: TQRLabel;
+    QRLabel51: TQRLabel;
+    QRLabel52: TQRLabel;
+    QRLabel53: TQRLabel;
+    QRLabel54: TQRLabel;
+    QRLabel55: TQRLabel;
+    QRLabel56: TQRLabel;
+    QRLabel57: TQRLabel;
+    QRBand7: TQRBand;
+    QRLabel58: TQRLabel;
+    QRShape45: TQRShape;
+    QRLabel59: TQRLabel;
+    QRLabel60: TQRLabel;
+    QRLabel61: TQRLabel;
+    QRLabel62: TQRLabel;
+    QRDBText23: TQRDBText;
+    QRLabel63: TQRLabel;
+    QRLabel64: TQRLabel;
+    QRLabel65: TQRLabel;
+    QRShape46: TQRShape;
+    QRShape47: TQRShape;
+    QRLabel66: TQRLabel;
+    QRLabel67: TQRLabel;
+    QRLabel68: TQRLabel;
+    QRLabel69: TQRLabel;
+    QRLabel70: TQRLabel;
+    QRLabel71: TQRLabel;
+    QRShape48: TQRShape;
+    QRShape49: TQRShape;
+    QRShape50: TQRShape;
+    QRShape51: TQRShape;
+    QRShape52: TQRShape;
+    QRDBText24: TQRDBText;
+    QRDBText25: TQRDBText;
+    QRDBText26: TQRDBText;
+    QRDBText27: TQRDBText;
+    StatusBar2: TStatusBar;
+    Cotacao: TFDMemTable;
+    QProdutos: TFDQuery;
+    QFornecedores: TFDQuery;
+    QMinimo: TFDQuery;
+    IQuery: TFDQuery;
+    FDDataMove1: TFDDataMove;
+    Cotacao_import: TFDDataMove;
+    CotacaoCDEST: TIntegerField;
+    CotacaoBARRA: TStringField;
+    CotacaoNMEST: TStringField;
+    CotacaoMEDIA: TFloatField;
+    CotacaoQUANT: TFloatField;
+    CotacaoUNID: TStringField;
+    CotacaoFORNE: TIntegerField;
+    CotacaoPRECO: TFloatField;
+    procedure FormCreate(Sender: TObject);
+    procedure DBGrid3KeyPress(Sender: TObject; var Key: Char);
+    procedure TabSheet1Show(Sender: TObject);
+    procedure DBGrid3KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid2KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure IncludeBtnClick(Sender: TObject);
+    procedure IncAllBtnClick(Sender: TObject);
+    procedure ExcludeBtnClick(Sender: TObject);
+    procedure ExAllBtnClick(Sender: TObject);
+    procedure btnCriaClick(Sender: TObject);
+    procedure btnAbreClick(Sender: TObject);
+    procedure btnFechaClick(Sender: TObject);
+    procedure btnSaiClick(Sender: TObject);
+    procedure btnPedClick(Sender: TObject);
+    procedure Mapa1Click(Sender: TObject);
+    procedure Requisio1Click(Sender: TObject);
+    procedure PropostadeFornecimento1Click(Sender: TObject);
+    procedure CriarArqWEB1Click(Sender: TObject);
+    procedure MoveSelected(List: TCustomListBox; Items: TStrings);
+    procedure SetButtons;
+    function GetFirstSelection(List: TCustomListBox): Integer;
+    procedure SetItem(List: TListBox; Index: Integer);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure ColumnHeaderBand1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure DetailBand1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure CotacaoBeforeDelete(DataSet: TDataSet);
+    procedure QRGroup1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure Pedido_CotacaoBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QRGroup1AfterPrint(Sender: TQRCustomBand; BandPrinted: Boolean);
+    procedure PageHeaderBand1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure QRBand7BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmCotacao: TFrmCotacao;
+  Ordem: String;
+  Pg: Integer;
+
+implementation
+
+uses
+  UData, UPrincipal, UFicha_Financeira, UFornecedor_Cotacao, UPesquisa;
+
+{$R *.dfm}
+
+procedure TFrmCotacao.btnAbreClick(Sender: TObject);
+var
+W: Integer;
+begin
+  if FrmPrincipal.OpenDialog1.Execute then
+  begin
+    if Cotacao.Active then
+    Cotacao.Active := False;
+
+    Cotacao.Free;
+    Cotacao := TFDMemTable.Create(nil);
+
+    with Cotacao DO
+    BEGIN
+      {with FieldDefs do
+      begin
+        Clear;
+        Add('CDEST', ftInteger, 0, False);
+        Add('BARRA', ftString, 13, False);
+        Add('NMEST', ftString, 40, False);
+        Add('MEDIA', ftFloat, 0, False);
+        Add('QUANT', ftFloat, 0, False);
+        Add('UNID', ftString, 5, False);
+        Add('Forne', ftInteger, 0, False);
+        Add('Preco', ftFloat, 0, False);
+      end; }
+      with IndexDefs do
+      begin
+        Clear;
+        Add('', 'CDEST', [ixPrimary, ixUnique]);
+        Add('COTACAO', 'NMEST', [ixCaseInsensitive]);
+        Add('COTFOR', 'FORNE', [ixCaseInsensitive]);
+      end;
+      IndexName := 'COTACAO';
+
+
+      LoadFromFile(FrmPrincipal.OpenDialog1.Filename,sfAuto);
+
+      open;
+
+
+      Cotacao.FieldByName('CDEST').ReadOnly := True;
+      Cotacao.FieldByName('BARRA').ReadOnly := True;
+      Cotacao.FieldByName('NMEST').ReadOnly := True;
+      Cotacao.FieldByName('MEDIA').ReadOnly := True;
+      Cotacao.FieldByName('FORNE').ReadOnly := True;
+      Cotacao.FieldByName('PRECO').ReadOnly := True;
+
+      for W := 1 to Cotacao.FieldCount - 1 do
+      begin
+        if Copy(Cotacao.Fields[W].FieldName, 1, 4) = 'Nulo' then
+          Cotacao.Fields[W].ReadOnly := True;
+      end;
+
+    END;
+    DataCotacao.DataSet := Cotacao;
+    dbGrid3.DataSource := DataCotacao;
+
+    btnCria.Enabled  := False;
+    btnAbre.Enabled  := False;
+    btnFecha.Enabled := True;
+    btnRel.Enabled   := True;
+    btnPed.Enabled   := True;
+
+    FrmCotacao.Caption := 'Cotação de Preços - ' + FrmPrincipal.OpenDialog1.FileName;
+
+    QProdutos.Prepare;
+    QProdutos.Open;
+  end;
+end;
+
+procedure TFrmCotacao.btnCriaClick(Sender: TObject);
+var
+CONTADOR, CP, Z, X, W , NM_SEQ : Integer;
+NM,NM_ANTERIOR: String;
+Alterado : Boolean;
+begin
+
+  CP := 0;
+  Z := 0;
+  NM_ANTERIOR := '';
+  NM_SEQ := 0;
+
+  if FrmPrincipal.OpenDialog1.Execute then
+  begin
+
+    if FileExists(FrmPrincipal.OpenDialog1.FileName) then
+    begin
+      Application.MessageBox('O arquivo selecionado já existe', PChar(Msg_Title), mb_IconStop);
+       exit;
+    end;
+
+   //  Cotacao.FetchOptions.Unidirectional := False;
+
+    Cotacao.Free;
+    Cotacao := TFDMemTable.Create(nil);
+
+    with Cotacao do
+    begin
+
+      with FieldDefs do
+      begin
+        Clear;
+        Add('CDEST', ftInteger, 0, False);
+        Add('BARRA', ftString, 20, False);
+        Add('NMEST', ftString, 40, False);
+        Add('MEDIA', ftFloat, 0, False);
+        Add('QUANT', ftFloat, 0, False);
+        Add('UNID', ftString, 5, False);
+
+        for CONTADOR := 0 to (DstList.Items.Count - 1) do
+        begin
+          NM := '';
+
+          for X := 1 to 10 do
+          begin
+            if Copy(DstList.Items[CONTADOR], X, 1) <> ' ' then
+              NM := NM + Copy(DstList.Items[CONTADOR],X, 1)
+            else
+              NM := NM + '_' ;
+
+          end;
+
+
+          if (NM <> '') and (Z <= 10) then
+          Begin
+            Alterado := False;
+
+            if NM_ANTERIOR = NM then
+            Begin
+             inc(NM_SEQ);
+             NM := IntTostr(NM_SEQ) +  NM;
+             Alterado := True;
+            End;
+
+            Add(NM, ftFloat, 0, False);
+
+            if NOT Alterado then
+            NM_Anterior := NM;
+
+          End;
+
+          Inc(CP);
+          Inc(Z);
+        end;
+
+        if CP <= 10 then
+        begin
+          for W := 1 to 10 - Z do
+            Add('Nulo_' + IntToStr(W), ftFloat, 0, False);
+        end;
+
+        Add('Forne', ftInteger, 0, False);
+        Add('Preco', ftFloat, 0, False);
+      end;
+
+      with IndexDefs do
+      begin
+        Clear;
+        Add('', 'CDEST', [ixPrimary, ixUnique]);
+        Add('COTACAO', 'NMEST', [ixCaseInsensitive]);
+        Add('COTFOR', 'FORNE', [ixCaseInsensitive]);
+      end;
+
+      IndexName := 'COTACAO';
+
+      Open;
+
+
+
+      if Application.MessageBox('Deseja exportar os itens abaixo do ponto mínimo?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+      begin
+        QMinimo.Sql.Clear;
+        QMinimo.Sql.Add('SELECT * FROM PRODUTOS');
+        QMinimo.Sql.Add('WHERE');
+        QMinimo.Sql.Add('(STATUS = :STATUS)');
+        QMinimo.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '3' then
+          QMinimo.Sql.Add('AND (QUANTIDADE_G < QUANT_MINIMA)')
+        else
+          QMinimo.Sql.Add('AND (QUANTIDADE_C < QUANT_MINIMA)');
+
+        if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        begin
+          QMinimo.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+          QMinimo.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+        end;
+
+        QMinimo.ParamByName('STATUS').AsString      := 'A';
+        QMinimo.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+        QMinimo.Prepare;
+        QMinimo.Open;
+
+
+        QMinimo.First;
+        while not QMinimo.Eof do
+        begin
+           if not Cotacao.FindKey([QMinimo.FieldByName('PRODUTO_ID').AsInteger]) then
+            Begin
+            Cotacao.Append;
+            Cotacao.FieldByName('CDEST').AsInteger :=        QMinimo.FieldbyName('PRODUTO_ID').AsInteger;
+            Cotacao.FieldByName('BARRA').AsString  :=        QMinimo.FieldbyName('COD_BARRA').AsString;
+            Cotacao.FieldByName('NMEST').AsString  :=        Copy(QMinimo.FieldbyName('DESCRICAO').AsString,1,40);
+            Cotacao.FieldByName('MEDIA').AsFloat   :=        QMinimo.FieldbyName('MEDIA_CONSUMO').AsFloat;
+            Cotacao.FieldByName('QUANT').AsFloat   :=        QMinimo.FieldbyName('QUANT_MINIMA').AsFloat;
+            Cotacao.FieldByName('UNID').AsString   :=        QMinimo.FieldbyName('UNIDADE_VENDA').AsString;
+            Cotacao.Post;
+            End;
+
+          Application.ProcessMessages;
+          QMinimo.Next;
+        end;
+
+        QMinimo.Close;
+      end;
+
+      FieldByName('CDEST').ReadOnly := True;
+      FieldByName('BARRA').ReadOnly := True;
+      FieldByName('NMEST').ReadOnly := True;
+      FieldByname('MEDIA').ReadOnly := True;
+      FieldByName('FORNE').ReadOnly := True;
+      FieldByName('PRECO').ReadOnly := True;
+
+      for W := 1 to FieldCount - 1 do
+      begin
+        if Copy(Fields[W].FieldName, 1, 4) = 'Nulo' then
+          Fields[W].ReadOnly := True;
+      end;
+    end;
+
+    DataCotacao.DataSet := Cotacao;
+    dbGrid3.DataSource := DataCotacao;
+
+    btnCria.Enabled  := False;
+    btnAbre.Enabled  := False;
+    btnFecha.Enabled := True;
+    btnRel.Enabled   := True;
+    btnPed.Enabled   := True;
+
+    Cotacao.Open;
+
+
+    //FDDataMove1.Destination     := FrmPrincipal.OpenDialog1.FileName;
+   { FDDataMove1.Source          := Cotacao;
+    FDDataMove1.SourceKind      := skDataSet;
+    FDDataMove1.DestinationKind := skText;
+    FDDataMove1.TextFileName    := FrmPrincipal.OpenDialog1.FileName;
+    FDDataMove1.TextAnalyze     := [taFields,taDelimSep,taHeader];
+    FDDataMove1.Execute; }
+
+   // ExportDataSetToCVS(Cotacao,FrmPrincipal.OpenDialog1.FileName);
+
+
+    FrmCotacao.Caption := 'Cotação de Preços - ' + FrmPrincipal.OpenDialog1.FileName;
+
+    QProdutos.Prepare;
+    QProdutos.Open;
+  end;
+end;
+
+procedure TFrmCotacao.btnFechaClick(Sender: TObject);
+begin
+
+ Cotacao.SaveToFile(FrmPrincipal.OpenDialog1.FileName,sfAuto);
+
+  //Cotacao.DeleteIndexes;
+  //cotacao.Delete;
+  Cotacao.Close;
+  QProdutos.Close;
+  
+  btnCria.Enabled  := True;
+  btnAbre.Enabled  := True;
+  btnFecha.Enabled := False;
+  btnRel.Enabled   := False;
+  btnPed.Enabled   := False;
+end;
+
+procedure TFrmCotacao.btnPedClick(Sender: TObject);
+var
+X, W, Forne: Integer;
+MEN, TT: Real;
+FN, CH: String;
+begin
+  Pg := 1;
+
+  Cotacao.First;
+  while not Cotacao.Eof do
+  begin
+    FN := '';
+    MEN := 99999;
+
+    for X := 6 to (Cotacao.FieldCount - 1) do
+    begin
+      if Cotacao.Fields[X].AsFloat <> 0 then
+      begin
+        if Cotacao.Fields[X].AsFloat < MEN then
+        begin
+          MEN := Cotacao.Fields[X].AsFloat;
+          FN := Cotacao.Fields[X].FieldName;
+        end;
+      end;
+    end;
+
+    if FN <> '' then
+    begin
+      Cotacao.FieldByName('FORNE').ReadOnly := False;
+      Cotacao.FieldByName('PRECO').ReadOnly := False;
+
+      CH := '';
+
+      for W := 1 to 10 do
+      begin
+        if Copy(FN, W, 1) <> '_' then
+          CH := CH + Copy(FN, W, 1)
+        else
+          CH := CH + ' ';
+      end;
+
+      if not QFornecedores.Locate('FANTASIA', CH, [loPartialKey]) then
+        QFornecedores.Locate('NOME', CH, [loPartialKey]);
+
+      Cotacao.Edit;
+      Cotacao.FieldByName('FORNE').AsInteger := QFornecedores.FieldByName('FORNECEDOR_ID').AsInteger;
+      Cotacao.FieldByName('PRECO').AsFloat   := MEN;
+      Cotacao.Post;
+
+      Cotacao.FieldByName('FORNE').ReadOnly := True;
+      Cotacao.FieldByName('PRECO').ReadOnly := True;
+    end
+    else
+    begin
+      Cotacao.FieldByName('FORNE').ReadOnly := False;
+      Cotacao.FieldByName('PRECO').ReadOnly := False;
+
+      Cotacao.Edit;
+      Cotacao.FieldByName('FORNE').AsInteger := 0;
+      Cotacao.FieldByName('PRECO').AsFloat := 0;
+      Cotacao.Post;
+
+      Cotacao.FieldByName('FORNE').ReadOnly := True;
+      Cotacao.FieldByName('PRECO').ReadOnly := True;
+    end;
+    Cotacao.Next;
+  end;
+
+  Cotacao.IndexName := 'COTFOR';
+  Cotacao.Filter    := 'FORNE > 0';
+  Cotacao.Filtered  := True;
+
+  Pedido_Cotacao.PreviewModal;
+{
+  if Application.MessageBox('Deseja Gerar o Pedido para cada fornecedor?', PChar(Msg_Title), mb_YESNO + mb_DefButton1) = IDYES then
+  begin
+    Forne := 0;
+    TT    := 0;
+
+    Cotacao.First;
+    while not Cotacao.Eof do
+    begin
+      QMinimo.Sql.Clear;
+      QMinimo.Sql.Add('SELECT * FROM FORNECEDORES');
+      QMinimo.Sql.Add('WHERE');
+      QMinimo.Sql.Add('(FORNECEDOR_ID = :FORNECDOR_ID)');
+      QMinimo.Sql.Add('AND (STATUS = :STATUS)');
+
+      QMinimo.ParamByName('FORNECEDOR_ID').AsInteger := Cotacao.FieldByName('FORNE').AsInteger;
+      QMinimo.ParamByName('STATUS').AsString         := 'A';
+
+      QMinimo.Prepare;
+      QMinimo.Open;
+
+      if Cotacao.FieldByName('FORNE').AsInteger <> Forne then
+      begin
+        if TT > 0 then
+        begin
+//          TBDEDataSet(DSMain.DataSet).Edit;
+//          TBDEDataSet(DSMain.DataSet).FieldByName('VALOR').AsFloat := TT;
+//          DataModule1.DataBase1.StartTransaction;
+//          try
+//            TBDEDataSet(DSMain.DataSet).Post;
+//            TBDEDataSet(DSMain.DataSet).ApplyUpdates;
+//            TBDEDataSet(DSMain.DataSet).CommitUpdates;
+//            DataModule1.DataBase1.Commit;
+//          except
+//            Application.MessageBox('Ocorreu um erro ao executar a operação. Os dados serão desfeitos', PChar(Msg_Title), mb_IconStop);
+//            DataModule1.DataBase1.Rollback;
+//            TBDEDataSet(DSMain.DataSet).CancelUpdates;
+//          end;
+        end;
+
+//        TBDEDataSet(DSMain.DataSet).Append;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('CLIENTE').AsInteger  := Cotacao.FieldByName('FORNE').AsInteger;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('NOME').AsString      := QMinimo.FieldByName('NOME').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('CNPJ_CPF').AsString  := QMinimo.FieldByName('CNPJ').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('INSCRICAO').AsString := QMinimo.FieldByName('INSCRICAO').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('ENDERECO').AsString  := QMinimo.FieldByName('ENDERECO').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('BAIRRO').AsString    := QMinimo.FieldByName('BAIRRO').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('CIDADE').AsString    := QMinimo.FieldByName('CIDADE').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('UF').AsString        := QMinimo.FieldByName('UF').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('CEP').AsString       := QMinimo.FieldByName('CEP').AsString;
+//        TBDEDataSet(DSMain.DataSet).FieldByName('TELEFONE').AsString  := QMinimo.FieldByName('TELEFONE_1').AsString;
+//        DataModule1.DataBase1.StartTransaction;
+//        try
+//          TBDEDataSet(DSMain.DataSet).Post;
+//          TBDEDataSet(DSMain.DataSet).ApplyUpdates;
+//          TBDEDataSet(DSMain.DataSet).CommitUpdates;
+//          DataModule1.DataBase1.Commit;
+//        except
+//          Application.MessageBox('Ocorreu um erro ao executar a operação. Os dados serão desfeitos', PChar(Msg_Title), mb_IconStop);
+//          DataModule1.DataBase1.Rollback;
+//          TBDEDataSet(DSMain.DataSet).CancelUpdates;
+//        end;
+
+        Forne := Cotacao.FieldByName('FORNE').AsInteger;
+        TT    := 0;
+      end;
+
+//      TBDEDataSet(DSDetail.DataSet).Append;
+//      TBDEDataSet(DSDetail.DataSet).FieldByName('COD_PRODUTO').AsInteger := Cotacao.FieldByName('CDEST').AsInteger;
+//      TBDEDataSet(DSDetail.DataSet).FieldByName('DESCRICAO').AsString    := Cotacao.FieldByName('NMEST').AsString;
+//      TBDEDataSet(DSDetail.DataSet).FieldByName('QUANTIDADE').AsFloat    := RoundTo(Cotacao.FieldByName('QUANT').AsFloat, -2);
+//      TBDEDataSet(DSDetail.DataSet).FieldByName('VR_UNITARIO').AsFloat   := Cotacao.FieldByName('PRECO').AsFloat;
+//      TBDEDataSet(DSDetail.DataSet).FieldByName('VALOR').AsFloat         := RoundTo(Cotacao.FieldByName('QUANT').AsFloat, -2) * Cotacao.FieldByName('PRECO').AsFloat;
+
+      TT := TT + (RoundTo(Cotacao.FieldByName('QUANT').AsFloat, -2) * Cotacao.FieldByName('PRECO').AsFloat);
+
+//      DataModule1.DataBase1.StartTransaction;
+//      try
+//        TBDEDataSet(DSDetail.DataSet).Post;
+//        TBDEDataSet(DSDetail.DataSet).ApplyUpdates;
+//        TBDEDataSet(DSDetail.DataSet).CommitUpdates;
+//        DataModule1.DataBase1.Commit;
+//      except
+//        Application.MessageBox('Ocorreu um erro ao executar a operação. Os dados serão desfeitos', PChar(Msg_Title), mb_IconStop);
+//        DataModule1.DataBase1.Rollback;
+//        TBDEDataSet(DSMain.DataSet).CancelUpdates;
+//      end;
+
+      Application.ProcessMessages;
+      Cotacao.Next;
+    end;
+  end;
+}
+  Cotacao.IndexName := 'COTACAO';
+  Cotacao.Filter    := '';
+  Cotacao.Filtered  := False;
+end;
+
+procedure TFrmCotacao.btnSaiClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmCotacao.ColumnHeaderBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+var
+X: Integer;
+begin
+  QRLabel4.Caption := Cotacao.Table.Name;
+
+  Forne1.Caption  := '';
+  Forne2.Caption  := '';
+  Forne3.Caption  := '';
+  Forne4.Caption  := '';
+  Forne5.Caption  := '';
+  Forne6.Caption  := '';
+  Forne7.Caption  := '';
+  Forne8.Caption  := '';
+  Forne9.Caption  := '';
+  Forne10.Caption := '';
+  Forne11.Caption := '';
+  Forne12.Caption := '';
+  Forne13.Caption := '';
+  Forne14.Caption := '';
+  Forne15.Caption := '';
+
+  for X := 6 to (Cotacao.FieldCount - 1) do
+  begin
+    if X = 6 then
+      Forne1.Caption  := Cotacao.Fields[X].FieldName;
+
+    if X = 7 then
+      Forne2.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 8 then
+      Forne3.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 9 then
+      Forne4.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 10 then
+      Forne5.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 11 then
+      Forne6.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 12 then
+      Forne7.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 13 then
+      Forne8.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 14 then
+      Forne9.Caption  := Cotacao.Fields[X].FieldName ;
+
+    if X = 15 then
+      Forne10.Caption := Cotacao.Fields[X].FieldName ;
+
+    if X = 16 then
+      Forne11.Caption := Cotacao.Fields[X].FieldName ;
+
+    if X = 17 then
+      Forne12.Caption := Cotacao.Fields[X].FieldName ;
+
+    if X = 18 then
+      Forne13.Caption := Cotacao.Fields[X].FieldName ;
+
+    if X = 19 then
+      Forne14.Caption := Cotacao.Fields[X].FieldName ;
+
+    if X = 20 then
+      Forne15.Caption := Cotacao.Fields[X].FieldName ;
+  end;
+end;
+
+procedure TFrmCotacao.CotacaoBeforeDelete(DataSet: TDataSet);
+begin
+  if Application.MessageBox('Deseja excluir o item?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmCotacao.CriarArqWEB1Click(Sender: TObject);
+var
+F1: TextFile;
+I : Integer;
+Arquivo :String;
+DecimalSeparator :Char;
+begin
+  DecimalSeparator := '.';
+  Arquivo := 'cotacao_eficaz_' + Copy(TimeToStr(Time),1,2)+ Copy(TimeToStr(Time),4,2) + Copy(TimeToStr(Time),7,2) + '_' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2);
+
+  AssignFile(F1, ExtractFilePath(ParamStr(0)) + '\Cotacoes\' + Arquivo + '.Txt');
+  Rewrite(F1);
+
+  WriteLn(F1, Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + ';' + DateToStr(date) + ';COTACAO ' + Copy(Arquivo,16,6)+ ';' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 7, 4) + ';' +  IntToStr((DstList.Items.Count)));
+  WriteLn(F1, 'FORNECEDOR_ID;NOME;CNPJ;CONTATO;ENDERECO;NUMERO;BAIRRO;COMPLEMENTO;MUNICIPIO;ESTADO;CEP;DDD;TELEFONE_1;TELEFONE_2;EMAIL;REPRESENTANTE;EMAIL,DDD,CELULAR');
+
+
+
+  for I := 0 to (DstList.Items.Count - 1) do
+  Begin
+  IQuery.SQL.Clear;
+  IQuery.Sql.Add('SELECT * FROM FORNECEDORES WHERE FORNECEDOR_ID = :FORNECEDOR_ID');
+  IQuery.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Copy(DstList.Items.Strings[I],56,4));
+  IQuery.Prepare;
+  IQuery.Open;
+
+  Writeln(F1, IQuery.FieldByName('FORNECEDOR_ID').AsString + ';' +
+                  IQuery.FieldByName('NOME').AsString + ';' +
+                  IQuery.FieldByName('CNPJ').AsString + ';' +
+                  IQuery.FieldByName('CONTATO').AsString + ';' +
+                  IQuery.FieldByName('ENDERECO').AsString + ';' +
+                  IQuery.FieldByName('NUMERO').AsString + ';' +
+                  IQuery.FieldByName('BAIRRO').AsString + ';' +
+                  IQuery.FieldByName('COMPLEMENTO').AsString + ';' +
+                  IQuery.FieldByName('MUNICIPIO').AsString + ';' +
+                  IQuery.FieldByName('ESTADO').AsString + ';' +
+                  IQuery.FieldByName('CEP').AsString + ';' +
+                  IQuery.FieldByName('DDD').AsString + ';' +
+                  IQuery.FieldByName('TELEFONE_1').AsString + ';' +
+                  IQuery.FieldByName('TELEFONE_2').AsString + ';' +
+                  IQuery.FieldByName('EMAIL').AsString + ';' +
+                  IQuery.FieldByName('REPRESENTANTE').AsString + ';' +
+                  IQuery.FieldByName('EMAIL_REPRESENTANTE').AsString + ';' +
+                  IQuery.FieldByName('DDD_R').AsString + ';' +
+                  IQuery.FieldByName('TELEFONE_R').AsString);
+
+  End;
+  WriteLn(F1, '--');
+  WriteLn(F1, 'CODIGO;PRODUTO;CODBARRAS;UNIDADE;QUANTIDADE;ULTIMO_PRECO;ESTOQUE;ESTQUE_MINIMO');
+
+  Cotacao.First;
+  while not Cotacao.Eof do
+  begin
+    QMinimo.Sql.Clear;
+    QMinimo.Sql.Add('SELECT * FROM PRODUTOS');
+    QMinimo.Sql.Add('WHERE');
+    QMinimo.Sql.Add('(STATUS = :STATUS)');
+    QMinimo.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+    QMinimo.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    begin
+      QMinimo.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+      QMinimo.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+    end;
+
+    QMinimo.Sql.Add('ORDER BY COD_BARRA');
+
+    QMinimo.ParamByName('STATUS').AsString      := 'A';
+    QMinimo.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QMinimo.ParamByName('PRODUTO_ID').AsInteger := Cotacao.FieldByName('CDEST').AsInteger;
+
+    QMinimo.Prepare;
+    QMinimo.Open;
+
+    Writeln(F1, Cotacao.FieldByName('CDEST').AsString + ';' +
+                Cotacao.FieldByName('NMEST').AsString + ';' +
+                Cotacao.FieldByName('BARRA').AsString + ';' +
+                Cotacao.FieldByName('UNID').AsString + ';' +
+                Cotacao.FieldByName('QUANT').AsString + ';' +
+                QMinimo.FieldByName('CUSTO_COMPRA').AsString + ';' +
+                QMinimo.FieldByName('QUANTIDADE_C').AsString + ';' +
+                QMinimo.FieldByName('QUANT_MINIMA').AsString);
+
+    Application.ProcessMessages;
+    Cotacao.Next;
+  end;
+
+  CloseFile(F1);
+
+  DecimalSeparator := ',';
+  Application.MessageBox(PChar('Arquivo ' + ExtractFilePath(ParamStr(0)) + Arquivo + '.Txt gerado com sucesso'), PChar(Msg_Title), mb_IconInformation);
+end;
+
+procedure TFrmCotacao.DBGrid2DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+OldBkMode: Integer;
+begin
+ TDBGrid(Sender).Canvas.Font.Color := clBlue;
+  if gdSelected in State then
+  begin
+    with (Sender as TDBGrid).Canvas do
+    begin
+      Brush.Color := clInfoBk;
+
+      FillRect(Rect);
+
+      Brush.Color := clInfoBk;
+      OldBkMode   := SetBkMode(Handle, TRANSPARENT);
+
+      SetBkMode(Handle, OldBkMode);
+
+      Font.Style := [fsBold];
+    end;
+  end;
+  TDBGrid(Sender).DefaultDrawDataCell(Rect, TDBGrid(Sender).Columns[DataCol].Field, State);
+end;
+
+procedure TFrmCotacao.DBGrid2KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+TX, Condicao: String;
+Quant: Double;
+InputInteger : Integer;
+begin
+  if (Key = VK_F3) AND (btnCria.Enabled  = False) then
+  begin
+    Condicao := GetPesquisa('PRODUTOS');
+
+    QProdutos.Sql.Clear;
+    QProdutos.Sql.Add('SELECT * FROM PRODUTOS');
+
+    if Condicao <> '' then
+    begin
+      if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString = 'True' then
+        QProdutos.Sql.Add(Condicao)
+      else
+        QProdutos.Sql.Add(Condicao + ' AND (STATUS = ' + #39 + 'A' + #39 + ')');
+    end
+    Else
+       QProdutos.Sql.Add('WHERE (STATUS = ' + #39 + 'A' + #39 + ')');
+
+    QProdutos.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    begin
+      QProdutos.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+      QProdutos.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+    end;
+
+     if Application.MessageBox('Deseja exibir os itens abaixo do ponto mínimo?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+     Begin
+       if FrmData.QAcesso.FieldByName('TPCTB').AsString = '3' then
+          QProdutos.Sql.Add('AND (QUANTIDADE_G < QUANT_MINIMA)')
+        else
+          QProdutos.Sql.Add('AND (QUANTIDADE_C < QUANT_MINIMA)');
+     End;
+
+    QProdutos.Sql.Add('ORDER BY DESCRICAO');
+
+    QProdutos.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    QProdutos.Prepare;
+    QProdutos.Open;
+
+
+    if Application.MessageBox('Deseja exportar os itens selecionados?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+    begin
+      Cotacao.FieldByname('CDEST').ReadOnly := False;
+      Cotacao.FieldByname('BARRA').ReadOnly := False;
+      Cotacao.FieldByname('NMEST').ReadOnly := False;
+      Cotacao.FieldByname('MEDIA').ReadOnly := False;
+      Cotacao.FieldByName('FORNE').ReadOnly := False;
+      Cotacao.FieldByName('PRECO').ReadOnly := False;
+
+      Cotacao.IndexName := 'COTACAO';
+
+      QProdutos.First;
+      while not QProdutos.Eof do
+      begin
+        if not Cotacao.FindKey([QProdutos.FieldByName('PRODUTO_ID').AsInteger]) then
+          Cotacao.AppendRecord([QProdutos.FieldbyName('PRODUTO_ID').AsInteger,
+                                QProdutos.FieldByName('COD_BARRA').AsString,
+                                QProdutos.FieldByName('DESCRICAO').AsString,
+                                QProdutos.FieldByName('MEDIA_CONSUMO').AsFloat,
+                                QProdutos.FieldByName('QUANT_MINIMA').AsFloat,
+                                QProdutos.FieldByName('UNIDADE_VENDA').AsString]);
+
+        Application.ProcessMessages;
+        QProdutos.Next;
+      end;
+
+      QProdutos.First;
+
+      Cotacao.FieldByName('CDEST').ReadOnly := True;
+      Cotacao.FieldByName('BARRA').ReadOnly := True;
+      Cotacao.FieldByName('NMEST').ReadOnly := True;
+      Cotacao.FieldByname('MEDIA').ReadOnly := True;
+      Cotacao.FieldByName('FORNE').ReadOnly := True;
+      Cotacao.FieldByName('PRECO').ReadOnly := True;
+    end;
+  end;
+
+  if (Key = VK_F5) AND (btnCria.Enabled  = False) then
+  begin
+    Ordem := 'Código';
+
+    QProdutos.Sql.Clear;
+    QProdutos.Sql.Add('SELECT * FROM PRODUTOS');
+    QProdutos.Sql.Add('WHERE');
+    QProdutos.Sql.Add('(STATUS = :STATUS)');
+    QProdutos.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    begin
+      QProdutos.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+      QProdutos.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+    end;
+
+    QProdutos.Sql.Add('ORDER BY COD_BARRA');
+
+    QProdutos.ParamByName('STATUS').AsString      := 'A';
+    QProdutos.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    QProdutos.Prepare;
+    QProdutos.Open;
+  end;
+
+  if (Key = VK_F6) AND (btnCria.Enabled  = False) then
+  begin
+    Ordem := 'Descricao';
+
+    QProdutos.Sql.Clear;
+    QProdutos.Sql.Add('SELECT * FROM PRODUTOS');
+    QProdutos.Sql.Add('WHERE');
+    QProdutos.Sql.Add('(STATUS = :STATUS)');
+    QProdutos.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    begin
+      QProdutos.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+      QProdutos.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+    end;
+
+    QProdutos.Sql.Add('ORDER BY DESCRICAO');
+
+    QProdutos.ParamByName('STATUS').AsString      := 'A';
+    QProdutos.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    QProdutos.Prepare;
+    QProdutos.Open;
+  end;
+
+  if (Key = VK_F7) AND (btnCria.Enabled  = False) then
+  begin
+     Try
+      TX := InputBox('Localizar', 'Descr. do Item/Código de Barras: ', '');
+      if StrToInt(Copy(Tx,1,1)) >= 0 then
+      QProdutos.Locate('PRODUTO_ID', TX, [loPartialKey])
+     Except
+      QProdutos.Locate('DESCRICAO',  UpperCase(TX), [loPartialKey]);
+     End;
+  end;
+
+  if (Key = VK_F8) AND (btnCria.Enabled  = False) then
+  begin
+
+   if not Cotacao.Locate('CDEST',QProdutos.FieldByName('PRODUTO_ID').AsInteger,[]) then
+   Begin
+     InputInteger := StrToInt(InputBox('Digite a Quantidade','Quantidade', IntToStr(0)));
+
+    if InputInteger > 0  then
+    Quant := InputInteger
+    Else
+    Begin
+    Application.MessageBox('Item com quantidade zero não pode ser exportado!', PChar(Msg_Title), mb_IconInformation);
+    Abort;
+    End;
+    //Quant := (QProdutos.FieldByName('QUANTIDADE_C').AsFloat + QProdutos.FieldByName('QUANTIDADE_G').AsFloat);
+
+
+    Cotacao.FieldByname('CDEST').ReadOnly := False;
+    Cotacao.FieldByname('BARRA').ReadOnly := False;
+    Cotacao.FieldByname('NMEST').ReadOnly := False;
+    Cotacao.FieldByname('MEDIA').ReadOnly := False;
+    Cotacao.FieldByName('FORNE').ReadOnly := False;
+    Cotacao.FieldByName('PRECO').ReadOnly := False;
+
+    //Cotacao.IndexName := '';
+
+     if not Cotacao.FindKey([QProdutos.FieldByName('PRODUTO_ID').AsInteger]) then
+      Cotacao.AppendRecord([QProdutos.FieldbyName('PRODUTO_ID').AsInteger,
+                            QProdutos.FieldByName('COD_BARRA').AsString,
+                            QProdutos.FieldByName('DESCRICAO').AsString,
+                            QProdutos.FieldByName('MEDIA_CONSUMO').AsFloat,
+                            Quant,
+                            QProdutos.FieldByName('UNIDADE_VENDA').AsString]);
+
+
+    Cotacao.FieldByname('CDEST').ReadOnly := True;
+    Cotacao.FieldByname('BARRA').ReadOnly := True;
+    Cotacao.FieldByname('NMEST').ReadOnly := True;
+    Cotacao.FieldByname('MEDIA').ReadOnly := True;
+    Cotacao.FieldByName('FORNE').ReadOnly := True;
+    Cotacao.FieldByName('PRECO').ReadOnly := True;
+
+    Application.MessageBox('Item exportado', PChar(Msg_Title), mb_IconInformation);
+
+    QProdutos.Next;
+   End
+   Else
+   Application.MessageBox('Item já exportado favor excluir da cotação para alterar a quantidade', PChar(Msg_Title), mb_IconInformation);
+  end;
+
+
+  if (Key = Vk_F9) and (not QProdutos.IsEmpty) then
+    Ficha_Produto(QProdutos.FieldByName('PRODUTO_ID').AsInteger);
+end;
+
+procedure TFrmCotacao.DBGrid3KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+InputString: String;
+begin
+  if Key = VK_F7 then
+  begin
+    InputString:= InputBox('Pesquisa :', 'Digite o Nome:', '');
+
+    if InputString <> '' then
+      Cotacao.FindNearest([InputString]);
+  end;
+
+  if (Key = Vk_F9) and (not Cotacao.IsEmpty) then
+    Ficha_Produto(Cotacao.FieldByName('CDEST').AsInteger);
+end;
+
+procedure TFrmCotacao.DBGrid3KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #46 then
+    Key := #44;
+
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+end;
+
+procedure TFrmCotacao.DetailBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+var
+X: Integer;
+begin
+  Pr1.Caption  := '';
+  Pr2.Caption  := '';
+  Pr3.Caption  := '';
+  Pr4.Caption  := '';
+  Pr5.Caption  := '';
+  Pr6.Caption  := '';
+  Pr7.Caption  := '';
+  Pr8.Caption  := '';
+  Pr9.Caption  := '';
+  Pr10.Caption := '';
+  Pr11.Caption := '';
+  Pr12.Caption := '';
+  Pr13.Caption := '';
+  Pr14.Caption := '';
+  Pr15.Caption := '';
+
+  for X := 6 to (Cotacao.FieldCount - 1) do
+  begin
+    if Cotacao.Fields[X].AsFloat > 0 then
+    begin
+      if X = 6 then
+        Pr1.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 7 then
+        Pr2.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 8 then
+        Pr3.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 9 then
+        Pr4.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 10 then
+        Pr5.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 11 then
+        Pr6.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 12 then
+        Pr7.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 13 then
+        Pr8.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 14 then
+        Pr9.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 15 then
+        Pr10.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 16 then
+        Pr11.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 17 then
+        Pr10.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 18 then
+        Pr10.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 19 then
+        Pr10.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+
+      if X = 20 then
+        Pr10.Caption := FormatFloat('#,##0.00', Cotacao.Fields[X].AsFloat);
+    end;
+  end;
+end;
+
+procedure TFrmCotacao.ExAllBtnClick(Sender: TObject);
+var
+I: Integer;
+begin
+  for I := 0 to (DstList.Items.Count - 1) do
+    SrcList.Items.AddObject(DstList.Items[I], DstList.Items.Objects[I]);
+
+  DstList.Items.Clear;
+  SetItem(DstList, 0);
+end;
+
+procedure TFrmCotacao.ExcludeBtnClick(Sender: TObject);
+var
+Index: Integer;
+begin
+  Index := GetFirstSelection(DstList);
+  MoveSelected(DstList, SrcList.Items);
+  SetItem(DstList, Index);
+end;
+
+procedure TFrmCotacao.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+    {FDDataMove1.Source          := Cotacao;
+    FDDataMove1.SourceKind      := skDataSet;
+    FDDataMove1.DestinationKind := skText;
+    FDDataMove1.TextFileName    := FrmPrincipal.OpenDialog1.FileName;
+    FDDataMove1.TextAnalyze     := [taFields,taDelimSep,taHeader];
+    FDDataMove1.Execute; }
+
+    if Cotacao.Active Then
+    Cotacao.SaveToFile(FrmPrincipal.OpenDialog1.FileName,sfAuto);
+
+
+
+  Action := caFree;
+end;
+
+procedure TFrmCotacao.FormCreate(Sender: TObject);
+begin
+  DBGrid2.Columns[0].Width := 100;
+  DBGrid2.Columns[1].Width := 50;
+  DBGrid2.Columns[2].Width := 206;
+  DBGrid2.Columns[3].Width := 50;
+  DBGrid2.Columns[4].Width := 65;
+  DBGrid2.Columns[5].Width := 75;
+  DBGrid2.Columns[6].Width := 75;
+  DBGrid2.Columns[7].Width := 65;
+  DBGrid2.Columns[8].Width := 65;
+
+  FrmPrincipal.OpenDialog1.Title      := 'Selecione o Arquivo';
+  FrmPrincipal.OpenDialog1.DefaultExt := '*.xml';
+  FrmPrincipal.OpenDialog1.Filter     := 'Arquivos xml (*.xml)|*.xml';
+  FrmPrincipal.OpenDialog1.InitialDir := ExtractFilePath(ParamStr(0));
+
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '3' then
+  begin
+    DBGrid2.Columns[7].FieldName := 'QUANTIDADE_G';
+
+    DBGrid2.Columns[6].Title.Caption := 'Quant. Cont.';
+    DBGrid2.Columns[7].Title.Caption := 'Quant. Ger.';
+  end;
+
+  QFornecedores.Prepare;
+  QFornecedores.Open;
+
+  QFornecedores.First;
+  while not QFornecedores.Eof do
+  begin
+
+    if QFornecedores.FieldByName('FANTASIA').AsString <> '' then
+      SrcList.Items.Add(Forcacomprimento(QFornecedores.FieldByName('FANTASIA').AsString,50,' ') + 'Cod:.' +  StrZero(QFornecedores.FieldByName('FORNECEDOR_ID').AsString,4,0))
+    else
+      SrcList.Items.Add(Forcacomprimento(QFornecedores.FieldByName('NOME').AsString,50,' ') + 'Cod:.' +  StrZero(QFornecedores.FieldByName('FORNECEDOR_ID').AsString,4,0));
+
+    Application.ProcessMessages;
+    QFornecedores.Next;
+  end;
+  TabSheet1.Show;
+
+
+end;
+
+procedure TFrmCotacao.IncAllBtnClick(Sender: TObject);
+var
+I: Integer;
+begin
+  for I := 0 to (SrcList.Items.Count - 1) do
+    DstList.Items.AddObject(SrcList.Items[I], SrcList.Items.Objects[I]);
+
+  SrcList.Items.Clear;
+  SetItem(SrcList, 0);
+end;
+
+procedure TFrmCotacao.IncludeBtnClick(Sender: TObject);
+var
+Index: Integer;
+begin
+  Index := GetFirstSelection(SrcList);
+  MoveSelected(SrcList, DstList.Items);
+  SetItem(SrcList, Index);
+end;
+
+procedure TFrmCotacao.Mapa1Click(Sender: TObject);
+begin
+  Cotacao.IndexName := 'COTACAO';
+
+  Mapa.PreviewModal;
+end;
+
+procedure TFrmCotacao.PageHeaderBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  QRLabel18.Caption := 'RA: ' + Cotacao.Table.Name;
+  QRLabel19.Caption := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - ' +
+                      'Inscrição Estadual: ' + FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString;
+  QRLabel20.Caption := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ' - ' +
+                       FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                       'Telefax: ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+  QRLabel21.Caption := 'CEP: ' + FrmPrincipal.QEmpresa.FieldByName('CEP').AsString + ' - ' +
+                       FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - ' +
+                       FrmPrincipal.QEmpresa.FieldByName('ESTADO').AsString;
+end;
+
+procedure TFrmCotacao.Pedido_CotacaoBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  Pg := 1;
+end;
+
+procedure TFrmCotacao.PropostadeFornecimento1Click(Sender: TObject);
+begin
+  Application.CreateForm(TFrmFornecedor_Cotacao, FrmFornecedor_Cotacao);
+  try
+    if FrmFornecedor_Cotacao.ShowModal = mrOK then
+    begin
+      QFornecedores.Locate('FORNECEDOR_ID', StrToInt(FrmFornecedor_Cotacao.Fornecedor.Text), [loCaseInsensitive]);
+      Proposta_Fornecimento.PreviewModal;
+    end;
+  finally
+    FrmFornecedor_Cotacao.Release;
+  end;
+end;
+
+procedure TFrmCotacao.QRBand7BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  QRLabel63.Caption := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - ' +
+                      'Inscrição Estadual: ' + FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString;
+  QRLabel64.Caption := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ' - ' +
+                       FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                       'Telefax: ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+  QRLabel65.Caption := 'CEP: ' + FrmPrincipal.QEmpresa.FieldByName('CEP').AsString + ' - ' +
+                       FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - ' +
+                       FrmPrincipal.QEmpresa.FieldByName('ESTADO').AsString;
+end;
+
+procedure TFrmCotacao.QRGroup1AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+  Inc(Pg);
+end;
+
+procedure TFrmCotacao.QRGroup1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  QFornecedores.Locate('FORNECEDOR_ID', Cotacao.FieldByName('FORNE').AsInteger, [loCaseInsensitive]);
+
+  if Pg > 1 then
+    Pedido_Cotacao.NewPage;
+end;
+
+procedure TFrmCotacao.Requisio1Click(Sender: TObject);
+begin
+  Cotacao.IndexName := 'COTACAO';
+
+  Requisicao_Abastecimento.PreviewModal;
+end;
+
+procedure TFrmCotacao.TabSheet1Show(Sender: TObject);
+begin
+  SrcList.SetFocus;
+end;
+
+procedure TFrmCotacao.MoveSelected(List: TCustomListBox; Items: TStrings);
+var
+I: Integer;
+begin
+  for I := (List.Items.Count - 1) downto 0 do
+  begin
+    if List.Selected[I] then
+    begin
+      Items.AddObject(List.Items[I], List.Items.Objects[I]);
+      List.Items.Delete(I);
+    end;
+  end;
+end;
+
+procedure TFrmCotacao.SetButtons;
+var
+SrcEmpty, DstEmpty: Boolean;
+begin
+  SrcEmpty           := SrcList.Items.Count = 0;
+  DstEmpty           := DstList.Items.Count = 0;
+  IncludeBtn.Enabled := not SrcEmpty;
+  IncAllBtn.Enabled  := not SrcEmpty;
+  ExcludeBtn.Enabled := not DstEmpty;
+  ExAllBtn.Enabled   := not DstEmpty;
+end;
+
+function TFrmCotacao.GetFirstSelection(List: TCustomListBox): Integer;
+begin
+  for Result := 0 to (List.Items.Count - 1) do
+  begin
+    if List.Selected[Result] then
+      Exit;
+  end;
+
+  Result := LB_ERR;
+end;
+
+procedure TFrmCotacao.SetItem(List: TListBox; Index: Integer);
+var
+MaxIndex: Integer;
+begin
+  with List do
+  begin
+    SetFocus;
+    MaxIndex := List.Items.Count - 1;
+
+    if Index = LB_ERR then
+      Index := 0
+    else if Index > MaxIndex then
+      Index := MaxIndex;
+
+    Selected[Index] := True;
+  end;
+
+  SetButtons;
+end;
+
+end.

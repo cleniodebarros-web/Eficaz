@@ -1,0 +1,387 @@
+unit UBackup;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
+  StdCtrls, Buttons, IBServices, ComCtrls, ExtCtrls, Registry, ShellAnimations,FileCtrl,Winapi.ShellAPI,
+  PSAPI, TlHelp32;
+
+type
+  TFrm_Backup = class(TForm)
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    OpenDialog1: TOpenDialog;
+    Memo1: TMemo;
+    GroupBox1: TGroupBox;
+    Chk_Data: TCheckBox;
+    Chk_Shema: TCheckBox;
+    Chk_disable: TCheckBox;
+    TabSheet2: TTabSheet;
+    RichEdit1: TRichEdit;
+    Bevel1: TBevel;
+    Panel1: TPanel;
+    btnRetorna: TButton;
+    BitBtn2: TBitBtn;
+    ShellResources1: TShellResources;
+    Bevel2: TBevel;
+    Label20: TLabel;
+    Path_Backup: TEdit;
+    btnBackup: TSpeedButton;
+    Animate1: TAnimate;
+    Banco_Dados: TEdit;
+    Label1: TLabel;
+    Label8: TLabel;
+    IP_Servidor: TEdit;
+    Porta: TEdit;
+    Label2: TLabel;
+    CheckBox1: TCheckBox;
+    Label3: TLabel;
+    Chk_Backup: TCheckBox;
+    Chk_Restore: TCheckBox;
+    Label4: TLabel;
+    SpeedButton1: TSpeedButton;
+    Label5: TLabel;
+    BtnRestore: TSpeedButton;
+    Path_Restore: TEdit;
+    procedure BitBtn2Click(Sender: TObject);
+    procedure CheckBox6Click(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnBackupClick(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure BtnRestoreClick(Sender: TObject);
+    procedure Chk_RestoreClick(Sender: TObject);
+    procedure Chk_BackupClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Frm_Backup: TFrm_Backup;
+  Function VerficarSeAplicaticoEstarRodandoPeloNomeDoExecutavel(Nome:String):Boolean;
+  function ProcessExists(exeFileName: string): Boolean;
+
+implementation
+
+uses
+  UPrincipal, UData;
+
+{$R *.DFM}
+function ProcessExists(exeFileName: string): Boolean;
+var
+  ContinueLoop: BOOL;
+  FSnapshotHandle: THandle;
+  FProcessEntry32: TProcessEntry32;
+begin
+  FSnapshotHandle := CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+  FProcessEntry32.dwSize := SizeOf(FProcessEntry32);
+  ContinueLoop := Process32First(FSnapshotHandle, FProcessEntry32);
+  Result := False;
+  while Integer(ContinueLoop) <> 0 do
+  begin
+    if ((UpperCase(ExtractFileName(FProcessEntry32.szExeFile)) =
+      UpperCase(ExeFileName)) or (UpperCase(FProcessEntry32.szExeFile) =
+      UpperCase(ExeFileName))) then
+    begin
+      Result := True;
+    end;
+    ContinueLoop := Process32Next(FSnapshotHandle, FProcessEntry32);
+  end;
+  CloseHandle(FSnapshotHandle);
+end;
+
+Function VerficarSeAplicaticoEstarRodandoPeloNomeDoExecutavel(Nome:String):Boolean;
+var rId:array[0..999] of DWord;
+i,NumProc,NumMod:DWord;
+HProc,HMod:THandle;
+sNome:String;
+Tamanho, Count:Integer;
+sNomeTratado:String;
+begin
+result:=False;
+SetLength(sNome, 256);// Aqui vc pega os IDs dos processos em execução
+EnumProcesses(@rId[0], 4000, NumProc);// Aqui vc faz um for p/ pegar cada processo
+  for i := 0 to NumProc div 4 do
+  begin// Aqui vc seleciona o processo
+  HProc := OpenProcess(Process_Query_Information or Process_VM_Read, FALSE, rId[i]);
+   if HProc = 0 then
+   Continue;// Aqui vc pega os módulos do processo// Como vc só quer o nome do programa, então será sempre o primeiro
+  EnumProcessModules(HProc, @HMod, 4, NumMod);// Aqui vc pega o nome do módulo; como é o primeiro, é o nome do programa
+  GetModuleBaseName(HProc, HMod, @sNome[1], 256);
+  sNomeTratado := trim(sNome);
+  Tamanho:=Length(SnomeTratado);
+  Count:=1;
+    While Count <= Tamanho do
+    begin
+    if SnomeTratado[Count]= '' Then
+    Break;
+    count:=Count+1;
+    end;
+  sNomeTratado:=Copy(SnomeTratado,1,Count-1);
+  if AnsiUpperCase(sNomeTratado)=AnsiUpperCase(Nome) Then
+  Result:=True;// Aqui vc libera o handle do processo selecionado
+  CloseHandle(HProc);
+  end;
+end;
+
+
+procedure TFrm_Backup.BitBtn2Click(Sender: TObject);
+var
+Arq_Bck,Arq_Bck_log ,stringc,vacuumdb, parametro,S : String;
+pcharc : pchar;
+X,Y:Integer;
+F1: TextFile;
+
+begin
+
+
+  Animate1.Active    := True;
+  Animate1.CommonAVI := aviCopyFile;
+  GravaIni(Arq_Ini, 'Backup', 'Path Backup', Path_Backup.Text);
+  GravaIni(Arq_Ini, 'Backup', 'Banco Dados', Banco_Dados.Text);
+  GravaIni(Arq_Ini, 'Backup', 'Servidor', IP_Servidor.Text);
+  GravaIni(Arq_Ini, 'Backup', 'Porta', Porta.Text);
+
+
+  if copy(Path_Backup.Text,1,3) = 'C:\' then
+  Application.MessageBox(PChar('Atenção o Backup será realizado na unidade C:! ' + #13 +'Seria o ideal efetuar o backup em driver externo. ' ), PChar(Msg_Title), MB_ICONINFORMATION);
+
+
+  try
+    Frm_Backup.Enabled := False;
+    Arq_Bck     := LeIni(Arq_Ini, 'Backup', 'Path Backup') + LeIni(Arq_Ini, 'Backup', 'Banco Dados') + '_'+ Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 7, 4) + Copy(TimeToStr(time), 1, 2) + Copy(TimeToStr(time), 4, 2) + Copy(TimeToStr(time), 7, 2) + '.Backup';
+    Arq_Bck_log := LeIni(Arq_Ini, 'Backup', 'Path Backup') + LeIni(Arq_Ini, 'Backup', 'Banco Dados') + '_'+ Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 7, 4) + Copy(TimeToStr(time), 1, 2) + Copy(TimeToStr(time), 4, 2) + Copy(TimeToStr(time), 7, 2) + '.Log';
+    parametro := '';
+
+    if Chk_Data.Checked then
+    parametro := parametro +  ' --data-only ';
+    if Chk_Shema.Checked then
+    parametro := parametro +  ' --schema-only ';
+    if Chk_disable.Checked then
+    parametro := parametro +  ' --disable-trigger ';
+
+   if Chk_Backup.Checked Then
+   begin
+
+    vacuumdb := ' --dbname=postgresql://' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'User Name'),3)  + ':' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'Password'),3) +
+    '@' + IP_Servidor.Text + ':' + Porta.Text +  '/'+ LeIni(Arq_Ini, 'Backup', 'Banco Dados') + ' --analyze --verbose';
+
+
+    stringc := ' --dbname=postgresql://' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'User Name'),3)  + ':' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'Password'),3) +
+    '@' + IP_Servidor.Text + ':' + Porta.Text +  '/'+ LeIni(Arq_Ini, 'Backup', 'Banco Dados') + parametro + ' --format=custom --compress=6 --verbose --file=' + Arq_Bck  ;
+
+   end
+   Else if Chk_Restore.Checked Then
+   begin
+   stringc := ' --dbname=postgresql://' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'User Name'),3)  + ':' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'Password'),3) +
+    '@' + IP_Servidor.Text + ':' + Porta.Text +  '/'+ LeIni(Arq_Ini, 'Backup', 'Banco Dados')  + ' -c --verbose ' + parametro + Path_Restore.Text ;
+
+   Arq_Bck := Path_Restore.Text;
+   end
+   else
+   begin
+   Application.MessageBox(PChar('Favor marcar a opçao Backup ou Restore!!!'), PChar(Msg_Title), MB_ICONINFORMATION);
+   Exit;
+   end;
+
+   //' --password= ' + LeIni(Arq_Ini, 'Conexão Postgres', 'Password')  + ' --verbose --file=' +  Arq_Bck + parametro + ' ' + LeIni(Arq_Ini, 'Backup', 'Banco Dados');
+
+   // --dbname=postgresql://postgres:37411478@10.0.0.40:5433/Eficaz --verbose --file=C:\EFICAZ7\BACKUP\13102016174441_backup
+
+    pcharc:= pchar(stringc);
+
+     X := 1;
+     Y := 1;
+     if Chk_Backup.Checked Then
+     Begin
+      {
+      if  LeIni(Arq_Ini, 'Backup', 'Postgres 11') = 'True' Then
+      ShellExecute(Handle,'open', PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg11\vacuumdb.exe'), PChar(vacuumdb), nil, SW_HIDE)
+      Else
+      ShellExecute(Handle,'open', PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg\vacuumdb.exe'), PChar(vacuumdb), nil, SW_HIDE);
+
+      Sleep(3000);
+      while Y > 0 do
+       Begin
+         if not ProcessExists('vacuumdb.exe') Then
+         Begin
+          Y := 0;
+          //Application.MessageBox(PChar('Manutenção do banco concluído! '), PChar(Msg_Title), mb_IconInformation)
+         End
+         else
+         Begin
+         Memo1.Lines.Add('Efetuando Manutenção do Banco Aguarde... ' + ' - ' + TimeToStr(time));
+         Inc(Y);
+         End;
+         Application.ProcessMessages;
+       End;
+       }
+       if not ProcessExists('vacuumdb.exe') Then
+       Begin
+         Memo1.Lines.Clear;
+
+         if  LeIni(Arq_Ini, 'Backup', 'Postgres 11') = 'True' Then
+         ShellExecute(Handle,'open', PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg15\pg_dump.exe'), PChar(stringc), nil, SW_HIDE)
+         else
+         ShellExecute(Handle,'open', PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg\pg_dump.exe'), PChar(stringc), nil, SW_HIDE);
+
+         Sleep(3000);
+         while X > 0 do
+         Begin
+           if not ProcessExists('pg_dump.exe') Then
+           Begin
+            X := 0;
+            if FileExists(Arq_Bck) then
+            Application.MessageBox(PChar('Backup concluído (' + Arq_Bck + ')'), PChar(Msg_Title), mb_IconInformation)
+            Else
+            Application.MessageBox(PChar('Backup não realizado favor verificar!!!'), PChar(Msg_Title), MB_ICONERROR);
+           End
+           else
+           Begin
+           Memo1.Lines.Add('Efetuando Backup Aguarde.. '+ Arq_Bck + ' - ' + TimeToStr(time));
+           Inc(X);
+           End;
+           Application.ProcessMessages;
+         End;
+       End;
+     End
+     else
+     begin
+
+     if  LeIni(Arq_Ini, 'Backup', 'Postgres 15') = 'True' Then
+     ShellExecute(Handle,'open', PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg15\pg_restore.exe'), PChar(stringc), nil, SW_HIDE)
+     Else
+     ShellExecute(Handle,'open', PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg\pg_restore.exe'), PChar(stringc), nil, SW_HIDE);
+
+     Sleep(3000);
+     while X > 0 do
+       Begin
+         if not ProcessExists('pg_restore.exe') Then
+         Begin
+          X := 0;
+          if FileExists(Arq_Bck) then
+          Application.MessageBox(PChar('Restore concluído (' + Arq_Bck + ')'), PChar(Msg_Title), mb_IconInformation)
+          Else
+          Application.MessageBox(PChar('Restore não realizado favor verificar!!!'), PChar(Msg_Title), MB_ICONERROR);
+         End
+         else
+         Begin
+         Memo1.Lines.Add('Efetuando Restore Aguarde.. '+ Arq_Bck + ' - ' + TimeToStr(time));
+         Inc(X);
+         End;
+         Application.ProcessMessages
+       End;
+
+     end;
+
+  finally
+    Frm_Backup.Enabled := True;
+    Animate1.Active    := False;
+    Close;
+   //Memo1.Lines.Add(PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg11\vacuumdb.exe') + vacuumdb);
+   //Memo1.Lines.Add(PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg11\pg_dump.exe') + stringc);
+
+
+  end;
+end;
+
+procedure TFrm_Backup.btnBackupClick(Sender: TObject);
+var
+path:string;
+begin
+{  FrmPrincipal.OpenDialog1.Title      := 'Selecione o Arquivo';
+  FrmPrincipal.OpenDialog1.DefaultExt := '*.FBK';
+  FrmPrincipal.OpenDialog1.Filter     := 'Arquivos FBK (*.Fbk)|*.Fbk|Todos os Arquivos (*.*)|*.*';
+  FrmPrincipal.OpenDialog1.InitialDir := LeIni(Arq_Ini, 'Backup', 'Path Backup');}
+
+  Path := ExtractFilePath(ParamStr(0));
+  if SelectDirectory(path, [sdAllowCreate, sdPerformCreate, sdPrompt],1000) then
+  Path_Backup.Text := path;
+
+
+end;
+
+procedure TFrm_Backup.CheckBox1Click(Sender: TObject);
+begin
+if CheckBox1.Checked then
+GroupBox1.Enabled := True
+Else
+GroupBox1.Enabled := False;
+end;
+
+procedure TFrm_Backup.Chk_BackupClick(Sender: TObject);
+begin
+ if Chk_Backup.Checked then
+  begin
+   Chk_Restore.Checked  := False;
+   Path_Restore.Enabled := False;
+   btnrestore.Enabled   := False;
+   Chk_Backup.Checked   := True;
+   Path_Backup.Enabled  := True;
+   btnBackup.Enabled    := True;
+  end;
+end;
+
+procedure TFrm_Backup.Chk_RestoreClick(Sender: TObject);
+begin
+  if Chk_Restore.Checked then
+  begin
+   Chk_Backup.Checked   := False;
+   Path_Backup.Enabled  := False;
+   btnBackup.Enabled    := False;
+   Chk_Restore.Checked  := True;
+   Path_Restore.Enabled := True;
+   btnrestore.Enabled   := True;
+  end;
+
+end;
+
+
+procedure TFrm_Backup.CheckBox6Click(Sender: TObject);
+var
+  TempForm: TForm;
+  I: Integer;
+begin
+  TempForm := TForm.Create(Self);
+  with TAnimate.Create(TempForm) do
+  try
+    Parent := TempForm;
+    CommonAVI := aviFindFile;
+    Active := True;
+    TempForm.Show;
+    // Simulate a lengthy process. Alter this value
+    // to accommodate your machine speed.
+    for I := 0 to 900000000000 do Application.ProcessMessages;
+  finally
+    TempForm.Release;
+  End;
+
+end;
+
+procedure TFrm_Backup.FormCreate(Sender: TObject);
+begin
+Path_Backup.Text        := LeIni(Arq_Ini, 'Backup', 'Path Backup');
+Banco_Dados.Text        := LeIni(Arq_Ini, 'Conexão Postgres', 'Base Name');
+IP_Servidor.Text        := LeIni(Arq_Ini, 'Conexão Postgres', 'Server Name');
+Porta.Text              := LeIni(Arq_Ini, 'Conexão Postgres', 'Porta');
+end;
+
+procedure TFrm_Backup.BtnRestoreClick(Sender: TObject);
+var
+path:string;
+begin
+  FrmPrincipal.OpenDialog1.Title      := 'Selecione o Arquivo';
+  FrmPrincipal.OpenDialog1.DefaultExt := '*.backup';
+  FrmPrincipal.OpenDialog1.Filter     := 'Arquivos Backup (*.Backup)|*.Backup|Todos os Arquivos (*.*)|*.*';
+  FrmPrincipal.OpenDialog1.InitialDir := ExtractFilePath(ParamStr(0));
+
+  if FrmPrincipal.OpenDialog1.Execute then
+  begin
+    Path_Restore.Text  := FrmPrincipal.OpenDialog1.FileName;
+
+  end;
+end;
+
+end.

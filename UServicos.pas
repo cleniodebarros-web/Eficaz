@@ -1,0 +1,1172 @@
+unit UServicos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, rxToolEdit,
+  rxCurrEdit, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmServicos = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    DESCRICAO: TEdit;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    PRECO: TCurrencyEdit;
+    COMISSAO: TCurrencyEdit;
+    StatusBar1: TStatusBar;
+    Label1: TLabel;
+    Label2: TLabel;
+    UNIDADE: TEdit;
+    Label16: TLabel;
+    NCM: TEdit;
+    btnNCM: TSpeedButton;
+    Label61: TLabel;
+    COD_GEN: TEdit;
+    btnGenero: TSpeedButton;
+    PageControl3: TPageControl;
+    TabSheet8: TTabSheet;
+    TabSheet9: TTabSheet;
+    Label68: TLabel;
+    btnCst_Pis_Entr: TSpeedButton;
+    Label70: TLabel;
+    btnCst_Cofins_Entr: TSpeedButton;
+    Label67: TLabel;
+    Label69: TLabel;
+    CST_PIS_ENTR: TEdit;
+    CST_COFINS_ENTR: TEdit;
+    PIS_ENTR: TRxCalcEdit;
+    COFINS_ENTR: TRxCalcEdit;
+    TabSheet10: TTabSheet;
+    btnCst_Pis: TSpeedButton;
+    Label62: TLabel;
+    Label63: TLabel;
+    btnCst_Cofins: TSpeedButton;
+    Label58: TLabel;
+    Label57: TLabel;
+    Label71: TLabel;
+    CST_PIS: TEdit;
+    CST_COFINS: TEdit;
+    PIS: TRxCalcEdit;
+    COFINS: TRxCalcEdit;
+    Label6: TLabel;
+    IR: TCurrencyEdit;
+    Label7: TLabel;
+    ISS: TCurrencyEdit;
+    Label8: TLabel;
+    ICMS: TCurrencyEdit;
+    Label9: TLabel;
+    MOD_ICMS: TComboBox;
+    Label11: TLabel;
+    ALIQ_ISS: TCurrencyEdit;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    COD_INTERNO: TCurrencyEdit;
+    Label59: TLabel;
+    CSOSN: TEdit;
+    Alfabeto: TTabSet;
+    Memo1: TMemo;
+    nat_rec: TEdit;
+    Label10: TLabel;
+    DESC_MAXIMO: TCurrencyEdit;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure PRECOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnNCMClick(Sender: TObject);
+    procedure btnGeneroClick(Sender: TObject);
+    procedure btnNat_RecClick(Sender: TObject);
+    procedure btnCst_Pis_EntrClick(Sender: TObject);
+    procedure btnCst_Cofins_EntrClick(Sender: TObject);
+    procedure btnCst_PisClick(Sender: TObject);
+    procedure btnCst_CofinsClick(Sender: TObject);
+    procedure CST_PIS_ENTRExit(Sender: TObject);
+    procedure CST_COFINS_ENTRExit(Sender: TObject);
+    procedure CST_PISExit(Sender: TObject);
+    procedure CST_COFINSExit(Sender: TObject);
+    procedure QTabelaAfterOpen(DataSet: TDataSet);
+    procedure AlfabetoClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+  end;
+
+var
+  FrmServicos: TFrmServicos;
+  Operacao: String;
+  ID: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta_NCM, UConsulta_CST, UConsulta_Contribuicao;
+
+{$R *.dfm}
+
+procedure TFrmServicos.PRECOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmServicos.QTabelaAfterOpen(DataSet: TDataSet);
+begin
+  TFloatField(QTabela.FieldByName('PRECO')).DisplayFormat  := '#,##0.00';
+  TFloatField(QTabela.FieldByName('ISS')).DisplayFormat    := '#,##0.00';
+  TFloatField(QTabela.FieldByName('IR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmServicos.AlfabetoClick(Sender: TObject);
+begin
+  if Alfabeto.TabIndex <> 26 then
+  Begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+      CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ') AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end
+  else
+  begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+      CmdSelectNull := 'WHERE (SERVICO_ID IS NOT NULL)'
+    else
+      CmdSelectNull := 'WHERE (SERVICO_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end;
+
+  CmdOrderBy    := 'ORDER BY DESCRICAO';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmServicos.Botoes_Editing;
+begin
+  btnPrior.Enabled           := False;
+  btnNext.Enabled            := False;
+  btnInsert.Enabled          := False;
+  btnEdit.Enabled            := False;
+  btnDelete.Enabled          := False;
+  btnSave.Enabled            := True;
+  btnDiscard.Enabled         := True;
+  btnRetorna.Enabled         := False;
+  btnNCM.Enabled             := True;
+  btnGenero.Enabled          := True;
+  btnCst_Pis.Enabled         := True;
+  btnCst_Pis_Entr.Enabled    := True;
+  btnCst_Cofins.Enabled      := True;
+  btnCst_Cofins_Entr.Enabled := True;
+end;
+
+procedure TFrmServicos.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled   := True;
+    btnDelete.Enabled := True;
+  end
+  else
+  begin
+    btnEdit.Enabled   := False;
+    btnDelete.Enabled := False;
+  end;
+
+  btnSave.Enabled            := False;
+  btnDiscard.Enabled         := False;
+  btnRetorna.Enabled         := True;
+  btnNCM.Enabled             := False;
+  btnGenero.Enabled          := False;
+ // btnNat_Rec.Enabled         := False;
+  btnCst_Pis.Enabled         := False;
+  btnCst_Pis_Entr.Enabled    := False;
+  btnCst_Cofins.Enabled      := False;
+  btnCst_Cofins_Entr.Enabled := False;
+end;
+
+procedure TFrmServicos.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+  end;
+end;
+
+procedure TFrmServicos.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO SERVICOS(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO SERVICOS(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO SERVICOS(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO SERVICOS(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'INSERT INTO SERVICOS(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TRxCalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox  then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  Habilitar(False);
+end;
+
+procedure TFrmServicos.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE SERVICOS SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE SERVICOS SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE SERVICOS SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE SERVICOS SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'UPDATE SERVICOS SET ' then
+        Sql := Sql + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (SERVICO_ID = :ID)';
+
+  
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox  then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('SERVICO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QTabela.Locate('SERVICO_ID', ID, [loCaseInsensitive]);
+
+  Habilitar(False);
+end;
+
+function TFrmServicos.Validacao: Boolean;
+var
+Cst_Valido: Boolean;
+begin
+  Result := False;
+
+  DESCRICAO.Color       := clWindow;
+  COD_GEN.Color         := clWindow;
+  MOD_ICMS.Color        := clwindow;
+  CST_PIS_ENTR.Color    := clWindow;
+  CST_PIS.Color         := clWindow;
+  CST_COFINS.Color      := clWindow;
+  CST_COFINS_ENTR.Color := clWindow;
+  nat_rec.Color         := clWindow;
+
+
+  if DESCRICAO.Text = '' then
+  begin
+    Application.MessageBox('Informe a Descrição', PChar(Msg_Title), mb_IconStop);
+    DESCRICAO.Color := clYellow;
+    DESCRICAO.SetFocus;
+    exit;
+  end;
+
+  if (COD_GEN.Text <> '') and (FrmPrincipal.Config.FieldByName('SPED').AsString = 'True') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM GENERO_PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+    IQuery.ParamByName('CODIGO').AsString := COD_GEN.Text;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Cód. Gênero inexistente', PChar(Msg_Title), mb_IconStop);
+
+      COD_GEN.Color := clYellow;
+      COD_GEN.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if NCM.Text <> '' then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TIPI');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(NCM = :NCM)');
+
+    IQuery.ParamByName('NCM').AsString := NCM.Text;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('NCM inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+
+      NCM.Color := clYellow;
+      NCM.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if FrmPrincipal.Config.FieldByName('SPED').AsString = 'True' then
+  begin
+    if CST_PIS_ENTR.Text <> '' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_PIS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_PIS_ENTR.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST PIS de Entrada inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_PIS_ENTR.Color := clYellow;
+
+        if CST_PIS_ENTR.CanFocus then
+          CST_PIS_ENTR.SetFocus;
+
+        exit;
+      end;
+
+      if ((Copy(NCM.Text, 1, 4) = '0201') or (Copy(NCM.Text, 1, 4) = '0202') or (Copy(NCM.Text, 1, 6) = '020620')) and ((CST_PIS_ENTR.Text < '60') or (CST_PIS_ENTR.Text > '66')) then
+        Application.MessageBox('Para NCM 0201 ou NMC 0202 ou NCM 020620 (Crédito Presumido Revenda), o CST deve ser de 60 a 66', PChar(Msg_Title), mb_IconStop)
+
+      else
+      begin
+        if ((CST_PIS_ENTR.Text >= '50') and (CST_PIS_ENTR.Text <= '66')) or ((CST_PIS_ENTR.Text >= '70') and (CST_PIS_ENTR.Text <= '75')) or (CST_PIS_ENTR.Text = '98') or (CST_PIS_ENTR.Text = '99') then
+          Cst_Valido := True
+        else
+          Cst_Valido := False;
+
+        if not Cst_Valido then
+          Application.MessageBox('CST de entrada/aquisição deve ser de 50 a 66, 70 a 75, 98 ou 99', PChar(Msg_Title), mb_IconStop);
+      end;
+    end;
+
+    if CST_PIS.Text <> '' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_PIS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_PIS.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST PIS de Saída inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_PIS.Color := clYellow;
+
+        if CST_PIS.CanFocus then
+          CST_PIS.SetFocus;
+
+        exit;
+      end;
+    end;
+
+    if (PIS.Value > 0) and (CST_PIS.Text = '') then
+    begin
+      Application.MessageBox('Se Alíquota PIS for maior do que 0 é obrigatório informar o CST PIS', PChar(Msg_Title), mb_IconStop);
+
+      CST_PIS.Color := clYellow;
+
+      if CST_PIS.CanFocus then
+        CST_PIS.SetFocus;
+
+      exit;
+    end;
+
+    if CST_COFINS_ENTR.Text <> '' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_COFINS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_COFINS_ENTR.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST COFINS de Entrada inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_COFINS_ENTR.Color := clYellow;
+
+        if CST_COFINS_ENTR.CanFocus then
+          CST_COFINS_ENTR.SetFocus;
+
+        exit;
+      end;
+
+      if ((Copy(NCM.Text, 1, 4) = '0201') or (Copy(NCM.Text, 1, 4) = '0202') or (Copy(NCM.Text, 1, 6) = '020620')) and ((CST_COFINS_ENTR.Text < '60') or (CST_COFINS_ENTR.Text > '66')) then
+        Application.MessageBox('Para NCM 0201 ou NMC 0202 ou NCM 020620 (Crédito Presumido Revenda), o CST deve ser de 60 a 66', PChar(Msg_Title), mb_IconStop)
+      else
+      begin
+        if ((CST_COFINS_ENTR.Text >= '50') and (CST_COFINS_ENTR.Text <= '66')) or ((CST_COFINS_ENTR.Text >= '70') and (CST_COFINS_ENTR.Text <= '75')) or (CST_COFINS_ENTR.Text = '98') or (CST_COFINS_ENTR.Text = '99') then
+          Cst_Valido := True
+        else
+          Cst_Valido := False;
+
+        if not Cst_Valido then
+          Application.MessageBox('CST de entrada/aquisição deve ser de 50 a 66, 70 a 75, 98 ou 99', PChar(Msg_Title), mb_IconStop);
+      end;
+    end;
+
+    if CST_COFINS.Text <> '' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_COFINS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_COFINS.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST COFINS de Saída inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_COFINS.Color := clYellow;
+
+        if CST_COFINS.CanFocus then
+          CST_COFINS.SetFocus;
+
+        exit;
+      end;
+    end;
+
+    if (COFINS.Value > 0) and (CST_COFINS.Text = '') then
+    begin
+      Application.MessageBox('Se Alíquota COFINS for maior do que 0 é obrigatório informar o CST COFINS', PChar(Msg_Title), mb_IconStop);
+
+      CST_COFINS.Color := clYellow;
+
+      if CST_COFINS.Canfocus then
+        CST_COFINS.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if CST_PIS.Text <> CST_COFINS.Text then
+  begin
+    Application.MessageBox('Cód. CST PIS de saída diferente de CST COFINS de saída', PChar(Msg_Title), mb_IconStop);
+
+    CST_PIS.Color := clYellow;
+
+    if CST_PIS.CanFocus then
+      CST_PIS.SetFocus;
+
+    exit;
+  end;
+
+  if CST_PIS_ENTR.Text <> CST_COFINS_ENTR.Text then
+  begin
+    Application.MessageBox('Cód. CST PIS de entrada diferente de CST COFINS de entrada', PChar(Msg_Title), mb_IconStop);
+
+    CST_PIS_ENTR.Color := clYellow;
+
+    if CST_PIS_ENTR.CanFocus then
+      CST_PIS_ENTR.SetFocus;
+
+    exit;
+  end;
+
+  if (MOD_ICMS.Text <> '') and (MOD_ICMS.Text <> 'MVA') and (MOD_ICMS.Text <> 'PAUTA') and (MOD_ICMS.Text <> 'PR. TABELADO') and (MOD_ICMS.Text <> 'VALOR DA OPERAÇÃO') then
+  begin
+    Application.MessageBox('Mod. de Determinação da Base de Cálculo do ICMS inválido', PChar(Msg_Title), mb_IconStop);
+
+    MOD_ICMS.Color := clYellow;
+    MOD_ICMS.SetFocus;
+
+    exit;
+  end;
+
+  if not ((nat_rec.Text = '03') OR (nat_rec.Text = '05') OR (nat_rec.Text = '06')
+       OR  (nat_rec.Text = '07') or (nat_rec.Text = '13') or (nat_rec.Text = '15') )  then
+  Begin
+  Application.MessageBox('Favor digitar códigos válidos conforme quadro ao lado.', PChar(Msg_Title), mb_IconStop);
+  nat_rec.Color := clYellow;
+  nat_rec.SetFocus;
+  exit;
+  End;
+
+
+  Result := True;
+end;
+
+procedure TFrmServicos.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmServicos.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+      Begin
+
+        TComboBox(Temp).Style := csDropDown;
+        TComboBox(Temp).Text  := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+        TComboBox(Temp).Style := csDropDownList;
+
+      End;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+    if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+
+    end;
+  end;
+end;
+
+procedure TFrmServicos.btnCst_CofinsClick(Sender: TObject);
+begin
+  CST_COFINS.Text := GetConsulta_CST('CST_COFINS', CST_COFINS.Text);
+end;
+
+procedure TFrmServicos.btnCst_Cofins_EntrClick(Sender: TObject);
+begin
+  CST_COFINS_ENTR.Text := GetConsulta_CST('CST_COFINS', CST_COFINS_ENTR.Text);
+end;
+
+procedure TFrmServicos.btnCst_PisClick(Sender: TObject);
+begin
+  CST_PIS.Text := GetConsulta_CST('CST_PIS', CST_PIS.Text);
+end;
+
+procedure TFrmServicos.btnCst_Pis_EntrClick(Sender: TObject);
+begin
+  CST_PIS_ENTR.Text := GetConsulta_CST('CST_PIS', CST_PIS_ENTR.Text);
+end;
+
+procedure TFrmServicos.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('SERVICO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'S';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Serviço com lançamento. Impossível excluir', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM ORCITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('SERVICO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'S';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Produto com lançamento. Impossível excluir', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM PEDITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('SERVICO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'S';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Serviço com lançamento. Impossível excluir', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+   
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM SERVICOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(SERVICO_ID = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('SERVICO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+end;
+
+procedure TFrmServicos.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmServicos.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Alterando';
+  ID := QTabela.FieldByName('SERVICO_ID').AsInteger;
+  Botoes_Editing;
+  Habilitar(True);
+
+  Consulta.TabVisible := False;
+
+  DESCRICAO.SetFocus;
+end;
+
+procedure TFrmServicos.btnGeneroClick(Sender: TObject);
+begin
+  COD_GEN.Text := GetConsulta_CST('GENEROS', COD_GEN.Text);
+end;
+
+procedure TFrmServicos.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  Consulta.TabVisible := False;
+
+  DESCRICAO.SetFocus;
+end;
+
+procedure TFrmServicos.btnNat_RecClick(Sender: TObject);
+begin
+  NAT_REC.Text := GetConsulta_Contribuicao('CONTR' + '4.3.7', NAT_REC.Text);
+end;
+
+procedure TFrmServicos.btnNCMClick(Sender: TObject);
+begin
+  NCM.Text := Alltrim(GetConsulta_NCM(NCM.Text));
+
+  if length(NCM.Text) <> 8 then
+    NCM.Text := '';
+end;
+
+procedure TFrmServicos.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+  Botoes_Normal;
+end;
+
+procedure TFrmServicos.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmServicos.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmServicos.btnSaveClick(Sender: TObject);
+begin
+  if Validacao then
+  begin
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdSelectNull := 'WHERE (SERVICO_ID IS NOT NULL)';
+      CmdOrderBy    := 'ORDER BY SERVICO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.Prepare;
+      QTabela.Open;
+
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    Set_Campos(False);
+    Habilitar(False);
+    Botoes_Normal;
+    Operacao := '';
+    Consulta.TabVisible := True;
+  end;
+end;
+
+procedure TFrmServicos.CST_COFINSExit(Sender: TObject);
+begin
+CST_pis.text := Cst_cofins.Text;
+end;
+
+procedure TFrmServicos.CST_COFINS_ENTRExit(Sender: TObject);
+begin
+CST_PIS_ENTR.Text := CST_COFINS_ENTR.Text
+end;
+
+procedure TFrmServicos.CST_PISExit(Sender: TObject);
+begin
+CST_COFINS.text := Cst_pis.Text;
+end;
+
+procedure TFrmServicos.CST_PIS_ENTRExit(Sender: TObject);
+begin
+CST_COFINS_ENTR.Text := CST_PIS_ENTR.Text
+end;
+
+procedure TFrmServicos.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmServicos.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F3) and (QTabela.FieldByName('STATUS').AsString = 'A') then
+  begin
+    ID := QTabela.FieldByName('SERVICO_ID').AsInteger;
+
+    
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE SERVICOS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(SERVICO_ID = :SERVICO_ID)');
+
+    IQuery.ParamByName('STATUS').AsString := 'D';
+    IQuery.ParamByName('SERVICO_ID').AsInteger := QTabela.FieldByName('SERVICO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    QTabela.Locate('SERVICO_ID', ID, [loCaseInsensitive]);
+  end;
+
+  if (Key = Vk_F4) and (QTabela.FieldByName('STATUS').AsString = 'D') then
+  begin
+    ID := QTabela.FieldByName('SERVICO_ID').AsInteger;
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE SERVICOS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(SERVICO_ID = :SERVICO_ID)');
+
+    IQuery.ParamByName('STATUS').AsString := 'A';
+    IQuery.ParamByName('SERVICO_ID').AsInteger := QTabela.FieldByName('SERVICO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+    
+    QTabela.Locate('SERVICO_ID', ID, [loCaseInsensitive]);
+  end;
+end;
+
+procedure TFrmServicos.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmServicos.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmServicos.DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = CST_PIS) then
+    btnCst_PisClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_PIS_ENTR) then
+    btnCst_Pis_EntrClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_COFINS) then
+    btnCst_CofinsClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_COFINS_ENTR) then
+    btnCst_Cofins_EntrClick(Self);
+
+  if (Key = Vk_F7) and (Sender = NAT_REC) then
+    btnNat_RecClick(Self);
+
+  if (Key = Vk_F7) and (Sender = NCM) then
+    btnNCMClick(Self);
+
+  if (Key = Vk_F7) and (Sender = COD_GEN) then
+    btnGeneroClick(Self);
+
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmServicos.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmServicos.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmServicos.FormCreate(Sender: TObject);
+begin
+  DBGrid1.Columns[0].Width := 57;
+  DBGrid1.Columns[1].Width := 263;
+  DBGrid1.Columns[2].Width := 100;
+  DBGrid1.Columns[3].Width := 100;
+  DBGrid1.Columns[4].Width := 100;
+  DBGrid1.Columns[5].Width := 50;
+
+  CmdSelect     := QTabela.Sql.Text;
+  CmdSelectNull := 'WHERE (SERVICO_ID IS NOT NULL)';
+  CmdOrderBy    := 'ORDER BY DESCRICAO';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  Qtabela.Prepare;
+  QTabela.Open;
+
+  Consulta.Show;
+end;
+
+procedure TFrmServicos.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+end;
+
+end.

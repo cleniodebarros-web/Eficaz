@@ -1,0 +1,142 @@
+unit UEstoque_G_F;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, ExtCtrls, rxCurrEdit, rxToolEdit, Buttons, DBCtrls,
+  DB, IBCustomDataSet, IBQuery, QuickRpt, QRCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, frxClass, frxExportBaseDialog,
+  frxExportXLSX, frxDBSet;
+
+type
+  TFrmEstoque_G_F = class(TForm)
+    DataProduto: TDataSource;
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    QProduto: TFDQuery;
+    Relatorio_Editar: TfrxReport;
+    FrxDSCredito: TfrxDBDataset;
+    Relatorio_Principal: TfrxReport;
+    frxXLSXExport1: TfrxXLSXExport;
+    DadosRelatorio: TFDMemTable;
+    DadosRelatorioDESCRICAO: TStringField;
+    DadosRelatorioQUANTIDADE_C: TFloatField;
+    DadosRelatorioQUANTIDADE_G: TFloatField;
+    DadosRelatorioQUANTIDADE_TOTAL: TFloatField;
+    QLayoutFastReport: TFDQuery;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure Relatorio_PrincipalLoadTemplate(Report: TfrxReport;
+      const TemplateName: string);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure SearchProduto;
+  end;
+
+var
+  FrmEstoque_G_F: TFrmEstoque_G_F;
+  Saldo, Sd: Real;
+
+implementation
+
+uses
+  UData, UConsulta, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmEstoque_G_F.SearchProduto;
+begin
+  QProduto.Close;
+  QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QProduto.Prepare;
+  QProduto.Open;
+end;
+
+procedure TFrmEstoque_G_F.btnExecutaClick(Sender: TObject);
+begin
+// 125, 325
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+    QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QProduto.ParamByName('STATUS').AsString      := 'A';
+    QProduto.Prepare;
+    QProduto.Open;
+
+    QLayoutFastReport.SQL.Clear;
+    QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+    QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+    QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+    QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'UEstoque_G_F';
+    QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+    QLayoutFastReport.Open();
+
+    Relatorio_Principal.Clear;
+    DadosRelatorio.Open;
+    DadosRelatorio.EmptyDataSet;
+
+    while not QProduto.eof Do
+    Begin
+      DadosRelatorio.append;
+
+      DadosRelatorio.FieldByName('DESCRICAO').AsString       := QProduto.FieldByName('DESCRICAO').AsString;
+      DadosRelatorio.FieldByName('QUANTIDADE_C').AsFloat     := QProduto.FieldByName('QUANTIDADE_C').AsFloat;
+      DadosRelatorio.FieldByName('QUANTIDADE_G').AsFloat     := QProduto.FieldByName('QUANTIDADE_G').AsFloat;
+      DadosRelatorio.FieldByName('QUANTIDADE_TOTAL').AsFloat := QProduto.FieldByName('QUANTIDADE_C').AsFloat - QProduto.FieldByName('QUANTIDADE_G').AsFloat;
+
+      DadosRelatorio.Post;
+      QProduto.Next;
+    End;
+
+    Relatorio_Principal.Clear;
+    Relatorio_Principal.InheritFromTemplate('UEstoque_G_F.fr3');
+    Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, '', 'Estoque G e F');
+    Relatorio_Principal.ShowReport(true);
+
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+end;
+
+
+procedure TFrmEstoque_G_F.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmEstoque_G_F.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmEstoque_G_F.Relatorio_PrincipalLoadTemplate(Report: TfrxReport;
+  const TemplateName: string);
+var BlobStream: TStream;
+begin
+  QLayoutFastReport.First;
+  while not QLayoutFastReport.Eof do
+  begin
+    //ShowMessage(TemplateName + ' ' + QLayoutFastReport.FieldByName('NOME_RELATORIO').AsString);
+    if AnsiCompareText(QLayoutFastReport.FieldByName('NOME_ARQUIVO').AsString, TemplateName) = 0 then
+    begin
+      //ShowMessage(TemplateName + ' ' + QLayoutFastReport.FieldByName('NOME_ARQUIVO').AsString);
+      //ShowMessage('Cheguei aqui');
+      BlobStream := TMemoryStream.Create;
+      TBlobField(QLayoutFastReport.FieldByName('ARQUIVO_RELATORIO')).SaveToStream(BlobStream);
+      BlobStream.Position := 0;
+      Report.LoadFromStream(BlobStream);
+      BlobStream.Free;
+      break;
+    end;
+    QLayoutFastReport.Next;
+  end;
+end;
+
+end.

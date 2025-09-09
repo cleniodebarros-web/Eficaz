@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Agrupado_5_LandScape.fr3" ReportOptions.CreateDate="44550,670455463" ReportOptions.LastChange="44552,3610951389" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportQRel" DataSetName="QRel_UFicha_Financeira_Clientes"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperSize="9">
+    <inherited Name="b_cabecalho">
+      <inherited Name="b_cabecalho_data_hora_atual"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Ficha Financeira do Cliente"/>
+      <inherited Name="b_cabecalho_periodo_analisado"/>
+      <inherited Name="b_cabecalho_razao_social"/>
+      <inherited Name="b_cabecalho_logo"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens">
+      <inherited Name="b_cabecalho_titulo_item_texto" Width="79,01577" Text="Dt.Emissão"/>
+      <inherited Name="b_cabecalho_espaco_branco"/>
+      <TfrxMemoView Name="Memo9" AllowVectorExport="True" Left="94,48825" Top="3,77953" Width="52,55906" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="N° Doc."/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="192,75603" Top="3,77953" Width="97,91342" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Vr. em Aberto"/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="298,58287" Top="3,77953" Width="41,22047" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Juros"/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="370,39394" Top="3,77953" Width="41,22047" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Multa"/>
+      <TfrxMemoView Name="Memo13" AllowVectorExport="True" Left="457,32313" Top="3,77953" Width="67,67718" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Desconto"/>
+      <TfrxMemoView Name="Memo14" AllowVectorExport="True" Left="544,25232" Top="3,77953" Width="82,7953" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Vencimento"/>
+      <TfrxMemoView Name="Memo15" AllowVectorExport="True" Left="642,5201" Top="3,77953" Width="79,01577" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Pagamento"/>
+      <TfrxMemoView Name="Memo16" AllowVectorExport="True" Left="740,78788" Top="3,77953" Width="79,01577" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Valor Pago"/>
+      <TfrxMemoView Name="Memo17" AllowVectorExport="True" Left="831,4966" Top="3,77953" Width="97,91342" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Valor Original"/>
+      <TfrxMemoView Name="Memo18" AllowVectorExport="True" Left="941,10297" Top="3,77953" Width="37,44094" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Total"/>
+      <TfrxMemoView Name="Memo19" AllowVectorExport="True" Left="1016,69357" Top="3,77953" Width="60,11812" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Espécie"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado5_landscape_group_header" Height="61,94489654" Condition="&#60;QRel_UFicha_Financeira_Clientes.&#34;CLIENTE_ID&#34;&#62;">
+      <inherited Name="b_rel_agrupado3_shape2" Top="59,67718"/>
+      <inherited Name="b_rel_agrupado5_landscape_group_header_item1" Width="472,85065" Text="[QRel_UFicha_Financeira_Clientes.&#34;NOME&#34;]"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="7,55906" Top="37,7953" Width="79,77953" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cnpj / Cpf -"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="86,92919" Top="39,7953" Width="104,91342" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;CNPJ&#34;]"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="196,53556" Top="37,7953" Width="72,22047" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Telefone -"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="268,34663" Top="40,57483" Width="135,14966" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;TELEFONE_1&#34;]"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="7,55906" Top="18,89765" Width="76" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Endereço - "/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="85,92919" Top="21,45671" Width="996,8825" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;ENDERECO&#34;], N°: [QRel_UFicha_Financeira_Clientes.&#34;NUMERO&#34;], Bairro: [QRel_UFicha_Financeira_Clientes.&#34;BAIRRO&#34;], Município: [QRel_UFicha_Financeira_Clientes.&#34;MUNICIPIO&#34;] [QRel_UFicha_Financeira_Clientes.&#34;ESTADO&#34;]"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado5_landscape_group_footer" Height="60,47246291" Top="389,29159">
+      <inherited Name="b_rel_agrupado5_landscape_group_footer_item1" Top="11,55906"/>
+      <inherited Name="b_rel_simples_shape1"/>
+      <TfrxMemoView Name="Memo20" AllowVectorExport="True" Left="151,1812" Top="7,55906" Width="87,33859" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Total Pago ="/>
+      <TfrxMemoView Name="u_ficha_financ_cli_groupfooter_totalpago" AllowVectorExport="True" Left="239,11039" Top="10,33859" Width="104,91342" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="0,00"/>
+      <TfrxMemoView Name="Memo22" AllowVectorExport="True" Left="362,83488" Top="7,55906" Width="117,57483" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Total a Receber ="/>
+      <TfrxMemoView Name="u_ficha_financ_cli_groupfooter_totalrecebido" AllowVectorExport="True" Left="481,00031" Top="10,33859" Width="104,91342" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="0,00"/>
+      <TfrxMemoView Name="Memo23" AllowVectorExport="True" Left="676,53587" Top="7,55906" Width="53,32282" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Juros ="/>
+      <TfrxMemoView Name="u_ficha_financ_cli_groupfooter_juros" AllowVectorExport="True" Left="730,44929" Top="10,33859" Width="104,91342" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="0,00"/>
+      <TfrxMemoView Name="Memo24" AllowVectorExport="True" Left="181,41744" Top="26,45671" Width="57,10235" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Multa  ="/>
+      <TfrxMemoView Name="u_ficha_financ_cli_groupfooter_multa" AllowVectorExport="True" Left="239,11039" Top="29,23624" Width="104,91342" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="0,00"/>
+      <TfrxMemoView Name="Memo25" AllowVectorExport="True" Left="393,07112" Top="26,45671" Width="87,33859" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Total Geral ="/>
+      <TfrxMemoView Name="u_ficha_financ_cli_groupfooter_totalgeral" AllowVectorExport="True" Left="481,00031" Top="29,23624" Width="104,91342" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="0,00"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado5_landscape_report_Summary" Height="173,74026" Top="510,23655" Visible="False">
+      <inherited Name="b_rel_simples_shape12"/>
+      <inherited Name="b_rel_agrupado5_landscape_report_Summary_item1"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData2" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976378" Left="0" Top="347,71676" Width="1084,72511" ColumnWidth="0" ColumnGap="0" DataSet="FastReportQRel" DataSetName="QRel_UFicha_Financeira_Clientes" RowCount="0">
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_data" AllowVectorExport="True" Left="7,55906" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;DT_ENT_SAI&#34;]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_conduta" AllowVectorExport="True" Left="147,40167" Top="-10,89765" Width="29,32282" Height="0" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;CONDUTA&#34;]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_vrdesconto" AllowVectorExport="True" Left="457,32313" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UFicha_Financeira_Clientes.&#34;VR_DESCONTO&#34;&#62;)]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_numdoc" AllowVectorExport="True" Left="94,48825" Top="2" Width="108,69295" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text=""/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_valort" AllowVectorExport="True" Left="207,87415" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UFicha_Financeira_Clientes.&#34;VALOR_T&#34;&#62;)]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_dtvencimento" AllowVectorExport="True" Left="544,25232" Top="3" Width="67,27559055" Height="15,11811024" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;DT_VENCIMENTO&#34;]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_especie" AllowVectorExport="True" Left="1016,69357" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;ESPECIE&#34;]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_valorori" AllowVectorExport="True" Left="831,4966" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UFicha_Financeira_Clientes.&#34;VALOR_ORI&#34;&#62;)]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_valor" AllowVectorExport="True" Left="740,78788" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UFicha_Financeira_Clientes.&#34;VALOR&#34;&#62;)]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_juros" AllowVectorExport="True" Left="298,58287" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="0,00"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_multa" AllowVectorExport="True" Left="370,39394" Top="2" Width="67,27559055" Height="15,11811024" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text=""/>
+      <TfrxMemoView Name="Memo21" AllowVectorExport="True" Left="642,5201" Top="2" Width="67,27559055" Height="15,11811024" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UFicha_Financeira_Clientes.&#34;DT_PAGAMENTO&#34;]"/>
+      <TfrxMemoView Name="u_ficha_financ_cli_masterdata_total" AllowVectorExport="True" Left="941,10297" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="0,00"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" PaperSize="9">
+    <inherited Name="ReportTitle1"/>
+    <inherited Name="MasterData1"/>
+    <inherited Name="PageFooter1">
+      <inherited Name="Memo1"/>
+    </inherited>
+  </inherited>
+</inherited>

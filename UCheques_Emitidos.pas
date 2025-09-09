@@ -1,0 +1,1120 @@
+unit UCheques_Emitidos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, DBCtrls, rxCurrEdit, rxToolEdit,
+  QRCtrls, QuickRpt, Menus, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client;
+
+type
+  TFrmCheques_Emitidos = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    Label2: TLabel;
+    Label9: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    DT_CHEQUE: TDateEdit;
+    BANCO_ID: TCurrencyEdit;
+    DataBanco: TDataSource;
+    DBText1: TDBText;
+    btnBanco: TSpeedButton;
+    VALOR: TRxCalcEdit;
+    DT_MOVIMENTO: TDateEdit;
+    Dias: TTabSet;
+    AUTORIZ_ID: TCurrencyEdit;
+    Label7: TLabel;
+    btnPesquisa: TBitBtn;
+    Label1: TLabel;
+    DT_PARA: TDateEdit;
+    Label8: TLabel;
+    NOMINAL: TEdit;
+    Label10: TLabel;
+    HISTORICO: TEdit;
+    NUM_CHEQUE: TCurrencyEdit;
+    Label3: TLabel;
+    STATUS: TComboBox;
+    btnImprimir: TButton;
+    Copia_Cheque: TQuickRep;
+    DetailBand1: TQRBand;
+    QRLabel5: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRLabel13: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRShape2: TQRShape;
+    QRShape3: TQRShape;
+    QRDBText13: TQRDBText;
+    QRLabel18: TQRLabel;
+    QRDBText14: TQRDBText;
+    QRLabel20: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRLabel23: TQRLabel;
+    QRDBText20: TQRDBText;
+    QRLabel19: TQRLabel;
+    QRDBText16: TQRDBText;
+    QRLabel21: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRShape4: TQRShape;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRLabel3: TQRLabel;
+    QRDBText2: TQRDBText;
+    btnCopia: TButton;
+    Rel_Cheques: TQuickRep;
+    QRBand1: TQRBand;
+    Vr_Extenso: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRExpr1: TQRExpr;
+    Cidade: TQRLabel;
+    Mes: TQRLabel;
+    Bom_Para: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    PopupMenu1: TPopupMenu;
+    Alterar_NFe: TMenuItem;
+    Label18: TLabel;
+    LIQUIDADO: TEdit;
+    Label20: TLabel;
+    Dt_liquidacao: TDateEdit;
+    QTabela: TFDQuery;
+    IQuery: TFDQuery;
+    QBanco: TFDQuery;
+    QLiquida: TFDQuery;
+    ts1: TTabSheet;
+    dbgrd1: TDBGrid;
+    QLancamentos: TFDQuery;
+    DataLancamento: TDataSource;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure BANCO_IDExit(Sender: TObject);
+    procedure BANCO_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnBancoClick(Sender: TObject);
+    procedure DiasClick(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure DT_CHEQUEKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure btnImprimirClick(Sender: TObject);
+    procedure DT_CHEQUEEnter(Sender: TObject);
+    procedure DetailBand1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure btnCopiaClick(Sender: TObject);
+    procedure QRBand1BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure Alterar_NFeClick(Sender: TObject);
+    procedure ts1Show(Sender: TObject);
+    procedure QLancamentosAfterOpen(DataSet: TDataSet);
+    procedure QTabelaAfterOpen(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+  end;
+
+var
+  FrmCheques_Emitidos: TFrmCheques_Emitidos;
+  Operacao: String;
+  ID: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UPesquisa, UImprimir_Cheque,ULiquidacao_Cheques;
+
+{$R *.dfm}
+
+procedure TFrmCheques_Emitidos.Botoes_Editing;
+begin
+  btnPrior.Enabled    := False;
+  btnNext.Enabled     := False;
+  btnInsert.Enabled   := False;
+  btnEdit.Enabled     := False;
+  btnDelete.Enabled   := False;
+  btnSave.Enabled     := True;
+  btnDiscard.Enabled  := True;
+  btnRetorna.Enabled  := False;
+  btnBanco.Enabled    := True;
+  btnPesquisa.Enabled := False;
+  btnImprimir.Enabled := False;
+  btnCopia.Enabled    := False;
+end;
+
+procedure TFrmCheques_Emitidos.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled     := True;
+    btnDelete.Enabled   := True;
+    btnImprimir.Enabled := True;
+    btnCopia.Enabled    := True;
+  end
+  else
+  begin
+    btnEdit.Enabled     := False;
+    btnDelete.Enabled   := False;
+    btnImprimir.Enabled := False;
+    btnCopia.Enabled    := False;
+  end;
+
+  btnSave.Enabled     := False;
+  btnDiscard.Enabled  := False;
+  btnRetorna.Enabled  := True;
+  btnBanco.Enabled    := False;
+  btnPesquisa.Enabled := True;
+end;
+
+procedure TFrmCheques_Emitidos.DetailBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  QRLabel1.Caption  := 'Cópia de Cheque Nº ' + QTabela.FieldByName('NUM_CHEQUE').AsString;
+  QRLabel13.Caption := '( ' + Extenso(QTabela.FieldByName('VALOR').AsFloat) + ' )';
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM BANCOS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(BANCO_ID = :BANCO_ID)');
+  IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+  IQuery.ParamByName('BANCO_ID').AsInteger   := QTabela.FieldByName('BANCO_ID').AsInteger;
+  IQuery.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+end;
+
+procedure TFrmCheques_Emitidos.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Banco')) and (BANCO_ID.Text <> '') then
+  begin
+    QBanco.Close;
+    QBanco.ParamByName('BANCO_ID').AsInteger   := StrToInt(BANCO_ID.Text);
+    QBanco.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QBanco.Prepare;
+    QBanco.Open;
+  end;
+end;
+
+procedure TFrmCheques_Emitidos.DiasClick(Sender: TObject);
+begin
+  if Dias.TabIndex <> (Dias.Tabs.Count - 1) then
+  begin
+    CmdSelectNull    := 'WHERE (NUM_CHEQUE IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO)';
+    CmdOrderBy       := 'ORDER BY NUM_CHEQUE';
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := StrToDate(StrZero(IntToStr(Dias.TabIndex + 1), 2, 0) + '/' + Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 7));
+  end
+  else
+  begin
+    CmdSelectNull    := 'WHERE (NUM_CHEQUE IS NOT NULL) AND (DT_MOVIMENTO <= :DT_MOVIMENTO)';
+    CmdOrderBy       := 'ORDER BY NUM_CHEQUE';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  end;
+
+  QTabela.Open;
+  Botoes_Normal;
+end;
+
+procedure TFrmCheques_Emitidos.DT_CHEQUEEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmCheques_Emitidos.DT_CHEQUEKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmCheques_Emitidos.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TMaskEdit then
+      TMaskEdit(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TRxCalcEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmCheques_Emitidos.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO CHEQUES_EMITIDOS(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO CHEQUES_EMITIDOS(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'INSERT INTO CHEQUES_EMITIDOS(' then
+        Sql := Sql + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TMaskEdit(Temp).Name
+      else
+        Par := Par + ', :' + TMaskEdit(Temp).Name;
+    end;
+
+     if (Temp is TDateEdit) AND (TDateEdit(Temp).Text <>  '  /  /    ')  then
+    begin
+      if Sql = 'INSERT INTO CHEQUES_EMITIDOS(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO CHEQUES_EMITIDOS(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'INSERT INTO CHEQUES_EMITIDOS(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TRxCalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO CHEQUES_EMITIDOS(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+     if Temp is TDateEdit then
+       if TDateEdit(Temp).Text <> '  /  /    ' then
+       IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxcalcEdit(Temp).Value;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  Habilitar(False);
+end;
+
+procedure TFrmCheques_Emitidos.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE CHEQUES_EMITIDOS SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE CHEQUES_EMITIDOS SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'UPDATE CHEQUES_EMITIDOS SET ' then
+        Sql := Sql + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name;
+    end;
+
+     if (Temp is TDateEdit) AND (TDateEdit(Temp).Text <>  '  /  /    ')  then
+    begin
+      if Sql = 'UPDATE CHEQUES_EMITIDOS SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE CHEQUES_EMITIDOS SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'UPDATE CHEQUES_EMITIDOS SET ' then
+        Sql := Sql + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE CHEQUES_EMITIDOS SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (NUM_CHEQUE = :ID)';
+
+  
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+     if Temp is TDateEdit then
+       if TDateEdit(Temp).Text <> '  /  /    ' then
+       IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('NUM_CHEQUE').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QTabela.Locate('NUM_CHEQUE', ID, [loCaseInsensitive]);
+
+  Habilitar(False);
+end;
+
+procedure TFrmCheques_Emitidos.Alterar_NFeClick(Sender: TObject);
+begin
+ if QTabela.FieldByName('LIQUIDADO').AsString <> 'SIM' then
+ Begin
+   Application.CreateForm(TFrmLiquidacao_Cheques, FrmLiquidacao_Cheques);
+  try
+    if FrmLiquidacao_Cheques.ShowModal = mrOK then
+    begin
+      ID       := QTabela.FieldByName('NUM_CHEQUE').AsInteger;
+
+      QLiquida.Sql.Clear;
+      QLiquida.Sql.Add('UPDATE CHEQUES_EMITIDOS SET LIQUIDADO = :LIQUIDADO, DT_LIQUIDACAO = :DT_LIQUIDACAO');
+      QLiquida.Sql.Add('WHERE');
+      QLiquida.Sql.Add('(NUM_CHEQUE = :NUM_CHEQUE)');
+
+      QLiquida.ParamByName('LIQUIDADO').AsString       := 'SIM';
+      QLiquida.ParamByName('DT_LIQUIDACAO').AsDateTime := FrmLiquidacao_Cheques.Dt_Liquidacao.Date;
+      QLiquida.ParamByName('NUM_CHEQUE').AsInteger     := ID;
+
+      QLiquida.Prepare;
+      QLiquida.ExecSql;
+
+
+
+      QLiquida.Sql.Clear;
+      QLiquida.Sql.Add('INSERT INTO TRANSACOES( ' +
+                       'DT_TRANS,         DT_MOVIMENTO,    EMPRESA_ID,        FORNECEDOR_ID, ' +
+                       'NUM_DOC,          SERIE,           MODELO,            CFOP, ' +
+                       'CONTA_ID,         BANCO_ID,        VALOR,             NUM_CHEQUE, ' +
+                       'BALANCO,          C_CUSTO_ID,      COND_PAGTO,        PATRIMONIO_ID, ' +
+                       'ODOMETRO,         QUANTIDADE,      BASE_ICMS_NORMAL,  CST_ICMS, ' +
+                       'ALIQUOTA_ICMS,    VR_ICMS_NORMAL,  BASE_CALC_PIS,     CST_PIS, ' +
+                       'ALIQUOTA_PIS,     VR_PIS,          BASE_CALC_COFINS,  CST_COFINS, ' +
+                       'ALIQUOTA_COFINS,  VR_COFINS,       VALOR_OUTROS,      VALOR_ISENTO, ' +
+                       'FLUXO_CAIXA_ID,   HISTORICO,       AUTORIZ_ID,        CONDUTA, ' +
+                       'DEPTO,            TPCTB) VALUES(' +
+                       ':DT_TRANS,        :DT_MOVIMENTO,   :EMPRESA_ID,       :FORNECEDOR_ID, ' +
+                       ':NUM_DOC,         :SERIE,          :MODELO,           :CFOP, ' +
+                       ':CONTA_ID,        :BANCO_ID,       :VALOR,            :NUM_CHEQUE, ' +
+                       ':BALANCO,         :C_CUSTO_ID,     :COND_PAGTO,       :PATRIMONIO_ID, ' +
+                       ':ODOMETRO,        :QUANTIDADE,     :BASE_ICMS_NORMAL, :CST_ICMS, ' +
+                       ':ALIQUOTA_ICMS,   :VR_ICMS_NORMAL, :BASE_CALC_PIS,    :CST_PIS, ' +
+                       ':ALIQUOTA_PIS,    :VR_PIS,         :BASE_CALC_COFINS, :CST_COFINS, ' +
+                       ':ALIQUOTA_COFINS, :VR_COFINS,      :VALOR_OUTROS,     :VALOR_ISENTO, ' +
+                       ':FLUXO_CAIXA_ID,  :HISTORICO,      :AUTORIZ_ID,       :CONDUTA, ' +
+                       ':DEPTO,           :TPCTB)');
+
+      QLiquida.ParamByName('DT_TRANS').AsDateTime      := FrmLiquidacao_Cheques.Dt_Liquidacao.Date;
+      QLiquida.ParamByName('DT_MOVIMENTO').AsDateTime  := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QLiquida.ParamByName('EMPRESA_ID').AsInteger     := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+      QLiquida.ParamByName('FORNECEDOR_ID').AsInteger  := 0;
+      QLiquida.ParamByName('NUM_DOC').AsString         := '';
+      QLiquida.ParamByName('SERIE').AsString           := '';
+      QLiquida.ParamByName('MODELO').AsString          := '';
+      QLiquida.ParamByName('CFOP').AsString            := '';
+      QLiquida.ParamByName('CONTA_ID').AsInteger       := FrmPrincipal.Config.FieldByName('CONTA_ESTOQUE').AsInteger;
+      QLiquida.ParamByName('BANCO_ID').AsInteger       := QTabela.FieldByName('BANCO_ID').AsInteger;
+      QLiquida.ParamByName('VALOR').AsFloat            := QTabela.FieldByName('VALOR').AsFloat;
+      QLiquida.ParamByName('NUM_CHEQUE').AsString      := StrZero(QTabela.FieldByName('NUM_CHEQUE').AsString, 6, 0);
+      QLiquida.ParamByName('BALANCO').AsString         := 'LIBERADO';
+      QLiquida.ParamByName('C_CUSTO_ID').AsInteger     := 1;
+      QLiquida.ParamByName('COND_PAGTO').AsString      := 'A VISTA';
+      QLiquida.ParamByName('PATRIMONIO_ID').AsInteger  := 0;
+      QLiquida.ParamByName('ODOMETRO').AsFloat         := 0;
+      QLiquida.ParamByName('QUANTIDADE').AsFloat       := 0;
+      QLiquida.ParamByName('BASE_ICMS_NORMAL').AsFloat := 0;
+      QLiquida.ParamByName('CST_ICMS').AsString        := '';
+      QLiquida.ParamByName('ALIQUOTA_ICMS').AsFloat    := 0;
+      QLiquida.ParamByName('VR_ICMS_NORMAL').AsFloat   := 0;
+      QLiquida.ParamByName('BASE_CALC_PIS').AsFloat    := 0;
+      QLiquida.ParamByName('CST_PIS').AsString         := '';
+      QLiquida.ParamByName('ALIQUOTA_PIS').AsFloat     := 0;
+      QLiquida.ParamByName('VR_PIS').AsFloat           := 0;
+      QLiquida.ParamByName('ALIQUOTA_ICMS').AsFloat    := 0;
+      QLiquida.ParamByName('BASE_CALC_COFINS').AsFloat := 0;
+      QLiquida.ParamByName('CST_COFINS').AsString      := '';
+      QLiquida.ParamByName('ALIQUOTA_COFINS').AsFloat  := 0;
+      QLiquida.ParamByName('VR_COFINS').AsFloat        := 0;
+      QLiquida.ParamByName('VALOR_OUTROS').AsFloat     := 0;
+      QLiquida.ParamByName('VALOR_ISENTO').AsFloat     := 0;
+      QLiquida.ParamByName('FLUXO_CAIXA_ID').AsInteger := 3;
+      QLiquida.ParamByName('HISTORICO').AsString       := QTabela.FieldByName('HISTORICO').AsString;
+      QLiquida.ParamByName('AUTORIZ_ID').AsInteger     := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+      QLiquida.ParamByName('CONDUTA').AsString         := '02';
+      QLiquida.ParamByName('DEPTO').AsString           := '02';
+      QLiquida.ParamByName('TPCTB').AsString           := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+
+      QLiquida.Prepare;
+      QLiquida.ExecSql;
+
+
+
+      QTabela.Close;
+      QTabela.Open;
+      QTabela.Locate('Num_cheque', ID, [loCaseInsensitive]);
+      Habilitar(False);
+      ManutencaoShow(Manutencao);
+      
+    end;
+  finally
+    FrmLiquidacao_Cheques.Release;
+  end;
+ End
+ Else
+ Begin
+ Application.MessageBox('Cheque liquidado!','Eficaz', MB_IconStop + MB_OK);
+ Abort;
+ End;
+end;
+
+procedure TFrmCheques_Emitidos.BANCO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Banco');
+end;
+
+procedure TFrmCheques_Emitidos.BANCO_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = BANCO_ID) then
+    btnBancoClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmCheques_Emitidos.Validacao: Boolean;
+begin
+  Result := False;
+
+  BANCO_ID.Color := clWindow;
+  VALOR.Color    := clWindow;
+  STATUS.Color   := clWindow;
+
+  if QBanco.IsEmpty then
+  begin
+    Application.MessageBox('Banco inexistente', PChar(Msg_Title), mb_IconStop);
+    BANCO_ID.Color := clYellow;
+    BANCO_ID.SetFocus;
+    exit;
+  end;
+
+  if VALOR.Value <= 0 then
+  begin
+    Application.MessageBox('Valor inválido', PChar(Msg_Title), mb_IconStop);
+    VALOR.Color := clYellow;
+    VALOR.SetFocus;
+    exit;
+  end;
+
+  if (STATUS.Text <> 'SIM') and (STATUS.Text <> 'NÃO') then
+  begin
+    Application.MessageBox('Status inválido', PChar(Msg_Title), mb_IconStop);
+    STATUS.Color := clYellow;
+    STATUS.SetFocus;
+    exit;
+  end;
+
+  Result := True;
+end;
+
+procedure TFrmCheques_Emitidos.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmCheques_Emitidos.QLancamentosAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QLancamentos.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmCheques_Emitidos.QRBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  Vr_Extenso.Caption := Extenso(QTabela.FieldByName('VALOR').AsFloat);
+  Cidade.Caption     := FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ', ' +
+                        Copy(QTabela.FieldByName('DT_CHEQUE').AsString, 1, 2);
+  Mes.Caption        := NomeMes(StrToInt(Copy(QTabela.FieldByName('DT_CHEQUE').AsString, 4, 2)));
+
+  if QTabela.FieldByName('DT_PARA').AsString <> '' then
+    Bom_Para.Caption := 'BOM PARA ' + QTabela.FieldByName('DT_PARA').AsString
+  else
+    Bom_Para.Caption := '';
+end;
+
+procedure TFrmCheques_Emitidos.QTabelaAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QTabela.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmCheques_Emitidos.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := '';
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := 0;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := QTabela.FieldByName(TMaskEdit(Temp).Name).AsString;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := QTabela.FieldByName(TDateEdit(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+    end;
+  end;
+
+  DetailSearch('');
+end;
+
+procedure TFrmCheques_Emitidos.ts1Show(Sender: TObject);
+begin
+Qlancamentos.Close;
+Qlancamentos.ParamByName('NUM_CHEQUE').AsString := QTabela.FieldByName('NUM_CHEQUE').AsString;
+Qlancamentos.ParamByName('BANCO_ID').AsiNTEGER  := QTabela.FieldByName('BANCO_ID').AsInteger;
+Qlancamentos.prepare;
+QLancamentos.Open;
+end;
+
+procedure TFrmCheques_Emitidos.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM CHEQUES_EMITIDOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(NUM_CHEQUE = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('NUM_CHEQUE').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+
+    Qtabela.Prepare;
+    QTabela.Open;
+
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+    QBanco.Close;
+end;
+
+procedure TFrmCheques_Emitidos.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+    QBanco.Close;
+
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmCheques_Emitidos.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Alterando';
+  ID       := QTabela.FieldByName('NUM_CHEQUE').AsInteger;
+
+  Botoes_Editing;
+  Habilitar(True);
+
+  Consulta.TabVisible := False;
+
+  DT_CHEQUE.SetFocus;
+end;
+
+procedure TFrmCheques_Emitidos.btnBancoClick(Sender: TObject);
+begin
+  try
+    BANCO_ID.Value := GetConsulta('BANCOS', 0, 0, StrToInt(BANCO_ID.Text));
+  except
+    BANCO_ID.Value := GetConsulta('BANCOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmCheques_Emitidos.btnCopiaClick(Sender: TObject);
+begin
+  Copia_Cheque.PreviewModal;
+end;
+
+procedure TFrmCheques_Emitidos.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  QBanco.Close;
+
+  DT_CHEQUE.Date    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.Date := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  AUTORIZ_ID.Value  := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+  STATUS.Text       := 'NÃO';
+  LIQUIDADO.Text    := 'NÃO';
+
+  Consulta.TabVisible := False;
+
+  DT_CHEQUE.SetFocus;
+end;
+
+procedure TFrmCheques_Emitidos.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmCheques_Emitidos.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+begin
+  Condicao := GetPesquisa('CHEQUES EMITIDOS');
+
+  CmdSelectNull := Condicao;
+  CmdOrderBy    := 'ORDER BY NUM_CHEQUE';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmCheques_Emitidos.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmCheques_Emitidos.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmCheques_Emitidos.btnSaveClick(Sender: TObject);
+begin
+  DetailSearch('');
+
+  if Validacao then
+  begin
+
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdOrderBy := 'ORDER BY NUM_CHEQUE';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.Open;
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+      QBanco.Close;
+
+    Habilitar(False);
+    Botoes_Normal;
+
+    Operacao := '';
+    Consulta.TabVisible := True;
+  end;
+end;
+
+procedure TFrmCheques_Emitidos.btnImprimirClick(Sender: TObject);
+begin
+  if Application.MessageBox('Deseja imprimir na impressora laser?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    if LeIni(Arq_Ini, 'Cheque', 'Altura') <> '' then
+      QRBand1.Height := StrToInt(LeIni(Arq_Ini, 'Cheque', 'Altura'));
+
+    Rel_Cheques.PreviewModal;
+  end
+  else
+  begin
+    Set_Campos(False);
+
+    DetailSearch('');
+
+    Application.CreateForm(TFrmImprimir_Cheque, FrmImprimir_Cheque);
+    try
+      FrmImprimir_Cheque.edDia.Text        := Copy(QTabela.FieldByName('DT_CHEQUE').AsString, 1, 2);
+      FrmImprimir_Cheque.cbMes.Text        := FrmImprimir_Cheque.cbMes.Items[StrToInt(Copy(QTabela.FieldByName('DT_CHEQUE').AsString, 4, 2)) - 1];
+      FrmImprimir_Cheque.edAno.Text        := Copy(QTabela.FieldByName('DT_CHEQUE').AsString, 7, 4);
+      FrmImprimir_Cheque.edValor.Text      := QTabela.FieldByName('VALOR').AsString;
+      FrmImprimir_Cheque.edFavorecido.Text := QTabela.FieldByName('NOMINAL').AsString;
+      FrmImprimir_Cheque.edCidade.Text     := FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString;
+      FrmImprimir_Cheque.edBanco.Text      := QBanco.FieldByName('NUM_BANCO').AsString;
+
+      FrmImprimir_Cheque.ShowModal;
+    finally
+      FrmImprimir_Cheque.Release;
+    end;
+  end;
+end;
+
+procedure TFrmCheques_Emitidos.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmCheques_Emitidos.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmCheques_Emitidos.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  QTabela.Open;
+end;
+
+procedure TFrmCheques_Emitidos.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmCheques_Emitidos.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmCheques_Emitidos.FormCreate(Sender: TObject);
+var
+X, Ult_Dia: Integer;
+begin
+  DBGrid1.Columns[0].Width := 64;
+  DBGrid1.Columns[1].Width := 64;
+  DBGrid1.Columns[2].Width := 230;
+  DBGrid1.Columns[3].Width := 210;
+  DBGrid1.Columns[4].Width := 67;
+  DBGrid1.Columns[5].Width := 46;
+
+  Ult_Dia := StrToInt(Copy(DateToStr(Ult_Dia_Mes(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime)), 1, 2));
+  Dias.Tabs.Clear;
+
+  for X := 1 to Ult_Dia do
+    Dias.Tabs.Add(IntToStr(X));
+
+  Dias.Tabs.Add('Todos');
+
+  DT_MOVIMENTO.MinDate := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.MaxDate := StrToDate('31/12/2026');
+
+  CmdSelect        := QTabela.Sql.Text;
+  CmdSelectNull    := 'WHERE (NUM_CHEQUE IS NOT NULL) AND (LIQUIDADO = :LIQUIDADO)';
+  CmdOrderBy       := 'ORDER BY NUM_CHEQUE';
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.ParamByName('LIQUIDADO').AsString := 'NÃO';
+  QTabela.Open;
+  Botoes_Normal;
+  Consulta.Show;
+end;
+
+procedure TFrmCheques_Emitidos.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+end;
+
+end.
+
+

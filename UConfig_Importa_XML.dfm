@@ -1,0 +1,538 @@
+object FrmConfig_Importa_XML: TFrmConfig_Importa_XML
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Configura'#231#227'o Importa'#231#227'o XML'
+  ClientHeight = 294
+  ClientWidth = 481
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Visible = True
+  OnClose = FormClose
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 481
+    Height = 253
+    ActivePage = TabSheet3
+    Align = alClient
+    TabOrder = 0
+    object Consulta: TTabSheet
+      Caption = 'CST 00'
+      object C00_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 153
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C00_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 113
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C00_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+    end
+    object Manutencao: TTabSheet
+      Caption = 'CST 10'
+      ImageIndex = 1
+      object C10_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 145
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C10_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 113
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C10_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+      object C10_Valor_Outros: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 97
+        Height = 17
+        Caption = 'Valor Outros'
+        TabOrder = 3
+      end
+      object C10_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 169
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 4
+      end
+      object C10_Valor_ST: TCheckBox
+        Left = 6
+        Top = 165
+        Width = 113
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 5
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'CST 20'
+      ImageIndex = 2
+      object C20_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 145
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C20_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 113
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C20_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+      object C20_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 161
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 3
+      end
+      object C20_Valor_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 113
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 4
+      end
+      object C20_Vr_Reducao_BC: TCheckBox
+        Left = 6
+        Top = 165
+        Width = 193
+        Height = 17
+        Caption = 'Valor de Redu'#231#227'o de B. de C'#225'lculo'
+        TabOrder = 5
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'CST 30'
+      ImageIndex = 3
+      object C30_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 161
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C30_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 121
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C30_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+      object C30_Valor_Outros: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 97
+        Height = 17
+        Caption = 'Valor Outros'
+        TabOrder = 3
+      end
+      object C30_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 161
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 4
+      end
+      object C30_Valor_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 165
+        Width = 137
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 5
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'CST 40, 41 e 50'
+      ImageIndex = 4
+      object C40_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 161
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C40_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 137
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C40_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+      object C40_Valor_Isento: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 97
+        Height = 17
+        Caption = 'Valor ISento'
+        TabOrder = 3
+      end
+      object C40_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 169
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 4
+      end
+      object C40_Valor_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 165
+        Width = 113
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 5
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'CST 51'
+      ImageIndex = 5
+      object C51_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 153
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C51_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 137
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C51_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor do ICMS'
+        TabOrder = 2
+      end
+      object C51_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 169
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 3
+      end
+      object C51_Valor_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 129
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 4
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = 'CST 60'
+      ImageIndex = 6
+      object C60_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 153
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C60_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 153
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C60_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+      object C60_Valor_Outros: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 97
+        Height = 17
+        Caption = 'Valor Outros'
+        TabOrder = 3
+      end
+      object C60_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 169
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 4
+      end
+      object C60_Valor_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 165
+        Width = 113
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 5
+      end
+    end
+    object TabSheet6: TTabSheet
+      Caption = 'CST 70'
+      ImageIndex = 7
+      object C70_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 145
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C70_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 121
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C70_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+      object C70_Valor_Outros: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 97
+        Height = 17
+        Caption = 'Valor Outros'
+        TabOrder = 3
+      end
+      object C70_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 169
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 4
+      end
+      object C70_Valor_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 165
+        Width = 137
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 5
+      end
+      object C70_Vr_Reducao_BC: TCheckBox
+        Left = 6
+        Top = 191
+        Width = 193
+        Height = 17
+        Caption = 'Valor de Redu'#231#227'o de B. de C'#225'lculo'
+        TabOrder = 6
+      end
+    end
+    object TabSheet7: TTabSheet
+      Caption = 'CST 90'
+      ImageIndex = 8
+      object C90_Base_ICMS: TCheckBox
+        Left = 6
+        Top = 35
+        Width = 153
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS'
+        TabOrder = 0
+      end
+      object C90_Aliquota_ICMS: TCheckBox
+        Left = 6
+        Top = 61
+        Width = 129
+        Height = 17
+        Caption = 'Al'#237'quota de ICMS'
+        TabOrder = 1
+      end
+      object C90_Valor_ICMS: TCheckBox
+        Left = 6
+        Top = 87
+        Width = 97
+        Height = 17
+        Caption = 'Valor de ICMS'
+        TabOrder = 2
+      end
+      object C90_Valor_Outros: TCheckBox
+        Left = 6
+        Top = 113
+        Width = 97
+        Height = 17
+        Caption = 'Valor Outros'
+        TabOrder = 3
+      end
+      object C90_Base_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 139
+        Width = 161
+        Height = 17
+        Caption = 'Base de C'#225'lculo de ICMS ST'
+        TabOrder = 4
+      end
+      object C90_Valor_ICMS_ST: TCheckBox
+        Left = 6
+        Top = 165
+        Width = 129
+        Height = 17
+        Caption = 'Valor de ICMS ST'
+        TabOrder = 5
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 253
+    Width = 481
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 1
+    object btnRetorna: TBitBtn
+      Left = 402
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Retorna'
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+        F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+        000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+        337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+        45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+        3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+        F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+        000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+        337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+        4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+        7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+        333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+        0000}
+      NumGlyphs = 2
+      TabOrder = 0
+      OnClick = btnRetornaClick
+    end
+    object btnPesquisa: TBitBtn
+      Left = 322
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'OK'
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        80000080000000808000800000008000800080800000C0C0C000808080000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333344333333333333333388F3333333333000033334224333333333333
+        338338F3333333330000333422224333333333333833338F3333333300003342
+        222224333333333383333338F3333333000034222A22224333333338F338F333
+        8F33333300003222A3A2224333333338F3838F338F33333300003A2A333A2224
+        33333338F83338F338F33333000033A33333A222433333338333338F338F3333
+        0000333333333A222433333333333338F338F33300003333333333A222433333
+        333333338F338F33000033333333333A222433333333333338F338F300003333
+        33333333A222433333333333338F338F00003333333333333A22433333333333
+        3338F38F000033333333333333A223333333333333338F830000333333333333
+        333A333333333333333338330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      TabOrder = 1
+      OnClick = btnPesquisaClick
+    end
+  end
+end

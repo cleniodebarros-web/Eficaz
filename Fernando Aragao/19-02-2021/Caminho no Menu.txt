@@ -1,0 +1,9 @@
+-URel_Recebimento_Cartao
+
+Relatórios -> Financeiro -> Contas a Pagar / Receber -> Recebimento de Cartões
+
+
+
+-URel_Vendas_Produtos_Tributados
+
+Relatórios -> Vendas -> Vendas de Produtos Tributados.

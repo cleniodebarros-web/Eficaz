@@ -1,0 +1,2071 @@
+{$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N-,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y+,Z1}
+{$MINSTACKSIZE $00004000}
+{$MAXSTACKSIZE $00100000}
+{$IMAGEBASE $00400000}
+{$APPTYPE GUI}
+{$WARN SYMBOL_DEPRECATED ON}
+{$WARN SYMBOL_LIBRARY ON}
+{$WARN SYMBOL_PLATFORM ON}
+{$WARN SYMBOL_EXPERIMENTAL ON}
+{$WARN UNIT_LIBRARY ON}
+{$WARN UNIT_PLATFORM ON}
+{$WARN UNIT_DEPRECATED ON}
+{$WARN UNIT_EXPERIMENTAL ON}
+{$WARN HRESULT_COMPAT ON}
+{$WARN HIDING_MEMBER ON}
+{$WARN HIDDEN_VIRTUAL ON}
+{$WARN GARBAGE ON}
+{$WARN BOUNDS_ERROR ON}
+{$WARN ZERO_NIL_COMPAT ON}
+{$WARN STRING_CONST_TRUNCED ON}
+{$WARN FOR_LOOP_VAR_VARPAR ON}
+{$WARN TYPED_CONST_VARPAR ON}
+{$WARN ASG_TO_TYPED_CONST ON}
+{$WARN CASE_LABEL_RANGE ON}
+{$WARN FOR_VARIABLE ON}
+{$WARN CONSTRUCTING_ABSTRACT ON}
+{$WARN COMPARISON_FALSE ON}
+{$WARN COMPARISON_TRUE ON}
+{$WARN COMPARING_SIGNED_UNSIGNED ON}
+{$WARN COMBINING_SIGNED_UNSIGNED ON}
+{$WARN UNSUPPORTED_CONSTRUCT ON}
+{$WARN FILE_OPEN ON}
+{$WARN FILE_OPEN_UNITSRC ON}
+{$WARN BAD_GLOBAL_SYMBOL ON}
+{$WARN DUPLICATE_CTOR_DTOR ON}
+{$WARN INVALID_DIRECTIVE ON}
+{$WARN PACKAGE_NO_LINK ON}
+{$WARN PACKAGED_THREADVAR ON}
+{$WARN IMPLICIT_IMPORT ON}
+{$WARN HPPEMIT_IGNORED ON}
+{$WARN NO_RETVAL ON}
+{$WARN USE_BEFORE_DEF ON}
+{$WARN FOR_LOOP_VAR_UNDEF ON}
+{$WARN UNIT_NAME_MISMATCH ON}
+{$WARN NO_CFG_FILE_FOUND ON}
+{$WARN IMPLICIT_VARIANTS ON}
+{$WARN UNICODE_TO_LOCALE ON}
+{$WARN LOCALE_TO_UNICODE ON}
+{$WARN IMAGEBASE_MULTIPLE ON}
+{$WARN SUSPICIOUS_TYPECAST ON}
+{$WARN PRIVATE_PROPACCESSOR ON}
+{$WARN UNSAFE_TYPE OFF}
+{$WARN UNSAFE_CODE OFF}
+{$WARN UNSAFE_CAST OFF}
+{$WARN OPTION_TRUNCATED ON}
+{$WARN WIDECHAR_REDUCED ON}
+{$WARN DUPLICATES_IGNORED ON}
+{$WARN UNIT_INIT_SEQ ON}
+{$WARN LOCAL_PINVOKE ON}
+{$WARN MESSAGE_DIRECTIVE ON}
+{$WARN TYPEINFO_IMPLICITLY_ADDED ON}
+{$WARN RLINK_WARNING ON}
+{$WARN IMPLICIT_STRING_CAST ON}
+{$WARN IMPLICIT_STRING_CAST_LOSS ON}
+{$WARN EXPLICIT_STRING_CAST OFF}
+{$WARN EXPLICIT_STRING_CAST_LOSS OFF}
+{$WARN CVT_WCHAR_TO_ACHAR ON}
+{$WARN CVT_NARROWING_STRING_LOST ON}
+{$WARN CVT_ACHAR_TO_WCHAR ON}
+{$WARN CVT_WIDENING_STRING_LOST ON}
+{$WARN NON_PORTABLE_TYPECAST ON}
+{$WARN XML_WHITESPACE_NOT_ALLOWED ON}
+{$WARN XML_UNKNOWN_ENTITY ON}
+{$WARN XML_INVALID_NAME_START ON}
+{$WARN XML_INVALID_NAME ON}
+{$WARN XML_EXPECTED_CHARACTER ON}
+{$WARN XML_CREF_NO_RESOLVE ON}
+{$WARN XML_NO_PARM ON}
+{$WARN XML_NO_MATCHING_PARM ON}
+{$WARN IMMUTABLE_STRINGS OFF}
+unit USintegra;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Mask, rxToolEdit, ACBrSintegra, DB, IBQuery,
+  IBCustomDataSet, Math, Buttons, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, ACBrBase;
+
+type
+  TFrmSintegra = class(TForm)
+    Bevel1: TBevel;
+    Label3: TLabel;
+    Convenio: TComboBox;
+    Label5: TLabel;
+    Finalidade_Arquivo: TComboBox;
+    Natureza_Operacoes: TComboBox;
+    Label4: TLabel;
+    Label1: TLabel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Label10: TLabel;
+    Versao: TComboBox;
+    ACBrSintegra: TACBrSintegra;
+    SaveDialog1: TSaveDialog;
+    Label2: TLabel;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Label6: TLabel;
+    Data: TComboBox;
+    Label8: TLabel;
+    Preco: TComboBox;
+    Label7: TLabel;
+    Inventario: TComboBox;
+    QDespesa: TFDQuery;
+    IQuery: TFDQuery;
+    QItens: TFDQuery;
+    QParceiro: TFDQuery;
+    QRel: TFDQuery;
+    QProduto: TFDQuery;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure ConvenioKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DtmenEnter(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure InventarioChange(Sender: TObject);
+  private
+    { Private declarations }
+    procedure GerarRegistro10;
+    procedure GerarRegistro11;
+    procedure GerarRegistro50(Cancelada: Char);
+    procedure GerarRegistro51(Cancelada: Char);
+    procedure GerarRegistro53(Cancelada: Char);
+    procedure GerarRegistro54;
+    procedure GerarRegistro60M;
+    procedure GerarRegistro60A;
+    procedure GerarRegistro60D;
+    procedure GerarRegistro60I;
+    procedure GerarRegistro60R;
+    procedure GerarRegistro61;
+    procedure GerarRegistro61R;
+    procedure GerarRegistro70;
+    procedure GerarRegistro74;
+    procedure GerarRegistro75;
+    procedure Seleciona_Parceiro(Conduta, Depto: String; Fornecedor, Cliente: Integer);
+    procedure Seleciona_Produtos;
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmSintegra: TFrmSintegra;
+  Laudo: String;
+
+implementation
+
+uses
+  UPrincipal, UData;
+
+{$R *.dfm}
+
+procedure TFrmSintegra.btnExecutaClick(Sender: TObject);
+var
+Arquivo, NCM: String;
+begin
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+   {
+    if Copy(Dtmen.Text, 1, 2) <> '01' then
+    begin
+      Application.MessageBox('Data inicial deve ser o primeiro dia do mês', PChar(Msg_Title), mb_IconStop);
+      exit;
+    end;
+
+    if Dtmai.Date <> Ult_Dia_Mes(StrToDate('01/' + Copy(Dtmai.Text, 4, 7))) then
+    begin
+      Application.MessageBox('Data final deve ser o último dia do mês', PChar(Msg_Title), mb_IconStop);
+      exit;
+    end;
+    }
+    if LeIni(Arq_Ini, 'Sintegra', 'Excluir Registro 75') = 'True' then
+    begin
+      QRel.Sql.Clear;
+      QRel.Sql.Add('DELETE FROM REGISTRO_75');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+      QRel.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+
+      QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+      QRel.ParamByName('DT_FINAl').AsDateTime   := Dtmai.Date;
+
+      QRel.Prepare;
+      QRel.ExecSql;
+    end;
+
+   if Inventario.Text = 'SIM' then
+    Begin
+      if Data.Text = '' then
+      Begin
+      Application.MessageBox('Necessário informar uma data!', PChar(Msg_Title), mb_IconInformation);
+      exit;
+      End;
+      if Preco.Text = '' then
+      Begin
+      Application.MessageBox('Necessário informar um Preço!', PChar(Msg_Title), mb_IconInformation);
+      exit;
+      End;
+    End;
+
+
+{
+compra     - conduta = 02, depto = 07
+dev. venda - conduta = 02, depto = 10
+
+venda    - conduta = 01, depto = 07
+dev. cpr - conduta = 01, depto = 10
+}
+    SaveDialog1.InitialDir := ExtractFilePath(ParamStr(0));
+
+    Laudo   := 'POL1462013';
+    Arquivo := Laudo + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 7, 4) +
+               Copy(TimeToStr(time), 1, 2) +  Copy(TimeToStr(time), 4, 2) + Copy(TimeToStr(time), 7, 2);
+
+    SaveDialog1.FileName := Arquivo;
+
+    if SaveDialog1.Execute then
+    begin
+      try
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM TRANSACOES');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (DEPTO = :DEPTO)');
+        QRel.Sql.Add('AND ((MODELO = :MODELO) OR (MODELO = :MODELO_1) OR (MODELO = :MODELO_2) OR (MODELO = :MODELO_3) OR (MODELO = :MODELO_4) OR (MODELO = :MODELO_5))');
+        QRel.Sql.Add('ORDER BY NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '02';
+        QRel.ParamByName('DEPTO').AsString        := '07';
+        QRel.ParamByName('MODELO').AsString       := '01';
+        QRel.ParamByName('MODELO_1').AsString     := '1A';
+        QRel.ParamByName('MODELO_2').AsString     := '04';
+        QRel.ParamByName('MODELO_3').AsString     := '21';
+        QRel.ParamByName('MODELO_4').AsString     := '22';
+        QRel.ParamByName('MODELO_5').AsString     := '55';
+
+
+
+        QRel.Prepare;
+        QRel.Open;
+
+        ACBrSintegra.FileName        := SaveDialog1.FileName;
+        ACBrSintegra.VersaoValidador := TVersaoValidador(Versao.ItemIndex);
+
+
+        GerarRegistro10;
+
+        GerarRegistro11;
+
+
+        Label2.Visible := True;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+
+            Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+
+            Seleciona_Produtos;
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 50') = 'True' then
+            GerarRegistro50('N');
+
+
+          if (QRel.FieldByName('VR_IPI').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 51') = 'True') then
+            GerarRegistro51('N');
+
+
+          if (QRel.FieldByName('BASE_ICMS_ST').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 53') = 'True') then
+            GerarRegistro53('N');
+
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 54') = 'True' then
+            GerarRegistro54;
+
+
+          Label2.Caption := 'Processando Transacao: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM REGISTRO_75');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+        QRel.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAl').AsDateTime   := Dtmai.Date;
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+
+          QDespesa.Sql.Clear;
+          QDespesa.Sql.Add('SELECT * FROM PRODUTOS');
+          QDespesa.Sql.Add('WHERE');
+          QDespesa.Sql.Add('(COD_BARRA = :COD_BARRA)');
+
+          QDespesa.ParamByName('COD_BARRA').AsString := QRel.FieldByName('COD_PRODUTO').AsString;
+
+          QDespesa.Prepare;
+          QDespesa.Open;
+
+          if not QDespesa.IsEmpty then
+          begin
+            NCM := QDespesa.FieldByName('NCM').AsString;
+
+            QDespesa.Sql.Clear;
+            QDespesa.Sql.Add('UPDATE REGISTRO_75 SET NCM = :NCM');
+            QDespesa.Sql.Add('WHERE');
+            QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+            QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+            QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+            QDespesa.ParamByName('NCM').AsString          := NCM;
+            QDespesa.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+            QDespesa.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+            QDespesa.ParamByName('COD_PRODUTO').AsString  := QRel.FieldByName('COD_PRODUTO').AsString;
+
+            QDespesa.Prepare;
+            QDespesa.ExecSql;
+
+
+          end;
+
+          Label2.Caption := 'Processando: ' + QRel.FieldByName('COD_PRODUTO').AsString;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        // Devoluções de Compra
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM TRANSACOES');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (DEPTO = :DEPTO)');
+        QRel.Sql.Add('ORDER BY NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '01';
+        QRel.ParamByName('DEPTO').AsString        := '10';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+          Seleciona_Produtos;
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 50') = 'True' then
+            GerarRegistro50('N');
+
+
+          if (QRel.FieldByName('VR_IPI').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 51') = 'True') then
+            GerarRegistro51('N');
+
+          if (QRel.FieldByName('BASE_ICMS_ST').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 53') = 'True') then
+            GerarRegistro53('N');
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 54') = 'True' then
+            GerarRegistro54;
+
+          Label2.Caption := 'Processando: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        // Devoluções de Venda
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM TRANSACOES');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (DEPTO = :DEPTO)');
+        QRel.Sql.Add('ORDER BY NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '02';
+        QRel.ParamByName('DEPTO').AsString        := '10';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+          Seleciona_Produtos;
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 50') = 'True' then
+            GerarRegistro50('N');
+
+          if (QRel.FieldByName('VR_IPI').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 51') = 'True') then
+            GerarRegistro51('N');
+
+          if (QRel.FieldByName('BASE_ICMS_ST').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 53') = 'True') then
+            GerarRegistro53('N');
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 54') = 'True' then
+            GerarRegistro54;
+
+          Label2.Caption := 'Processando: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        // Venda
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT COMPL_NFISCAL.PROTOCOLO, COMPL_NFISCAL.CHAVE_NFE, TRANSACOES.*');
+        QRel.Sql.Add('FROM COMPL_NFISCAL');
+        QRel.Sql.Add('INNER JOIN TRANSACOES');
+        QRel.Sql.Add('ON (COMPL_NFISCAL.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+        QRel.Sql.Add('AND (TRANSACOES.MODELO <> :MODELO)');
+        QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+        QRel.Sql.Add('AND ((COMPL_NFISCAL.SINTEGRA <> :SINTEGRA) OR (COMPL_NFISCAL.SINTEGRA IS NULL))');
+        QRel.Sql.Add('ORDER BY TRANSACOES.NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '01';
+        QRel.ParamByName('DEPTO').AsString        := '07';
+        QRel.ParamByName('SINTEGRA').AsString     := 'N';
+        QRel.ParamByName('MODELO').AsString       := '65';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+
+          Seleciona_Produtos;
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 50') = 'True' then
+            GerarRegistro50('N');
+
+          if (QRel.FieldByName('VR_IPI').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 51') = 'True') then
+            GerarRegistro51('N');
+
+          if (QRel.FieldByName('BASE_ICMS_ST').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 53') = 'True') then
+            GerarRegistro53('N');
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 54') = 'True' then
+            GerarRegistro54;
+
+          Label2.Caption := 'Processando: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        // VENDAS  MODELO 01
+
+        QRel.SQL.Clear;
+        QRel.sql.Add('SELECT * FROM TRANSACOES');
+        QRel.Sql.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND MODELO = :MODELO');
+        QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+        QRel.Sql.Add('ORDER BY TRANSACOES.NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '01';
+        QRel.ParamByName('DEPTO').AsString        := '07';
+        QRel.ParamByName('MODELO').AsString       := '01';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+
+
+        while not QRel.Eof do
+        begin
+
+          Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+
+            Seleciona_Produtos;
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 50') = 'True' then
+            GerarRegistro50('N');
+
+
+          if (QRel.FieldByName('VR_IPI').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 51') = 'True') then
+            GerarRegistro51('N');
+
+
+          if (QRel.FieldByName('BASE_ICMS_ST').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 53') = 'True') then
+            GerarRegistro53('N');
+
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 54') = 'True' then
+            GerarRegistro54;
+
+
+          Label2.Caption := 'Processando Transacao: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+
+        // VENDAS  MODELO 02
+
+        QRel.SQL.Clear;
+        QRel.sql.Add('SELECT * FROM TRANSACOES');
+        QRel.Sql.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND MODELO = :MODELO');
+        QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+        QRel.Sql.Add('ORDER BY TRANSACOES.NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '01';
+        QRel.ParamByName('DEPTO').AsString        := '07';
+        QRel.ParamByName('MODELO').AsString       := '02';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+
+
+        while not QRel.Eof do
+        begin
+
+          Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+
+          Seleciona_Produtos;
+
+          GerarRegistro61;
+
+          Application.ProcessMessages;
+          QRel.Next;
+
+        end;
+
+        // VENDAS  MODELO 65
+
+        QRel.SQL.Clear;
+        QRel.Sql.Add('SELECT DISTINCT DT_SAIDA DT_ENT_SAI');
+        QRel.Sql.Add('FROM COMPL_NFCEFISCAL');
+        QRel.Sql.Add('INNER JOIN TRANSACOES');
+        QRel.Sql.Add('ON (COMPL_NFCEFISCAL.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+        QRel.Sql.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND MODELO = :MODELO');
+        QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_VDA)');
+        QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO) ORDER BY DT_SAIDA');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_VDA').AsString       := '01';
+        QRel.ParamByName('DEPTO').AsString        := '07';
+        QRel.ParamByName('MODELO').AsString       := '65';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          //Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+
+          //Seleciona_Produtos;
+
+          GerarRegistro61;
+
+
+          Application.ProcessMessages;
+          QRel.Next;
+
+        end;
+
+        QRel.SQL.Clear;
+        QRel.Sql.Add('SELECT COMPL_NFCEFISCAL.PROTOCOLO, COMPL_NFCEFISCAL.CHAVE_NFCE, TRANSACOES.*');
+        QRel.Sql.Add('FROM COMPL_NFCEFISCAL');
+        QRel.Sql.Add('INNER JOIN TRANSACOES');
+        QRel.Sql.Add('ON (COMPL_NFCEFISCAL.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+        QRel.Sql.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND MODELO = :MODELO');
+        QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+
+        QRel.Sql.Add('ORDER BY TRANSACOES.NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '01';
+        QRel.ParamByName('DEPTO').AsString        := '07';
+        QRel.ParamByName('MODELO').AsString       := '65';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+
+          Seleciona_Produtos;
+
+          GerarRegistro61R;
+
+          Application.ProcessMessages;
+          QRel.Next;
+
+        end;
+
+
+
+        // Notas Canceladas
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT NOTAS_CANCELADAS.PROTOCOLO, NOTAS_CANCELADAS.CHAVE_NFE, TRANSACOES.*');
+        QRel.Sql.Add('FROM NOTAS_CANCELADAS');
+        QRel.Sql.Add('INNER JOIN TRANSACOES');
+        QRel.Sql.Add('ON (NOTAS_CANCELADAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+        QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_CPR)');
+        QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+        QRel.Sql.Add('AND ((NOTAS_CANCELADAS.SINTEGRA <> :SINTEGRA) OR (NOTAS_CANCELADAS.SINTEGRA IS NULL))');
+        QRel.Sql.Add('ORDER BY TRANSACOES.NUM_DOC');
+
+        QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+        QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('CD_CPR').AsString       := '01';
+        QRel.ParamByName('DEPTO').AsString        := '07';
+        QRel.ParamByName('SINTEGRA').AsString     := 'N';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          Seleciona_Parceiro(QRel.FieldByName('CONDUTA').AsString, QRel.FieldByName('DEPTO').AsString, QRel.FieldByName('FORNECEDOR_ID').AsInteger, QRel.FieldByName('CLIENTE_ID').AsInteger);
+
+          Seleciona_Produtos;
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 50') = 'True' then
+            GerarRegistro50('S');
+
+          if (QRel.FieldByName('VR_IPI').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 51') = 'True') then
+            GerarRegistro51('S');
+
+          if (QRel.FieldByName('BASE_ICMS_ST').AsFloat > 0) and (LeIni(Arq_Ini, 'Sintegra', 'Registro 53') = 'True') then
+            GerarRegistro53('S');
+
+          if LeIni(Arq_Ini, 'Sintegra', 'Registro 54') = 'True' then
+            GerarRegistro54;
+
+          Label2.Caption := 'Processando: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        if LeIni(Arq_Ini, 'Sintegra', 'Registro 60M') = 'True' then
+
+          GerarRegistro60M;
+
+        if LeIni(Arq_Ini, 'Sintegra', 'Registro 60A') = 'True' then
+          GerarRegistro60A;
+
+        if LeIni(Arq_Ini, 'Sintegra', 'Registro 60D') = 'True' then
+          GerarRegistro60D;
+
+        if LeIni(Arq_Ini, 'Sintegra', 'Registro 60I') = 'True' then
+          GerarRegistro60I;
+
+        if LeIni(Arq_Ini, 'Sintegra', 'Registro 60R') = 'True' then
+          GerarRegistro60R;
+
+        if LeIni(Arq_Ini, 'Sintegra', 'Registro 70') = 'True' then
+          GerarRegistro70;
+
+        if (Inventario.Text = 'SIM') then
+          GerarRegistro74;
+
+        if LeIni(Arq_Ini, 'Sintegra', 'Registro 75') = 'True' then
+          GerarRegistro75;
+
+        ACBrSintegra.GeraArquivo;
+
+        Application.MessageBox('Arquivo gerado com sucesso', PChar(Msg_Title), mb_IconInformation);
+      except
+        on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro ao gerar arquivo do sintegra!' + #13 +
+            'Erro: ' + e.Message), PChar(Msg_Title), mb_IconStop + mb_TaskModal);
+        end;
+      end;
+    end;
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+    Label2.Visible     := False;
+  end;
+end;
+
+procedure TFrmSintegra.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmSintegra.ConvenioKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmSintegra.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmSintegra.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   // Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmSintegra.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmSintegra.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+end;
+
+procedure TFrmSintegra.FormShow(Sender: TObject);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT DISTINCT DT_MOVIMENTO');
+  IQuery.Sql.Add('FROM POSICAO_PRODUTOS');
+  IQuery.Sql.Add('ORDER BY DT_MOVIMENTO');
+  IQuery.Prepare;
+  IQuery.Open;
+
+  Data.Items.Clear;
+  Data.Items.Add('Hoje');
+
+  IQuery.First;
+  while not IQuery.Eof do
+  begin
+    Data.Items.Add(IQuery.FieldByName('DT_MOVIMENTO').AsString);
+    Application.ProcessMessages;
+    IQuery.Next;
+  end;
+
+
+  if Copy(DateToStr(date),4,2) = '03' then
+  begin
+
+   IQuery.SQL.Clear;
+   IQuery.SQL.Add('SELECT DISTINCT DT_MOVIMENTO FROM POSICAO_PRODUTOS WHERE DT_MOVIMENTO <= :DT_FIM ORDER BY DT_MOVIMENTO DESC' );
+   IQuery.ParamByName('DT_FIM').AsDate := StrToDate('31/12/' + IntToStr(StrToInt(Copy(DateToStr(Dtmen.Date), 7, 4))-1));
+   IQuery.Prepare;
+   IQuery.Open();
+
+
+   Inventario.ItemIndex := 1;
+   Preco.ItemIndex := 1;
+   Data.Visible  := True;
+   Preco.Visible := True;
+   Label6.Visible := True;
+   Label8.Visible := True;
+
+   Data.Items.Clear;
+   Data.Items.Add(IQuery.FieldByName('DT_MOVIMENTO').AsString);
+   Data.ItemIndex := 0;
+  end;
+
+
+end;
+
+procedure TFrmSintegra.GerarRegistro10;
+begin
+  with ACBrSintegra do
+  begin
+    Registro10.CNPJ                := SemMascara(FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString);
+    Registro10.Inscricao           := SemMascara(FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString);
+    Registro10.RazaoSocial         := FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString;
+    Registro10.Cidade              := FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString;
+    Registro10.Estado              := FrmPrincipal.QEmpresa.FieldByName('ESTADO').AsString;
+    Registro10.Telefone            := SemMascara(FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString);
+    Registro10.DataInicial         := Dtmen.Date;
+    Registro10.DataFinal           := Dtmai.Date;
+    Registro10.CodigoConvenio      := IntToStr(Convenio.ItemIndex + 1);
+    Registro10.NaturezaInformacoes := IntToStr(Natureza_Operacoes.ItemIndex + 1);
+    Registro10.FinalidadeArquivo   := Copy(Finalidade_Arquivo.Items[Finalidade_Arquivo.ItemIndex], 1, 1);
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro11;
+begin
+  with ACBrSintegra do
+  begin
+    Registro11.Endereco    := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString;
+    Registro11.Numero      := FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString;
+    Registro11.Bairro      := FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString;
+    Registro11.Cep         := FrmPrincipal.QEmpresa.FieldByName('CEP').AsString;
+    Registro11.Responsavel := FrmPrincipal.QEmpresa.FieldByName('PROPRIETARIO').AsString;
+    Registro11.Telefone    := SemMascara(FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString);
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro50(Cancelada: Char);
+var
+WRegistro50: TRegistro50;
+begin
+  QItens.Sql.Clear;
+  QItens.Sql.Add('SELECT CFOP, ALIQUOTA_ICMS, SUM(coalesce(BASE_CALC_ICMS,0)) BASE_CALC_ICMS, SUM(coalesce(VALOR_ICMS,0)) VALOR_ICMS, ' +
+                 'SUM(coalesce(VALOR_ICMS_ST,0)) VALOR_ICMS_ST, ' +
+                 'SUM(coalesce(VR_TOTAL,0) + coalesce(VALOR_ICMS_ST,0) + coalesce(VR_FRETE,0) + coalesce(VR_ACRESCIMO,0) + coalesce(VR_IPI,0) + coalesce(VR_FCPST,0) + coalesce(VR_FCP,0) - coalesce(DESC_RODAPE,0) - coalesce(VALOR_ICMS_DESON,0)) VR_TOTAL, ' +
+                 'SUM(VALOR_ISENTO) VALOR_ISENTO, SUM(VALOR_OUTROS) VALOR_OUTROS');
+  QItens.Sql.Add('FROM TRANSITENS');
+  QItens.Sql.Add('WHERE');
+  QItens.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+  QItens.Sql.Add('GROUP BY CFOP, ALIQUOTA_ICMS');
+
+  QItens.ParamByName('TRANSACAO_ID').AsInteger := QRel.FieldByName('TRANSACAO_ID').AsInteger;
+
+  QItens.Prepare;
+  QItens.Open;
+
+  QItens.First;
+  while not QItens.Eof do
+  begin
+    WRegistro50 := TRegistro50.Create;
+
+    with ACBrSintegra do
+    begin
+      WRegistro50.CPFCNPJ := QParceiro.FieldByName('CNPJ').AsString;
+
+      if StrZero(SemMascara(QParceiro.FieldByName('INSCRICAO').AsString), 15, 0) = '000000000000000' then
+        WRegistro50.Inscricao := QParceiro.FieldByName('INSCRICAO').AsString
+      else
+        WRegistro50.Inscricao := SemMascara(QParceiro.FieldByName('INSCRICAO').AsString);
+
+     if QParceiro.FieldByName('PESSOA').AsString = 'PESSOA FÍSICA' then
+         WRegistro50.Inscricao := 'ISENTO';
+
+      WRegistro50.DataDocumento := QRel.FieldByName('DT_ENT_SAI').AsDateTime;
+      WRegistro50.UF            := QParceiro.FieldByName('ESTADO').AsString;
+      WRegistro50.Modelo        := QRel.FieldByName('MODELO').AsString;
+      WRegistro50.Serie         := QRel.FieldByName('SERIE').AsString;
+      WRegistro50.Numero        := StrZero(QRel.FieldByName('NUM_DOC').AsString, 6, 0);
+      WRegistro50.Cfop          := QItens.FieldByName('CFOP').AsString;
+
+      if QRel.FieldByName('CONDUTA').AsString = '02' then
+        WRegistro50.EmissorDocumento := 'T'
+      else
+        WRegistro50.EmissorDocumento := 'P';
+
+      WRegistro50.ValorContabil := QItens.FieldByName('VR_TOTAL').AsFloat; // a soma deste deve dar o valor da NF (VR_ICMS_ST, VR_IPI, VR_ACRESCIMO, VR_FRETE, VR_DESCONTO)
+      WRegistro50.BasedeCalculo := QItens.FieldByName('BASE_CALC_ICMS').AsFloat;
+      WRegistro50.Icms          := QItens.FieldByName('VALOR_ICMS').AsFloat;
+      WRegistro50.Isentas       := QItens.FieldByName('VALOR_ISENTO').AsFloat;  // valor amparada por isenção ou não incidência
+      WRegistro50.Outras        := QItens.FieldByName('VALOR_OUTROS').AsFloat; // valor que não confira débito ou crédito do ICMS
+      WRegistro50.Aliquota      := QItens.FieldByName('ALIQUOTA_ICMS').AsFloat;
+      WRegistro50.Situacao      := Cancelada;
+
+      ACBrSintegra.Registros50.Add(WRegistro50);
+    end;
+
+    Application.ProcessMessages;
+    Label2.Caption := 'Processando Registro 50: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+    QItens.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro51(Cancelada: Char);
+var
+WRegistro51: TRegistro51;
+begin
+  QItens.Sql.Clear;
+  QItens.Sql.Add('SELECT CFOP, SUM(coalesce(VR_IPI,0)) VR_IPI,');
+  QItens.Sql.Add('SUM(coalesce(VR_TOTAL,0) + coalesce(VALOR_ICMS_ST,0) + coalesce(VR_FRETE,0) + coalesce(VR_ACRESCIMO,0) + coalesce(VR_FCPST,0)  + coalesce(VR_FCP,0) - coalesce(DESC_RODAPE,0) - coalesce(VALOR_ICMS_DESON,0)) VR_TOTAL,');
+  QItens.Sql.Add('SUM(coalesce(VALOR_ISENTO,0)) VALOR_ISENTO, SUM(coalesce(VALOR_OUTROS,0)) VALOR_OUTROS');
+  QItens.Sql.Add('FROM TRANSITENS');
+  QItens.Sql.Add('WHERE');
+  QItens.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+  QItens.Sql.Add('AND (VR_IPI > 0)');
+  QItens.Sql.Add('GROUP BY CFOP');
+
+  QItens.ParamByName('TRANSACAO_ID').AsInteger := QRel.FieldByName('TRANSACAO_ID').AsInteger;
+
+  QItens.Prepare;
+  QItens.Open;
+
+  QItens.First;
+  while not QItens.Eof do
+  begin
+    WRegistro51 := TRegistro51.Create;
+
+    WRegistro51.CPFCNPJ := QParceiro.FieldByName('CNPJ').AsString;
+
+    if StrZero(SemMascara(QParceiro.FieldByName('INSCRICAO').AsString), 15, 0) = '000000000000000' then
+      WRegistro51.Inscricao := QParceiro.FieldByName('INSCRICAO').AsString
+    else
+      WRegistro51.Inscricao := SemMascara(QParceiro.FieldByName('INSCRICAO').AsString);
+
+    if QParceiro.FieldByName('PESSOA').AsString = 'PESSOA FÍSICA' then
+         WRegistro51.Inscricao := 'ISENTO';
+
+    WRegistro51.DataDocumento := QRel.FieldByName('DT_ENT_SAI').AsDateTime;
+    WRegistro51.Estado        := QParceiro.FieldByName('ESTADO').AsString;
+    WRegistro51.Serie         := QRel.FieldByName('SERIE').AsString;
+    WRegistro51.Numero        := StrZero(QRel.FieldByName('NUM_DOC').AsString, 6, 0);
+    Wregistro51.CFOP          := QItens.FieldByName('CFOP').AsString;
+    WRegistro51.ValorContabil := QItens.FieldByName('VR_TOTAL').AsFloat; // a soma deste deve dar o valor da NF (VR_ICMS_ST, VR_IPI, VR_ACRESCIMO, VR_FRETE, VR_DESCONTO)
+    WRegistro51.ValorIpi      := QItens.FieldByName('VR_IPI').AsFloat;
+    WRegistro51.ValorOutras   := QItens.FieldByName('VALOR_OUTROS').AsFloat; // valor que não confira débito ou crédito do IPI
+    WRegistro51.ValorIsentas  := QItens.FieldByName('VALOR_ISENTO').AsFloat; // valor amparado por isenção ou não incidência do IPI
+    WRegistro51.Situacao      := Cancelada;
+
+    ACBrSintegra.Registros51.Add(WRegistro51);
+
+
+    Label2.Caption := 'Processando Registro 51: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+
+    Application.ProcessMessages;
+
+    QItens.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro53(Cancelada: Char);
+var
+WRegistro53: TRegistro53;
+begin
+  QItens.Sql.Clear;
+  QItens.Sql.Add('SELECT CFOP, SUM(coalesce(BASE_CALC_ST,0)) BASE_CALC_ST, SUM(coalesce(VALOR_ICMS_ST,0)) VALOR_ICMS_ST');
+  QItens.Sql.Add('FROM TRANSITENS');
+  QItens.Sql.Add('WHERE');
+  QItens.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+  QItens.Sql.Add('AND (CST LIKE :CST1 OR CST LIKE :CST2 OR CST LIKE :CST3 OR CST LIKE :CST4 OR CST LIKE :CST5)');
+
+  QItens.Sql.Add('GROUP BY CFOP');
+
+  QItens.ParamByName('TRANSACAO_ID').AsInteger := QRel.FieldByName('TRANSACAO_ID').AsInteger;
+  QItens.ParamByName('CST1').AsString          := '%10';
+  QItens.ParamByName('CST2').AsString          := '%30';
+  QItens.ParamByName('CST3').AsString          := '%60';
+  QItens.ParamByName('CST4').AsString          := '%70';
+  QItens.ParamByName('CST5').AsString          := '%01';
+
+  QItens.Prepare;
+  QItens.Open;
+
+  QItens.First;
+  while not QItens.Eof do
+  begin
+    WRegistro53 := TRegistro53.Create;
+
+    WRegistro53.CPFCNPJ := QParceiro.FieldByName('CNPJ').AsString;
+
+    if StrZero(SemMascara(QParceiro.FieldByName('INSCRICAO').AsString), 15, 0) = '000000000000000' then
+      WRegistro53.Inscricao := QParceiro.FieldByName('INSCRICAO').AsString
+    else
+      WRegistro53.Inscricao := SemMascara(QParceiro.FieldByName('INSCRICAO').AsString);
+
+    if QParceiro.FieldByName('PESSOA').AsString = 'PESSOA FÍSICA' then
+         WRegistro53.Inscricao := 'ISENTO';
+
+    WRegistro53.DataDocumento := QRel.FieldByName('DT_ENT_SAI').AsDateTime;
+    WRegistro53.Estado        := QParceiro.FieldByName('ESTADO').AsString;
+    WRegistro53.Modelo        := QRel.FieldByName('MODELO').AsString;
+    WRegistro53.Serie         := QRel.FieldByName('SERIE').AsString;
+    WRegistro53.Numero        := StrZero(QRel.FieldByName('NUM_DOC').AsString, 6, 0);
+    WRegistro53.CFOP          := QItens.FieldByName('CFOP').AsString;
+
+    if QRel.FieldByName('CONDUTA').AsString = '02' then
+      WRegistro53.Emitente := 'T'
+    else
+      WRegistro53.Emitente := 'P';
+
+    WRegistro53.BaseST     := QItens.FieldByName('BASE_CALC_ST').AsFloat;
+    WRegistro53.IcmsRetido := QItens.FieldByName('VALOR_ICMS_ST').AsFloat;
+    WRegistro53.Despesas   := (QRel.FieldByName('VR_FRETE').AsFloat + QRel.FieldByName('VR_ACRESCIMO').AsFloat); // soma das despesas acessórias (frete, seguro, outras)
+    WRegistro53.Situacao   := Cancelada;
+
+    ACBrSintegra.Registros53.Add(WRegistro53);
+
+
+    Label2.Caption := 'Processando Registro 53: ' + QRel.FieldByName('TRANSACAO_ID').AsString;
+    Application.ProcessMessages;
+    QItens.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro54;
+var
+WRegistro54: TRegistro54;
+Item: Integer;
+begin
+  Item := 1;
+
+  QProduto.First;
+  while not QProduto.Eof do
+  begin
+    WRegistro54 := TRegistro54.Create;
+
+    WRegistro54.CPFCNPJ    := QParceiro.FieldByName('CNPJ').AsString;
+    WRegistro54.Modelo     := QRel.FieldByName('MODELO').AsString;
+    WRegistro54.Serie      := QRel.FieldByName('SERIE').AsString;
+    WRegistro54.Numero     := StrZero(QRel.FieldByName('NUM_DOC').AsString, 6, 0);
+    WRegistro54.Cfop       := QProduto.FieldByName('CFOP').AsString;
+    WRegistro54.CST        := QProduto.FieldByName('CST').AsString;
+    WRegistro54.NumeroItem := Item;
+    WRegistro54.Codigo     := QProduto.FieldByName('COD_BARRA').AsString;
+    WRegistro54.Descricao  := QProduto.FieldByName('DESCRICAO').AsString;
+    WRegistro54.Quantidade := QProduto.FieldByName('QUANTIDADE').AsFloat;
+
+    if (QProduto.FieldByName('CST').AsString = '060') or (QProduto.FieldByName('CST').AsString = '201')  then
+    WRegistro54.Valor      := (QProduto.FieldByName('VR_TOTAL').AsFloat  + QProduto.FieldByName('VR_FRETE').AsFloat + QProduto.FieldByName('VR_ACRESCIMO').AsFloat +
+                              + QProduto.FieldByName('VALOR_ICMS_ST').AsFloat + QProduto.FieldByName('VR_IPI').AsFloat - QProduto.FieldByName('DESC_RODAPE').AsFloat)
+    else
+    WRegistro54.Valor      := (QProduto.FieldByName('VR_TOTAL').AsFloat  + QProduto.FieldByName('VR_FRETE').AsFloat + QProduto.FieldByName('VR_ACRESCIMO').AsFloat +
+                               QProduto.FieldByName('VR_IPI').AsFloat - QProduto.FieldByName('DESC_RODAPE').AsFloat);
+    //
+
+    WRegistro54.ValorDescontoDespesa := QProduto.FieldByName('DESC_RODAPE').AsFloat;
+    WRegistro54.BasedeCalculo        := QProduto.FieldByName('BASE_CALC_ICMS').AsFloat;
+    WRegistro54.BaseST               := QProduto.FieldByName('BASE_CALC_ST').AsFloat;
+    WRegistro54.ValorIpi             := QProduto.FieldByName('VR_IPI').AsFloat;
+    WRegistro54.Aliquota             := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+
+    ACBrSintegra.Registros54.Add(WRegistro54);
+
+    QDespesa.Sql.Clear;
+    QDespesa.Sql.Add('SELECT * FROM REGISTRO_75');
+    QDespesa.Sql.Add('WHERE');
+    QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+    QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+    QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+    QDespesa.ParamByName('DT_INICIAL').AsDateTime := ACBrSintegra.Registro10.DataInicial;
+    QDespesa.ParamByName('DT_FINAL').AsDateTime   := ACBrSintegra.Registro10.DataFinal;
+    QDespesa.ParamByName('COD_PRODUTO').AsString  := WRegistro54.Codigo;
+
+
+    QDespesa.Prepare;
+    QDespesa.Open;
+
+    if QDespesa.IsEmpty then
+    begin
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('INSERT INTO REGISTRO_75(' +
+                       'DT_INICIAL,    DT_FINAL,      COD_PRODUTO, ' +
+                       'NCM,           DESCRICAO,     UNIDADE, ' +
+                       'ALIQUOTA_IPI,  ALIQUOTA_ICMS, REDUCAO_BASE_ICMS, ' +
+                       'BASE_CALC_ST) VALUES(' +
+                       ':DT_INICIAL,   :DT_FINAL,      :COD_PRODUTO, ' +
+                       ':NCM,          :DESCRICAO,     :UNIDADE, ' +
+                       ':ALIQUOTA_IPI, :ALIQUOTA_ICMS, :REDUCAO_BASE_ICMS, ' +
+                       ':BASE_CALC_ST)');
+
+      QDespesa.ParamByName('DT_INICIAL').AsDateTime     := ACBrSintegra.Registro10.DataInicial;
+      QDespesa.ParamByName('DT_FINAL').AsDateTime       := ACBrSintegra.Registro10.DataFinal;
+      QDespesa.ParamByName('COD_PRODUTO').AsString      := WRegistro54.Codigo;
+      QDespesa.ParamByName('NCM').AsString              := QProduto.FieldByName('NCM').AsString;
+      QDespesa.ParamByName('DESCRICAO').AsString        := Copy(QProduto.FieldByName('DESCRICAO').AsString,1,53);
+      QDespesa.ParamByName('UNIDADE').AsString          := QProduto.FieldByName('UNIDADE').AsString;
+      QDespesa.ParamByName('ALIQUOTA_IPI').AsFloat      := 0;
+      QDespesa.ParamByName('ALIQUOTA_ICMS').AsFloat     := WRegistro54.Aliquota;
+      QDespesa.ParamByName('REDUCAO_BASE_ICMS').AsFloat := 0;
+      QDespesa.ParamByName('BASE_CALC_ST').AsFloat      := QProduto.FieldByName('BASE_CALC_ST').AsFloat;
+
+      QDespesa.Prepare;
+      QDespesa.ExecSql;
+
+
+    end
+    else
+    begin
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('UPDATE REGISTRO_75 SET NCM = :NCM');
+      QDespesa.Sql.Add('WHERE');
+      QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+      QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+      QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+      QDespesa.ParamByName('NCM').AsString          := QProduto.FieldByName('NCM').AsString;
+      QDespesa.ParamByName('DT_INICIAL').AsDateTime := ACBrSintegra.Registro10.DataInicial;
+      QDespesa.ParamByName('DT_FINAL').AsDateTime   := ACBrSintegra.Registro10.DataFinal;
+      QDespesa.ParamByName('COD_PRODUTO').AsString  := WRegistro54.Codigo;
+
+      QDespesa.Prepare;
+      QDespesa.ExecSql;
+
+
+    end;
+
+    Inc(Item);
+
+    Label2.Caption := 'Processando Registro 54: ' + QProduto.FieldByName('PRODUTO_ID').AsString;
+    Application.ProcessMessages;
+    QProduto.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro60M;
+var
+WRegistro60M: TRegistro60M;
+begin
+  QDespesa.Sql.Clear;
+  QDespesa.Sql.Add('SELECT * FROM REGISTRO_60M');
+  QDespesa.Sql.Add('WHERE');
+  QDespesa.Sql.Add('(DT_EMISSAO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QDespesa.Sql.Add('ORDER BY NUM_SERIE, CRZ');
+
+  QDespesa.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QDespesa.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+  QDespesa.Prepare;
+  QDespesa.Open;
+
+  QDespesa.First;
+  while not QDespesa.Eof do
+  begin
+    WRegistro60M := TRegistro60M.Create;
+
+    WRegistro60M.Emissao    := QDespesa.FieldByName('DT_EMISSAO').AsDateTime;
+    WRegistro60M.NumSerie   := QDespesa.FieldByName('NUM_SERIE').AsString;
+    WRegistro60M.NumOrdem   := QDespesa.FieldByName('NUM_ORDEM').AsInteger;
+    WRegistro60M.ModeloDoc  := QDespesa.FieldByName('MODELO_DOC').AsString;
+    WRegistro60M.CooInicial := QDespesa.FieldByName('COO_INICIAL').AsInteger;
+    WRegistro60M.CooFinal   := QDespesa.FieldByName('COO_FINAL').AsInteger;
+    WRegistro60M.CRZ        := QDespesa.FieldByName('CRZ').AsInteger;
+    WRegistro60M.CRO        := QDespesa.FieldByName('CRO').AsInteger;
+    WRegistro60M.VendaBruta := QDespesa.FieldByName('VENDA_BRUTA').AsFloat;
+    WRegistro60M.ValorGT    := QDespesa.FieldByName('GRANDE_TOTAL').AsFloat;
+
+    ACBrSintegra.Registros60M.Add(WRegistro60M);
+
+    Label2.Caption := 'Processando: ' + QDespesa.FieldByName('NUM_ORDEM').AsString;
+
+    Label2.Caption := 'Processando Registro 60M: ' + QDespesa.FieldByName('NUM_SERIE').AsString;
+    Application.ProcessMessages;
+    QDespesa.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro60A;
+var
+WRegistro60A: TRegistro60A;
+begin
+  QDespesa.Sql.Clear;
+  QDespesa.Sql.Add('SELECT * FROM REGISTRO_60A');
+  QDespesa.Sql.Add('WHERE');
+  QDespesa.Sql.Add('(DT_EMISSAO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QDespesa.Sql.Add('ORDER BY DT_EMISSAO');
+
+  QDespesa.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QDespesa.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+  QDespesa.Prepare;
+  QDespesa.Open;
+
+  QDespesa.First;
+  while not QDespesa.Eof do
+  begin
+    WRegistro60A := TRegistro60A.Create;
+
+    WRegistro60A.Emissao    := QDespesa.FieldByName('DT_EMISSAO').AsDateTime;
+    WRegistro60A.NumSerie   := QDespesa.FieldByName('NUM_SERIE').AsString;
+    WRegistro60A.StAliquota := QDespesa.FieldByName('SIT_TRIBUTARIA').AsString;
+    WRegistro60A.Valor      := QDespesa.FieldByName('VALOR_TOTALIZADOR').AsFloat;
+
+    ACBrSintegra.Registros60A.Add(WRegistro60A);
+
+    Label2.Caption := 'Processando: ' + QDespesa.FieldByName('VALOR_TOTALIZADOR').AsString;
+
+    Label2.Caption := 'Processando Registro 60A: ' + QDespesa.FieldByName('SIT_TRIBUTARIA').AsString;
+    Application.ProcessMessages;
+    QDespesa.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro60D;
+var
+WRegistro60D: TRegistro60D;
+begin
+  QDespesa.Sql.Clear;
+  QDespesa.Sql.Add('SELECT * FROM REGISTRO_60D');
+  QDespesa.Sql.Add('WHERE');
+  QDespesa.Sql.Add('(DT_EMISSAO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QDespesa.Sql.Add('ORDER BY DT_EMISSAO, COD_PRODUTO');
+
+  QDespesa.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QDespesa.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+  QDespesa.Prepare;
+  QDespesa.Open;
+
+  QDespesa.First;
+  while not QDespesa.Eof do
+  begin
+    WRegistro60D := TRegistro60D.Create;
+
+    WRegistro60D.Emissao       := QDespesa.FieldByName('DT_EMISSAO').AsDateTime;
+    WRegistro60D.NumSerie      := QDespesa.FieldByName('NUM_SERIE').AsString;
+    WRegistro60D.Codigo        := QDespesa.FieldByName('COD_PRODUTO').AsString;
+    WRegistro60D.Quantidade    := QDespesa.FieldByName('QUANTIDADE').AsFloat;
+    WRegistro60D.Valor         := QDespesa.FieldByName('VR_UNITARIO').AsFloat;
+    WRegistro60D.BaseDeCalculo := QDespesa.FieldByName('BASE_CALC_ICMS').AsFloat;
+    WRegistro60D.StAliquota    := QDespesa.FieldByName('SIT_TRIBUTARIA').AsString;
+    WRegistro60D.ValorIcms     := QDespesa.FieldByName('VALOR_ICMS').AsFloat;
+
+    ACBrSintegra.Registros60D.Add(WRegistro60D);
+
+    Label2.Caption := 'Processando Registro 60D: ' + QDespesa.FieldByName('COD_PRODUTO').AsString;
+
+    Application.ProcessMessages;
+    QDespesa.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro60I;
+var
+WRegistro60I: TRegistro60I;
+begin
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT * FROM REGISTRO_60I');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(DT_EMISSAO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('ORDER BY DT_EMISSAO, NUM_SERIE, NUM_ORDEM');
+
+  QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+  QRel.Prepare;
+  QRel.Open;
+
+  QRel.First;
+  while not QRel.Eof do
+  begin
+    WRegistro60I := TRegistro60I.Create;
+
+    WRegistro60I.Emissao       := QRel.FieldByName('DT_EMISSAO').AsDateTime;
+    WRegistro60I.NumSerie      := QRel.FieldByName('NUM_SERIE').AsString;
+    WRegistro60I.ModeloDoc     := QRel.FieldByName('MODELO_DOC').AsString;
+    WRegistro60I.Cupom         := QRel.FieldByName('NUM_ORDEM').AsString;
+    WRegistro60I.Item          := QRel.FieldByName('NUM_ITEM').AsInteger;
+    WRegistro60I.Codigo        := Alltrim(QRel.FieldByName('COD_PRODUTO').AsString);
+    WRegistro60I.Quantidade    := QRel.FieldByName('QUANTIDADE').AsFloat;
+    WRegistro60I.Valor         := QRel.FieldByName('VR_UNITARIO').AsFloat;
+    WRegistro60I.BaseDeCalculo := QRel.FieldByName('BASE_CALC_ICMS').AsFloat;
+    WRegistro60I.StAliquota    := QRel.FieldByName('SIT_TRIBUTARIA').AsString;
+    WRegistro60I.ValorIcms     := QRel.FieldByName('VALOR_ICMS').AsFloat;
+
+    ACBrSintegra.Registros60I.Add(WRegistro60I);
+
+    Label2.Caption := 'Processando Registro 60I:  ' + Alltrim(QRel.FieldByName('COD_PRODUTO').AsString);
+
+    Application.ProcessMessages;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT DESCRICAO,NCM, UNIDADE_VENDA FROM PRODUTOS WHERE COD_BARRA = :COD_BARRA');
+    IQuery.ParamByName('COD_BARRA').ASString :=   Alltrim(QRel.FieldByName('COD_PRODUTO').AsString);
+    IQuery.Prepare;
+    IQuery.Open;
+
+
+    QDespesa.Sql.Clear;
+    QDespesa.Sql.Add('SELECT * FROM REGISTRO_75');
+    QDespesa.Sql.Add('WHERE');
+    QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+    QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+    QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+    QDespesa.ParamByName('DT_INICIAL').AsDateTime := ACBrSintegra.Registro10.DataInicial;
+    QDespesa.ParamByName('DT_FINAL').AsDateTime   := ACBrSintegra.Registro10.DataFinal;
+    QDespesa.ParamByName('COD_PRODUTO').AsString  := WRegistro60i.Codigo;
+
+    QDespesa.Prepare;
+    QDespesa.Open;
+
+    if QDespesa.IsEmpty then
+    begin
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('INSERT INTO REGISTRO_75(' +
+                       'DT_INICIAL,    DT_FINAL,      COD_PRODUTO, ' +
+                       'NCM,           DESCRICAO,     UNIDADE, ' +
+                       'ALIQUOTA_IPI,  ALIQUOTA_ICMS, REDUCAO_BASE_ICMS, ' +
+                       'BASE_CALC_ST) VALUES(' +
+                       ':DT_INICIAL,   :DT_FINAL,      :COD_PRODUTO, ' +
+                       ':NCM,          :DESCRICAO,     :UNIDADE, ' +
+                       ':ALIQUOTA_IPI, :ALIQUOTA_ICMS, :REDUCAO_BASE_ICMS, ' +
+                       ':BASE_CALC_ST)');
+
+      QDespesa.ParamByName('DT_INICIAL').AsDateTime     := ACBrSintegra.Registro10.DataInicial;
+      QDespesa.ParamByName('DT_FINAL').AsDateTime       := ACBrSintegra.Registro10.DataFinal;
+      QDespesa.ParamByName('COD_PRODUTO').AsString      := WRegistro60i.Codigo;
+      QDespesa.ParamByName('NCM').AsString              := IQuery.FieldByName('NCM').AsString;
+      QDespesa.ParamByName('DESCRICAO').AsString        := Copy(IQuery.FieldByName('DESCRICAO').AsString,1,53);
+      QDespesa.ParamByName('UNIDADE').AsString          := IQuery.FieldByName('UNIDADE_VENDA').AsString;
+      QDespesa.ParamByName('ALIQUOTA_IPI').AsFloat      := 0;
+      QDespesa.ParamByName('ALIQUOTA_ICMS').AsFloat     := 0;
+      QDespesa.ParamByName('REDUCAO_BASE_ICMS').AsFloat := 0;
+      QDespesa.ParamByName('BASE_CALC_ST').AsFloat      := 0; //QProduto.FieldByName('BASE_CALC_ST').AsFloat;
+
+      QDespesa.Prepare;
+      QDespesa.ExecSql;
+
+
+    end
+    else
+    begin
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('UPDATE REGISTRO_75 SET NCM = :NCM');
+      QDespesa.Sql.Add('WHERE');
+      QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+      QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+      QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+      QDespesa.ParamByName('NCM').AsString          := IQuery.FieldByName('NCM').AsString;
+      QDespesa.ParamByName('DT_INICIAL').AsDateTime := ACBrSintegra.Registro10.DataInicial;
+      QDespesa.ParamByName('DT_FINAL').AsDateTime   := ACBrSintegra.Registro10.DataFinal;
+      QDespesa.ParamByName('COD_PRODUTO').AsString  := WRegistro60i.Codigo;
+
+      QDespesa.Prepare;
+      QDespesa.ExecSql;
+
+
+    end;
+
+    QRel.Next;
+  end;
+
+
+
+end;
+
+procedure TFrmSintegra.GerarRegistro60R;
+var
+WRegistro60R: TRegistro60R;
+begin
+  QDespesa.Sql.Clear;
+  QDespesa.Sql.Add('SELECT * FROM REGISTRO_60R');
+  QDespesa.Sql.Add('WHERE');
+  QDespesa.Sql.Add('(MES_ANO = :MES_ANO)');
+  QDespesa.Sql.Add('ORDER BY COD_PRODUTO');
+
+  QDespesa.ParamByName('MES_ANO').AsString := Copy(Dtmen.Text, 4, 7);
+
+  QDespesa.Prepare;
+  QDespesa.Open;
+
+  QDespesa.First;
+  while not QDespesa.Eof do
+  begin
+    WRegistro60R := TRegistro60R.Create;
+
+    WRegistro60R.MesAno        := SemMascara(QDespesa.FieldByName('MES_ANO').AsString);
+    WRegistro60R.Codigo        := QDespesa.FieldByName('COD_PRODUTO').AsString;
+    WRegistro60R.Qtd           := QDespesa.FieldByName('QUANTIDADE').AsFloat;
+    WRegistro60R.Valor         := QDespesa.FieldByName('VR_UNITARIO').AsFloat;
+    WRegistro60R.BaseDeCalculo := QDespesa.FieldByName('BASE_CALC_ICMS').AsFloat;
+    WRegistro60R.Aliquota      := QDespesa.FieldByName('SIT_TRIBUTARIA').AsString;
+
+    ACBrSintegra.Registros60R.Add(WRegistro60R);
+
+    Label2.Caption := 'Processando Registro 60R: ' + QDespesa.FieldByName('COD_PRODUTO').AsString;
+
+    Application.ProcessMessages;
+    QDespesa.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro61;
+var
+WRegistro61: TRegistro61;
+begin
+  WRegistro61 := TRegistro61.Create;
+
+   IQuery.Sql.Text:= 'SELECT NUM_ECF FROM LICENCA_IF WHERE GERAR_SPED = 1';
+   IQuery.Prepare;
+   IQuery.Open;
+   IQuery.First;
+
+   while not IQuery.Eof do
+   Begin
+
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('SELECT SERIE , DT_ENT_SAI,TRANSITENS.ALIQUOTA_ICMS, SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO ');
+      QDespesa.Sql.Add('+ TRANSITENS.VR_IPI + TRANSITENS.VR_FCPST  + TRANSITENS.VR_FCP - TRANSITENS.DESC_RODAPE - TRANSITENS.VALOR_ICMS_DESON) VALOR, SUM(TRANSITENS.BASE_CALC_ICMS) BASE_ICMS_NORMAL,');
+      QDespesa.Sql.Add('SUM(TRANSITENS.VALOR_ICMS) VR_ICMS_NORMAL,SUM(TRANSITENS.VALOR_ISENTO) VALOR_ISENTO, SUM(TRANSITENS.VALOR_OUTROS) VALOR_OUTROS,');
+      QDespesa.Sql.Add('(SELECT  NUM_DOC NUM_DOC_INI FROM TRANSACOES   WHERE (TRANSACOES.DT_ENT_SAI =  :DT_REGISTRO)');
+      QDespesa.Sql.Add('      AND (MODELO = :MODELO)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.CONDUTA = :CONDUTA)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.DEPTO = :DEPTO)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.SERIE = :SERIE)');
+      QDespesa.Sql.Add('      ORDER BY NUM_DOC ASC LIMIT 1 ),');
+      QDespesa.Sql.Add('(SELECT NUM_DOC NUM_DOC_FIM FROM TRANSACOES   WHERE (TRANSACOES.DT_ENT_SAI =  :DT_REGISTRO)');
+      QDespesa.Sql.Add('      AND (MODELO = :MODELO)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.CONDUTA = :CONDUTA)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.SERIE = :SERIE)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.DEPTO = :DEPTO) ORDER BY NUM_DOC DESC LIMIT 1) NUM_DOC_FIM');
+      QDespesa.Sql.Add('FROM TRANSITENS');
+      QDespesa.Sql.Add('INNER JOIN TRANSACOES ON TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID');
+      QDespesa.Sql.Add('INNER JOIN COMPL_NFCEFISCAL ON COMPL_NFCEFISCAL.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID');
+      QDespesa.Sql.Add('      WHERE (TRANSACOES.DT_ENT_SAI = :DT_REGISTRO)');
+      QDespesa.Sql.Add('      AND (MODELO = :MODELO)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.CONDUTA = :CONDUTA)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.DEPTO = :DEPTO)');
+      QDespesa.Sql.Add('      AND (TRANSACOES.SERIE = :SERIE)');
+      QDespesa.Sql.Add('	GROUP BY TRANSACOES.SERIE,TRANSACOES.DT_ENT_SAI, TRANSITENS.ALIQUOTA_ICMS');
+      QDespesa.Sql.Add('	ORDER BY TRANSACOES.SERIE,TRANSACOES.DT_ENT_SAI,TRANSITENS.ALIQUOTA_ICMS');
+
+      QDespesa.ParamByName('DT_REGISTRO').AsDateTime := QRel.FieldByName('DT_ENT_SAI').AsDateTime;
+      QDespesa.ParamByName('EMPRESA_ID').AsInteger   := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+      QDespesa.ParamByName('TPCTB').AsString         := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QDespesa.ParamByName('CONDUTA').AsString       := '01';
+      QDespesa.ParamByName('DEPTO').AsString         := '07';
+      QDespesa.ParamByName('MODELO').AsString        := '65';
+      QDespesa.ParamByName('SERIE').AsString         := IQuery.FieldByName('NUM_ECF').AsString;
+
+      QDespesa.Prepare;
+      QDespesa.Open();
+      QDespesa.First;
+
+      if not QDespesa.IsEmpty then
+      Begin
+       while not QDespesa.Eof do
+       Begin
+        with ACBrSintegra do
+        begin
+          WRegistro61 := TRegistro61.Create;
+
+          WRegistro61.Emissao         := QRel.FieldByName('DT_ENT_SAI').AsDateTime;
+          WRegistro61.Modelo          := '65';
+          WRegistro61.Serie           := IQuery.FieldByName('NUM_ECF').AsString;
+          WRegistro61.NumOrdemInicial := StrToInt(QDespesa.FieldByName('NUM_DOC_INI').AsString);
+          WRegistro61.NumOrdemFinal   := StrToInt(QDespesa.FieldByName('NUM_DOC_FIM').AsString);
+          WRegistro61.Valor         := QDespesa.FieldByName('VALOR').AsFloat; // a soma deste deve dar o valor da NF (VR_ICMS_ST, VR_IPI, VR_ACRESCIMO, VR_FRETE, VR_DESCONTO)
+          WRegistro61.ValorIcms     := QDespesa.FieldByName('VR_ICMS_NORMAL').AsFloat;
+          WRegistro61.Isentas       := QDespesa.FieldByName('VALOR_ISENTO').AsFloat;  // valor amparada por isenção ou não incidência
+          WRegistro61.Aliquota      := QDespesa.FieldByName('ALIQUOTA_ICMS').AsFloat;
+          WRegistro61.BasedeCalculo := QDespesa.FieldByName('BASE_ICMS_NORMAL').AsFloat;
+          WRegistro61.Outras        := QDespesa.FieldByName('VALOR_OUTROS').AsFloat;
+
+
+
+          if QDespesa.FieldByName('ALIQUOTA_ICMS').AsFloat > 0 Then
+          WRegistro61.BasedeCalculo := 0 /// QDespesa.FieldByName('VALOR').AsFloat
+          Else
+          WRegistro61.Outras        := QDespesa.FieldByName('VALOR').AsFloat; // valor que não confira débito ou crédito do ICMS
+
+          ACBrSintegra.Registros61.Add(WRegistro61);
+
+          label2.Caption := 'Processando registro 61: ' +  DateToStr(QRel.FieldByName('DT_ENT_SAI').AsDateTime);
+        end;
+        QDespesa.Next;
+       End;
+      End;
+      IQuery.next;
+   End;
+end;
+
+procedure TFrmSintegra.GerarRegistro61R;
+var
+WRegistro61R: TRegistro61R;
+begin
+  {QDespesa.Sql.Clear;
+  QDespesa.Sql.Add('SELECT * FROM REGISTRO_60R');
+  QDespesa.Sql.Add('WHERE');
+  QDespesa.Sql.Add('(MES_ANO = :MES_ANO)');
+  QDespesa.Sql.Add('ORDER BY COD_PRODUTO');
+
+  QDespesa.ParamByName('MES_ANO').AsString := Copy(Dtmen.Text, 4, 7);
+
+  QDespesa.Prepare;
+  QDespesa.Open;
+  }
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT :MES_ANO MES_ANO , PRODUTOS.COD_BARRA COD_PRODUTO, TRANSITENS.ALIQUOTA_ICMS,');
+  QRel.Sql.Add('CASE WHEN TRIBUTOS.CODIGO_ECF= :CODIGO_II THEN :CODIGO_I WHEN TRIBUTOS.CODIGO_ECF = :CODIGO_FF THEN :CODIGO_F ');
+  QRel.Sql.Add('ELSE TRIBUTOS.CODIGO_ECF END CODIGO_ECF , SUM(TRANSITENS.QUANTIDADE) QUANTIDADE,');
+  QRel.Sql.Add('SUM(BASE_CALC_ICMS) BASE_CALC_ICMS,PRODUTOS.PRECO_VAREJO VR_UNITARIO');
+  QRel.Sql.Add('FROM TRANSITENS');
+  QRel.Sql.Add('INNER JOIN TRANSACOES ON  TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID');
+  QRel.Sql.Add('INNER JOIN COMPL_NFCEFISCAL ON TRANSACOES.TRANSACAO_ID = COMPL_NFCEFISCAL.TRANSACAO_ID ');
+  QRel.Sql.Add('INNER JOIN PRODUTOS ON PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID');
+  QRel.Sql.Add('INNER JOIN TRIBUTOS ON PRODUTOS.TRIBUTO_ID =TRIBUTOS.TRIBUTO_ID');
+  QRel.Sql.Add('WHERE DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL');
+  QRel.Sql.Add('GROUP BY PRODUTOS.COD_BARRA,TRANSITENS.ALIQUOTA_ICMS,TRIBUTOS.CODIGO_ECF,TRIBUTOS.ALIQUOTA_ICMS,PRODUTOS.PRECO_VAREJO ');
+
+
+  QRel.ParamByName('MES_ANO').AsString      := Copy(Dtmen.Text, 4, 2) + Copy(Dtmen.Text, 7, 4);
+  QRel.ParamByName('CODIGO_II').AsString    := 'II';
+  QRel.ParamByName('CODIGO_I').AsString     := 'I';
+  QRel.ParamByName('CODIGO_FF').AsString    := 'FF';
+  QRel.ParamByName('CODIGO_F').AsString     := 'F';
+  QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+  QRel.Prepare;
+  QRel.Open;
+
+
+  QRel.First;
+  while not QRel.Eof do
+  begin
+    WRegistro61R := TRegistro61R.Create;
+
+    WRegistro61R.MesAno        := SemMascara(QRel.FieldByName('MES_ANO').AsString);
+    WRegistro61R.Codigo        := QRel.FieldByName('COD_PRODUTO').AsString;
+    WRegistro61R.Qtd           := QRel.FieldByName('QUANTIDADE').AsFloat;
+    WRegistro61R.Valor         := QRel.FieldByName('VR_UNITARIO').AsFloat;
+    WRegistro61R.BaseDeCalculo := QRel.FieldByName('BASE_CALC_ICMS').AsFloat;
+    WRegistro61R.Aliquota      := QRel.FieldByName('ALIQUOTA_ICMS').AsFloat;
+
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT DESCRICAO,NCM, UNIDADE_VENDA FROM PRODUTOS WHERE COD_BARRA = :COD_BARRA');
+    IQuery.ParamByName('COD_BARRA').ASString :=   Alltrim(QRel.FieldByName('COD_PRODUTO').AsString);
+    IQuery.Prepare;
+    IQuery.Open;
+
+
+    QDespesa.Sql.Clear;
+    QDespesa.Sql.Add('SELECT * FROM REGISTRO_75');
+    QDespesa.Sql.Add('WHERE');
+    QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+    QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+    QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+    QDespesa.ParamByName('DT_INICIAL').AsDateTime := ACBrSintegra.Registro10.DataInicial;
+    QDespesa.ParamByName('DT_FINAL').AsDateTime   := ACBrSintegra.Registro10.DataFinal;
+    QDespesa.ParamByName('COD_PRODUTO').AsString  := WRegistro61R.Codigo;
+
+    QDespesa.Prepare;
+    QDespesa.Open;
+
+    if QDespesa.IsEmpty then
+    begin
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('INSERT INTO REGISTRO_75(' +
+                       'DT_INICIAL,    DT_FINAL,      COD_PRODUTO, ' +
+                       'NCM,           DESCRICAO,     UNIDADE, ' +
+                       'ALIQUOTA_IPI,  ALIQUOTA_ICMS, REDUCAO_BASE_ICMS, ' +
+                       'BASE_CALC_ST) VALUES(' +
+                       ':DT_INICIAL,   :DT_FINAL,      :COD_PRODUTO, ' +
+                       ':NCM,          :DESCRICAO,     :UNIDADE, ' +
+                       ':ALIQUOTA_IPI, :ALIQUOTA_ICMS, :REDUCAO_BASE_ICMS, ' +
+                       ':BASE_CALC_ST)');
+
+      QDespesa.ParamByName('DT_INICIAL').AsDateTime     := ACBrSintegra.Registro10.DataInicial;
+      QDespesa.ParamByName('DT_FINAL').AsDateTime       := ACBrSintegra.Registro10.DataFinal;
+      QDespesa.ParamByName('COD_PRODUTO').AsString      := WRegistro61R.Codigo;
+      QDespesa.ParamByName('NCM').AsString              := IQuery.FieldByName('NCM').AsString;
+      QDespesa.ParamByName('DESCRICAO').AsString        := Copy(IQuery.FieldByName('DESCRICAO').AsString,1,53);
+      QDespesa.ParamByName('UNIDADE').AsString          := IQuery.FieldByName('UNIDADE_VENDA').AsString;
+      QDespesa.ParamByName('ALIQUOTA_IPI').AsFloat      := 0;
+      QDespesa.ParamByName('ALIQUOTA_ICMS').AsFloat     := 0;
+      QDespesa.ParamByName('REDUCAO_BASE_ICMS').AsFloat := 0;
+      QDespesa.ParamByName('BASE_CALC_ST').AsFloat      := 0; //QProduto.FieldByName('BASE_CALC_ST').AsFloat;
+
+      QDespesa.Prepare;
+      QDespesa.ExecSql;
+
+
+    end
+    else
+    begin
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('UPDATE REGISTRO_75 SET NCM = :NCM');
+      QDespesa.Sql.Add('WHERE');
+      QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+      QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+      QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+      QDespesa.ParamByName('NCM').AsString          := IQuery.FieldByName('NCM').AsString;
+      QDespesa.ParamByName('DT_INICIAL').AsDateTime := ACBrSintegra.Registro10.DataInicial;
+      QDespesa.ParamByName('DT_FINAL').AsDateTime   := ACBrSintegra.Registro10.DataFinal;
+      QDespesa.ParamByName('COD_PRODUTO').AsString  := WRegistro61R.Codigo;
+
+      QDespesa.Prepare;
+      QDespesa.ExecSql;
+
+    end;
+
+
+    ACBrSintegra.Registros61R.Add(WRegistro61R);
+
+    Label2.Caption := 'Processando Registro 61R: ' + QRel.FieldByName('COD_PRODUTO').AsString;
+
+    Application.ProcessMessages;
+    QRel.Next;
+  end;
+end;
+
+
+procedure TFrmSintegra.GerarRegistro70;
+var
+WRegistro70: TRegistro70;
+WRegistro50: TRegistro50;
+CFOP: String;
+begin
+  QDespesa.Sql.Clear;
+  QDespesa.Sql.Add('SELECT * FROM TRANSACOES');
+  QDespesa.Sql.Add('WHERE');
+  QDespesa.Sql.Add('(DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QDespesa.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+  QDespesa.Sql.Add('AND (TPCTB <= :TPCTB)');
+  QDespesa.Sql.Add('AND (CONDUTA = :CD_CPR)');
+  QDespesa.Sql.Add('AND (DEPTO = :DEPTO)');
+  QDespesa.Sql.Add('AND (CFOP <> :NULO)');
+  QDespesa.Sql.Add('ORDER BY NUM_DOC');
+
+  QDespesa.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QDespesa.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+  QDespesa.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QDespesa.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  QDespesa.ParamByName('CD_CPR').AsString       := '02';
+  QDespesa.ParamByName('DEPTO').AsString        := '02';
+  QDespesa.ParamByName('NULO').AsString         := '';
+
+  QDespesa.Prepare;
+  QDespesa.Open;
+
+  QDespesa.First;
+  while not QDespesa.Eof do
+  begin
+    Seleciona_Parceiro(QDespesa.FieldByName('CONDUTA').AsString, QDespesa.FieldByName('DEPTO').AsString, QDespesa.FieldByName('FORNECEDOR_ID').AsInteger, QDespesa.FieldByName('CLIENTE_ID').AsInteger);
+
+    CFOP := QDespesa.FieldByName('CFOP').AsString;
+
+// Saída (transporte): 5206, 6206, 7206, 5351, 6351, 7351, 5352, 6352, 7352, 5353, 6353, 7353, 5354,
+// 6354, 7354, 5355, 6355, 7355, 5356, 6356, 7356, 5357, 6357, 7357
+
+// 2353, 1303
+
+    if (CFOP = '1206') or (CFOP = '2206') or (CFOP = '3206') or (CFOP = '1351') or
+       (CFOP = '2351') or (CFOP = '3351') or (CFOP = '1352') or (CFOP = '2352') or
+       (CFOP = '3352') or (CFOP = '1353') or (CFOP = '2353') or (CFOP = '3353') or
+       (CFOP = '1354') or (CFOP = '2354') or (CFOP = '3354') or (CFOP = '1355') or
+       (CFOP = '2355') or (CFOP = '3355') or (CFOP = '1356') or (CFOP = '2356') or
+       (CFOP = '3356') or (CFOP = '1357') or (CFOP = '2357') or (CFOP = '3357') or
+       (CFOP = '5915') then
+    begin
+      WRegistro70 := TRegistro70.Create;
+
+      WRegistro70.CPFCNPJ := QParceiro.FieldByName('CNPJ').AsString;
+
+      if StrZero(SemMascara(QParceiro.FieldByName('INSCRICAO').AsString), 15, 0) = '000000000000000' then
+        WRegistro70.Inscricao := QParceiro.FieldByName('INSCRICAO').AsString
+      else
+        WRegistro70.Inscricao := SemMascara(QParceiro.FieldByName('INSCRICAO').AsString);
+
+      if QParceiro.FieldByName('PESSOA').AsString = 'PESSOA FÍSICA' then
+         WRegistro70.Inscricao := 'ISENTO';
+
+      WRegistro70.DataDocumento := QDespesa.FieldByName('DT_ENT_SAI').AsDateTime;
+      WRegistro70.UF            := QParceiro.FieldByName('ESTADO').AsString;
+      WRegistro70.Modelo        := QDespesa.FieldByName('MODELO').AsString;
+      WRegistro70.Serie         := QDespesa.FieldByName('SERIE').AsString;
+      WRegistro70.SubSerie      := '';
+      WRegistro70.Numero        := StrZero(QDespesa.FieldByName('NUM_DOC').AsString, 6, 0);
+      WRegistro70.Cfop          := QDespesa.FieldByName('CFOP').AsString;
+      WRegistro70.ValorContabil := QDespesa.FieldByName('VALOR').AsFloat;
+      WRegistro70.BasedeCalculo := QDespesa.FieldByName('BASE_ICMS_NORMAL').AsFloat;
+      WRegistro70.Icms          := QDespesa.FieldByName('VR_ICMS_NORMAL').AsFloat;
+      WRegistro70.Isentas       := QDespesa.FieldByName('VALOR_ISENTO').AsFloat;
+      WRegistro70.Outras        := QDespesa.FieldByName('VALOR_OUTROS').AsFloat;
+      WRegistro70.CifFobOutros  := '';
+      WRegistro70.Situacao      := 'N';
+
+      ACBrSintegra.Registros70.Add(WRegistro70);
+    end
+    else
+    begin
+      WRegistro50 := TRegistro50.Create;
+
+      with ACBrSintegra do
+      begin
+
+        if StrZero(SemMascara(QParceiro.FieldByName('INSCRICAO').AsString), 15, 0) = '000000000000000' then
+          WRegistro50.Inscricao := QParceiro.FieldByName('INSCRICAO').AsString
+        else
+          WRegistro50.Inscricao := SemMascara(QParceiro.FieldByName('INSCRICAO').AsString);
+
+        if QParceiro.FieldByName('PESSOA').AsString = 'PESSOA FÍSICA' then
+        WRegistro50.Inscricao := 'ISENTO';
+
+        WRegistro50.CPFCNPJ          :=SemMascara(QParceiro.FieldByName('CNPJ').AsString);
+        WRegistro50.DataDocumento    := QDespesa.FieldByName('DT_ENT_SAI').AsDateTime;
+        WRegistro50.UF               := QParceiro.FieldByName('ESTADO').AsString;
+        WRegistro50.Modelo           := QDespesa.FieldByName('MODELO').AsString;
+        WRegistro50.Serie            := QDespesa.FieldByName('SERIE').AsString;
+        WRegistro50.Numero           := StrZero(QDespesa.FieldByName('NUM_DOC').AsString, 6, 0);
+        WRegistro50.Cfop             := QDespesa.FieldByName('CFOP').AsString;
+        WRegistro50.EmissorDocumento := 'T';
+        WRegistro50.ValorContabil    := QDespesa.FieldByName('VALOR').AsFloat;
+        WRegistro50.BasedeCalculo    := QDespesa.FieldByName('BASE_ICMS_NORMAL').AsFloat;
+        WRegistro50.Icms             := QDespesa.FieldByName('VR_ICMS_NORMAL').AsFloat;
+        WRegistro50.Isentas          := QDespesa.FieldByName('VALOR_ISENTO').AsFloat;
+        WRegistro50.Outras           := QDespesa.FieldByName('VALOR_OUTROS').AsFloat;
+        WRegistro50.Aliquota         := 0;
+        WRegistro50.Situacao         := 'N';
+
+        ACBrSintegra.Registros50.Add(WRegistro50);
+      end;
+    end;
+
+    Label2.Caption := 'Processando Registro 70: ' + QDespesa.FieldByName('TRANSACAO_ID').AsString;
+
+    Application.ProcessMessages;
+    QDespesa.Next;
+  end;
+end;
+
+procedure TFrmSintegra.GerarRegistro74;
+var
+WRegistro74: TRegistro74;
+begin
+  if Data.Text <> 'Hoje' then
+  Begin
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT POSICAO_PRODUTOS.QUANTIDADE_C QUANTIDADE,' +
+               'PRODUTOS.COD_BARRA COD_PRODUTO, PRODUTOS.ALIQUOTA_ICMS,');
+
+  if Preco.Text = 'Custo Compra' then
+  QRel.Sql.Add('POSICAO_PRODUTOS.CUSTO_COMPRA VALOR,');
+  if Preco.Text = 'Valor Compra' then
+  QRel.Sql.Add('POSICAO_PRODUTOS.VALOR_COMPRA VALOR,');
+  if Preco.Text = 'Customédio' then
+  QRel.Sql.Add('POSICAO_PRODUTOS.CUSTOMEDIO VALOR,');
+  if Preco.Text = 'Pr. Varejo' then
+  QRel.Sql.Add('POSICAO_PRODUTOS.PRECO_VAREJO VALOR,');
+
+  QRel.Sql.Add('NCM, UNIDADE, DESCRICAO');
+  QRel.Sql.Add('FROM POSICAO_PRODUTOS');
+  QRel.Sql.Add('INNER JOIN PRODUTOS ON PRODUTOS.PRODUTO_ID = POSICAO_PRODUTOS.PRODUTO_ID');
+  QRel.Sql.Add('WHERE POSICAO_PRODUTOS.DT_MOVIMENTO = :DT_MOVIMENTO');
+  QRel.SQL.Add('AND PRODUTOS.EMPRESA_ID = :EMPRESA_ID AND POSICAO_PRODUTOS.QUANTIDADE_C > 0 ');
+
+  QRel.ParamByName('DT_MOVIMENTO').AsDateTime := StrToDate(Data.Text);
+  QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmPrincipal.QEmpresa.FieldByName('EMPRESA_ID').AsInteger;
+  End
+  Else
+  Begin
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT QUANTIDADE_C QUANTIDADE,' +
+               'PRODUTOS.COD_BARRA COD_PRODUTO, PRODUTOS.ALIQUOTA_ICMS,');
+
+  if Preco.Text = 'Custo Compra' then
+  QRel.Sql.Add('PRODUTOS.CUSTO_COMPRA VALOR,');
+  if Preco.Text = 'Valor Compra' then
+  QRel.Sql.Add('PRODUTOS.VALOR_COMPRA VALOR,');
+  if Preco.Text = 'Customédio' then
+  QRel.Sql.Add('PRODUTOS.CUSTOMEDIO VALOR,');
+  if Preco.Text = 'Pr. Varejo' then
+  QRel.Sql.Add('PRODUTOS.PRECO_VAREJO VALOR,');
+
+  QRel.Sql.Add('NCM, UNIDADE, DESCRICAO');
+  QRel.Sql.Add('FROM PRODUTOS');
+  QRel.SQL.Add('WHERE PRODUTOS.EMPRESA_ID = :EMPRESA_ID AND QUANTIDADE_C > 0 ');
+
+
+  QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmPrincipal.QEmpresa.FieldByName('EMPRESA_ID').AsInteger;
+  End;
+
+  QRel.Sql.Add('ORDER BY PRODUTOS.DESCRICAO');
+
+  QRel.Prepare;
+  QRel.Open;
+
+ QRel.First;
+ while not QRel.Eof do
+ begin
+    WRegistro74 := TRegistro74.Create;
+
+    WRegistro74.Data                := StrToDate(Data.Text);
+    WRegistro74.Codigo              := QRel.FieldByName('COD_PRODUTO').AsString;
+    WRegistro74.Quantidade          := QRel.FieldByName('QUANTIDADE').AsFloat;
+    WRegistro74.ValorProduto        := (QRel.FieldByName('VALOR').AsFloat * QRel.FieldByName('QUANTIDADE').AsFloat);
+    WRegistro74.CodigoPosse         := '1';
+    WRegistro74.CNPJPossuidor       := '0000000000000'; //SemMascara(FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString);
+    WRegistro74.InscricaoPossuidor  := ''; //SemMascara(FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString);
+    WRegistro74.UFPossuidor         := ''; //FrmPrincipal.QEmpresa.FieldByName('ESTADO').AsString;
+
+
+    ACBrSintegra.Registros74.Add(WRegistro74);
+
+
+
+    QDespesa.Sql.Clear;
+    QDespesa.Sql.Add('SELECT * FROM REGISTRO_75');
+    QDespesa.Sql.Add('WHERE');
+    QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+    QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+    QDespesa.Sql.Add('AND (COD_PRODUTO = :COD_PRODUTO)');
+
+    QDespesa.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+    QDespesa.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+    QDespesa.ParamByName('COD_PRODUTO').AsString  := QRel.FieldByName('COD_PRODUTO').AsString; //WRegistro74.Codigo;
+
+    QDespesa.Prepare;
+    QDespesa.Open;
+
+    Label2.Caption := 'Processando Registro 74: ' + QRel.FieldByName('COD_PRODUTO').AsString;
+
+    Application.ProcessMessages;
+
+    if QDespesa.IsEmpty then
+    begin
+      try
+      QDespesa.Sql.Clear;
+      QDespesa.Sql.Add('INSERT INTO REGISTRO_75(' +
+                       'DT_INICIAL,    DT_FINAL,      COD_PRODUTO, ' +
+                       'NCM,           DESCRICAO,     UNIDADE, ' +
+                       'ALIQUOTA_IPI,  ALIQUOTA_ICMS, REDUCAO_BASE_ICMS, ' +
+                       'BASE_CALC_ST) VALUES(' +
+                       ':DT_INICIAL,   :DT_FINAL,      :COD_PRODUTO, ' +
+                       ':NCM,          :DESCRICAO,     :UNIDADE, ' +
+                       ':ALIQUOTA_IPI, :ALIQUOTA_ICMS, :REDUCAO_BASE_ICMS, ' +
+                       ':BASE_CALC_ST)');
+
+      QDespesa.ParamByName('DT_INICIAL').AsDateTime     := ACBrSintegra.Registro10.DataInicial;
+      QDespesa.ParamByName('DT_FINAL').AsDateTime       := ACBrSintegra.Registro10.DataFinal;
+      QDespesa.ParamByName('COD_PRODUTO').AsString      := QRel.FieldByName('COD_PRODUTO').AsString; //WRegistro74.Codigo;
+      QDespesa.ParamByName('NCM').AsString              := QRel.FieldByName('NCM').AsString;
+      QDespesa.ParamByName('DESCRICAO').AsString        := Copy(QRel.FieldByName('DESCRICAO').AsString,1,53);
+      QDespesa.ParamByName('UNIDADE').AsString          := QRel.FieldByName('UNIDADE').AsString;
+      QDespesa.ParamByName('ALIQUOTA_IPI').AsFloat      := 0;
+      QDespesa.ParamByName('ALIQUOTA_ICMS').AsFloat     := QRel.FieldByName('ALIQUOTA_ICMS').AsFloat;
+      QDespesa.ParamByName('REDUCAO_BASE_ICMS').AsFloat := 0;
+      QDespesa.ParamByName('BASE_CALC_ST').AsFloat      := 0;
+
+      QDespesa.Prepare;
+      QDespesa.ExecSql;
+
+      except
+
+      end;
+
+    end;
+  QRel.Next;
+ end;
+end;
+
+
+
+
+procedure TFrmSintegra.GerarRegistro75;
+var
+WRegistro75: TRegistro75;
+begin
+  QDespesa.Sql.Clear;
+  QDespesa.Sql.Add('SELECT * FROM REGISTRO_75');
+  QDespesa.Sql.Add('WHERE');
+  QDespesa.Sql.Add('(DT_INICIAL = :DT_INICIAL)');
+  QDespesa.Sql.Add('AND (DT_FINAL = :DT_FINAL)');
+
+  QDespesa.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QDespesa.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+  QDespesa.Prepare;
+  QDespesa.Open;
+
+  QDespesa.First;
+  while not QDespesa.Eof do
+  begin
+    WRegistro75 := TRegistro75.Create;
+
+    WRegistro75.DataInicial  := ACBrSintegra.Registro10.DataInicial;
+    WRegistro75.DataFinal    := ACBrSintegra.Registro10.DataFinal;
+    WRegistro75.Codigo       := QDespesa.FieldByName('COD_PRODUTO').AsString;
+    WRegistro75.NCM          := QDespesa.FieldByName('NCM').AsString;
+    WRegistro75.Descricao    := Copy(QDespesa.FieldByName('DESCRICAO').AsString,1,53);
+    WRegistro75.Unidade      := QDespesa.FieldByName('UNIDADE').AsString;
+    WRegistro75.AliquotaIpi  := QDespesa.FieldByName('ALIQUOTA_IPI').AsFloat;
+    WRegistro75.AliquotaICMS := QDespesa.FieldByName('ALIQUOTA_ICMS').AsFloat;
+    WRegistro75.Reducao      := QDespesa.FieldByName('REDUCAO_BASE_ICMS').AsFloat;
+    WRegistro75.BaseST       := QDespesa.FieldByName('BASE_CALC_ST').AsFloat;
+
+    ACBrSintegra.Registros75.Add(WRegistro75);
+
+    Label2.Caption := 'Processando Registro 75: ' + QDespesa.FieldByName('COD_PRODUTO').AsString;
+
+    Application.ProcessMessages;
+    QDespesa.Next;
+  end;
+end;
+
+procedure TFrmSintegra.InventarioChange(Sender: TObject);
+begin
+ if inventario.Text = 'NÃO' then
+ Begin
+ label6.Visible := False;
+ label8.Visible := False;
+ Preco.Visible  := False;
+ Data.Visible   := False;
+ end
+ Else
+ Begin
+ label6.Visible := True;
+ label8.Visible := True;
+ Preco.Visible  := True;
+ Data.Visible   := True;
+
+  if Copy(DateToStr(date),4,2) = '03' then
+  begin
+
+   IQuery.SQL.Clear;
+   IQuery.SQL.Add('SELECT DISTINCT DT_MOVIMENTO FROM POSICAO_PRODUTOS WHERE DT_MOVIMENTO <= :DT_FIM ORDER BY DT_MOVIMENTO DESC' );
+   IQuery.ParamByName('DT_FIM').AsDate := StrToDate('31/12/' + IntToStr(StrToInt(Copy(DateToStr(Dtmen.Date), 7, 4))-1));
+   IQuery.Prepare;
+   IQuery.Open();
+
+
+   Inventario.ItemIndex := 1;
+   Preco.ItemIndex := 1;
+   Data.Visible  := True;
+   Preco.Visible := True;
+   Label6.Visible := True;
+   Label8.Visible := True;
+
+   Data.Items.Clear;
+   Data.Items.Add(IQuery.FieldByName('DT_MOVIMENTO').AsString);
+   Data.ItemIndex := 0;
+  end;
+ End;
+end;
+
+procedure TFrmSintegra.Seleciona_Parceiro(Conduta, Depto: String; Fornecedor, Cliente: Integer);
+begin
+  if ((Conduta = '01') and (Depto = '03')) or ((Conduta = '01') and (Depto = '07')) or ((Conduta = '02') and (Depto = '10')) then
+  begin
+    QParceiro.Sql.Clear;
+    QParceiro.Sql.Add('SELECT CLIENTES.* , TIPO_CLIENTE PESSOA FROM CLIENTES');
+    QParceiro.Sql.Add('WHERE');
+    QParceiro.Sql.Add('(CLIENTE_ID = :CLIENTE_ID)');
+
+    QParceiro.ParamByName('CLIENTE_ID').AsInteger := Cliente;
+
+    QParceiro.Prepare;
+    QParceiro.Open;
+  end;
+
+  if ((Conduta = '02') and (Depto = '02')) or ((Conduta = '02') and (Depto = '07')) or ((Conduta = '01') and (Depto = '10')) then
+  begin
+    QParceiro.Sql.Clear;
+    QParceiro.Sql.Add('SELECT FORNECEDORES.* , TIPO_FORNECEDOR PESSOA FROM FORNECEDORES');
+    QParceiro.Sql.Add('WHERE');
+    QParceiro.Sql.Add('(FORNECEDOR_ID = :FORNECEDOR_ID)');
+
+    QParceiro.ParamByName('FORNECEDOR_ID').AsInteger := Fornecedor;
+
+    QParceiro.Prepare;
+    QParceiro.Open;
+  end;
+end;
+
+procedure TFrmSintegra.Seleciona_Produtos;
+begin
+  QProduto.Sql.Clear;
+  QProduto.Sql.Add('SELECT TRANSITENS.*, PRODUTOS.COD_BARRA, PRODUTOS.UNIDADE, PRODUTOS.NCM');
+  QProduto.Sql.Add('FROM TRANSITENS');
+  QProduto.Sql.Add('INNER JOIN PRODUTOS');
+  QProduto.Sql.Add('ON (TRANSITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+  QProduto.Sql.Add('WHERE');
+  QProduto.Sql.Add('(TRANSITENS.TRANSACAO_ID = :TRANSACAO_ID)');
+
+  QProduto.ParamByName('TRANSACAO_ID').AsInteger := QRel.FieldByName('TRANSACAO_ID').AsInteger;
+
+  QProduto.Prepare;
+  QProduto.Open;
+end;
+
+end.

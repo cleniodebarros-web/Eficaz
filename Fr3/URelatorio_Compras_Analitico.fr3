@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Agrupado_1_LandScape.fr3" ReportOptions.CreateDate="44544,3856777662" ReportOptions.LastChange="44544,4170996644" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportQRel" DataSetName="QRel_URelatorio_Compras"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperSize="9">
+    <inherited Name="b_cabecalho">
+      <inherited Name="b_cabecalho_data_hora_atual"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Relatório de Compras"/>
+      <inherited Name="b_cabecalho_periodo_analisado"/>
+      <inherited Name="b_cabecalho_razao_social"/>
+      <inherited Name="b_cabecalho_logo"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens">
+      <inherited Name="b_cabecalho_titulo_item_texto" Width="82,7953" Text="Dt.Compra"/>
+      <inherited Name="b_cabecalho_espaco_branco"/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="98,26778" Top="3,77953" Width="52,55906" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="N° Doc."/>
+      <TfrxMemoView Name="Memo9" AllowVectorExport="True" Left="185,19697" Top="3,77953" Width="60,11812" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="ID Prod."/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="268,34663" Top="3,77953" Width="79,6709074849873" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Descrição"/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="865,51237" Top="3,77953" Width="86,57483" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Qtd.Compra"/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="755,906" Top="3,77953" Width="86,57483" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Vr.Custo"/>
+      <TfrxMemoView Name="Memo13" AllowVectorExport="True" Left="975,11874" Top="3,77953" Width="86,57483" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Vr.Compra"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_landscape_groupheader" Condition="&#60;QRel_URelatorio_Compras.&#34;GRUPO&#34;&#62;">
+      <inherited Name="b_rel_agrupado1_groupheader_shape1"/>
+      <inherited Name="b_rel_agrupado1_landscape_groupheader_item1" Visible="True" Text="[QRel_URelatorio_Compras.&#34;GRUPO&#34;]"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_landscape_groupfooter" Top="377,953">
+      <inherited Name="b_rel_agrupado1_landscape_groufooter_item1" Visible="True" Text="Sub Total -"/>
+      <inherited Name="b_rel_agrupado1_groufooter_shape1"/>
+      <TfrxMemoView Name="Memo14" AllowVectorExport="True" Left="865,51237" Top="7,55906" Width="97,51181102" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-13" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_URelatorio_Compras.&#34;QTD_COMPRA&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo15" AllowVectorExport="True" Left="975,11874" Top="7,55906" Width="97,51181102" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-13" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_URelatorio_Compras.&#34;VR_TOTAL&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo16" AllowVectorExport="True" Left="755,906" Top="7,55906" Width="97,51181102" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-13" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_URelatorio_Compras.&#34;vr_unitario&#34;&#62;))]"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_landscape_report_Summary" Height="135,94496" Top="472,44125">
+      <inherited Name="b_rel_agrupado1_landscape_report_Summary_resultado" Text="Resultado &#62;"/>
+      <inherited Name="b_rel_simples_shape1"/>
+      <TfrxMemoView Name="Memo21" AllowVectorExport="True" Left="220,21274" Top="24,67718" Width="120,18897638" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_URelatorio_Compras.&#34;vr_unitario&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo22" AllowVectorExport="True" Left="139,84261" Top="22,67718" Width="79,77953" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Vr.Custo -"/>
+      <TfrxMemoView Name="Memo17" AllowVectorExport="True" Left="450,76407" Top="24,67718" Width="120,18897638" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_URelatorio_Compras.&#34;QTD_COMPRA&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo18" AllowVectorExport="True" Left="355,27582" Top="22,67718" Width="94,89765" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Qtd.Compra -"/>
+      <TfrxMemoView Name="Memo19" AllowVectorExport="True" Left="669,97681" Top="24,67718" Width="120,03154" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_URelatorio_Compras.&#34;VR_TOTAL&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo23" AllowVectorExport="True" Left="585,82715" Top="22,67718" Width="83,55906" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Vr.Compra -"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="22,67718" Left="0" Top="332,59864" Width="1084,72511" ColumnWidth="0" ColumnGap="0" DataSet="FastReportQRel" DataSetName="QRel_URelatorio_Compras" RowCount="0">
+      <TfrxMemoView Name="Memo1" AllowVectorExport="True" Left="7,55906" Top="3,77953" Width="78,45671" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URelatorio_Compras.&#34;dt_ent_sai&#34;]"/>
+      <TfrxMemoView Name="Memo2" AllowVectorExport="True" Left="98,26778" Top="3,77953" Width="74,67718" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URelatorio_Compras.&#34;num_doc&#34;]"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="185,19697" Top="3,77953" Width="70,89765" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URelatorio_Compras.&#34;PRODUTO_ID&#34;]"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="268,34663" Top="3,77953" Width="475,30736" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URelatorio_Compras.&#34;DESCRICAO&#34;]"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="755,906" Top="3,77953" Width="97,35436" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_URelatorio_Compras.&#34;vr_unitario&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="865,51237" Top="3,77953" Width="97,35436" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_URelatorio_Compras.&#34;QTD_COMPRA&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="975,11874" Top="3,77953" Width="97,35436" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_URelatorio_Compras.&#34;VR_TOTAL&#34;&#62;)]"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" Orientation="poPortrait" PaperWidth="210" PaperHeight="297" PaperSize="9"/>
+</inherited>

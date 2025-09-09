@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Simples.fr3" ReportOptions.CreateDate="44599,391784375" ReportOptions.LastChange="44599,4158317708" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportQRel" DataSetName="QRel_UMapa_Mensal"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperSize="9">
+    <inherited Name="b_cabecalho">
+      <inherited Name="b_cabecalho_data_hora_atual"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Mapa Mensal do Estoque"/>
+      <inherited Name="b_cabecalho_periodo_analisado"/>
+      <inherited Name="b_cabecalho_razao_social"/>
+      <inherited Name="b_cabecalho_logo"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens">
+      <inherited Name="b_cabecalho_titulo_item_texto"/>
+      <inherited Name="b_cabecalho_espaco_branco"/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="60,47248" Top="0" Width="79,01577" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cod.Barras"/>
+      <TfrxMemoView Name="Memo9" AllowVectorExport="True" Left="158,74026" Top="0" Width="79,01577" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Descrição"/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="480,00031" Top="0" Width="52,55906" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Sd.Ant"/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="548,03185" Top="0" Width="63,89765" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Entradas"/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="616,06339" Top="0" Width="48,77953" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Saídas"/>
+      <TfrxMemoView Name="Memo13" AllowVectorExport="True" Left="684,09493" Top="0" Width="63,89765" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Sd.Final"/>
+    </inherited>
+    <inherited Name="b_rel_simples_report_Summary" Top="343,93723">
+      <inherited Name="b_rel_simples_resultado"/>
+      <inherited Name="b_rel_simples_shape1"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976378" Left="0" Top="264,5671" Width="755,906" ColumnWidth="0" ColumnGap="0" DataSet="FastReportQRel" DataSetName="QRel_UMapa_Mensal" RowCount="0">
+      <TfrxMemoView Name="Memo1" AllowVectorExport="True" Left="7,55906" Top="0" Width="48,22047" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UMapa_Mensal.&#34;PRODUTO_ID&#34;]"/>
+      <TfrxMemoView Name="Memo2" AllowVectorExport="True" Left="60,47248" Top="0" Width="93,57483" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UMapa_Mensal.&#34;COD_BARRA&#34;]"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="158,74026" Top="0" Width="316,5671" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UMapa_Mensal.&#34;DESCRICAO&#34;]"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="480,00031" Top="0" Width="63,33859" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',(&#60;QRel_UMapa_Mensal.&#34;ENTRADA_ANT&#34;&#62;+&#60;QRel_UMapa_Mensal.&#34;E_TRANSF_ANT&#34;&#62;-&#60;QRel_UMapa_Mensal.&#34;SAIDA_ANT&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="548,03185" Top="0" Width="63,49606299" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',(&#60;QRel_UMapa_Mensal.&#34;ENTRADA_ATUAL&#34;&#62;+&#60;QRel_UMapa_Mensal.&#34;E_TRANSF_ATUAL&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="616,06339" Top="0" Width="63,49606299" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UMapa_Mensal.&#34;SAIDA_ATUAL&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="684,09493" Top="0" Width="63,49606299" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',(&#60;QRel_UMapa_Mensal.&#34;ENTRADA_ANT&#34;&#62;+&#60;QRel_UMapa_Mensal.&#34;E_TRANSF_ANT&#34;&#62;-&#60;QRel_UMapa_Mensal.&#34;SAIDA_ANT&#34;&#62;+&#60;QRel_UMapa_Mensal.&#34;ENTRADA_ATUAL&#34;&#62;+&#60;QRel_UMapa_Mensal.&#34;E_TRANSF_ATUAL&#34;&#62;-&#60;QRel_UMapa_Mensal.&#34;SAIDA_ATUAL&#34;&#62;))]"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" PaperSize="9"/>
+</inherited>

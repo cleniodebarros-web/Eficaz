@@ -1,0 +1,320 @@
+unit USel_Produto;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, DBCtrls, Buttons, Mask, rxToolEdit, rxCurrEdit,
+  DB, IBCustomDataSet, IBQuery, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, Math, ACBrNFe.Classes, pcnConversao;
+
+type
+  TFrmSel_Produto = class(TForm)
+    Label2: TLabel;
+    Produto: TCurrencyEdit;
+    btnProduto: TSpeedButton;
+    DBText1: TDBText;
+    Bevel1: TBevel;
+    DataProduto: TDataSource;
+    Label1: TLabel;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    QProduto: TFDQuery;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    IQuery: TFDQuery;
+    QUpdate: TFDQuery;
+    QSearch: TFDQuery;
+    procedure btnProdutoClick(Sender: TObject);
+    procedure ProdutoChange(Sender: TObject);
+    procedure ProdutoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure SearchProduto;
+  end;
+
+var
+  FrmSel_Produto: TFrmSel_Produto;
+  COD_PRODUTO_XML,NCM_XML,DESCRICAO_XML,UNIDADE_XML,UNIADE_XML,CEST_XML :STRING;
+  ALIQUOTA_XML,VALOR_XML:REAL;
+  ProdXML: TProd;
+  ImpostoXML: TImposto;
+  //function Seleciona_Produto_Xml(Produto,COD_BARRA,NCM,COD_PROD,UNIDADE,CEST: String;ALIQUOTA,VALOR:REAL): Integer;
+  function Seleciona_Produto_Xml(Prod:TProd; Imposto:TImposto): Integer;
+
+implementation
+
+uses
+  UPrincipal, UConsulta, UData, UCadastro_Produtos,UTrans_Compra_Estoque, UProdutosXML;
+
+{$R *.dfm}
+
+function Seleciona_Produto_Xml(Prod:TProd; Imposto:TImposto): Integer;//function Seleciona_Produto_Xml(Produto,COD_BARRA,NCM,COD_PROD,UNIDADE,CEST: String;ALIQUOTA,VALOR:REAL): Integer;
+begin
+
+  Application.CreateForm(TFrmSel_Produto, FrmSel_Produto);
+  try
+    ProdXML := Prod;
+    ImpostoXML := Imposto;
+    Valor_Xml :=ProdXML.vUnCom + RoundTO(((ProdXML.vUnCom * FrmPrincipal.config.FieldByName('MARGEM_LUCRO').AsFloat) / 100), -2);
+
+    FrmSel_Produto.Label1.Caption := Copy(RemoveAcentos(ProdXML.xProd),1,60);
+
+    FrmSel_Produto.ShowModal;
+
+    if FrmSel_Produto.Produto.Value > 0 then
+      Result := StrToInt(FrmSel_Produto.Produto.Text)
+    else
+      Result := 0;
+  finally
+    FrmSel_Produto.Release;
+  end;
+end;
+
+procedure TFrmSel_Produto.SearchProduto;
+begin
+  QProduto.Close;
+  QProduto.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Produto.Text);
+  QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QProduto.Prepare;
+  QProduto.Open;
+
+  if QProduto.IsEmpty then
+    btnExecuta.Enabled := False
+  else
+    btnExecuta.Enabled := True;
+end;
+
+procedure TFrmSel_Produto.BitBtn1Click(Sender: TObject);
+begin
+Seleciona_Produtos_Nfe := False;
+end;
+
+procedure TFrmSel_Produto.BitBtn2Click(Sender: TObject);
+var
+id_prod, id_tributo : Integer;
+csosn: string;
+begin
+
+    if Application.MessageBox('Deseja Cadastrar o produto com dados da Nota Fiscal(XML)?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+    Begin
+     try
+        IQuery.SQL.Clear;
+        IQuery.SQL.Add('SELECT NEXTVAL(:GEN_PRODUTOS) ID');
+        IQuery.ParamByName('GEN_PRODUTOS').AsString :=  'GEN_PRODUTOS';
+
+        IQuery.Prepare;
+        IQuery.Open;
+
+
+        id_prod := IQuery.Fields[0].AsInteger;
+
+        QUpdate.Sql.Clear;
+        QUpdate.Sql.Add('INSERT INTO PRODUTOS(' +
+                                             'PRODUTO_ID,            COD_BARRA,             NCM,                    CODRED, ' +
+                                             'DESCRICAO,             FANTASIA,               SUPERVISOR,           ' +
+                                             'CTRL_SERIE,            PROVQT,                 PESAVEL,              FRAC_INV, ' +
+                                             'IAT,                   IPPT,                   MOD_ICMS,             TIPO_ITEM, ' +
+                                             'UNIDADE,               EMBALAGEM,              UNIDADE_VENDA,       FRACAO_VENDA, ' +
+                                             'EMPRESA_ID,            GRUPO_ID,               SUBTIPO_ID,          LOCALIZACAO_ID, ' +
+                                             'TRIBUTO_ID,            CSOSN,                  FAMILIA_ID,          ALIQUOTA_ICMS,       PRECO_VAREJO, ' +
+                                             'PRECO_ATACADO,         PRECO_PROMOCAO,         PRECO_PRAZO,         STATUS, ' +
+                                             'QUANTIDADE_C,          QUANTIDADE_G,           CEST,                REFERENCIA) VALUES(' +
+                                             ':PRODUTO_ID,           :COD_BARRA,             :NCM,                :CODRED, ' +
+                                             ':DESCRICAO,            :FANTASIA,              :SUPERVISOR,          ' +
+                                             ':CTRL_SERIE,           :PROVQT,                :PESAVEL,            :FRAC_INV, ' +
+                                             ':IAT,                  :IPPT,                  :MOD_ICMS,           :TIPO_ITEM, ' +
+                                             ':UNIDADE,              :EMBALAGEM,             :UNIDADE_VENDA,      :FRACAO_VENDA, ' +
+                                             ':EMPRESA_ID,           :GRUPO_ID,              :SUBTIPO_ID,         :LOCALIZACAO_ID, ' +
+                                             ':TRIBUTO_ID,           :CSOSN,                 :FAMILIA_ID,         :ALIQUOTA_ICMS,      :PRECO_VAREJO, ' +
+                                             ':PRECO_ATACADO,        :PRECO_PROMOCAO,        :PRECO_PRAZO,        :STATUS, ' +
+                                             ':QUANTIDADE_C,         :QUANTIDADE_G,          :CEST,               :REFERENCIA)');
+
+
+         QUpdate.ParamByName('PRODUTO_ID').AsInteger := id_prod;
+
+         if (ProdXML.cEAN = 'SEM GTIN') OR (ProdXML.cEAN = '') then
+
+          QUpdate.ParamByName('COD_BARRA').AsString       := StrZero(Dig(IntToStr(id_prod)), FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0)
+
+         else
+          QUpdate.ParamByName('COD_BARRA').AsString       := StrZero(ProdXML.cEAN, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+
+        QUpdate.ParamByName('NCM').AsString             := ProdXML.Ncm;
+        QUpdate.ParamByName('CODRED').AsString          := '';
+        QUpdate.ParamByName('DESCRICAO').AsString       := Copy(RemoveAcentos(ProdXML.xProd),1,120);
+        QUpdate.ParamByName('FANTASIA').AsString        := Copy(RemoveAcentos(ProdXML.xProd),1,24);
+        QUpdate.ParamByName('SUPERVISOR').AsString      := 'NÃO';
+
+         if Copy(ProdXML.uCom,1,1) ='P' then
+          QUpdate.ParamByName('UNIDADE').AsString         :='PC'
+         Else
+        QUpdate.ParamByName('UNIDADE').AsString         := RemoveAcentos(ProdXML.uCom);
+
+        QUpdate.ParamByName('EMBALAGEM').AsFloat        := 0;
+
+        if Copy(ProdXML.uCom,1,1) ='P' then
+        QUpdate.ParamByName('UNIDADE_VENDA').AsString   :='PC'
+        else
+        QUpdate.ParamByName('UNIDADE_VENDA').AsString   := RemoveAcentos(ProdXML.uCom);
+
+        QUpdate.ParamByName('FRACAO_VENDA').AsFloat     := 0;
+        QUpdate.ParamByName('EMPRESA_ID').AsInteger     := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QUpdate.ParamByName('GRUPO_ID').AsInteger       := 1;
+        QUpdate.ParamByName('SUBTIPO_ID').AsInteger     := 1;
+        QUpdate.ParamByName('LOCALIZACAO_ID').AsInteger := 1;
+        QUpdate.ParamByName('CTRL_SERIE').AsString      := 'NÃO';
+        QUpdate.ParamByName('PROVQT').AsString          := 'NÃO';
+        QUpdate.ParamByName('PESAVEL').AsString         := 'NÃO';
+        QUpdate.ParamByName('FRAC_INV').AsString        := 'NÃO';
+        QUpdate.ParamByName('IAT').AsString             := 'A';
+        QUpdate.ParamByName('IPPT').AsString            := 'T';
+        QUpdate.ParamByName('MOD_ICMS').AsString        := 'MVA';
+        QUpdate.ParamByName('TIPO_ITEM').AsString       := '00 - MERCADORIA PARA REVENDA';
+        QUpdate.ParamByName('CEST').AsString            := ProdXML.Cest;
+        QUpdate.ParamByName('REFERENCIA').AsString      := Copy(ProdXML.cProd,1,13);
+
+        QSearch.SQL.Clear;
+        //tributo vindo do xml de simples nacional
+        if ImpostoXML.ICMS.CSOSN <> csosnVazio then
+        begin
+          if CSOSNIcmsToStr(ImpostoXML.ICMS.CSOSN) = '102' then
+          begin
+            QSearch.SQL.Add('SELECT TRIBUTO_ID,CSOSN FROM TRIBUTOS WHERE ALIQUOTA_ICMS = :ALIQUOTA_ICMS LIMIT 1');
+            QSearch.ParamByName('ALIQUOTA_ICMS').AsFloat := 18;
+          end
+          else
+          begin
+            QSearch.SQL.Add('SELECT TRIBUTO_ID,CSOSN FROM TRIBUTOS WHERE CSOSN = :CSOSN LIMIT 1');
+            QSearch.ParamByName('CSOSN').AsString := CSOSNIcmsToStr(ImpostoXML.ICMS.CSOSN);
+          end;
+        end
+        //fim do tributo do xml de simples nacional
+        else
+        //se não tiver tributo, então não é simples nacional
+        begin
+          if CSTICMSToStr(ImpostoXML.ICMS.CST) = '00' then
+          begin
+            QSearch.SQL.Add('SELECT TRIBUTO_ID,CSOSN FROM TRIBUTOS WHERE ALIQUOTA_ICMS = :ALIQUOTA_ICMS LIMIT 1');
+            QSearch.ParamByName('ALIQUOTA_ICMS').AsFloat := ImpostoXML.ICMS.pICMS;
+          end
+          else
+          begin
+            QSearch.SQL.Add('SELECT TRIBUTO_ID,CSOSN FROM TRIBUTOS WHERE SUBSTR(TRIBUTACAO,1,2) = :TRIBUTACAO LIMIT 1');
+            QSearch.ParamByName('TRIBUTACAO').AsString := CSTICMSToStr(ImpostoXML.ICMS.CST);
+          end;
+        end;
+        QSearch.Prepare;
+        QSearch.Open();
+
+        if QSearch.RecordCount > 0 then
+        begin
+          id_tributo := QSearch.FieldByName('TRIBUTO_ID').AsInteger;
+          csosn      := QSearch.FieldByName('CSOSN').AsString;
+        end;
+
+        if not QSearch.IsEmpty then
+        Begin
+        QUpdate.ParamByName('TRIBUTO_ID').AsInteger     := QSearch.FieldByName('TRIBUTO_ID').AsInteger;
+        QUpdate.ParamByName('CSOSN').AsString           := QSearch.FieldByName('CSOSN').AsString;
+        End
+        else
+        Begin
+        QUpdate.ParamByName('TRIBUTO_ID').AsInteger    := 1;
+        QUpdate.ParamByName('CSOSN').AsString          := '';
+        End;
+
+        QUpdate.ParamByName('FAMILIA_ID').AsInteger     := 0;
+        QUpdate.ParamByName('ALIQUOTA_ICMS').AsFloat    := ImpostoXML.ICMS.pICMS;
+        QUpdate.ParamByName('PRECO_VAREJO').AsFloat     := Valor_Xml + RoundTO(((Valor_Xml * FrmPrincipal.config.FieldByName('MARGEM_LUCRO').AsFloat) / 100), -2);
+        QUpdate.ParamByName('PRECO_ATACADO').AsFloat    := 0;
+        QUpdate.ParamByName('PRECO_PROMOCAO').AsFloat   := 0;
+        QUpdate.ParamByName('PRECO_PRAZO').AsFloat      := 0;
+        QUpdate.ParamByName('STATUS').AsString          := 'A';
+        QUpdate.ParamByName('QUANTIDADE_C').AsFloat     := 0;
+        QUpdate.ParamByName('QUANTIDADE_G').AsFloat     := 0;
+
+        QUpdate.Prepare;
+        QUpdate.ExecSql;
+
+     Except
+
+        on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro ao cadastrar produto pelo Xml:' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+     end;
+
+    Application.CreateForm(TFrmProdutosXML, FrmProdutosXML);
+    FrmProdutosXML.QTabela.ParamByName('PRODUTO_ID').AsInteger := id_prod;
+    FrmProdutosXML.QTabela.Prepare;
+    FrmProdutosXML.QTabela.Open;
+    try
+      FrmProdutosXML.ShowModal;
+    finally
+      FrmProdutosXML.Release;
+    end;
+
+    Produto.Text := IntToStr(id_prod);
+
+    End;
+
+end;
+
+procedure TFrmSel_Produto.btnProdutoClick(Sender: TObject);
+begin
+  try
+    //MODIFICADO DIA 02-10-2017 a pedido de Regivaldo.
+    //Produto.Value := GetConsulta('ESTOQUE', 0, 0, StrToInt(Produto.Text));
+
+    if LeIni(Arq_Ini, 'Sistema', 'Consulta Código Barras Completo') = 'True' Then
+    Produto.Value := GetConsulta('ESTOQUE_BARRA', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Produto.Text))
+    Else
+    Produto.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Produto.Text))
+
+  except
+    //Produto.Value := GetConsulta('ESTOQUE', 0, 0, 0);
+    if LeIni(Arq_Ini, 'Sistema', 'Consulta Código Barras Completo') = 'True' Then
+    Produto.Value := GetConsulta('ESTOQUE_BARRA', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Produto.Text))
+    Else
+    Produto.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Produto.Text))
+  end;
+end;
+
+procedure TFrmSel_Produto.ProdutoChange(Sender: TObject);
+begin
+  if Produto.Value > 0 then
+    SearchProduto;
+end;
+
+procedure TFrmSel_Produto.ProdutoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  {if (Key = Vk_F2) and (Sender = Produto) then
+  begin
+    Application.CreateForm(TFrmCadastro_Produtos, FrmCadastro_Produtos);
+    try
+      FrmCadastro_Produtos.ShowModal;
+      Produto.Value := FrmCadastro_Produtos.QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    finally
+      FrmCadastro_Produtos.Release;
+    end;
+  end;  }
+
+  if (Key = Vk_F7) and (Sender = Produto) then
+    btnProdutoClick(Self);
+
+  if (Key = Vk_Return) and (not QProduto.IsEmpty) then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+end.

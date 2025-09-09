@@ -1,0 +1,808 @@
+unit UAbertura;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Mask, rxToolEdit, DB, IBCustomDataSet, IBQuery,
+  Math, Buttons, sGauge, Vcl.ComCtrls,FireDAC.Stan.Intf, FireDAC.Stan.Option,
+   FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmAbertura = class(TForm)
+    Label1: TLabel;
+    Dt_Dia: TDateEdit;
+    Bevel1: TBevel;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Progresso: TProgressBar;
+    QEntrada: TFDQuery;
+    QCalculos: TFDQuery;
+    QUpdate: TFDQuery;
+    Label2: TLabel;
+    IQuery: TFDQuery;
+    FDMemTable1: TFDMemTable;
+    procedure FormCreate(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure Dt_DiaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Dt_DiaEnter(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAbertura: TFrmAbertura;
+
+implementation
+
+uses
+  UData, UPrincipal,UAguarde;
+
+{$R *.dfm}
+
+procedure TFrmAbertura.btnExecutaClick(Sender: TObject);
+var
+Base_Calc_Desc_Rodape, Vl_Prod, Perc_Desc, Perc_Frt, Perc_Desp, New_Custo, Vl_Sbt, Perc_Sub, Desc_Footer, ICMS_Sub ,X: Real;
+New_IPI, New_Frt, New_Desp, Cst_Entr, Est_Exist, Cst_Med_Entr, Indices, New_PMZ, New_Sugestao, New_Dif_ICMS, Perc_IPI,Perc_Desp_Custo,New_Desp_Custo: Real;
+Resu:string;
+Y ,I: Integer;
+SR: TSearchRec;
+begin
+  {
+  IQuery.sql.Clear;
+  IQuery.SQL.Add('SELECT STATUS');
+  IQuery.SQL.Add('FROM ABERTURA');
+  IQuery.Prepare;
+  IQuery.Open;
+
+ IF IQuery.FieldByName('STATUS').AsInteger = 0 Then
+ Begin
+ try
+   }
+      btnExecuta.Enabled := False;
+      btnRetorna.Enabled := False;
+      Progresso.Visible := True;
+
+   {  QUpdate.Sql.Clear;
+     QUpdate.Sql.Add('UPDATE ABERTURA SET STATUS  = 1');
+     QUpdate.Prepare;
+     QUpdate.ExecSql;
+     }
+
+  label2.Visible := True;
+
+  IQuery.sql.Clear;
+  IQuery.SQL.Add('SELECT TGNAME, TGENABLED STATUS');
+  IQuery.SQL.Add('FROM PG_TRIGGER');
+  IQuery.SQL.Add('WHERE  TGNAME = :PRODUTOS_UP');
+
+  IQuery.ParamByName('PRODUTOS_UP').AsString := 'produtos_up';
+  IQuery.Prepare;
+  IQuery.Open;
+
+   if IQuery.FieldByName('STATUS').AsSTRING <> 'D' then
+   begin
+    try
+
+
+           QUpdate.Sql.Clear;
+           QUpdate.Sql.Add('ALTER TABLE PRODUTOS DISABLE TRIGGER PRODUTOS_UP');
+
+           QUpdate.Prepare;
+           QUpdate.ExecSql;
+
+
+           Progresso.Position := 20;
+
+      if (Dt_Dia.Date > FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_FECHAMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+      begin
+
+        Application.MessageBox(PChar('Movimento não encerrado ' + FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString + ' o Sistema irá fechar o dia automaticamente'), PChar(Msg_Title), MB_ICONINFORMATION);
+
+
+        QUpdate.Sql.Clear;
+        QUpdate.Sql.Add('SELECT * FROM POSICAO_PRODUTOS');
+        QUpdate.Sql.Add('WHERE');
+        QUpdate.Sql.Add('(DT_MOVIMENTO = :DT_MOVIMENTO)');
+
+        QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+        QUpdate.Prepare;
+        QUpdate.Open;
+
+        Progresso.Position := 40;
+
+        if not QUpdate.IsEmpty then
+        begin
+          if Application.MessageBox('Foi detectada uma posição de produtos para esta data. Caso deseja continuar estes dados serão excluídos. Continua?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+          begin
+
+            QUpdate.Sql.Clear;
+            QUpdate.Sql.Add('DELETE FROM POSICAO_PRODUTOS');
+            QUpdate.Sql.Add('WHERE');
+            QUpdate.Sql.Add('(DT_MOVIMENTO = :DT_MOVIMENTO)');
+
+            QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+            QUpdate.Prepare;
+            QUpdate.ExecSql;
+
+
+            Progresso.Position := 60;
+          end
+          else
+            exit;
+        end;
+
+        QUpdate.Sql.Clear;
+        QUpdate.Sql.Add('SELECT SUM(VALOR) AS VALOR FROM INDICES');
+
+        QUpdate.Prepare;
+        QUpdate.Open;
+
+        Indices := QUpdate.FieldByName('VALOR').AsFloat;
+
+        QEntrada.Sql.Clear;
+        QEntrada.Sql.Add('SELECT TRANSITENS.PRODUTO_ID, TRANSITENS.VR_UNITARIO, TRANSITENS.VR_DESCONTO AS DESC_ITEM, TRANSITENS.QUANTIDADE, TRANSITENS.ALIQUOTA_ICMS AS ICMS_ENTRADA, TRANSITENS.VALOR_ICMS,TRANSITENS.CFOP, ' +
+                         'TRANSITENS.DESC_RODAPE,TRANSITENS.VR_IPI, TRANSITENS.CST, TRANSITENS.VALOR_ICMS_ST, TRANSACOES.VR_DESCONTO, TRANSACOES.VR_FRETE, TRANSACOES.VR_ACRESCIMO, TRANSACOES.FORNECEDOR_ID, ' +
+                         'TRANSACOES.VR_ICMS_ST, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO,TRANSACOES.DT_ENT_SAI, TRANSACOES.TRANSACAO_ID, TRANSACOES.VALOR_PRODUTOS, TRANSACOES.VR_OUTROS, PRODUTOS.QUANTIDADE_G, ' +
+                         'PRODUTOS.CUSTOMEDIO, PRODUTOS.ESTOQUE_INICIAL, PRODUTOS.ALIQUOTA_ICMS AS ICMS_SAIDA, PRODUTOS.MARGEM_LUCRO,PRODUTOS.VINCULO,PRODUTOS.EMPRESA_ID PRODUTO_EMPRESA,TRANSACOES.DESPESAS_CUSTO');
+        QEntrada.Sql.Add('FROM TRANSITENS');
+        QEntrada.Sql.Add('INNER JOIN TRANSACOES');
+        QEntrada.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+        QEntrada.Sql.Add('INNER JOIN PRODUTOS');
+        QEntrada.Sql.Add('ON (TRANSITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+        QEntrada.Sql.Add('WHERE');
+        QEntrada.Sql.Add('(TRANSACOES.DT_MOVIMENTO = :DT_MOVIMENTO)');
+        QEntrada.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+        QEntrada.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+        QEntrada.Sql.Add('AND (TRANSITENS.TP_PROD_SERV = :TP_PROD_SERV)');
+        QEntrada.Sql.Add('AND (TRANSACOES.TIPO_COMPRA = :TIPO_COMPRA)');
+        QEntrada.Sql.Add('ORDER BY TRANSACOES.TRANSACAO_ID');
+
+        QEntrada.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+        QEntrada.ParamByName('CONDUTA').AsString        := '02';
+        QEntrada.ParamByName('DEPTO').AsString          := '07';
+        QEntrada.ParamByName('TP_PROD_SERV').AsString   := 'P';
+        QEntrada.ParamByName('TIPO_COMPRA').AsString    := 'COMPRA';
+
+        QEntrada.Prepare;
+        QEntrada.Open;
+
+        QEntrada.First;
+
+        X:= 0.2;
+        while not QEntrada.Eof do
+        begin
+          try
+
+           Perc_Desp       := 0;
+           Perc_Desp_Custo := 0;
+           Perc_Desc       := 0;
+           Perc_Frt        := 0;
+           Desc_Footer     := 0;
+
+            X := X + 0.5;
+            Base_Calc_Desc_Rodape := QEntrada.FieldByName('VALOR_PRODUTOS').AsFloat;
+            Vl_Prod               := QEntrada.FieldByName('VALOR_PRODUTOS').AsFloat;
+
+            if (QEntrada.FieldByName('VR_DESCONTO').AsFloat > 0) and (Base_Calc_Desc_Rodape > 0) then
+              Perc_Desc := ((QEntrada.FieldByName('VR_DESCONTO').AsFloat * 100) / Base_Calc_Desc_Rodape)
+            else
+              Perc_Desc := 0;
+
+            if (QEntrada.FieldByName('VR_FRETE').AsFloat > 0) and (Vl_Prod > 0) then
+              Perc_Frt := ((QEntrada.FieldByName('VR_FRETE').AsFloat * 100) / Vl_Prod)
+            else
+              Perc_Frt := 0;
+
+            if (QEntrada.FieldByName('VR_ACRESCIMO').AsFloat > 0) and (Vl_Prod > 0) then
+              Perc_Desp := ((QEntrada.FieldByName('VR_ACRESCIMO').AsFloat * 100) / Vl_Prod)
+            else
+              Perc_Desp := 0;
+
+            if (QEntrada.FieldByName('VR_OUTROS').AsFloat > 0) and (Vl_Prod > 0) then
+              Perc_Desp := (Perc_Desp + ((QEntrada.FieldByName('VR_OUTROS').AsFloat * 100) / Vl_Prod))
+            else
+              Perc_Desp := 0;
+
+            if (QEntrada.FieldByName('DESPESAS_CUSTO').AsFloat > 0) and (Vl_Prod > 0) then
+              Perc_Desp_Custo := (Perc_Desp_Custo + ((QEntrada.FieldByName('DESPESAS_CUSTO').AsFloat * 100) / Vl_Prod))
+            else
+              Perc_Desp_Custo := 0;
+
+            QCalculos.Sql.Clear;
+            QCalculos.Sql.Add('SELECT SUM(VR_TOTAL) AS VALOR');
+            QCalculos.Sql.Add('FROM TRANSITENS');
+            QCalculos.Sql.Add('WHERE');
+            QCalculos.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+            QCalculos.Sql.Add('AND (CST LIKE :CST1 OR CST LIKE :CST2 OR CST LIKE :CST3 OR CST LIKE :CST4)');
+
+            QCalculos.ParamByName('TRANSACAO_ID').AsInteger := QEntrada.FieldByName('TRANSACAO_ID').AsInteger;
+            QCalculos.ParamByName('CST1').AsString          := '%10';
+            QCalculos.ParamByName('CST2').AsString          := '%30';
+            QCalculos.ParamByName('CST3').AsString          := '%60';
+            QCalculos.ParamByName('CST4').AsString          := '%70';
+
+            QCalculos.Prepare;
+            QCalculos.Open;
+
+            Vl_Sbt := QCalculos.FieldByName('VALOR').AsFloat;
+
+            if (QEntrada.FieldByName('VALOR_ICMS_ST').AsFloat > 0) and (Vl_Sbt > 0) then
+              Perc_Sub := ((QEntrada.FieldByName('VALOR_ICMS_ST').AsFloat * 100) / Vl_Sbt)
+            else
+              Perc_Sub := 0;
+
+            New_Custo := (QEntrada.FieldByName('VR_UNITARIO').AsFloat - QEntrada.FieldByName('DESC_ITEM').AsFloat);
+
+            if Perc_Desc > 0 then
+              Desc_Footer := ((Perc_Desc * New_Custo) / 100)
+            else
+              Desc_Footer := 0;
+
+            if QEntrada.FieldByName('DESC_RODAPE').AsFloat > 0  then
+              Desc_Footer :=  QEntrada.FieldByName('DESC_RODAPE').AsFloat / QEntrada.FieldByName('QUANTIDADE').AsFloat
+            else
+              Desc_Footer := 0;
+
+            New_Custo := New_Custo - Desc_Footer;
+            ICMS_Sub  := 0;
+
+            if QEntrada.FieldByName('VR_IPI').AsFloat > 0  then
+            begin
+              New_IPI  := (QEntrada.FieldByName('VR_IPI').AsFloat / QEntrada.FieldByName('QUANTIDADE').AsFloat);
+              Perc_IPI := ((New_IPI * 100) / (QEntrada.FieldByName('VR_UNITARIO').AsFloat - QEntrada.FieldByName('DESC_ITEM').AsFloat));
+            end
+            else
+            begin
+              New_IPI  := 0;
+              Perc_IPI := 0;
+            end;
+
+            if Perc_Frt > 0 then
+              New_Frt := ((New_Custo * Perc_Frt) / 100)
+            else
+              New_Frt := 0;
+
+            if Perc_Desp > 0 then
+              New_Desp := ((New_Custo * Perc_Desp) / 100)
+            else
+              New_Desp := 0;
+
+            if Perc_Desp_Custo > 0 then
+              New_Desp_Custo := ((New_Custo * Perc_Desp_Custo) / 100)
+            else
+              New_Desp_Custo := 0;
+
+
+          //  if (Copy(QEntrada.FieldByName('CST').AsString, 2, 2) = '10') or (Copy(QEntrada.FieldByName('CST').AsString, 2, 2) = '30') or
+          //     (Copy(QEntrada.FieldByName('CST').AsString, 2, 2) = '60') or (Copy(QEntrada.FieldByName('CST').AsString, 2, 2) = '70') then
+           // begin
+
+              if (QEntrada.FieldByName('VR_ICMS_ST').AsFloat > 0) and (Vl_Sbt > 0) then
+                ICMS_Sub := ((New_Custo * Perc_Sub) / 100);
+
+              if QEntrada.FieldByName('VALOR_ICMS_ST').AsFloat > 0 then
+                ICMS_Sub := (QEntrada.FieldByName('VALOR_ICMS_ST').AsFloat / QEntrada.FieldByName('QUANTIDADE').AsFloat);
+
+           // end;
+
+            if ICMS_Sub = 0 then
+            begin
+
+              New_PMZ      := ((New_Custo - ((New_Custo * QEntrada.FieldByName('ICMS_ENTRADA').AsFloat) / 100)) / (1 - ((Indices + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QEntrada.FieldByName('ICMS_SAIDA').AsFloat) / 100)));
+              New_Sugestao := ((New_Custo - ((New_Custo * QEntrada.FieldByName('ICMS_ENTRADA').AsFloat) / 100)) / (1 - ((Indices + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QEntrada.FieldByName('ICMS_SAIDA').AsFloat + QEntrada.FieldByName('MARGEM_LUCRO').AsFloat) / 100)));
+
+            end
+            else
+            begin
+
+              New_PMZ      := (New_Custo / (1 - ((Indices + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QEntrada.FieldByName('ICMS_SAIDA').AsFloat) / 100)));
+              New_Sugestao := (New_Custo / (1 - ((Indices + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QEntrada.FieldByName('ICMS_SAIDA').AsFloat + QEntrada.FieldByName('MARGEM_LUCRO').AsFloat) / 100)));
+              New_Dif_ICMS := 0;
+
+            end;
+
+
+            if  FrmPrincipal.Config.FieldByName('DIFERENCA_ICMS').AsString = 'True' Then
+            Begin
+
+              if (Copy(QEntrada.FieldByName('CFOP').AsString,1,1) = '2') and (QEntrada.FieldByName('ICMS_SAIDA').AsFloat > QEntrada.FieldByName('ICMS_ENTRADA').AsFloat) AND (QEntrada.FieldByName('ICMS_ENTRADA').AsFloat > 0 ) then
+                New_Dif_ICMS := ((New_Custo * (QEntrada.FieldByName('ICMS_SAIDA').AsFloat - QEntrada.FieldByName('ICMS_ENTRADA').AsFloat)) / 100)
+              else
+                New_Dif_ICMS := 0;
+
+            End;
+
+            Cst_Entr := New_Custo + New_IPI + New_Frt + New_Desp + New_Desp_Custo + ICMS_Sub + New_Dif_ICMS ;
+
+
+            Est_Exist :=  QEntrada.FieldByName('ESTOQUE_INICIAL').AsFloat;
+
+            if (Est_Exist > 0) then
+              Cst_Med_Entr := (((QEntrada.FieldByName('CUSTOMEDIO').AsFloat * Est_Exist) +
+                              (Cst_Entr * QEntrada.FieldByName('QUANTIDADE').AsFloat)) / (Est_Exist + QEntrada.FieldByName('QUANTIDADE').AsFloat))
+            else
+              Cst_Med_Entr := Cst_Entr;
+
+
+            QUpdate.Sql.Clear;
+            QUpdate.Sql.Clear;
+            if  FrmPrincipal.Config.FieldByName('DESATIVAR_CUSTOS').AsString <> 'True' then
+            QUpdate.Sql.Add('UPDATE PRODUTOS SET FORNECEDOR_ID   = :FORNECEDOR_ID,  VALOR_COMPRA   = :VALOR_COMPRA, ' +
+                                                 'CUSTO_COMPRA   = :CUSTO_COMPRA,   CUSTOMEDIO     = :CUSTOMEDIO, ' +
+                                                 'DT_COMPRA      = :DT_COMPRA,      DT_ENTRADA     = :DT_ENTRADA, ' +
+                                                 'ULT_QUANTIDADE = :ULT_QUANTIDADE, DESPESAS       = :DESPESAS, ' +
+                                                 'PMZ            = :PMZ,            PRECO_SUGESTAO = :PRECO_SUGESTAO, ' +
+                                                 'VR_ICMSST      = :VR_ICMSST,      VR_FRETE       = :VR_FRETE, ' +
+                                                 'VR_IPI         = :VR_IPI,         VR_DESPESAS    = :VR_DESPESAS, ' +
+                                                 'DIF_ICMS       = :DIF_ICMS ' +
+                                                 'WHERE ' +
+                                                 '(PRODUTO_ID = :PRODUTO_ID)')
+            Else
+            QUpdate.Sql.Add('UPDATE PRODUTOS SET FORNECEDOR_ID   = :FORNECEDOR_ID, ' +
+                                                 'DT_COMPRA      = :DT_COMPRA,      DT_ENTRADA     = :DT_ENTRADA, ' +
+                                                 'ULT_QUANTIDADE = :ULT_QUANTIDADE, DESPESAS       = :DESPESAS, ' +
+                                                 'PMZ            = :PMZ,            PRECO_SUGESTAO = :PRECO_SUGESTAO, ' +
+                                                 'VR_ICMSST      = :VR_ICMSST,      VR_FRETE       = :VR_FRETE, ' +
+                                                 'VR_IPI         = :VR_IPI,         VR_DESPESAS    = :VR_DESPESAS, ' +
+                                                 'DIF_ICMS       = :DIF_ICMS ' +
+                                                 'WHERE ' +
+                                                 '(PRODUTO_ID = :PRODUTO_ID)');
+
+
+            QUpdate.ParamByName('FORNECEDOR_ID').AsInteger := QEntrada.FieldByName('FORNECEDOR_ID').AsInteger;
+
+            if  FrmPrincipal.Config.FieldByName('DESATIVAR_CUSTOS').AsString <> 'True' then
+            Begin
+            QUpdate.ParamByName('VALOR_COMPRA').AsFloat    := RoundTo(New_Custo, -2);
+            QUpdate.ParamByName('CUSTO_COMPRA').AsFloat    := RoundTo(Cst_Entr, -2);
+            QUpdate.ParamByName('CUSTOMEDIO').AsFloat      := RoundTo(Cst_Med_Entr, -2);
+            End;
+            QUpdate.ParamByName('DT_COMPRA').AsDateTime    := QEntrada.FieldByName('DT_TRANS').AsDateTime;
+            QUpdate.ParamByName('DT_ENTRADA').AsDateTime   := QEntrada.FieldByName('DT_ENT_SAI').AsDateTime;
+            QUpdate.ParamByName('ULT_QUANTIDADE').AsFloat  := QEntrada.FieldByName('QUANTIDADE').AsFloat;
+            QUpdate.ParamByName('DESPESAS').AsFloat        := (Indices + QEntrada.FieldByName('ICMS_SAIDA').AsFloat);
+            QUpdate.ParamByName('PMZ').AsFloat             := RoundTo(New_PMZ, -2);
+            QUpdate.ParamByName('PRECO_SUGESTAO').AsFloat  := RoundTo(New_Sugestao, -2);
+            QUpdate.ParamByName('VR_ICMSST').AsFloat       := RoundTo(Icms_Sub, -2);
+            QUpdate.ParamByName('VR_FRETE').AsFloat        := RoundTo(New_Frt, -2);
+            QUpdate.ParamByName('VR_IPI').AsFloat          := RoundTo(New_Ipi, -2);
+            QUpdate.ParamByName('VR_DESPESAS').AsFloat     := RoundTo(New_Desp, -2);
+            QUpdate.ParamByName('DIF_ICMS').AsFloat        := RoundTo(New_Dif_ICMS, -2);
+            QUpdate.ParamByName('PRODUTO_ID').AsInteger    := QEntrada.FieldByName('PRODUTO_ID').AsInteger;
+
+            QUpdate.Prepare;
+            QUpdate.ExecSql;
+
+
+
+            Label2.Caption := QEntrada.FieldByName('TRANSACAO_ID').AsString;
+          except
+            on e:Exception do
+            begin
+              Application.MessageBox(PChar('Erro ao efetuar o fechamento/abertura. Produto: ' + QEntrada.FieldByName('PRODUTO_ID').AsString + ' Entrada: ' + QEntrada.FieldByName('TRANSACAO_ID').AsString + #13 +
+                'Erro: ' + e.Message), PChar(Msg_Title), mb_IconInformation + mb_TaskModal);
+            end;
+          end;
+
+
+          Resu                := FormatFloat('0', (X));
+          Progresso.Position := StrToInt(resu) ;
+
+          Application.ProcessMessages;
+          QEntrada.Next;
+        end;
+
+        QEntrada.Sql.Clear;
+        QEntrada.Sql.Add('SELECT DISTINCT PRODUTO_ID');
+        QEntrada.Sql.Add('FROM TRANSITENS');
+        QEntrada.Sql.Add('INNER JOIN TRANSACOES');
+        QEntrada.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+        QEntrada.Sql.Add('WHERE');
+        QEntrada.Sql.Add('(TRANSACOES.DT_MOVIMENTO = :DT_MOVIMENTO)');
+        QEntrada.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+        QEntrada.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+        QEntrada.Sql.Add('AND (TRANSITENS.TP_PROD_SERV = :TP_PROD_SERV)');
+
+        QEntrada.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+        QEntrada.ParamByName('CONDUTA').AsString        := '01';
+        QEntrada.ParamByName('DEPTO').AsString          := '07';
+        QEntrada.ParamByName('TP_PROD_SERV').AsString   := 'P';
+
+        QEntrada.Prepare;
+        QEntrada.Open;
+
+        QEntrada.First;
+
+        X := 0.2;
+
+        while not QEntrada.Eof do
+        begin
+          X := X + 0.5;
+          QUpdate.Sql.Clear;
+          QUpdate.Sql.Add('UPDATE PRODUTOS SET DT_MOVIMENTO = :DT_MOVIMENTO ' +
+                          'WHERE ' +
+                          '(PRODUTO_ID = :PRODUTO_ID)');
+
+          QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          QUpdate.ParamByName('PRODUTO_ID').AsInteger    := QEntrada.FieldByName('PRODUTO_ID').AsInteger;
+
+          QUpdate.Prepare;
+          QUpdate.ExecSql;
+
+
+
+          Label2.Caption := QEntrada.FieldByName('PRODUTO_ID').AsString;
+
+
+
+          Resu                := FormatFloat('0', (X));
+          Progresso.Position := StrToInt(resu) ;
+
+          Application.ProcessMessages;
+          QEntrada.Next;
+        end;
+
+        if  (FrmPrincipal.Config.FieldByName('POSICAO_FIM_MES').AsString = 'True') Then
+        Begin
+           if ((date = Ult_Dia_Mes(date)) or (date = Ult_Dia_Mes(date +1)) or (date = Ult_Dia_Mes(date -1))) then
+          Begin
+
+            Label2.Caption := 'Criando posição de produtos.';
+            Application.ProcessMessages;
+
+            IQuery.SQL.Clear;
+            IQuery.SQL.Add('SELECT * FROM PRODUTOS WHERE (QUANTIDADE_C <> 0 OR QUANTIDADE_G <> 0)');
+            IQuery.Prepare;
+            IQuery.Open();
+            IQuery.First;
+
+            while not IQuery.Eof do
+            begin
+            QUpdate.Sql.Clear;
+            QUpdate.Sql.Add('INSERT INTO POSICAO_PRODUTOS(PRODUTO_ID, DT_MOVIMENTO, CUSTO_COMPRA, VALOR_COMPRA, CUSTOMEDIO, PRECO_VAREJO, PRECO_ATACADO, QUANTIDADE_C, QUANTIDADE_G)');
+            QUpdate.Sql.Add('VALUES(:PRODUTO_ID, :DT_MOVIMENTO, :CUSTO_COMPRA, :VALOR_COMPRA, :CUSTOMEDIO, :PRECO_VAREJO, :PRECO_ATACADO, :QUANTIDADE_C, :QUANTIDADE_G)');
+
+
+            QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+            QUpdate.ParamByName('PRODUTO_ID').AsInteger    := IQuery.FieldByName('PRODUTO_ID').AsInteger;
+            QUpdate.ParamByName('CUSTO_COMPRA').AsFloat    := IQuery.FieldByName('CUSTO_COMPRA').AsFloat;
+            QUpdate.ParamByName('VALOR_COMPRA').AsFloat    := IQuery.FieldByName('VALOR_COMPRA').AsFloat;
+            QUpdate.ParamByName('CUSTOMEDIO').AsFloat      := IQuery.FieldByName('CUSTOMEDIO').AsFloat;
+            QUpdate.ParamByName('PRECO_VAREJO').AsFloat    := IQuery.FieldByName('PRECO_VAREJO').AsFloat;
+            QUpdate.ParamByName('PRECO_ATACADO').AsFloat   := IQuery.FieldByName('PRECO_ATACADO').AsFloat;
+            QUpdate.ParamByName('QUANTIDADE_C').AsFloat    := IQuery.FieldByName('QUANTIDADE_C').AsFloat;
+            QUpdate.ParamByName('QUANTIDADE_G').AsFloat    := IQuery.FieldByName('QUANTIDADE_G').AsFloat;
+
+            QUpdate.Prepare;
+            QUpdate.ExecSql;
+
+            IQuery.Next;
+            end;
+
+            QUpdate.Sql.Clear;
+            QUpdate.Sql.Add('ALTER TABLE PRODUTOS DISABLE TRIGGER PRODUTOS_UP');
+
+            QUpdate.Prepare;
+            QUpdate.ExecSql;
+            QUpdate.Sql.Clear;
+            QUpdate.Sql.Add('UPDATE PRODUTOS SET ESTOQUE_INICIAL = (QUANTIDADE_C)');
+
+            QUpdate.Prepare;
+            QUpdate.ExecSql;
+
+          end;
+        End
+        Else
+        Begin
+
+          Label2.Caption := 'Criando posição de produtos.';
+          Application.ProcessMessages;
+
+          IQuery.SQL.Clear;
+          IQuery.SQL.Add('SELECT * FROM PRODUTOS WHERE (QUANTIDADE_C <> 0 OR QUANTIDADE_G <> 0)');
+          IQuery.Prepare;
+          IQuery.Open();
+          IQuery.First;
+
+          while not IQuery.Eof do
+          begin
+          QUpdate.Sql.Clear;
+          QUpdate.Sql.Add('INSERT INTO POSICAO_PRODUTOS(PRODUTO_ID, DT_MOVIMENTO, CUSTO_COMPRA, VALOR_COMPRA, CUSTOMEDIO, PRECO_VAREJO, PRECO_ATACADO, QUANTIDADE_C, QUANTIDADE_G)');
+          QUpdate.Sql.Add('VALUES(:PRODUTO_ID, :DT_MOVIMENTO, :CUSTO_COMPRA, :VALOR_COMPRA, :CUSTOMEDIO, :PRECO_VAREJO, :PRECO_ATACADO, :QUANTIDADE_C, :QUANTIDADE_G)');
+
+
+          QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          QUpdate.ParamByName('PRODUTO_ID').AsInteger    := IQuery.FieldByName('PRODUTO_ID').AsInteger;
+          QUpdate.ParamByName('CUSTO_COMPRA').AsFloat    := IQuery.FieldByName('CUSTO_COMPRA').AsFloat;
+          QUpdate.ParamByName('VALOR_COMPRA').AsFloat    := IQuery.FieldByName('VALOR_COMPRA').AsFloat;
+          QUpdate.ParamByName('CUSTOMEDIO').AsFloat      := IQuery.FieldByName('CUSTOMEDIO').AsFloat;
+          QUpdate.ParamByName('PRECO_VAREJO').AsFloat    := IQuery.FieldByName('PRECO_VAREJO').AsFloat;
+          QUpdate.ParamByName('PRECO_ATACADO').AsFloat   := IQuery.FieldByName('PRECO_ATACADO').AsFloat;
+          QUpdate.ParamByName('QUANTIDADE_C').AsFloat    := IQuery.FieldByName('QUANTIDADE_C').AsFloat;
+          QUpdate.ParamByName('QUANTIDADE_G').AsFloat    := IQuery.FieldByName('QUANTIDADE_G').AsFloat;
+
+          QUpdate.Prepare;
+          QUpdate.ExecSql;
+
+          IQuery.Next;
+
+          end;
+
+          QUpdate.Sql.Clear;
+          QUpdate.Sql.Add('ALTER TABLE PRODUTOS DISABLE TRIGGER PRODUTOS_UP');
+
+          QUpdate.Prepare;
+          QUpdate.ExecSql;
+
+          QUpdate.Sql.Clear;
+          QUpdate.Sql.Add('UPDATE PRODUTOS SET ESTOQUE_INICIAL = (QUANTIDADE_C)');
+
+          QUpdate.Prepare;
+          QUpdate.ExecSql;
+
+        End;
+      end;
+
+
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE ORDEM_SERVICO SET DT_MOVIMENTO = :DT_MOVIMENTO ' +
+                      'WHERE ' +
+                     '((STATUS <> :STATUS) AND (STATUS <> :STATUS1)) ');
+
+      QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := Dt_Dia.Date;
+      QUpdate.ParamByName('STATUS').AsString         := 'FATURADO';
+      QUpdate.ParamByName('STATUS1').AsString        := 'EXECUTADA';
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+
+      try
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE PED_PENDENTE SET DT_MOVIMENTO = :DT_MOVIMENTO ' +
+                      'WHERE ' +
+                     '(STATUS <> :STATUS)');
+
+      QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := Dt_Dia.Date;
+      QUpdate.ParamByName('STATUS').AsString         := 'CONCLUIDO';
+
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+      except
+
+      end;
+
+      try
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE ORCAMENTOS SET DT_MOVIMENTO = :DT_MOVIMENTO ' +
+                      'WHERE ' +
+                     '(LANC_FUTURO = ''SIM'')');
+
+      QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime := Dt_Dia.Date;
+
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+      except
+
+      end;
+
+
+
+
+        QUpdate.Sql.Clear;
+        QUpdate.Sql.Add('UPDATE PEDIDOS SET DT_MOVIMENTO = :DT_MOVIMENTO ' +
+                        'WHERE ' +
+                        '(STATUS = :STATUS OR STATUS = :STATUS1)');
+
+        QUpdate.ParamByName('DT_MOVIMENTO').AsDateTime  := Dt_Dia.date;
+        QUpdate.ParamByName('STATUS').AsString          := 'NORMAL';
+        QUpdate.ParamByName('STATUS1').AsString         := 'AGUARD. RECEB.';
+        QUpdate.Prepare;
+        QUpdate.ExecSql;
+
+
+
+
+      FrmPrincipal.Config.Open;
+
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE PEDIDOS SET STATUS = :STATUS, OBSERVACAO = :OBSERVACAO, CANCELAMENTO = :CANCELAMENTO ' +
+                      'WHERE ' +
+                      '(DT_PEDIDO <= :DT_PEDIDO) AND (STATUS = :STATUS1) AND (TP_PEDIDO = :TP_PEDIDO) ');
+
+      QUpdate.ParamByName('STATUS').AsString          := 'CANCELADO';
+      QUpdate.ParamByName('STATUS1').AsString         := 'NORMAL';
+      QUpdate.ParamByName('OBSERVACAO').AsByteStr     := 'PEDIDO CANCELADO POR ULTRAPASSAR PRAZO DE 10 DIAS';
+      Qupdate.ParamByName('DT_PEDIDO').AsDateTime     :=  Date - (FrmPrincipal.Config.FieldByName('DIAS_PEDIDO').AsInteger) ;
+      Qupdate.ParamByName('CANCELAMENTO').AsString    := 'PRAZO DO PEDIDO EXPIRADO!';
+      QUpdate.ParamByName('TP_PEDIDO').AsInteger      := 1;
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+
+
+
+
+      Resu                := FormatFloat('0', (X));
+      Progresso.Position  := StrToInt(resu) ;
+
+      FrmPrincipal.Abertura.Close;
+
+      TRY
+
+
+
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE ABERTURA SET DT_MOVIMENTO = :DATA,STATUS = 0,');
+      QUpdate.Sql.Add(' HR_SYNC = :HR_SYNC,HR_SYNC_CLI = :HR_SYNC_CLI, RESET = 1');
+
+      QUpdate.ParamByName('DATA').AsDateTime    := Dt_Dia.Date;
+      QUpdate.ParamByName('HR_SYNC').AsTime     := StrToTime('00:00:00');
+      QUpdate.ParamByName('HR_SYNC_CLI').AsTime := StrToTime('00:00:00');
+      QUpdate.Prepare;
+      QUpdate.ExecSQL;
+
+      EXCEPT
+
+
+
+      END;
+
+
+
+      GravaIni(Arq_Ini, 'Sistema', 'Mostrar Lembrete', 'True');
+
+
+      FrmPrincipal.Abertura.Open;
+
+      Application.MessageBox(PChar('A data de trabalho será o dia ' + FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString), PChar(Msg_Title), mb_IconInformation);
+
+      ModalResult := mrOK;
+
+
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('ALTER TABLE PRODUTOS ENABLE TRIGGER PRODUTOS_UP');
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+
+
+     {
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('ALTER TABLE PRODUTOS ENABLE TRIGGER tr_logs_gerais');
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+      }
+
+
+
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE PRODUTOS SET SUPERVISOR = :SUPERVISOR');
+      QUpdate.Sql.Add('WHERE PROMO_FINAL < :DATA AND SUPERVISOR = :SIM AND PRECO_PROMOCAO > 0.01 ');
+
+      QUpdate.ParamByName('DATA').AsDateTime     :=  Dt_Dia.DATE;
+      QUpdate.ParamByName('SUPERVISOR').AsString := 'NÃO';
+      QUpdate.ParamByName('SIM').AsString        := 'SIM';
+
+      QUpdate.Prepare;
+      QUpdate.ExecSQL;
+
+
+
+      if FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'SoftBeer' then
+      Begin
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('ALTER SEQUENCE GEN_PAINEL RESTART WITH 1');
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+      End;
+
+     I := FindFirst(ExtractFilePath(ParamStr(0)) + 'EficazSync_Logs\*.*', faAnyFile, SR);
+     while I = 0 do
+     begin if (SR.Attr and faDirectory) <> faDirectory then
+     DeleteFile(ExtractFilePath(ParamStr(0)) + 'EficazSync_Logs\'+ SR.Name);//if not DeleteFile(´c:\Delphi\´ + SR.Name) then ShowMessage(´Não foi possível excluir c:\Delphi\´ + SR.Name);
+     I := FindNext(SR);
+     end;
+
+     CopyFile(PChar(ExtractFilePath(ParamStr(0)) + 'EficazLog.Log'), PChar(ExtractFilePath(ParamStr(0)) + '\Auditoria\EficazLog_' + Copy(DateToStr(date),1,2) + Copy(DateToStr(date),4,2) + Copy(DateToStr(date),7,4)+ '.log' ),True);
+     DeleteFile(ExtractFilePath(ParamStr(0)) + 'EficazLog.Log');
+
+
+    except
+
+        on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro Abertura verifique permissões.' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+
+
+          {btnExecuta.Enabled := True;
+      btnRetorna.Enabled := True;
+      Progresso.Visible  := False; }
+    end;
+   end
+   Else
+   Begin
+
+    QUpdate.Sql.Clear;
+    QUpdate.Sql.Add('ALTER TABLE PRODUTOS ENABLE TRIGGER PRODUTOS_UP');
+    QUpdate.Prepare;
+    QUpdate.ExecSql;
+
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+    Progresso.Visible := True;
+    Label2.Caption := 'Sistema importando arquivos aguarde...';
+
+    Y := 0;
+
+    while Y <= 100 DO
+    Begin
+    Progresso.Position := Y;
+    Sleep(100);
+    Inc(Y);
+    if Y = 98 then
+    btnExecutaClick(SENDER);
+    End;
+   End;
+   {
+    QUpdate.Sql.Clear;
+    QUpdate.Sql.Add('UPDATE ABERTURA SET STATUS  = 0');
+    QUpdate.Prepare;
+    QUpdate.ExecSql;
+
+  Except
+
+    QUpdate.Sql.Clear;
+    QUpdate.Sql.Add('UPDATE ABERTURA SET STATUS  = 0');
+    QUpdate.Prepare;
+    QUpdate.ExecSql;
+
+
+  end; }
+
+End;
+
+
+{ Else
+ Begin
+  Application.MessageBox(PChar('Sistema em modo de abertura Favor Aguarde!'), PChar(Msg_Title), mb_IconStop);
+  Close;
+ End;
+
+end}
+
+
+procedure TFrmAbertura.Dt_DiaEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmAbertura.Dt_DiaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmAbertura.FormCreate(Sender: TObject);
+begin
+  Dt_Dia.Date := date;
+  DrawControl(Progresso);
+end;
+
+end.

@@ -1,0 +1,666 @@
+unit URel_Comandas_Garcom;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBTables, DB, IBCustomDataSet, IBQuery, Buttons, ExtCtrls,
+  rxCurrEdit, Mask, rxToolEdit, QRCtrls, QuickRpt, DBCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, RDprint, frxClass, frxDBSet,
+  frxExportBaseDialog, frxExportXLSX;
+  
+
+type
+  TFrmRel_Comandas_Garcom = class(TForm)
+    Dtmen: TDateEdit;
+    Label1: TLabel;
+    Dtmai: TDateEdit;
+    Bevel1: TBevel;
+    btnRetorna: TBitBtn;
+    DataFuncionario: TDataSource;
+    btnExecuta: TBitBtn;
+    DataAcesso: TDataSource;
+    Rel_Comandas_Abertas: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel7: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel10: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText8: TQRDBText;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape4: TQRShape;
+    QRLabel20: TQRLabel;
+    QRExpr3: TQRExpr;
+    QRGroup1: TQRGroup;
+    QRDBText3: TQRDBText;
+    QRLabel6: TQRLabel;
+    QRBand2: TQRBand;
+    QRShape3: TQRShape;
+    QRLabel2: TQRLabel;
+    QRExpr6: TQRExpr;
+    QRGroup2: TQRGroup;
+    QRDBText9: TQRDBText;
+    QRLabel9: TQRLabel;
+    QRBand3: TQRBand;
+    QRLabel1: TQRLabel;
+    QRExpr9: TQRExpr;
+    QRShape5: TQRShape;
+    QRLabel12: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRDBText5: TQRDBText;
+    Tipo: TComboBox;
+    Label2: TLabel;
+    QRLabel4: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRLabel8: TQRLabel;
+    Label3: TLabel;
+    Produto: TCurrencyEdit;
+    btnProduto: TSpeedButton;
+    DBText1: TDBText;
+    DataProduto: TDataSource;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr4: TQRExpr;
+    Label4: TLabel;
+    Mesa: TCurrencyEdit;
+    QFuncionario: TFDQuery;
+    QAcesso: TFDQuery;
+    QProduto: TFDQuery;
+    QRel: TFDQuery;
+    Hora_Inicial: TMaskEdit;
+    Hora_Final: TMaskEdit;
+    Label5: TLabel;
+    Label6: TLabel;
+    Garcom: TCurrencyEdit;
+    btnGarcom: TSpeedButton;
+    DBText2: TDBText;
+    Ordem: TComboBox;
+    Label7: TLabel;
+    RDprint1: TRDprint;
+    CheckBox1: TCheckBox;
+    Label8: TLabel;
+    QGrupo: TFDQuery;
+    DataGrupo: TDataSource;
+    Grupo: TDBLookupComboBox;
+    ComboboxTurnos: TDBLookupComboBox;
+    TurnoPeriodo: TBitBtn;
+    DSTurnos: TDataSource;
+    QTurnoComboBox: TFDQuery;
+    frxXLSXExport1: TfrxXLSXExport;
+    DadosRelatorio: TFDMemTable;
+    Relatorio_Principal: TfrxReport;
+    FrxDSCredito: TfrxDBDataset;
+    Relatorio_Editar: TfrxReport;
+    DadosRelatorioDATA: TDateField;
+    DadosRelatorioHORA: TTimeField;
+    DadosRelatorioNOME: TStringField;
+    DadosRelatorioMESA: TStringField;
+    DadosRelatorioDESCRICAO: TStringField;
+    DadosRelatorioQUANTIDADE: TFloatField;
+    DadosRelatorioVR_UNITARIO: TFloatField;
+    DadosRelatorioVR_TOTAL: TFloatField;
+    QLayoutFastReport: TFDQuery;
+    DeliveryBalcao: TCheckBox;
+    procedure FuncionarioKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnProdutoClick(Sender: TObject);
+    procedure ProdutoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ProdutoChange(Sender: TObject);
+    procedure btnGarcomClick(Sender: TObject);
+    procedure GarcomChange(Sender: TObject);
+    procedure GarcomKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Relatorio_PrincipalLoadTemplate(Report: TfrxReport;
+      const TemplateName: string);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure DtmaiExit(Sender: TObject);
+    procedure DtmenExit(Sender: TObject);
+    procedure TurnoPeriodoClick(Sender: TObject);
+  private
+    procedure SearchGarcom;
+    { Private declarations }
+  public
+    { Public declarations }
+     procedure SearchProduto;
+  end;
+
+var
+  FrmRel_Comandas_Garcom: TFrmRel_Comandas_Garcom;
+  Linha, Pagina: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta;
+
+{$R *.dfm}
+
+procedure TFrmRel_Comandas_Garcom.SearchProduto;
+begin
+    QProduto.Close;
+    QProduto.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Produto.Text);
+    QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QProduto.Prepare;
+    QProduto.Open;
+
+    if Qproduto.IsEmpty then
+        DBText1.Visible := False
+    else
+        DBText1.Visible := True;
+
+end;
+
+
+
+procedure TFrmRel_Comandas_Garcom.TurnoPeriodoClick(Sender: TObject);
+begin
+  if TurnoPeriodo.Caption = 'Relatório por data' then
+  begin
+    TurnoPeriodo.Caption := 'Relatório por turno';
+    Label1.Caption := 'Período';
+    Dtmen.Visible := True;
+    Dtmai.Visible := True;
+    ComboboxTurnos.Visible := False;
+    Dtmen.Enabled := True;
+    Dtmai.Enabled := True;
+    ComboboxTurnos.Enabled := False;
+  end
+  else
+  begin
+    TurnoPeriodo.Caption := 'Relatório por data';
+    Label1.Caption := 'Turno';
+    Dtmen.Visible := False;
+    Dtmai.Visible := False;
+    ComboboxTurnos.Visible := True;
+    Dtmen.Enabled := False;
+    Dtmai.Enabled := False;
+    ComboboxTurnos.Enabled := True;
+
+    QTurnoComboBox.Close;
+    QTurnoComboBox.Open;
+  end;
+end;
+
+procedure TFrmRel_Comandas_Garcom.SearchGarcom;
+begin
+  QFuncionario.Close;
+  QFuncionario.ParamByName('FUNCIONARIO_ID').AsInteger := StrToInt(Garcom.Text);
+  QFuncionario.Open;
+
+  if QFuncionario.IsEmpty then
+     DBText2.Visible := False
+  else
+     DBText2.Visible := True;
+
+
+end;
+
+
+procedure TFrmRel_Comandas_Garcom.btnExecutaClick(Sender: TObject);
+var
+  vr_total,qt_total: Real;
+  dt_combinada_inicial, dt_combinada_final: string;
+begin
+// 125, 327
+     btnExecuta.Enabled := False;
+
+    try
+        Hora_Inicial.EditMask := '!90:00;0;_';
+        Hora_Final.EditMask := '!90:00;0;_';
+
+        QRel.Close;
+        QRel.SQL.Clear;
+        QRel.SQL.Add('SELECT');
+        QRel.SQL.Add('	BAR.DATA,');
+        QRel.SQL.Add('	BAR.HORA,');
+        QRel.SQL.Add('	CASE WHEN BAR.MESA = 99000 THEN ''BALCÃO'' WHEN BAR.MESA >= 600 THEN ''DELIVERY'' ELSE TO_CHAR(BAR.MESA, ''fm000'') END AS MESA,');
+        QRel.SQL.Add('	BAR.GARCOM,');
+        QRel.SQL.Add('	( SELECT NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = BAR.GARCOM ) AS NOME,');
+        QRel.SQL.Add('	BAR.COD_PRODUTO,');
+        QRel.SQL.Add('	BAR.DESCRICAO,');
+        QRel.SQL.Add('	BAR.QUANTIDADE,');
+        QRel.SQL.Add('	BAR.VR_UNITARIO,');
+        QRel.SQL.Add('	BAR.VR_TOTAL,');
+        QRel.Sql.Add('  TO_TIMESTAMP(''''||BAR.DATA||''-''||BAR.HORA||'''', ''YYYY/MM/DD-HH24:MI:SS'')::TIMESTAMP DATA_COMBINADA');
+        QRel.SQL.Add('FROM');
+        QRel.SQL.Add('	BAR');
+        //QRel.SQL.Add('	INNER JOIN TRANSACOES ON ( BAR.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID )');
+
+        if QGrupo.FieldByName('TABELA_ID').AsInteger <> 0 then
+        begin
+          QRel.SQL.Add('	INNER JOIN PRODUTOS ON ( BAR.COD_PRODUTO = PRODUTOS.PRODUTO_ID )');
+          QRel.SQL.Add('	INNER JOIN TABELAS ON ( PRODUTOS.GRUPO_ID = TABELAS.TABELA_ID )');
+        end;
+
+        QRel.SQL.Add('WHERE');
+        //QRel.SQL.Add('BAR.DATA BETWEEN :DT_INICIAL AND :DT_FINAL');
+        if ComboboxTurnos.Enabled then
+        begin
+          dt_combinada_inicial := Concat(QTurnoComboBox.FieldByName('DT_INICIAL').AsString, '-', QTurnoComboBox.FieldByName('HORA_INICIAL').AsString);
+
+          if (QTurnoComboBox.FieldByName('DT_FINAL').AsDateTime < QTurnoComboBox.FieldByName('DT_INICIAL').AsDateTime) then
+          begin
+            dt_combinada_final := 'Turno aberto';
+            QRel.Sql.Add('TO_TIMESTAMP(''''||BAR.DATA||''-''||BAR.HORA||'''', ''YYYY/MM/DD-HH24:MI:SS'')::TIMESTAMP >= TO_TIMESTAMP(:DATA_COMBINADA_INICIAL, ''DD/MM/YYYY-HH24:MI:SS'')');
+            QRel.ParamByName('DATA_COMBINADA_INICIAL').AsString := dt_combinada_inicial;
+          end
+          else
+          begin
+            dt_combinada_final := Concat(QTurnoComboBox.FieldByName('DT_FINAL').AsString, '-', QTurnoComboBox.FieldByName('HORA_FINAL').AsString);
+            QRel.Sql.Add('TO_TIMESTAMP(''''||BAR.DATA||''-''||BAR.HORA||'''', ''YYYY/MM/DD-HH24:MI:SS'')::TIMESTAMP BETWEEN TO_TIMESTAMP(:DATA_COMBINADA_INICIAL, ''DD/MM/YYYY-HH24:MI:SS'')');
+            QRel.Sql.Add('AND TO_TIMESTAMP(:DATA_COMBINADA_FINAL, ''DD/MM/YYYY-HH24:MI:SS'')');
+            QRel.ParamByName('DATA_COMBINADA_INICIAL').AsString := dt_combinada_inicial;
+            QRel.ParamByName('DATA_COMBINADA_FINAL').AsString := dt_combinada_final;
+          end;
+        end
+        else
+        begin
+          dt_combinada_inicial := Dtmen.Text;
+          dt_combinada_final   := Dtmai.Text;
+          QRel.Sql.Add('(BAR.DATA >= :DT_INICIAL) AND');
+          QRel.Sql.Add('(BAR.DATA <= :DT_FINAL)');
+          QRel.ParamByName('DT_INICIAL').AsDate := Dtmen.Date;
+          QRel.ParamByName('DT_FINAL').AsDate := Dtmai.Date;
+        end;
+
+        if (AllTrim(Hora_Inicial.Text) <> '') and (AllTrim(Hora_Final.Text) <> '') then
+        begin
+
+            Hora_Inicial.EditMask := '!90:00;1;_';
+            Hora_Final.EditMask := '!90:00;1;_';
+
+            if (Length(Hora_Inicial.Text) = 5) and (Length(Hora_Final.Text) = 5) then
+            begin
+                try
+                    QRel.SQL.Add('AND CAST(BAR.HORA AS TIME) BETWEEN :HORA_INICIAL AND :HORA_FINAL ');
+                    QRel.ParamByName('HORA_INICIAL').AsTime := StrToTime(Hora_Inicial.Text + ':00');
+                    QRel.ParamByName('HORA_FINAL').AsTime := StrToTime(Hora_Final.Text + ':59');
+                except
+                     //
+                end;
+            end;
+        end;
+
+        if QGrupo.FieldByName('TABELA_ID').AsInteger <> 0 then
+        begin
+          QRel.SQL.Add('AND TABELAS.TABELA_ID = :TABELA_ID');
+          QRel.SQL.Add('AND TABELAS.TIPO_TABELA = :TIPO_TABELA');
+          QRel.ParamByName('TABELA_ID').AsInteger := QGrupo.FieldByName('TABELA_ID').AsInteger;
+          QRel.ParamByName('TIPO_TABELA').AsString := '7';
+        end;
+
+        QRel.SQL.Add('	AND ( BAR.STATUS = :STATUS ) ');
+        if not DeliveryBalcao.Checked then
+          QRel.Sql.Add('AND (BAR.MESA < 600 )');
+
+        if Mesa.Value > 0 then
+        begin
+            QRel.SQL.Add('	AND ( BAR.MESA = :MESA ) ');
+            QRel.ParamByName('MESA').AsInteger := StrToInt(Mesa.Text);
+        end;
+
+        if Garcom.Value > 0 then
+        begin
+            QRel.SQL.Add('	AND ( BAR.GARCOM = :GARCOM ) ');
+            QRel.ParamByName('GARCOM').AsInteger := StrToInt(Garcom.Text);
+        end;
+
+        QRel.SQL.Add('	AND ( BAR.CANCELADO = :CANCELADO ) ');
+        //QRel.SQL.Add('	AND ( BAR.TRANSACAO_ID > 0 ) ');
+        //QRel.SQL.Add('	AND TRANSACOES.TPCTB = :TCPTB');
+
+        if Produto.Value > 0 then
+        begin
+            QRel.SQL.Add('AND BAR.COD_PRODUTO = :COD_PRODUTO');
+            QRel.ParamByName('COD_PRODUTO').AsInteger := StrToInt(Produto.Text);
+        end;
+
+        if Ordem.Text = 'Data, Hora' then
+        begin
+            QRel.SQL.Add('ORDER BY BAR.DATA, BAR.HORA, BAR.MESA');
+        end;
+
+        if Ordem.Text = 'Mesa' then
+        begin
+            QRel.SQL.Add('ORDER BY BAR.MESA, BAR.DATA, BAR.HORA');
+        end;
+
+        if Ordem.Text = 'Garçom' then
+        begin
+            QRel.SQL.Add('ORDER BY NOME, BAR.DATA, BAR.HORA');
+        end;
+
+        if Ordem.Text = 'Produto' then
+        begin
+            QRel.SQL.Add('ORDER BY BAR.DESCRICAO, BAR.DATA, BAR.HORA');
+        end;
+
+        if Tipo.Text = 'Fechada' then
+            QRel.ParamByName('STATUS').AsString := 'F'
+        else
+            QRel.ParamByName('STATUS').AsString := 'A';
+
+        QRel.ParamByName('CANCELADO').AsString := '0';
+        //QRel.ParamByName('TCPTB').AsString := '3';
+
+        QRel.Prepare;
+        QRel.Open();
+
+        if QRel.IsEmpty then
+            Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+        else
+        begin
+
+            //if CheckBox1.Checked = True then
+            //begin
+            //    RDprint1.Impressora := HP;
+            //    RDprint1.FonteTamanhoPadrao := S10cpp;
+            //end;
+
+            //RDprint1.TamanhoQteColunas := 120;
+            //RDprint1.OpcoesPreview.Preview := True;
+            //RDprint1.MostrarProgresso := True;
+            //RDprint1.Acentuacao := SemAcento;
+            //RDprint1.TamanhoQteLinhas := 1;
+            //RDprint1.Abrir;
+
+            //if linha > 66 then
+            //begin
+            //    RDprint1.novapagina;
+            //    Pagina := Pagina + 1;
+            //end;
+
+            QRel.First;
+
+            try
+
+             QLayoutFastReport.SQL.Clear;
+             QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+             QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+             QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+             QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'URel_Comandas_Garcom';
+             QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+             QLayoutFastReport.Open();
+
+
+            Except
+            on e:Exception do
+            begin
+              Application.MessageBox(PChar('Erro:' + #13 +
+                'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+            end;
+            end;
+
+            Relatorio_Principal.Clear;
+            DadosRelatorio.Open;
+            DadosRelatorio.EmptyDataSet;
+            vr_total := 0;
+            while not Qrel.Eof do
+            begin
+                DadosRelatorio.Append;
+
+                DadosRelatorio.FieldByName('DATA').AsString       := Qrel.FieldByName('DATA').AsString;
+                DadosRelatorio.FieldByName('HORA').AsString       := Qrel.FieldByName('HORA').AsString;
+                DadosRelatorio.FieldByName('NOME').AsString       := Qrel.FieldByName('NOME').AsString;
+                DadosRelatorio.FieldByName('MESA').AsString       := StrZero(Qrel.FieldByName('MESA').AsString, 3, 0);
+                DadosRelatorio.FieldByName('DESCRICAO').AsString  := Qrel.FieldByName('DESCRICAO').AsString;
+                DadosRelatorio.FieldByName('QUANTIDADE').AsFloat  := Qrel.FieldByName('QUANTIDADE').AsFloat;
+                DadosRelatorio.FieldByName('VR_UNITARIO').AsFloat := Qrel.FieldByName('VR_UNITARIO').AsFloat;
+                DadosRelatorio.FieldByName('VR_TOTAL').AsFloat    := Qrel.FieldByName('VR_TOTAL').AsFloat;
+
+                DadosRelatorio.Post;
+
+                //RDprint1.ImpF(linha, 01, Qrel.FieldByName('DATA').AsString, []);
+                //RDprint1.ImpF(linha, 13, Copy(Qrel.FieldByName('HORA').AsString, 1, 5), []);
+                //RDprint1.ImpF(linha, 20, Copy(Qrel.FieldByName('NOME').AsString, 1, 15), []);
+                //RDprint1.ImpF(linha, 41, StrZero(Qrel.FieldByName('MESA').AsString, 3, 0), []);
+                //RDprint1.ImpF(linha, 50, Copy(Qrel.FieldByName('DESCRICAO').AsString, 1, 30), []);
+                //RDprint1.ImpVal(linha, 82, ',#,##0.00', Qrel.FieldByName('QUANTIDADE').AsFloat, []);
+                //RDprint1.ImpVal(linha, 95, ',#,##0.00', Qrel.FieldByName('VR_UNITARIO').AsFloat, []);
+                //RDprint1.ImpVal(linha, 110, ',#,##0.00', Qrel.FieldByName('VR_TOTAL').AsFloat, []);
+
+                //vr_total := vr_total + Qrel.FieldByName('VR_TOTAL').AsFloat;
+                //qt_total := qt_total + Qrel.FieldByName('QUANTIDADE').AsFloat;
+
+                //if linha > 63 then
+                //begin
+                //    RDprint1.novapagina;
+                //    Pagina := Pagina + 1;
+                //end;
+
+                //Inc(Linha);
+                QRel.Next;
+            end;
+
+            //Inc(linha);
+            //RDprint1.LinhaH(linha, 105, 120, 0, false);
+            //RDprint1.LinhaH(linha, 77, 92, 0, false);
+            //Inc(linha);
+            //RDprint1.ImpVal(linha, 110, ',#,##0.00', vr_total, [negrito]);
+            //RDprint1.ImpVal(linha, 82, ',#,##0.00', qt_total, [negrito]);
+
+            //RDprint1.TamanhoQteLinhas := 66;
+            //RDprint1.Fechar;
+            Relatorio_Principal.Clear;
+            Relatorio_Principal.InheritFromTemplate('URel_Comandas_Garcom.fr3');
+            Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + dt_combinada_inicial + ' a ' + dt_combinada_final, 'Relatório de Comandas por Garçom');
+            Relatorio_Principal.ShowReport(true);
+        end;
+    finally
+       begin
+           btnExecuta.Enabled := True;
+       end;
+    end;
+
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.Relatorio_PrincipalLoadTemplate(
+  Report: TfrxReport; const TemplateName: string);
+var
+  BlobStream: TStream;
+
+begin
+  QLayoutFastReport.First;
+  while not QLayoutFastReport.Eof do
+  begin
+    //ShowMessage(TemplateName + ' ' + QLayoutFastReport.FieldByName('NOME_RELATORIO').AsString);
+    if AnsiCompareText(QLayoutFastReport.FieldByName('NOME_ARQUIVO').AsString, TemplateName) = 0 then
+    begin
+      //ShowMessage(TemplateName + ' ' + QLayoutFastReport.FieldByName('NOME_ARQUIVO').AsString);
+      //ShowMessage('Cheguei aqui');
+      BlobStream := TMemoryStream.Create;
+      TBlobField(QLayoutFastReport.FieldByName('ARQUIVO_RELATORIO')).SaveToStream(BlobStream);
+      BlobStream.Position := 0;
+      Report.LoadFromStream(BlobStream);
+      BlobStream.Free;
+      break;
+    end;
+    QLayoutFastReport.Next;
+  end;
+end;
+
+procedure TFrmRel_Comandas_Garcom.RDprint1NewPage(Sender: TObject;
+  Pagina: Integer);
+begin
+
+
+      RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+      RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 120, 'Sistema de Automação de empresas Eficaz', []);
+      RDprint1.Imp(02, 01, 'Data/Hora: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+      RDprint1.impDir(02, 80, 120, 'Página: ' + IntToStr(Pagina), []);
+      RDprint1.impC(03, 48, '*** Comandas por Garçom: '+Tipo.Text+' ***',[negrito]);
+      RDprint1.imp(04, 01, 'Período:'+ datetoStr(dtmen.date) + ' à ' + datetoStr(dtmai.date));
+      RDprint1.imp(04,50, 'Cliente:');
+      RDprint1.LinhaH(05,01,120,0,false);
+      RDprint1.Imp(06, 01, 'Data');
+      RDprint1.Imp(06, 13, 'Hora');
+      RDprint1.Imp(06, 20, 'Garçom');
+      RDprint1.Imp(06, 40, 'Mesa');
+      RDprint1.Imp(06, 50, 'Produto');
+      RDprint1.Imp(06, 85, 'Quant.');
+      RDprint1.Imp(06, 96, 'Vr Unit.');
+      RDprint1.Imp(06, 114, 'Total');
+      RDprint1.LinhaH(07,01,120,0,false);
+      linha := 08;
+
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.btnGarcomClick(Sender: TObject);
+begin
+
+    try
+        Garcom.Value := GetConsulta('PESSOAL', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Garcom.Text));
+    except
+        Garcom.Value := GetConsulta('PESSOAL', 0, 0, 0);
+    end;
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.btnProdutoClick(Sender: TObject);
+begin
+  try
+    Produto.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0 , StrToInt(Produto.Text));
+  except
+    Produto.Value := GetConsulta('ESTOQUE', 0, 0, 0);
+  end;
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmRel_Comandas_Garcom.DtmaiExit(Sender: TObject);
+begin
+
+     if Dtmen.Text = Dtmai.Text then
+     begin
+         Hora_Inicial.Enabled := True;
+         Hora_Final.Enabled   := True;
+         Hora_Inicial.SetFocus;
+     end
+     else
+     begin
+         Hora_Inicial.Enabled := False;
+         Hora_Final.Enabled   := False;
+         Hora_Inicial.Text := '';
+         Hora_Final.Text   := '';
+     end;
+
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmRel_Comandas_Garcom.DtmenExit(Sender: TObject);
+begin
+
+     if Dtmen.Text = Dtmai.Text then
+     begin
+         Hora_Inicial.Enabled := True;
+         Hora_Final.Enabled   := True;
+         Hora_Inicial.SetFocus;
+     end
+     else
+     begin
+         Hora_Inicial.Enabled := False;
+         Hora_Final.Enabled   := False;
+         Hora_Inicial.Text := '';
+         Hora_Final.Text   := '';
+         Produto.SetFocus;
+     end;
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmRel_Comandas_Garcom.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+  QGrupo.Prepare;
+  QGrupo.Open;
+end;
+
+procedure TFrmRel_Comandas_Garcom.FuncionarioKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmRel_Comandas_Garcom.GarcomChange(Sender: TObject);
+begin
+
+    if Garcom.Value > 0 then
+       SearchGarcom;
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.GarcomKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+
+    if (Key = Vk_F7) and (Sender = Garcom) then
+        btnGarcomClick(Self);
+
+
+    if Key = Vk_Return then
+        Perform(Wm_NextDlgctl, 0, 0);
+
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.ProdutoChange(Sender: TObject);
+begin
+  if Produto.Value > 0 then
+    SearchProduto;
+
+
+end;
+
+procedure TFrmRel_Comandas_Garcom.ProdutoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Produto) then
+    btnProdutoClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+end;
+
+
+
+end.

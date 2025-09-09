@@ -1,0 +1,354 @@
+unit UAtualiz_Tabelas_Ncm;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Buttons, DB, IBCustomDataSet, IBQuery, ACBrBase,
+  ACBrSocket, ACBrIBPTax, IBTable, DBCtrls, Grids, DBGrids, Gauges,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.Client, FireDAC.Comp.DataSet,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdExplicitTLSClientServerBase, IdFTP,System.zip;
+
+type
+  TFrmAtualiz_Tabelas_Ncm = class(TForm)
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Label1: TLabel;
+    URL: TEdit;
+    Versao: TLabel;
+    edArquivo: TEdit;
+    sbArquivo: TSpeedButton;
+    Label3: TLabel;
+    Label4: TLabel;
+    btDownload: TBitBtn;
+    DBGrid1: TDBGrid;
+    dtsCadastro: TDataSource;
+    Panel1: TPanel;
+    DBNavigator2: TDBNavigator;
+    GroupBox2: TGroupBox;
+    Label2: TLabel;
+    edNCM: TEdit;
+    btnPesquisar: TBitBtn;
+    OpenDialog1: TOpenDialog;
+    ACBrIBPTax1: TACBrIBPTax;
+    lbl1: TLabel;
+    Gauge1: TGauge;
+    QRel: TFDQuery;
+    TmpCadastro: TFDTable;
+    bDownload: TBitBtn;
+    IdFTP1: TIdFTP;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure TabelaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure btDownloadClick(Sender: TObject);
+    procedure btnPesquisarClick(Sender: TObject);
+    procedure sbArquivoClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure TmpCadastroAfterOpen(DataSet: TDataSet);
+    procedure bDownloadClick(Sender: TObject);
+    procedure IdFTP1Work(ASender: TObject; AWorkMode: TWorkMode;
+      AWorkCount: Int64);
+    procedure IdFTP1WorkBegin(ASender: TObject; AWorkMode: TWorkMode;
+      AWorkCountMax: Int64);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAtualiz_Tabelas_Ncm: TFrmAtualiz_Tabelas_Ncm;
+
+implementation
+
+uses
+  UPrincipal, UData,UAguarde;
+
+{$R *.dfm}
+
+procedure TFrmAtualiz_Tabelas_Ncm.bDownloadClick(Sender: TObject);
+var
+ZipFile: TZipFile;
+begin
+
+        IdFTP1.Disconnect();
+
+        IdFTP1.Disconnect();
+
+  IdFTP1.Host     := 'ftp.eficazcotacoes.com.br';//DecryptMsg(LeIni(Arq_Ini, 'Atualização', 'Host'),3);
+  IdFTP1.Port     :=  21;//StrToInt(LeIni(Arq_Ini, 'Atualização', 'Porta'));
+  IdFTP1.Username := 'eficazcotacoes3';//DecryptMsg(LeIni(Arq_Ini, 'Atualização', 'Usuario'),3);
+  IdFTP1.Password := 'Efic@z_%%4695$$'; //DecryptMsg(LeIni(Arq_Ini, 'Atualização', 'Senha'),3);
+  IdFTP1.Passive  := True;
+
+
+
+        try
+
+         IdFTP1.Connect;
+
+         if LeIni(Arq_Ini, 'Atualização', 'Diretorio') <> '' Then
+         IdFTP1.ChangeDir(LeIni(Arq_Ini, 'Atualização', 'Diretorio'));
+
+        except
+        on e:Exception do
+              begin
+                Application.MessageBox(PChar('Erro ao conectar:' + #13 +
+                  'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+              end;
+        end;
+
+        try
+         DeleteFile(LeIni(Arq_Ini, 'Atualização', 'Ibpt'));
+         DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/TabelaIBPTaxMG.csv'));
+        except
+
+        end;
+
+
+        if (FrmAguarde = nil) then
+        FrmAguarde := TFrmAguarde.Create(Application);
+        FrmAguarde.Timer1.Enabled := False;
+        FrmAguarde.Label1.Caption := 'Efetuando Download nova tabela Ibpt, aguarde...';
+        FrmAguarde.Show;
+        FrmAguarde.BringToFront;
+        Application.ProcessMessages;
+
+
+        IdFTP1.Get('TabelaIBPTaxMG.zip', LeIni(Arq_Ini, 'Atualização', 'Ibpt'), true, True);
+
+
+        IdFTP1.Disconnect();
+
+        ZipFile := TZipFile.Create;
+
+        Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Ibpt'),ExtractFilePath(ParamStr(0)) + '/' );
+
+        FrmAguarde.Label1.Caption := 'Download concluído com sucesso!';
+
+        FrmAguarde.Label1.Caption := 'Atualização Concluida!';
+        FrmAguarde.Close;
+        FrmAguarde.Release;
+
+        edArquivo.Text := ExtractFilePath(ParamStr(0)) + 'TabelaIBPTaxMG.csv' ;
+        BtnExecuta.Click;
+
+
+
+
+end;
+
+procedure TFrmAtualiz_Tabelas_Ncm.btDownloadClick(Sender: TObject);
+begin
+ tmpCadastro.Close;
+  ACBrIBPTax1.URLDownload := Trim(URL.Text);
+
+  if ACBrIBPTax1.DownloadTabela then
+  begin
+    MessageDlg('Download da tabela efetuado com sucesso.', mtInformation, [mbOK], 0);
+
+    if MessageDlg('Deseja importar a tabela e mostrar os dados?', mtInformation, [mbYes,mbNo], 0) = mrYes then
+      BtnExecuta.Click;
+  end
+  else
+    MessageDlg('Não foi possível efetuar o download da tabela.', mtError, [mbOK], 0);
+end;
+
+procedure TFrmAtualiz_Tabelas_Ncm.btnExecutaClick(Sender: TObject);
+var
+  I: Integer;
+  Resu:string;
+begin
+  if MessageDlg('Deseja apagar tabela antiga e importar os novos dados?', mtInformation, [mbYes,mbNo], 0) = mrYes then
+ Begin
+
+  QRel.SQL.Clear;
+  QRel.Sql.Add('DELETE FROM IBTP');
+  QRel.Prepare;
+  QRel.ExecSQL;
+
+
+
+  // configurar a URL do arquivo para ser baixado
+  // if Trim(URL.Text) <> '' then
+  //    ACBrIBPTax1.URLDownload := Trim(URL.Text);
+
+  // se o path do arquivo não for passado, então o componente vai tentar baixar
+  // a tabela no URL informado
+
+  if ACBrIBPTax1.AbrirTabela(edArquivo.Text) then
+  begin
+    Versao.Caption := 'Versão: ' + ACBrIBPTax1.VersaoArquivo;
+    Versao.Font.Color:= clRed;
+
+    tmpCadastro.Open;
+    tmpCadastro.DisableControls;
+
+
+    Gauge1.Visible  := True;
+    lbl1.Visible    := True;
+
+     QRel.SQL.Clear;
+     QRel.SQL.Add('DELETE FROM IBTP');
+
+
+
+    try
+      for I := 0 to ACBrIBPTax1.Itens.Count - 1 do
+      begin
+
+
+        QRel.SQL.Clear;
+        QRel.Sql.Add('INSERT INTO IBTP(IBTP_ID, CODIGO,EX,TABELA,ALIQNAC,ALIQIMP,ALIQEST,VERSAO,VIGENCIAFIM)');
+        QRel.SQL.Add('VALUES(:IBTP_ID,:CODIGO,:EX,:TABELA,:ALIQNAC,:ALIQIMP,:ALIQEST,:VERSAO,:VIGENCIAFIM)');
+
+        QRel.ParamByName('IBTP_ID').AsInteger  :=  I + 1;
+        QRel.ParamByName('CODIGO').AsString  :=    Copy(ACBrIBPTax1.Itens[I].NCM,1,8);
+        QRel.ParamByName('EX').AsString      :=    ACBrIBPTax1.Itens[I].Excecao;
+        QRel.ParamByName('TABELA').AsInteger :=    Integer(ACBrIBPTax1.Itens[I].Tabela);
+        QRel.ParamByName('ALIQNAC').AsFloat  :=    ACBrIBPTax1.Itens[I].FederalNacional;
+        QRel.ParamByName('ALIQIMP').AsFloat  :=    ACBrIBPTax1.Itens[I].FederalImportado;
+        QRel.ParamByName('ALIQEST').AsFloat  :=    ACBrIBPTax1.Itens[I].Estadual;
+        QRel.ParamByName('VERSAO').AsString  :=    ACBrIBPTax1.VersaoArquivo;
+        QRel.ParamByName('VIGENCIAFIM').AsDateTime  :=   ACBrIBPTax1.VigenciaFim;
+
+        QRel.Prepare;
+        QRel.ExecSql;
+
+
+        Resu := FormatFloat('0',((I * 100) / (ACBrIBPTax1.Itens.Count)));
+        Gauge1.Progress := StrToInt(Resu);
+        Application.ProcessMessages;
+
+      end;
+
+    finally
+      tmpCadastro.Open;
+      tmpCadastro.First;
+      tmpCadastro.EnableControls;
+    end;
+
+    Application.MessageBox('Procedimento executado com sucesso', PChar(Msg_Title), mb_IconInformation);
+    Gauge1.Visible  := False;
+    lbl1.Visible    := False;
+    TmpCadastro.Close;
+    TmpCadastro.Open();
+
+    end;
+  end;
+end;
+
+
+procedure TFrmAtualiz_Tabelas_Ncm.btnPesquisarClick(Sender: TObject);
+var
+  ex, descricao, ID: String;
+  tabela: Integer;
+  aliqFedNac, aliqFedImp, aliqEst, aliqMun: Double;
+begin
+  {if ACBrIBPTax1.Procurar(edNCM.Text, ex, descricao, tabela, aliqFedNac, aliqFedImp, aliqEst, aliqMun, ckbBuscaNCMParcial.Checked) then
+  begin
+    ShowMessage(
+      'Código: '    + edNCM.Text  + sLineBreak +
+      'Exceção: '   + ex + sLineBreak +
+      'Descrição: ' + descricao + sLineBreak +
+      'Tabela: '    + IntToStr(tabela) + sLineBreak +
+      'Aliq Federal Nacional: '  + FloatToStr(aliqFedNac) + sLineBreak +
+      'Aliq Federal Importado: '  + FloatToStr(aliqFedImp) + sLineBreak +
+      'Aliq Estadual: '  + FloatToStr(aliqEst) + sLineBreak +
+      'Aliq Municipal: '  + FloatToStr(aliqMun)
+    );
+  end
+  else
+    showmessage('Código não encontrado!');  }
+
+
+  IF  TmpCadastro.Locate('CODIGO',EDNCM.Text,[loCaseInsensitive]) Then
+  Begin
+
+   ShowMessage(
+      'Código: '    + TmpCadastro.FieldByName('CODIGO').AsString  + sLineBreak +
+      'Exceção: '   + TmpCadastro.FieldByName('EX').AsString + sLineBreak +
+      'Tabela: '    + IntToStr(tmpCadastro.FieldByName('TABELA').AsInteger) + sLineBreak +
+      'Aliq Federal Nacional: '  + FloatToStr(tmpCadastro.FieldByName('AliqNac').AsFloat) + sLineBreak +
+      'Aliq Federal Importado: '  + FloatToStr(tmpCadastro.FieldByName('AliqImp').AsFloat) + sLineBreak +
+      'Aliq Estadual: '  + FloatToStr(tmpCadastro.FieldByName('AliqEst').AsFloat) + sLineBreak
+    );
+
+  end
+  else
+    showmessage('Código não encontrado!');
+end;
+
+
+procedure TFrmAtualiz_Tabelas_Ncm.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmAtualiz_Tabelas_Ncm.TabelaKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmAtualiz_Tabelas_Ncm.TmpCadastroAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(TmpCadastro.FieldByName('aliqnac')).DisplayFormat  := '#,##0.00';
+TFloatField(TmpCadastro.FieldByName('aliqimp')).DisplayFormat  := '#,##0.00';
+TFloatField(TmpCadastro.FieldByName('aliqest')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmAtualiz_Tabelas_Ncm.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmAtualiz_Tabelas_Ncm.FormCreate(Sender: TObject);
+begin
+edArquivo.Text :=  ExtractFilePath(ParamStr(0)) + 'TabelaIBPTaxMG17.2.A.csv';
+TmpCadastro.Open;
+Versao.Caption := 'Versão: ' + TmpCadastro.FieldByName('VERSAO').AsString;
+Versao.Font.Color:= clRed;
+end;
+
+procedure TFrmAtualiz_Tabelas_Ncm.IdFTP1Work(ASender: TObject;
+  AWorkMode: TWorkMode; AWorkCount: Int64);
+  var
+  Transferido : Integer;
+begin
+ FrmAguarde.Progresso.Position := AWorkCount;
+ Transferido := AWorkCount div 1024;
+ FrmAguarde.Label3.Caption := 'Transferido: ' + IntToStr(Transferido) + '/kb.';
+ Application.ProcessMessages;
+end;
+
+
+procedure TFrmAtualiz_Tabelas_Ncm.IdFTP1WorkBegin(ASender: TObject;
+  AWorkMode: TWorkMode; AWorkCountMax: Int64);
+begin
+FrmAguarde.Progresso.Position := 0;
+FrmAguarde.Progresso.Max := 2000;
+end;
+
+Procedure TFrmAtualiz_Tabelas_Ncm.sbArquivoClick(Sender: TObject);
+begin
+  OpenDialog1.Title      := 'Selecione o arquivos de tabelas de imposto';
+  OpenDialog1.DefaultExt := '*.csv';
+  OpenDialog1.InitialDir := ExtractFilePath(ParamStr(0));
+
+  if OpenDialog1.Execute then
+  begin
+    edArquivo.Text := OpenDialog1.FileName;
+    BtnExecuta.Click;
+  end;
+
+end;
+
+end.

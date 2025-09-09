@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Simples_LandScape.fr3" ReportOptions.CreateDate="44601,4050570949" ReportOptions.LastChange="44601,5806861111" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportQRel" DataSetName="QRel_URel_Conferencia_Tributaria"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperWidth="350">
+    <inherited Name="b_cabecalho" Width="1285,0402">
+      <inherited Name="b_cabecalho_data_hora_atual" Left="1109,40229"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Conferência Tributária"/>
+      <inherited Name="b_cabecalho_periodo_analisado" Left="1137,63853"/>
+      <inherited Name="b_cabecalho_razao_social" Left="869,2919"/>
+      <inherited Name="b_cabecalho_logo" Left="572,5201"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens" Width="1285,0402">
+      <inherited Name="b_cabecalho_titulo_item_texto"/>
+      <inherited Name="b_cabecalho_espaco_branco" Width="1288,81973"/>
+      <TfrxMemoView Name="Memo18" AllowVectorExport="True" Left="52,91342" Top="3,77953" Width="79,01577" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cod.Barras"/>
+      <TfrxMemoView Name="Memo19" AllowVectorExport="True" Left="151,1812" Top="3,77953" Width="71,45671" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Descrição"/>
+      <TfrxMemoView Name="Memo20" AllowVectorExport="True" Left="389,29159" Top="3,77953" Width="45" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Csosn"/>
+      <TfrxMemoView Name="Memo21" AllowVectorExport="True" Left="438,42548" Top="3,77953" Width="45" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Ncm"/>
+      <TfrxMemoView Name="Memo22" AllowVectorExport="True" Left="514,01608" Top="3,77953" Width="37,44094" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cest"/>
+      <TfrxMemoView Name="Memo23" AllowVectorExport="True" Left="585,82715" Top="3,77953" Width="105,47248" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cod.Tributação"/>
+      <TfrxMemoView Name="Memo24" AllowVectorExport="True" Left="725,66976" Top="3,77953" Width="52,55906" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cst/Pis"/>
+      <TfrxMemoView Name="Memo25" AllowVectorExport="True" Left="786,14224" Top="3,77953" Width="75,23624" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cst/Cofins"/>
+      <TfrxMemoView Name="Memo26" AllowVectorExport="True" Left="865,51237" Top="3,77953" Width="45" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Al.Pis"/>
+      <TfrxMemoView Name="Memo27" AllowVectorExport="True" Left="914,64626" Top="3,77953" Width="67,67718" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Al.Cofins"/>
+      <TfrxMemoView Name="Memo28" AllowVectorExport="True" Left="986,45733" Top="3,77953" Width="52,55906" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cst/Pis"/>
+      <TfrxMemoView Name="Memo29" AllowVectorExport="True" Left="1043,15028" Top="3,77953" Width="75,23624" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cst/Cofins"/>
+      <TfrxMemoView Name="Memo30" AllowVectorExport="True" Left="1122,52041" Top="3,77953" Width="45" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Al.Pis"/>
+      <TfrxMemoView Name="Memo31" AllowVectorExport="True" Left="1171,6543" Top="3,77953" Width="67,67718" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Al.Cofins"/>
+      <TfrxMemoView Name="Memo32" AllowVectorExport="True" Left="1247,2449" Top="3,77953" Width="29,88188" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Nat."/>
+    </inherited>
+    <inherited Name="b_rel_simples_landscape_report_Summary" Top="340,1577" Visible="False" Width="1285,0402">
+      <inherited Name="b_rel_simples_landscape_resultado"/>
+      <inherited Name="b_rel_simples_shape1" Width="1285,0402"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="15,1181078" Left="0" Top="264,5671" Width="1285,0402" ColumnWidth="0" ColumnGap="0" DataSet="FastReportQRel" DataSetName="QRel_URel_Conferencia_Tributaria" RowCount="0">
+      <TfrxMemoView Name="Memo1" AllowVectorExport="True" Left="3,77953" Top="0" Width="44,44094" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;PRODUTO_ID&#34;]"/>
+      <TfrxMemoView Name="Memo2" AllowVectorExport="True" Left="52,91342" Top="0" Width="93,57483" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;COD_BARRA&#34;]"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="151,1812" Top="0" Width="233,41744" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;DESCRICAO_PRODUTO&#34;]"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="389,29159" Top="0" Width="29,32282" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;CSOSN&#34;]"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="438,42548" Top="0" Width="67,11812" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;NCM&#34;]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="514,01608" Top="0" Width="67,11812" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;CEST&#34;]"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="585,82715" Top="0" Width="21,76376" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;TRIBUTO_ID&#34;]"/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="608,50433" Top="0" Width="112,47248" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;TRIBUTO&#34;]"/>
+      <TfrxMemoView Name="Memo9" AllowVectorExport="True" Left="725,66976" Top="0" Width="52" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;CST_PIS_ENTRADA&#34;]"/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="786,14224" Top="0" Width="74,67718" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;CST_COFINS_ENTRADA&#34;]"/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="865,51237" Top="0" Width="44,44094" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_URel_Conferencia_Tributaria.&#34;ALIQUOTA_PIS_ENTRADA&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="914,64626" Top="0" Width="59,55906" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_URel_Conferencia_Tributaria.&#34;ALIQUOTA_COFINS_ENTRADA&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo13" AllowVectorExport="True" Left="986,45733" Top="0" Width="33,10235" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;CST_PIS_SAIDA&#34;]"/>
+      <TfrxMemoView Name="Memo14" AllowVectorExport="True" Left="1043,15028" Top="0" Width="36,88188" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;CST_COFINS_SAIDA&#34;]"/>
+      <TfrxMemoView Name="Memo15" AllowVectorExport="True" Left="1122,52041" Top="0" Width="44,44094" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_URel_Conferencia_Tributaria.&#34;ALIQUOTA_PIS_SAIDA&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo16" AllowVectorExport="True" Left="1171,6543" Top="0" Width="44,44094" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_URel_Conferencia_Tributaria.&#34;ALIQUOTA_COFINS_SAIDA&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo17" AllowVectorExport="True" Left="1247,2449" Top="0" Width="29,32282" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_URel_Conferencia_Tributaria.&#34;NAT_REC&#34;]"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" Orientation="poPortrait" PaperWidth="210" PaperHeight="297" PaperSize="9"/>
+</inherited>

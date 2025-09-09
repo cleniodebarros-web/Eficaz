@@ -1,0 +1,1684 @@
+unit UPedidos_Pendentes;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, DBCtrls, rxCurrEdit, rxToolEdit,
+  IBUpdateSQL, Math, QRCtrls, QuickRpt, RDprint, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Imaging.jpeg;
+
+type
+  TFrmPedidos_Pendentes = class(TForm)
+    PageControl1: TPageControl;                            
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    DT_PEDIDO: TDateEdit;
+    EMPRESA_ID: TCurrencyEdit;
+    CLIENTE_ID: TCurrencyEdit;
+    DataEmpresa: TDataSource;
+    DataCliente: TDataSource;
+    DBText1: TDBText;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label15: TLabel;
+    Panel3: TPanel;
+    StatusBar1: TStatusBar;
+    Itens: TDBGrid;
+    btnEmpresa: TSpeedButton;
+    btnCliente: TSpeedButton;
+    DataSub_Detail: TDataSource;
+    Dias: TTabSet;
+    btnPesquisa: TBitBtn;
+    Orcamento_Reduzido: TQuickRep;
+    QRBand1: TQRBand;
+    QRShape1: TQRShape;
+    QRLabel6: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText14: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRLabel10: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRShape2: TQRShape;
+    QRLabel18: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel15: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRLabel2: TQRLabel;
+    QRDBText2: TQRDBText;
+    DetailBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRBand2: TQRBand;
+    QRLabel19: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRDBText23: TQRDBText;
+    QRDBText24: TQRDBText;
+    QRShape5: TQRShape;
+    QRExpr1: TQRExpr;
+    QRLabel4: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRLabel5: TQRLabel;
+    QRDBText11: TQRDBText;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    Reduzido: TQuickRep;
+    QRBand6: TQRBand;
+    QRDBText28: TQRDBText;
+    QRDBText29: TQRDBText;
+    QRDBText30: TQRDBText;
+    QRDBText31: TQRDBText;
+    QRDBText32: TQRDBText;
+    QRDBText33: TQRDBText;
+    QRBand8: TQRBand;
+    QRLabel59: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRLabel60: TQRLabel;
+    QRShape13: TQRShape;
+    QRDBText38: TQRDBText;
+    QRLabel61: TQRLabel;
+    QRLabel62: TQRLabel;
+    QRShape14: TQRShape;
+    QRLabel63: TQRLabel;
+    QRLabel64: TQRLabel;
+    QRLabel65: TQRLabel;
+    QRLabel66: TQRLabel;
+    QRLabel67: TQRLabel;
+    QRShape15: TQRShape;
+    QRBand9: TQRBand;
+    QRDBText39: TQRDBText;
+    QRShape16: TQRShape;
+    QRLabel68: TQRLabel;
+    QRDBText40: TQRDBText;
+    QRLabel69: TQRLabel;
+    QRLabel70: TQRLabel;
+    QRLabel71: TQRLabel;
+    QRDBText16: TQRDBText;
+    QRLabel13: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRMemo1: TQRMemo;
+    QRMemo2: TQRMemo;
+    QRLabel23: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRLabel24: TQRLabel;
+    QRDBText18: TQRDBText;
+    QRLabel27: TQRLabel;
+    QRDBText19: TQRDBText;
+    QRLabel30: TQRLabel;
+    QRDBText20: TQRDBText;
+    QRLabel31: TQRLabel;
+    QRDBText21: TQRDBText;
+    QRDBText22: TQRDBText;
+    QRLabel32: TQRLabel;
+    RDprint1: TRDprint;
+    Orcamento: TQuickRep;
+    QRBand3: TQRBand;
+    QRShape4: TQRShape;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel35: TQRLabel;
+    QRDBText25: TQRDBText;
+    QRDBText26: TQRDBText;
+    QRDBText27: TQRDBText;
+    QRDBText34: TQRDBText;
+    QRLabel36: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRDBText35: TQRDBText;
+    QRShape6: TQRShape;
+    QRLabel38: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    QRShape7: TQRShape;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRSysData3: TQRSysData;
+    QRLabel43: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel44: TQRLabel;
+    QRDBText36: TQRDBText;
+    QRLabel45: TQRLabel;
+    QRDBText37: TQRDBText;
+    QRLabel46: TQRLabel;
+    QRLabel47: TQRLabel;
+    QRLabel48: TQRLabel;
+    QRLabel49: TQRLabel;
+    QRDBText41: TQRDBText;
+    QRLabel50: TQRLabel;
+    QRDBText42: TQRDBText;
+    QRLabel51: TQRLabel;
+    QRDBText43: TQRDBText;
+    QRLabel52: TQRLabel;
+    QRDBText44: TQRDBText;
+    QRLabel53: TQRLabel;
+    QRDBText45: TQRDBText;
+    QRDBText46: TQRDBText;
+    QRLabel54: TQRLabel;
+    QRBand4: TQRBand;
+    QRDBText47: TQRDBText;
+    QRDBText48: TQRDBText;
+    QRDBText49: TQRDBText;
+    QRDBText50: TQRDBText;
+    QRDBText51: TQRDBText;
+    QRDBText52: TQRDBText;
+    QRBand5: TQRBand;
+    QRLabel55: TQRLabel;
+    QRDBText53: TQRDBText;
+    QRLabel56: TQRLabel;
+    QRLabel57: TQRLabel;
+    QRDBText54: TQRDBText;
+    QRDBText55: TQRDBText;
+    QRShape8: TQRShape;
+    QRExpr2: TQRExpr;
+    QRLabel58: TQRLabel;
+    QRLabel72: TQRLabel;
+    QRLabel73: TQRLabel;
+    QRLabel74: TQRLabel;
+    QRDBText56: TQRDBText;
+    QRLabel75: TQRLabel;
+    QRLabel76: TQRLabel;
+    QRMemo3: TQRMemo;
+    QRMemo4: TQRMemo;
+    RDprint2: TRDprint;
+    QCliente: TFDQuery;
+    Qempresa: TFDQuery;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    QProduto: TFDQuery;
+    QSub_Detail: TFDQuery;
+    QrLogo: TQRImage;
+    QrLogo2: TQRImage;
+    VALOR: TRxCalcEdit;
+    Label22: TLabel;
+    Label9: TLabel;
+    MUNICIPIO: TEdit;
+    itens_logs: TDBGrid;
+    QSub_Detail2: TFDQuery;
+    DataSubdetail2: TDataSource;
+    QSub_Detail2ped_pendente_id: TIntegerField;
+    QSub_Detail2produto_id: TIntegerField;
+    QSub_Detail2funcionario_id: TIntegerField;
+    QSub_Detail2dt_anotacao: TDateField;
+    QSub_Detail2funcionario: TStringField;
+    Label17: TLabel;
+    Status: TComboBox;
+    Label16: TLabel;
+    COND_PAGTO: TComboBox;
+    QSub_Detail2anotacao: TStringField;
+    Nome: TEdit;
+    QSub_Detail2hora: TStringField;
+    dt_movimento: TDateEdit;
+    Obs: TMemo;
+    Label36: TLabel;
+    QSub_Detail2produto_id_ped: TIntegerField;
+    Label2: TLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure CLIENTE_IDExit(Sender: TObject);
+    procedure EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure btnClienteClick(Sender: TObject);
+    procedure QSub_DetailNewRecord(DataSet: TDataSet);
+    procedure ItensKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ItensKeyPress(Sender: TObject; var Key: Char);
+    procedure QSub_DetailBeforePost(DataSet: TDataSet);
+    procedure ItensColEnter(Sender: TObject);
+    procedure ItensColExit(Sender: TObject);
+    procedure ItensEnter(Sender: TObject);
+    procedure ItensExit(Sender: TObject);
+    procedure QSub_DetailBeforeDelete(DataSet: TDataSet);
+    procedure DiasClick(Sender: TObject);
+    procedure VENDEDOR_IDExit(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ConsultaShow(Sender: TObject);
+    procedure DT_PEDIDOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnOrcamentoClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnLogClick(Sender: TObject);
+    procedure QSub_DetailBeforeEdit(DataSet: TDataSet);
+    procedure DT_PEDIDOEnter(Sender: TObject);
+    procedure QSub_DetailBeforeInsert(DataSet: TDataSet);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure RDprint1BeforeNewPage(Sender: TObject; Pagina: Integer);
+    procedure RDprint2BeforeNewPage(Sender: TObject; Pagina: Integer);
+    procedure OrcamentoBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure Orcamento_ReduzidoBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QSub_Detail2anotacaoGetText(Sender: TField; var Text: string;
+      DisplayText: Boolean);
+    procedure QSub_Detail2NewRecord(DataSet: TDataSet);
+    procedure itens_logsExit(Sender: TObject);
+    procedure QTabelaAfterOpen(DataSet: TDataSet);
+    procedure ItensCellClick(Column: TColumn);
+    procedure QSub_DetailAfterOpen(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Disable;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+    procedure ProdutoSearch;
+    procedure TributoSearch;
+    procedure Ordenar(Valores: tStrings);
+    procedure ServicoSearch;
+  end;
+
+var
+  FrmPedidos_Pendentes: TFrmPedidos_Pendentes;
+  Operacao: String;
+  ID , linha ,linha2,linha3, pagina: Integer;
+  Desc_por:Real;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UParcelas, UPesquisa,UGerente,UAcesso;
+
+{$R *.dfm}
+
+procedure TFrmPedidos_Pendentes.ServicoSearch;
+begin
+
+end;
+
+
+procedure TFrmPedidos_Pendentes.OrcamentoBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+ if FileExists(ExtractFilePath(ParamStr(0)) + 'Logo_Danfe.Jpg') then
+QrLogo.Picture.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'Logo_Danfe.Jpg');
+//LabelEndereco.Caption := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ',' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString;
+end;
+
+procedure TFrmPedidos_Pendentes.Orcamento_ReduzidoBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+ if FileExists(ExtractFilePath(ParamStr(0)) + 'Logo_Orcamento.jpg') then
+QrLogo2.Picture.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'Logo_Orcamento.jpg');
+//LabelEndereco.Caption := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ',' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString;
+
+end;
+
+procedure  TFrmPedidos_Pendentes.Ordenar(Valores: tStrings);
+var i, j : integer;
+    temp : string;
+begin
+  for i := 0 to Valores.Count - 1 do
+    for j := 0 to Valores.Count - 2 do
+    begin
+      if ansiUpperCase(Valores[j]) > ansiUpperCase(Valores[j + 1]) then
+      begin
+        TEmp := Valores[j];
+        Valores[j] := Valores[j + 1];
+        Valores[j + 1 ] := TEmp;
+      end;
+    end;
+end;
+
+procedure TFrmPedidos_Pendentes.CLIENTE_IDExit(Sender: TObject);
+begin
+  DetailSearch('Cliente');
+end;
+
+procedure TFrmPedidos_Pendentes.ConsultaShow(Sender: TObject);
+begin
+  Botoes_Normal;
+end;
+
+procedure TFrmPedidos_Pendentes.Botoes_Disable;
+begin
+  btnPrior.Enabled     := False;
+  btnNext.Enabled      := False;
+  btnInsert.Enabled    := False;
+  btnEdit.Enabled      := False;
+  btnDelete.Enabled    := False;
+  btnSave.Enabled      := False;
+  btnDiscard.Enabled   := False;
+  btnRetorna.Enabled   := False;
+  btnEmpresa.Enabled   := False;
+  btnCliente.Enabled   := False;
+  btnPesquisa.Enabled  := False;
+  end;
+
+procedure TFrmPedidos_Pendentes.Botoes_Editing;
+begin
+  btnPrior.Enabled     := False;
+  btnNext.Enabled      := False;
+  btnInsert.Enabled    := False;
+  btnEdit.Enabled      := False;
+  btnDelete.Enabled    := False;
+  btnSave.Enabled      := True;
+  btnDiscard.Enabled   := True;
+  btnRetorna.Enabled   := False;
+  btnEmpresa.Enabled   := True;
+  btnCliente.Enabled   := True;
+  btnPesquisa.Enabled  := False;
+end;
+
+procedure TFrmPedidos_Pendentes.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled      := True;
+    btnDelete.Enabled    := True;
+
+  end
+  else
+  begin
+    btnEdit.Enabled      := False;
+    btnDelete.Enabled    := False;
+  end;
+
+  btnSave.Enabled     := False;
+  btnDiscard.Enabled  := False;
+  btnRetorna.Enabled  := True;
+  btnEmpresa.Enabled  := False;
+  btnCliente.Enabled  := False;
+  btnPesquisa.Enabled := True;
+end;
+
+procedure TFrmPedidos_Pendentes.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA_ID.Text <> '') then
+  begin
+    QEmpresa.Close;
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Cliente')) and (CLIENTE_ID.Text <> '') then
+  begin
+    QCliente.Close;
+    QCliente.ParamByName('CLIENTE_ID').AsInteger := StrToInt(CLIENTE_ID.Text);
+    QCliente.Prepare;
+    QCliente.Open;
+    IF not QCliente.IsEmpty Then
+    Begin
+    Municipio.Text := QCliente.FieldByName('MUNICIPIO').AsString;
+    Nome.Text      := QCliente.FieldByName('NOME').AsString;
+    End;
+  end;
+
+end;
+
+procedure TFrmPedidos_Pendentes.DiasClick(Sender: TObject);
+begin
+  if Dias.TabIndex <> (Dias.Tabs.Count - 1) then
+  begin
+    CmdSelectNull := 'WHERE (PED_PENDENTE_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID) ';
+    CmdOrderBy    := 'ORDER BY PED_PENDENTE_ID, MUNICIPIO';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := StrToDate(StrZero(IntToStr(Dias.TabIndex + 1), 2, 0) + '/' + Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 7));
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end
+  else
+  begin
+    CmdSelectNull := 'WHERE (PED_PENDENTE_ID IS NOT NULL) AND (DT_MOVIMENTO <= :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID) ';
+    CmdOrderBy    := 'ORDER BY PED_PENDENTE_ID,MUNICIPIO';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+
+  QTabela.Open;
+  Botoes_Normal;
+end;
+
+procedure TFrmPedidos_Pendentes.DT_PEDIDOEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmPedidos_Pendentes.DT_PEDIDOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmPedidos_Pendentes.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TMaskEdit then
+      TMaskEdit(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TRxcalcEdit(Temp).Enabled := Status;
+
+    if Temp is TMemo then
+      TMemo(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO PED_PENDENTE(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO PED_PENDENTE(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'INSERT INTO PED_PENDENTE(' then
+        Sql := Sql + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TMaskEdit(Temp).Name
+      else
+        Par := Par + ', :' + TMaskEdit(Temp).Name;
+    end;
+
+    if (Temp is TDateEdit) AND (TDateEdit(Temp).Text <> '  /  /    ')  then
+    begin
+      if Sql = 'INSERT INTO PED_PENDENTE(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO PED_PENDENTE(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO PED_PENDENTE(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'INSERT INTO PED_PENDENTE(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TRxcalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TMemo then
+    begin
+      if Sql = 'INSERT INTO PED_PENDENTE(' then
+        Sql := Sql + TMemo(Temp).Name
+      else
+        Sql := Sql + ', ' + TMemo(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TMemo(Temp).Name
+      else
+        Par := Par + ', :' + TMemo(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+    if (Temp is TDateEdit)  AND (TDateEdit(Temp).Text <> '  /  /    ') then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+
+    if Temp is TMemo then
+      IQuery.ParamByName(TMemo(Temp).Name).AsByteStr := TMemo(Temp).Lines.Text;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+  Habilitar(False);
+end;
+
+procedure TFrmPedidos_Pendentes.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE PED_PENDENTE SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE PED_PENDENTE SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'UPDATE PED_PENDENTE SET ' then
+        Sql := Sql + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name;
+    end;
+
+    if (Temp is TDateEdit) and (TDateEdit(Temp).Text <> '  /  /    ') then
+    begin
+      if Sql = 'UPDATE PED_PENDENTE SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE PED_PENDENTE SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE PED_PENDENTE SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'UPDATE PED_PENDENTE SET ' then
+        Sql := Sql + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TMemo then
+    begin
+      if Sql = 'UPDATE PED_PENDENTE SET ' then
+        Sql := Sql + TMemo(Temp).Name + ' = :' + TMemo(Temp).Name
+      else
+        Sql := Sql + ', ' + Tmemo(Temp).Name + ' = :' + TMemo(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (PED_PENDENTE_ID = :ID)';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+    if (Temp is TDateEdit)  AND (TDateEdit(Temp).Text <> '  /  /    ')then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+
+    if Temp is TMemo then
+      IQuery.ParamByName(TMemo(Temp).Name).AsByteStr:= TMemo(Temp).Lines.Text;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+  QTabela.Open;
+  QTabela.Locate('PED_PENDENTE_ID', ID, [loCaseInsensitive]);
+  Habilitar(False);
+end;
+
+procedure TFrmPedidos_Pendentes.ProdutoSearch;
+begin
+  QProduto.Close;
+  QProduto.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+  QProduto.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+  QProduto.Prepare;
+  QProduto.Open;
+end;
+
+procedure TFrmPedidos_Pendentes.TributoSearch;
+begin
+
+end;
+
+procedure TFrmPedidos_Pendentes.EMPRESA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Empresa');
+end;
+
+procedure TFrmPedidos_Pendentes.EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = EMPRESA_ID) then
+    btnEmpresaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CLIENTE_ID) then
+    btnClienteClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmPedidos_Pendentes.Validacao: Boolean;
+begin
+  Result := False;
+
+  CLIENTE_ID.Color  := clWindow;
+  EMPRESA_ID.Color  := clWindow;
+
+  {
+  if COND_PAGTO.Text = 'A PRAZO' then
+  begin
+   if Cliente_id.Value > 0 then
+   Begin
+    if QCliente.IsEmpty then
+    begin
+      Application.MessageBox('Cliente inexistente', PChar(Msg_Title), mb_IconSTop);
+      CLIENTE_ID.Color := clYellow;
+      CLIENTE_ID.SetFocus;
+      exit;
+    end
+    else
+    begin
+      if QCliente.FieldByName('BLOQUEADO').AsString = 'SIM' then
+        begin
+        Application.MessageBox('Cliente bloqueado', PChar(Msg_Title), mb_IconSTop);
+        CLIENTE_ID.Color := clYellow;
+        CLIENTE_ID.SetFocus;
+        exit;
+        end;
+    end;
+
+   End;
+  end;
+
+  if CLIENTE_ID.Value > 0 then
+  begin
+    if QCliente.IsEmpty then
+    begin
+      Application.MessageBox('Cliente inexistente', PChar(Msg_Title), mb_IconStop);
+      CLIENTE_ID.Color := clYellow;
+      CLIENTE_ID.SetFocus;
+      exit;
+    end;
+  end;
+  }
+  if QEmpresa.IsEmpty then
+  begin
+    Application.MessageBox('Empresa inexistente', PChar(Msg_Title), mb_IconStop);
+    EMPRESA_ID.Color := clYellow;
+    EMPRESA_ID.SetFocus;
+    exit;
+  end;
+
+
+  if (COND_PAGTO.Text <> 'A VISTA') and (COND_PAGTO.Text <> 'A PRAZO') then
+  begin
+    Application.MessageBox('Cond. de Pagto. inválida', PChar(Msg_Title), mb_IconStop);
+    COND_PAGTO.Color := clYellow;
+    COND_PAGTO.SetFocus;
+    exit;
+  end;
+
+  Result := True;
+end;
+
+procedure TFrmPedidos_Pendentes.VENDEDOR_IDExit(Sender: TObject);
+begin
+  DetailSearch('Vendedor');
+end;
+
+procedure TFrmPedidos_Pendentes.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_Detail2anotacaoGetText(Sender: TField;
+  var Text: string; DisplayText: Boolean);
+begin
+ Text := Sender.AsString;
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_Detail2NewRecord(DataSet: TDataSet);
+begin
+
+DataSet['DT_ANOTACAO']     := DATE;
+DataSet['PED_PENDENTE_ID'] := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+DataSet['PRODUTO_ID_PED']  := QSub_Detail.FieldByName('PRODUTO_ID_PED').AsInteger;
+DataSet['PRODUTO_ID']      := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+DataSet['FUNCIONARIO_ID']  := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+DataSet['HORA']            := TimeToStr(time);
+
+IQuery.sql.Clear;
+IQuery.Sql.Add('SELECT NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+IQuery.Prepare;
+IQuery.Open;
+
+DataSet['FUNCIONARIO']     := Copy(IQuery.FieldByName('NOME').AsString,1,20);;
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_DetailAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QSub_Detail.FieldByName('QUANTIDADE')).DisplayFormat  := '#,##0.00';
+TFloatField(QSub_Detail.FieldByName('VR_UNITARIO')).DisplayFormat := '#,##0.00';
+TFloatField(QSub_Detail.FieldByName('VR_TOTAL')).DisplayFormat    := '#,##0.00';
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_DetailBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if (QTabela.FieldByName('DT_PEDIDO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_DetailBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if (QTabela.FieldByName('DT_PEDIDO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_DetailBeforeInsert(DataSet: TDataSet);
+begin
+  if (QTabela.FieldByName('DT_PEDIDO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_DetailBeforePost(DataSet: TDataSet);
+var
+Cst: String;
+Promocao: Boolean;
+begin
+
+  ProdutoSearch;
+  {
+  if QProduto.IsEmpty then
+  begin
+    Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 0;
+    abort;
+  end;
+  }
+
+  if (QSub_Detail.FieldByName('QUANTIDADE').AsFloat <= 0) or (QSub_Detail.FieldByName('QUANTIDADE').AsFloat > 99999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 3;
+    abort;
+  end;
+
+end;
+
+procedure TFrmPedidos_Pendentes.QSub_DetailNewRecord(DataSet: TDataSet);
+var
+id_ped :integer;
+begin
+  IQuery.SQL.Clear;
+  IQuery.SQL.Add('SELECT NEXTVAL(:GEN_PRODUTOS_PED_PENDENTE) ID');
+  IQuery.ParamByName('GEN_PRODUTOS_PED_PENDENTE').AsString :=  'GEN_PRODUTOS_PED_PENDENTE';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  id_ped := IQuery.Fields[0].AsInteger;
+
+  DataSet['PRODUTO_ID_PED']  := id_ped;
+  DataSet['PED_PENDENTE_ID'] := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+end;
+
+procedure TFrmPedidos_Pendentes.QTabelaAfterOpen(DataSet: TDataSet);
+begin
+ TFloatField(QTabela.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmPedidos_Pendentes.RDprint1BeforeNewPage(Sender: TObject; Pagina: Integer);
+begin
+
+  if linha <= 62  then
+  Begin
+  RDprint1.Imp(63, 01, '================================================================================');
+  RDprint1.Imp(64, 01, 'Eficaz Automação e Sistemas Ltda');
+  RDprint1.ImpDir(64, 33, 80, 'http://www.eficazautomacao.com.br', []);
+  RDprint1.Imp(66,01,' ');
+  End;
+end;
+
+procedure TFrmPedidos_Pendentes.RDprint1NewPage(Sender: TObject; Pagina: Integer);
+begin
+  RDprint1.Imp(02, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+  RDprint1.ImpDir(02, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 80, 'Eficaz Automação e Sistemas Ltda - ME', []);
+  RDprint1.Imp(03, 01, Copy(FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString,1,30));
+  RDprint1.Imp(03, 30, 'Nº:' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString);
+  RDprint1.Imp(03, 37, Copy (FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString,1,15));
+  RDprint1.Imp(03, 55, Copy(FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString,1,20));
+  RDprint1.Imp(03, 72, FrmPrincipal.QEmpresa.FieldByName('CEP').AsString);
+  RDprint1.Imp(04, 01, 'Cnpj.:' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString);
+  RDprint1.Imp(04, 30, 'I.E.: ' + FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString);
+  RDprint1.Imp(04, 55, 'Fone: ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString);
+  RDprint1.Imp(05, 01, 'Data: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+  RDprint1.impDir(05, 80, 80, 'Página: ' + IntToStr(Pagina), []);
+  RDprint1.Imp(06, 30, '*** ORCAMENTO ***');
+  RDprint1.Imp(07, 01, '--------------------------------------------------------------------------------');
+  linha := 08;
+  Linha3 := 08;
+
+end;
+
+procedure TFrmPedidos_Pendentes.RDprint2BeforeNewPage(Sender: TObject; Pagina: Integer);
+begin
+  if linha <= 62  then
+  Begin
+  RDprint1.Imp(63, 01, '==================================');
+  RDprint1.Imp(64, 01, 'Eficaz Automação e Sistemas Ltda');
+  RDprint1.ImpDir(64, 28, 80, 'http://www.eficazautomacao.com.br', []);
+  RDprint1.Imp(66,01,' ');
+  End;
+
+end;
+
+procedure TFrmPedidos_Pendentes.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := '';
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := 0;
+
+      if Temp is TMemo then
+        TMemo(Temp).Lines.Text := '';
+
+      QSub_Detail.Close;
+
+      QSub_Detail.ParamByName('PED_PENDENTE_ID').AsInteger := 0;
+
+      QSub_Detail.Prepare;
+      QSub_Detail.Open;
+
+      QSub_Detail2.Close;
+
+      QSub_Detail2.ParamByName('PED_PENDENTE_ID').AsInteger := 0;
+      QSub_Detail2.ParamByName('PRODUTO_ID_PED').AsInteger      := 0;
+
+      QSub_Detail2.Prepare;
+      QSub_Detail2.Open;
+
+      Itens_logs.SelectedIndex := 0;
+
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := QTabela.FieldByName(TMaskEdit(Temp).Name).AsString;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := QTabela.FieldByName(TDateEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+
+      if Temp is TMemo then
+        TMemo(Temp).Lines.Text := QTabela.FieldByName(Tmemo(Temp).Name).AsString;
+
+      QSub_Detail.Close;
+
+      QSub_Detail.ParamByName('PED_PENDENTE_ID').AsInteger := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+
+      QSub_Detail.Prepare;
+      QSub_Detail.Open;
+
+
+      QSub_Detail2.Close;
+
+      QSub_Detail2.ParamByName('PED_PENDENTE_ID').AsInteger := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+      QSub_Detail2.ParamByName('PRODUTO_ID_PED').AsInteger  := Itens.DataSource.DataSet.FieldByName('PRODUTO_ID_PED').AsInteger;
+
+      QSub_Detail2.Prepare;
+      QSub_Detail2.Open;
+
+      Itens_logs.SelectedIndex := 0;
+
+
+
+    end;
+  end;
+
+  if QTabela.IsEmpty then
+  Begin
+    Itens.Enabled      := False;
+    Itens_LOGS.Enabled := False;
+  End
+  else
+  Begin
+    Itens.Enabled      := True;
+    Itens_LOGS.Enabled := True;
+  End;
+
+  DetailSearch('');
+end;
+
+procedure TFrmPedidos_Pendentes.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if QTabela.FieldByName('DT_PEDIDO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM PED_PENDENTE');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PED_PENDENTE_ID = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+    QTabela.Close;
+    QTabela.Open;
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QCliente.Close;
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QCliente.Close;
+  end;
+
+  Habilitar(False);
+  Operacao := '';
+
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmPedidos_Pendentes.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if QTabela.FieldByName('DT_PEDIDO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  Operacao := 'Alterando';
+
+  ID := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+
+  Botoes_Editing;
+  Habilitar(True);
+  Itens.Enabled := False;
+  itens_logs.Enabled := False;
+
+  Consulta.TabVisible := False;
+  DT_PEDIDO.SetFocus;
+end;
+
+procedure TFrmPedidos_Pendentes.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA_ID.Text));
+  except
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.btnClienteClick(Sender: TObject);
+begin
+  try
+    CLIENTE_ID.Value := GetConsulta('CLIENTES', 0, 0, StrToInt(CLIENTE_ID.Text));
+  except
+    CLIENTE_ID.Value := GetConsulta('CLIENTES', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+  Itens.Enabled := False;
+  itens_logs .Enabled := False;
+
+  QEmpresa.Close;
+  QCliente.Close;
+
+
+  DT_PEDIDO.Date    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.Date := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  COND_PAGTO.Text   := 'A VISTA';
+  EMPRESA_ID.Value  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  STATUS.Text       := 'PENDENTE';
+
+  Consulta.TabVisible := False;
+  DT_PEDIDO.SetFocus;
+end;
+
+procedure TFrmPedidos_Pendentes.btnLogClick(Sender: TObject);
+var
+F1: TextFile;
+begin
+
+end;
+
+procedure TFrmPedidos_Pendentes.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmPedidos_Pendentes.btnOrcamentoClick(Sender: TObject);
+var
+Copias,Linhas,Dividir:Integer;
+InputString,Buffer,S: String;
+MyFile: TextFile;
+Desconto, Acrescimo, Vr_venda,Meio:Real;
+
+begin
+
+end;
+
+procedure TFrmPedidos_Pendentes.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+begin
+  Condicao := GetPesquisa('PED_PENDENTE');
+
+  if Condicao <> '' then
+  begin
+    CmdSelectNull := Condicao + ' AND (EMPRESA_ID = :EMPRESA_ID) ';
+
+    QTabela.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+
+  CmdOrderBy := 'ORDER BY PED_PENDENTE_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmPedidos_Pendentes.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmPedidos_Pendentes.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmPedidos_Pendentes.btnSaveClick(Sender: TObject);
+begin
+  DetailSearch('');
+
+  if Validacao then
+  begin
+     Valor.Value := 0;
+     QSub_Detail.First;
+     While not QSub_Detail.eof do
+     Begin
+      Valor.Value := Valor.Value + QSub_Detail.FieldByName('VR_TOTAL').AsFloat;
+
+     QSub_Detail.Next;
+     End;
+
+
+
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdSelectNull := 'WHERE (PED_PENDENTE_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID) AND (STATUS = ''PENDENTE'')';
+      CmdOrderBy    := 'ORDER BY PED_PENDENTE_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+      QTabela.Open;
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+    begin
+      QEmpresa.Close;
+      QCliente.Close;
+    end;
+
+    Habilitar(False);
+    Botoes_Normal;
+      
+    Operacao := '';
+    Consulta.TabVisible := True;
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmPedidos_Pendentes.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmPedidos_Pendentes.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  QTabela.Open;
+end;
+
+procedure TFrmPedidos_Pendentes.ItensCellClick(Column: TColumn);
+begin
+      QSub_Detail2.Close;
+
+      QSub_Detail2.ParamByName('PED_PENDENTE_ID').AsInteger := QTabela.FieldByName('PED_PENDENTE_ID').AsInteger;
+      QSub_Detail2.ParamByName('PRODUTO_ID_PED').AsInteger  := Itens.DataSource.DataSet.FieldByName('PRODUTO_ID_PED').AsInteger;
+
+      QSub_Detail2.Prepare;
+      QSub_Detail2.Open;
+
+      Itens_logs.SelectedIndex := 0;
+end;
+
+procedure TFrmPedidos_Pendentes.ItensColEnter(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    ProdutoSearch;
+
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.ItensColExit(Sender: TObject);
+begin
+   if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    if Itens.SelectedField.FieldName = 'produto_id' then
+    begin
+
+        ProdutoSearch;
+        if not QProduto.IsEmpty Then
+         QSub_Detail.FieldByName('DESCRICAO').AsString    := QProduto.FieldByName('DESCRICAO').AsString;
+
+        if QSub_Detail.FieldByName('DESCRICAO').AsString  = '' then
+        begin
+
+          Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+          Itens.SelectedIndex := 0;
+        end
+        else
+        begin
+          QSub_Detail.FieldByName('DESCRICAO').AsString    := QProduto.FieldByName('DESCRICAO').AsString;
+        end;
+    end;
+    if Itens.SelectedField.FieldName = 'quantidade' then
+    begin
+
+      QSub_Detail.FieldByName('VR_TOTAL').AsFloat := RoundTo((QSub_Detail.FieldByName('QUANTIDADE').AsFloat * (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat)), -2);
+
+    end;
+
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.ItensEnter(Sender: TObject);
+begin
+  Botoes_Disable;
+  Consulta.TabVisible := False;
+end;
+
+procedure TFrmPedidos_Pendentes.ItensExit(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    QSub_Detail.Cancel;
+
+  end;
+
+end;
+
+procedure TFrmPedidos_Pendentes.ItensKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_F4) and (QSub_Detail.State = dsBrowse) and (not QSub_Detail.IsEmpty) then
+    QSub_Detail.Delete;
+
+  if (Key = Vk_F4) and (QSub_Detail2.State = dsBrowse) and (not QSub_Detail2.IsEmpty) then
+    QSub_Detail2.Delete;
+
+  if (Key = Vk_F7) and ((Itens.SelectedField.FieldName = 'produto_id')) and (QSub_Detail.State in [dsInsert, dsEdit]) then
+  begin
+
+      if Itens.SelectedField.FieldName = 'produto_id' then
+        QSub_Detail.FieldByName('PRODUTO_ID').AsInteger := GetConsulta('ESTOQUE', StrToInt(EMPRESA_ID.Text), StrToInt(CLIENTE_ID.Text), QSub_Detail.FieldByName('PRODUTO_ID').AsInteger);
+
+  end;
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QSub_Detail.State in [dsInsert, dsEdit]) then
+    Key := 0;
+
+end;
+
+procedure TFrmPedidos_Pendentes.ItensKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #46 then
+    Key := #44;
+
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmPedidos_Pendentes.itens_logsExit(Sender: TObject);
+begin
+
+  if QSub_Detail2.State in [dsInsert, dsEdit] then
+  begin
+    QSub_Detail2.Cancel;
+
+  end;
+
+
+  if QTabela.FieldByName('DT_PEDIDO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    Botoes_Normal;
+    Consulta.TabVisible := True;
+    exit;
+  end;
+
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    Botoes_Normal;
+    Consulta.TabVisible := True;
+    exit;
+  end;
+
+
+
+  QSub_Detail2.First;
+  while not QSub_Detail2.Eof do
+  begin
+    Application.ProcessMessages;
+    QSub_Detail2.Next;
+  end;
+
+  btnEditClick(Self);
+
+  //Botoes_Normal;
+
+end;
+
+procedure TFrmPedidos_Pendentes.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmPedidos_Pendentes.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') or (QSub_Detail.State in [dsInsert, dsEdit]) or (Itens.Focused) or (itens_logs.Focused) then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmPedidos_Pendentes.FormCreate(Sender: TObject);
+var
+X, Ult_Dia: Integer;
+begin
+  DBGrid1.Columns[0].Width := 50;
+  DBGrid1.Columns[1].Width := 79;
+  DBGrid1.Columns[2].Width := 253;
+  DBGrid1.Columns[3].Width := 79;
+  DBGrid1.Columns[4].Width := 90;
+  DBGrid1.Columns[5].Width := 90;
+
+  Ult_Dia := StrToInt(Copy(DateToStr(Ult_Dia_Mes(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime)), 1, 2));
+  Dias.Tabs.Clear;
+
+  for X := 1 to Ult_Dia do
+    Dias.Tabs.Add(IntToStr(X));
+
+  Dias.Tabs.Add('Todos');
+
+
+  QRLabel7.Caption   := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' +
+                        FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                        FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - CEP ' +
+                        FrmPrincipal.QEmpresa.FieldByName('CEP').AsString;
+  QRLabel8.Caption   := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - I. E. ' +
+                        FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString + ' - Fone: ' +
+                        FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+  QRLabel60.Caption  := FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+  QRLabel20.Caption  := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString;
+
+  Itens.Columns[0].Width  := 64;
+  Itens.Columns[1].Width  := 230;
+  Itens.Columns[2].Width  := 64;
+  Itens.Columns[3].Width  := 64;
+  Itens.Columns[4].Width  := 64;
+
+
+  CmdSelect     := QTabela.Sql.Text;
+  CmdSelectNull := 'WHERE (PED_PENDENTE_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID) AND (STATUS = ''PENDENTE'')';
+  CmdOrderBy    := 'ORDER BY PED_PENDENTE_ID, MUNICIPIO';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  Botoes_Normal;
+  Consulta.Show;
+
+end;
+
+procedure TFrmPedidos_Pendentes.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+end;
+
+end.

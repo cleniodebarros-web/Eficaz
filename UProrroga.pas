@@ -1,0 +1,447 @@
+unit UProrroga;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Mask, rxToolEdit, StdCtrls, ExtCtrls, Buttons, DB, IBCustomDataSet,
+  IBQuery, rxCurrEdit, IBStoredProc, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client;
+
+type
+  TFrmProrroga = class(TForm)
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Bevel1: TBevel;
+    Label4: TLabel;
+    Label8: TLabel;
+    Especie: TComboBox;
+    Duplicata: TEdit;
+    Label2: TLabel;
+    Dt_Vencimento: TDateEdit;
+    Label1: TLabel;
+    Vr_Despesa: TRxCalcEdit;
+    Lancar_Despesa: TCheckBox;
+    Label3: TLabel;
+    Conta: TCurrencyEdit;
+    btnConta: TSpeedButton;
+    Label5: TLabel;
+    Historico: TEdit;
+    QInsert: TFDQuery;
+    QTransacao: TFDQuery;
+    QContas: TFDQuery;
+    IQuery: TFDQuery;
+    QSearch: TFDQuery;
+    excluir_lancamento: TCheckBox;
+    Label6: TLabel;
+    Observacao: TMemo;
+    procedure FormCreate(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure Dt_VencimentoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EspecieKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnContaClick(Sender: TObject);
+    procedure Lancar_DespesaClick(Sender: TObject);
+    procedure excluir_lancamentoClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmProrroga: TFrmProrroga;
+  Num_Trans: Integer;
+  Num_Parcela, Tp_Trans,Tp_debito: String;
+
+  procedure Prorroga(Trans: Integer; Parcela, Tipo, Tipo_db: String);
+
+implementation
+
+uses
+  UData, UConsulta, UPrincipal;
+
+{$R *.dfm}
+
+procedure Prorroga(Trans: Integer; Parcela, Tipo, Tipo_Db: String);
+begin
+  Num_Trans   := Trans;
+  Num_Parcela := Parcela;
+  Tp_Trans    := Tipo;
+  tp_debito   := Tipo_db;
+
+  Application.CreateForm(TFrmProrroga, FrmProrroga);
+  try
+    FrmProrroga.ShowModal;
+  finally
+    FrmProrroga.Release;
+  end;
+end;
+
+procedure TFrmProrroga.btnContaClick(Sender: TObject);
+begin
+  try
+    Conta.Value := GetConsulta('PLANO', 0, 0, StrToInt(Conta.Text));
+  except
+    Conta.Value := GetConsulta('PLANO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProrroga.btnExecutaClick(Sender: TObject);
+var
+Id_Trans: Integer;
+begin
+  if ESPECIE.Text <> '' then
+  Begin
+
+
+
+
+
+    if Lancar_Despesa.Checked then
+    Begin
+    QContas.Sql.Clear;
+    QContas.Sql.Add('UPDATE TRANSPARCELAS SET DT_VENCIMENTO = :DT_VENCIMENTO, DUPLICATA = :DUPLICATA, VALOR_DESPESAS = :VALOR_DESPESAS, OBSERVACAO_PARCELA = :OBSERVACAO_PARCELA');
+    QContas.Sql.Add('WHERE');
+    QContas.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    QContas.Sql.Add('AND (PARCELA_ID = :PARCELA_ID)');
+    QContas.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+    QContas.ParamByName('DT_VENCIMENTO').AsDateTime    := Dt_Vencimento.Date;
+    QContas.ParamByName('DUPLICATA').AsString          := Duplicata.Text;
+    QContas.ParamByName('VALOR_DESPESAS').AsFloat      := Vr_Despesa.Value;
+    QContas.ParamByName('OBSERVACAO_PARCELA').AsString := Observacao.Text;
+    QContas.ParamByName('TRANSACAO_ID').AsInteger      := Num_Trans;
+    QContas.ParamByName('PARCELA_ID').AsString         := Num_Parcela;
+    QContas.ParamByName('TIPO_TRANSACAO').AsString     := Tp_Trans;
+
+    QContas.Prepare;
+    QContas.ExecSql;
+
+
+    End
+    Else
+    Begin
+
+    QContas.Sql.Clear;
+    QContas.Sql.Add('UPDATE TRANSPARCELAS SET DT_VENCIMENTO = :DT_VENCIMENTO, ESPECIE = :ESPECIE, DUPLICATA = :DUPLICATA, VALOR_DESPESAS = :VALOR_DESPESAS, OBSERVACAO_PARCELA = :OBSERVACAO_PARCELA');
+    QContas.Sql.Add('WHERE');
+    QContas.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    QContas.Sql.Add('AND (PARCELA_ID = :PARCELA_ID)');
+    QContas.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+    QContas.ParamByName('DT_VENCIMENTO').AsDateTime    := Dt_Vencimento.Date;
+    QContas.ParamByName('ESPECIE').AsString            := Especie.Text;
+    QContas.ParamByName('DUPLICATA').AsString          := Duplicata.Text;
+    QContas.ParamByName('VALOR_DESPESAS').AsFloat      := Vr_Despesa.Value;
+    QContas.ParamByName('OBSERVACAO_PARCELA').AsString := Observacao.Text;
+    QContas.ParamByName('TRANSACAO_ID').AsInteger      := Num_Trans;
+    QContas.ParamByName('PARCELA_ID').AsString         := Num_Parcela;
+    QContas.ParamByName('TIPO_TRANSACAO').AsString     := Tp_Trans;
+
+    QContas.Prepare;
+    QContas.ExecSql;
+
+
+    End;
+
+
+   if Lancar_Despesa.Checked then
+   begin
+    try
+
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('SELECT NEXTVAL(:GEN_TRANSACOES) ID');
+      IQuery.ParamByName('GEN_TRANSACOES').AsString :=  'GEN_TRANSACOES';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      Id_Trans := IQuery.FieldByName('ID').AsInteger;
+
+
+      QInsert.Sql.Clear;
+
+      if Tp_debito = 'R' then
+      QInsert.Sql.Add('INSERT INTO TRANSACOES( CLIENTE_ID, ')
+      else
+      QInsert.Sql.Add('INSERT INTO TRANSACOES( FORNECEDOR_ID, ');
+
+      QInsert.Sql.Add('TRANSACAO_ID,   DT_TRANS,    DT_MOVIMENTO,  CONDUTA, ' +
+                      'DEPTO,          EMPRESA_ID,  CONTA_ID,      C_CUSTO_ID, ' +
+                      'VALOR,          TPCTB,       AUTORIZ_ID,    HISTORICO, ' +
+                      'CONTAAUX_ID,    NUM_DOC,     BANCO_ID,      BALANCO, ' +
+                      'COND_PAGTO,     DT_ENT_SAI,  FINALIZADORA_ID)');
+
+      if Tp_debito = 'R' then
+      QInsert.Sql.Add ('VALUES( :CLIENTE_ID,')
+      else
+      QInsert.Sql.Add ('VALUES( :FORNECEDOR_ID,');
+
+      QInsert.Sql.Add (':TRANSACAO_ID,  :DT_TRANS,   :DT_MOVIMENTO, :CONDUTA, ' +
+                      ':DEPTO,         :EMPRESA_ID, :CONTA_ID,     :C_CUSTO_ID, ' +
+                      ':VALOR,         :TPCTB,      :AUTORIZ_ID,   :HISTORICO, ' +
+                      ':CONTAAUX_ID,   :NUM_DOC,    :BANCO_ID,     :BALANCO, ' +
+                      ':COND_PAGTO,    :DT_ENT_SAI, :FINALIZADORA_ID )');
+
+      QInsert.ParamByName('TRANSACAO_ID').AsInteger  := Id_Trans;
+      QInsert.ParamByName('DT_TRANS').AsDateTime     := QTransacao.FieldByName('DT_TRANS').AsDateTime;
+      QInsert.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+      if Tp_debito = 'R' then
+      Begin
+      QInsert.ParamByName('CONDUTA').AsString        := '01'; //QTransacao.FieldByName('CONDUTA').AsString;
+      QInsert.ParamByName('DEPTO').AsString          := '03'; //QTransacao.FieldByName('DEPTO').AsString;
+      End
+      Else
+      Begin
+      QInsert.ParamByName('CONDUTA').AsString        := '02'; //QTransacao.FieldByName('CONDUTA').AsString;
+      QInsert.ParamByName('DEPTO').AsString          := '02'; //QTransacao.FieldByName('DEPTO').AsString;
+      End;
+
+      QInsert.ParamByName('EMPRESA_ID').AsInteger    := QTransacao.FieldByName('EMPRESA_ID').AsInteger;
+      QInsert.ParamByName('CONTA_ID').AsInteger      := StrToInt(Conta.Text);
+      QInsert.ParamByName('C_CUSTO_ID').AsInteger    := QTransacao.FieldByName('C_CUSTO_ID').AsInteger;
+      QInsert.ParamByName('VALOR').AsFloat           := Vr_Despesa.Value;
+      QInsert.ParamByName('TPCTB').AsString          := QTransacao.FieldByName('TPCTB').AsString;
+      QInsert.ParamByName('AUTORIZ_ID').AsInteger    := QTransacao.FieldByName('AUTORIZ_ID').AsInteger;
+      QInsert.ParamByName('HISTORICO').AsString      := Historico.Text;
+      QInsert.ParamByName('CONTAAUX_ID').AsInteger   := QTransacao.FieldByName('CONTAAUX_ID').AsInteger;
+      QInsert.ParamByName('NUM_DOC').AsString        := QTransacao.FieldByName('NUM_DOC').AsString;
+      QInsert.ParamByName('BANCO_ID').AsInteger      := QTransacao.FieldByName('BANCO_ID').AsInteger;
+      QInsert.ParamByName('BALANCO').AsString        := QTransacao.FieldByName('BALANCO').AsString;
+      QInsert.ParamByName('COND_PAGTO').AsString     := QTransacao.FieldByName('COND_PAGTO').AsString;
+
+      QSearch.Sql.Clear;
+      QSearch.Sql.Add('SELECT FINALIZADORA_ID FROM FINALIZADORAS WHERE LEGENDA = :LEGENDA');
+      QSearch.ParamByName('LEGENDA').AsString := 'A Prazo';
+      QSearch.Prepare;
+      QSearch.Open;
+
+      IF not QSearch.isEmpty Then
+      QInsert.ParamByName('FINALIZADORA_ID').AsInteger := QSearch.FieldByName('FINALIZADORA_ID').AsInteger
+      Else
+      QInsert.ParamByName('FINALIZADORA_ID').AsInteger := 2;
+
+      if Tp_debito = 'R' then
+      QInsert.ParamByName('CLIENTE_ID').AsInteger    := QTransacao.FieldByName('CLIENTE_ID').AsInteger
+      Else
+      QInsert.ParamByName('FORNECEDOR_ID').AsInteger := QTransacao.FieldByName('FORNECEDOR_ID').AsInteger;
+
+
+      QInsert.ParamByName('DT_ENT_SAI').AsDateTime   := QTransacao.FieldByName('DT_ENT_SAI').AsDateTime;
+
+      QInsert.Prepare;
+      QInsert.ExecSql;
+
+
+
+      QInsert.Sql.Clear;
+      QInsert.Sql.Add('INSERT INTO TRANSPARCELAS( ' +
+                      'TRANSACAO_ID,   PARCELA_ID,   TIPO_TRANSACAO,   DT_VENCIMENTO, ' +
+                      'VALOR,          DUPLICATA, ESPECIE, OBSERVACAO_PARCELA) VALUES(' +
+                      ':TRANSACAO_ID,  :PARCELA_ID,  :TIPO_TRANSACAO,  :DT_VENCIMENTO, ' +
+                      ':VALOR,         :DUPLICATA, :ESPECIE, :OBSERVACAO_PARCELA)');
+
+      QInsert.ParamByName('TRANSACAO_ID').AsInteger      := Id_Trans;
+      QInsert.ParamByName('PARCELA_ID').AsString         := '01/01';
+      QInsert.ParamByName('TIPO_TRANSACAO').AsString     := 'T';
+      QInsert.ParamByName('DT_VENCIMENTO').AsDateTime    := Dt_Vencimento.Date;
+      QInsert.ParamByName('VALOR').AsFloat               := Vr_Despesa.Value;
+      QInsert.ParamByName('DUPLICATA').AsString          := Duplicata.Text;
+      QInsert.ParamByName('ESPECIE').AsString            := Especie.Text;
+      QInsert.ParamByName('OBSERVACAO_PARCELA').AsString := Observacao.Text;
+
+      QInsert.Prepare;
+      QInsert.ExecSql;
+
+
+    Except
+
+    on e:Exception do
+          begin
+            Application.MessageBox(PChar('Erro:' + #13 +
+              'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+          end;
+
+    end;
+   end;
+
+   if Excluir_Lancamento.Checked then
+    Begin
+      if Application.MessageBox('Confirma a exclusão do recebiimento?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+     Begin
+
+
+      QSearch.SQL.Clear;
+      QSearch.SQL.Add('SELECT NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+      QSearch.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+      QSearch.Prepare;
+      QSearch.Open();
+
+
+      QContas.Sql.Clear;
+      QContas.Sql.Add('UPDATE TRANSPARCELAS SET ESPECIE = :ESPECIE,  PERDA = :PERDA,DUPLICATA = :DUPLICATA, DT_PROTESTO = :DT_PROTESTO, OBSERVACAO_PARCELA = :OBSERVACAO_PARCELA');
+      QContas.Sql.Add('WHERE');
+      QContas.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+      QContas.Sql.Add('AND (PARCELA_ID = :PARCELA_ID)');
+      QContas.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      QContas.ParamByName('TRANSACAO_ID').AsInteger      := Num_Trans;
+      QContas.ParamByName('PARCELA_ID').AsString         := Num_Parcela;
+      QContas.ParamByName('TIPO_TRANSACAO').AsString     := Tp_Trans;
+      QContas.ParamByName('ESPECIE').AsString            := Especie.Text;
+      QContas.ParamByName('PERDA').AsInteger             := 1;
+      QContas.ParamByName('DUPLICATA').AsString          := Copy(Duplicata.Text,1,7) + '-' + Copy(QSearch.FieldByName('NOME').AsString ,1,18 - 7);
+      QContas.ParamByName('DT_PROTESTO').AsDateTime      := Date;
+      QContas.ParamByName('OBSERVACAO_PARCELA').AsString := Observacao.Text;
+
+
+
+      QContas.Prepare;
+      QContas.ExecSql;
+
+
+      QContas.Sql.Clear;
+      QContas.Sql.Add('UPDATE CLIENTES SET DT_ATUALIZACAO = :DATE');
+      QContas.Sql.Add('WHERE');
+      QContas.Sql.Add('(CLIENTE_ID = :CLIENTE_ID)');
+
+      QContas.ParamByName('DATE').AsDateTime      := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QContas.ParamByName('Cliente_ID').AsInteger := QTransacao.FieldByName('CLIENTE_ID').AsInteger;
+
+      QContas.Prepare;
+      QContas.ExecSql;
+
+     End;
+
+    End;
+
+
+  Close;
+  End
+  Else
+  Begin
+    Application.MessageBox('Obrigatório informar Especie do Documento', PChar(Msg_Title), mb_IconStop);
+    Especie.Color := clYellow;
+    Especie.SetFocus;
+    exit;
+
+  End;
+end;
+
+procedure TFrmProrroga.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmProrroga.Dt_VencimentoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmProrroga.EspecieKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Conta) then
+    btnContaClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmProrroga.excluir_lancamentoClick(Sender: TObject);
+begin
+
+ if excluir_lancamento.Checked then
+ Begin
+ Especie.Items.Clear;
+ Especie.Style := csDropDown;
+ Especie.Text := 'EXCLUIDO';
+ Especie.Enabled := False;
+ Lancar_Despesa.Checked := False;
+ Lancar_Despesa.Enabled := False;
+ End
+ else
+ Begin
+ Especie.Style := csDropDownList;
+ Especie.Text := '';
+ Lancar_Despesa.Enabled := True;
+ End;
+
+end;
+
+procedure TFrmProrroga.FormCreate(Sender: TObject);
+begin
+  QContas.Sql.Clear;
+  QContas.Sql.Add('SELECT * FROM TRANSPARCELAS');
+  QContas.Sql.Add('WHERE');
+  QContas.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+  QContas.Sql.Add('AND (PARCELA_ID = :PARCELA_ID)');
+  QContas.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+  QContas.ParamByName('TRANSACAO_ID').AsInteger  := Num_Trans;
+  QContas.ParamByName('PARCELA_ID').AsString     := Num_Parcela;
+  QContas.ParamByName('TIPO_TRANSACAO').AsString := Tp_Trans;
+
+  QContas.Prepare;
+  QContas.Open;
+
+  QTransacao.Sql.Clear;
+  QTransacao.Sql.Add('SELECT * FROM TRANSACOES');
+  QTransacao.Sql.Add('WHERE');
+  QTransacao.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+  QTransacao.ParamByName('TRANSACAO_ID').AsInteger  := Num_Trans;
+
+  QTransacao.Prepare;
+  QTransacao.Open;
+
+  Dt_Vencimento.Text := QContas.FieldByName('DT_VENCIMENTO').AsString;
+  Especie.Text       := QContas.FieldByName('ESPECIE').AsString;
+  Duplicata.Text     := QContas.FieldByName('DUPLICATA').AsString;
+  Vr_Despesa.Value   := QContas.FieldByName('VALOR_DESPESAS').AsFloat;
+  Observacao.Text    := QContas.FieldByName('OBSERVACAO_PARCELA').AsString;
+  Conta.Text         := QTransacao.FieldByName('CONTA_ID').AsString;
+  Historico.Text     := QTransacao.FieldByName('HISTORICO').AsString;
+
+  QContas.Sql.Clear;
+  QContas.Sql.Add('SELECT * FROM TABELAS');
+  QContas.Sql.Add('WHERE');
+  QContas.Sql.Add('(TIPO_TABELA = :TIPO_TABELA)');
+
+  QContas.ParamByName('TIPO_TABELA').AsString := 'D';
+
+  QContas.Prepare;
+  QContas.Open;
+
+  Especie.Items.Clear;
+
+  QContas.First;
+  while not QContas.Eof do
+  begin
+    Especie.Items.Add(Copy(QContas.FieldByName('DESCRICAO').AsString, 1, 25));
+
+    Application.ProcessMessages;
+    QContas.Next;
+  end;
+
+end;
+
+procedure TFrmProrroga.Lancar_DespesaClick(Sender: TObject);
+begin
+  Conta.Enabled     := Lancar_Despesa.Checked;
+  btnConta.Enabled  := Lancar_Despesa.Checked;
+  Historico.Enabled := Lancar_Despesa.Checked;
+end;
+
+end.

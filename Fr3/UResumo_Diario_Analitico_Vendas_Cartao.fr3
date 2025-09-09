@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Agrupado_3.fr3" ReportOptions.CreateDate="44552,7466467708" ReportOptions.LastChange="44553,4441336458" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportTableTemp" DataSetName="Table_Temp_UResumo_Diario"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperSize="9">
+    <inherited Name="b_cabecalho">
+      <inherited Name="b_cabecalho_data_hora_atual"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Resumo do Mov. Diário&#13;&#10;(Caixa / Bancos)"/>
+      <inherited Name="b_cabecalho_periodo_analisado"/>
+      <inherited Name="b_cabecalho_razao_social"/>
+      <inherited Name="b_cabecalho_logo"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens">
+      <inherited Name="b_cabecalho_titulo_item_texto" Width="37,44094" Text="Data"/>
+      <inherited Name="b_cabecalho_espaco_branco"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="79,37013" Top="3,77953" Width="48,77953" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="N° Doc"/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="151,1812" Top="3,77953" Width="86,57483" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Finalizadora"/>
+      <TfrxMemoView Name="Memo9" AllowVectorExport="True" Left="506,45702" Top="3,77953" Width="75,23624" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Acréscimo"/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="589,60668" Top="3,77953" Width="67,67718" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Desconto"/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="672,75634" Top="3,77953" Width="67,67718" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Valor"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado3_groupheader" Height="25,70080205" Condition="&#60;Table_Temp_UResumo_Diario.&#34;CONDUTA&#34;&#62;">
+      <inherited Name="b_rel_agrupado3_groupheader_item1" Visible="True" Text="[Table_Temp_UResumo_Diario.&#34;CONDUTA&#34;]"/>
+      <inherited Name="b_rel_agrupado3_shape1"/>
+      <inherited Name="b_rel_agrupado3_groupheader_item2" Left="154,96073" Top="3,77953" Visible="False"/>
+      <inherited Name="b_rel_agrupado3_shape2" Visible="False"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado3_groupfooter" Height="45,61418299" Top="355,27582">
+      <inherited Name="b_rel_agrupado3_groupfooter_item1" Top="7,93700299"/>
+      <inherited Name="b_rel_simples_shape1"/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="151,1812" Top="7,55906" Width="87,33859" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Acréscimo ="/>
+      <TfrxMemoView Name="Memo13" AllowVectorExport="True" Left="239,88992" Top="9,33859" Width="78,61417323" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;Table_Temp_UResumo_Diario.&#34;ACRESCIMO&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo14" AllowVectorExport="True" Left="340,1577" Top="7,55906" Width="79,77953" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Desconto ="/>
+      <TfrxMemoView Name="Memo15" AllowVectorExport="True" Left="421,30736" Top="9,33859" Width="78,61417323" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;Table_Temp_UResumo_Diario.&#34;DESCONTO&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo16" AllowVectorExport="True" Left="514,01608" Top="7,55906" Width="49,54329" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Valor ="/>
+      <TfrxMemoView Name="Memo17" AllowVectorExport="True" Left="564,9295" Top="9,33859" Width="78,61417323" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;Table_Temp_UResumo_Diario.&#34;VALOR&#34;&#62;))]"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado3_Band_Informacao" Top="423,30736">
+      <inherited Name="b_rel_agrupado3_Band_Informacao_item_1"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976378" Left="0" Top="313,70099" Width="755,906" ColumnWidth="0" ColumnGap="0" DataSet="FastReportTableTemp" DataSetName="Table_Temp_UResumo_Diario" RowCount="0">
+      <TfrxMemoView Name="Memo1" AllowVectorExport="True" Left="7,55906" Top="1" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Table_Temp_UResumo_Diario.&#34;DT_TRANS&#34;]"/>
+      <TfrxMemoView Name="Memo2" AllowVectorExport="True" Left="79,37013" Top="1" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Table_Temp_UResumo_Diario.&#34;NUM_DOC&#34;]"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="506,45702" Top="1" Width="78,61417323" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;Table_Temp_UResumo_Diario.&#34;ACRESCIMO&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="589,60668" Top="1" Width="78,61417323" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;Table_Temp_UResumo_Diario.&#34;DESCONTO&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="672,75634" Top="1" Width="78,45671" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;Table_Temp_UResumo_Diario.&#34;VALOR&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo18" AllowVectorExport="True" Left="151,1812" Top="1" Width="350,58287" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Table_Temp_UResumo_Diario.&#34;NOME&#34;]"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" PaperSize="9"/>
+</inherited>

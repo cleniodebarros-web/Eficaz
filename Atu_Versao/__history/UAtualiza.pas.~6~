@@ -1,0 +1,111 @@
+unit UAtualiza;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,ShellApi;
+
+type
+  TFrmAtualiza = class(TForm)
+    procedure FormCreate(Sender: TObject);
+    function AddDeleteServico(comando: string): boolean;
+    function WinExecAndWait32(FileName: String; WorkDir: String; Visibility: integer): integer;
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAtualiza: TFrmAtualiza;
+
+implementation
+
+uses
+  Funcoes;
+
+{$R *.dfm}
+function TFrmAtualiza.WinExecAndWait32(FileName: String; WorkDir: String; Visibility: integer): integer;
+var
+   zAppName: array[0..512] of char;
+   zCurDir: array[0..255] of char;
+   StartupInfo: TStartupInfo;
+   ProcessInfo: TProcessInformation;
+begin
+  StrPCopy(zAppName,FileName);
+  StrPCopy(zCurDir,WorkDir);
+  FillChar(StartupInfo,Sizeof(StartupInfo),#0);
+  StartupInfo.cb:=Sizeof(StartupInfo);
+  StartupInfo.dwFlags:=STARTF_USESHOWWINDOW;
+  StartupInfo.wShowWindow:=Visibility;
+
+  if not CreateProcess(nil,zAppName,nil,nil,False,CREATE_NEW_CONSOLE or NORMAL_PRIORITY_CLASS,nil,zCurDir,StartupInfo,ProcessInfo) then
+     Result:=-1
+  else
+  begin
+     WaitforSingleObject(ProcessInfo.hProcess,INFINITE);
+     GetExitCodeProcess(ProcessInfo.hProcess,DWORD(Result));
+  end;
+end;
+
+
+function TFrmAtualiza.AddDeleteServico(comando: string): boolean;
+var
+   txt: TextFile;
+   dir: string;
+   ret: boolean;
+begin
+  ret:=False;
+  try
+     dir:=ExtractFilePath(Application.ExeName);
+     AssignFile(txt, dir + 'User.bat');
+     Rewrite(txt);
+     Write(txt,comando);
+
+     CloseFile(txt);
+     if WinExecAndWait32(dir + 'User.bat',dir,SW_ShowNormal) = 0 then
+         ret:=True;
+     DeleteFile(dir + 'User.bat');
+  finally
+     AddDeleteServico:=ret;
+  end;
+end;
+
+
+
+procedure TFrmAtualiza.FormCreate(Sender: TObject);
+var
+Janela: HWND;
+Local, Server, Old,kill: String;
+begin
+ KILL := 'TASKKILL /F /IM EFICAZ.EXE' ;
+
+ AddDeleteServico(KILL);
+
+  Janela := FindWindow('TFrmPrincipal', nil);
+
+  if Janela <> 0 then
+    PostMessage(Janela, WM_QUIT, 0, 0);
+
+  Old    := ExtractFilePath(ParamStr(0)) + 'Eficaz.Old';
+  Local  := ExtractFilePath(ParamStr(0)) + 'Eficaz.Exe';
+  Server := LeIni(ExtractFilePath(ParamStr(0)) + 'Eficaz.Ini', 'Atualização', 'Download');
+
+  DeleteFile(Old);
+  RenameFile(Local, Old);
+  CopyFile(PChar(Server), PChar(Local), False);
+
+  ShellExecute(handle,'open',PChar(local), '','',SW_SHOWNORMAL);
+
+
+  KILL := 'TASKKILL /F /IM Atu_Versao.EXE' ;
+
+  AddDeleteServico(KILL);
+
+
+
+ // WinExec(PChar(Local), SW_SHOWNORMAL);
+end;
+
+end.

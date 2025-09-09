@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Agrupado_1.fr3" ReportOptions.CreateDate="44552,4358333449" ReportOptions.LastChange="44552,4695739236" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportQRel" DataSetName="QRel_UMovimento_Duplicatas"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperSize="9">
+    <inherited Name="b_cabecalho">
+      <inherited Name="b_cabecalho_data_hora_atual"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Movimento de Duplicatas"/>
+      <inherited Name="b_cabecalho_periodo_analisado"/>
+      <inherited Name="b_cabecalho_razao_social"/>
+      <inherited Name="b_cabecalho_logo"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+      <TfrxMemoView Name="u_mov_dupl_tipo_rel" AllowVectorExport="True" Left="139,84261" Top="120,94496" Width="118" Height="15" AutoWidth="True" Font.Charset="0" Font.Color="-16777208" Font.Height="-12" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" Fill.BackColor="16777215" ParentFont="False" Text="Tipo -"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens">
+      <inherited Name="b_cabecalho_titulo_item_texto" Width="56,33859" Text="Dt.Pag"/>
+      <inherited Name="b_cabecalho_espaco_branco"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="90,70872" Top="2,77953" Width="56,33859" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Atraso"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="166,29932" Top="2,77953" Width="63,89765" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Histórico"/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="661,41775" Top="2,77953" Width="41,22047" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Valor"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_groupheader" Condition="&#60;QRel_UMovimento_Duplicatas.&#34;nome&#34;&#62;">
+      <inherited Name="b_rel_agrupado3_shape2"/>
+      <inherited Name="b_rel_agrupado1_groupheader_item1" Width="442,61441" Text="[QRel_UMovimento_Duplicatas.&#34;nome&#34;]"/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="457,32313" Top="0" Width="72,22047" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Telefone -">
+        <Formats>
+          <item/>
+          <item/>
+        </Formats>
+      </TfrxMemoView>
+      <TfrxMemoView Name="Memo13" AllowVectorExport="True" Left="529,1342" Top="1,77953" Width="214,51979" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UMovimento_Duplicatas.&#34;DDD&#34;] [QRel_UMovimento_Duplicatas.&#34;TELEFONE&#34;]"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_groupfooter" Height="37,79528291" Top="359,05535">
+      <inherited Name="b_rel_agrupado1_groufooter_item1" Text="Sub Total &#62;"/>
+      <inherited Name="b_rel_agrupado1_groufooter_shape1"/>
+      <TfrxMemoView Name="Memo9" AllowVectorExport="True" Left="661,41775" Top="3,77953" Width="89,95275591" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-13" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_UMovimento_Duplicatas.&#34;VALOR&#34;&#62;))]"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_report_Summary" Top="536,69326">
+      <inherited Name="b_rel_agrupado1_report_Summary_resultado" Text="Resultado &#62;"/>
+      <inherited Name="b_rel_simples_shape1"/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="151,1812" Top="15,11812" Width="49,54329" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Valor ="/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="201,31509" Top="17,89765" Width="89,7953" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;QRel_UMovimento_Duplicatas.&#34;VALOR&#34;&#62;))]"/>
+    </inherited>
+    <inherited Name="Footer1" Top="419,52783">
+      <inherited Name="b_rel_agrupado1_report_Summary_resultado2"/>
+      <inherited Name="b_rel_agrupado1_shape2"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976378" Left="0" Top="317,48052" Width="755,906" ColumnWidth="0" ColumnGap="0" DataSet="FastReportQRel" DataSetName="QRel_UMovimento_Duplicatas" RowCount="0">
+      <TfrxMemoView Name="Memo1" AllowVectorExport="True" Left="7,55906" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UMovimento_Duplicatas.&#34;DT_TRANS&#34;]"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="90,70872" Top="2" Width="67,11812" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UMovimento_Duplicatas.&#34;ATRASO&#34;]"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="166,29932" Top="2" Width="486,64595" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UMovimento_Duplicatas.&#34;HISTORICO&#34;]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="661,41775" Top="2" Width="89,7953" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UMovimento_Duplicatas.&#34;VALOR&#34;&#62;)]"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" PaperSize="9"/>
+</inherited>

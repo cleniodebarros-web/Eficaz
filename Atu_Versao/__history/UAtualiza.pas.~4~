@@ -1,0 +1,60 @@
+unit UAtualiza;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs,ShellApi;
+
+type
+  TFrmAtualiza = class(TForm)
+    procedure FormCreate(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmAtualiza: TFrmAtualiza;
+
+implementation
+
+uses
+  Funcoes;
+
+{$R *.dfm}
+
+
+
+procedure TFrmAtualiza.FormCreate(Sender: TObject);
+var
+Janela: HWND;
+Local, Server, Old,kill: String;
+begin
+ KILL := 'TASKKILL /F /IM EFICAZ.EXE' ;
+
+ AddDeleteServico(KILL);
+
+  Janela := FindWindow('TFrmPrincipal', nil);
+
+  if Janela <> 0 then
+    PostMessage(Janela, WM_QUIT, 0, 0);
+
+  Old    := ExtractFilePath(ParamStr(0)) + 'Eficaz.Old';
+  Local  := ExtractFilePath(ParamStr(0)) + 'Eficaz.Exe';
+  Server := LeIni(ExtractFilePath(ParamStr(0)) + 'Eficaz.Ini', 'Atualização', 'Download');
+
+  showmessage(server);
+
+  DeleteFile(Old);
+  RenameFile(Local, Old);
+  CopyFile(PChar(Server), PChar(Local), False);
+
+  ShellExecute(handle,'open',PChar(local), '','',SW_SHOWNORMAL);
+
+ // WinExec(PChar(Local), SW_SHOWNORMAL);
+end;
+
+end.

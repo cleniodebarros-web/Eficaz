@@ -1,0 +1,42 @@
+object FrmQuantidade: TFrmQuantidade
+  Left = 0
+  Top = 0
+  BorderIcons = []
+  BorderStyle = bsSingle
+  Caption = 'Digite a Quantidade'
+  ClientHeight = 47
+  ClientWidth = 242
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Quantidade: TCurrencyEdit
+    Left = 0
+    Top = 0
+    Width = 242
+    Height = 47
+    Margins.Left = 9
+    Margins.Top = 0
+    BorderStyle = bsNone
+    DecimalPlaces = 3
+    DisplayFormat = '0.000;-0.000'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clBlue
+    Font.Height = -32
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxValue = 999999999.999000000000000000
+    MinValue = 0.010000000000000000
+    ParentFont = False
+    TabOrder = 0
+    Value = 1.000000000000000000
+    ZeroEmpty = False
+    OnKeyPress = QuantidadeKeyPress
+  end
+end

@@ -1,0 +1,647 @@
+unit UEtiquetas_Validade;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, DB, DBTables, Spin, IBCustomDataSet,
+  IBQuery, Mask, rxToolEdit, rxCurrEdit, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids, Vcl.ComCtrls;
+
+type
+  TFrmEtiquetas_Validade = class(TForm)
+    Label6: TLabel;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Bevel1: TBevel;
+    QEstoque: TFDQuery;
+    Label9: TLabel;
+    Modelo: TComboBox;
+    Porta: TComboBox;
+    Table_Etiquetas: TFDMemTable;
+    DataContad: TDataSource;
+    Table_EtiquetasDescricao: TStringField;
+    Table_Etiquetasfabricacao: TDateTimeField;
+    Table_EtiquetasValidade: TDateTimeField;
+    Table_EtiquetasLote: TStringField;
+    Button1: TButton;
+    Table_EtiquetasQuantidade: TIntegerField;
+    Impressora: TComboBox;
+    Panel1: TPanel;
+    StatusBar3: TStatusBar;
+    Grid_Etiquetas: TDBGrid;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure ImpressoraKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Button1Click(Sender: TObject);
+    procedure Table_EtiquetasAfterOpen(DataSet: TDataSet);
+    procedure Button2Click(Sender: TObject);
+    procedure Grid_EtiquetasKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Seleciona_Produtos;
+  end;
+
+var
+  FrmEtiquetas_Validade: TFrmEtiquetas_Validade;
+  Op_Sel: String;
+
+  procedure Par_Etiquetas(Opcao: String);
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UEtiquetas_Novos;
+
+{$R *.dfm}
+
+procedure Par_Etiquetas(Opcao: String);
+begin
+  {Op_Sel := Opcao;
+
+  if not ThereIs('Etiquetas') then
+    TFrmEtiquetas.Create(Application);
+
+  if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
+    FrmPrincipal.Cascade;
+
+    }
+end;
+
+procedure TFrmEtiquetas_Validade.Seleciona_Produtos;
+begin
+
+end;
+
+procedure TFrmEtiquetas_Validade.Table_EtiquetasAfterOpen(DataSet: TDataSet);
+begin
+ TFloatField(Table_EtiquetaS.FieldByName('FABRICACAO')).EditMask     :='!99/99/0000;1;_';
+ TFloatField(Table_EtiquetaS.FieldByName('VALIDADE')).EditMask       :='!99/99/0000;1;_';
+end;
+
+procedure TFrmEtiquetas_Validade.btnExecutaClick(Sender: TObject);
+var
+F, MyFile: TextFile;
+InputString, LcLinha, D1, D2, D3, D4, B1, B2, B3, B4, P1, P2, P3, P4, ID1, ID2,ID3, Cod_Custo,D1b,D2B,D3B,L1,L2,L3: String;
+C, W, X, Q, Tam_Custo, Linha, Etiquetas_Impressas: Integer;
+begin
+
+  try
+
+    GravaIni(Arq_Ini, 'Impressora Código Barras','Impressora', Impressora.Text);
+    GravaIni(Arq_Ini, 'Impressora Código Barras','Modelo', Modelo.Text);
+    GravaIni(Arq_Ini, 'Impressora Código Barras','Porta', Porta.Text);
+
+
+    if (Impressora.Text = 'Elgin')  then
+    begin
+    if (Modelo.Text = '3 Colunas') or (Modelo.Text = '3 Colunas (S/Barra)') then
+          begin
+            D1 := '';
+            D2 := '';
+            D3 := '';
+            B1 := '';
+            B2 := '';
+            B3 := '';
+            P1 := '';
+            P2 := '';
+            P3 := '';
+            L1 := '';
+            L2 := '';
+            L3 := '';
+            Q := 1;
+
+           Table_Etiquetas.First;
+           Begin
+            while not Table_Etiquetas.Eof do
+            begin
+
+              showmessage(Table_Etiquetas.FieldByName('DESCRICAO').AsString);
+
+              for X := 1 to Table_Etiquetas.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(Table_Etiquetas.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B1 := 'Fabric.: ' + DateToStr(Table_Etiquetas.FieldByName('FABRICACAO').AsDateTime);
+                  P1 := 'Validade:' + DateToStr(Table_Etiquetas.FieldByName('VALIDADE').AsDateTime); //'R$ ' + FormatFloat('#,##0.00', Table_Etiquetas.FieldByName('PRECO_VAREJO').AsFloat);
+                  L1 := 'Lote:' + Table_Etiquetas.FieldByName('LOTE').AsString
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(Table_Etiquetas.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B2 := 'Fabric.: ' + DateToStr(Table_Etiquetas.FieldByName('FABRICACAO').AsDateTime);
+                  P2 := 'Validade:' + DateToStr(Table_Etiquetas.FieldByName('VALIDADE').AsDateTime); //'R$ ' + FormatFloat('#,##0.00', Table_Etiquetas.FieldByName('PRECO_VAREJO').AsFloat);
+                  L2 := 'Lote:' + Table_Etiquetas.FieldByName('LOTE').AsString
+                end;
+
+                if Q = 3 then
+                begin
+                  D3 := Copy(Table_Etiquetas.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B3 := 'Fabric.: ' + DateToStr(Table_Etiquetas.FieldByName('FABRICACAO').AsDateTime);
+                  P3 := 'Validade:' + DateToStr(Table_Etiquetas.FieldByName('VALIDADE').AsDateTime); //'R$ ' + FormatFloat('#,##0.00', Table_Etiquetas.FieldByName('PRECO_VAREJO').AsFloat);
+                  L3 := 'Lote:' + Table_Etiquetas.FieldByName('LOTE').AsString;
+
+                  AssignFile(F, Porta.Text);
+
+                  Rewrite(F);
+
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D20');
+
+                    if (Impressora.Text = 'Tanca')  Then
+                    Begin
+                    WriteLn(F, 'Q200,24');
+                    WriteLn(F, 'q840');
+                    End
+                    Else
+                    WriteLn(F, 'Q176,16');
+
+                    WriteLn(F, 'A35,1,0,1,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'A35,30,0,1,1,2,N,"' + B1 + '"');
+                    WriteLn(F, 'A35,60,0,1,1,2,N,"' + P1 + '"');
+                    WriteLn(F, 'A35,90,0,1,1,2,N,"' + L1 + '"');
+
+                   { if Modelo.Text = '3 Colunas' then
+                    Begin
+                     if (Impressora.Text = 'Tanca')  Then
+                        WriteLn(F, 'A35,2,0,1,1,2,N,"' + B1 + '"');//WriteLn(F, 'B35,50,0,E30,3,2,80,B,"' + B1 + '"')
+                     Else
+                        WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+                    End;
+                    }
+
+                    WriteLn(F, 'A335,1,0,1,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'A325,30,0,1,1,2,N,"' + B2 + '"');
+                    WriteLn(F, 'A325,60,0,1,1,2,N,"' + P2 + '"');
+                    WriteLn(F, 'A325,90,0,1,1,2,N,"' + L2 + '"');
+
+                    {if Modelo.Text = '3 Colunas' then
+                    Begin
+                     if (Impressora.Text = 'Tanca')  Then
+                      WriteLn(F, 'B325,50,0,E30,3,2,80,B,"' + B2 + '"')
+                     else
+                      WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+                    End;
+                   }
+                    WriteLn(F, 'A615,1,0,1,1,2,N,"' + D3 + '"');
+                    WriteLn(F, 'A605,30,0,1,1,2,N,"' + B3 + '"');
+                    WriteLn(F, 'A605,60,0,1,1,2,N,"' + P3 + '"');
+                    WriteLn(F, 'A605,90,0,1,1,2,N,"' + L3 + '"');
+                    {
+                    if Modelo.Text = '3 Colunas' then
+                    Begin
+                      if (Impressora.Text = 'Tanca')  Then
+                      WriteLn(F, 'B605,50,0,E30,3,2,80,B,"' + B3 + '"')
+                      Else
+                      WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+                    End;
+                    }
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  D3 := '';
+                  B1 := '';
+                  B2 := '';
+                  B3 := '';
+                  P1 := '';
+                  P2 := '';
+                  P3 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              Table_Etiquetas.Next;
+            end;
+
+            if (Q >= 2)  then
+            begin
+             if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+             else
+                  AssignFile(F, Porta.Text);
+
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D20');
+
+                if (Impressora.Text = 'Tanca')  Then
+                Begin
+                WriteLn(F, 'Q200,24');
+                WriteLn(F, 'q840');
+                End
+                Else
+                WriteLn(F, 'Q176,16');
+
+                WriteLn(F, 'A35,1,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A35,30,0,1,1,2,N,"' + B1 + '"');
+                WriteLn(F, 'A35,60,0,1,1,2,N,"' + P1 + '"');
+                WriteLn(F, 'A35,90,0,1,1,2,N,"' + L1 + '"');
+
+                {
+                if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                Begin
+                 if (Impressora.Text = 'Tanca')  Then
+                    WriteLn(F, 'B35,50,0,E30,3,2,80,B,"' + B1 + '"')
+                 Else
+                    WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+                End;
+                }
+
+                WriteLn(F, 'A325,1,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A325,30,0,1,1,2,N,"' + B2 + '"');
+                WriteLn(F, 'A325,60,0,1,1,2,N,"' + P2 + '"');
+                WriteLn(F, 'A325,90,0,1,1,2,N,"' + L2 + '"');
+
+                {
+                if Modelo.Text = '3 Colunas' then
+                Begin
+                 if (Impressora.Text = 'Tanca')  Then
+                  WriteLn(F, 'B325,50,0,E30,3,2,80,B,"' + B2 + '"')
+                 else
+                  WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+                End;
+                }
+
+                WriteLn(F, 'A605,1,0,1,1,2,N,"' + D3 + '"');
+                WriteLn(F, 'A605,30,0,1,1,2,N,"' + B3 + '"');
+                WriteLn(F, 'A605,60,0,1,1,2,N,"' + P3 + '"');
+                WriteLn(F, 'A605,90,0,1,1,2,N,"' + L3 + '"');
+               {
+                if Modelo.Text = '3 Colunas' then
+                Begin
+                  if (Impressora.Text = 'Tanca')  Then
+                  WriteLn(F, 'B605,50,0,E30,3,2,80,B,"' + B3 + '"')
+                  Else
+                  WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+                End;
+                  }
+
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+           End;
+          end;
+    end;
+
+
+
+
+
+   { if Op_Sel = '1' then
+    begin
+      C := 0;
+
+      Seleciona_Produtos;
+
+      QEstoque.First;
+      while not QEstoque.Eof do
+      begin
+        if Quantidade.Value > 0 then
+          Q := Quantidade.Value
+        else
+          Q := QEstoque.FieldByName('ULT_QUANTIDADE').AsInteger;
+
+        for W := 1 to Q do
+        begin
+          D1 := D1 + Repl(QEstoque.FieldByName('COD_BARRA').AsString, Tam_Etiq.Value);
+          D2 := D2 + Repl(Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 17), Tam_Etiq.Value);
+          D3 := D3 + Repl(FormatFloat('#,##0.00', QEstoque.FieldByName('PRECO_VAREJO').AsFloat), Tam_Etiq.Value);
+
+          Inc(C);
+
+          if C >= Colunas.Value then
+          begin
+            try
+              AssignFile(F, 'LPT1');
+              Rewrite(F);
+
+              if Tipo_Font.Checked then
+                WriteLn(F, #27#15 + D1)
+              else
+                WriteLn(F, #27#18 + D1);
+
+              WriteLn(F, D2);
+              WriteLn(F, D3);
+              WriteLn(F, #27#18);
+
+              if Linhas.Value > 0 then
+              begin
+                for X := 1 to Linhas.Value do
+                  WriteLn(F, '');
+              end;
+
+              CloseFile(F);
+              Sleep(StrToInt(Tempo.Text));
+            except
+              CloseFile(F);
+            end;
+
+            C  := 0;
+            D1 := '';
+            D2 := '';
+            D3 := '';
+          end;
+        end;
+
+        Application.ProcessMessages;
+        QEstoque.Next;
+      end;
+
+      if (C < Colunas.Value) and (C > 0) then
+      begin
+        try
+          AssignFile(F, 'LPT1');
+          Rewrite(F);
+
+          if Tipo_Font.Checked then
+            WriteLn(F, #27#15 + D1)
+          else
+            WriteLn(F, #27#18 + D1);
+
+          WriteLn(F, D2);
+          WriteLn(F, D3);
+          WriteLn(F, #27#18);
+
+          if Linhas.Value > 0 then
+          begin
+            for X := 1 to Linhas.Value do
+              WriteLn(F, '');
+          end;
+
+          CloseFile(F);
+
+          Sleep(StrToInt(Tempo.Text));
+        except
+          CloseFile(F);
+        end;
+      end;
+    end;
+
+    if Op_Sel = '2' then
+    begin
+      Seleciona_Produtos;
+
+      if Impr.Text = 'Datamax' then
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Datamax') = 'COM1' then
+          AssignFile(F, 'COM1')
+        else
+          AssignFile(F, 'COM2');
+
+        Rewrite(F);
+        try
+          Writeln(F, #2 + 'L' + #13);
+          Writeln(F, 'D11' + #13);
+          Writeln(F, '121101200600008' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+          Writeln(F, '121101200600143' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+          Writeln(F, '121101200600272' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+          Writeln(F, '111101200520008' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(F, '111101200520143' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(F, '111101200520272' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(F, '1F6204000020008' + QEstoque.FieldByName('COD_BARRA').AsString + #13);
+          Writeln(F, '1F6204000020143' + QEstoque.FieldByName('COD_BARRA').AsString + #13);
+          Writeln(F, '1F6204000020272' + QEstoque.FieldByName('COD_BARRA').AsString + #13);
+          Writeln(F, 'Q' + StrZero(IntToStr(Quantidade.Value), 4, 0) + #13);
+          Writeln(F, 'E' + #13);
+        finally
+          CloseFile(F);
+        end;
+      end;
+
+      if Impr.Text = 'Zebra TLP2844' then
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+          AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+        else
+          AssignFile(F, 'LPT1');
+
+        Rewrite(F);
+
+        try
+          WriteLn(F, 'N');
+          WriteLn(F, 'A140,15,0,3,2,2,N,"' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+          WriteLn(F, 'A140,60,0,3,2,2,N,"' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+          WriteLn(F, 'B31,115,0,1,2,9,70,N,"' + QEstoque.FieldByName('COD_BARRA').AsString + '"');
+          WriteLn(F, 'A460,104,0,5,2,2,N,"' + FormatFloat('#,##0.00', QEstoque.FieldByName('PRECO_VAREJO').AsFloat) + '"');
+          WriteLn(F, 'A350,128,0,3,3,3,N,"R$"');
+          WriteLn(F, 'A31,190,0,1,2,2,R,"' + QEstoque.FieldByName('COD_BARRA').AsString + '"');
+          WriteLn(F, 'P1');
+        finally
+          CloseFile(F);
+        end;
+      end;
+
+      Codigo_Inicial.SetFocus;
+    end;
+
+    if Op_Sel = '3' then
+    begin
+      Seleciona_Produtos;
+
+      if Impr.Text = 'Datamax' then
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Datamax') = 'COM1' then
+          AssignFile(F, 'COM1')
+        else
+          AssignFile(F, 'COM2');
+
+        Rewrite(F);
+
+        try
+          Writeln(F, #2 + 'L' + #13);
+          Writeln(F, 'D11' + #13);
+          Writeln(F, '1F6204000020010' + QEstoque.FieldByName('COD_BARRA').AsString + #13);
+          Writeln(F, '161104000600010' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(F, '161104000020210' + 'R$  ' + FormatFloat('#,##0.00', QEstoque.FieldByName('PRECO_VAREJO').AsFloat) + #13);
+          Writeln(F, 'Q' + StrZero(IntToStr(Quantidade.Value), 4, 0));
+          Writeln(F, 'E' + #13);
+        finally
+          CloseFile(F);
+        end;
+      end;
+
+      if Impr.Text = 'Zebra TLP2844' then
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+          AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+        else
+          AssignFile(F, 'LPT1');
+
+        Rewrite(F);
+
+        try
+          WriteLn(F, 'N');
+          WriteLn(F, 'A140,15,0,3,2,2,N,"' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+          WriteLn(F, 'A140,60,0,3,2,2,N,"' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+          WriteLn(F, 'B31,115,0,1,2,9,70,N,"' + QEstoque.FieldByName('COD_BARRA').AsString + '"');
+          WriteLn(F, 'A460,104,0,5,2,2,N,"' + FormatFloat('#,##0.00', QEstoque.FieldByName('PRECO_VAREJO').AsFloat) + '"');
+          WriteLn(F, 'A350,128,0,3,3,3,N,"R$"');
+          WriteLn(F, 'A31,190,0,1,2,2,R,"' + QEstoque.FieldByName('COD_BARRA').AsString + '"');
+          WriteLn(F, 'P1');
+        finally
+          CloseFile(F);
+        end;
+      end;
+
+      Codigo_Inicial.SetFocus;
+    end;
+
+    if Op_Sel = '4' then
+    begin
+      QEstoque.Sql.Clear;
+      QEstoque.Sql.Add('SELECT * FROM PRODUTOS');
+      QEstoque.Sql.Add('WHERE');
+      QEstoque.Sql.Add('(DT_PRECO >= :DT_PRECO)');
+
+      QEstoque.ParamByName('DT_PRECO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+      QEstoque.Prepare;
+      QEstoque.Open;
+
+      QEstoque.First;
+      while not QEstoque.Eof do
+      begin
+        if Impr.Text = 'Datamax' then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Datamax') = 'COM1' then
+            AssignFile(F, 'COM1')
+          else
+            AssignFile(F, 'COM2');
+
+          Rewrite(F);
+
+          try
+            Writeln(F, #2 + 'L' + #13);
+            Writeln(F, 'D11' + #13);
+            Writeln(F, '1F6204000020010' + QEstoque.FieldByName('COD_BARRA').AsString + #13);
+            Writeln(F, '161104000600010' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+            Writeln(F, '161104000020210' + 'R$  ' + FormatFloat('#,##0.00', QEstoque.FieldByName('PRECO_VAREJO').AsFloat) + #13);
+            Writeln(F, 'Q' + StrZero(IntToStr(Quantidade.Value), 4, 0));
+            Writeln(F, 'E' + #13);
+          finally
+            CloseFile(F);
+          end;
+        end;
+
+        if Impr.Text = 'Zebra TLP2844' then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+            AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+          else
+            AssignFile(F, 'LPT1');
+
+          Rewrite(F);
+
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'A140,15,0,3,2,2,N,"' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+            WriteLn(F, 'A140,60,0,3,2,2,N,"' + Copy(QEstoque.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+            WriteLn(F, 'B31,115,0,1,2,9,70,N,"' + QEstoque.FieldByName('COD_BARRA').AsString + '"');
+            WriteLn(F, 'A460,104,0,5,2,2,N,"' + FormatFloat('#,##0.00', QEstoque.FieldByName('PRECO_VAREJO').AsFloat) + '"');
+            WriteLn(F, 'A350,128,0,3,3,3,N,"R$"');
+            WriteLn(F, 'A31,190,0,1,2,2,R,"' + QEstoque.FieldByName('COD_BARRA').AsString + '"');
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+
+        Application.ProcessMessages;
+        QEstoque.Next;
+      end;
+    end;
+   }
+  finally
+
+  end;
+
+end;
+
+procedure TFrmEtiquetas_Validade.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmEtiquetas_Validade.Button1Click(Sender: TObject);
+begin
+Table_Etiquetas.Open;
+Table_Etiquetas.Append;
+Grid_Etiquetas.SetFocus;
+
+end;
+
+procedure TFrmEtiquetas_Validade.Button2Click(Sender: TObject);
+begin
+ Table_Etiquetas.Post;
+end;
+
+procedure TFrmEtiquetas_Validade.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    //(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmEtiquetas_Validade.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmEtiquetas_Validade.FormCreate(Sender: TObject);
+begin
+  if LeIni(Arq_Ini, 'Impressora Código Barras','Impressora') <> '' then
+  Begin
+  Impressora.Text      := LeIni(Arq_Ini, 'Impressora Código Barras','Impressora');
+  Modelo.Text          := LeIni(Arq_Ini, 'Impressora Código Barras','Modelo');
+  Porta.Text           := LeIni(Arq_Ini, 'Impressora Código Barras','Porta');
+  End;
+end;
+
+procedure TFrmEtiquetas_Validade.Grid_EtiquetasKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+
+  if Key = VK_F9 then
+  Begin
+  BtnExecuta.Show;
+  Perform(Wm_NextDlgCtl, 0, 0);
+  End;
+
+end;
+
+procedure TFrmEtiquetas_Validade.ImpressoraKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+end.

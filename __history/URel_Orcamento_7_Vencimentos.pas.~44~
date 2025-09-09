@@ -1,0 +1,686 @@
+unit URel_Orcamento_7_Vencimentos;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, IBCustomDataSet, IBQuery, StdCtrls, rxCurrEdit, Buttons,
+  ExtCtrls, Mask, rxToolEdit, QuickRpt, QRCtrls, DBCtrls, RDprint, Printers,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmRel_Orcamento_7_Vencimentos = class(TForm)
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    Bevel1: TBevel;
+    btnTecnico: TSpeedButton;
+    Tecnico: TCurrencyEdit;
+    Label2: TLabel;
+    Label3: TLabel;
+    Rel_Ordem_Tecnico: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel7: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel10: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText8: TQRDBText;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRGroup1: TQRGroup;
+    QRLabel2: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRBand1: TQRBand;
+    QRExpr1: TQRExpr;
+    Label4: TLabel;
+    Centro_Custo: TCurrencyEdit;
+    btnCentro_Custo: TSpeedButton;
+    Label5: TLabel;
+    btnAtendente: TSpeedButton;
+    Atendente: TCurrencyEdit;
+    Rel_Ordem_Servico: TQuickRep;
+    QRBand17: TQRBand;
+    QRSysData17: TQRSysData;
+    QRLabel75: TQRLabel;
+    QRSysData18: TQRSysData;
+    QRLabel80: TQRLabel;
+    QRShape19: TQRShape;
+    QRLabel81: TQRLabel;
+    QRLabel82: TQRLabel;
+    QRLabel83: TQRLabel;
+    QRLabel85: TQRLabel;
+    QRLabel86: TQRLabel;
+    QRLabel87: TQRLabel;
+    QRShape20: TQRShape;
+    QRDBText54: TQRDBText;
+    QRLabel88: TQRLabel;
+    QRLabel89: TQRLabel;
+    QRLabel90: TQRLabel;
+    QRLabel91: TQRLabel;
+    QRLabel92: TQRLabel;
+    QRLabel93: TQRLabel;
+    QRBand18: TQRBand;
+    QRDBText55: TQRDBText;
+    QRDBText56: TQRDBText;
+    QRDBText57: TQRDBText;
+    QRDBText58: TQRDBText;
+    QRDBText59: TQRDBText;
+    QRDBText61: TQRDBText;
+    QRDBText62: TQRDBText;
+    QRDBText63: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRBand2: TQRBand;
+    QRSysData3: TQRSysData;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    Label7: TLabel;
+    DataStatus: TDataSource;
+    Tipo_Atendimento: TDBLookupComboBox;
+    DataAtend: TDataSource;
+    RDprint1: TRDprint;
+    edt_cliente: TCurrencyEdit;
+    btnCliente: TSpeedButton;
+    label_cliente: TLabel;
+    Label8: TLabel;
+    Num_Ordem: TCurrencyEdit;
+    QRel: TFDQuery;
+    QStatus: TFDQuery;
+    QAtend: TFDQuery;
+    QAtendente: TFDQuery;
+    QItens: TFDQuery;
+    chk_observacao: TCheckBox;
+    Label9: TLabel;
+    Aparelho: TEdit;
+    QSearch: TFDQuery;
+    Status: TComboBox;
+    Label6: TLabel;
+    Empresa: TCurrencyEdit;
+    btnEmpresa: TSpeedButton;
+    Dtmai: TDateEdit;
+    Dtmen: TDateEdit;
+    Label1: TLabel;
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure TecnicoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnTecnicoClick(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnCentro_CustoClick(Sender: TObject);
+    procedure btnAtendenteClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure btnClienteClick(Sender: TObject);
+    procedure Num_OrdemExit(Sender: TObject);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure StatusChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRel_Orcamento_7_Vencimentos: TFrmRel_Orcamento_7_Vencimentos;
+  linha, Pagina, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11,ULTIMO_vendedor,totalregistro,registro: Integer;
+  total_serv, total_pecas, total_geral, soma_vr_pecas, total_desconto, total_acrescimo,Total_Faturado,Total_Normal,T_Faturado, T_Normal,Total_Vendedor,Desconto_vendedor,Acrescimo_Vendedor : Real;
+  NOME_VENDEDOR :String;
+
+implementation
+
+uses
+  UConsulta, UData, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmRel_Orcamento_7_Vencimentos.btnAtendenteClick(Sender: TObject);
+begin
+  try
+    Atendente.Value := GetConsulta('PESSOAL', 0, 0, StrToInt(Atendente.Text));
+  except
+    Atendente.Value := GetConsulta('PESSOAL', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.btnCentro_CustoClick(Sender: TObject);
+begin
+  try
+    Centro_Custo.Value := GetConsulta('CCUSTO', 0, 0, StrToInt(Centro_Custo.Text));
+  except
+    Centro_Custo.Value := GetConsulta('CCUSTO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.btnClienteClick(Sender: TObject);
+begin
+  try
+    edt_cliente.Value := GetConsulta('CLIENTES', 0, 0, StrToInt(edt_cliente.Text));
+  except
+    edt_cliente.Value := GetConsulta('CLIENTES', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    Empresa.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(Empresa.Text));
+  except
+    Empresa.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.btnExecutaClick(Sender: TObject);
+begin
+  // 255, 325
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT ORCAMENTOS.*, FUNCIONARIOS.NOME, EMPRESAS.RAZAO');
+  QRel.Sql.Add('FROM ORCAMENTOS');
+
+  QRel.Sql.Add('INNER JOIN FUNCIONARIOS');
+  QRel.Sql.Add('ON (ORCAMENTOS.VENDEDOR_ID = FUNCIONARIOS.FUNCIONARIO_ID)');
+  QRel.Sql.Add('INNER JOIN EMPRESAS');
+  QRel.Sql.Add('ON (ORCAMENTOS.EMPRESA_ID = EMPRESAS.EMPRESA_ID)');
+  
+  QRel.Sql.Add('WHERE');
+
+  if Status.Text = 'Cancelados' then
+  begin
+    QRel.Sql.Add('ORCAMENTOS.STATUS = ''CANCELADO''');
+    QRel.Sql.Add('AND ORCAMENTOS.DT_ORCAMENTO BETWEEN :DT_INI AND :DT_FIM');
+    QRel.ParamByName('DT_INI').AsDateTime := Dtmen.Date;
+    QRel.ParamByName('DT_FIM').AsDateTime := Dtmai.Date;
+  end
+  else
+  begin
+    QRel.Sql.Add('ORCAMENTOS.STATUS = ''NORMAL''');
+    QRel.Sql.Add('AND ORCAMENTOS.DT_ORCAMENTO <= ''TODAY''::DATE');
+    if Status.Text = 'Menos de 7 dias' then
+    begin
+      QRel.Sql.Add('-8');
+    end
+    else
+    if Status.Text = 'Menos de 4 dias' then
+    begin
+      QRel.Sql.Add('-11');
+    end
+    else
+    if Status.Text = 'Menos de 1 dia' then
+    begin
+      QRel.Sql.Add('-14');
+    end
+    else
+      QRel.Sql.Add('-15');
+  end;
+
+  if Atendente.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (ORCAMENTOS.VENDEDOR_ID = :ATENDENTE)');
+    QRel.ParamByName('ATENDENTE').AsInteger := StrToInt(Atendente.Text);
+  end
+  Else
+    QRel.Sql.Add('AND (ORCAMENTOS.VENDEDOR_ID > 1 )');
+
+  QRel.Sql.Add('AND ((ORCAMENTOS.TRANSACAO_ID = 0) or (ORCAMENTOS.TRANSACAO_ID IS NULL))');
+  if Empresa.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (ORCAMENTOS.EMPRESA_ID =:EMPRESA_ID)');
+    QRel.ParamByName('EMPRESA_ID').AsInteger := StrToInt(Empresa.Text);
+  end;
+
+  if edt_cliente.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (ORCAMENTOS.CLIENTE_ID =:CLIENTE_ID)');
+    QRel.ParamByName('CLIENTE_ID').AsInteger := StrToInt(edt_cliente.Text);
+  end;
+
+
+    QRel.Sql.Add('ORDER BY FUNCIONARIOS.NOME, ORCAMENTOS.DT_ORCAMENTO, ORCAMENTOS.ORCAMENTO_ID, ORCAMENTOS.TRANSACAO_ID');
+
+  QRel.Prepare;
+  QRel.Open;
+
+  if QRel.IsEmpty then
+    Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+  else
+  begin
+
+    RDprint1.TamanhoQteColunas:=180;
+    RDprint1.OpcoesPreview.Preview     := True;
+    RDprint1.MostrarProgresso          := True;
+    RDprint1.Acentuacao                := SemAcento;
+    RDprint1.TamanhoQteLinhas          := 1;
+    RDprint1.Abrir;
+
+    if linha > 66 then
+    begin
+      RDprint1.novapagina;
+      Pagina := Pagina + 1;
+    end;
+
+    Pagina:= 1;
+    total_geral := 0;
+    ULTIMO_VENDEDOR := 0;
+    T_Faturado :=  0;
+    T_Normal   :=  0;
+    total_faturado := 0;
+    Total_normal := 0;
+    TotalRegistro := 0 ;
+    registro := 0;
+    Desconto_Vendedor  := 0;
+    Acrescimo_Vendedor := 0;
+
+    QRel.First;
+    while not QRel.Eof do
+    Begin
+       TotalRegistro := totalRegistro + 1;
+       QRel.Next;
+    End;
+
+    QRel.First;
+    while not QRel.Eof do
+    Begin
+
+      inc(registro);
+
+      QAtendente.SQL.Clear;
+      QAtendente.SQL.Add('SELECT FUNCIONARIO_ID, NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+      QAtendente.ParamByName('FUNCIONARIO_ID').AsInteger :=  QRel.FieldByName('VENDEDOR_ID').AsInteger;
+      QAtendente.Prepare;
+      QAtendente.Open;
+
+     // showmessage(nome_Vendedor + ' Ult.Vend: ' + IntToStr(ULTIMO_VENDEDOR) + 'Vendedor ' +IntToStr(QRel.FieldByName('VENDEDOR_ID').AsInteger)   );
+
+
+
+
+      IF ((ULTIMO_VENDEDOR <> QRel.FieldByName('VENDEDOR_ID').AsInteger) and (ULTIMO_VENDEDOR > 0)  and (Atendente.Value = 0)) Then
+      Begin
+        RDprint1.LinhaH(linha, 01, 180, 0,false);
+        Inc(linha);
+        RDprint1.Imp(linha, p3 + 3,'Vendedor: ' + NOME_VENDEDOR);
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Desconto vendedor => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0.00', Desconto_Vendedor,[negrito]);
+
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Acréscimo vendedor => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0.00', Acrescimo_Vendedor,[negrito]);
+
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Vendedor => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0.00', total_Vendedor,[negrito]);
+
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Orçamentos => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0', total_Normal,[negrito]);
+        Inc(linha);
+
+        Inc(linha);
+
+        RDprint1.LinhaH(linha, 01, 180, 0,false);
+        Inc(linha);
+        {
+        IF QRel.FieldByName('STATUS').AsString = 'FATURADO' Then
+        T_Faturado :=    T_Faturado + Total_Faturado;
+
+        T_Normal   :=    T_Normal + Total_Normal ;
+        }
+        Total_Faturado := 0;
+        Total_Normal   := 0;
+        Total_Vendedor := 0;
+        Desconto_Vendedor := 0;
+        Acrescimo_Vendedor :=0 ;
+
+      End;
+
+
+      RDprint1.ImpF(linha, p1, QRel.FieldByName('ORCAMENTO_ID').AsString,[negrito]);
+      RDprint1.Imp(linha, p2, QRel.FieldByName('DT_ORCAMENTO').AsString);
+      RDprint1.Imp(linha, p3, Copy(QRel.FieldByName('NOME').AsString, 1, 30));
+     //RDprint1.ImpVal(linha, p4, ',###,##0.00', QRel.FieldByName('VALOR_SERVICOS').AsFloat,[]);
+     //RDprint1.ImpVal(linha, p5, ',###,##0.00', QRel.FieldByName('VALOR_PECAS').AsFloat,[]);
+      RDprint1.ImpVal(linha, p5, ',###,##0.00', QRel.FieldByName('VALOR_PRODUTOS').AsFloat,[]);
+      RDprint1.ImpVal(linha, p6, ',###,##0.00', QRel.FieldByName('VR_ACRESCIMO').AsFloat,[]);
+      RDprint1.ImpVal(linha, p7, ',###,##0.00', QRel.FieldByName('VR_DESCONTO').AsFloat,[]);
+      RDprint1.ImpVal(linha, p8, ',###,##0.00', QRel.FieldByName('VALOR').AsFloat,[]);
+      RDprint1.Imp(linha, p9, Copy(QAtendente.FieldByName('NOME').AsString, 1, 27));
+      RDprint1.Imp(linha, p10, Copy(QRel.FieldByName('RAZAO').AsString, 1, 25));
+      RDprint1.Imp(linha, p11, QRel.FieldByName('STATUS').AsString);
+
+
+      if chk_observacao.Checked then
+      Begin
+      inc(linha);
+      RDprint1.Imp(linha, 01,'Observação:' );
+      inc(linha);
+      RDprint1.Imp(linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 1, 180));
+      inc(linha);
+      //RDprint1.Imp(linha, 01,'Aparelho:' );
+      //inc(linha);
+      //RDprint1.Imp(linha, 01,(QRel.FieldByName('APARELHO').AsString));
+      //inc(linha);
+      //RDprint1.LinhaH(linha,01,180,0,false);
+      //inc(linha);
+      End;
+
+      //total_serv  := total_serv  + QRel.FieldByName('VALOR_SERVICOS').AsFloat;
+     //total_pecas := total_pecas + QRel.FieldByName('VALOR_PECAS').AsFloat;
+      total_geral    := total_geral + QRel.FieldByName('VALOR').AsFloat;
+      total_vendedor := total_vendedor + QRel.FieldByName('VALOR').AsFloat;
+      total_desconto :=   total_desconto + QRel.FieldByName('VR_DESCONTO').AsFloat ;
+      total_acrescimo :=   total_acrescimo + QRel.FieldByName('VR_ACRESCIMO').AsFloat ;
+      desconto_Vendedor := Desconto_Vendedor + QRel.FieldByName('VR_DESCONTO').AsFloat ;
+      acrescimo_Vendedor := acrescimo_Vendedor + QRel.FieldByName('VR_acrescimo').AsFloat ;
+
+
+      Inc(linha);
+
+
+      if QRel.FieldByName('STATUS').AsString = 'FATURADO' Then
+      Begin
+      Total_Faturado := (Total_Faturado + 1);
+      t_Faturado := T_Faturado + 1
+      End;
+
+      Total_Normal   := (Total_Normal + 1);
+      t_normal := T_normal + 1;
+
+
+      if  (atendente.value > 0) Then
+      Begin
+       if QRel.FieldByName('STATUS').AsString = 'FATURADO' Then
+       T_Faturado :=  Total_Faturado +  T_Faturado;
+
+       T_Normal   :=  Total_Normal   +  T_Normal;
+      End;
+
+
+      ULTIMO_vendedor := QRel.FieldByName('VENDEDOR_ID').AsInteger;
+
+      NOME_VENDEDOR   := QAtendente.FieldByName('NOME').AsString;
+
+
+
+      if linha > 63 then
+      begin
+        RDprint1.novapagina;
+        Pagina := Pagina + 1;
+      end;
+
+
+      QRel.Next;
+
+       IF  (registro = totalregistro)Then
+       Begin
+        RDprint1.LinhaH(linha, 01, 180, 0,false);
+        Inc(linha);
+        RDprint1.Imp(linha, p3 + 3,'Vendedor: ' + NOME_VENDEDOR);
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Desconto vendedor => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0.00', desconto_Vendedor,[negrito]);
+
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Acréscimo vendedor => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0.00', Acrescimo_Vendedor,[negrito]);
+
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Vendedor => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0.00', total_vendedor,[negrito]);
+
+        Inc(linha);
+        RDprint1.ImpF(linha, p3 + 3, 'Total Orçamentos => ',[negrito]);
+        RDprint1.ImpVal(linha, p4, ',###,##0', total_Normal,[negrito]);
+        Inc(linha);
+
+        RDprint1.LinhaH(linha, 01, 180, 0,false);
+        Inc(linha);
+        {
+        IF QRel.FieldByName('STATUS').AsString = 'FATURADO' Then
+        T_Faturado :=  T_Faturado +  Total_Faturado;
+
+        T_Normal   :=  Total_Normal   +  Total_Normal;
+         }
+        Total_Faturado := 0;
+        Total_Normal   := 0;
+        Total_Vendedor   := 0;
+        Desconto_Vendedor := 0;
+        Acrescimo_Vendedor := 0;
+
+
+       End;
+
+
+    End;
+
+   if linha > 63 then
+    begin
+      RDprint1.novapagina;
+      Pagina := Pagina + 1;
+    end;
+
+
+    //RDprint1.LinhaH(linha, 01, 180, 0,false);
+   // Inc(linha);
+   // RDprint1.ImpF(linha, p3, 'Total Serviços => ',[negrito]);
+   // RDprint1.ImpVal(linha, p4, ',###,##0.00', total_serv,[negrito]);
+
+    //Inc(linha);
+    //RDprint1.ImpF(linha, p3 + 3, 'Total Orçamentos => ',[negrito]);
+    //RDprint1.ImpVal(linha, p4, ',###,##0.00',  T_Normal,[negrito]);
+    //Inc(linha);
+    //RDprint1.ImpF(linha, p3 + 3, 'Total Desconto => ',[negrito]);
+    //RDprint1.ImpVal(linha, p4, ',###,##0.00', total_desconto,[negrito]);
+    //Inc(linha);
+    //RDprint1.ImpF(linha, p3 + 3, 'Total Acréscimo => ',[negrito]);
+    //RDprint1.ImpVal(linha, p4, ',###,##0.00', total_acrescimo,[negrito]);
+
+    //Inc(linha);
+    //RDprint1.ImpF(linha, p3 + 3, 'Total Geral => ',[negrito]);
+    //RDprint1.ImpVal(linha, p4, ',###,##0.00', total_geral,[negrito]);
+
+
+    total_serv     := 0;
+    total_pecas    := 0;
+    total_geral    := 0;
+    total_desconto := 0;
+    total_acrescimo := 0;
+
+    Application.ProcessMessages;
+    RDprint1.TamanhoQteLinhas:= 66;
+    RDprint1.Fechar;
+
+
+  end;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.btnTecnicoClick(Sender: TObject);
+begin
+  try
+    Tecnico.Value := GetConsulta('PESSOAL', 0, 0, StrToInt(Tecnico.Text));
+  except
+    Tecnico.Value := GetConsulta('PESSOAL', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.DtmenKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+  //  Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+QStatus.Open;
+QAtend.Open;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.FormCreate(Sender: TObject);
+begin
+  QStatus.Open;
+  QAtend.Open;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.Num_OrdemExit(Sender: TObject);
+begin
+   if Num_Ordem.Value > 0 then
+   begin
+     Status.Enabled := False;
+   end
+   else
+     Status.Enabled := True;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.RDprint1NewPage(Sender: TObject;
+  Pagina: Integer);
+  begin
+
+            RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+            RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 180, 'Sistema de Automação de empresas Eficaz', []);
+            RDprint1.Imp(02, 01, 'Data/Hora: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+            RDprint1.impDir(02, 80, 180, 'Página: ' + IntToStr(Pagina), []);
+            RDprint1.impC(03, 80, '*** ORÇAMENTOS POR VENDEDOR ***',[negrito]);
+
+            if Tecnico.value > 0 Then
+            Begin
+            QSearch.Sql.Clear;
+            QSearch.Sql.Add('SELECT NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+            QSearch.ParamByName('FUNCIONARIO_ID').AsInteger := StrToInt(Tecnico.Text);
+            QSearch.Prepare;
+            QSearch.Open;
+
+            RDprint1.imp(05, 01, 'Técnico: ' + QSearch.FieldByName('NOME').AsString);
+            RDprint1.LinhaH(06,01,180,0,false);
+            End
+            Else
+            RDprint1.LinhaH(05,01,180,0,false);
+
+            //POSICAO DAS COLUNAS
+            p1 := 01;
+            p2 := 08;
+            p3 := 25;
+            p4 := 65;
+            p5 := 58;
+            p6 := 70;
+            p7 := 85;
+            p8 := 100;
+            p9 := 115;
+            p10 := 143;
+            p11 := 170;
+
+            if Tecnico.value > 0 Then
+            Begin
+            RDprint1.imp(07, p1, 'Núm.');
+            RDprint1.imp(07, p2, 'Data');
+            RDprint1.imp(07, p3, 'Cliente');
+            //RDprint1.imp(07, p4+3, 'Serviços');
+            //RDprint1.imp(07, p5+6, 'Peças');
+            RDprint1.imp(07, p6+6, 'Valor');
+            //RDprint1.imp(07, p7, 'Atendimento');
+            //RDprint1.imp(07, p8, 'D.P. Ent.');
+            RDprint1.imp(07, p9, 'Dt. Faturamento');
+            RDprint1.imp(07, p10, 'Vendedor');
+            RDprint1.imp(07, p11, 'Situação');
+
+            RDprint1.LinhaH(08,01,180,0,false);
+            linha:= 09;
+            End
+            Else
+            Begin
+            RDprint1.imp(06, p1, 'Núm.');
+            RDprint1.imp(06, p2 +2, 'Data');
+            RDprint1.imp(06, p3 +2, 'Cliente');
+            //RDprint1.imp(06, p4+3, 'Serviços');
+            //RDprint1.imp(06, p5+6, 'Peças');
+            RDprint1.imp(06, p5+5, 'Valor');
+            RDprint1.imp(06, p6 + 5, 'Acréscimo');
+            RDprint1.imp(06, p7 + 5, 'Desconto');
+            RDprint1.imp(06, p8 + 4, 'Total');
+            RDprint1.imp(06, p9, 'Vendedor');
+            RDprint1.imp(06, p10, 'Empresa');
+            RDprint1.imp(06, p11, 'Situação');
+
+            RDprint1.LinhaH(07,01,180,0,false);
+            linha:= 08;
+
+            End;
+
+
+
+
+
+
+  end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.StatusChange(Sender: TObject);
+begin
+  if Status.Text = 'Cancelados' then
+  begin
+    Label1.Visible := True;
+    Dtmai.Visible  := True;
+    Dtmen.Visible  := True;
+    Dtmen.Date := StrToDate('01/' + Copy(DateToStr(IncMonth(date,-1)), 4, 7));
+    Dtmai.Date := date;
+  end
+  else
+  begin
+    Label1.Visible := False;
+    Dtmai.Visible  := False;
+    Dtmen.Visible  := False;
+  end;
+end;
+
+procedure TFrmRel_Orcamento_7_Vencimentos.TecnicoKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Tecnico) then
+    btnTecnicoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Centro_Custo) then
+    btnCentro_CustoClick(Self);
+
+   if (Key = Vk_F7) and (Sender = Atendente) then
+    btnAtendenteClick(Self);
+
+   if (Key = Vk_F7) and (Sender = edt_cliente) then
+    btnClienteClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+end.

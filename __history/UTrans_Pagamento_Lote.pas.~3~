@@ -1,0 +1,476 @@
+unit UTrans_Pagamento_Lote;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, IBCustomDataSet, IBQuery, StdCtrls, Tabs, ComCtrls, Grids,
+  DBGrids, Buttons, rxCurrEdit, Mask, rxToolEdit, ExtCtrls, DBTables,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  QRCtrls, QuickRpt;
+
+type
+  TFrmTrans_Pagamento_Lote = class(TForm)
+    Panel1: TPanel;
+    Label1: TLabel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Label2: TLabel;
+    Fornecedor: TCurrencyEdit;
+    btnFornecedor: TSpeedButton;
+    Panel2: TPanel;
+    DBGrid1: TDBGrid;
+    StatusBar1: TStatusBar;
+    Alfabeto: TTabSet;
+    btnExecuta: TButton;
+    btnRetorna: TButton;
+    DataContas: TDataSource;
+    Label3: TLabel;
+    btnSoma: TButton;
+    QRel: TFDQuery;
+    QContas: TFDQuery;
+    Label5: TLabel;
+    Caixa: TCurrencyEdit;
+    btnCaixa: TSpeedButton;
+    Recibo: TQuickRep;
+    DetailBand1: TQRBand;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel1: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRShape3: TQRShape;
+    QRDBText3: TQRDBText;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRLabel14: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRBand3: TQRBand;
+    QFornecedor: TFDQuery;
+    Chk_ordenar: TCheckBox;
+    IQuery: TFDQuery;
+    procedure FormCreate(Sender: TObject);
+    procedure btnFornecedorClick(Sender: TObject);
+    procedure FornecedorKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FornecedorExit(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure AlfabetoClick(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure btnSomaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+    procedure btnCaixaClick(Sender: TObject);
+    procedure CaixaKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Seleciona;
+    procedure Soma;
+  end;
+
+var
+  FrmTrans_Pagamento_Lote: TFrmTrans_Pagamento_Lote;
+  Cod_fornecedor: Integer;
+  procedure Pagamentos(id_fornecedor: Integer);
+
+implementation
+
+uses
+  UPrincipal, Udata, UConsulta, UProrroga;
+
+{$R *.dfm}
+
+procedure Pagamentos(id_fornecedor: Integer);
+begin
+  Cod_fornecedor := id_fornecedor;
+
+  if not ThereIs('Trans. Mov. Financeira - Pagamento de Contas p/ Lote') then
+    TFrmTrans_Pagamento_Lote.Create(Application);
+
+  if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
+    FrmPrincipal.Cascade;
+end;
+
+procedure TFrmTrans_Pagamento_Lote.Seleciona;
+begin
+
+  QContas.Sql.Clear;
+  QContas.Sql.Add('SELECT FORNECEDORES.NOME, TRANSPARCELAS.*, TRANSACOES.HISTORICO, TRANSACOES.NUM_DOC, TRANSACOES.CONTA_ID, TRANSACOES.VENDEDOR_ID, TRANSACOES.EMPRESA_ID, TRANSACOES.TPCTB, TRANSACOES.C_CUSTO_ID, TRANSACOES.FORNECEDOR_ID');
+  QContas.Sql.Add('FROM FORNECEDORES');
+  QContas.Sql.Add('INNER JOIN TRANSACOES');
+  QContas.Sql.Add('ON (FORNECEDORES.FORNECEDOR_ID = TRANSACOES.FORNECEDOR_ID)');
+  QContas.Sql.Add('INNER JOIN TRANSPARCELAS');
+  QContas.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSPARCELAS.TRANSACAO_ID)');
+  QContas.Sql.Add('WHERE');
+  QContas.Sql.Add('(TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+
+  if Fornecedor.Value > 0 then
+  begin
+    QContas.Sql.Add('AND (TRANSACOES.FORNECEDOR_ID = :FORNECEDOR_ID)');
+    QContas.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Fornecedor.Text);
+  end;
+
+  QContas.Sql.Add('AND (TRANSPARCELAS.DT_VENCIMENTO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QContas.Sql.Add('AND (TRANSPARCELAS.VALOR > 0)');
+  QContas.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+  QContas.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+  QContas.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+
+  if chk_ordenar.Checked = True Then
+   QContas.Sql.Add('ORDER BY TRANSPARCELAS.DT_VENCIMENTO , FORNECEDORES.NOME')
+  Else
+  QContas.Sql.Add('ORDER BY FORNECEDORES.NOME, TRANSPARCELAS.DT_VENCIMENTO');
+
+
+  QContas.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+  QContas.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+  QContas.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+  QContas.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+
+  QContas.Prepare;
+  QContas.Open;
+
+  Soma;
+
+  DBGrid1.SetFocus;
+
+end;
+
+procedure TFrmTrans_Pagamento_Lote.Soma;
+var
+Vl: Double;
+begin
+  Vl := 0;
+
+  QContas.First;
+  while not QContas.Eof do
+  begin
+    Vl := Vl + QContas.FieldByName('VALOR').AsFloat;
+
+    Application.ProcessMessages;
+    QContas.Next;
+  end;
+
+  QContas.First;
+
+  Label3.Caption := 'Soma : ' + FormatFloat('#,##0.00', Vl);
+end;
+
+procedure TFrmTrans_Pagamento_Lote.AlfabetoClick(Sender: TObject);
+begin
+
+  QContas.Sql.Clear;
+  QContas.Sql.Add('SELECT FORNECEDORES.NOME, TRANSPARCELAS.*, TRANSACOES.HISTORICO, TRANSACOES.NUM_DOC, TRANSACOES.CONTA_ID, TRANSACOES.VENDEDOR_ID, TRANSACOES.EMPRESA_ID, TRANSACOES.TPCTB, TRANSACOES.C_CUSTO_ID, TRANSACOES.FORNECEDOR_ID');
+  QContas.Sql.Add('FROM FORNECEDORES');
+  QContas.Sql.Add('INNER JOIN TRANSACOES');
+  QContas.Sql.Add('ON (FORNECEDORES.FORNECEDOR_ID = TRANSACOES.FORNECEDOR_ID)');
+  QContas.Sql.Add('INNER JOIN TRANSPARCELAS');
+  QContas.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSPARCELAS.TRANSACAO_ID)');
+  QContas.Sql.Add('WHERE');
+  QContas.Sql.Add('(FORNECEDORES.NOME LIKE :NOME)');
+  QContas.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+
+  if Fornecedor.Value > 0 then
+  begin
+    QContas.Sql.Add('AND (TRANSACOES.FORNECEDOR_ID = :FORNECEDOR_ID)');
+    QContas.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Fornecedor.Text);
+  end;
+
+  QContas.Sql.Add('AND (TRANSPARCELAS.DT_VENCIMENTO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QContas.Sql.Add('AND (TRANSPARCELAS.VALOR > 0)');
+  QContas.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+  QContas.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+  QContas.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+  QContas.Sql.Add('ORDER BY FORNECEDORES.NOME, TRANSPARCELAS.DT_VENCIMENTO');
+
+  QContas.ParamByName('NOME').AsString           := Chr(Alfabeto.TabIndex + 65) + '%';
+  QContas.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+  QContas.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+  QContas.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+  QContas.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+
+  QContas.Prepare;
+  QContas.Open;
+
+  Soma;
+
+  DBGrid1.SetFocus;
+
+end;
+
+procedure TFrmTrans_Pagamento_Lote.btnCaixaClick(Sender: TObject);
+begin
+try
+    Caixa.Value := GetConsulta('BANCOS', 0, 0, StrToInt(Caixa.Text));
+  except
+    Caixa.Value := GetConsulta('BANCOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Pagamento_Lote.btnExecutaClick(Sender: TObject);
+var
+Individual : Real;
+ID:integer;
+begin
+  if QContas.IsEmpty then
+    exit;
+
+ Individual := 0;
+
+ QRLabel18.Caption := 'Vr. rec. doc. ';
+
+  DBGrid1.SetFocus;
+
+  DBGrid1.DataSource.DataSet.First;
+
+
+  if (Application.MessageBox('Deseja realmente pagar os valores selecionados?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) <> IDYES) then
+       exit;
+
+  while not DBGrid1.DataSource.DataSet.Eof do
+  begin
+    if DBGrid1.SelectedRows.CurrentRowSelected = True then
+    begin
+
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('SELECT NEXTVAL(:GEN_TRANSACOES) ID');
+      IQuery.ParamByName('GEN_TRANSACOES').AsString :=  'GEN_TRANSACOES';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      Id := IQuery.FieldByName('ID').AsInteger;
+
+      QRel.Sql.Clear;
+      QRel.Sql.Add('INSERT INTO TRANSACOES(TRANSACAO_ID,' +
+                   'DT_TRANS,       DT_MOVIMENTO,      CONDUTA, ' +
+                   'EMPRESA_ID,     FORNECEDOR_ID,     BANCO_ID, ' +
+                   'NUM_DOC,        SERIE,             FLUXO_CAIXA_ID, ' +
+                   'ENTRADA_ID,     PARCELA_ID,        VALOR_PARCELA, ' +
+                   'VALOR,          BALANCO,           TPCTB, ' +
+                   'AUTORIZ_ID,     HISTORICO, COMPLEMENTO,HORA) VALUES(:TRANSACAO_ID,' +
+                   ':DT_TRANS,      :DT_MOVIMENTO,     :CONDUTA, ' +
+                   ':EMPRESA_ID,    :FORNECEDOR_ID,    :BANCO_ID, ' +
+                   ':NUM_DOC,       :SERIE,            :FLUXO_CAIXA_ID, ' +
+                   ':ENTRADA_ID,    :PARCELA_ID,       :VALOR_PARCELA, ' +
+                   ':VALOR,         :BALANCO,          :TPCTB, ' +
+                   ':AUTORIZ_ID,    :HISTORICO,:COMPLEMENTO,:HORA)');
+
+      QRel.ParamByName('TRANSACAO_ID').AsInteger   := ID;
+      QRel.ParamByName('DT_TRANS').AsDateTime      := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QRel.ParamByName('DT_MOVIMENTO').AsDateTime  := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QRel.ParamByName('CONDUTA').AsString         := '08';
+      QRel.ParamByName('EMPRESA_ID').AsInteger     := DBGrid1.DataSource.DataSet.FieldByName('EMPRESA_ID').AsInteger;
+      QRel.ParamByName('FORNECEDOR_ID').AsInteger  := DBGrid1.DataSource.DataSet.FieldByName('FORNECEDOR_ID').AsInteger;
+
+      if StrToInt(Caixa.Text) = 0 then
+            QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Caixa'))
+          else
+            QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa.Text);
+
+      QRel.ParamByName('NUM_DOC').AsString         := DBGrid1.DataSource.DataSet.FieldByName('NUM_DOC').AsString;
+      QRel.ParamByName('SERIE').AsString           := 'N';
+      QRel.ParamByName('FLUXO_CAIXA_ID').AsInteger := 3;
+      QRel.ParamByName('ENTRADA_ID').AsInteger     := DBGrid1.DataSource.DataSet.FieldByName('TRANSACAO_ID').AsInteger;
+      QRel.ParamByName('PARCELA_ID').AsString      := DBGrid1.DataSource.DataSet.FieldByName('PARCELA_ID').AsString;
+      QRel.ParamByName('VALOR_PARCELA').AsFloat    := DBGrid1.DataSource.DataSet.FieldByName('VALOR').AsFloat;
+      QRel.ParamByName('VALOR').AsFloat            := DBGrid1.DataSource.DataSet.FieldByName('VALOR').AsFloat;
+      QRel.ParamByName('BALANCO').AsString         := 'LIBERADO';
+      QRel.ParamByName('TPCTB').AsString           := DBGrid1.DataSource.DataSet.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('AUTORIZ_ID').AsInteger     := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+      QRel.ParamByName('HISTORICO').AsString       := DBGrid1.DataSource.DataSet.FieldByName('HISTORICO').AsString;
+      QRel.ParamByName('COMPLEMENTO').AsString     := 'Doc: ' + DBGrid1.DataSource.DataSet.FieldByName('DUPLICATA').AsString + ' - Venc.: ' + DBGrid1.DataSource.DataSet.FieldByName('DT_VENCIMENTO').AsString;
+      QRel.ParamByName('HORA').AsString            := TimeToStr(time);
+
+      QRel.Prepare;
+      QRel.ExecSql;
+
+      If (FrmPrincipal.Config.FieldByName('AUDITORIA').AsString = 'True') Then
+          GravarLog('PAGAMENTO','INSERIR',DateToStr(date),TimeToStr(time),'Transação_id ' , IntToStr(id),FloatToStr(DBGrid1.DataSource.DataSet.FieldByName('VALOR').AsFloat) + ' Documento: ' + DBGrid1.DataSource.DataSet.FieldByName('NUM_DOC').AsString  ,FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,DBGrid1.DataSource.DataSet.FieldByName('FORNECEDOR_ID').AsInteger);
+
+      Individual := DBGrid1.DataSource.DataSet.FieldByName('VALOR').AsFloat + Individual;
+
+      QRLabel18.Caption := QRLabel18.Caption + DBGrid1.DataSource.DataSet.FieldByName('DUPLICATA').AsString + ' ref. parc. ' + DBGrid1.DataSource.DataSet.FieldByName('PARCELA_ID').AsString + ', ';
+
+    end;
+
+    Application.ProcessMessages;
+    DBGrid1.DataSource.DataSet.Next;
+  end;
+
+
+  if Individual = 0  then
+  Begin
+  Application.MessageBox('Selecione um valor para pagamento por favor!', PChar(Msg_Title), mb_IconInformation);
+  Fornecedor.setFocus;
+  Exit;
+  End;
+
+  QContas.Close;
+  QContas.Open;
+
+  Soma;
+
+  QFornecedor.Close;
+  QFornecedor.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Fornecedor.Text);
+  QFornecedor.Open;
+
+
+
+
+  QRLabel1.Caption  := 'Nº: LOTE';
+  QRLabel2.Caption  := 'Valor: ' + FormatFloat('#,##0.00', Individual);
+  QRLabel8.Caption  := Extenso(Individual);
+  QRLabel10.Caption := FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + '(' +
+                       FrmPrincipal.QEmpresa.FieldByName('ESTADO').AsString + '), ' +
+                       Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 1, 2) + ' de ' +
+                       NomeMes(StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 2))) + ' de ' +
+                       Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 7, 4);
+  QRLabel12.Caption := QFornecedor.FieldByName('ENDERECO').AsString + ', ' + QFornecedor.FieldByName('NUMERO').AsString;
+  QRLabel17.Caption := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString;
+
+  if Application.MessageBox('Deseja imprimir o recibo de quitação?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+    Recibo.PreviewModal;
+
+end;
+
+procedure TFrmTrans_Pagamento_Lote.btnFornecedorClick(Sender: TObject);
+begin
+  try
+    Fornecedor.Value := GetConsulta('FORNECEDORES', 0, 0, StrToInt(Fornecedor.Text));
+  except
+    Fornecedor.Value := GetConsulta('FORNECEDORES', 0, 0, 0);
+  end;
+
+  Seleciona;
+end;
+
+procedure TFrmTrans_Pagamento_Lote.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmTrans_Pagamento_Lote.btnSomaClick(Sender: TObject);
+var
+Vl: Double;
+begin
+  Vl := 0;
+
+  DBGrid1.DataSource.DataSet.First;
+  while not DBGrid1.DataSource.DataSet.eof do
+  begin
+    if DBGrid1.SelectedRows.CurrentRowSelected = True then
+      Vl := Vl + QContas.FieldByName('VALOR').AsFloat;
+
+    Application.ProcessMessages;
+    DBGrid1.DataSource.DataSet.Next;
+  end;
+
+  Label3.Caption := 'Soma : ' + FormatFloat('#,##0.00', Vl);
+end;
+
+procedure TFrmTrans_Pagamento_Lote.CaixaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Caixa) then
+    btnCaixaClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+end;
+
+procedure TFrmTrans_Pagamento_Lote.DBGrid1KeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = VK_F3) and (not QContas.IsEmpty) then
+    Prorroga(QContas.FieldByName('TRANSACAO_ID').AsInteger, QContas.FieldByName('PARCELA_ID').AsString, QContas.FieldByName('TIPO_TRANSACAO').AsString,'P');
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+end;
+
+procedure TFrmTrans_Pagamento_Lote.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmTrans_Pagamento_Lote.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   // Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmTrans_Pagamento_Lote.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmTrans_Pagamento_Lote.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/01/1900');
+  Dtmai.Date := date + 365;
+
+  DBGrid1.Columns[0].Width := 268;
+  DBGrid1.Columns[1].Width := 90;
+  DBGrid1.Columns[2].Width := 90;
+  DBGrid1.Columns[3].Width := 40;
+  DBGrid1.Columns[4].Width := 64;
+  DBGrid1.Columns[5].Width := 90;
+  Caixa.Text    := LeIni(Arq_Ini, 'Sistema', 'Caixa');
+end;
+
+procedure TFrmTrans_Pagamento_Lote.FormShow(Sender: TObject);
+begin
+if Cod_fornecedor > 0 then
+ begin
+  Fornecedor.Value := (Cod_fornecedor);
+  FornecedorExit(Self);
+ end;
+end;
+
+procedure TFrmTrans_Pagamento_Lote.FornecedorExit(Sender: TObject);
+begin
+  Seleciona;
+end;
+
+procedure TFrmTrans_Pagamento_Lote.FornecedorKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Fornecedor) then
+    btnFornecedorClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+end.

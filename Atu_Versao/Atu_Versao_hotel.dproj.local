@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2011/09/28 11:24:58.000.421,=C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2011/09/28 11:50:07.859,=C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Unit2.pas</Transaction>
+    <Transaction>2012/03/17 20:25:39.481.pas,C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Unit2.pas=C:\Documents and Settings\Rubinho\Meus documentos\Fontes\Eficaz 2009\Atu_Versao\UAtualiza.pas</Transaction>
+    <Transaction>2012/03/17 20:25:39.497.dfm,C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Unit2.dfm=C:\Documents and Settings\Rubinho\Meus documentos\Fontes\Eficaz 2009\Atu_Versao\UAtualiza.dfm</Transaction>
+    <Transaction>2012/03/17 20:25:44.294.dproj,C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Project2.dproj=C:\Documents and Settings\Rubinho\Meus documentos\Fontes\Eficaz 2009\Atu_Versao\Atu_Versao.dproj</Transaction>
+    <Transaction>2013/10/02 10:26:35.091.dproj,C:\Projetos\Integrados\Eficaz7\Atu_Versao\Atu_Versao.dproj=C:\Projetos\Integrados\Eficaz7\Atu_Versao\Atu_Versao_hotel.dproj</Transaction>
+    <Transaction>2013/10/02 10:26:48.960.pas,C:\Projetos\Integrados\Eficaz7\Atu_Versao\UAtualiza.pas=C:\Projetos\Integrados\Eficaz7\Atu_Versao\UAtualiza_Hotel.pas</Transaction>
+    <Transaction>2013/10/02 10:26:48.960.dfm,C:\Projetos\Integrados\Eficaz7\Atu_Versao\UAtualiza.dfm=C:\Projetos\Integrados\Eficaz7\Atu_Versao\UAtualiza_Hotel.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

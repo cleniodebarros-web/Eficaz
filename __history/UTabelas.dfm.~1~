@@ -1,0 +1,949 @@
+object FrmTabelas: TFrmTabelas
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Tabelas'
+  ClientHeight = 302
+  ClientWidth = 716
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Scaled = False
+  Visible = True
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object PageControl1: TPageControl
+    Left = 145
+    Top = 0
+    Width = 571
+    Height = 261
+    ActivePage = Manutencao
+    Align = alClient
+    TabOrder = 1
+    object Consulta: TTabSheet
+      Caption = '&Consulta'
+      OnShow = ConsultaShow
+      object Alfabeto: TTabSet
+        Left = 0
+        Top = 212
+        Width = 563
+        Height = 21
+        Align = alBottom
+        AutoScroll = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        SoftTop = True
+        Style = tsModernTabs
+        Tabs.Strings = (
+          'A'
+          'B'
+          'C'
+          'D'
+          'E'
+          'F'
+          'G'
+          'H'
+          'I'
+          'J'
+          'K'
+          'L'
+          'M'
+          'N'
+          'O'
+          'P'
+          'Q'
+          'R'
+          'S'
+          'T'
+          'U'
+          'V'
+          'W'
+          'X'
+          'Y'
+          'Z'
+          'Todos')
+        OnClick = AlfabetoClick
+      end
+      object StatusBar1: TStatusBar
+        Left = 0
+        Top = 193
+        Width = 563
+        Height = 19
+        Panels = <
+          item
+            Text = '<F3> - Desativar'
+            Width = 281
+          end
+          item
+            Text = '<F4> - Reativar'
+            Width = 282
+          end>
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 563
+        Height = 193
+        Align = alClient
+        Color = clInfoBk
+        DataSource = DataTabela
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+        TitleFont.Charset = ANSI_CHARSET
+        TitleFont.Color = clBlue
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDblClick = DBGrid1DblClick
+        OnKeyDown = DBGrid1KeyDown
+        OnKeyPress = DBGrid1KeyPress
+        OnTitleClick = DBGrid1TitleClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'TABELA_ID'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'ID'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'DESCRICAO'
+            Title.Caption = 'Descri'#231#227'o'
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'STATUS'
+            Title.Alignment = taCenter
+            Title.Caption = 'Status'
+            Width = 41
+            Visible = True
+          end>
+      end
+    end
+    object Manutencao: TTabSheet
+      Caption = '&Manuten'#231#227'o'
+      ImageIndex = 1
+      OnShow = ManutencaoShow
+      object Label3: TLabel
+        Left = 6
+        Top = 87
+        Width = 46
+        Height = 13
+        Caption = 'Descri'#231#227'o'
+      end
+      object Label1: TLabel
+        Left = 6
+        Top = 153
+        Width = 55
+        Height = 13
+        Caption = 'Tipo Tabela'
+        Visible = False
+      end
+      object Label2: TLabel
+        Left = 0
+        Top = 41
+        Width = 563
+        Height = 13
+        Align = alTop
+        Alignment = taCenter
+        AutoSize = False
+        Caption = 'Centros de Custo'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+        ExplicitLeft = 400
+        ExplicitTop = 48
+        ExplicitWidth = 31
+      end
+      object Label5: TLabel
+        Left = 10
+        Top = 66
+        Width = 39
+        Height = 13
+        Caption = 'Unidade'
+        Visible = False
+      end
+      object Label25: TLabel
+        Left = 6
+        Top = 112
+        Width = 26
+        Height = 13
+        Caption = 'Setor'
+        Visible = False
+      end
+      object Label4: TLabel
+        Left = 5
+        Top = 134
+        Width = 26
+        Height = 13
+        Caption = 'Setor'
+        Visible = False
+      end
+      object DESCRICAO: TEdit
+        Left = 84
+        Top = 84
+        Width = 301
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 70
+        ParentFont = False
+        TabOrder = 1
+        OnKeyDown = DESCRICAOKeyDown
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 0
+        Width = 563
+        Height = 41
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 0
+        object btnPrior: TBitBtn
+          Left = 6
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'Anterior'
+          TabOrder = 0
+          OnClick = btnPriorClick
+        end
+        object btnNext: TBitBtn
+          Left = 85
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'Pr'#243'ximo'
+          TabOrder = 1
+          OnClick = btnNextClick
+        end
+        object btnInsert: TBitBtn
+          Left = 164
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Incluir'
+          TabOrder = 2
+          OnClick = btnInsertClick
+        end
+        object btnEdit: TBitBtn
+          Left = 244
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'A&lterar'
+          TabOrder = 3
+          OnClick = btnEditClick
+        end
+        object btnDelete: TBitBtn
+          Left = 323
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Excluir'
+          TabOrder = 4
+          OnClick = btnDeleteClick
+        end
+        object btnSave: TBitBtn
+          Left = 402
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Salvar'
+          TabOrder = 5
+          OnClick = btnSaveClick
+        end
+        object btnDiscard: TBitBtn
+          Left = 482
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'C&ancelar'
+          TabOrder = 6
+          OnClick = btnDiscardClick
+        end
+      end
+      object TIPO_TABELA: TEdit
+        Left = 84
+        Top = 150
+        Width = 29
+        Height = 21
+        Enabled = False
+        MaxLength = 1
+        TabOrder = 2
+        Visible = False
+        OnKeyDown = DESCRICAOKeyDown
+      end
+      object Tabelas: TQuickRep
+        Left = 2
+        Top = 300
+        Width = 794
+        Height = 1123
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        Functions.Strings = (
+          'PAGENUMBER'
+          'COLUMNNUMBER'
+          'REPORTTITLE')
+        Functions.DATA = (
+          '0'
+          '0'
+          #39#39)
+        Options = [FirstPageHeader, LastPageFooter]
+        Page.Columns = 1
+        Page.Orientation = poPortrait
+        Page.PaperSize = Default
+        Page.Continuous = False
+        Page.Values = (
+          127.000000000000000000
+          2970.000000000000000000
+          127.000000000000000000
+          2100.000000000000000000
+          127.000000000000000000
+          127.000000000000000000
+          0.000000000000000000)
+        PrinterSettings.Copies = 1
+        PrinterSettings.OutputBin = First
+        PrinterSettings.Duplex = False
+        PrinterSettings.FirstPage = 0
+        PrinterSettings.LastPage = 0
+        PrinterSettings.UseStandardprinter = False
+        PrinterSettings.UseCustomBinCode = False
+        PrinterSettings.CustomBinCode = 0
+        PrinterSettings.ExtendedDuplex = 0
+        PrinterSettings.UseCustomPaperCode = False
+        PrinterSettings.CustomPaperCode = 0
+        PrinterSettings.PrintMetaFile = False
+        PrinterSettings.PrintQuality = 0
+        PrinterSettings.Collate = 0
+        PrinterSettings.ColorOption = 0
+        PrintIfEmpty = True
+        ReportTitle = 'Relat'#243'rio das Tabelas'
+        SnapToGrid = True
+        Units = MM
+        Zoom = 100
+        PrevFormStyle = fsNormal
+        PreviewInitialState = wsMaximized
+        PreviewWidth = 500
+        PreviewHeight = 500
+        PrevInitialZoom = qrZoomToWidth
+        PreviewDefaultSaveType = stQRP
+        PreviewLeft = 0
+        PreviewTop = 0
+        object QRBand1: TQRBand
+          Left = 48
+          Top = 48
+          Width = 698
+          Height = 75
+          AlignToBottom = False
+          TransparentBand = False
+          ForceNewColumn = False
+          ForceNewPage = False
+          Size.Values = (
+            198.437500000000000000
+            1846.791666666667000000)
+          PreCaluculateBandHeight = False
+          KeepOnOnePage = False
+          BandType = rbPageHeader
+          object QRSysData1: TQRSysData
+            Left = 0
+            Top = 16
+            Width = 162
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              0.000000000000000000
+              42.333333333333330000
+              428.625000000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            Data = qrsDateTime
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Text = 'Data/Hora : '
+            Transparent = False
+            ExportAs = exptText
+            FontSize = 8
+          end
+          object Cabec: TQRLabel
+            Left = 445
+            Top = 1
+            Width = 253
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1177.395833333333000000
+              2.645833333333333000
+              669.395833333333300000)
+            XLColumn = 0
+            Alignment = taRightJustify
+            AlignToBand = True
+            Caption = 'Sistema de Adm. de Empresas - Eficaz'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRSysData2: TQRSysData
+            Left = 585
+            Top = 16
+            Width = 113
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1547.812500000000000000
+              42.333333333333330000
+              298.979166666666700000)
+            XLColumn = 0
+            Alignment = taRightJustify
+            AlignToBand = True
+            Color = clWhite
+            Data = qrsPageNumber
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Text = 'P'#225'gina : '
+            Transparent = False
+            ExportAs = exptText
+            FontSize = 8
+          end
+          object QRLabel3: TQRLabel
+            Left = 296
+            Top = 31
+            Width = 106
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              783.166666666666700000
+              82.020833333333330000
+              280.458333333333300000)
+            XLColumn = 0
+            Alignment = taCenter
+            AlignToBand = True
+            Caption = '*** TABELAS ***'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = [fsBold]
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRShape1: TQRShape
+            Left = 0
+            Top = 46
+            Width = 698
+            Height = 4
+            Size.Values = (
+              10.583333333333330000
+              0.000000000000000000
+              121.708333333333300000
+              1846.791666666667000000)
+            XLColumn = 0
+            Shape = qrsHorLine
+            VertAdjust = 0
+          end
+          object QRDBText3: TQRDBText
+            Left = 0
+            Top = 1
+            Width = 36
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              0.000000000000000000
+              2.645833333333333000
+              95.250000000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = FrmPrincipal.QEmpresa
+            DataField = 'RAZAO'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRLabel10: TQRLabel
+            Left = 133
+            Top = 52
+            Width = 50
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              351.895833333333300000
+              137.583333333333300000
+              132.291666666666700000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'C'#243'd. ID'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRLabel2: TQRLabel
+            Left = 230
+            Top = 52
+            Width = 64
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              608.541666666666700000
+              137.583333333333300000
+              169.333333333333300000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'Descri'#231#227'o'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRShape3: TQRShape
+            Left = 0
+            Top = 69
+            Width = 698
+            Height = 4
+            Size.Values = (
+              10.583333333333330000
+              0.000000000000000000
+              182.562500000000000000
+              1846.791666666667000000)
+            XLColumn = 0
+            Shape = qrsHorLine
+            VertAdjust = 0
+          end
+        end
+        object QRBand2: TQRBand
+          Left = 48
+          Top = 157
+          Width = 698
+          Height = 17
+          AlignToBottom = False
+          TransparentBand = False
+          ForceNewColumn = False
+          ForceNewPage = False
+          Size.Values = (
+            44.979166666666670000
+            1846.791666666667000000)
+          PreCaluculateBandHeight = False
+          KeepOnOnePage = False
+          BandType = rbDetail
+          object QRDBText5: TQRDBText
+            Left = 133
+            Top = 1
+            Width = 64
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              351.895833333333300000
+              2.645833333333333000
+              169.333333333333300000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataField = 'TABELA_ID'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRDBText6: TQRDBText
+            Left = 230
+            Top = 1
+            Width = 64
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              608.541666666666700000
+              2.645833333333333000
+              169.333333333333300000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataField = 'DESCRICAO'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+        end
+        object QRGroup1: TQRGroup
+          Left = 48
+          Top = 123
+          Width = 698
+          Height = 34
+          AlignToBottom = False
+          TransparentBand = False
+          ForceNewColumn = False
+          ForceNewPage = False
+          Size.Values = (
+            89.958333333333330000
+            1846.791666666667000000)
+          PreCaluculateBandHeight = False
+          KeepOnOnePage = False
+          Expression = 'QRel.TIPO_TABELA'
+          Master = Tabelas
+          ReprintOnNewPage = False
+          object QRDBText1: TQRDBText
+            Left = 9
+            Top = 9
+            Width = 78
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              23.812500000000000000
+              23.812500000000000000
+              206.375000000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataField = 'TIPO_TABELA'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = [fsBold]
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+        end
+      end
+      object Nivel: TEdit
+        Left = 84
+        Top = 60
+        Width = 301
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        MaxLength = 70
+        TabOrder = 4
+        OnKeyDown = DESCRICAOKeyDown
+      end
+      object TIPO_ATENDIMENTO: TComboBox
+        Left = 84
+        Top = 109
+        Width = 173
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 25
+        ParentFont = False
+        TabOrder = 5
+        Visible = False
+        Items.Strings = (
+          'ARQ. MAGN'#201'TICOS'
+          'ATENDIMENTO EXTERNO'
+          'CONTRATO'
+          'CORTESIA'
+          'GARANTIA'
+          'OR'#199'AMENTO'
+          'OR'#199'AMENTO FABRICANTE'
+          'SERV. APROVADO'
+          'SERV. N'#195'O APROVADO'
+          'SERV. SIST. PARTICULAR'
+          'SISTEMA CONTRATO')
+      end
+      object COD_CONTA_CONTABIL: TEdit
+        Left = 84
+        Top = 188
+        Width = 301
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        MaxLength = 70
+        TabOrder = 6
+        Visible = False
+        OnKeyDown = DESCRICAOKeyDown
+      end
+      object conta_ref: TEdit
+        Left = 83
+        Top = 133
+        Width = 301
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        MaxLength = 70
+        TabOrder = 7
+        Visible = False
+        OnKeyDown = DESCRICAOKeyDown
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 261
+    Width = 716
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 2
+    object btnRetorna: TBitBtn
+      Left = 637
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Retorna'
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+        F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+        000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+        337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+        45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+        3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+        F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+        000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+        337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+        4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+        7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+        333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+        0000}
+      NumGlyphs = 2
+      TabOrder = 2
+      OnClick = btnRetornaClick
+    end
+    object btnPesquisa: TBitBtn
+      Left = 557
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Pesquisa'
+      Glyph.Data = {
+        06020000424D0602000000000000760000002800000028000000140000000100
+        0400000000009001000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+        FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+        FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+        333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+        333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+        777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+        FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+        FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+        333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+        88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+        F777333333333088FFF003333333333337333337733333333333088FFF033333
+        333333337F33337333333333333308FFF09333333333333378F3373333333333
+        333330FF0933333333333333378F733333333333333333003333333333333333
+        33773333333333333333}
+      NumGlyphs = 2
+      TabOrder = 1
+      OnClick = btnPesquisaClick
+    end
+    object btnImprime: TBitBtn
+      Left = 477
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Listagem'
+      TabOrder = 0
+      OnClick = btnImprimeClick
+    end
+  end
+  object Lista: TTreeView
+    Left = 0
+    Top = 0
+    Width = 145
+    Height = 261
+    Align = alLeft
+    Color = clInfoBk
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Indent = 19
+    ParentFont = False
+    ReadOnly = True
+    RowSelect = True
+    TabOrder = 0
+    OnClick = ListaClick
+    OnDblClick = ListaClick
+    OnKeyDown = ListaKeyDown
+    OnKeyPress = ListaKeyPress
+    Items.NodeData = {
+      03120000003E0000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000
+      00000000000110430065006E00740072006F0073002000640065002000430075
+      00730074006F003E0000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF00
+      00000000000000011043006100720067006F007300200065002000460075006E
+      00E700F50065007300400000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+      FF0000000000000000011147007200750070006F007300200064006500200045
+      00730074006F00710075006500460000000000000000000000FFFFFFFFFFFFFF
+      FFFFFFFFFF000000000000000001145300750062002D005400690070006F0073
+      0020006400650020004500730074006F00710075006500360000000000000000
+      000000FFFFFFFFFFFFFFFFFFFFFFFF0000000000000000010C4C006F00630061
+      006C0069007A006100E700F50065007300440000000000000000000000FFFFFF
+      FFFFFFFFFFFFFFFFFF00000000000000000113460061006D00ED006C00690061
+      002000640065002000500072006F006400750074006F00730040000000000000
+      0000000000FFFFFFFFFFFFFFFFFFFFFFFF0000000000000000011155006E0069
+      00640061006400650020006400650020004D0065006400690064006100440000
+      000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF0000000000000000011343
+      006F006D0070006F0073006900E700E3006F002000500072006F0064007500E7
+      00E3006F00240000000000000000000000FFFFFFFFFFFFFFFFFFFFFFFF000000
+      000000000001034E0043004D00260000000000000000000000FFFFFFFFFFFFFF
+      FFFFFFFFFF0000000000000000010443004500530054003A0000000000000000
+      000000FFFFFFFFFFFFFFFFFFFFFFFF0000000000000000010E5400690070006F
+      0020004100740065006E0064002E0020004F0053003000000000000000000000
+      00FFFFFFFFFFFFFFFFFFFFFFFF00000000000000000109530074006100740075
+      00730020004F005300400000000000000000000000FFFFFFFFFFFFFFFFFFFFFF
+      FF000000000000000001115400690070006F002000430061006E00630065006C
+      0061006D0065006E0074006F00400000000000000000000000FFFFFFFFFFFFFF
+      FF00000000000000000000000001115400690070006F00200064006500200044
+      006F00630075006D0065006E0074006F004A0000000000000000000000FFFFFF
+      FFFFFFFFFF00000000000000000000000001164C006F00630061006C0069007A
+      006100E700E3006F00200064006F0020004500730074006F0071007500650040
+      0000000000000000000000FFFFFFFFFFFFFFFF00000000000000000000000001
+      115400690070006F002000640065002000410074006900760069006400610064
+      0065003A0000000000000000000000FFFFFFFFFFFFFFFF000000000000000000
+      000000010E50006C0061006E006F00200043006F006E007400E100620069006C
+      00420000000000000000000000FFFFFFFFFFFFFFFF0000000000000000000000
+      00011247007200750070006F00200043006F006E007400E100620069006C0020
+      00440052004500}
+  end
+  object DataTabela: TDataSource
+    AutoEdit = False
+    DataSet = QTabela
+    Left = 72
+    Top = 264
+  end
+  object QTabela: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM TABELAS')
+    Left = 32
+    Top = 264
+  end
+  object IQuery: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 112
+    Top = 264
+  end
+  object QRel: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 152
+    Top = 264
+  end
+end

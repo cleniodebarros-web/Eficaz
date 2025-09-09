@@ -1,0 +1,1802 @@
+unit UExtrato_Debito_Credito;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, ExtCtrls, rxCurrEdit, rxToolEdit, Buttons, DBCtrls,
+  DB, IBCustomDataSet, IBQuery, QuickRpt, QRCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids;
+
+type
+  TFrmExtrato_Debito_Credito = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Dtmen: TDateEdit;
+    Caixa_Banco: TCurrencyEdit;
+    Dtmai: TDateEdit;
+    btnCaixa_Banco: TSpeedButton;
+    DataBanco: TDataSource;
+    DBText1: TDBText;
+    Extrato: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText8: TQRDBText;
+    SummaryBand1: TQRBand;
+    QRLabel7: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRShape4: TQRShape;
+    QRLabel6: TQRLabel;
+    QRDBText6: TQRDBText;
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    QRExpr4: TQRExpr;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRGroup1: TQRGroup;
+    QRDBText2: TQRDBText;
+    QRBand1: TQRBand;
+    QRExpr5: TQRExpr;
+    QRShape2: TQRShape;
+    QRExpr6: TQRExpr;
+    QRExpr7: TQRExpr;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRShape6: TQRShape;
+    DataFinalizadora: TDataSource;
+    QRDBText5: TQRDBText;
+    QBanco: TFDQuery;
+    QRel: TFDQuery;
+    QFinalizadora: TFDQuery;
+    QArq: TFDQuery;
+    Fdac_Temp: TFDMemTable;
+    Data_Banco: TDataSource;
+    QSearch: TFDQuery;
+    Memo1: TMemo;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure btnCaixa_BancoClick(Sender: TObject);
+    procedure Caixa_BancoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Caixa_BancoChange(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DetailBand1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure DtmenEnter(Sender: TObject);
+    procedure QRGroup1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure ExtratoBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure FormShow(Sender: TObject);
+    procedure ReceitaClick(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure SearchBanco;
+    Procedure Recupera_Saldos;
+    function exibesql(Q: TFDQuery): string;
+  end;
+
+var
+  FrmExtrato_Debito_Credito: TFrmExtrato_Debito_Credito;
+  Saldo, Sd: Real;
+
+implementation
+
+uses
+  UData, UConsulta, UPrincipal,URecupera_Saldos;
+
+{$R *.dfm}
+
+function TFrmExtrato_Debito_Credito.exibesql(Q: TFDQuery): string;
+var
+  i: Integer;
+  r: string;
+begin
+  Result := Q.SQL.Text;
+  for i := 0 to Q.Params.Count - 1 do
+  begin
+    case Q.Params.Items[i].DataType of
+      ftString, ftDate, ftDateTime: r := QuotedStr(Q.Params[i].AsString);
+    else
+      r := Q.Params[i].AsString;
+    end;
+    Result := StringReplace(Result, ':' + Q.Params.Items[i].Name, r,[rfReplaceAll, rfIgnoreCase]);
+  end;
+end;
+
+
+
+procedure TFrmExtrato_Debito_Credito.SearchBanco;
+begin
+  QBanco.Close;
+  QBanco.ParamByName('BANCO_ID').AsInteger   := StrToInt(Caixa_Banco.Text);
+  QBanco.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QBanco.Prepare;
+  QBanco.Open;
+
+  if QBanco.IsEmpty then
+    btnExecuta.Enabled := False
+  else
+    btnExecuta.Enabled := True;
+end;
+procedure TFrmExtrato_Debito_Credito.Recupera_Saldos;
+begin
+ try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('DELETE FROM RAZAO');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TIPO_TRANSACAO <> :TIPO_TRANSACAO)');
+    QArq.Sql.Add('AND (DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'M';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Transação Entre Bancos (DB Destino - CR Origem)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BCO_DEBITO.COD_CONTABIL, BCO_CREDITO.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN BANCOS BCO_DEBITO');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID_TRANSF = BCO_DEBITO.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS BCO_CREDITO');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BCO_CREDITO.BANCO_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '02';
+    QArq.ParamByName('DEPTO').AsString          := '04';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Crédito a Vista (DB Cx/Bco - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '03';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Crédito a Prazo (DB Cliente - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, CLIENTES.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '03';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QArq.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Recebimento c/ Desconto (DB Cx/Bco - CR Cliente) - (DB Cta. - CR Cliente)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, CLIENTES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '07';
+    QArq.ParamByName('SERIE').AsString          := 'D';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, CLIENTES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.COMPLEMENTO, (TRANSACOES.VALOR_PARCELA - TRANSACOES.VALOR), TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('INNER JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '07';
+    QArq.ParamByName('SERIE').AsString          := 'D';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Recebimento c/ Juros (DB Cx/Bco - CR Cliente) - (DB Cx/Bco - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, CLIENTES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR_PARCELA, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '07';
+    QArq.ParamByName('SERIE').AsString          := 'J';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.COMPLEMENTO, (TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '07';
+    QArq.ParamByName('SERIE').AsString          := 'J';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Recebimento Integral (DB Cx/Bco - CR Cliente)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, CLIENTES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '07';
+    QArq.ParamByName('SERIE').AsString          := 'N';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Recebimento Parcial (DB Cx/Bco - CR Cliente)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, CLIENTES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '07';
+    QArq.ParamByName('SERIE').AsString          := 'P';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Débito a Vista (CR Cx/Bco - DB Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '02';
+    QArq.ParamByName('DEPTO').AsString          := '02';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Débito a Prazo (DB Cta. - CR Fornecedor)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, FORNECEDORES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '02';
+    QArq.ParamByName('DEPTO').AsString          := '02';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QArq.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Pagamento c/ Desconto (DB Fornecedor - CR Cx/Bco.) - (DB Fornecedor - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, FORNECEDORES.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '08';
+    QArq.ParamByName('SERIE').AsString          := 'D';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, FORNECEDORES.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.COMPLEMENTO, (TRANSACOES.VALOR_PARCELA - TRANSACOES.VALOR), TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '08';
+    QArq.ParamByName('SERIE').AsString          := 'D';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Pagamento c/ Juros (DB Fornecedor - CR Cx/Bco.) - (DB Cta. - CR Cx/Bco.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, FORNECEDORES.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR_PARCELA, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '08';
+    QArq.ParamByName('SERIE').AsString          := 'J';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.COMPLEMENTO, (TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '08';
+    QArq.ParamByName('SERIE').AsString          := 'J';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Pagamento Integral (DB Fornecedor - CR Cx/Bco.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, FORNECEDORES.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '08';
+    QArq.ParamByName('SERIE').AsString          := 'N';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Pagamento Parcial (DB Fornecedor - CR Cx/Bco.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, FORNECEDORES.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSACOES');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.SERIE = :SERIE)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('CONDUTA').AsString        := '08';
+    QArq.ParamByName('SERIE').AsString          := 'P';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Compra a Vista (DB Cta. - CR Cx/Bco.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+    QArq.Sql.Add('FROM TRANSACOES');
+    //QArq.Sql.Add('INNER JOIN TRANSACOES');
+    //QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    //QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+    //             'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '02';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Compra a Prazo (DB Cta. - CR Fornecedor)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, FORNECEDORES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO,TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+    QArq.Sql.Add('FROM TRANSACOES');
+    //QArq.Sql.Add('INNER JOIN TRANSACOES');
+    //QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  //  QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, FORNECEDORES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+  //               'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '02';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QArq.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Devolução de Compra (DB Cta. - CR Cx/Bco.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO,TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+    QArq.Sql.Add('FROM TRANSACOES');
+    //QArq.Sql.Add('INNER JOIN TRANSACOES');
+    //QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  //  QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+  //               'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '10';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Venda a Vista (DB Cx/Bco. - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+    QArq.Sql.Add('FROM TRANSACOES');
+    //QArq.Sql.Add('INNER JOIN TRANSACOES');
+    //QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+     QArq.Sql.Add('AND (TRANSACOES.MODELO = :MODELO)');
+    QArq.Sql.Add('AND ((TRANSACOES.COND_PAGTO = :COND_PAGTO) OR (TRANSACOES.COND_PAGTO = :COND_PAGTO1))');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+//    QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+//                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('MODELO').AsString         := '2D';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+    QArq.ParamByName('COND_PAGTO1').AsString     := 'CARTAO';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    //REMESSA/BONIFICACAO
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+    QArq.Sql.Add('FROM TRANSACOES');
+    //QArq.Sql.Add('INNER JOIN TRANSACOES');
+    //QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('LEFT JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND ((TRANSACOES.TIPO_VENDA = :TIPO_VENDA) OR (TRANSACOES.TIPO_VENDA = :TIPO_VENDA1))');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.MODELO = :MODELO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+//    QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+//                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_VENDA').AsString     := 'REMESSA';
+    QArq.ParamByName('TIPO_VENDA1').AsString    := 'BONIFICACAO';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('MODELO').AsString         := '55';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+
+
+    // Venda a Prazo (DB Cliente - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, CLIENTES.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+
+    QArq.Sql.Add('FROM TRANSACOES');
+   // QArq.Sql.Add('INNER JOIN TRANSACOES');
+   // QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('LEFT JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.MODELO = :MODELO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+ //   QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, CLIENTES.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+ //                'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('MODELO').AsString         := '2D';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QArq.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Venda a Vista Nfe (DB Cx/Bco. - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+    QArq.Sql.Add('FROM TRANSACOES');
+    //QArq.Sql.Add('INNER JOIN TRANSACOES');
+    //QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.MODELO <> :MODELO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+//    QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+//                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('MODELO').AsString         := '2D';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+    QArq.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Venda a Prazo Nfe (DB Cliente - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_ENT_SAI, TRANSACOES.DT_MOVIMENTO, CLIENTES.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+
+    QArq.Sql.Add('FROM TRANSACOES');
+   // QArq.Sql.Add('INNER JOIN TRANSACOES');
+   // QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.MODELO <> :MODELO)');
+    QArq.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QArq.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+ //   QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, CLIENTES.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+ //                'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '01';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('MODELO').AsString         := '2D';
+    QArq.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QArq.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+
+
+
+    // Devolução de Venda (DB Cx/Bco. - CR Cta.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, TABELAS.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO,TRANSACOES.VALOR , TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+    //SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE)
+    QArq.Sql.Add('FROM TRANSACOES');
+    //QArq.Sql.Add('INNER JOIN TRANSACOES');
+    //QArq.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSACOES.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN TABELAS');
+    QArq.Sql.Add('ON (TRANSACOES.CONTA_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACOES.CONDUTA = :CONDUTA)');
+    QArq.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    //QArq.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, TABELAS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+    //             'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, TRANSACOES.FLUXO_CAIXA_ID');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QArq.ParamByName('TIPO_TABELA').AsString    := '4';
+    QArq.ParamByName('CONDUTA').AsString        := '02';
+    QArq.ParamByName('DEPTO').AsString          := '10';
+    QArq.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Venda a Prazo c/ Entrada (DB Cx/Bco. - CR Cliente)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, BANCOS.COD_CONTABIL, CLIENTES.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSPARCELAS.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, :FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSPARCELAS');
+    QArq.Sql.Add('INNER JOIN TRANSACOES');
+    QArq.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSPARCELAS.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('LEFT JOIN CLIENTES');
+    QArq.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSPARCELAS.BANCO_ID > 0)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString  := 'R';
+    QArq.ParamByName('FLUXO_CAIXA_ID').AsInteger := 1;
+    QArq.ParamByName('DT_INICIAL').AsDateTime    := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime      := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    // Compra a Prazo c/ Entrada (DB Fornecedor - CR Cx/Bco.)
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO RAZAO(TRANSACAO_ID, TIPO_TRANSACAO, DT_TRANS, DT_MOVIMENTO, CONTA_DB, CONTA_CR, EMPRESA_ID, C_CUSTO_ID, TPCTB, HISTORICO, VALOR, AUTORIZ_ID, NUM_DOC, FLUXO_CAIXA_ID)');
+    QArq.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, :TIPO_TRANSACAO, TRANSACOES.DT_TRANS, TRANSACOES.DT_MOVIMENTO, FORNECEDORES.COD_CONTABIL, BANCOS.COD_CONTABIL, TRANSACOES.EMPRESA_ID, TRANSACOES.C_CUSTO_ID, ' +
+                 'TRANSACOES.TPCTB, TRANSACOES.HISTORICO, TRANSPARCELAS.VALOR, TRANSACOES.AUTORIZ_ID, TRANSACOES.NUM_DOC, :FLUXO_CAIXA_ID');
+    QArq.Sql.Add('FROM TRANSPARCELAS');
+    QArq.Sql.Add('INNER JOIN TRANSACOES');
+    QArq.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QArq.Sql.Add('INNER JOIN BANCOS');
+    QArq.Sql.Add('ON (TRANSPARCELAS.BANCO_ID = BANCOS.BANCO_ID)');
+    QArq.Sql.Add('INNER JOIN FORNECEDORES');
+    QArq.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSPARCELAS.BANCO_ID > 0)');
+    QArq.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QArq.ParamByName('TIPO_TRANSACAO').AsString  := 'R';
+    QArq.ParamByName('FLUXO_CAIXA_ID').AsInteger := 3;
+    QArq.ParamByName('DT_INICIAL').AsDateTime    := Dtmen.Date;
+    QArq.ParamByName('DT_FINAL').AsDateTime      := Dtmai.Date;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+end;
+
+
+procedure TFrmExtrato_Debito_Credito.BitBtn1Click(Sender: TObject);
+begin
+ if not ThereIs('Recuperação de Saldos') then
+    TFrmRecupera_Saldos.Create(Application);
+
+  if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
+    Cascade;
+end;
+
+procedure TFrmExtrato_Debito_Credito.btnCaixa_BancoClick(Sender: TObject);
+begin
+  try
+    Caixa_Banco.Value := GetConsulta('BANCOS', 0, 0, StrToInt(Caixa_Banco.Text));
+  except
+    Caixa_Banco.Value := GetConsulta('BANCOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmExtrato_Debito_Credito.btnExecutaClick(Sender: TObject);
+var
+X,COD: Integer;
+contas: string;
+Marcado : Boolean;
+begin
+
+  //01 - VENDAS ECF - Primeira Parte
+  QRel.SQL.Clear;
+  QRel.SQL.Add('SELECT DT_TRANS, LEGENDA ,HISTORICO, DEBITO, CREDITO');
+  QRel.SQL.Add('FROM');
+  QRel.SQL.Add('(');
+  QRel.SQL.Add('SELECT RAZAO.DT_TRANS, NULL LEGENDA , ''01 - VENDAS ECF'' HISTORICO , 0 DEBITO, SUM(RAZAO.VALOR) CREDITO');
+  QRel.SQL.Add('FROM RAZAO');
+  QRel.SQL.Add('INNER JOIN TRANSACOES ON TRANSACOES.TRANSACAO_ID = RAZAO.TRANSACAO_ID');
+  QRel.SQL.Add('WHERE');
+  QRel.SQL.Add('(RAZAO.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.SQL.Add('AND (RAZAO.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (RAZAO.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (RAZAO.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.SQL.Add('AND (RAZAO.HISTORICO <> :SUPRIMENTO)');
+  QRel.SQL.Add('AND (RAZAO.CONTA_DB IN (SELECT COD_CONTABIL FROM BANCOS WHERE TIPO_LIMITE <> ''EXCLUSO DO SALDO''))');
+  QRel.SQL.Add('AND ((TRANSACOES.FINALIZADORA_ID = 1) OR (TRANSACOES.FINALIZADORA_ID = 0))');
+  QRel.SQL.Add('AND (TRANSACOES.MODELO = :MODELO)');
+  QRel.SQL.Add('AND (COND_PAGTO <> :COND_PAGTO02)');
+
+  if Caixa_Banco.Value > 0 then
+    begin
+      QRel.Sql.Add('AND (RAZAO.CONTA_DB = :CONTA_DB)');
+      SearchBanco;
+      QRel.ParamByName('CONTA_DB').AsString     := QBanco.FieldByName('COD_CONTABIL').AsString;
+    end;
+
+  QRel.SQL.Add('GROUP BY RAZAO.DT_TRANS');
+
+  QRel.Sql.Add('UNION ALL');
+
+  //01 - VENDAS ECF - Segunda Parte
+  QRel.Sql.Add('SELECT RAZAO.DT_TRANS, NULL LEGENDA , ''02 - VENDAS COM ENTRADA'' HISTORICO , 0 DEBITO, SUM(RAZAO.VALOR) CREDITO');
+  QRel.Sql.Add('FROM RAZAO');
+  QRel.Sql.Add('INNER JOIN TRANSACOES ON TRANSACOES.TRANSACAO_ID = RAZAO.TRANSACAO_ID');
+
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(RAZAO.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (RAZAO.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (RAZAO.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (RAZAO.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (RAZAO.HISTORICO <> :SUPRIMENTO)');
+  QRel.Sql.Add('AND (RAZAO.CONTA_DB IN (SELECT COD_CONTABIL FROM BANCOS WHERE TIPO_LIMITE <> ''EXCLUSO DO SALDO'' ))');
+  QRel.Sql.Add('AND (TRANSACOES.MODELO = :MODELO)');
+  QRel.Sql.Add('AND (RAZAO.TIPO_TRANSACAO =  :TIPO_TRANSACAO)');
+
+  if Caixa_Banco.Value > 0 then
+    begin
+      QRel.Sql.Add('AND (RAZAO.CONTA_DB = :CONTA_DB)');
+      SearchBanco;
+      QRel.ParamByName('CONTA_DB').AsString     := QBanco.FieldByName('COD_CONTABIL').AsString;
+    end;
+
+  QRel.Sql.Add('GROUP BY RAZAO.DT_TRANS');
+
+  QRel.Sql.Add('UNION ALL');
+
+  //01 - VENDAS ECF - Terceira Parte
+  QRel.Sql.Add('SELECT DT_TRANS, NULL LEGENDA , ''03 - SUPRIMENTO'' HISTORICO , 0 DEBITO, SUM(VALOR) CREDITO');
+  QRel.Sql.Add('FROM RAZAO');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (RAZAO.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (RAZAO.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+
+  QRel.Sql.Add('AND (HISTORICO = :SUPRIMENTO)');
+  QRel.Sql.Add('AND (CONTA_DB IN (SELECT COD_CONTABIL FROM BANCOS WHERE TIPO_LIMITE <> ''EXCLUSO DO SALDO'' ))');
+
+  if Caixa_Banco.Value > 0 then
+    begin
+      QRel.Sql.Add('AND (RAZAO.CONTA_DB = :CONTA_DB)');
+      SearchBanco;
+      QRel.ParamByName('CONTA_DB').AsString     := QBanco.FieldByName('COD_CONTABIL').AsString;
+    end;
+
+  QRel.Sql.Add('GROUP BY DT_TRANS');
+
+  QRel.Sql.Add('UNION ALL');
+
+  //01 - VENDAS ECF - Quarta Parte
+  QRel.Sql.Add('SELECT DT_TRANS, NULL LEGENDA ,''04 - SANGRIA'' HISTORICO, SUM(VALOR) DEBITO, 0 CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (CONDUTA = :COND_02)');
+  QRel.Sql.Add('AND (DEPTO = :DEPTO_02)');
+  QRel.Sql.Add('AND (COND_PAGTO = :COND_PAGTO)');
+  QRel.Sql.Add('AND (HISTORICO = :HIST_SANGRIA)');
+
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_TRANS, HISTORICO');
+
+
+  QRel.ParamByName('SUPRIMENTO').AsString    :='SUPRIMENTO';
+  //QRel.ParamByName('FINALIZADORA').AsInteger := QFinalizadora.FieldByName('FINALIZADORA_ID').AsInteger;
+  QRel.ParamByName('COND_PAGTO02').AsString  :='A PRAZO';
+  QRel.ParamByName('HIST_SANGRIA').AsString  := 'SANGRIA';
+  QRel.ParamByName('COND_02').AsString       := '02';
+  QRel.ParamByName('DEPTO_02').AsString      := '02';
+
+  ////01 - VENDAS ECF - Acabou
+
+  QRel.Sql.Add('UNION ALL');
+
+  //05 - COMPRA SINTÉTICO - Primeira parte
+  QRel.Sql.Add('SELECT DT_ENT_SAI DT_TRANS, NULL LEGENDA , ''COMPRA SINTÉTICO''   HISTORICO, SUM(VALOR) DEBITO , 0 CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_02)');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO_07)');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT RAZAO.TRANSACAO_ID FROM RAZAO');
+  QRel.Sql.Add('INNER JOIN NOTAS_CANCELADAS ON NOTAS_CANCELADAS.TRANSACAO_ID=RAZAO.TRANSACAO_ID ))');
+
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_ENT_SAI');
+
+  QRel.ParamByName('COND_PAGTO').AsString   := 'A VISTA';
+  QRel.ParamByName('COND_02').AsString      := '02';
+  QRel.ParamByName('DEPTO_07').AsString     := '07';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////06 - VENDA SINTÉTICO - Primeira parte
+  QRel.Sql.Add('SELECT DT_ENT_SAI DT_TRANS,NULL LEGENDA , ''06 - VENDA SINTÉTICO''   HISTORICO, 0 DEBITO, SUM(VALOR) CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND ((TRANSACOES.MODELO = :MODELO1) OR (TRANSACOES.MODELO = :MODELO2) OR (TRANSACOES.MODELO = :MODELO3) OR (TRANSACOES.MODELO = :MODELO4))');
+  QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_01)');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO_07)');
+  QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT RAZAO.TRANSACAO_ID FROM RAZAO');
+  QRel.Sql.Add('INNER JOIN NOTAS_CANCELADAS ON NOTAS_CANCELADAS.TRANSACAO_ID=RAZAO.TRANSACAO_ID ))');
+
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_ENT_SAI');
+
+  QRel.ParamByName('COND_PAGTO').AsString := 'A VISTA';
+  QRel.ParamByName('DEPTO_07').AsString   := '07';
+  QRel.ParamByName('COND_01').AsString    := '01';
+  QRel.ParamByName('MODELO1').AsString    := '01';
+  QRel.ParamByName('MODELO2').AsString    := '02';
+  QRel.ParamByName('MODELO3').AsString    := '04';
+  QRel.ParamByName('MODELO4').AsString    := '55';
+  QRel.ParamByName('BALANCO').AsString    := 'AGRUPADO';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////07 - VENDA NfC-e SINTÉTICO - Primeira parte
+  QRel.Sql.Add('SELECT DT_ENT_SAI DT_TRANS,NULL LEGENDA , ''07 - VENDA NfC-e SINTÉTICO '' HISTORICO, 0 DEBITO, SUM(VALOR) CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND TRANSACOES.MODELO = :MODELO_02');
+  QRel.Sql.Add('AND TRANSACOES.COND_PAGTO = :COND_PAGTO');
+  QRel.Sql.Add('AND TRANSACOES.CONDUTA = :COND_01');
+  QRel.Sql.Add('AND TRANSACOES.DEPTO = :DEPTO_07');
+  QRel.Sql.Add('AND TRANSACOES.BALANCO <> :BALANCO');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT RAZAO.TRANSACAO_ID FROM RAZAO');
+  QRel.Sql.Add('INNER JOIN NOTAS_CANCELADAS ON NOTAS_CANCELADAS.TRANSACAO_ID=RAZAO.TRANSACAO_ID ))');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_ENT_SAI');
+
+  QRel.ParamByName('COND_PAGTO').AsString   := 'A VISTA';
+  QRel.ParamByName('DEPTO_07').AsString     := '07';
+  QRel.ParamByName('COND_01').AsString      := '01';
+  QRel.ParamByName('MODELO_02').AsString    := '65';
+  QRel.ParamByName('BALANCO').AsString      := 'AGRUPADO';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////07 - VENDA NfC-e Múltiplas Formas - Primeira parte
+  QRel.Sql.Add('SELECT DT_ENT_SAI DT_TRANS,NULL LEGENDA , ''07 - VENDA NfC-e MULT.PAGAMENTO'' HISTORICO, 0 DEBITO, SUM(VALOR) CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (TRANSACOES.MODELO = :MODELO_02)');
+  QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO_NFCE_2)');
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_01)');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO_07)');
+  QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+  QRel.Sql.Add('AND (TRANSACOES.PARCELA_ID = :PARCELA_ID)');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT RAZAO.TRANSACAO_ID FROM RAZAO');
+  QRel.Sql.Add('INNER JOIN NOTAS_CANCELADAS ON NOTAS_CANCELADAS.TRANSACAO_ID=RAZAO.TRANSACAO_ID ))');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_ENT_SAI');
+
+  QRel.ParamByName('COND_PAGTO_NFCE_2').AsString   := 'A PRAZO';
+  QRel.ParamByName('PARCELA_ID').AsString   := 'F';
+  QRel.ParamByName('DEPTO_07').AsString     := '07';
+  QRel.ParamByName('COND_01').AsString      := '01';
+  QRel.ParamByName('MODELO_02').AsString    := '65';
+  QRel.ParamByName('BALANCO').AsString      := 'AGRUPADO';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////07 - VENDA NfC-e A PRAZO - Primeira parte
+  QRel.Sql.Add('SELECT DT_ENT_SAI DT_TRANS,NULL LEGENDA , ''07 - VENDA NfC-e A PRAZO'' HISTORICO, 0 DEBITO, SUM(VALOR) CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (TRANSACOES.MODELO = :MODELO_02)');
+  QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO_NFCE_2)');
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_01)');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO_07)');
+  QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+  QRel.Sql.Add('AND (TRANSACOES.PARCELA_ID <> :PARCELA_ID)');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT RAZAO.TRANSACAO_ID FROM RAZAO');
+  QRel.Sql.Add('INNER JOIN NOTAS_CANCELADAS ON NOTAS_CANCELADAS.TRANSACAO_ID=RAZAO.TRANSACAO_ID ))');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_ENT_SAI');
+
+  QRel.ParamByName('COND_PAGTO_NFCE_2').AsString   := 'A PRAZO';
+  QRel.ParamByName('PARCELA_ID').AsString   := 'F';
+  QRel.ParamByName('DEPTO_07').AsString     := '07';
+  QRel.ParamByName('COND_01').AsString      := '01';
+  QRel.ParamByName('MODELO_02').AsString    := '65';
+  QRel.ParamByName('BALANCO').AsString      := 'AGRUPADO';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////08 - DESPESA SINTÉTICO  - Primeira Parte
+  QRel.Sql.Add('SELECT DT_ENT_SAI DT_TRANS, NULL LEGENDA , ''08 - DESPESA SINTÉTICO''   HISTORICO, SUM(VALOR) DEBITO, 0 CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (CONDUTA = :COND_02)');
+  QRel.Sql.Add('AND (DEPTO = :DEPTO_02)');
+  QRel.Sql.Add('AND (COND_PAGTO = :COND_PAGTO)');
+  QRel.Sql.Add('AND (HISTORICO <> :HIST_SANGRIA)');
+
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_ENT_SAI,LEGENDA');
+
+  QRel.ParamByName('COND_02').AsString         := '02';
+  QRel.ParamByName('DEPTO_02').AsString        := '02';
+  QRel.ParamByName('HIST_SANGRIA').AsString    := 'SANGRIA';
+  QRel.ParamByName('COND_PAGTO').AsString      := 'A VISTA';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////09 - RECEITA SINTÉTICO  - Primeira Parte
+  QRel.Sql.Add('SELECT DT_ENT_SAI DT_TRANS,NULL LEGENDA , ''09 - RECEITA SINTÉTICO''  HISTORICO, 0 DEBITO, SUM(VALOR) CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (CONDUTA = :COND_01)');
+  QRel.Sql.Add('AND (DEPTO = :DEPTO_03)');
+  QRel.Sql.Add('AND (COND_PAGTO = :COND_PAGTO)');
+  QRel.Sql.Add('AND (HISTORICO <> :HIST_SUPRIMENTO)');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_ENT_SAI,LEGENDA');
+
+  QRel.ParamByName('COND_01').AsString         := '01';
+  QRel.ParamByName('DEPTO_03').AsString        := '03';
+  QRel.ParamByName('HIST_SUPRIMENTO').AsString := 'SUPRIMENTO';
+  QRel.ParamByName('COND_PAGTO').AsString      := 'A VISTA';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////10 - RECEBIMENTO SINTÉTICO - Primeira Parte
+  QRel.Sql.Add('SELECT TRANSACOES.DT_TRANS, NULL LEGENDA , ''10 - RECEBIMENTO SINTÉTICO''  HISTORICO, 0 DEBITO, SUM(TRANSACOES.VALOR) CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('INNER JOIN CLIENTES');
+  QRel.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_07)');
+  QRel.Sql.Add('AND (TRANSACOES.TIPO_VENDA IS NULL)');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM TRANSACOES WHERE HISTORICO LIKE ''Ref. Devolução%''))');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_TRANS, LEGENDA');
+
+  QRel.ParamByName('COND_07').AsString         := '07';
+
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////11 - PAGAMENTO SINTÉTICO - Primeira Parte
+  QRel.Sql.Add('SELECT TRANSACOES.DT_TRANS, NULL LEGENDA , ''11 - PAGAMENTO SINTÉTICO''  HISTORICO, SUM(TRANSACOES.VALOR) DEBITO, 0 CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('INNER JOIN FORNECEDORES');
+  QRel.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_08)');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM TRANSACOES WHERE HISTORICO LIKE ''Ref. Devolução%''))');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_TRANS');
+
+  QRel.ParamByName('COND_08').AsString      := '08';
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////12 - DEV. COMPRAS, Primeira Parte
+  QRel.Sql.Add('SELECT TRANSACOES.DT_TRANS,''12 - DEV. COMPRAS'' LEGENDA , '''' HISTORICO, 0 DEBITO , SUM(TRANSACOES.VALOR) CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('LEFT JOIN FORNECEDORES');
+  QRel.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_01)');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO =   :DEPTO_10)');
+  QRel.Sql.Add('AND ((TRANSACOES.COND_PAGTO =   :COND_PAGTO) OR (TRANSACOES.COND_PAGTO = :COND_PAGTO1))');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACOES.TRANSACAO_ID FROM TRANSACOES');
+  QRel.Sql.Add('INNER JOIN NOTAS_CANCELADAS ON NOTAS_CANCELADAS.TRANSACAO_ID=TRANSACOES.TRANSACAO_ID ))');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+
+  QRel.Sql.Add('GROUP BY DT_TRANS');
+
+  QRel.Sql.Add('UNION ALL');
+
+  ////12 - DEV. VENDAS - Primeira parte
+  QRel.Sql.Add('SELECT TRANSACOES.DT_TRANS, ''12 - DEV. VENDAS'' LEGENDA , '''' HISTORICO, SUM(TRANSACOES.VALOR) DEBITO , 0  CREDITO');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('LEFT JOIN CLIENTES');
+  QRel.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if ((Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = 'False') or (Trim(LeIni(Arq_Ini, 'Sistema', 'Totalizar G-F em Usuario Gerencial')) = '')) then
+      begin
+        QRel.SQL.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+  end;
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_02)');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO =   :DEPTO_10)');
+  QRel.Sql.Add('AND ((TRANSACOES.COND_PAGTO =   :COND_PAGTO) OR (TRANSACOES.COND_PAGTO = :COND_PAGTO1))');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACOES.TRANSACAO_ID FROM TRANSACOES INNER JOIN NOTAS_CANCELADAS ON NOTAS_CANCELADAS.TRANSACAO_ID=TRANSACOES.TRANSACAO_ID ))');
+  if Caixa_Banco.Value > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+    QRel.ParamByName('BANCO_ID').AsInteger := StrToInt(Caixa_Banco.Text);
+  end;
+  QRel.Sql.Add('GROUP BY DT_TRANS');
+
+
+  QRel.SQL.Add(') AS TESTE ORDER BY DT_TRANS, LEGENDA, HISTORICO');
+
+  //QRel.SQL.Add(' ORDER BY DT_TRANS, LEGENDA, HISTORICO');
+
+  QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+  QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+  QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QRel.ParamByName('DEPTO_10').AsString       := '10';
+  QRel.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+  QRel.ParamByName('COND_PAGTO1').AsString    := 'CARTAO';
+  QRel.ParamByName('COND_02').AsString        := '02';
+  QRel.ParamByName('COND_01').AsString        := '01';
+  QRel.ParamByName('MODELO').AsString         := '2D';
+  QRel.ParamByName('TIPO_TRANSACAO').AsString := 'R';
+
+  QRel.Open();
+
+
+  if QRel.IsEmpty then
+    Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+  else
+    Extrato.PreviewModal;
+end;
+
+procedure TFrmExtrato_Debito_Credito.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmExtrato_Debito_Credito.Caixa_BancoChange(Sender: TObject);
+begin
+  if Caixa_Banco.Value > 0 then
+     SearchBanco
+     Else
+     Qbanco.Close;
+
+
+end;
+
+procedure TFrmExtrato_Debito_Credito.Caixa_BancoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Caixa_Banco) then
+    btnCaixa_BancoClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+
+procedure TFrmExtrato_Debito_Credito.DetailBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  if QRel.FieldByName('CREDITO').AsFloat = 0 then
+    QRDBText8.Enabled := False
+  else
+    QRDBText8.Enabled := True;
+
+  if QRel.FieldByName('DEBITO').AsFloat = 0 then
+    QRDBText4.Enabled := False
+  else
+    QRDBText4.Enabled := True;
+
+    Saldo := Saldo + QRel.FieldByName('CREDITO').AsFloat - QRel.FieldByName('DEBITO').AsFloat;
+end;
+
+procedure TFrmExtrato_Debito_Credito.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmExtrato_Debito_Credito.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+  //  Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmExtrato_Debito_Credito.ExtratoBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+
+Saldo  := Sd;
+end;
+
+procedure TFrmExtrato_Debito_Credito.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmExtrato_Debito_Credito.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+
+  QSearch.SQL.Clear;
+  QSearch.SQL.Add('SELECT * FROM BANCOS WHERE STATUS= :STATUS AND TIPO_LIMITE = :TIPO AND COD_CONTABIL <> :VAZIO');
+  QSearch.ParamByName('STATUS').AsString  := 'A';
+  QSearch.ParamByName('TIPO').AsString    := 'INCLUSO NO SALDO';
+  QSearch.ParamByName('VAZIO').AsString   :='';
+  QSearch.Prepare;
+  QSearch.Open();
+
+
+end;
+
+procedure TFrmExtrato_Debito_Credito.FormShow(Sender: TObject);
+begin
+try
+    QFinalizadora.Open;
+
+  except
+    Application.MessageBox('Erro ao conectar com o Banco de Dados', PChar(Msg_Title), mb_IconStop);
+    Application.Terminate;
+  end;
+end;
+
+procedure TFrmExtrato_Debito_Credito.QRGroup1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  QRlabel10.Left := 615;
+  QRlabel10.Caption := '-' + FormatFloat('#,##0.00', Abs(saldo));
+ End;
+
+procedure TFrmExtrato_Debito_Credito.ReceitaClick(Sender: TObject);
+begin
+{iF (Receita.Checked) and (Despesa.Checked) and (Pagamento.Checked) and (Recebimento.Checked)
+   and (VendaNfe.Checked) and (Compra.Checked) and (VendaEcf.Checked) Then
+  Begin
+  Saldo_Anterior.Enabled := True;
+  Saldo_Anterior.Checked := True;
+  End
+  Else
+  Begin
+  Saldo_Anterior.Enabled := False;
+  Saldo_Anterior.Checked := False;
+  End;
+
+  iF (Receita.Checked) or (Despesa.Checked) or (Pagamento.Checked) or (Recebimento.Checked) or (VendaNfe.Checked)
+     or (Compra.Checked) or (VendaEcf.Checked)  then
+  btnExecuta.Enabled := True
+  Else
+  btnExecuta.Enabled := False;}
+end;
+end.

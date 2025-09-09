@@ -1,0 +1,239 @@
+unit UDemonstrativo_Fluxo;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, ExtCtrls, rxToolEdit, DB, IBCustomDataSet, IBQuery,
+  IBTable, DBTables, QRCtrls, QuickRpt, Buttons, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmDemonstrativo_Fluxo = class(TForm)
+    Label1: TLabel;
+    Bevel1: TBevel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Fluxo: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel10: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel11: TQRLabel;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText4: TQRDBText;
+    SummaryBand1: TQRBand;
+    QRShape4: TQRShape;
+    QRLabel2: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRExpr3: TQRExpr;
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    QRel: TFDQuery;
+    Table_Temp: TFDMemTable;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmDemonstrativo_Fluxo: TFrmDemonstrativo_Fluxo;
+
+implementation
+
+uses
+  UPrincipal, UData;
+
+{$R *.dfm}
+
+procedure TFrmDemonstrativo_Fluxo.btnExecutaClick(Sender: TObject);
+var
+Temp_Name: String;
+begin
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+    try
+      with Table_Temp do
+      begin
+
+        Temp_Name    := Copy(TimeToStr(time), 1, 2) + Copy(TimeToStr(time), 4, 2) + Copy(TimeToStr(time), 7, 2);
+
+
+        with FieldDefs do
+        begin
+          Clear;
+          Add('CONTA', ftString, 20, False);
+          Add('DESCRICAO', ftString, 40, False);
+          Add('CREDITO', ftFloat, 0, False);
+          Add('DEBITO', ftFloat, 0, False);
+          Add('SALDO', ftFloat, 0, False);
+        end;
+
+        with IndexDefs do
+        begin
+          Clear;
+          Add('', 'CONTA', [ixPrimary, ixUnique]);
+          Add('TEMP', 'CONTA', [ixCaseInsensitive]);
+        end;
+        Table_Temp.IndexName := 'TEMP';
+        Open;
+      end;
+    except
+      Application.MessageBox('Ocorreu um erro ao criar um arquivo temporário', PChar(Msg_Title), mb_IconStop);
+      exit;
+    end;
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT PLANO.CODIGO, PLANO.DESCRICAO, SUM(RAZAO.VALOR) AS CREDITO');
+    QRel.Sql.Add('FROM PLANO');
+    QRel.Sql.Add('INNER JOIN RAZAO');
+    QRel.Sql.Add('ON (PLANO.CODIGO = RAZAO.CONTA_CR)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(RAZAO.CONTA_DB LIKE :CONTA_DB)');
+    QRel.Sql.Add('AND (RAZAO.CONTA_CR NOT LIKE :CONTA_CR)');
+    QRel.Sql.Add('AND (RAZAO.EMPRESA_ID = :EMPRESA_ID)');
+    QRel.Sql.Add('AND (RAZAO.TPCTB <= :TPCTB)');
+    QRel.Sql.Add('AND (RAZAO.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (RAZAO.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+    QRel.Sql.Add('AND (RAZAO.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS_NFCE))');
+
+    QRel.ParamByName('CONTA_DB').AsString     := '1.1.1.%';
+    QRel.ParamByName('CONTA_CR').AsString     := '1.1.1.%';
+    QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+    QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+    QRel.Sql.Add('GROUP BY PLANO.CODIGO, PLANO.DESCRICAO');
+    QRel.Prepare;
+    QRel.Open;
+
+    QRel.First;
+    while not QRel.Eof do
+    begin
+      if not Table_Temp.FindKey([QRel.FieldByName('CODIGO').AsString]) then
+        Table_Temp.Append
+      else
+        Table_Temp.Edit;
+
+      Table_Temp.FieldByName('CONTA').AsString     := QRel.FieldByName('CODIGO').AsString;
+      Table_Temp.FieldByName('DESCRICAO').AsString := QRel.FieldByName('DESCRICAO').AsString;
+      Table_Temp.FieldByName('CREDITO').AsFloat    := (Table_Temp.FieldByName('CREDITO').AsFloat + QRel.FieldByName('CREDITO').AsFloat);
+      Table_Temp.FieldByName('SALDO').AsFloat      := (Table_Temp.FieldByName('CREDITO').AsFloat - Table_Temp.FieldByName('DEBITO').AsFloat);
+      Table_Temp.Post;
+
+      Application.ProcessMessages;
+      QRel.Next;
+    end;
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT PLANO.CODIGO, PLANO.DESCRICAO, SUM(RAZAO.VALOR) AS DEBITO');
+    QRel.Sql.Add('FROM PLANO');
+    QRel.Sql.Add('INNER JOIN RAZAO');
+    QRel.Sql.Add('ON (PLANO.CODIGO = RAZAO.CONTA_DB)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(RAZAO.CONTA_CR LIKE :CONTA_CR)');
+    QRel.Sql.Add('AND (RAZAO.CONTA_DB NOT LIKE :CONTA_DB)');
+    QRel.Sql.Add('AND (RAZAO.EMPRESA_ID = :EMPRESA_ID)');
+    QRel.Sql.Add('AND (RAZAO.TPCTB <= :TPCTB)');
+    QRel.Sql.Add('AND (RAZAO.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    QRel.ParamByName('CONTA_CR').AsString     := '1.1.1.%';
+    QRel.ParamByName('CONTA_DB').AsString     := '1.1.1.%';
+    QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+    QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+    QRel.Sql.Add('GROUP BY PLANO.CODIGO, PLANO.DESCRICAO');
+    QRel.Prepare;
+    QRel.Open;
+
+    QRel.First;
+    while not QRel.Eof do
+    begin
+      if not Table_Temp.FindKey([QRel.FieldByName('CODIGO').AsString]) then
+        Table_Temp.Append
+      else
+        Table_Temp.Edit;
+
+      Table_Temp.FieldByName('CONTA').AsString     := QRel.FieldByName('CODIGO').AsString;
+      Table_Temp.FieldByName('DESCRICAO').AsString := QRel.FieldByName('DESCRICAO').AsString;
+      Table_Temp.FieldByName('DEBITO').AsFloat     := (Table_Temp.FieldByName('DEBITO').AsFloat + QRel.FieldByName('DEBITO').AsFloat);
+      Table_Temp.FieldByName('SALDO').AsFloat      := (Table_Temp.FieldByName('CREDITO').AsFloat - Table_Temp.FieldByName('DEBITO').AsFloat);
+      Table_Temp.Post;
+
+      Application.ProcessMessages;
+      QRel.Next;
+    end;
+
+    QRLabel1.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+    if Table_Temp.IsEmpty then
+      Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+    else
+      Fluxo.PreviewModal;
+
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+
+    Table_Temp.Close;
+    //Table_Temp.Delete;
+  end;
+end;
+
+procedure TFrmDemonstrativo_Fluxo.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmDemonstrativo_Fluxo.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmDemonstrativo_Fluxo.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    //Perform(Wm_NextDlgctl, 0, 0);
+    
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmDemonstrativo_Fluxo.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmDemonstrativo_Fluxo.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+end;
+
+end.

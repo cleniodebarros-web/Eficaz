@@ -1,0 +1,976 @@
+unit USubstituicao;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, IBCustomDataSet, IBQuery, StdCtrls, Buttons, ExtCtrls, Mask,
+  rxToolEdit, rxCurrEdit, DBCtrls, Math, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, Vcl.ComCtrls, Vcl.Grids, Vcl.DBGrids, Vcl.ImgList;
+
+type
+  TFrmSubstituicao = class(TForm)
+    Panel1: TPanel;
+    DataTabela: TDataSource;
+    Panel2: TPanel;
+    Label6: TLabel;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    PageControl2: TPageControl;
+    TabSheet3: TTabSheet;
+    Panel3: TPanel;
+    Panel4: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnEdit: TBitBtn;
+    Label5: TLabel;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label1: TLabel;
+    Label4: TLabel;
+    Label15: TLabel;
+    Label17: TLabel;
+    Label23: TLabel;
+    Label2: TLabel;
+    Valor_Isento: TRxCalcEdit;
+    Valor_ICMS_ST: TRxCalcEdit;
+    Base_Calc_ST: TRxCalcEdit;
+    Base_Calc_ICMS: TRxCalcEdit;
+    Reducao_Bc: TRxCalcEdit;
+    Perc_ST: TRxCalcEdit;
+    DBEdit13: TDBEdit;
+    CST_IPI: TEdit;
+    DBEdit9: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit1: TDBEdit;
+    DBEdit8: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit11: TDBEdit;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    Label35: TLabel;
+    Label36: TLabel;
+    Label37: TLabel;
+    vr_fcp: TRxCalcEdit;
+    p_fcp: TRxCalcEdit;
+    vr_base_fcp: TRxCalcEdit;
+    TabSheet2: TTabSheet;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
+    VR_FCPST: TRxCalcEdit;
+    P_FCPST: TRxCalcEdit;
+    VR_BASE_FCPST: TRxCalcEdit;
+    Label16: TLabel;
+    Valor_ICMS: TRxCalcEdit;
+    Label22: TLabel;
+    Aliquota_St: TRxCalcEdit;
+    Label18: TLabel;
+    DBEdit14: TDBEdit;
+    Label14: TLabel;
+    DBEdit12: TDBEdit;
+    Label13: TLabel;
+    DBEdit10: TDBEdit;
+    btnCst_Ipi: TSpeedButton;
+    Label19: TLabel;
+    CST_PIS: TEdit;
+    btnCst_Pis: TSpeedButton;
+    Base_Calc_Pis: TRxCalcEdit;
+    Label24: TLabel;
+    Label25: TLabel;
+    Aliquota_Pis: TRxCalcEdit;
+    Label26: TLabel;
+    Vr_Pis: TRxCalcEdit;
+    Label20: TLabel;
+    CST_COFINS: TEdit;
+    btnCst_Cofins: TSpeedButton;
+    Base_Calc_Cofins: TRxCalcEdit;
+    Label27: TLabel;
+    Label28: TLabel;
+    Aliquota_Cofins: TRxCalcEdit;
+    Vr_Cofins: TRxCalcEdit;
+    Label29: TLabel;
+    Label21: TLabel;
+    Vr_Pis_Ret: TRxCalcEdit;
+    Label30: TLabel;
+    Vr_Cofins_Ret: TRxCalcEdit;
+    Label34: TLabel;
+    VALOR_ICMS_DESON: TRxCalcEdit;
+    Label38: TLabel;
+    Vr_Frete: TRxCalcEdit;
+    Label3: TLabel;
+    Valor_Outros: TRxCalcEdit;
+    Label39: TLabel;
+    desc_rodape: TRxCalcEdit;
+    TabSheet4: TTabSheet;
+    Panel5: TPanel;
+    DBGrid1: TDBGrid;
+    Table_Inconsistencias: TFDMemTable;
+    Data_Inconsistencias: TDataSource;
+    Table_InconsistenciasProduto_id: TIntegerField;
+    Table_InconsistenciasDescricao: TStringField;
+    Table_InconsistenciasErro: TStringField;
+    Table_InconsistenciasDetalhe: TStringField;
+    ImageList1: TImageList;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    QSearch: TFDQuery;
+    Label40: TLabel;
+    Vr_Acrescimo: TRxCalcEdit;
+    TabSheet5: TTabSheet;
+    Label41: TLabel;
+    Label42: TLabel;
+    Label43: TLabel;
+    Label44: TLabel;
+    Label45: TLabel;
+    Label46: TLabel;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
+    Label55: TLabel;
+    Label56: TLabel;
+    Label57: TLabel;
+    Label58: TLabel;
+    Label59: TLabel;
+    Label60: TLabel;
+    Label61: TLabel;
+    Label62: TLabel;
+    Label63: TLabel;
+    Label64: TLabel;
+    Chassi: TEdit;
+    CodCorMontadora: TEdit;
+    DescricaoCor: TEdit;
+    Potencia: TEdit;
+    Cilindradas: TEdit;
+    NumeroSerie: TEdit;
+    NumeroMotor: TEdit;
+    DistanciaEixos: TEdit;
+    CodigoMarcaModelo: TEdit;
+    TipoOperacao: TComboBox;
+    CondicaoVeiculo: TComboBox;
+    PesoLiquido: TCurrencyEdit;
+    PesoBruto: TCurrencyEdit;
+    AnoModelo: TCurrencyEdit;
+    AnoFabricacao: TCurrencyEdit;
+    TipoVeiculo: TComboBox;
+    EspecieVeiculo: TComboBox;
+    VIN: TComboBox;
+    CodCorDenatran: TComboBox;
+    CapacidadeMaximaTracao: TCurrencyEdit;
+    LotacaoMaxima: TCurrencyEdit;
+    Restricao: TComboBox;
+    TipoCombustivel: TComboBox;
+    TipoPintura: TComboBox;
+    procedure Base_Calc_ICMSKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Base_Calc_ICMSKeyPress(Sender: TObject; var Key: Char);
+    procedure btnCst_PisClick(Sender: TObject);
+    procedure btnCst_CofinsClick(Sender: TObject);
+    procedure DBEdit1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnCst_IpiClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure CST_PISChange(Sender: TObject);
+    procedure CST_COFINSChange(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure FormCreate(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure TabSheet3Show(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Display_Campos;
+    procedure Inconsistencias;
+    function  Valida_Veiculo: Boolean;
+  end;
+
+var
+  FrmSubstituicao: TFrmSubstituicao;
+
+  procedure Atualiza_Impostos(Transacao, Produto: Integer);
+  function  BuscaIndex(Lista:TStrings; Item:String):Integer;
+
+implementation
+
+uses
+  UData, UConsulta_CST, UPrincipal;
+
+{$R *.dfm}
+
+procedure Atualiza_Impostos(Transacao, Produto: Integer);
+begin
+  Application.CreateForm(TFrmSubstituicao, FrmSubstituicao);
+  try
+    FrmSubstituicao.QTabela.Close;
+
+    FrmSubstituicao.QTabela.ParamByName('TRANSACAO_ID').AsInteger := Transacao;
+
+    FrmSubstituicao.QTabela.Prepare;
+    FrmSubstituicao.QTabela.Open;
+
+    if Produto > 0 then
+      FrmSubstituicao.QTabela.Locate('PRODUTO_ID', Produto, [loCaseInsensitive]);
+
+    if FrmSubstituicao.QTabela.FieldByName('DT_MOVIMENTO').AsDateTime = FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+      FrmSubstituicao.btnEdit.Enabled := True
+    else
+      FrmSubstituicao.btnEdit.Enabled := False;
+
+    FrmSubstituicao.ShowModal;
+  finally
+    FrmSubstituicao.Release;
+  end;
+end;
+procedure TFrmSubstituicao.inconsistencias;
+begin
+
+  Table_Inconsistencias.Open;
+  Table_Inconsistencias.EmptyDataSet;
+
+  QTabela.First;
+
+ While not QTabela.eof do
+ Begin
+  QSearch.Sql.Clear;
+  QSearch.Sql.Text := 'SELECT ALIQUOTA_ICMS,TRIBUTO_ID FROM PRODUTOS WHERE PRODUTO_ID = :PRODUTO_ID';
+  QSearch.ParamByName('PRODUTO_ID').AsInteger :=  QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  QSearch.Prepare;
+  QSearch.Open;
+
+  if  (QTabela.FieldByName('VALOR_ICMS').AsFloat > 0) AND (QSearch.FieldByName('TRIBUTO_ID').aSFloat = 7) tHEN
+  Begin
+
+   Table_inconsistencias.append;
+
+   Table_Inconsistencias.FieldByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+   Table_Inconsistencias.FieldByName('DESCRICAO').AsString   := Copy(QTabela.FieldByName('DESCRICAO').AsString,1,50);
+   Table_Inconsistencias.FieldByName('ERRO').AsString        := 'Produto tributado que possui em seu cadastro ST';
+
+   Table_inconsistencias.Post;
+
+  End;
+
+  QTabela.Next;
+ End;
+
+ QTabela.First;
+
+end;
+
+procedure TFrmSubstituicao.TabSheet3Show(Sender: TObject);
+begin
+  if not Table_Inconsistencias.IsEmpty Then
+  TabSheet4.Show;
+
+end;
+
+procedure TFrmSubstituicao.Display_Campos;
+begin
+  Base_Calc_ICMS.Value   := QTabela.FieldByName('BASE_CALC_ICMS').AsFloat;
+  Valor_ICMS.Value       := QTabela.FieldByName('VALOR_ICMS').AsFloat;
+  Base_Calc_ST.Value     := QTabela.FieldByName('BASE_CALC_ST').AsFloat;
+  Valor_ICMS_ST.Value    := QTabela.FieldByName('VALOR_ICMS_ST').AsFloat;
+  Valor_Isento.Value     := QTabela.FieldByName('VALOR_ISENTO').AsFloat;
+  Valor_Outros.Value     := QTabela.FieldByName('VALOR_OUTROS').AsFloat;
+  Reducao_Bc.Value       := QTabela.FieldByName('VR_REDUCAO_BC').AsFloat;
+  CST_IPI.Text           := QTabela.FieldByName('CST_IPI').AsString;
+  Aliquota_St.Value      := QTabela.FieldByName('ALIQUOTA_ST').AsFloat;
+  CST_PIS.Text           := QTabela.FieldByName('CST_PIS').AsString;
+  Base_Calc_Pis.Value    := QTabela.FieldByName('BASE_CALC_PIS').AsFloat;
+  Aliquota_Pis.Value     := QTabela.FieldByName('ALIQUOTA_PIS').AsFloat;
+  Vr_Pis.Value           := QTabela.FieldByName('VR_PIS').AsFloat;
+  CST_COFINS.Text        := QTabela.FieldByName('CST_COFINS').AsString;
+  Base_Calc_Cofins.Value := QTabela.FieldByName('BASE_CALC_COFINS').AsFloat;
+  Aliquota_Cofins.Value  := QTabela.FieldByName('ALIQUOTA_COFINS').AsFloat;
+  Vr_Cofins.Value        := QTabela.FieldByName('VR_COFINS').AsFloat;
+  Vr_Pis_Ret.Value       := QTabela.FieldByName('VR_PIS_RET').AsFloat;
+  Vr_Cofins_Ret.Value    := QTabela.FieldByName('VR_COFINS_RET').AsFloat;
+  Vr_Base_FcpSt.Value    := QTabela.FieldByName('VR_BASE_FCPST').AsFloat;
+  P_FcpSt.Value          := QTabela.FieldByName('P_FCPST').AsFloat;
+  P_Fcp.Value            := QTabela.FieldByName('P_FCP').AsFloat;
+  Vr_FcpSt.Value         := QTabela.FieldByName('VR_FCPST').AsFloat;
+  Vr_Fcp.Value           := QTabela.FieldByName('VR_FCP').AsFloat;
+  Vr_Base_FcpSt.Value    := QTabela.FieldByName('VR_BASE_FCPST').AsFloat;
+  Vr_Base_Fcp.Value      := QTabela.FieldByName('VR_BASE_FCP').AsFloat;
+  Valor_Icms_Deson.Value := QTabela.FieldByName('VALOR_ICMS_DESON').AsFloat;
+  Vr_Frete.Value         := QTabela.FieldByName('VR_FRETE').AsFloat;
+  desc_rodape.Value      := QTabela.FieldByName('DESC_RODAPE').AsFloat;
+  VR_Acrescimo.Value     := QTabela.FieldByName('VR_ACRESCIMO').AsFloat;
+
+
+
+ if (Existe_Recebimento(QTabela.FieldByName('TRANSACAO_ID').AsInteger)) or (Existe_Pagamento(QTabela.FieldByName('TRANSACAO_ID').AsInteger))  then
+  begin
+  Base_Calc_ICMS.Enabled   := False;
+  Valor_ICMS.Enabled       := False;
+  Base_Calc_ST.Enabled     := False;
+  Valor_ICMS_ST.Enabled    := False;
+  Valor_Isento.Enabled     := False;
+  Valor_Outros.Enabled     := True;
+  Reducao_Bc.Enabled       := False;
+  CST_IPI.Enabled          := False;
+  Aliquota_St.Enabled      := False;
+  CST_PIS.Enabled          := False;
+  Base_Calc_Pis.Enabled    := False;
+  Aliquota_Pis.Enabled     := False;
+  Vr_Pis.Enabled           := False;
+  CST_COFINS.Enabled       := False;
+  Base_Calc_Cofins.Enabled := False;
+  Aliquota_Cofins.Enabled  := False;
+  Vr_Cofins.Enabled        := False;
+  VALOR_ICMS_DESON.Enabled := False;
+
+   if Existe_Recebimento(QTabela.FieldByName('TRANSACAO_ID').AsInteger) Then
+   Label6.Caption           := 'Transação possui parcela quitada somente Valor Outros pode ser alterado!'
+   Else
+   Label6.Caption           := 'Transação possui pagamento efetuado somente Valor Outros pode ser alterado!' ;
+  end;
+
+
+
+end;
+
+procedure TFrmSubstituicao.Base_Calc_ICMSKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmSubstituicao.Base_Calc_ICMSKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #27 then
+    ModalResult := mrOk;
+end;
+
+procedure TFrmSubstituicao.btnCst_CofinsClick(Sender: TObject);
+begin
+  CST_COFINS.Text := GetConsulta_CST('CST_COFINS', CST_COFINS.Text);
+end;
+
+procedure TFrmSubstituicao.btnCst_IpiClick(Sender: TObject);
+begin
+  CST_IPI.Text := GetConsulta_CST('CST_IPI', CST_IPI.Text);
+end;
+
+procedure TFrmSubstituicao.btnCst_PisClick(Sender: TObject);
+begin
+  CST_PIS.Text := GetConsulta_CST('CST_PIS', CST_PIS.Text);
+end;
+
+procedure TFrmSubstituicao.btnEditClick(Sender: TObject);
+var
+T_Id, P_Id: Integer;
+T_Prod: String;
+begin
+  T_Id   := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+  P_Id   := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  T_Prod := QTabela.FieldByName('TP_PROD_SERV').AsString;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('UPDATE TRANSITENS SET BASE_CALC_ICMS = :BASE_CALC_ICMS, ' +
+                                        'VALOR_ICMS = :VALOR_ICMS, ' +
+                                        'BASE_CALC_ST = :BASE_CALC_ST, ' +
+                                        'VALOR_ISENTO = :VALOR_ISENTO, ' +
+                                        'VALOR_OUTROS = :VALOR_OUTROS, ' +
+                                        'VR_REDUCAO_BC = :VR_REDUCAO_BC, ' +
+                                        'CST_IPI = :CST_IPI, ' +
+                                        'ALIQUOTA_ST = :ALIQUOTA_ST, ' +
+                                        'CST_PIS = :CST_PIS, ' +
+                                        'BASE_CALC_PIS = :BASE_CALC_PIS, ' +
+                                        'ALIQUOTA_PIS = :ALIQUOTA_PIS, ' +
+                                        'VR_PIS = :VR_PIS, ' +
+                                        'CST_COFINS = :CST_COFINS, ' +
+                                        'BASE_CALC_COFINS = :BASE_CALC_COFINS, ' +
+                                        'ALIQUOTA_COFINS = :ALIQUOTA_COFINS, ' +
+                                        'VR_COFINS = :VR_COFINS, ' +
+                                        'VALOR_ICMS_ST = :VALOR_ICMS_ST, ' +
+                                        'VR_PIS_RET = :VR_PIS_RET, ' +
+                                        'VR_COFINS_RET = :VR_COFINS_RET, '+
+                                        'VALOR_ICMS_DESON = :VALOR_ICMS_DESON, ' +
+                                        'VR_BASE_FCPST = :VR_BASE_FCPST,' +
+                                        'P_FCPST = :P_FCPST,' +
+                                        'VR_FCPST = :VR_FCPST, ' +
+                                        'VR_BASE_FCP = :VR_BASE_FCP,' +
+                                        'P_FCP = :P_FCP,' +
+                                        'VR_FCP = :VR_FCP, ' +
+                                        'VR_FRETE = :VR_FRETE, ' +
+                                        'DESC_RODAPE = :DESC_RODAPE, ' +
+                                        'VR_ACRESCIMO = :VR_ACRESCIMO ' +
+                                        'WHERE (TRANSACAO_ID = :TRANSACAO_ID) ' +
+                                        'AND (PRODUTO_ID = :PRODUTO_ID) ' +
+                                        'AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+
+  IQuery.ParamByName('BASE_CALC_ICMS').AsFloat   := Base_Calc_ICMS.Value;
+  IQuery.ParamByName('VALOR_ICMS').AsFloat       := Valor_ICMS.Value;
+  IQuery.ParamByName('BASE_CALC_ST').AsFloat     := Base_Calc_ST.Value;
+  IQuery.ParamByName('VALOR_ISENTO').AsFloat     := Valor_Isento.Value;
+  IQuery.ParamByName('VALOR_OUTROS').AsFloat     := Valor_Outros.Value;
+  IQuery.ParamByName('VR_REDUCAO_BC').AsFloat    := Reducao_Bc.Value;
+  IQuery.ParamByName('CST_IPI').AsString         := CST_IPI.Text;
+  IQuery.ParamByName('ALIQUOTA_ST').AsFloat      := Aliquota_St.Value;
+  IQuery.ParamByName('CST_PIS').AsString         := CST_PIS.Text;
+  IQuery.ParamByName('BASE_CALC_PIS').AsFloat    := Base_Calc_Pis.Value;
+  IQuery.ParamByName('ALIQUOTA_PIS').AsFloat     := Aliquota_Pis.Value;
+  IQuery.ParamByName('VR_PIS').AsFloat           := Vr_Pis.Value;
+  IQuery.ParamByName('CST_COFINS').AsString      := CST_COFINS.Text;
+  IQuery.ParamByName('BASE_CALC_COFINS').AsFloat := Base_Calc_Cofins.Value;
+  IQuery.ParamByName('ALIQUOTA_COFINS').AsFloat  := Aliquota_Cofins.Value;
+  IQuery.ParamByName('VR_COFINS').AsFloat        := Vr_Cofins.Value;
+  IQuery.ParamByName('VR_PIS_RET').AsFloat       := Vr_Pis_Ret.Value;
+  IQuery.ParamByName('VR_COFINS_RET').AsFloat    := Vr_Cofins_Ret.Value;
+  IQuery.ParamByName('VALOR_ICMS_DESON').AsFloat := Valor_Icms_Deson.Value;
+  IQuery.ParamByName('VR_BASE_FCPST').AsFloat    := VR_BASE_FCPST.Value;
+  IQuery.ParamByName('P_FCPST').AsFloat          := P_FCPST.Value;
+  IQuery.ParamByName('VR_FCPST').AsFloat         := VR_FCPST.Value;
+  IQuery.ParamByName('VR_BASE_FCP').AsFloat      := VR_BASE_FCP.Value;
+  IQuery.ParamByName('P_FCP').AsFloat            := P_FCP.Value;
+  IQuery.ParamByName('VR_FCP').AsFloat           := VR_FCP.Value;
+  IQuery.ParamByName('VR_FRETE').AsFloat         := VR_FRETE.Value;
+  IQuery.ParamByName('DESC_RODAPE').AsFloat      := desc_rodape.Value;
+  IQuery.ParamByName('VR_ACRESCIMO').AsFloat     := Vr_Acrescimo.Value;
+
+  if Perc_ST.Value > 0 then
+    IQuery.ParamByName('VALOR_ICMS_ST').AsFloat := RoundTo(((Perc_ST.Value * QTabela.FieldByName('VR_TOTAL').AsFloat) / 100), -2)
+  else
+    IQuery.ParamByName('VALOR_ICMS_ST').AsFloat := Valor_ICMS_ST.Value;
+
+  IQuery.ParamByName('TRANSACAO_ID').AsInteger := T_Id;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger   := P_Id;
+  IQuery.ParamByName('TP_PROD_SERV').AsString  := T_Prod;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QTabela.Locate('TRANSACAO_ID;PRODUTO_ID;TP_PROD_SERV', VarArrayOf([T_Id, P_Id, T_Prod]), [loCaseInsensitive]);
+
+  Display_Campos;
+end;
+
+procedure TFrmSubstituicao.btnExecutaClick(Sender: TObject);
+var
+T_Id, P_Id: Integer;
+begin
+  if (FrmPrincipal.Config.FieldByName('VENDA_VEICULOS_NOVOS').AsString <> 'True') or (PageControl2.ActivePage <> TabSheet5) then
+    Exit;
+
+  if Valida_Veiculo then
+  begin
+    T_Id   := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+    P_Id   := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.SQL.Clear;
+    IQuery.SQL.Add('SELECT TRANSACAO_ID, PRODUTO_ID FROM TRANSITENS_VEICULO WHERE TRANSACAO_ID = :TRANSACAO_ID AND PRODUTO_ID = :PRODUTO_ID');
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger := T_Id;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger   := P_Id;
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.Eof then
+    begin
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('INSERT INTO TRANSITENS_VEICULO (');
+      IQuery.SQL.Add('TRANSACAO_ID, PRODUTO_ID, TPOP, CHASSI, CCOR, XCOR, POT, CILIN, PESOL, PESOB, NSERIE, TPCOMB, NMOTOR, CMT, DIST,');
+      IQuery.SQL.Add('ANOMOD, ANOFAB, TPPINT, TPVEIC, ESPVEIC, VIN, CONDVEIC, CMOD, CCORDENATRAN, LOTA, TPREST');
+      IQuery.SQL.Add(') VALUES (');
+      IQuery.SQL.Add(':TRANSACAO_ID, :PRODUTO_ID, :TPOP, :CHASSI, :CCOR, :XCOR, :POT, :CILIN, :PESOL, :PESOB, :NSERIE, :TPCOMB, :NMOTOR, :CMT, :DIST,');
+      IQuery.SQL.Add(':ANOMOD, :ANOFAB, :TPPINT, :TPVEIC, :ESPVEIC, :VIN, :CONDVEIC, :CMOD, :CCORDENATRAN, :LOTA, :TPREST');
+      IQuery.SQL.Add(')');
+    end
+    else
+    begin
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('UPDATE TRANSITENS_VEICULO SET');
+      IQuery.SQL.Add('TPOP = :TPOP, CHASSI = :CHASSI, CCOR = :CCOR, XCOR = :XCOR, POT = :POT, CILIN = :CILIN, PESOL = :PESOL,');
+      IQuery.SQL.Add('PESOB = :PESOB, NSERIE = :NSERIE, TPCOMB = :TPCOMB, NMOTOR = :NMOTOR, CMT = :CMT, DIST = :DIST,');
+      IQuery.SQL.Add('ANOMOD = :ANOMOD, ANOFAB = :ANOFAB, TPPINT = :TPPINT, TPVEIC = :TPVEIC, ESPVEIC = :ESPVEIC, VIN = :VIN,');
+      IQuery.SQL.Add('CONDVEIC = :CONDVEIC, CMOD = :CMOD, CCORDENATRAN = :CCORDENATRAN, LOTA = :LOTA, TPREST = :TPREST');
+      IQuery.SQL.Add('WHERE TRANSACAO_ID = :TRANSACAO_ID AND PRODUTO_ID = :PRODUTO_ID');
+    end;
+
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger := T_Id;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger   := P_Id;
+    IQuery.ParamByName('TPOP').AsInteger         := StrToInt(Copy(TipoOperacao.Text,1,1));
+    IQuery.ParamByName('CHASSI').AsString        := Chassi.Text;
+    IQuery.ParamByName('CCOR').AsString          := CodCorMontadora.Text;
+    IQuery.ParamByName('XCOR').AsString          := DescricaoCor.Text;
+    IQuery.ParamByName('POT').AsString           := Potencia.Text;
+    IQuery.ParamByName('CILIN').AsString         := Cilindradas.Text;
+    IQuery.ParamByName('PESOL').AsFloat          := PesoLiquido.Value;
+    IQuery.ParamByName('PESOB').AsFloat          := PesoBruto.Value;
+    IQuery.ParamByName('NSERIE').AsString        := NumeroSerie.Text;
+    IQuery.ParamByName('TPCOMB').AsString        := Copy(TipoCombustivel.Text,1,2);
+    IQuery.ParamByName('NMOTOR').AsString        := NumeroMotor.Text;
+    IQuery.ParamByName('CMT').AsFloat            := CapacidadeMaximaTracao.Value;
+    IQuery.ParamByName('DIST').AsString          := DistanciaEixos.Text;
+    IQuery.ParamByName('ANOMOD').AsInteger       := Trunc(AnoModelo.Value);
+    IQuery.ParamByName('ANOFAB').AsInteger       := Trunc(AnoFabricacao.Value);
+    IQuery.ParamByName('TPPINT').AsString        := Copy(TipoPintura.Text,1,1);
+    IQuery.ParamByName('TPVEIC').AsInteger       := StrToInt(Copy(TipoVeiculo.Text,1,2));
+    IQuery.ParamByName('ESPVEIC').AsInteger      := StrToInt(Copy(EspecieVeiculo.Text,1,1));
+    IQuery.ParamByName('VIN').AsString           := Copy(VIN.Text,1,1);
+    IQuery.ParamByName('CONDVEIC').AsInteger     := StrToInt(Copy(CondicaoVeiculo.Text,1,1));
+    IQuery.ParamByName('CMOD').AsString          := CodigoMarcaModelo.Text;
+    IQuery.ParamByName('CCORDENATRAN').AsString  := Copy(CodCorDenatran.Text,1,2);
+    IQuery.ParamByName('LOTA').AsInteger         := Trunc(LotacaoMaxima.Value);
+    IQuery.ParamByName('TPREST').AsInteger       := StrToInt(Copy(Restricao.Text,1,1));
+    IQuery.Prepare;
+    IQuery.ExecSQL;
+
+    if Chassi.Text = '' then
+      Application.MessageBox('Sem CHASSI o grupo de veículo novo não vai ser criado no XML.', PChar(Msg_Title), mb_IconInformation);
+
+    ModalResult := mrOk;
+  end
+  else
+    ModalResult := mrNone;
+end;
+
+function TFrmSubstituicao.Valida_Veiculo: Boolean;
+var inteiro: Integer;
+begin
+  Result := True;
+
+  TipoOperacao.Color := clWindow;
+  Chassi.Color := clWindow;
+  CodCorMontadora.Color := clWindow;
+  DescricaoCor.Color := clWindow;
+  Potencia.Color := clWindow;
+  Cilindradas.Color := clWindow;
+  PesoLiquido.Color := clWindow;
+  PesoBruto.Color := clWindow;
+  NumeroSerie.Color := clWindow;
+  TipoCombustivel.Color := clWindow;
+  NumeroMotor.Color := clWindow;
+  CapacidadeMaximaTracao.Color := clWindow;
+  DistanciaEixos.Color := clWindow;
+  AnoModelo.Color := clWindow;
+  AnoFabricacao.Color := clWindow;
+  TipoPintura.Color := clWindow;
+  TipoVeiculo.Color := clWindow;
+  EspecieVeiculo.Color := clWindow;
+  VIN.Color := clWindow;
+  CondicaoVeiculo.Color := clWindow;
+  CodigoMarcaModelo.Color := clWindow;
+  CodCorDenatran.Color := clWindow;
+  LotacaoMaxima.Color := clWindow;
+  Restricao.Color := clWindow;
+
+  try
+    inteiro := StrToInt(Copy(TipoOperacao.Text,1,1));
+    if (inteiro < 0) or (inteiro > 3) then
+      Abort;
+  except
+    Application.MessageBox('Tipo de Operação inválido.' + #13 + 'O tipo de operação deve começar com um número entre 0 e 3.' + #13 + 'Escolha uma das opções disponíveis.', PChar(Msg_Title), mb_IconInformation);
+    TipoOperacao.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if (Length(Chassi.Text) > 17) or (Chassi.Text = '')  then
+      Abort;
+  except
+    Application.MessageBox('O Chassi é obrigatório e deve ter no máximo 17 caracteres.', PChar(Msg_Title), mb_IconInformation);
+    Chassi.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if (Length(CodCorMontadora.Text) > 4) or (CodCorMontadora.Text = '0') then
+      Abort;
+  except
+    Application.MessageBox('Código da cor da montadora inválido.' + #13 + 'O código deve ter no máximo 4 dígitos.', PChar(Msg_Title), mb_IconInformation);
+    CodCorMontadora.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if (Length(DescricaoCor.Text) > 40) or (DescricaoCor.Text = '') then
+      Abort;
+  except
+    Application.MessageBox('Descrição da cor inválida.' + #13 + 'A descrição deve ter no máximo 40 caracteres.', PChar(Msg_Title), mb_IconInformation);
+    DescricaoCor.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Potencia.Text);
+    if Length(Potencia.Text) > 4 then
+      Abort;
+  except
+    Application.MessageBox('Potência inválida.' + #13 + 'A potência deve ser um número de até 4 dígitos.', PChar(Msg_Title), mb_IconInformation);
+    Potencia.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Cilindradas.Text);
+    if Length(Cilindradas.Text) > 4 then
+      Abort;
+  except
+    Application.MessageBox('Cilindrada inválida.' + #13 + 'A cilindrada deve ser um número de até 4 dígitos.', PChar(Msg_Title), mb_IconInformation);
+    Cilindradas.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if PesoLiquido.Value <= 0 then
+      Abort;
+  except
+    Application.MessageBox('Peso líquido inválido.' + #13 + 'O peso líquido deve ser maior que zero (em toneladas, até 4 casas decimais).', PChar(Msg_Title), mb_IconInformation);
+    PesoLiquido.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if PesoBruto.Value <= 0 then
+      Abort;
+  except
+    Application.MessageBox('Peso bruto inválido.' + #13 + 'O peso bruto deve ser maior que zero (em toneladas, até 4 casas decimais).', PChar(Msg_Title), mb_IconInformation);
+    PesoBruto.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if (Length(NumeroSerie.Text) > 9) or (NumeroSerie.Text = '') then
+      Abort;
+  except
+    Application.MessageBox('Número de série inválido. O número de série deve ter no máximo 9 caracteres.', PChar(Msg_Title), mb_IconInformation);
+    NumeroSerie.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Copy(TipoCombustivel.Text,1,2));
+    if (inteiro < 1) or (inteiro > 27) then
+      Abort;
+  except
+    Application.MessageBox('Tipo de combustível inválido.' + #13 + 'O tipo de combustível deve começar com um número entre 00 e 27.' + #13 + 'Escolha uma das opções disponíveis.', PChar(Msg_Title), mb_IconInformation);
+    TipoCombustivel.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if (Length(NumeroMotor.Text) > 21) or (NumeroMotor.Text = '') then
+      Abort;
+  except
+    Application.MessageBox('Número de motor inválido. O número de motor deve ter no máximo 21 caracteres.', PChar(Msg_Title), mb_IconInformation);
+    NumeroMotor.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if CapacidadeMaximaTracao.Value <= 0 then
+      Abort;
+  except
+    Application.MessageBox('Capacidade máxima de tração inválido.' + #13 + 'A capacidade máxima de tração deve ser maior que zero (em toneladas, até 4 casas decimais).', PChar(Msg_Title), mb_IconInformation);
+    CapacidadeMaximaTracao.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(DistanciaEixos.Text);
+    if Length(DistanciaEixos.Text) > 4 then
+      Abort;
+  except
+    Application.MessageBox('Distância entre eixos inválida.' + #13 + 'A distância entre eixos deve ser um número de até 4 dígitos.', PChar(Msg_Title), mb_IconInformation);
+    DistanciaEixos.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if Length(AnoModelo.Text) <> 4 then
+      Abort;
+  except
+    Application.MessageBox('Ano modelo de fabricação inválido.' + #13 + 'O ano deve ser um número de 4 dígitos.', PChar(Msg_Title), mb_IconInformation);
+    AnoModelo.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if Length(AnoFabricacao.Text) <> 4 then
+      Abort;
+  except
+    Application.MessageBox('Ano de fabricação inválido.' + #13 + 'O ano deve ser um número de 4 dígitos.', PChar(Msg_Title), mb_IconInformation);
+    AnoFabricacao.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if TipoPintura.Text = '' then
+      Abort;
+  except
+    Application.MessageBox('Favor selecionar um tipo de pintura.', PChar(Msg_Title), mb_IconInformation);
+    TipoPintura.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Copy(TipoVeiculo.Text,1,2));
+    if (inteiro < 2) or (inteiro > 26) or (inteiro = 9) or (inteiro = 12) or (inteiro = 15) or (inteiro = 16) or (inteiro = 24) then
+      Abort;
+  except
+    Application.MessageBox('Tipo de veículo inválido.' + #13 + 'O tipo de veículo deve começar com 2 dígitos, devendo estar entre 02 e 26 excluindo 09, 12, 15, 16 e 24.' + #13 + 'Escolha uma das opções disponíveis.', PChar(Msg_Title), mb_IconInformation);
+    TipoVeiculo.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Copy(EspecieVeiculo.Text,1,1));
+    if (inteiro < 1) or (inteiro > 7) then
+      Abort;
+  except
+    Application.MessageBox('Espécie de veículo inválida.' + #13 + 'A espécie de veículo deve começar com um número entre 1 e 7.' + #13 + 'Escolha uma das opções disponíveis.', PChar(Msg_Title), mb_IconInformation);
+    EspecieVeiculo.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if VIN.Text = '' then
+      Abort;
+  except
+    Application.MessageBox('Favor selecionar uma condição do VIN.', PChar(Msg_Title), mb_IconInformation);
+    VIN.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Copy(CondicaoVeiculo.Text,1,1));
+    if (inteiro < 1) or (inteiro > 3) then
+      Abort;
+  except
+    Application.MessageBox('Condição do veículo inválida.' + #13 + 'A condição do veículo deve começar com um número entre 1 e 3.' + #13 + 'Escolha uma das opções disponíveis.', PChar(Msg_Title), mb_IconInformation);
+    CondicaoVeiculo.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if (Length(CodigoMarcaModelo.Text) > 6) or (CodigoMarcaModelo.Text = '') then
+      Abort;
+  except
+    Application.MessageBox('Código marca modelo inválido.' + #13 + 'O código deve ter no máximo 6 caracteres.', PChar(Msg_Title), mb_IconInformation);
+    CodigoMarcaModelo.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Copy(CodCorDenatran.Text,1,2));
+    if (inteiro < 1) or (inteiro > 16) then
+      Abort;
+  except
+    Application.MessageBox('Código de cor DENATRAN inválido.' + #13 + 'O código de cor DENATRAN deve começar com um número entre 01 e 16.' + #13 + 'Escolha uma das opções disponíveis.', PChar(Msg_Title), mb_IconInformation);
+    CodCorDenatran.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    if (Length(LotacaoMaxima.Text) > 3) or (LotacaoMaxima.Value = 0) then
+      Abort;
+  except
+    Application.MessageBox('Capacidade máxima de lotação máxima inválida.' + #13 + 'A capacidade máxima de lotação máxima deve ser um número de até 3 dígitos.', PChar(Msg_Title), mb_IconInformation);
+    LotacaoMaxima.Color := clYellow;
+    Result := False;
+  end;
+
+  try
+    inteiro := StrToInt(Copy(Restricao.Text,1,1));
+    if (inteiro < 0) or (inteiro > 9) then
+      Abort;
+  except
+    Application.MessageBox('Restrição inválida.' + #13 + 'A restrição deve começar com um número de 1 dígito.' + #13 + 'Escolha uma das opções disponíveis.', PChar(Msg_Title), mb_IconInformation);
+    Restricao.Color := clYellow;
+    Result := False;
+  end;
+end;
+
+procedure TFrmSubstituicao.btnNextClick(Sender: TObject);
+begin
+  QTabela.Next;
+  Display_Campos;
+
+  if QTabela.Eof then
+  begin
+    btnNext.Enabled  := False;
+    btnPrior.Enabled := True;
+  end;
+end;
+
+procedure TFrmSubstituicao.btnPriorClick(Sender: TObject);
+begin
+  QTabela.Prior;
+  Display_Campos;
+
+  if QTabela.Bof then
+  begin
+    btnPrior.Enabled := False;
+    btnNext.Enabled  := True;
+  end;
+end;
+
+procedure TFrmSubstituicao.CST_COFINSChange(Sender: TObject);
+begin
+  CST_PIS.Text := CST_COFINS.Text;
+end;
+
+procedure TFrmSubstituicao.CST_PISChange(Sender: TObject);
+begin
+  CST_COFINS.Text := CST_PIS.Text;
+end;
+
+procedure TFrmSubstituicao.DBEdit1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = CST_PIS) then
+    btnCst_PisClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_COFINS) then
+    btnCst_CofinsClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_IPI) then
+    btnCst_IpiClick(Self);
+
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmSubstituicao.DBGrid1CellClick(Column: TColumn);
+begin
+ if not Table_Inconsistencias.IsEmpty Then
+
+ if Column.FieldName = 'Detalhe' then
+   begin
+     Application.MessageBox('No XML foram encontrados produtos tributados que possuem no cadastro do produto configuração de ST na entrada.' + #13 +
+                            'Para corrigir a inconsistência utilize o cadastro de produtos.', PChar(Msg_Title), mb_IconInformation);
+   end;
+
+end;
+
+procedure TFrmSubstituicao.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+begin
+  if not Table_Inconsistencias.IsEmpty Then
+   if Column.FieldName = 'Detalhe' then
+   begin
+     TDBGrid(Sender).Canvas.FillRect(Rect);
+     ImageList1.Draw(TDBGrid(Sender).Canvas, Rect.Left +15,Rect.Top + 1, 0);
+   end;
+
+end;
+
+procedure TFrmSubstituicao.FormCreate(Sender: TObject);
+begin
+
+  DBGrid1.Columns[0].Width  := 50;
+  DBGrid1.Columns[1].Width  := 238;
+  DBGrid1.Columns[2].Width  := 400;
+  DBGrid1.Columns[3].Width  := 46;
+
+end;
+
+procedure TFrmSubstituicao.FormShow(Sender: TObject);
+begin
+  TabSheet3.Show;
+
+  Display_Campos;
+
+  Inconsistencias;
+
+
+  if  (QTabela.FieldByName('TIPO_IMP').Value <> 2) then
+    desc_rodape.ReadOnly := False;
+
+  if not ((Existe_Recebimento(QTabela.FieldByName('TRANSACAO_ID').AsInteger)) or (Existe_Pagamento(QTabela.FieldByName('TRANSACAO_ID').AsInteger)))  then
+    CST_IPI.SetFocus;
+
+  if FrmPrincipal.Config.FieldByName('VENDA_VEICULOS_NOVOS').AsString = 'True' then
+  begin
+    TabSheet5.TabVisible := True;
+    PageControl2.ActivePage := TabSheet5;
+    IQuery.SQL.Clear;
+    IQuery.SQL.Add('SELECT * FROM TRANSITENS_VEICULO WHERE TRANSACAO_ID = :TRANSACAO_ID AND PRODUTO_ID = :PRODUTO_ID');
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger   := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.Eof then
+    begin
+      TipoOperacao.ItemIndex       := BuscaIndex(TipoOperacao.Items, IQuery.FieldByName('TPOP').AsString);
+      Chassi.Text                  := IQuery.FieldByName('CHASSI').AsString;
+      CodCorMontadora.Text         := IQuery.FieldByName('CCOR').AsString;
+      DescricaoCor.Text            := IQuery.FieldByName('XCOR').AsString;
+      Potencia.Text                := IQuery.FieldByName('POT').AsString;
+      Cilindradas.Text             := IQuery.FieldByName('CILIN').AsString;
+      PesoLiquido.Value            := IQuery.FieldByName('PESOL').AsFloat;
+      PesoBruto.Value              := IQuery.FieldByName('PESOB').AsFloat;
+      NumeroSerie.Text             := IQuery.FieldByName('NSERIE').AsString;
+      TipoCombustivel.ItemIndex    := BuscaIndex(TipoCombustivel.Items, IQuery.FieldByName('TPCOMB').AsString);
+      NumeroMotor.Text             := IQuery.FieldByName('NMOTOR').AsString;
+      CapacidadeMaximaTracao.Value := IQuery.FieldByName('CMT').AsFloat;
+      DistanciaEixos.Text          := IQuery.FieldByName('DIST').AsString;
+      AnoModelo.Value              := IQuery.FieldByName('ANOMOD').AsInteger;
+      AnoFabricacao.Value          := IQuery.FieldByName('ANOFAB').AsInteger;
+      TipoPintura.ItemIndex        := BuscaIndex(TipoPintura.Items, IQuery.FieldByName('TPPINT').AsString);
+      TipoVeiculo.ItemIndex        := BuscaIndex(TipoVeiculo.Items, StrZero(IQuery.FieldByName('TPVEIC').AsString,2,0));
+      EspecieVeiculo.ItemIndex     := BuscaIndex(EspecieVeiculo.Items, IQuery.FieldByName('ESPVEIC').AsString);
+      VIN.ItemIndex                := BuscaIndex(VIN.Items, IQuery.FieldByName('VIN').AsString);
+      CondicaoVeiculo.ItemIndex    := BuscaIndex(CondicaoVeiculo.Items, IQuery.FieldByName('CONDVEIC').AsString);
+      CodigoMarcaModelo.Text       := IQuery.FieldByName('CMOD').AsString;
+      CodCorDenatran.ItemIndex     := BuscaIndex(CodCorDenatran.Items, IQuery.FieldByName('CCORDENATRAN').AsString);
+      LotacaoMaxima.Value          := IQuery.FieldByName('LOTA').AsInteger;
+      Restricao.ItemIndex          := BuscaIndex(Restricao.Items, IQuery.FieldByName('TPREST').AsString);
+    end;
+  end
+  else
+    TabSheet5.TabVisible := False;
+
+end;
+
+function BuscaIndex(Lista:TStrings; Item:String):Integer;
+var aux: string;
+begin
+  Result := -1;
+  for aux in Lista do
+  begin
+    if Item = Copy(aux,1,Item.Length) then
+    begin
+      Result := Lista.IndexOf(aux);
+      Break;
+    end;
+  end;
+end;
+
+end.

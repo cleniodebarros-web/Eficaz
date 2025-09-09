@@ -1,0 +1,1089 @@
+unit UItensAbaixoDoMinimoRDP;
+
+interface
+
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, ExtCtrls, rxCurrEdit, rxToolEdit, Buttons, DBCtrls,
+  DB, IBCustomDataSet, IBQuery, QuickRpt, QRCtrls, RDprint, DBTables,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  PRINTERS, Datasnap.DBClient;
+
+type
+  TFrmItensAbaixoDoMinimoRDP = class(TForm)
+    Label1: TLabel;
+    Bevel1: TBevel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    RDprint1: TRDprint;
+    CheckBox1: TCheckBox;
+    cbOdenarPor: TComboBox;
+    lbl1: TLabel;
+    chk_mostrar_todos: TCheckBox;
+    lb_tipo: TLabel;
+    cb_tipo: TComboBox;
+    QRel: TFDQuery;
+    IBQuery: TFDQuery;
+    table_temp: TFDMemTable;
+    Chk_UltimaVenda: TCheckBox;
+    rel_estoque_minimo: TQuickRep;
+    QRBand1: TQRBand;
+    QRSysData4: TQRSysData;
+    QRLabel14: TQRLabel;
+    QRSysData5: TQRSysData;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRShape5: TQRShape;
+    QRLabel17: TQRLabel;
+    QRDBText13: TQRDBText;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRBand2: TQRBand;
+    qrdb_produto_id: TQRDBText;
+    qrdb_produto_descricao: TQRDBText;
+    qrdb_produto_codbarra: TQRDBText;
+    qrdb_produto_qtd_c: TQRDBText;
+    QRLabel1: TQRLabel;
+    qrdb_produto_qtd_emb: TQRDBText;
+    QRLabel2: TQRLabel;
+    qrdb_produto_qtd_min: TQRDBText;
+    QRLabel3: TQRLabel;
+    qrdb_produto_ult_custo: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    qrdb_produto_dt_compra: TQRDBText;
+    QRShape1: TQRShape;
+    CliDataSet: TClientDataSet;
+    qrdb_produto_sug_compra: TQRDBText;
+    QRLabel20: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel22: TQRLabel;
+    CliDataSet_rel_itens_abaixo_min: TFDMemTable;
+    chk_sugestao: TCheckBox;
+    rel_estoque_minimo_semsugstao: TQuickRep;
+    QRBand3: TQRBand;
+    QRSysData1: TQRSysData;
+    QRLabel7: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel10: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRBand4: TQRBand;
+    QRDBText2: TQRDBText;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText9: TQRDBText;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+    procedure Tipo_OrcamentoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure chk_mostrar_todosClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure relatorio_quickrep();
+  end;
+
+var
+  FrmItensAbaixoDoMinimoRDP: TFrmItensAbaixoDoMinimoRDP;
+  Pagina, linha, C1, C2, C3, C4, C5, C6, C7,C8,C9 : Integer;
+  Condicao : String;
+  Sub_Valor_Produtos, Sub_VR_Desconto, Sub_VR_Acrescimo, Sub_Valor,
+  Total_Valor_Produtos, Total_VR_Desconto, Total_VR_Acrescimo, Total_Valor: Real;
+
+implementation
+
+uses
+  UData, UConsulta, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmItensAbaixoDoMinimoRDP.relatorio_quickrep();
+var
+  X, AA, BB, I, J, DIA: Integer;
+  MES: array[1..6] of String;
+  S1, S2, S3, S4, CP: array[1..6] of Real;
+  Sugestao: Real;
+
+begin
+
+  btnExecuta.Enabled := False;
+  btnRetorna.Enabled := False;
+
+  QRel.SQL.Clear;
+
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.Sql.Add('SELECT PRODUTO_ID, COD_BARRA, DESCRICAO, QUANTIDADE_C AS QUANTIDADE, QUANT_MINIMA, CUSTO_COMPRA, DT_COMPRA,DT_MOVIMENTO,QTD_EMBALAGEM');
+    QRel.Sql.Add('FROM PRODUTOS');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(EMPRESA_ID = :EMPRESA_ID)');
+
+    if cb_tipo.ItemIndex = 0 then
+       QRel.Sql.Add('AND (QUANTIDADE_C < QUANT_MINIMA)');
+
+    if cb_tipo.ItemIndex = 1 then
+       QRel.Sql.Add('AND (QUANTIDADE_C = QUANT_MINIMA)');
+
+    if cb_tipo.ItemIndex = 2 then
+       QRel.Sql.Add('AND (QUANTIDADE_C > QUANT_MINIMA)');
+
+
+
+    if chk_mostrar_todos.Checked = False then
+    begin
+      QRel.Sql.Add('AND DT_COMPRA BETWEEN :DT_INICIO AND :DT_FINAL');
+      QRel.ParamByName('DT_INICIO').AsDate := StrToDate(Dtmen.Text);
+      QRel.ParamByName('DT_FINAL').AsDate  := StrToDate(Dtmai.Text);
+    end;
+
+
+  end
+  else
+  begin
+    QRel.Sql.Add('SELECT PRODUTO_ID, COD_BARRA, DESCRICAO, QUANTIDADE_G AS QUANTIDADE, QUANT_MINIMA, CUSTO_COMPRA, DT_COMPRA,DT_MOVIMENTO,QTD_EMBALAGEM');
+    QRel.Sql.Add('FROM PRODUTOS');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(EMPRESA_ID = :EMPRESA_ID)');
+    QRel.Sql.Add('AND (QUANTIDADE_G < QUANT_MINIMA)');
+
+    if chk_mostrar_todos.Checked = False then
+    begin
+      QRel.Sql.Add('AND DT_COMPRA BETWEEN :DT_INICIO AND :DT_FINAL');
+      QRel.ParamByName('DT_INICIO').AsDate := StrToDate(Dtmen.Text);
+      QRel.ParamByName('DT_FINAL').AsDate  := StrToDate(Dtmai.Text);
+    end;
+  end;
+
+    QRel.Sql.Add('AND (STATUS = :STATUS)');
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    begin
+      QRel.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+      QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+    end;
+
+
+    if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor')) > 0 then
+    begin
+      QRel.Sql.Add('AND (FORNECEDOR_ID = :FORNECEDOR_ID)');
+      QRel.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor'));
+    end;
+
+    if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')) > 0 then
+    begin
+      QRel.Sql.Add('AND (GRUPO_ID = :GRUPO_ID)');
+      QRel.ParamByName('GRUPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo'));
+    end;
+
+    if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')) > 0 then
+    begin
+      QRel.Sql.Add('AND (SUBTIPO_ID = :SUBTIPO_ID)');
+      QRel.ParamByName('SUBTIPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo'));
+    end;
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) = 0 then
+    begin
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')) > 0 then
+      begin
+        QRel.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+        QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização'));
+      end;
+    end;
+
+    if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial')) > 0 then
+    begin
+      QRel.Sql.Add('AND (PRODUTO_ID BETWEEN :PRODUTO_INICIAL AND :PRODUTO_FINAL)');
+      QRel.ParamByName('PRODUTO_INICIAL').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial'));
+      QRel.ParamByName('PRODUTO_FINAL').AsInteger   := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Final'));
+    end;
+
+
+  if cbOdenarPor.Text = 'Descrição' then
+     QRel.Sql.Add('ORDER BY DESCRICAO');
+
+  if cbOdenarPor.Text = 'Data' then
+     QRel.Sql.Add('ORDER BY DT_COMPRA');
+
+
+  QRel.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QRel.ParamByName('STATUS').AsString      := 'A';
+
+  QRel.Prepare;
+  QRel.Open;
+  QRel.First;
+
+  QRLabel21.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+  if QRel.IsEmpty then
+    Application.MessageBox('Não há dados para serem impressos', PChar(Msg_Title), mb_IconInformation)
+  else
+    begin
+      //Limpo a tabela mostrada ao cliente
+      if CliDataSet_rel_itens_abaixo_min.Active then
+        CliDataSet_rel_itens_abaixo_min.EmptyDataSet;
+
+      while not QRel.Eof do
+      begin
+
+        CliDataSet_rel_itens_abaixo_min.Append;
+        CliDataSet_rel_itens_abaixo_min.FieldByName('PRODUTO_ID').AsString := QRel.FieldByName('PRODUTO_ID').AsString;
+        CliDataSet_rel_itens_abaixo_min.FieldByName('COD_BARRA').AsString := QRel.FieldByName('COD_BARRA').AsString;
+        CliDataSet_rel_itens_abaixo_min.FieldByName('DESCRICAO').AsString := QRel.FieldByName('DESCRICAO').AsString;
+        CliDataSet_rel_itens_abaixo_min.FieldByName('QUANTIDADE').AsString := formatfloat('#0.00', QRel.FieldByName('QUANTIDADE').AsFloat);
+        CliDataSet_rel_itens_abaixo_min.FieldByName('QTD_EMBALAGEM').AsString := formatfloat('#0.00', QRel.FieldByName('QTD_EMBALAGEM').AsFloat);
+        CliDataSet_rel_itens_abaixo_min.FieldByName('QUANT_MINIMA').AsString := formatfloat('#0.00', QRel.FieldByName('QUANT_MINIMA').AsFloat);
+        CliDataSet_rel_itens_abaixo_min.FieldByName('CUSTO_COMPRA').AsString := formatfloat('#0.00', QRel.FieldByName('CUSTO_COMPRA').AsFloat);
+
+        if Chk_UltimaVenda.Checked then
+          begin
+            CliDataSet_rel_itens_abaixo_min.FieldByName('DT_COMPRA').AsString := QRel.FieldByName('DT_MOVIMENTO').AsString;
+            QRLabel5.Caption := 'Últ.Vda.';
+          end
+        else
+          begin
+            CliDataSet_rel_itens_abaixo_min.FieldByName('DT_COMPRA').AsString := QRel.FieldByName('DT_COMPRA').AsString;
+            QRLabel5.Caption := 'Últ.Cpr.';
+          end;
+
+       if chk_sugestao.Checked Then
+       Begin
+        //Calculo da quantidade sugestão de compra.
+        Sugestao := 0;
+        IBQuery.Sql.Clear;
+        IBQuery.Sql.Add('SELECT TRANSITENS.QUANTIDADE, TRANSACOES.DT_TRANS, TRANSACOES.CONDUTA');
+        IBQuery.Sql.Add('FROM TRANSITENS');
+        IBQuery.Sql.Add('INNER JOIN TRANSACOES');
+        IBQuery.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+        IBQuery.Sql.Add('WHERE');
+        IBQuery.Sql.Add('(TRANSITENS.PRODUTO_ID = :PRODUTO_ID)');
+        IBQuery.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+        IBQuery.Sql.Add('AND ((TRANSACOES.CONDUTA = :CD_VENDA) OR (TRANSACOES.CONDUTA = :CD_COMPRA) OR (TRANSACOES.CONDUTA = :CD_CONSUMO))');
+        IBQuery.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+        IBQuery.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        IBQuery.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+        IBQuery.ParamByName('PRODUTO_ID').AsInteger  := QRel.FieldByName('PRODUTO_ID').AsInteger;
+        IBQuery.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        IBQuery.ParamByName('CD_VENDA').AsString     := '01';
+        IBQuery.ParamByName('CD_COMPRA').AsString    := '02';
+        IBQuery.ParamByName('CD_CONSUMO').AsString   := '17';
+        IBQuery.ParamByName('DEPTO').AsString        := '07';
+        IBQuery.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        IBQuery.ParamByName('DT_INICIAL').AsDateTime := (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime - 90);
+        IBQuery.ParamByName('DT_FINAL').AsDateTime   := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+        IBQuery.Sql.Add('ORDER BY TRANSACOES.DT_TRANS');
+
+        IBQuery.Prepare;
+        IBQuery.Open;
+        IBQuery.First;
+
+        while not IBQuery.Eof do
+        Begin
+
+          AA := StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 2));
+          BB := StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 7, 4));
+
+          for X := 6 downto 1 do
+          begin
+            MES[X]              := StrZero(IntToStr(AA), 2, 0) + '/' + StrZero(IntToStr(BB), 4, 0);
+            S1[X]               := 0;
+            S2[X]               := 0;
+            S3[X]               := 0;
+            S4[X]               := 0;
+            CP[X]               := 0;
+            AA                  := AA - 1;
+
+            if AA = 0 then
+            begin
+              AA := 12;
+              BB := BB - 1;
+            end;
+          end;
+
+          DIA := StrToInt(Copy(IBQuery.FieldByName('DT_TRANS').AsString, 1, 2));
+
+          if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[1] then
+          begin
+            if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+            begin
+              if DIA <= 7 then
+                S1[1] := S1[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 7) and (DIA <= 14) then
+                S2[1] := S2[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 14) and (DIA <= 21) then
+                S3[1] := S3[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if DIA > 21 then
+                S4[1] := S4[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+            end;
+
+            if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+              CP[1] := CP[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[2] then
+          begin
+            if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+            begin
+              if DIA <= 7 then
+                S1[2] := S1[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 7) and (DIA <= 14) then
+                S2[2] := S2[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 14) and (DIA <= 21) then
+                 S3[2] := S3[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if DIA > 21 then
+                S4[2] := S4[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+            end;
+            if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+              CP[2] := CP[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[3] then
+          begin
+            if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+            begin
+              if DIA <= 7 then
+                S1[3] := S1[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 7) and (DIA <= 14) then
+                S2[3] := S2[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 14) and (DIA <= 21) then
+                S3[3] := S3[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if DIA > 21 then
+                S4[3] := S4[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+            end;
+
+            if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+              CP[3] := CP[3] + QRel.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[4] then
+          begin
+            if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+            begin
+              if DIA <= 7 then
+                S1[4] := S1[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 7) and (DIA <= 14) then
+                S2[4] := S2[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 14) and (DIA <= 21) then
+                S3[4] := S3[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if DIA > 21 then
+                S4[4] := S4[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+            end;
+
+            if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+              CP[4] := CP[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[5] then
+          begin
+            if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+            begin
+              if DIA <= 7 then
+                S1[5] := S1[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 7) and (DIA <= 14) then
+                S2[5] := S2[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 14) and (DIA <= 21) then
+                S3[5] := S3[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if DIA > 21 then
+                S4[5] := S4[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+            end;
+
+            if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+              CP[5] := CP[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[6] then
+          begin
+            if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+            begin
+              if DIA <= 7 then
+                S1[6] := S1[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 7) and (DIA <= 14) then
+                S2[6] := S2[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if (DIA > 14) and (DIA <= 21) then
+                S3[6] := S3[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+              else if DIA > 21 then
+                S4[6] := S4[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+            end;
+
+            if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+              CP[6] := CP[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+           Sugestao := Sugestao + ((S1[4] + S2[4] + S3[4] + S4[4] + S1[5] + S2[5] + S3[5] + S4[5] +
+                  S1[6] + S2[6] + S3[6] + S4[6]) / 90) * 30;
+
+         Application.ProcessMessages;
+         IBQuery.Next
+        End;
+
+        if Sugestao > QRel.FieldByName('QUANTIDADE').AsFloat  then
+          CliDataSet_rel_itens_abaixo_min.FieldByName('SUG_COMPRA').AsString := formatfloat('#0.00', Round(Sugestao - QRel.FieldByName('QUANTIDADE').AsFloat))
+        else
+          CliDataSet_rel_itens_abaixo_min.FieldByName('SUG_COMPRA').AsString := '0,00';
+        END;
+
+        CliDataSet_rel_itens_abaixo_min.Post;
+
+        QRel.Next;
+      end;
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo') = '0' then
+        QRLabel20.Caption := 'Grupo: TODOS'
+      else
+        QRLabel20.Caption := 'Grupo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')), '7');
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
+        QRLabel6.Caption := 'Sub-Tipo: TODOS'
+      else
+        QRLabel6.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
+        QRLabel28.Caption := 'Sub-Tipo: TODOS'
+      else
+        QRLabel28.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
+        QRLabel29.Caption := 'Sub-Tipo: TODOS'
+      else
+        QRLabel29.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
+
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização') = '0' then
+        QRLabel22.Caption := 'Localização: TODAS'
+      else
+        QRLabel22.Caption := 'Localização: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')), '8');
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização') = '0' then
+        QRLabel30.Caption := 'Localização: TODAS'
+      else
+        QRLabel30.Caption := 'Localização: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')), '8');
+
+      if chk_sugestao.Checked Then
+      rel_estoque_minimo.PreviewModal
+      Else
+      rel_estoque_minimo_semsugstao.PreviewModal
+    end;
+
+  btnExecuta.Enabled := True;
+  btnRetorna.Enabled := True;
+
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.btnExecutaClick(Sender: TObject);
+var
+Temp_Name: String;
+X, AA, BB, I, J, DIA: Integer;
+MES: array[1..6] of String;
+S1, S2, S3, S4, CP: array[1..6] of Real;
+Sugestao: Real;
+begin
+// 125, 325
+
+    relatorio_quickrep();
+
+    {Relatório refeito utilizando a funão acima com o quickreport.
+
+    try
+          with Table_Temp do
+          begin
+
+            Temp_Name    := Copy(TimeToStr(time), 1, 2) + Copy(TimeToStr(time), 4, 2) + Copy(TimeToStr(time), 7, 2);
+
+
+            with FieldDefs do
+            begin
+              Clear;
+              Add('ID', ftAutoInc, 0, False);
+              Add('COD_BARRA', ftString, 40, False);
+              Add('DESCRICAO', ftString, 40, False);
+              Add('QUANTIDADE', ftFloat, 0, False);
+              Add('QUANT_MINIMA', ftFloat, 0, False);
+              Add('QUANT_EMBALAGEM', ftFloat, 0, False);
+              Add('CUSTO_COMPRA', ftFloat, 0, False);
+              Add('SUGESTAO_COMPRA', ftFloat, 0, False);
+              Add('DT_COMPRA', ftDate, 0, False);
+              Add('DT_MOVIMENTO', ftDate, 0, False);
+              Add('PRODUTO_ID',ftInteger,0,False);
+
+            end;
+
+            with IndexDefs do
+            begin
+              Clear;
+              Add('', 'ID', [ixPrimary, ixUnique]);
+              Add('COD_BARRA', 'COD_BARRA', [ixCaseInsensitive, ixDescending]);
+              Add('DESCRICAO', 'DESCRICAO', [ixCaseInsensitive, ixDescending]);
+            end;
+
+
+            Open;
+          end;
+    except
+        // Application.MessageBox('Ocorreu um erro ao criar um arquivo temporário', PChar(Msg_Title), mb_IconStop);
+        // exit;
+
+        on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro ao importar produtos!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+    end;
+
+
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+    QRel.Sql.Clear;
+
+    if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+    begin
+      QRel.Sql.Add('SELECT PRODUTO_ID, COD_BARRA, DESCRICAO, QUANTIDADE_C AS QUANTIDADE, QUANT_MINIMA, CUSTO_COMPRA, DT_COMPRA,DT_MOVIMENTO,QTD_EMBALAGEM');
+      QRel.Sql.Add('FROM PRODUTOS');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(EMPRESA_ID = :EMPRESA_ID)');
+
+      if cb_tipo.ItemIndex = 0 then
+         QRel.Sql.Add('AND (QUANTIDADE_C < QUANT_MINIMA)');
+
+      if cb_tipo.ItemIndex = 1 then
+         QRel.Sql.Add('AND (QUANTIDADE_C = QUANT_MINIMA)');
+
+      if cb_tipo.ItemIndex = 2 then
+         QRel.Sql.Add('AND (QUANTIDADE_C > QUANT_MINIMA)');
+
+
+
+      if chk_mostrar_todos.Checked = False then
+      begin
+        QRel.Sql.Add('AND DT_COMPRA BETWEEN :DT_INICIO AND :DT_FINAL');
+        QRel.ParamByName('DT_INICIO').AsDate := StrToDate(Dtmen.Text);
+        QRel.ParamByName('DT_FINAL').AsDate  := StrToDate(Dtmai.Text);
+      end;
+
+
+    end
+    else
+    begin
+      QRel.Sql.Add('SELECT PRODUTO_ID, COD_BARRA, DESCRICAO, QUANTIDADE_G AS QUANTIDADE, QUANT_MINIMA, CUSTO_COMPRA, DT_COMPRA,DT_MOVIMENTO,QTD_EMBALAGEM');
+      QRel.Sql.Add('FROM PRODUTOS');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (QUANTIDADE_G < QUANT_MINIMA)');
+
+      if chk_mostrar_todos.Checked = False then
+      begin
+        QRel.Sql.Add('AND DT_COMPRA BETWEEN :DT_INICIO AND :DT_FINAL');
+        QRel.ParamByName('DT_INICIO').AsDate := StrToDate(Dtmen.Text);
+        QRel.ParamByName('DT_FINAL').AsDate  := StrToDate(Dtmai.Text);
+      end;
+    end;
+
+      QRel.Sql.Add('AND (STATUS = :STATUS)');
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+      begin
+        QRel.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+        QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+      end;
+
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor')) > 0 then
+      begin
+        QRel.Sql.Add('AND (FORNECEDOR_ID = :FORNECEDOR_ID)');
+        QRel.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')) > 0 then
+      begin
+        QRel.Sql.Add('AND (GRUPO_ID = :GRUPO_ID)');
+        QRel.ParamByName('GRUPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')) > 0 then
+      begin
+        QRel.Sql.Add('AND (SUBTIPO_ID = :SUBTIPO_ID)');
+        QRel.ParamByName('SUBTIPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) = 0 then
+      begin
+        if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')) > 0 then
+        begin
+          QRel.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+          QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização'));
+        end;
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial')) > 0 then
+      begin
+        QRel.Sql.Add('AND (PRODUTO_ID BETWEEN :PRODUTO_INICIAL AND :PRODUTO_FINAL)');
+        QRel.ParamByName('PRODUTO_INICIAL').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial'));
+        QRel.ParamByName('PRODUTO_FINAL').AsInteger   := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Final'));
+      end;
+
+
+    if cbOdenarPor.Text = 'Descrição' then
+       QRel.Sql.Add('ORDER BY DESCRICAO');
+
+    if cbOdenarPor.Text = 'Data' then
+       QRel.Sql.Add('ORDER BY DT_COMPRA');
+
+
+    QRel.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QRel.ParamByName('STATUS').AsString      := 'A';
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QRel.First;
+
+    while not QRel.Eof do
+    begin
+    Sugestao := 0;
+
+    Table_Temp.Append;
+    Table_Temp.FieldByName('PRODUTO_ID').AsInteger    := QRel.FieldByName('PRODUTO_ID').AsInteger;
+    Table_Temp.FieldByName('COD_BARRA').AsString      := QRel.FieldByName('COD_BARRA').AsString;;
+    Table_Temp.FieldByName('DESCRICAO').AsString      := QRel.FieldByName('DESCRICAO').AsString;
+    Table_Temp.FieldByName('QUANTIDADE').AsFloat      := QRel.FieldByName('QUANTIDADE').AsFloat;
+    Table_Temp.FieldByName('QUANT_MINIMA').AsFloat    := QRel.FieldByName('QUANT_MINIMA').AsFloat;
+    Table_Temp.FieldByName('QUANT_EMBALAGEM').AsFloat := QRel.FieldByName('QTD_EMBALAGEM').AsFloat;
+    Table_Temp.FieldByName('CUSTO_COMPRA').AsFloat    := QRel.FieldByName('CUSTO_COMPRA').AsFloat;
+    Table_Temp.FieldByName('DT_COMPRA').AsDateTime    := QRel.FieldByName('DT_COMPRA').AsFloat;
+    Table_Temp.FieldByName('DT_MOVIMENTO').AsDateTime := QRel.FieldByName('DT_MOVIMENTO').AsFloat;
+
+
+    IBQuery.Sql.Clear;
+    IBQuery.Sql.Add('SELECT TRANSITENS.QUANTIDADE, TRANSACOES.DT_TRANS, TRANSACOES.CONDUTA');
+    IBQuery.Sql.Add('FROM TRANSITENS');
+    IBQuery.Sql.Add('INNER JOIN TRANSACOES');
+    IBQuery.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    IBQuery.Sql.Add('WHERE');
+    IBQuery.Sql.Add('(TRANSITENS.PRODUTO_ID = :PRODUTO_ID)');
+    IBQuery.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+    IBQuery.Sql.Add('AND ((TRANSACOES.CONDUTA = :CD_VENDA) OR (TRANSACOES.CONDUTA = :CD_COMPRA) OR (TRANSACOES.CONDUTA = :CD_CONSUMO))');
+    IBQuery.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    IBQuery.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+    IBQuery.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+    IBQuery.ParamByName('PRODUTO_ID').AsInteger  := QRel.FieldByName('PRODUTO_ID').AsInteger;
+    IBQuery.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    IBQuery.ParamByName('CD_VENDA').AsString     := '01';
+    IBQuery.ParamByName('CD_COMPRA').AsString    := '02';
+    IBQuery.ParamByName('CD_CONSUMO').AsString   := '17';
+    IBQuery.ParamByName('DEPTO').AsString        := '07';
+    IBQuery.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    IBQuery.ParamByName('DT_INICIAL').AsDateTime := (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime - 180);
+    IBQuery.ParamByName('DT_FINAL').AsDateTime   := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+    IBQuery.Sql.Add('ORDER BY TRANSACOES.DT_TRANS');
+
+    IBQuery.Prepare;
+    IBQuery.Open;
+    IBQuery.First;
+
+      while not IBQuery.Eof do
+      Begin
+
+        AA := StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 2));
+        BB := StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 7, 4));
+
+        for X := 6 downto 1 do
+        begin
+          MES[X]              := StrZero(IntToStr(AA), 2, 0) + '/' + StrZero(IntToStr(BB), 4, 0);
+          S1[X]               := 0;
+          S2[X]               := 0;
+          S3[X]               := 0;
+          S4[X]               := 0;
+          CP[X]               := 0;
+          AA                  := AA - 1;
+
+          if AA = 0 then
+          begin
+            AA := 12;
+            BB := BB - 1;
+          end;
+        end;
+
+        DIA := StrToInt(Copy(IBQuery.FieldByName('DT_TRANS').AsString, 1, 2));
+
+        if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[1] then
+        begin
+          if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+          begin
+            if DIA <= 7 then
+              S1[1] := S1[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 7) and (DIA <= 14) then
+              S2[1] := S2[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 14) and (DIA <= 21) then
+              S3[1] := S3[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if DIA > 21 then
+              S4[1] := S4[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+            CP[1] := CP[1] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+        end;
+
+        if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[2] then
+        begin
+          if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+          begin
+            if DIA <= 7 then
+              S1[2] := S1[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 7) and (DIA <= 14) then
+              S2[2] := S2[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 14) and (DIA <= 21) then
+               S3[2] := S3[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if DIA > 21 then
+              S4[2] := S4[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+          if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+            CP[2] := CP[2] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+        end;
+
+        if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[3] then
+        begin
+          if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+          begin
+            if DIA <= 7 then
+              S1[3] := S1[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 7) and (DIA <= 14) then
+              S2[3] := S2[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 14) and (DIA <= 21) then
+              S3[3] := S3[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if DIA > 21 then
+              S4[3] := S4[3] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+            CP[3] := CP[3] + QRel.FieldByName('QUANTIDADE').AsFloat;
+        end;
+
+        if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[4] then
+        begin
+          if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+          begin
+            if DIA <= 7 then
+              S1[4] := S1[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 7) and (DIA <= 14) then
+              S2[4] := S2[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 14) and (DIA <= 21) then
+              S3[4] := S3[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if DIA > 21 then
+              S4[4] := S4[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+            CP[4] := CP[4] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+        end;
+
+        if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[5] then
+        begin
+          if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+          begin
+            if DIA <= 7 then
+              S1[5] := S1[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 7) and (DIA <= 14) then
+              S2[5] := S2[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 14) and (DIA <= 21) then
+              S3[5] := S3[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if DIA > 21 then
+              S4[5] := S4[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+            CP[5] := CP[5] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+        end;
+
+        if Copy(IBQuery.FieldByName('DT_TRANS').AsString, 4, 7) = MES[6] then
+        begin
+          if (IBQuery.FieldByName('CONDUTA').AsString = '01') or (IBQuery.FieldByName('CONDUTA').AsString = '17') then
+          begin
+            if DIA <= 7 then
+              S1[6] := S1[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 7) and (DIA <= 14) then
+              S2[6] := S2[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if (DIA > 14) and (DIA <= 21) then
+              S3[6] := S3[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat
+            else if DIA > 21 then
+              S4[6] := S4[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+          end;
+
+          if IBQuery.FieldByName('CONDUTA').AsString = '02' then
+            CP[6] := CP[6] + IBQuery.FieldByName('QUANTIDADE').AsFloat;
+        end;
+
+         Sugestao := Sugestao + ((S1[4] + S2[4] + S3[4] + S4[4] + S1[5] + S2[5] + S3[5] + S4[5] +
+                S1[6] + S2[6] + S3[6] + S4[6]) / 90) * 30;
+
+       Application.ProcessMessages;
+       IBQuery.Next
+      End;
+
+      if Sugestao > QRel.FieldByName('QUANTIDADE').AsFloat  then
+             Table_Temp.FieldByName('SUGESTAO_COMPRA').AsFloat   :=  Round(Sugestao - QRel.FieldByName('QUANTIDADE').AsFloat);
+
+
+        Table_Temp.Post;
+
+        Application.ProcessMessages;
+        QRel.Next;
+
+    end;
+
+    if cbOdenarPor.Text = 'Descrição' then
+    Begin
+     Table_Temp.IndexFieldNames := 'DESCRICAO';
+
+     // Table_Temp.Filter := 'ORDER BY DESCRICAO';
+     // Table_Temp.Filtered:= True;
+    End;
+
+    if cbOdenarPor.Text = 'Data' then
+    Begin
+      Table_Temp.IndexFieldNames := 'DT_COMPRA';
+      //Table_Temp.Filter := 'ORDER BY DATA';
+      //Table_Temp.Filtered:= True;
+    End;
+
+
+
+    if  Table_Temp.IsEmpty then
+      Application.MessageBox('Não há dados para serem impressos', PChar(Msg_Title), mb_IconInformation)
+    else
+      Begin
+          if CheckBox1.Checked = True then
+          Begin
+           RDprint1.Impressora         := HP;
+           RDprint1.FonteTamanhoPadrao := S10cpp;
+
+           //RDprint1.Orientacao         := poLandscape;
+          End;
+
+          RDprint1.TamanhoQteColunas         := 130;
+          RDprint1.OpcoesPreview.Preview     := True;
+          RDprint1.MostrarProgresso          := True;
+          RDprint1.Acentuacao                := SemAcento;
+          RDprint1.TamanhoQteLinhas          := 1;
+          RDprint1.Abrir;
+
+        if linha > 66  then
+          Begin
+           RDprint1.Novapagina;
+           Pagina := Pagina + 1;
+          End;
+
+        Table_Temp.First;
+
+        while not Table_Temp.Eof do
+        Begin
+          RDprint1.ImpD(linha, C1+6, Table_Temp.FieldByName('PRODUTO_ID').AsString,[]);
+          RDprint1.Imp(linha, C2, Table_Temp.FieldByName('COD_BARRA').AsString);
+          RDprint1.Imp(linha, C3, Copy(Table_Temp.FieldByName('DESCRICAO').AsString, 1,50));
+          RDprint1.ImpVal(linha,C4,'###,##0.00', Table_Temp.FieldByName('QUANTIDADE').AsFloat,[]);
+          RDprint1.ImpVal(linha,C5,'###,##0.00', Table_Temp.FieldByName('QUANT_MINIMA').AsFloat,[]);
+          RDprint1.ImpVal(linha,C6,'###,##0.00', Table_Temp.FieldByName('CUSTO_COMPRA').AsFloat,[]);
+          RDprint1.ImpVal(linha,C7,'###,##0.00', Table_Temp.FieldByName('SUGESTAO_COMPRA').AsFloat,[]);
+          RDprint1.ImpVal(linha,C9,'###,##0.00', Table_Temp.FieldByName('QUANT_EMBALAGEM').AsFloat,[]);
+
+
+          if Chk_UltimaVenda.Checked then
+          RDprint1.Imp(linha, C8, Table_Temp.FieldByName('DT_MOVIMENTO').AsString)
+          Else
+          RDprint1.Imp(linha, C8, Table_Temp.FieldByName('DT_COMPRA').AsString);
+
+         if linha > 63  then
+          Begin
+           RDprint1.Novapagina;
+           Pagina := Pagina + 1;
+          End;
+          Inc(linha);
+          Table_Temp.Next;
+        End;
+
+        Application.ProcessMessages;
+        RDprint1.TamanhoQteLinhas:= 66;
+        RDprint1.Fechar;
+      End;
+
+  finally
+      Table_Temp.Close;
+
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+
+  }
+
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.RDprint1NewPage(Sender: TObject;
+  Pagina: Integer);
+begin
+
+       //posição das colulas
+       C1 := 01;
+       C2 := 09;
+       C3 := 24;
+       C4 := 64;
+       C5 := 82;
+       C6 := 92;
+       C7 := 105;
+       C8 := 120;
+       C9 := 74;
+
+      RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+      RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 130, 'Sistema de Automação de empresas Eficaz', []);
+      RDprint1.Imp(02, 01, 'Data/Hora: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+      RDprint1.impDir(02, 80, 130, 'Página: ' + IntToStr(Pagina), []);
+
+      if cb_tipo.ItemIndex = 0 then
+       RDprint1.impC(03, 70, '*** ITENS: ABAIXO DO ESTOQUE MÍNIMO ***',[negrito]);
+
+      if cb_tipo.ItemIndex = 1 then
+       RDprint1.impC(03, 70, '*** ITENS: QUANTIDADE IGUAL AO ESTOQUE MÍNIMO ***',[negrito]);
+
+      if cb_tipo.ItemIndex = 2 then
+       RDprint1.impC(03, 70, '*** ITENS: QUANTIDADE ACIMA DO ESTOQUE MÍNIMO ***',[negrito]);
+
+
+
+      RDprint1.imp(04, 01, 'Período:'+ datetoStr(dtmen.date) + ' à ' + datetoStr(dtmai.date));
+
+       if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo') = '0' then
+         RDprint1.imp(05, 01, 'Grupo: Todos')
+       else
+         RDprint1.Imp(05, 01, 'Grupo: '+Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')), '7'));
+
+
+       if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
+         RDprint1.imp(05, 40, 'Sub-tipo: TODOS')
+       else
+         RDprint1.imp(05, 40, 'Sub-tipo: '+ Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5'));
+
+       if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização') = '0' then
+         RDprint1.imp(05, 80, 'Localização: TODAS')
+       else
+         RDprint1.imp(05, 80, 'Localização: '+Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')), '8'));
+
+
+
+      RDprint1.LinhaH(06,01,130,0,false);
+      RDprint1.impD(07, C1+6, 'Id',[]);
+      RDprint1.imp(07, C2, 'Cód. Barra');
+      RDprint1.imp(07, C3, 'Descrição');
+      RDprint1.imp(07, C4+5, 'Atual');
+      RDprint1.imp(07, C5+5, 'Mínimo');
+      RDprint1.imp(07, C6+3, 'Últ. Cst.');
+      RDprint1.imp(07, C7+1, 'Sugestão Cpr.');
+      RDprint1.imp(07, C9+3, 'Qtd. Emb.');
+
+      if Chk_UltimaVenda.Checked then
+       RDprint1.imp(07, C8+1,'Últ. Vda.')
+      Else
+       RDprint1.imp(07, C8+1,'Últ. Cpr.');
+
+   RDprint1.LinhaH(08,01,130,0,false);
+      linha := 09;
+end;
+
+
+procedure TFrmItensAbaixoDoMinimoRDP.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.chk_mostrar_todosClick(Sender: TObject);
+begin
+      if chk_mostrar_todos.Checked = True then
+      begin
+        Dtmai.Enabled := False;
+        Dtmen.Enabled := False;
+      end
+      else
+      begin
+        Dtmai.Enabled := True;
+        Dtmen.Enabled := True;
+      end;
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   //Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.FormCreate(Sender: TObject);
+begin
+
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('PRODUTO_ID', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('COD_BARRA', ftString, 15, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('DESCRICAO', ftString, 120, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('QUANTIDADE', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('QTD_EMBALAGEM', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('QUANT_MINIMA', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('CUSTO_COMPRA', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('SUG_COMPRA', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('DT_COMPRA', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.CreateDataSet;
+
+end;
+
+procedure TFrmItensAbaixoDoMinimoRDP.Tipo_OrcamentoKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+end.

@@ -1,0 +1,417 @@
+unit UPesquisa;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Mask, StdCtrls, rxToolEdit, Grids, DBGrids, Buttons, ExtCtrls, DB,
+  IBCustomDataSet, IBQuery, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client;
+
+type
+  TFrmPesquisa = class(TForm)
+    Panel1: TPanel;
+    btnConfirma: TButton;
+    btnRetorna: TBitBtn;
+    Label1: TLabel;
+    GroupBox2: TGroupBox;
+    Condicao: TComboBox;
+    Dt: TDateEdit;
+    Txt_Sql: TMaskEdit;
+    DataTabela: TDataSource;
+    DBGrid1: TDBGrid;
+    Label2: TLabel;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    Condicao2: TComboBox;
+    Dt2: TDateEdit;
+    Txt_Sql2: TMaskEdit;
+    QTabela: TFDQuery;
+    procedure FormCreate(Sender: TObject);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure btnConfirmaClick(Sender: TObject);
+    procedure CondicaoChange(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure Txt_SqlKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure CondicaoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DtChange(Sender: TObject);
+    procedure DBGrid1KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure DtKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DtEnter(Sender: TObject);
+    procedure CheckBox1Click(Sender: TObject);
+    procedure CheckBox2Click(Sender: TObject);
+    procedure Txt_Sql2KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Dt2Change(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPesquisa: TFrmPesquisa;
+  ChavePesquisa, Par_Sql: String;
+  function GetPesquisa(Nm_Form: String): String;
+
+implementation
+
+uses
+  UData, UConsulta;
+
+{$R *.dfm}
+
+function GetPesquisa(Nm_Form: String): String;
+begin
+  Par_Sql := Nm_Form;
+
+  Application.CreateForm(TFrmPesquisa, FrmPesquisa);
+  try
+    FrmPesquisa.ShowModal;
+
+    if (not FrmPesquisa.QTabela.IsEmpty) and (FrmPesquisa.ModalResult = mrOK) then
+      Result := ChavePesquisa
+    else
+      Result := '';
+  finally
+    FrmPesquisa.Release;
+  end;
+end;
+
+procedure TFrmPesquisa.CheckBox1Click(Sender: TObject);
+begin
+  if CheckBox1.Checked then
+    CheckBox2.Checked := False
+  else
+    CheckBox2.Checked := True;
+end;
+
+procedure TFrmPesquisa.CheckBox2Click(Sender: TObject);
+begin
+  if CheckBox2.Checked then
+    CheckBox1.Checked := False
+  else
+    CheckBox1.Checked := True;
+end;
+
+procedure TFrmPesquisa.CondicaoChange(Sender: TObject);
+begin
+  if (Condicao.Text <> '') and (Txt_Sql.Text <> '') then
+    btnConfirma.Enabled := True
+  else
+    btnConfirma.Enabled := False;
+end;
+
+procedure TFrmPesquisa.CondicaoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmPesquisa.btnConfirmaClick(Sender: TObject);
+var
+AndOr: String;
+begin
+  ChavePesquisa := '';
+
+  if Checkbox1.Checked then
+    AndOr := ' AND '
+  else
+    AndOr := ' OR ';
+
+  if (Condicao.Text = 'é igual a') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE (' + QTabela.FieldByName('CAMPO').AsString + ' = ' + #39 + Txt_Sql.Text + #39 + ')'
+  else if (Condicao.Text = 'é diferente de') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE (' + QTabela.FieldByName('CAMPO').AsString + ' <> ' + #39 + Txt_Sql.Text + #39 + ')'
+  else if (Condicao.Text = 'é maior do que') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE (' + QTabela.FieldByName('CAMPO').AsString + ' > ' + #39 + Txt_Sql.Text + #39 + ')'
+  else if (Condicao.Text = 'é maior ou igual a') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE (' + QTabela.FieldByName('CAMPO').AsString + ' >= ' + #39 + Txt_Sql.Text + #39 + ')'
+  else if (Condicao.Text = 'é menor do que') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE (' + QTabela.FieldByName('CAMPO').AsString + ' < ' + #39 + Txt_Sql.Text + #39 + ')'
+  else if (Condicao.Text = 'é menor ou igual a') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE (' + QTabela.FieldByName('CAMPO').AsString + ' <= ' + #39 + Txt_Sql.Text + #39 + ')'
+  else if (Condicao.Text = 'começa com') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39 + Txt_Sql.Text + '%' + #39
+  else if (Condicao.Text = 'não começa com') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + Txt_Sql.Text + '%' + #39
+  else if (Condicao.Text = 'termina com') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39 + '%' + Txt_Sql.Text + #39
+  else if (Condicao.Text = 'não termina com') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%' + Txt_Sql.Text + #39
+  else if (Condicao.Text = 'contém') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100))  LIKE ' + #39 + '%'  + Txt_Sql.Text + '%'  + #39
+  else if (Condicao.Text = 'não contém') and (Txt_Sql.Text <> '') then
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%'+ Txt_Sql.Text + '%' + #39;
+
+  if (Condicao2.Text = 'é igual a') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' = ' + #39 + Txt_Sql2.Text + #39 + ')'
+  else if (Condicao2.Text = 'é diferente de') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' <> ' + #39 + Txt_Sql2.Text + #39 + ')'
+  else if (Condicao2.Text = 'é maior do que') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' > ' + #39 + Txt_Sql2.Text + #39 + ')'
+  else if (Condicao2.Text = 'é maior ou igual a') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' >= ' + #39 + Txt_Sql2.Text + #39 + ')'
+  else if (Condicao2.Text = 'é menor do que') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' < ' + #39 + Txt_Sql2.Text + #39 + ')'
+  else if (Condicao2.Text = 'é menor ou igual a') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' <= ' + #39 + Txt_Sql2.Text + #39 + ')'
+  else if (Condicao2.Text = 'começa com') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39 + Txt_Sql2.Text + '%' + #39
+  else if (Condicao2.Text = 'não começa com') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + Txt_Sql2.Text + '%' + #39
+  else if (Condicao2.Text = 'termina com') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39  + Txt_Sql2.Text + '%' +  #39
+  else if (Condicao2.Text = 'não termina com') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%' + Txt_Sql2.Text + #39
+  else if (Condicao2.Text = 'contém') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE '  + #39 + '%'  + Txt_Sql2.Text + '%'  + #39
+  else if (Condicao2.Text = 'não contém') and (Txt_Sql2.Text <> '') then
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%'+ Txt_Sql2.Text + '%' + #39;
+
+//  if QTabela.FieldByName('ORDEM').AsString <> '' then
+//    ChavePesquisa := ChavePesquisa + ' ORDER BY ' + QTabela.FieldByName('ORDEM').AsString;
+
+  ModalResult := mrOk;
+
+end;
+
+procedure TFrmPesquisa.DBGrid1CellClick(Column: TColumn);
+begin
+  GroupBox2.Caption := QTabela.FieldByName('DESCRICAO').AsString;
+
+  if QTabela.FieldByName('TIPO_CAMPO').AsString = 'DATA' then
+  begin
+    Dt.Date          := date;
+    Dt2.Date         := date;
+    Txt_Sql.Text     := DateToStr(Dt.Date);
+                     {   Copy(DateToStr(Dt.Date), 4, 2) + '/' +
+                        Copy(DateToStr(Dt.Date), 1, 2) + '/' +
+                        Copy(DateToStr(Dt.Date), 7, 4);  }
+    Txt_Sql2.Text    := DateToStr(Dt2.Date);
+                       { Copy(DateToStr(Dt2.Date), 4, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 1, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 7, 4); }
+    Txt_Sql.Visible  := False;
+    Txt_Sql2.Visible := False;
+    Dt.Visible       := True;
+    Dt2.Visible      := True;
+  end
+  else
+  begin
+    Txt_Sql.Text     := '';
+    Txt_Sql.Visible  := True;
+    Dt.Visible       := False;
+    Txt_Sql2.Text    := '';
+    Txt_Sql2.Visible := True;
+    Dt2.Visible      := False;
+  end;
+end;
+
+procedure TFrmPesquisa.DBGrid1DblClick(Sender: TObject);
+begin
+  GroupBox2.Caption := QTabela.FieldByName('DESCRICAO').AsString;
+
+  if QTabela.FieldByName('TIPO_CAMPO').AsString = 'DATA' then
+  begin
+    Dt.Date         := date;
+    Txt_Sql.Text    := DateToStr(Dt.Date);
+                       {Copy(DateToStr(Dt.Date), 4, 2) + '/' +
+                       Copy(DateToStr(Dt.Date), 1, 2) + '/' +
+                       Copy(DateToStr(Dt.Date), 7, 4);  }
+    Txt_Sql.Visible  := False;
+    Dt.Visible       := True;
+    Dt2.Date         := date;
+    Txt_Sql2.Text    := DateToStr(Dt2.Date);
+                       { Copy(DateToStr(Dt2.Date), 4, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 1, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 7, 4);  }
+    Txt_Sql2.Visible := False;
+    Dt2.Visible      := True;
+  end
+  else
+  begin
+    Txt_Sql.Text     := '';
+    Txt_Sql.Visible  := True;
+    Dt.Visible       := False;
+    Txt_Sql2.Text    := '';
+    Txt_Sql2.Visible := True;
+    Dt2.Visible      := False;
+  end;
+end;
+
+procedure TFrmPesquisa.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    GroupBox2.Caption := QTabela.FieldByName('DESCRICAO').AsString;
+
+    if QTabela.FieldByName('TIPO_CAMPO').AsString = 'DATA' then
+    begin
+      Dt.Date          := date;
+      Txt_Sql.Text     := DateToStr(Dt.Date);
+                          {Copy(DateToStr(Dt.Date), 4, 2) + '/' +
+                          Copy(DateToStr(Dt.Date), 1, 2) + '/' +
+                          Copy(DateToStr(Dt.Date), 7, 4); }
+      Txt_Sql.Visible  := False;
+      Dt.Visible       := True;
+      Dt2.Date         := date;
+      Txt_Sql2.Text    := DateToStr(Dt2.Date);
+                        {  Copy(DateToStr(Dt2.Date), 4, 2) + '/' +
+                          Copy(DateToStr(Dt2.Date), 1, 2) + '/' +
+                          Copy(DateToStr(Dt2.Date), 7, 4); }
+      Txt_Sql2.Visible := False;
+      Dt2.Visible      := True;
+    end
+    else
+    begin
+      Txt_Sql.Text     := '';
+      Txt_Sql.Visible  := True;
+      Dt.Visible       := False;
+      Txt_Sql2.Text    := '';
+      Txt_Sql2.Visible := True;
+      Dt2.Visible      := False;
+    end;
+
+    Condicao.SetFocus;
+  end;
+end;
+
+procedure TFrmPesquisa.DBGrid1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  GroupBox2.Caption := QTabela.FieldByName('DESCRICAO').AsString;
+
+  if QTabela.FieldByName('TIPO_CAMPO').AsString = 'DATA' then
+  begin
+    Dt.Date          := date;
+    Txt_Sql.Text     := DateToStr(Dt.Date);
+                      {  Copy(DateToStr(Dt.Date), 4, 2) + '/' +
+                        Copy(DateToStr(Dt.Date), 1, 2) + '/' +
+                        Copy(DateToStr(Dt.Date), 7, 4); }
+    Txt_Sql.Visible  := False;
+    Dt.Visible       := True;
+    Dt2.Date         := date;
+    Txt_Sql2.Text    := DateToStr(Dt2.Date);
+                        {Copy(DateToStr(Dt2.Date), 4, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 1, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 7, 4); }
+    Txt_Sql2.Visible := False;
+    Dt2.Visible      := True;
+  end
+  else
+  begin
+    Txt_Sql.Text     := '';
+    Txt_Sql.Visible  := True;
+    Dt.Visible       := False;
+    Txt_Sql2.Text    := '';
+    Txt_Sql2.Visible := True;
+    Dt2.Visible      := False;
+  end;
+end;
+
+procedure TFrmPesquisa.Dt2Change(Sender: TObject);
+begin
+  Txt_Sql2.Text := DateToStr(Dt2.Date);
+                 {  Copy(DateToStr(Dt2.Date), 4, 2) + '/' +
+                   Copy(DateToStr(Dt2.Date), 1, 2) + '/' +
+                   Copy(DateToStr(Dt2.Date), 7, 4); }
+end;
+
+procedure TFrmPesquisa.DtChange(Sender: TObject);
+begin
+  Txt_Sql.Text := DateToStr(Dt.Date);
+                 { Copy(DateToStr(Dt.Date), 4, 2) + '/' +
+                  Copy(DateToStr(Dt.Date), 1, 2) + '/' +
+                  Copy(DateToStr(Dt.Date), 7, 4);}
+end;
+
+procedure TFrmPesquisa.DtEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmPesquisa.DtKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmPesquisa.FormCreate(Sender: TObject);
+begin
+  DBGrid1.Columns[0].Width := 184;
+  
+  QTabela.Sql.Clear;
+  QTabela.Sql.Add('SELECT * FROM PESQUISA WHERE FORMULARIO = :FORMULARIO');
+
+  QTabela.ParamByName('FORMULARIO').AsString := Par_Sql;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  GroupBox2.Caption := QTabela.FieldByName('DESCRICAO').AsString;
+  Dt.Date           := date;
+
+  if QTabela.FieldByName('TIPO_CAMPO').AsString = 'DATA' then
+  begin
+    Txt_Sql.Text     := DateToStr(Dt.Date);
+                        {Copy(DateToStr(Dt.Date), 4, 2) + '/' +
+                        Copy(DateToStr(Dt.Date), 1, 2) + '/' +
+                        Copy(DateToStr(Dt.Date), 7, 4);  }
+    Txt_Sql.Visible  := False;
+    Dt.Visible       := True;
+    Txt_Sql2.Text    := DateToStr(Dt2.Date);
+                       { Copy(DateToStr(Dt2.Date), 4, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 1, 2) + '/' +
+                        Copy(DateToStr(Dt2.Date), 7, 4); }
+    Txt_Sql2.Visible := False;
+    Dt2.Visible      := True;
+  end
+  else
+  begin
+    Txt_Sql.Text     := '';
+    Txt_Sql.Visible  := True;
+    Dt.Visible       := False;
+    Txt_Sql2.Text    := '';
+    Txt_Sql2.Visible := True;
+    Dt2.Visible      := False;
+  end;
+end;
+
+procedure TFrmPesquisa.Txt_Sql2KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (QTabela.FieldByName('CONSULTA').AsString <> '') then
+    Txt_Sql2.Text := IntToStr(GetConsulta(QTabela.FieldByName('CONSULTA').AsString, 0, 0, 0));
+
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmPesquisa.Txt_SqlKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (QTabela.FieldByName('CONSULTA').AsString <> '') then
+    Txt_Sql.Text := IntToStr(GetConsulta(QTabela.FieldByName('CONSULTA').AsString, 0, 0, 0));
+
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+end.

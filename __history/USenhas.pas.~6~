@@ -1,0 +1,869 @@
+unit USenhas;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, DBCtrls, rxToolEdit, rxCurrEdit,
+  CheckLst, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmSenhas = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Manutencao: TTabSheet;
+    SENHA: TEdit;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    Label3: TLabel;
+    Label4: TLabel;
+    INCLUSAO: TComboBox;
+    Label10: TLabel;
+    FUNCIONARIO_ID: TCurrencyEdit;
+    Label1: TLabel;
+    EMPRESA_ID: TCurrencyEdit;
+    Label2: TLabel;
+    ALTERACAO: TComboBox;
+    Label5: TLabel;
+    EXCLUSAO: TComboBox;
+    Label6: TLabel;
+    ABERTURA: TComboBox;
+    Label7: TLabel;
+    TPCTB: TComboBox;
+    btnEmpresa: TSpeedButton;
+    DBText1: TDBText;
+    btnFuncionario: TSpeedButton;
+    DBText2: TDBText;
+    Label8: TLabel;
+    TROCAR_SENHA: TComboBox;
+    Menu: TCheckListBox;
+    OPCOES: TEdit;
+    Label9: TLabel;
+    LIBERA: TComboBox;
+    StatusBar1: TStatusBar;
+    Label11: TLabel;
+    Label12: TLabel;
+    DataFuncionario: TDataSource;
+    DataEmpresa: TDataSource;
+    QFuncionario: TFDQuery;
+    QEmpresa: TFDQuery;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    Label13: TLabel;
+    Alt_Produtos: TComboBox;
+    Desativados: TComboBox;
+    Label14: TLabel;
+    Recebimento_Data_Retroativa: TComboBox;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure INCLUSAOKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure SENHAKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FUNCIONARIO_IDExit(Sender: TObject);
+    procedure btnFuncionarioClick(Sender: TObject);
+    procedure MenuClickCheck(Sender: TObject);
+    procedure MenuKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+  end;
+
+var
+  FrmSenhas: TFrmSenhas;
+  Operacao, SN: String;
+  ID, Itens_Menu: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta;
+
+{$R *.dfm}
+
+procedure TFrmSenhas.Botoes_Editing;
+begin
+  btnPrior.Enabled       := False;
+  btnNext.Enabled        := False;
+  btnInsert.Enabled      := False;
+  btnEdit.Enabled        := False;
+  btnDelete.Enabled      := False;
+  btnSave.Enabled        := True;
+  btnDiscard.Enabled     := True;
+  btnRetorna.Enabled     := False;
+  btnEmpresa.Enabled     := True;
+  btnFuncionario.Enabled := True;
+end;
+
+procedure TFrmSenhas.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled   := True;
+    btnDelete.Enabled := True;
+  end
+  else
+  begin
+    btnEdit.Enabled   := False;
+    btnDelete.Enabled := False;
+  end;
+
+  btnSave.Enabled        := False;
+  btnDiscard.Enabled     := False;
+  btnRetorna.Enabled     := True;
+  btnEmpresa.Enabled     := False;
+  btnFuncionario.Enabled := False;
+end;
+
+procedure TFrmSenhas.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA_ID.Text <> '') then
+  begin
+    QEmpresa.Close;
+
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Funcion·rio')) and (FUNCIONARIO_ID.Text <> '') then
+  begin
+    QFuncionario.Close;
+
+    QFuncionario.ParamByName('FUNCIONARIO_ID').AsInteger := StrToInt(FUNCIONARIO_ID.Text);
+
+    QFuncionario.Prepare;
+    QFuncionario.Open;
+  end;
+end;
+
+procedure TFrmSenhas.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TCheckListBox then
+      TCheckListBox(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmSenhas.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO ACESSO(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO ACESSO(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO ACESSO(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO ACESSO(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  Habilitar(False);
+end;
+
+procedure TFrmSenhas.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE ACESSO SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE ACESSO SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE ACESSO SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE ACESSO SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (FUNCIONARIO_ID = :ID) AND (SENHA = :SN)';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+  IQuery.ParamByName('SN').AsString  := QTabela.FieldByName('SENHA').AsString;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QTabela.Locate('FUNCIONARIO_ID', ID, [loCaseInsensitive]);
+
+  Habilitar(False);
+end;
+
+procedure TFrmSenhas.EMPRESA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Empresa');
+end;
+
+procedure TFrmSenhas.EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = EMPRESA_ID) then
+    btnEmpresaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = FUNCIONARIO_ID) then
+    btnFuncionarioClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmSenhas.SENHAKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+function TFrmSenhas.Validacao: Boolean;
+begin
+  Result := False;
+
+  EMPRESA_ID.Color     := clWindow;
+  FUNCIONARIO_ID.Color := clWindow;
+
+  if QEmpresa.IsEmpty then
+  begin
+    Application.MessageBox('Empresa inexistente', PChar(Msg_Title), mb_IconStop);
+
+    EMPRESA_ID.Color := clYellow;
+    EMPRESA_ID.SetFocus;
+
+    exit;
+  end;
+
+  if QFuncionario.IsEmpty then
+  begin
+    Application.MessageBox('Funcion·rio inexistente', PChar(Msg_Title), mb_IconStop);
+
+    FUNCIONARIO_ID.Color := clYellow;
+    FUNCIONARIO_ID.SetFocus;
+
+    exit;
+  end;
+
+  Result := True;
+
+  IQuery.SQL.Clear;
+  IQuery.SQL.Add('select funcionario_id, substr(opcoes,69,1) from acesso where length(opcoes) >= 69 and substr(opcoes,69,1) = ''S''');
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    ShowMessage(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString,69,1) + '   ' + BoolToStr(Menu.Checked[68]));
+    if (Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString,69,1) = 'N') and Menu.Checked[68] then
+    begin
+      Result := False;
+      Application.MessageBox('Usu·rio sem permiss„o para alterar a permiss„o de editar limite de cliente', PChar(Msg_Title), mb_IconStop);
+      exit;
+    end;
+
+  end;
+
+end;
+
+procedure TFrmSenhas.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmSenhas.MenuClickCheck(Sender: TObject);
+var
+X: Integer;
+begin
+  OPCOES.Text := '';
+
+  for X := 0 to (Menu.Items.Count - 1) do
+  begin
+    if Menu.Checked[X] then
+      OPCOES.Text := OPCOES.Text + 'S'
+    else
+      OPCOES.Text := OPCOES.Text + 'N';
+  end;
+end;
+
+procedure TFrmSenhas.MenuKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+X: Integer;
+begin
+  if Key = VK_F7 then
+  begin
+    OPCOES.Text := '';
+
+    for X := 1 to Itens_Menu do
+    begin
+      Menu.Checked[X - 1] := False;
+      OPCOES.Text         := OPCOES.Text + 'N';
+    end;
+  end;
+
+  if Key = VK_F8 then
+  begin
+    OPCOES.Text := '';
+
+    for X := 1 to Itens_Menu do
+    begin
+      if Menu.ItemEnabled[X - 1] then
+      begin
+        Menu.Checked[X - 1] := True;
+        OPCOES.Text         := OPCOES.Text + 'S';
+      end
+      else
+      begin
+        Menu.Checked[X - 1] := False;
+        OPCOES.Text         := OPCOES.Text + 'N';
+      end;
+    end;
+  end;
+end;
+
+procedure TFrmSenhas.Set_Campos(Vazio: Boolean);
+var
+I, X: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      OPCOES.Text := '';
+
+      for X := 1 to Itens_Menu do
+      begin
+        Menu.Checked[X - 1] := Caso(Copy(QTabela.FieldByName('OPCOES').AsString, X, 1));
+        OPCOES.Text         := OPCOES.Text + Copy(QTabela.FieldByName('OPCOES').AsString, X, 1);
+      end;
+    end;
+  end;
+
+  DetailSearch('');
+end;
+
+procedure TFrmSenhas.INCLUSAOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmSenhas.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'N√O' then
+  begin
+    Application.MessageBox('Usu·rio sem permiss„o para exclus„o', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM ACESSO');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(FUNCIONARIO_ID = :ID)');
+    IQuery.Sql.Add('AND (SENHA = :SN)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+    IQuery.ParamByName('SN').AsString  := QTabela.FieldByName('SENHA').AsString;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM ACESSO');
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('INSERT INTO ACESSO(' +
+                     'FUNCIONARIO_ID,  SENHA,     EMPRESA_ID, ' +
+                     'TPCTB,           INCLUSAO,  ALTERACAO, ' +
+                     'EXCLUSAO,        ABERTURA,  TROCAR_SENHA, ' +
+                     'LIBERA,          OPCOES) VALUES(' +
+                     ':FUNCIONARIO_ID, :SENHA,    :EMPRESA_ID, ' +
+                     ':TPCTB,          :INCLUSAO, :ALTERACAO, ' +
+                     ':EXCLUSAO,       :ABERTURA, :TROCAR_SENHA, ' +
+                     ':LIBERA,         :OPCOES)');
+
+      IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := 1;
+      IQuery.ParamByName('SENHA').AsString           := 'sr';
+      IQuery.ParamByName('EMPRESA_ID').AsInteger     := 1;
+      IQuery.ParamByName('TPCTB').AsString           := '2';
+      IQuery.ParamByName('INCLUSAO').AsString        := 'SIM';
+      IQuery.ParamByName('ALTERACAO').AsString       := 'SIM';
+      IQuery.ParamByName('EXCLUSAO').AsString        := 'SIM';
+      IQuery.ParamByName('ABERTURA').AsString        := 'SIM';
+      IQuery.ParamByName('TROCAR_SENHA').AsString    := 'N√O';
+      IQuery.ParamByName('LIBERA').AsString          := 'N√O';
+      IQuery.ParamByName('OPCOES').AsString          := 'NNNNNNNNNSNNNNNNSSNNNNNNSNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN';
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('INSERT INTO ACESSO(' +
+                     'FUNCIONARIO_ID,  SENHA,     EMPRESA_ID, ' +
+                     'TPCTB,           INCLUSAO,  ALTERACAO, ' +
+                     'EXCLUSAO,        ABERTURA,  TROCAR_SENHA, ' +
+                     'LIBERA,          OPCOES) VALUES(' +
+                     ':FUNCIONARIO_ID, :SENHA,    :EMPRESA_ID, ' +
+                     ':TPCTB,          :INCLUSAO, :ALTERACAO, ' +
+                     ':EXCLUSAO,       :ABERTURA, :TROCAR_SENHA, ' +
+                     ':LIBERA,         :OPCOES)');
+
+      IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := 1;
+      IQuery.ParamByName('SENHA').AsString           := 'ÖÇèàÜì';
+      IQuery.ParamByName('EMPRESA_ID').AsInteger     := 1;
+      IQuery.ParamByName('TPCTB').AsString           := '3';
+      IQuery.ParamByName('INCLUSAO').AsString        := 'SIM';
+      IQuery.ParamByName('ALTERACAO').AsString       := 'SIM';
+      IQuery.ParamByName('EXCLUSAO').AsString        := 'SIM';
+      IQuery.ParamByName('ABERTURA').AsString        := 'SIM';
+      IQuery.ParamByName('TROCAR_SENHA').AsString    := 'N√O';
+      IQuery.ParamByName('LIBERA').AsString          := 'N√O';
+      IQuery.ParamByName('OPCOES').AsString          := 'NNNNNNNNNSNNNNNNSSNNNNNNSNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN';
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+
+      Application.MessageBox('O Sistema ser· reinicializado', PChar(Msg_Title), mb_IconInformation);
+
+      Application.Terminate;
+    end;
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+end;
+
+procedure TFrmSenhas.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+  Habilitar(False);
+  Operacao := '';
+end;
+
+procedure TFrmSenhas.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'N√O' then
+  begin
+    Application.MessageBox('Usu·rio sem permiss„o para alteraÁ„o', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Alterando';
+
+  ID := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+  SN := QTabela.FieldByName('SENHA').AsString;
+
+  SENHA.Text := DecryptMsg(SENHA.Text, 65);
+
+  Botoes_Editing;
+  Habilitar(True);
+  FUNCIONARIO_ID.SetFocus;
+end;
+
+procedure TFrmSenhas.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA_ID.Text));
+  except
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmSenhas.btnFuncionarioClick(Sender: TObject);
+begin
+  try
+    FUNCIONARIO_ID.Value := GetConsulta('PESSOAL', 0, 0, StrToInt(FUNCIONARIO_ID.Text));
+  except
+    FUNCIONARIO_ID.Value := GetConsulta('PESSOAL', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmSenhas.btnInsertClick(Sender: TObject);
+var
+X: Integer;
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'N√O' then
+  begin
+    Application.MessageBox('Usu·rio sem permiss„o para inclus„o', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  EMPRESA_ID.Value  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  TPCTB.Text        :=  FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  INCLUSAO.Text     := 'SIM';
+  ALTERACAO.Text    := 'SIM';
+  EXCLUSAO.Text     := 'SIM';
+  ABERTURA.Text     := 'SIM';
+  TROCAR_SENHA.Text := 'SIM';
+  LIBERA.Text       := 'SIM';
+
+  for X := 1 to Itens_Menu do
+    Menu.Checked[X - 1] := False;
+
+  OPCOES.Text := '';
+
+  FUNCIONARIO_ID.SetFocus;
+end;
+
+procedure TFrmSenhas.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmSenhas.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmSenhas.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmSenhas.btnSaveClick(Sender: TObject);
+begin
+  DetailSearch('');
+
+  if Validacao then
+  begin
+    SENHA.Text := EncryptMsg(SENHA.Text, 65);
+
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdOrderBy := 'ORDER BY FUNCIONARIO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.Prepare;
+      QTabela.Open;
+
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    Set_Campos(False);
+    Habilitar(False);
+    Botoes_Normal;
+    Operacao := '';
+  end;
+end;
+
+procedure TFrmSenhas.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmSenhas.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('… melhor salvar as alteraÁıes antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmSenhas.FormCreate(Sender: TObject);
+var
+X: Integer;
+begin
+  if UpperCase(DecryptMsg(Frmprincipal.Config.FieldByName('VERSAO').AsString, 65)) <> 'LIGHT' then
+  Begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM CONFIG_SUBMENU');
+    IQuery.Sql.Add('ORDER BY ID');
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Menu.Items.Clear;
+
+    X          := 0;
+    Itens_Menu := 0;
+
+    IQuery.First;
+    while not IQuery.Eof do
+    begin
+      Menu.Items.Add(IQuery.FieldByName('DESCRICAO').AsString);
+
+      if (IQuery.FieldByName('STATUS').AsString = 'False') or (IQuery.FieldByName('DESCRICAO').AsString = '-') then
+      begin
+        Menu.Checked[X]     := False;
+        Menu.ItemEnabled[X] := False;
+      end;
+
+      Inc(X);
+      Inc(Itens_Menu);
+
+      Application.ProcessMessages;
+      IQuery.Next;
+    end;
+  End;
+
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    Label7.Visible := False;
+    TPCTB.Visible  := False;
+
+  end;
+
+  CmdSelect     := QTabela.Sql.Text;
+  CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NOT NULL)';
+  CmdOrderBy    := 'ORDER BY FUNCIONARIO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  if UpperCase(DecryptMsg(Frmprincipal.Config.FieldByName('VERSAO').AsString, 65)) = 'LIGHT' then
+  Begin
+  Menu.visible       := False;
+  StatusBar1.Visible := False;
+  //FrmSenhas.Height   := 307;
+  End;
+
+end;
+
+procedure TFrmSenhas.FUNCIONARIO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Funcion·rio');
+end;
+
+end.

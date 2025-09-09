@@ -1,0 +1,1707 @@
+object FrmEmpresas: TFrmEmpresas
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Empresas'
+  ClientHeight = 659
+  ClientWidth = 722
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Visible = True
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label39: TLabel
+    Left = 448
+    Top = 553
+    Width = 28
+    Height = 13
+    Caption = 'Bairro'
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 722
+    Height = 618
+    ActivePage = Manutencao
+    Align = alClient
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 0
+    object Consulta: TTabSheet
+      Caption = '&Consulta'
+      object Alfabeto: TTabSet
+        Left = 0
+        Top = 569
+        Width = 714
+        Height = 21
+        Align = alBottom
+        AutoScroll = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        SoftTop = True
+        Style = tsModernTabs
+        Tabs.Strings = (
+          'A'
+          'B'
+          'C'
+          'D'
+          'E'
+          'F'
+          'G'
+          'H'
+          'I'
+          'J'
+          'K'
+          'L'
+          'M'
+          'N'
+          'O'
+          'P'
+          'Q'
+          'R'
+          'S'
+          'T'
+          'U'
+          'V'
+          'W'
+          'X'
+          'Y'
+          'Z'
+          'Todos')
+        OnClick = AlfabetoClick
+      end
+      object StatusBar1: TStatusBar
+        Left = 0
+        Top = 550
+        Width = 714
+        Height = 19
+        Panels = <
+          item
+            Text = '<F3> - Desativar'
+            Width = 354
+          end
+          item
+            Text = '<F4> - Reativar'
+            Width = 354
+          end>
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 714
+        Height = 550
+        Align = alClient
+        Color = clInfoBk
+        DataSource = DataTabela
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+        TitleFont.Charset = ANSI_CHARSET
+        TitleFont.Color = clBlue
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDblClick = DBGrid1DblClick
+        OnKeyDown = DBGrid1KeyDown
+        OnKeyPress = DBGrid1KeyPress
+        OnTitleClick = DBGrid1TitleClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'EMPRESA_ID'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'ID'
+            Width = 45
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TIPO_EMPRESA'
+            Title.Caption = 'Tipo Empresa'
+            Width = 115
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'RAZAO'
+            Title.Caption = 'Raz'#227'o Social'
+            Width = 259
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CNPJ'
+            Title.Caption = 'CNPJ/CPF'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'INSCR_ESTADUAL'
+            Title.Caption = 'Insc. Estadual'
+            Width = 100
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'STATUS'
+            Title.Alignment = taCenter
+            Title.Caption = 'Status'
+            Width = 40
+            Visible = True
+          end>
+      end
+    end
+    object Manutencao: TTabSheet
+      Caption = '&Manuten'#231#227'o'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ImageIndex = 1
+      ParentFont = False
+      OnShow = ManutencaoShow
+      object Label3: TLabel
+        Left = 6
+        Top = 61
+        Width = 60
+        Height = 13
+        Caption = 'Raz'#227'o Social'
+      end
+      object Label4: TLabel
+        Left = 6
+        Top = 113
+        Width = 56
+        Height = 13
+        Caption = 'Propriet'#225'rio'
+      end
+      object Label5: TLabel
+        Left = 6
+        Top = 139
+        Width = 67
+        Height = 13
+        Caption = 'Ativ. Empresa'
+      end
+      object Label6: TLabel
+        Left = 6
+        Top = 165
+        Width = 68
+        Height = 13
+        Caption = 'Insc. Estadual'
+      end
+      object Label8: TLabel
+        Left = 6
+        Top = 217
+        Width = 45
+        Height = 13
+        Caption = 'Endere'#231'o'
+      end
+      object Label9: TLabel
+        Left = 6
+        Top = 243
+        Width = 28
+        Height = 13
+        Caption = 'Bairro'
+      end
+      object Label10: TLabel
+        Left = 3
+        Top = 269
+        Width = 66
+        Height = 13
+        Caption = 'Munic'#237'pio/Cep'
+      end
+      object Label12: TLabel
+        Left = 3
+        Top = 295
+        Width = 67
+        Height = 13
+        Caption = 'Logo Empresa'
+      end
+      object Label14: TLabel
+        Left = 6
+        Top = 373
+        Width = 64
+        Height = 13
+        Caption = 'Dt. '#218'lt. Folha'
+      end
+      object Label17: TLabel
+        Left = 6
+        Top = 321
+        Width = 54
+        Height = 13
+        Caption = 'Home Page'
+      end
+      object Label18: TLabel
+        Left = 6
+        Top = 347
+        Width = 28
+        Height = 13
+        Caption = 'e-mail'
+      end
+      object Label19: TLabel
+        Left = 447
+        Top = 139
+        Width = 70
+        Height = 13
+        Caption = 'Insc. Municipal'
+      end
+      object Label7: TLabel
+        Left = 447
+        Top = 165
+        Width = 48
+        Height = 13
+        Caption = 'CNPJ/CPF'
+      end
+      object Label11: TLabel
+        Left = 447
+        Top = 269
+        Width = 33
+        Height = 13
+        Caption = 'Estado'
+      end
+      object Label13: TLabel
+        Left = 447
+        Top = 295
+        Width = 65
+        Height = 13
+        Caption = 'Telefone/Cel.'
+      end
+      object Label1: TLabel
+        Left = 447
+        Top = 373
+        Width = 56
+        Height = 13
+        Caption = 'Dt. '#218'lt. Bal.'
+      end
+      object Label2: TLabel
+        Left = 447
+        Top = 217
+        Width = 37
+        Height = 13
+        Caption = 'N'#250'mero'
+      end
+      object Label20: TLabel
+        Left = 447
+        Top = 61
+        Width = 64
+        Height = 13
+        Caption = 'Tipo Empresa'
+      end
+      object Label21: TLabel
+        Left = 447
+        Top = 243
+        Width = 49
+        Height = 13
+        Caption = 'C'#243'd. IBGE'
+      end
+      object btnIBGE: TSpeedButton
+        Left = 587
+        Top = 240
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnIBGEClick
+      end
+      object Label22: TLabel
+        Left = 6
+        Top = 87
+        Width = 41
+        Height = 13
+        Caption = 'Fantasia'
+      end
+      object Label23: TLabel
+        Left = 447
+        Top = 113
+        Width = 55
+        Height = 13
+        Caption = 'CPF Diretor'
+      end
+      object Label33: TLabel
+        Left = 6
+        Top = 191
+        Width = 72
+        Height = 13
+        Caption = 'Reg. Tribut'#225'rio'
+      end
+      object Label34: TLabel
+        Left = 447
+        Top = 321
+        Width = 48
+        Height = 13
+        Caption = 'SUFRAMA'
+      end
+      object Label57: TLabel
+        Left = 447
+        Top = 191
+        Width = 72
+        Height = 13
+        Caption = '% PIS/COFINS'
+      end
+      object btnAtividade: TSpeedButton
+        Left = 155
+        Top = 136
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnAtividadeClick
+      end
+      object Label35: TLabel
+        Left = 112
+        Top = 220
+        Width = 50
+        Height = 13
+        Caption = 'Bloqueado'
+      end
+      object Label36: TLabel
+        Left = 448
+        Top = 347
+        Width = 59
+        Height = 13
+        Caption = 'Gerar Carga'
+      end
+      object Label37: TLabel
+        Left = 321
+        Top = 136
+        Width = 36
+        Height = 11
+        Caption = 'Telefone'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -9
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        Visible = False
+      end
+      object Label38: TLabel
+        Left = 321
+        Top = 147
+        Width = 36
+        Height = 11
+        Caption = 'Telefone'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clRed
+        Font.Height = -9
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        Visible = False
+      end
+      object Label41: TLabel
+        Left = 420
+        Top = 87
+        Width = 104
+        Height = 13
+        Caption = 'Tipo. Ativ./C'#243'd. Sped'
+      end
+      object btnLogo: TSpeedButton
+        Left = 402
+        Top = 293
+        Width = 23
+        Height = 21
+        Caption = '...'
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        OnClick = btnLogoClick
+      end
+      object RAZAO: TEdit
+        Left = 84
+        Top = 58
+        Width = 301
+        Height = 21
+        Enabled = False
+        MaxLength = 40
+        TabOrder = 1
+        OnKeyDown = RAZAOKeyDown
+      end
+      object PROPRIETARIO: TEdit
+        Left = 84
+        Top = 110
+        Width = 301
+        Height = 21
+        Enabled = False
+        MaxLength = 40
+        TabOrder = 6
+        OnKeyDown = RAZAOKeyDown
+      end
+      object COD_ATIVIDADE: TEdit
+        Left = 84
+        Top = 136
+        Width = 69
+        Height = 21
+        Enabled = False
+        MaxLength = 9
+        TabOrder = 8
+        OnKeyDown = RAZAOKeyDown
+      end
+      object INSCR_MUNICIPAL: TEdit
+        Left = 523
+        Top = 136
+        Width = 175
+        Height = 21
+        Enabled = False
+        MaxLength = 15
+        TabOrder = 10
+        OnKeyDown = RAZAOKeyDown
+      end
+      object INSCR_ESTADUAL: TEdit
+        Left = 84
+        Top = 162
+        Width = 175
+        Height = 21
+        Enabled = False
+        MaxLength = 15
+        TabOrder = 11
+        OnKeyDown = RAZAOKeyDown
+      end
+      object ENDERECO: TEdit
+        Left = 84
+        Top = 214
+        Width = 301
+        Height = 21
+        Enabled = False
+        MaxLength = 40
+        TabOrder = 16
+        OnKeyDown = RAZAOKeyDown
+      end
+      object NUMERO: TEdit
+        Left = 523
+        Top = 214
+        Width = 56
+        Height = 21
+        Enabled = False
+        MaxLength = 6
+        TabOrder = 17
+        OnKeyDown = RAZAOKeyDown
+      end
+      object BAIRRO: TEdit
+        Left = 84
+        Top = 240
+        Width = 189
+        Height = 21
+        Enabled = False
+        MaxLength = 20
+        TabOrder = 18
+        OnKeyDown = RAZAOKeyDown
+      end
+      object MUNICIPIO: TEdit
+        Left = 84
+        Top = 266
+        Width = 229
+        Height = 21
+        Enabled = False
+        MaxLength = 30
+        TabOrder = 20
+        OnKeyDown = RAZAOKeyDown
+      end
+      object URL: TEdit
+        Left = 84
+        Top = 318
+        Width = 301
+        Height = 21
+        CharCase = ecLowerCase
+        Enabled = False
+        MaxLength = 80
+        TabOrder = 25
+        OnKeyDown = RAZAOKeyDown
+      end
+      object EMAIL: TEdit
+        Left = 84
+        Top = 344
+        Width = 229
+        Height = 21
+        CharCase = ecLowerCase
+        Enabled = False
+        MaxLength = 40
+        TabOrder = 27
+        OnKeyDown = RAZAOKeyDown
+      end
+      object DT_ULT_FOLHA: TDateEdit
+        Left = 84
+        Top = 370
+        Width = 90
+        Height = 21
+        CheckOnExit = True
+        DialogTitle = 'Selecione a Data'
+        Enabled = False
+        NumGlyphs = 2
+        TabOrder = 29
+        OnEnter = DT_ULT_FOLHAEnter
+        OnKeyDown = RAZAOKeyDown
+      end
+      object DT_ULT_BALANCO: TDateEdit
+        Left = 523
+        Top = 370
+        Width = 90
+        Height = 21
+        CheckOnExit = True
+        DialogTitle = 'Selecione a Data'
+        Enabled = False
+        NumGlyphs = 2
+        TabOrder = 30
+        OnEnter = DT_ULT_FOLHAEnter
+        OnKeyDown = RAZAOKeyDown
+      end
+      object CEP: TMaskEdit
+        Left = 329
+        Top = 266
+        Width = 67
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Enabled = False
+        EditMask = '99999-999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 9
+        ParentFont = False
+        TabOrder = 22
+        Text = '     -   '
+        OnKeyDown = RAZAOKeyDown
+      end
+      object ESTADO: TComboBox
+        Left = 523
+        Top = 266
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 21
+        OnKeyDown = TIPO_EMPRESAKeyDown
+        Items.Strings = (
+          ''
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object TELEFONE: TMaskEdit
+        Left = 523
+        Top = 292
+        Width = 90
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        EditMask = '(99) 9999-9999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 14
+        ParentFont = False
+        TabOrder = 23
+        Text = '(  )     -    '
+        OnKeyDown = RAZAOKeyDown
+      end
+      object CNPJ: TMaskEdit
+        Left = 523
+        Top = 162
+        Width = 133
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 12
+        Text = ''
+        OnKeyDown = RAZAOKeyDown
+      end
+      object Panel2: TPanel
+        Left = 0
+        Top = 0
+        Width = 714
+        Height = 41
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 0
+        object btnPrior: TBitBtn
+          Left = 6
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'Anterior'
+          TabOrder = 0
+          OnClick = btnPriorClick
+        end
+        object btnNext: TBitBtn
+          Left = 108
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'Pr'#243'ximo'
+          TabOrder = 1
+          OnClick = btnNextClick
+        end
+        object btnInsert: TBitBtn
+          Left = 211
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Incluir'
+          TabOrder = 2
+          OnClick = btnInsertClick
+        end
+        object btnEdit: TBitBtn
+          Left = 314
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'A&lterar'
+          TabOrder = 3
+          OnClick = btnEditClick
+        end
+        object btnDelete: TBitBtn
+          Left = 417
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Excluir'
+          TabOrder = 4
+          OnClick = btnDeleteClick
+        end
+        object btnSave: TBitBtn
+          Left = 520
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Salvar'
+          TabOrder = 5
+          OnClick = btnSaveClick
+        end
+        object btnDiscard: TBitBtn
+          Left = 623
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'C&ancelar'
+          TabOrder = 6
+          OnClick = btnDiscardClick
+        end
+      end
+      object TIPO_EMPRESA: TComboBox
+        Left = 523
+        Top = 58
+        Width = 175
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 15
+        ParentFont = False
+        TabOrder = 2
+        OnChange = TIPO_EMPRESAChange
+        OnKeyDown = TIPO_EMPRESAKeyDown
+        Items.Strings = (
+          'PESSOA F'#205'SICA'
+          'PESSOA JUR'#205'DICA')
+      end
+      object IBGE: TEdit
+        Left = 523
+        Top = 240
+        Width = 61
+        Height = 21
+        Enabled = False
+        MaxLength = 7
+        TabOrder = 19
+        OnExit = IBGEExit
+        OnKeyDown = RAZAOKeyDown
+      end
+      object FANTASIA: TEdit
+        Left = 84
+        Top = 84
+        Width = 233
+        Height = 21
+        Enabled = False
+        MaxLength = 30
+        TabOrder = 3
+        OnKeyDown = RAZAOKeyDown
+      end
+      object CPF_DIRETOR: TMaskEdit
+        Left = 523
+        Top = 110
+        Width = 102
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        EditMask = '999.999.999-99;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 14
+        ParentFont = False
+        TabOrder = 7
+        Text = '   .   .   -  '
+        OnKeyDown = RAZAOKeyDown
+      end
+      object CRT: TComboBox
+        Left = 84
+        Top = 188
+        Width = 301
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 15
+        ParentFont = False
+        TabOrder = 13
+        OnChange = CRTChange
+        OnKeyDown = TIPO_EMPRESAKeyDown
+        Items.Strings = (
+          '1 - SIMPLES NACIONAL'
+          '2 - SIMPLES NACIONAL - EXC. REC. BRUTA'
+          '3 - REGIME NORMAL - LUCRO PRESUMIDO'
+          '4 - REGIME NORMAL - LUCRO REAL'
+          '5 - REGIME NORMAL - SUBLIMITE')
+      end
+      object SUFRAMA: TEdit
+        Left = 523
+        Top = 318
+        Width = 118
+        Height = 21
+        Enabled = False
+        MaxLength = 9
+        TabOrder = 26
+        OnExit = IBGEExit
+        OnKeyDown = RAZAOKeyDown
+      end
+      object PIS: TRxCalcEdit
+        Left = 523
+        Top = 188
+        Width = 82
+        Height = 21
+        Margins.Left = 4
+        Margins.Top = 1
+        DisplayFormat = '0.00;-0.00'
+        Enabled = False
+        NumGlyphs = 2
+        TabOrder = 14
+        ZeroEmpty = False
+        OnKeyDown = PISKeyDown
+      end
+      object COFINS: TRxCalcEdit
+        Left = 616
+        Top = 188
+        Width = 82
+        Height = 21
+        Margins.Left = 4
+        Margins.Top = 1
+        DisplayFormat = '0.00;-0.00'
+        Enabled = False
+        MaxValue = 9999.990000000000000000
+        NumGlyphs = 2
+        TabOrder = 15
+        ZeroEmpty = False
+        OnKeyDown = COFINSKeyDown
+      end
+      object CARGA: TComboBox
+        Left = 523
+        Top = 344
+        Width = 69
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 28
+        Items.Strings = (
+          ''
+          'SIM'
+          'N'#195'O')
+      end
+      object btnlicenca: TButton
+        Left = 225
+        Top = 136
+        Width = 92
+        Height = 22
+        Caption = 'Inserir Licen'#231'as'
+        TabOrder = 9
+        OnClick = btnlicencaClick
+      end
+      object tipo_atividade: TComboBox
+        Left = 525
+        Top = 84
+        Width = 140
+        Height = 21
+        Hint = 
+          '0 - INDUSTRIAL OU EQUIPARADO'#13#10'1 - PRESTADOR DE SERVICOS'#13#10'2 - ATI' +
+          'VIDADE DE COMERCIO'#13#10'3 - ATIVIDADE FINANCEIRA'#13#10'4 - ATIVIDADE IMOB' +
+          'ILI'#193'RIA'#13#10'9 - OUTROS'
+        CharCase = ecUpperCase
+        Color = clWhite
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 15
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 4
+        OnKeyDown = TIPO_EMPRESAKeyDown
+        Items.Strings = (
+          '0 - INDUSTRIAL OU EQUIPARADO'
+          '1 - PRESTADOR DE SERVICOS'
+          '2 - ATIVIDADE DE COMERCIO'
+          '3 - ATIVIDADE FINANCEIRA'
+          '4 - ATIVIDADE IMOBILI'#193'RIA'
+          '9 - OUTROS')
+      end
+      object COD_EMPRESA_SPED: TEdit
+        Left = 662
+        Top = 84
+        Width = 36
+        Height = 21
+        Enabled = False
+        MaxLength = 60
+        TabOrder = 5
+        OnExit = IBGEExit
+        OnKeyDown = RAZAOKeyDown
+      end
+      object CELULAR: TMaskEdit
+        Left = 617
+        Top = 292
+        Width = 88
+        Height = 21
+        CharCase = ecUpperCase
+        Enabled = False
+        EditMask = '(99) 99999-9999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 15
+        ParentFont = False
+        TabOrder = 24
+        Text = '(  )      -    '
+      end
+      object PageControl2: TPageControl
+        Left = -14
+        Top = 392
+        Width = 722
+        Height = 194
+        ActivePage = TabSheet1
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        TabOrder = 31
+        object TabSheet1: TTabSheet
+          Caption = '     Contador'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ParentFont = False
+          object Label15: TLabel
+            Left = 14
+            Top = 11
+            Width = 56
+            Height = 13
+            Caption = 'Contabilista'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label24: TLabel
+            Left = 14
+            Top = 35
+            Width = 61
+            Height = 13
+            Caption = 'CPF Contab.'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label26: TLabel
+            Left = 14
+            Top = 63
+            Width = 52
+            Height = 13
+            Caption = 'End. Cont.'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label28: TLabel
+            Left = 14
+            Top = 87
+            Width = 33
+            Height = 13
+            Caption = 'Compl.'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label30: TLabel
+            Left = 14
+            Top = 115
+            Width = 28
+            Height = 13
+            Caption = 'e-mail'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label32: TLabel
+            Left = 14
+            Top = 145
+            Width = 49
+            Height = 13
+            Caption = 'C'#243'd. IBGE'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object btnIBGE_Cont: TSpeedButton
+            Left = 172
+            Top = 138
+            Width = 64
+            Height = 21
+            Cursor = crHandPoint
+            Caption = '(F7)'
+            Flat = True
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Glyph.Data = {
+              06020000424D0602000000000000760000002800000028000000140000000100
+              0400000000009001000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+              FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+              FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+              333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+              333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+              777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+              FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+              FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+              333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+              88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+              F777333333333088FFF003333333333337333337733333333333088FFF033333
+              333333337F33337333333333333308FFF09333333333333378F3373333333333
+              333330FF0933333333333333378F733333333333333333003333333333333333
+              33773333333333333333}
+            NumGlyphs = 2
+            ParentFont = False
+            OnClick = btnIBGE_ContClick
+          end
+          object Label40: TLabel
+            Left = 460
+            Top = 141
+            Width = 51
+            Height = 13
+            Caption = 'Rntrc(Cte)'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label31: TLabel
+            Left = 464
+            Top = 115
+            Width = 42
+            Height = 13
+            Caption = 'Telefone'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label29: TLabel
+            Left = 476
+            Top = 87
+            Width = 28
+            Height = 13
+            Caption = 'Bairro'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label27: TLabel
+            Left = 468
+            Top = 60
+            Width = 37
+            Height = 13
+            Caption = 'N'#250'mero'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label25: TLabel
+            Left = 447
+            Top = 35
+            Width = 67
+            Height = 13
+            Caption = 'CNPJ Contab.'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label16: TLabel
+            Left = 450
+            Top = 11
+            Width = 64
+            Height = 13
+            Caption = 'Doc. Contab.'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object CPF_CONTABILISTA: TMaskEdit
+            Left = 105
+            Top = 30
+            Width = 102
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            EditMask = '999.999.999-99;1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 14
+            ParentFont = False
+            TabOrder = 2
+            Text = '   .   .   -  '
+            OnKeyDown = RAZAOKeyDown
+          end
+          object CONTABILISTA: TEdit
+            Left = 105
+            Top = 3
+            Width = 301
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 40
+            ParentFont = False
+            TabOrder = 0
+            OnKeyDown = RAZAOKeyDown
+          end
+          object END_CONTABILISTA: TEdit
+            Left = 105
+            Top = 57
+            Width = 301
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 40
+            ParentFont = False
+            TabOrder = 4
+            OnKeyDown = RAZAOKeyDown
+          end
+          object COMPL_CONTABILISTA: TEdit
+            Left = 105
+            Top = 84
+            Width = 189
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 20
+            ParentFont = False
+            TabOrder = 6
+            OnKeyDown = RAZAOKeyDown
+          end
+          object EMAIL_CONTABILISTA: TEdit
+            Left = 105
+            Top = 111
+            Width = 229
+            Height = 21
+            CharCase = ecLowerCase
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 40
+            ParentFont = False
+            TabOrder = 8
+            OnKeyDown = RAZAOKeyDown
+          end
+          object IBGE_CONTABILISTA: TEdit
+            Left = 105
+            Top = 138
+            Width = 61
+            Height = 21
+            Enabled = False
+            MaxLength = 7
+            TabOrder = 10
+            OnExit = IBGEExit
+            OnKeyDown = RAZAOKeyDown
+          end
+          object RNTRC: TEdit
+            Left = 536
+            Top = 139
+            Width = 93
+            Height = 21
+            Enabled = False
+            MaxLength = 8
+            TabOrder = 11
+            OnKeyDown = RAZAOKeyDown
+          end
+          object FONE_CONTABILISTA: TMaskEdit
+            Left = 536
+            Top = 112
+            Width = 90
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            EditMask = '(99) 9999-9999;1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 14
+            ParentFont = False
+            TabOrder = 9
+            Text = '(  )     -    '
+            OnKeyDown = RAZAOKeyDown
+          end
+          object BAIRRO_CONTABILISTA: TEdit
+            Left = 534
+            Top = 86
+            Width = 175
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 20
+            ParentFont = False
+            TabOrder = 7
+            OnKeyDown = RAZAOKeyDown
+          end
+          object NUM_CONTABILISTA: TEdit
+            Left = 534
+            Top = 60
+            Width = 56
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 6
+            ParentFont = False
+            TabOrder = 5
+            OnKeyDown = RAZAOKeyDown
+          end
+          object CNPJ_CONTABILISTA: TMaskEdit
+            Left = 534
+            Top = 32
+            Width = 132
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            EditMask = '99.999.999/9999-99;1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 18
+            ParentFont = False
+            TabOrder = 3
+            Text = '  .   .   /    -  '
+            OnKeyDown = RAZAOKeyDown
+          end
+          object CRC_CONTABILISTA: TEdit
+            Left = 534
+            Top = 3
+            Width = 175
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 20
+            ParentFont = False
+            TabOrder = 1
+            OnKeyDown = RAZAOKeyDown
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = 'Conex'#227'o'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          ImageIndex = 1
+          ParentFont = False
+          object Label42: TLabel
+            Left = 15
+            Top = 113
+            Width = 30
+            Height = 13
+            Caption = 'Senha'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label43: TLabel
+            Left = 15
+            Top = 80
+            Width = 36
+            Height = 13
+            Caption = 'Usu'#225'rio'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label44: TLabel
+            Left = 15
+            Top = 45
+            Width = 61
+            Height = 13
+            Caption = 'IP/Porta Pdv'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label45: TLabel
+            Left = 15
+            Top = 15
+            Width = 72
+            Height = 13
+            Caption = 'Banco Servidor'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Label46: TLabel
+            Left = 455
+            Top = 15
+            Width = 139
+            Height = 13
+            Caption = 'C'#243'digo da Empresa na Matriz'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object senha: TEdit
+            Left = 108
+            Top = 110
+            Width = 183
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 20
+            ParentFont = False
+            PasswordChar = '*'
+            TabOrder = 5
+          end
+          object usuario: TEdit
+            Left = 108
+            Top = 77
+            Width = 183
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 20
+            ParentFont = False
+            TabOrder = 4
+          end
+          object ip: TEdit
+            Left = 108
+            Top = 42
+            Width = 102
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 15
+            ParentFont = False
+            TabOrder = 2
+          end
+          object banco: TEdit
+            Left = 108
+            Top = 12
+            Width = 102
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 30
+            ParentFont = False
+            TabOrder = 0
+          end
+          object porta: TEdit
+            Left = 231
+            Top = 42
+            Width = 69
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 4
+            NumbersOnly = True
+            ParentFont = False
+            TabOrder = 3
+          end
+          object EMPRESA_ID_MATRIZ: TCurrencyEdit
+            Left = 601
+            Top = 12
+            Width = 22
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            AutoSize = False
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 1
+            ZeroEmpty = False
+          end
+        end
+      end
+      object Logo_Empresa: TEdit
+        Left = 84
+        Top = 292
+        Width = 312
+        Height = 21
+        Enabled = False
+        MaxLength = 30
+        TabOrder = 32
+        OnKeyDown = RAZAOKeyDown
+      end
+      object CHK_SYNC_APP: TCheckBox
+        Left = 194
+        Top = 372
+        Width = 79
+        Height = 17
+        Caption = 'Eficaz Mobile'
+        TabOrder = 33
+      end
+      object SYNC_APP: TEdit
+        Left = 284
+        Top = 370
+        Width = 73
+        Height = 21
+        CharCase = ecLowerCase
+        Enabled = False
+        MaxLength = 40
+        TabOrder = 34
+        Visible = False
+        OnKeyDown = RAZAOKeyDown
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 618
+    Width = 722
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 1
+    object btnRetorna: TBitBtn
+      Left = 637
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Retorna'
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+        F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+        000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+        337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+        45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+        3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+        F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+        000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+        337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+        4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+        7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+        333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+        0000}
+      NumGlyphs = 2
+      TabOrder = 0
+      OnClick = btnRetornaClick
+    end
+  end
+  object DataTabela: TDataSource
+    AutoEdit = False
+    DataSet = QTabela
+    Left = 48
+    Top = 590
+  end
+  object Qibge: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM IBGE'
+      'WHERE'
+      '(CODIGO = :IBGE)')
+    Left = 136
+    Top = 592
+    ParamData = <
+      item
+        Name = 'IBGE'
+        ParamType = ptInput
+      end>
+  end
+  object IQuery: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 112
+    Top = 592
+  end
+  object QTabela: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM EMPRESAS')
+    Left = 80
+    Top = 592
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Left = 96
+    Top = 24
+  end
+end

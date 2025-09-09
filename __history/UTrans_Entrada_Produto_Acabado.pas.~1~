@@ -1,0 +1,1746 @@
+unit UTrans_Entrada_Produto_Acabado;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, DBCtrls, rxCurrEdit, rxToolEdit,
+  IBUpdateSQL, Math, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.Client, FireDAC.Comp.DataSet;
+
+type
+  TFrmTrans_Entrada_Produto_Acabado = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    DT_TRANS: TDateEdit;
+    EMPRESA_ID: TCurrencyEdit;
+    CONTA_ID: TCurrencyEdit;
+    HISTORICO: TEdit;
+    NUM_DOC: TEdit;
+    DataEmpresa: TDataSource;
+    DBText1: TDBText;
+    DBText3: TDBText;
+    C_CUSTO_ID: TCurrencyEdit;
+    DBText5: TDBText;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label4: TLabel;
+    Label15: TLabel;
+    Label6: TLabel;
+    Label9: TLabel;
+    Label11: TLabel;
+    DT_MOVIMENTO: TDateEdit;
+    CONDUTA: TEdit;
+    DEPTO: TEdit;
+    TPCTB: TEdit;
+    Panel3: TPanel;
+    Label21: TLabel;
+    StatusBar1: TStatusBar;
+    Itens: TDBGrid;
+    btnEmpresa: TSpeedButton;
+    btnConta: TSpeedButton;
+    btnCentro_Custo: TSpeedButton;
+    VALOR: TRxCalcEdit;
+    DataConta: TDataSource;
+    DataCusto: TDataSource;
+    DataSub_Detail: TDataSource;
+    Dias: TTabSet;
+    AUTORIZ_ID: TCurrencyEdit;
+    btnPesquisa: TBitBtn;
+    Label3: TLabel;
+    CONTAAUX_ID: TCurrencyEdit;
+    btnContaAux: TSpeedButton;
+    DBText2: TDBText;
+    DataConta_Aux: TDataSource;
+    NUM_CHEQUE: TEdit;
+    QTributo: TFDQuery;
+    QProduto: TFDQuery;
+    QSub_Detail: TFDQuery;
+    QCusto: TFDQuery;
+    QConta: TFDQuery;
+    QConta_Aux: TFDQuery;
+    QLimite: TFDQuery;
+    QEmpresa: TFDQuery;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    IQuery1: TFDQuery;
+    USql_Transest: TFDUpdateSQL;
+    Label5: TLabel;
+    DT_SPED: TDateEdit;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure btnContaClick(Sender: TObject);
+    procedure btnCentro_CustoClick(Sender: TObject);
+    procedure CONTA_IDExit(Sender: TObject);
+    procedure C_CUSTO_IDExit(Sender: TObject);
+    procedure QSub_DetailNewRecord(DataSet: TDataSet);
+    procedure ItensKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ItensKeyPress(Sender: TObject; var Key: Char);
+    procedure QSub_DetailBeforePost(DataSet: TDataSet);
+    procedure ItensColEnter(Sender: TObject);
+    procedure ItensColExit(Sender: TObject);
+    procedure ItensEnter(Sender: TObject);
+    procedure ItensExit(Sender: TObject);
+    procedure QSub_DetailBeforeDelete(DataSet: TDataSet);
+    procedure QSub_DetailBeforeEdit(DataSet: TDataSet);
+    procedure QSub_DetailBeforeInsert(DataSet: TDataSet);
+    procedure DiasClick(Sender: TObject);
+    procedure QSub_DetailAfterPost(DataSet: TDataSet);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btnContaAuxClick(Sender: TObject);
+    procedure CONTAAUX_IDExit(Sender: TObject);
+    procedure DT_TRANSKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure DT_TRANSEnter(Sender: TObject);
+    procedure QSub_DetailAfterOpen(DataSet: TDataSet);
+    procedure QTabelaAfterOpen(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Disable;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+    procedure ProdutoSearch;
+    procedure TributoSearch;
+  end;
+
+var
+  FrmTrans_Entrada_Produto_Acabado: TFrmTrans_Entrada_Produto_Acabado;
+  Operacao, Cond_Trans, Cond_Ent_Sai: String;
+  ID: Integer;
+
+  procedure Entr_Produto_Acabado(Conduta, Conduta_Consumo: String);
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UPesquisa;
+
+{$R *.dfm}
+
+procedure Entr_Produto_Acabado(Conduta, Conduta_Consumo: String);
+begin
+  Cond_Trans   := Conduta;
+  Cond_Ent_Sai := Conduta_Consumo; 
+
+  if not ThereIs('Trans. de Estoque - Entrada de Produto Acabado') then
+    TFrmTrans_Entrada_Produto_Acabado.Create(Application);
+
+  if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
+    FrmPrincipal.Cascade; 
+
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.CONTAAUX_IDExit(Sender: TObject);
+begin
+  DetailSearch('Conta Consumo');
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.CONTA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Conta');
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.C_CUSTO_IDExit(Sender: TObject);
+begin
+  DetailSearch('C. Custo');
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.Botoes_Disable;
+begin
+  btnPrior.Enabled        := False;
+  btnNext.Enabled         := False;
+  btnInsert.Enabled       := False;
+  btnEdit.Enabled         := False;
+  btnDelete.Enabled       := False;
+  btnSave.Enabled         := False;
+  btnDiscard.Enabled      := False;
+  btnRetorna.Enabled      := False;
+  btnEmpresa.Enabled      := False;
+  btnConta.Enabled        := False;
+  btnContaAux.Enabled     := False;
+  btnCentro_Custo.Enabled := False;
+  btnPesquisa.Enabled     := False;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.Botoes_Editing;
+begin
+  btnPrior.Enabled        := False;
+  btnNext.Enabled         := False;
+  btnInsert.Enabled       := False;
+  btnEdit.Enabled         := False;
+  btnDelete.Enabled       := False;
+  btnSave.Enabled         := True;
+  btnDiscard.Enabled      := True;
+  btnRetorna.Enabled      := False;
+  btnEmpresa.Enabled      := True;
+  btnConta.Enabled        := True;
+  btnContaAux.Enabled     := True;
+  btnCentro_Custo.Enabled := True;
+  btnPesquisa.Enabled     := False;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled   := True;
+    btnDelete.Enabled := True;
+  end
+  else
+  begin
+    btnEdit.Enabled   := False;
+    btnDelete.Enabled := False;
+  end;
+
+  btnSave.Enabled         := False;
+  btnDiscard.Enabled      := False;
+  btnRetorna.Enabled      := True;
+  btnEmpresa.Enabled      := False;
+  btnConta.Enabled        := False;
+  btnContaAux.Enabled     := False;
+  btnCentro_Custo.Enabled := False;
+  btnPesquisa.Enabled     := True;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'C. Custo')) and (C_CUSTO_ID.Text <> '') then
+  begin
+    QCusto.Close;
+    QCusto.ParamByName('TABELA_ID').AsInteger := StrToInt(C_CUSTO_ID.Text);
+    QCusto.Prepare;
+    QCusto.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Conta')) and (CONTA_ID.Text <> '') then
+  begin
+    QConta.Close;
+    QConta.ParamByName('TABELA_ID').AsInteger := StrToInt(CONTA_ID.Text);
+    QConta.Prepare;
+    QConta.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Conta Consumo')) and (CONTAAUX_ID.Text <> '') then
+  begin
+    QConta_Aux.Close;
+    QConta_Aux.ParamByName('TABELA_ID').AsInteger := StrToInt(CONTAAUX_ID.Text);
+    QConta_Aux.Prepare;
+    QConta_Aux.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA_ID.Text <> '') then
+  begin
+    QEmpresa.Close;
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.DiasClick(Sender: TObject);
+begin
+  if Dias.TabIndex <> (Dias.Tabs.Count - 1) then
+  begin
+    CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+    CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := StrToDate(StrZero(IntToStr(Dias.TabIndex + 1), 2, 0) + '/' + Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 7));
+    QTabela.ParamByName('CONDUTA').AsString        := Cond_Trans;
+    QTabela.ParamByName('DEPTO').AsString          := '07';
+    QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end
+  else
+  begin
+    CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO <= :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+    CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QTabela.ParamByName('CONDUTA').AsString        := Cond_Trans;
+    QTabela.ParamByName('DEPTO').AsString          := '07';
+    QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.DT_TRANSEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.DT_TRANSKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+  //  Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TRxcalcEdit(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO TRANSACOES(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TRxcalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+ 
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  Habilitar(False);
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE TRANSACOES SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE TRANSACOES SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'UPDATE TRANSACOES SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE TRANSACOES SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE TRANSACOES SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'UPDATE TRANSACOES SET ' then
+        Sql := Sql + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (TRANSACAO_ID = :ID)';
+
+  
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QTabela.Locate('TRANSACAO_ID', ID, [loCaseInsensitive]);
+
+  Habilitar(False);
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ProdutoSearch;
+begin
+  QProduto.Close;
+
+  QProduto.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+  QProduto.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+  QProduto.Prepare;
+  QProduto.Open;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.TributoSearch;
+begin
+  QTributo.Close;
+  QTributo.ParamByName('TRIBUTO_ID').AsInteger := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
+  QTributo.Prepare;
+  QTributo.Open;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.EMPRESA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Empresa');
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = EMPRESA_ID) then
+    btnEmpresaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CONTA_ID) then
+    btnContaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = C_CUSTO_ID) then
+    btnCentro_CustoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CONTAAUX_ID) then
+    btnContaAuxClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmTrans_Entrada_Produto_Acabado.Validacao: Boolean;
+begin
+  Result := False;
+
+  EMPRESA_ID.Color  := clWindow;
+  CONTA_ID.Color    := clWindow;
+  C_CUSTO_ID.Color  := clWindow;
+  CONTAAUX_ID.Color := clWindow;
+  DT_TRANS.Color    := clWindow;
+  NUM_DOC.Color     := clWindow;
+
+  if DT_TRANS.Date <= FrmPrincipal.QEmpresa.FieldByName('DT_ULT_FOLHA').AsDateTime then
+  begin
+    Application.MessageBox('Data inválida. Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    DT_TRANS.Color := clYellow;
+    DT_TRANS.SetFocus;
+    exit;
+  end;
+
+  if (NUM_DOC.Text = '') then
+  begin
+    Application.MessageBox('Favor preencher o número do documento.', PChar(Msg_Title), mb_IconStop);
+    NUM_DOC.Color := clYellow;
+    NUM_DOC.SetFocus;
+    exit;
+  end;
+
+  if QEmpresa.IsEmpty then
+  begin
+    Application.MessageBox('Empresa inexistente', PChar(Msg_Title), mb_IconStop);
+    EMPRESA_ID.Color := clYellow;
+    EMPRESA_ID.SetFocus;
+    exit;
+  end;
+
+  if QCusto.IsEmpty then
+  begin
+    Application.MessageBox('Centro de Custo inexistente', PChar(Msg_Title), mb_IconStop);
+    C_CUSTO_ID.Color := clYellow;
+    C_CUSTO_ID.SetFocus;
+    exit;
+  end;
+
+  if QConta.IsEmpty then
+  begin
+    Application.MessageBox('Conta inexistente', PChar(Msg_Title), mb_IconStop);
+    CONTA_ID.Color := clYellow;
+    CONTA_ID.SetFocus;
+    exit;
+  end;
+
+  if not Existe_Plano(QConta.FieldByName('COD_CONTABIL').AsString) then
+  begin
+    Application.MessageBox('Conta de Estoque inexistente no plano de contas. Gere o plano de contas novamente', PChar(Msg_Title), mb_IconStop);
+    CONTA_ID.Color := clYellow;
+    CONTA_ID.SetFocus;
+    exit;
+  end;
+
+  if QConta_Aux.IsEmpty then
+  begin
+    Application.MessageBox('Conta Consumo inexistente', PChar(Msg_Title), mb_IconStop);
+    CONTAAUX_ID.Color := clYellow;
+    CONTAAUX_ID.SetFocus;
+    exit;
+  end;
+
+  if not Existe_Plano(QConta_Aux.FieldByName('COD_CONTABIL').AsString) then
+  begin
+    Application.MessageBox('Conta de Consumo de Estoque inexistente no plano de contas. Gere o plano de contas novamente', PChar(Msg_Title), mb_IconStop);
+    CONTAAUX_ID.Color := clYellow;
+    CONTAAUX_ID.SetFocus;
+    exit;
+  end;
+
+  if CONTAAUX_ID.Value = CONTA_ID.Value then
+  begin
+    Application.MessageBox('Conta Consumo não pode ser igual à Conta Estoque', PChar(Msg_Title), mb_IconStop);
+    CONTAAUX_ID.Color := clYellow;
+    CONTAAUX_ID.SetFocus;
+    exit;
+  end;
+
+  Result := True;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QSub_DetailAfterOpen(
+  DataSet: TDataSet);
+begin
+  TFloatField(QSub_Detail.FieldByName('QUANTIDADE')).DisplayFormat  := '#,##0.00';
+  TFloatField(QSub_Detail.FieldByName('VR_UNITARIO')).DisplayFormat  := '#,##0.00';
+  TFloatField(QSub_Detail.FieldByName('VR_TOTAL')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QSub_DetailAfterPost(DataSet: TDataSet);
+var
+Gerencial: Boolean;
+Vl_Trans: Real;
+begin
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('DELETE FROM TRANSITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+  IQuery.ParamByName('TRANSACAO_ID').AsInteger := StrToInt(NUM_CHEQUE.Text);
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+  QSub_Detail.First;
+  while not QSub_Detail.Eof do
+  begin
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('INSERT INTO TRANSITENS(TRANSACAO_ID, BANCO_ID, CONTA_ID, PRODUTO_ID, TP_PROD_SERV, DESCRICAO, TRIBUTO_ID, CFOP, QUANTIDADE, VR_UNITARIO, VR_DESCONTO, VR_TOTAL)');
+      IQuery.Sql.Add('SELECT :ID_TRANS,:BANCO_ID,:CONTA_ID, PRODUCAO_ITENS.INSUMO_ID, :TP_PROD_SERV, PRODUTOS.DESCRICAO, PRODUTOS.TRIBUTO_ID, :CFOP , (PRODUCAO_ITENS.QUANTIDADE * :QUANTIDADE),');
+      IQuery.Sql.Add('PRODUTOS.CUSTO_COMPRA, 0, ((PRODUCAO_ITENS.QUANTIDADE * :QUANTIDADE) * PRODUTOS.CUSTO_COMPRA)');
+      IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+      IQuery.Sql.Add('INNER JOIN PRODUTOS');
+      IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+      IQuery.ParamByName('ID_TRANS').AsInteger     := StrToInt(NUM_CHEQUE.Text);
+      IQuery.ParamByName('TP_PROD_SERV').AsString  := 'P';
+      IQuery.ParamByName('QUANTIDADE').AsFloat     := QSub_Detail.FieldByName('QUANTIDADE').AsFloat;
+      IQuery.ParamByName('PRODUTO_ID').AsInteger   := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+      IQuery.ParamByName('CFOP').AsString          := QSub_Detail.FieldByName('CFOP').AsString;
+      IQuery.ParamByName('BANCO_ID').AsInteger     := QSub_Detail.FieldByName('TRANSACAO_ID').AsInteger;
+      IQuery.ParamByName('CONTA_ID').AsInteger     := QSub_Detail.FieldByName('CONTA_ID').AsInteger;
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+
+
+    Application.ProcessMessages;
+    QSub_Detail.Next;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT SUM(VR_TOTAL) VR_TOTAL');
+  IQuery.Sql.Add('FROM TRANSITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+  IQuery.ParamByName('TRANSACAO_ID').AsInteger := StrToInt(NUM_CHEQUE.Text);
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  Vl_Trans := IQuery.FieldByName('VR_TOTAL').AsFloat;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('UPDATE TRANSACOES SET VALOR = :VALOR');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+  IQuery.ParamByName('VALOR').AsFloat          := Vl_Trans;
+  IQuery.ParamByName('TRANSACAO_ID').AsInteger := StrToInt(NUM_CHEQUE.Text);
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QSub_DetailBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QSub_DetailBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QSub_DetailBeforeInsert(DataSet: TDataSet);
+begin
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QSub_DetailBeforePost(DataSet: TDataSet);
+
+var
+  mensagem_erro: string;
+
+begin
+  ProdutoSearch;
+  TributoSearch;
+
+  //Alteração dia 10/05/2021, validação de estoque dos insumos, caso sistema bloqueado para estoque negativo
+  if FrmPrincipal.Config.FieldByName('ESTOQUE_NEGATIVO').AsString = 'False' then
+  begin
+
+    //Validando estoque da produção
+    if (Cond_Trans = '19') and (Cond_Ent_Sai = '17') then
+    begin
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('SELECT PRODUCAO_ITENS.PRODUTO_ID, PRODUCAO_ITENS.INSUMO_ID, PRODUCAO_ITENS.DESCRICAO,');
+      IQuery.SQL.Add('PRODUCAO_ITENS.QUANTIDADE, PRODUCAO_ITENS.PRODUTO_ID, PRODUTOS.QUANTIDADE_C');
+      IQuery.SQL.Add('FROM PRODUCAO_ITENS');
+      IQuery.SQL.Add('INNER JOIN PRODUTOS ON PRODUTOS.PRODUTO_ID = PRODUCAO_ITENS.INSUMO_ID');
+      IQuery.SQL.Add('WHERE PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID');
+      IQuery.SQL.Add('AND (PRODUTOS.QUANTIDADE_C - (PRODUCAO_ITENS.QUANTIDADE * :QUANTIDADE_LANCAMENTO)) < 0');
+      IQuery.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+      IQuery.ParamByName('QUANTIDADE_LANCAMENTO').AsFloat := QSub_Detail.FieldByName('QUANTIDADE').AsFloat;
+      IQuery.Prepare;
+      IQuery.Open();
+
+      if not IQuery.IsEmpty then
+      begin
+        mensagem_erro := '';
+        IQuery.First;
+        while not IQuery.Eof do
+        begin
+        mensagem_erro := mensagem_erro + 'ID ' + IQuery.FieldByName('insumo_id').AsString + ' - ' + IQuery.FieldByName('descricao').AsString + ' ' + #13;
+        IQuery.Next
+        end;
+        Application.MessageBox(PChar('Os seguintes insumos não possuem estoque suficiente:' + #13 + #13 + mensagem_erro), PChar(Msg_Title), mb_IconStop);
+        Itens.SelectedIndex := 0;
+        abort;
+      end;
+
+    end;
+
+    //Validando estoque do desmanche
+    if (Cond_Trans = '21') and (Cond_Ent_Sai = '18') then
+    begin
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('SELECT (PRODUTOS.QUANTIDADE_C - :QUANTIDADE_LANCAMENTO) QUANTIDADE');
+      IQuery.SQL.Add('FROM PRODUTOS');
+      IQuery.SQL.Add('WHERE PRODUTOS.PRODUTO_ID = :PRODUTO_ID');
+      IQuery.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+      IQuery.ParamByName('QUANTIDADE_LANCAMENTO').AsFloat := QSub_Detail.FieldByName('QUANTIDADE').AsFloat;
+      IQuery.Prepare;
+      IQuery.Open();
+
+      if (IQuery.FieldByName('QUANTIDADE').AsFloat < 0) then
+      begin
+        Application.MessageBox(PChar('Produto com estoque insuficiente para o desmanche!'), PChar(Msg_Title), mb_IconStop);
+        Itens.SelectedIndex := 0;
+        abort;
+      end;
+
+    end;
+
+  end;
+
+   IQuery.SQL.Clear;
+   IQuery.SQL.Add('SELECT COUNT(*) TOTAL FROM TRANSITENS WHERE TRANSACAO_ID = :TRANSACAO_ID');
+   IQuery.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+   IQuery.Prepare;
+   IQuery.Open();
+
+   if IQuery.FieldByName('TOTAL').AsInteger >= 1 then
+   begin
+    Application.MessageBox('Impossível inserir mais de 1(um) item para a rotina, caso deseje alterar o produto, exclua primeiro e lance novamente!', PChar(Msg_Title), MB_ICONINFORMATION);
+    Itens.SelectedIndex := 0;
+    abort;
+   end;
+
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT SUM((PRODUTOS.CUSTO_COMPRA * PRODUCAO_ITENS.QUANTIDADE)) VALOR');
+  IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+  IQuery.Sql.Add('INNER JOIN PRODUTOS');
+  IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+
+  QSub_Detail.FieldByName('DESCRICAO').AsString    := QProduto.FieldByName('DESCRICAO').AsString;
+  QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
+  QSub_Detail.FieldByName('CFOP').AsString         := Copy(FormatDateTime('HH:MM:SS.ZZZ', Now), 10, 3);//StrZero(Copy(QTabela.FieldByName('TRANSACAO_ID').AsString, 1,4),4,0); //QTributo.FieldByName('CFOP').AsString;
+  QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+  QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := RoundTo(IQuery.FieldByName('VALOR').AsFloat, -2);
+
+  QSub_Detail.FieldByName('VR_UNITARIO').AsFloat := RoundTo(IQuery.FieldByName('VALOR').AsFloat, -2);
+  QSub_Detail.FieldByName('VR_TOTAL').AsFloat    := RoundTo((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat), -2);
+
+
+  if QProduto.IsEmpty then
+  begin
+    Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 0;
+    abort;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM PRODUCAO_ITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Produto sem composição', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 0;
+    abort;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT PRODUCAO_ITENS.*');
+  IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+  IQuery.Sql.Add('INNER JOIN PRODUTOS');
+  IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (PRODUTOS.CUSTO_COMPRA = 0)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Produto possui insumo sem preço de custo', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 0;
+    abort;
+  end;
+
+  if (QSub_Detail.FieldByName('QUANTIDADE').AsFloat <= 0) or (QSub_Detail.FieldByName('QUANTIDADE').AsFloat > 99999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 2;
+    abort;
+  end;
+
+  if (LeIni(Arq_Ini, 'Sistema', 'Permitir Estoque Negativo') = 'False') AND (Cond_trans = '19')  then
+   Begin
+    IQuery.SQL.Clear;
+    IQuery.Sql.Add('SELECT INSUMO_ID FROM PRODUCAO_ITENS WHERE PRODUTO_ID = :PRODUTO_ID');
+    IQuery.ParamByName('PRODUTO_ID').AsInteger :=  QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.Prepare;
+    IQuery.Open;
+    IQuery.First;
+
+    while not IQuery.Eof  do
+    Begin
+    IQuery1.SQL.Clear;
+    IQuery1.SQL.Add('SELECT QUANTIDADE_C , QUANTIDADE_G FROM PRODUTOS');
+    IQuery1.SQL.Add('WHERE PRODUTO_ID = :PRODUTO_ID');
+    IQuery1.ParamByName('PRODUTO_ID').AsInteger := IQuery.FieldByName('INSUMO_ID').AsInteger;
+    IQuery1.Prepare;
+    IQuery1.Open;
+
+    if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+     if IQuery1.FieldByName('QUANTIDADE_C').AsFloat <= 0 then
+       Begin
+        Application.MessageBox(Pchar('Insumo código: ' + StrZero(IntToStr(IQuery.FieldByName('INSUMO_ID').AsInteger),5,0) +  ' sem estoque favor verificar!'), PChar(Msg_Title), mb_IconStop);
+       Itens.SelectedIndex := 2;
+       Abort;
+       End
+     Else
+     if IQuery1.FieldByName('QUANTIDADE_G').AsFloat <= 0 then
+       Begin
+        Application.MessageBox(PChar('Insumo código: ' +StrZero(IntToStr(IQuery.FieldByName('INSUMO_ID').AsInteger),5,0) +  ' sem estoque favor verificar!'), PChar(Msg_Title), mb_IconStop);
+       Itens.SelectedIndex := 2;
+       Abort;
+       End;
+    IQuery.Next;
+    End;
+   End;
+
+  if QSub_Detail.FieldByName('VR_UNITARIO').AsFloat <= 0 then
+  begin
+    Application.MessageBox('Vr. Unitário inválido', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 3;
+    abort;
+  end;
+
+  if QSub_Detail.FieldByName('VR_TOTAL').AsFloat <= 0 then
+  begin
+    Application.MessageBox('Vr. Total inválido', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 4;
+    abort;
+  end;
+
+  if QSub_Detail.State = dsInsert then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TRANSITENS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    IQuery.Sql.Add('ORDER BY SEQUENCIA');
+
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    IQuery.Last;
+
+    QSub_Detail.FieldByName('SEQUENCIA').AsInteger := (IQuery.FieldByName('SEQUENCIA').AsInteger + 1);
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QSub_DetailNewRecord(DataSet: TDataSet);
+begin
+  DataSet['TRANSACAO_ID']   := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+  DataSet['CONTA_ID']       := QTabela.FieldByName('CONTA_ID').AsInteger;
+  DataSet['TP_PROD_SERV']   := 'P';
+  DataSet['TRIBUTO_ID']     := 0;
+  DataSet['CFOP']           := '';
+  DataSet['MVA']            := 0;
+  DataSet['BASE_CALC_ICMS'] := 0;
+  DataSet['ALIQUOTA_ICMS']  := 0;
+  DataSet['VR_IPI']         := 0;
+  DataSet['QUANTIDADE']     := 0;
+  DataSet['VR_UNITARIO']    := 0;
+  DataSet['VR_DESCONTO']    := 0;
+  DataSet['VR_TOTAL']       := 0;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.QTabelaAfterOpen(DataSet: TDataSet);
+begin
+ TFloatField(QTabela.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+    
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := 0;
+
+      QSub_Detail.Close;
+
+      QSub_Detail.ParamByName('TRANSACAO_ID').AsInteger := 0;
+
+      QSub_Detail.Prepare;
+      QSub_Detail.Open;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := QTabela.FieldByName(TDateEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+
+      QSub_Detail.Close;
+
+      QSub_Detail.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+
+      QSub_Detail.Prepare;
+      QSub_Detail.Open;
+    end;
+  end;
+
+  if QTabela.IsEmpty then
+    Itens.Enabled := False
+  else
+    Itens.Enabled := True;
+
+  DetailSearch('');
+
+  CONDUTA.Text := Cond_Trans;
+  DEPTO.Text   := '07';
+  TPCTB.Text   := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnCentro_CustoClick(Sender: TObject);
+begin
+  try
+    C_CUSTO_ID.Value := GetConsulta('CCUSTO', 0, 0, StrToInt(C_CUSTO_ID.Text));
+  except
+    C_CUSTO_ID.Value := GetConsulta('CCUSTO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnContaAuxClick(Sender: TObject);
+begin
+  try
+    CONTAAUX_ID.Value := GetConsulta('PLANO', 0, 0, StrToInt(CONTAAUX_ID.Text));
+  except
+    CONTAAUX_ID.Value := GetConsulta('PLANO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnContaClick(Sender: TObject);
+begin
+  try
+    CONTA_ID.Value := GetConsulta('PLANO', 0, 0, StrToInt(CONTA_ID.Text));
+  except
+    CONTA_ID.Value := GetConsulta('PLANO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_TRANS').AsDateTime <= FrmPrincipal.QEmpresa.FieldByName('DT_ULT_FOLHA').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM TRANSACOES');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger := StrToInt(NUM_CHEQUE.Text);
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM TRANSACOES');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TRANSACAO_ID = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+    QTabela.Prepare;
+    QTabela.Open;
+
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QConta.Close;
+    QCusto.Close;
+    QConta_Aux.Close;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QConta.Close;
+    QCusto.Close;
+    QConta_Aux.Close;
+  end;
+
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Alterando';
+  ID := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+  Botoes_Editing;
+  Habilitar(True);
+  Itens.Enabled := False;
+
+  Consulta.TabVisible := False;
+
+  DT_TRANS.SetFocus;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA_ID.Text));
+  except
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+  Itens.Enabled := False;
+
+  QEmpresa.Close;
+  QConta.Close;
+  QCusto.Close;
+  QConta_Aux.Close;
+
+  DT_TRANS.Date     := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.Date := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_SPED.Date      := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  EMPRESA_ID.Value  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  AUTORIZ_ID.Value  := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+  CONTA_ID.Value    := FrmPrincipal.Config.FieldByName('CONTA_ESTOQUE').AsInteger;
+  CONTAAUX_ID.Value := FrmPrincipal.Config.FieldByName('CONTA_CONSUMO').AsInteger;
+  NUM_DOC.Text      := Copy(TimeToStr(now),1,2) + Copy(TimeToStr(now),4,2) + Copy(TimeToStr(now),7,2) ;
+
+  Consulta.TabVisible := False;
+
+  DT_TRANS.SetFocus;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnNextClick(Sender: TObject);
+begin
+  Botoes_Disable;
+
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+begin
+  Condicao := GetPesquisa('TRANS PRODUÇÃO');
+
+  if Condicao <> '' then
+  begin
+    CmdSelectNull := Condicao + ' AND (CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+
+    QTabela.ParamByName('CONDUTA').AsString     := Cond_Trans;
+    QTabela.ParamByName('DEPTO').AsString       := '07';
+    QTabela.ParamByName('TPCTB').AsString       := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+
+  CmdOrderBy := 'ORDER BY TRANSACAO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnPriorClick(Sender: TObject);
+begin
+  Botoes_Disable;
+
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.btnSaveClick(Sender: TObject);
+var
+Id_Trans: Integer;
+begin
+  DetailSearch('');
+
+  if Validacao then
+  begin
+
+    if HISTORICO.Text = '' then
+      HISTORICO.Text := 'Vr. Requisição nº ' + NUM_DOC.Text;
+
+    if Operacao = 'Inserindo' then
+    begin
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('SELECT NEXTVAL(:GEN_TRANSACOES) ID');
+      IQuery.ParamByName('GEN_TRANSACOES').AsString :=  'GEN_TRANSACOES';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      Id_Trans := IQuery.FieldByName('ID').AsInteger;
+
+      NUM_CHEQUE.Text := StrZero(IntToStr(Id_Trans), 7, 0);
+
+
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('INSERT INTO TRANSACOES( ' +
+                     'TRANSACAO_ID, DT_TRANS,   DT_MOVIMENTO, CONDUTA, ' +
+                     'DEPTO,        EMPRESA_ID, CONTA_ID,     C_CUSTO_ID, ' +
+                     'VALOR,        TPCTB,      AUTORIZ_ID,   HISTORICO, ' +
+                     'CONTAAUX_ID) VALUES(' +
+                     ':TRANSACAO_ID, :DT_TRANS,   :DT_MOVIMENTO, :CONDUTA, :DEPTO,      :EMPRESA_ID, ' +
+                     ':CONTA_ID,     :C_CUSTO_ID, :VALOR,        :TPCTB,   :AUTORIZ_ID, :HISTORICO, ' +
+                     ':CONTAAUX_ID)');
+
+      IQuery.ParamByName('TRANSACAO_ID').AsInteger  := Id_Trans;
+      IQuery.ParamByName('DT_TRANS').AsDateTime     := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      IQuery.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      IQuery.ParamByName('CONDUTA').AsString        := Cond_Ent_Sai;
+      IQuery.ParamByName('DEPTO').AsString          := '07';
+      IQuery.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+      IQuery.ParamByName('CONTA_ID').AsInteger      := FrmPrincipal.Config.FieldByName('CONTA_ESTOQUE').AsInteger;
+      IQuery.ParamByName('C_CUSTO_ID').AsInteger    := 1;
+      IQuery.ParamByName('VALOR').AsFloat           := 0;
+      IQuery.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      IQuery.ParamByName('AUTORIZ_ID').AsInteger    := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+      IQuery.ParamByName('HISTORICO').AsString      := 'REQUISIÇÃO PARA ENTRADA DE PRODUTO ACABADO ' + StrZero(IntToStr(Id_Trans), 7, 0);
+      IQuery.ParamByName('CONTAAUX_ID').AsInteger   := 0;
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+
+      Insert;
+
+      CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+      CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QTabela.ParamByName('CONDUTA').AsString        := Cond_Trans;
+      QTabela.ParamByName('DEPTO').AsString          := '07';
+      QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+      QTabela.Prepare;
+      QTabela.Open;
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+    begin
+      QEmpresa.Close;
+      QConta.Close;
+      QCusto.Close;
+      QConta_Aux.Close;
+    end;
+
+    Habilitar(False);
+    Botoes_Normal;
+
+    Operacao := '';
+    Consulta.TabVisible := True;
+
+    if (not QSub_Detail.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+      Carga_PDV_Movimento(QTabela.FieldByName('TRANSACAO_ID').AsInteger);
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ItensColEnter(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    ProdutoSearch;
+    TributoSearch;
+
+    if (Itens.SelectedField.FieldName = 'quantidade') and (QProduto.IsEmpty) then
+      Itens.SelectedIndex := 0;
+
+    if (Itens.SelectedField.FieldName = 'vr_unitario') and (QSub_Detail.FieldByName('QUANTIDADE').AsFloat = 0) then
+      Itens.SelectedIndex := 2;
+
+    if (Itens.SelectedField.FieldName = 'vr_total') and (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat = 0) then
+      Itens.SelectedIndex := 3;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ItensColExit(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    if Itens.SelectedField.FieldName = 'produto_id' then
+    begin
+      ProdutoSearch;
+
+      if QProduto.IsEmpty then
+      begin
+        QSub_Detail.FieldByName('DESCRICAO').AsString    := '';
+        QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := 0;
+        QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := 0;
+        QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := 0;
+
+        Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+
+        Itens.SelectedIndex := 0;
+      end
+      else
+      begin
+        TributoSearch;
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('SELECT SUM((PRODUTOS.CUSTO_COMPRA * PRODUCAO_ITENS.QUANTIDADE)) VALOR');
+        IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+        IQuery.Sql.Add('INNER JOIN PRODUTOS');
+        IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.Open;
+
+
+        QSub_Detail.FieldByName('CFOP').AsString         := Copy(FormatDateTime('HH:MM:SS.ZZZ', Now), 10, 3);//StrZero(Copy(QTabela.FieldByName('TRANSACAO_ID').AsString, 1,4),4,0); //QTributo.FieldByName('CFOP').AsString;
+        QSub_Detail.FieldByName('DESCRICAO').AsString    := QProduto.FieldByName('DESCRICAO').AsString;
+        QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
+        QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+        QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := RoundTo(IQuery.FieldByName('VALOR').AsFloat, -2);
+        QSub_Detail.FieldByName('CST').AsString          := Copy(QTributo.FieldByName('ORIGEM').AsString, 1, 1) + Copy(QTributo.FieldByName('TRIBUTACAO').AsString, 1, 2);
+
+
+      end;
+    end;
+
+    if (Itens.SelectedField.FieldName = 'vr_unitario') or (Itens.SelectedField.FieldName = 'quantidade') or (Itens.SelectedField.FieldName = 'vr_desconto') then
+    begin
+      if Itens.SelectedField.FieldName = 'quantidade' then
+      begin
+        ProdutoSearch;
+
+        if QProduto.FieldbyName('FRACAO_VENDA').AsInteger > 0 then
+          QSub_Detail.FieldByName('QUANTIDADE').AsFloat := (QSub_Detail.FieldByName('QUANTIDADE').AsFloat * QProduto.FieldByName('FRACAO_VENDA').AsFloat);
+      end;
+      QSub_Detail.FieldByName('VR_TOTAL').AsFloat := RoundTo((QSub_Detail.FieldByName('QUANTIDADE').AsFloat * (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat - QSub_Detail.FieldByName('VR_DESCONTO').AsFloat)), -2);
+    end;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ItensEnter(Sender: TObject);
+begin
+  Botoes_Disable;
+  Consulta.TabVisible := False;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ItensExit(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    QSub_Detail.Cancel;
+
+  end;
+
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    Botoes_Normal;
+    Consulta.TabVisible := True;
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    Botoes_Normal;
+    Consulta.TabVisible := True;
+    exit;
+  end;
+  
+  btnEditClick(Self);
+
+  VALOR.Value := 0;
+
+  QSub_Detail.First;
+  while not QSub_Detail.Eof do
+  begin
+    VALOR.Value := VALOR.Value + QSub_Detail.FieldByName('VR_TOTAL').AsFloat;
+
+    Application.ProcessMessages;
+    QSub_Detail.Next;
+  end;
+
+  btnSaveClick(Self);
+
+  if VALOR.CanFocus then
+    VALOR.SetFocus
+  else
+    Botoes_Normal;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ItensKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_F4) and (QSub_Detail.State = dsBrowse) and (not QSub_Detail.IsEmpty) then
+    QSub_Detail.Delete;
+
+  if (Key = Vk_F7) and ((Itens.SelectedField.FieldName = 'produto_id') or (Itens.SelectedField.FieldName = 'tributo_id')) and (QSub_Detail.State in [dsInsert, dsEdit]) then
+  begin
+    if Itens.SelectedField.FieldName = 'produto_id' then
+      QSub_Detail.FieldByName('PRODUTO_ID').AsInteger := GetConsulta('ESTOQUE', StrToInt(EMPRESA_ID.Text), 0, QSub_Detail.FieldByName('PRODUTO_ID').AsInteger);
+
+    if Itens.SelectedField.FieldName = 'tributo_id' then
+      QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger := GetConsulta('TRIBUTOS', 0, 0, QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger);
+  end;
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QSub_Detail.State in [dsInsert, dsEdit]) then
+    Key := 0;
+
+  
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.ItensKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #46 then
+    Key := #44;
+
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') or (QSub_Detail.State in [dsInsert, dsEdit]) then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.FormCreate(Sender: TObject);
+var
+X, Ult_Dia: Integer;
+begin
+  USql_Transest.DeleteSQL.Clear;
+  USql_Transest.DeleteSQL.Add(Delete_Transest);
+
+  USql_Transest.InsertSQL.Clear;
+  USql_Transest.InsertSQL.Add(Insert_Transest);
+
+  USql_Transest.ModifySQL.Clear;
+  USql_Transest.ModifySQL.Add(Modify_Transest);
+
+  USql_Transest.FetchRowSQL.Clear;
+  USql_Transest.FetchRowSQL.Add(Refresh_Transest);
+
+  DBGrid1.Columns[0].Width := 54;
+  DBGrid1.Columns[1].Width := 76;
+  DBGrid1.Columns[2].Width := 77;
+  DBGrid1.Columns[3].Width := 78;
+  DBGrid1.Columns[4].Width := 72;
+  DBGrid1.Columns[5].Width := 331;
+
+  Ult_Dia := StrToInt(Copy(DateToStr(Ult_Dia_Mes(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime)), 1, 2));
+  Dias.Tabs.Clear;
+
+  for X := 1 to Ult_Dia do
+    Dias.Tabs.Add(IntToStr(X));
+
+  Dias.Tabs.Add('Todos');
+
+  DT_MOVIMENTO.MinDate := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.MaxDate := StrToDate('31/12/2026');
+
+  Itens.Columns[0].Width := 63;
+  Itens.Columns[1].Width := 365;
+  Itens.Columns[2].Width := 83;
+  Itens.Columns[3].Width := 83;
+  Itens.Columns[4].Width := 83;
+
+  CmdSelect     := QTabela.Sql.Text;
+  CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+  CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  QTabela.ParamByName('CONDUTA').AsString        := Cond_Trans;
+  QTabela.ParamByName('DEPTO').AsString          := '07';
+  QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QTabela.Prepare;
+  QTabela.Open;
+  Consulta.Show;
+
+end;
+
+procedure TFrmTrans_Entrada_Produto_Acabado.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+end;
+
+end.

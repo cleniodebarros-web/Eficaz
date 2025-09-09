@@ -1,0 +1,679 @@
+unit Fiado;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, Menus, AppEvnts, DB, DBTables, RXShell, StdCtrls;
+
+type
+  TForm_Fiado = class(TForm)
+    Timer_Consulta: TTimer;
+    ApplicationEvents1: TApplicationEvents;
+    Database1: TDatabase;
+    QRel: TQuery;
+    QTrans: TQuery;
+    USTrans: TUpdateSQL;
+    QTransest: TQuery;
+    USTransest: TUpdateSQL;
+    QTransrp: TQuery;
+    USTransrp: TUpdateSQL;
+    Gen_Codigo: TStoredProc;
+    DSMain: TDataSource;
+    DSDetail: TDataSource;
+    DSContas: TDataSource;
+    QEstoque: TQuery;
+    popmnuGeral: TPopupMenu;
+    Sair: TMenuItem;
+    RxTrayIcon1: TRxTrayIcon;
+    ApplicationEvents2: TApplicationEvents;
+    Timer_Dados: TTimer;
+    Timer_Logs: TTimer;
+    Logs: TTable;
+    Fechamento: TTable;
+    Formas: TTable;
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure ApplicationEvents1Minimize(Sender: TObject);
+    procedure SairClick(Sender: TObject);
+    procedure Database1BeforeConnect(Sender: TObject);
+    procedure Timer_ConsultaTimer(Sender: TObject);
+    procedure QTransBeforePost(DataSet: TDataSet);
+    procedure QTransNewRecord(DataSet: TDataSet);
+    procedure QTransestBeforePost(DataSet: TDataSet);
+    procedure QTransestNewRecord(DataSet: TDataSet);
+    procedure QTransrpBeforePost(DataSet: TDataSet);
+    procedure QTransrpNewRecord(DataSet: TDataSet);
+    procedure Timer_DadosTimer(Sender: TObject);
+    procedure Timer_LogsTimer(Sender: TObject);
+    procedure LogsBeforePost(DataSet: TDataSet);
+    procedure FechamentoBeforePost(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure ColocaZero(Arq: TQuery);
+  end;
+
+var
+  Form_Fiado: TForm_Fiado;
+  Caminho_Rx, Caminho_Tx, Arq_Perg, Arq_Resp, Arq_Ent, Arq_Inf, Campo_Pesq: String;
+
+implementation
+
+uses
+  Funcoes;
+
+{$R *.dfm}
+
+procedure TForm_Fiado.FormCreate(Sender: TObject);
+begin
+  Timer_Consulta.Interval := StrToInt(LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Intervalo'));
+  Timer_Dados.Interval := StrToInt(LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Intervalo'));
+  Timer_Logs.Interval := StrToInt(LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Intervalo'));
+  Caminho_Rx := LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Path Rx');
+  Caminho_Tx := LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Path Tx');
+  Arq_Perg := LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Pergunta');
+  Arq_Resp := LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Resposta');
+  Arq_Ent := LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Entrega');
+  Arq_Inf := LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Informa');
+  Campo_Pesq := LeIni(ExtractFilePath(ParamStr(0)) + 'Cheque.Ini', 'Cheque', 'Cliente');
+  Timer_Consulta.Enabled := True;
+  Timer_Dados.Enabled := True;
+  Timer_Logs.Enabled := True;
+end;
+
+procedure TForm_Fiado.FormShow(Sender: TObject);
+begin
+  ShowWindow(Application.Handle, SW_HIDE);
+end;
+
+procedure TForm_Fiado.ApplicationEvents1Minimize(Sender: TObject);
+begin
+  ShowWindow(Application.Handle, SW_HIDE);
+end;
+
+procedure TForm_Fiado.SairClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TForm_Fiado.Database1BeforeConnect(Sender: TObject);
+begin
+  DataBase1.Connected := False;
+  DataBase1.Params.Clear;
+  DataBase1.Params.Add('SERVER NAME=' + LeIni(ExtractFilePath(ParamStr(0)) + 'Biosoft.Ini', 'Sistema', 'Server Name'));
+  DataBase1.Params.Add('USER NAME=' + LeIni(ExtractFilePath(ParamStr(0)) + 'Biosoft.Ini', 'Sistema', 'User Name'));
+  DataBase1.Params.Add('OPEN MODE=READ/WRITE');
+  DataBase1.Params.Add('SCHEMA CACHE SIZE=8');
+  DataBase1.Params.Add('LANGDRIVER=');
+  DataBase1.Params.Add('SQLQRYMODE=LOCAL');
+  DataBase1.Params.Add('SQLPASSTHRU MODE=SHARED AUTOCOMMIT');
+  DataBase1.Params.Add('SCHEMA CACHE TIME=-1');
+  DataBase1.Params.Add('MAX ROWS=-1');
+  DataBase1.Params.Add('BATCH COUNT=200');
+  DataBase1.Params.Add('ENABLE SCHEMA CACHE=FALSE');
+  DataBase1.Params.Add('SCHEMA CACHE DIR=');
+  DataBase1.Params.Add('ENABLE BCD=FALSE');
+  DataBase1.Params.Add('BLOBS TO CACHE=64');
+  DataBase1.Params.Add('BLOB SIZE=32');
+  DataBase1.Params.Add('PASSWORD=' + LeIni(ExtractFilePath(ParamStr(0)) + 'Biosoft.Ini', 'Sistema', 'Password'));
+end;
+
+procedure TForm_Fiado.Timer_ConsultaTimer(Sender: TObject);
+var
+SR: TSearchRec;
+I: Integer;
+F1, F2: TextFile;
+S, Status: String;
+Sm: Double;
+begin
+  Timer_Consulta.Enabled := False;
+  Sair.Enabled := False;
+  try
+    I := FindFirst(Caminho_Rx + Arq_Perg + '*.0??', faAnyFile, SR);
+    try
+      while I = 0 do
+      begin
+        AssignFile(F2, Caminho_Rx + SR.Name);
+        try
+          Reset(F2);
+          ReadLn(F2, S);
+        finally
+          CloseFile(F2);
+        end;
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT CLIENTE.CODIGO, CLIENTE.TIPO_CLIENTE, CLIENTE.NOME, CLIENTE.CNPJ, CLIENTE.LIMITE, CLIENTE.BLOQUEIO, CLIENTE.JUROS, CLIENTE.DIAVEN, SUM(TRANSRP.VALOR)');
+        QRel.Sql.Add('FROM CLIENTE CLIENTE');
+        QRel.Sql.Add('LEFT JOIN TRANS TRANS');
+        QRel.Sql.Add('ON (TRANS.FORNE_CLIENTE = CLIENTE.CODIGO) AND (TRANS.CONDUTA = "05")');
+        QRel.Sql.Add('LEFT JOIN TRANSRP TRANSRP');
+        QRel.Sql.Add('ON (TRANSRP.TRANSACAO = TRANS.CODIGO) AND (TRANSRP.VALOR > 0) AND (TRANSRP.CAIXA_BANCO = 0)');
+        QRel.Sql.Add('WHERE');
+//        if Copy(S, 1, 3) = '000' then
+//          QRel.Sql.Add('(CLIENTE.CNPJ = ' + #39 + Copy(S, 4, 3) + '.' + Copy(S, 7, 3) + '.' + Copy(S, 10, 3) + '-' + Copy(S, 13, 2) + #39 + ')')
+//        else
+//          QRel.Sql.Add('(CLIENTE.CNPJ = ' + #39 + Copy(S, 1, 2) + '.' + Copy(S, 3, 3) + '.' + Copy(S, 6, 3) + '/' + Copy(S, 9, 4) + '-' + Copy(S, 13, 2) + #39 + ')');
+        QRel.Sql.Add('(CLIENTE.CODIGO = ' + #39 + Copy(S, 1, 14) + #39 + ')');
+        QRel.Sql.Add('GROUP BY CLIENTE.CODIGO, CLIENTE.TIPO_CLIENTE, CLIENTE.NOME, CLIENTE.CNPJ, CLIENTE.LIMITE, CLIENTE.BLOQUEIO, CLIENTE.JUROS, CLIENTE.DIAVEN');
+        QRel.Open;
+        if QRel.RecordCount > 0 then
+        begin
+          if QRel.FieldByName('SUM').IsNull then
+            Sm := 0
+          else
+            Sm := QRel.FieldByName('SUM').AsFloat;
+          Status := 'A0';
+          if QRel.FieldByName('BLOQUEIO').AsString = 'S' then
+            Status := 'R1';
+          AssignFile(F1, Caminho_Tx + Arq_Resp);
+          try
+            Rewrite(F1);
+            WriteLn(F1, Status + Copy(S, 1, 14) + ForcaComprimento(QRel.FieldByName('NOME').AsString, 30, ' ') + Copy(S, 1, 14) +
+                        StrZero(FloatToStr(Sm), 10, 2));
+          finally
+            CloseFile(F1);
+          end;
+        end
+        else
+        begin
+          AssignFile(F1, Caminho_Tx + Arq_Resp);
+          try
+            Rewrite(F1);
+            WriteLn(F1, 'N0');
+          finally
+            CloseFile(F1);
+          end;
+        end;
+        RenameFile(Caminho_Tx + Arq_Resp, Caminho_Tx + Arq_Resp + Copy(SR.Name, (length(SR.Name) - 3), 4));
+        Application.ProcessMessages;
+        DeleteFile(Caminho_Rx + SR.Name);
+        I := FindNext(SR);
+      end;
+    except
+      AssignFile(F1, Caminho_Tx + Arq_Resp);
+      try
+        Rewrite(F1);
+        WriteLn(F1, 'N0');
+      finally
+        CloseFile(F1);
+      end;
+      RenameFile(Caminho_Tx + Arq_Resp, Caminho_Tx + Arq_Resp + Copy(SR.Name, (length(SR.Name) - 3), 4));
+      DeleteFile(Caminho_Rx + SR.Name);
+      FindClose(SR);
+    end;
+  finally
+    Timer_Consulta.Enabled := True;
+    Sair.Enabled := True;
+  end;
+end;
+
+procedure TForm_Fiado.QTransBeforePost(DataSet: TDataSet);
+begin
+  if QTrans.State = dsInsert then
+  begin
+    Gen_Codigo.StoredProcName := 'PROC_GENTRANS';
+    Gen_Codigo.Prepare;
+    Gen_Codigo.ExecProc;
+    QTrans.FieldByName('CODIGO').AsInteger := Gen_Codigo.Params[0].Value;
+  end;
+end;
+
+procedure TForm_Fiado.QTransNewRecord(DataSet: TDataSet);
+begin
+  ColocaZero(QTrans);
+  DataSet['DATA'] := date;
+  DataSet['ENTRADA'] := date;
+  DataSet['EMPRESA'] := 1;
+  DataSet['CONDUTA'] := '05';
+  DataSet['DEPTO'] := '07';
+  DataSet['TPCTB'] := '2';
+  DataSet['C_CUSTO'] := 1;
+  DataSet['BALANCO'] := 'Liberado';
+  DataSet['SUB_CODIGO'] := '1 - Normal';
+  DataSet['CONTA'] := LeIni(ExtractFilePath(ParamStr(0)) + 'Biosoft.Ini', 'Sistema', 'Cta. Estoque');
+end;
+
+procedure TForm_Fiado.ColocaZero(Arq: TQuery);
+var
+I: Integer;
+begin
+  for I := 0 to Arq.FieldCount - 1 do
+  begin
+    if Arq.Fields[I].DataType in [ftInteger, ftFloat] then
+      Arq.Fields[I].AsInteger := 0;
+  end;
+end;
+
+procedure TForm_Fiado.QTransestBeforePost(DataSet: TDataSet);
+begin
+  if QTransest.State = dsInsert then
+  begin
+    Gen_Codigo.StoredProcName := 'PROC_GENTRANSEST';
+    Gen_Codigo.Prepare;
+    Gen_Codigo.ExecProc;
+    QTransest.FieldByName('CODIGO').AsInteger := Gen_Codigo.Params[0].Value;
+  end;
+end;
+
+procedure TForm_Fiado.QTransestNewRecord(DataSet: TDataSet);
+begin
+  ColocaZero(QTransest);
+  DataSet['TRANSACAO'] := QTrans.FieldByName('CODIGO').AsInteger;
+  DataSet['CONTA'] := QTrans.FieldByName('CONTA').AsInteger;
+  DataSet['TIPO'] := 'P';
+end;
+
+procedure TForm_Fiado.QTransrpBeforePost(DataSet: TDataSet);
+begin
+  if QTransrp.State = dsInsert then
+  begin
+    Gen_Codigo.StoredProcName := 'PROC_GENTRANSRP';
+    Gen_Codigo.Prepare;
+    Gen_Codigo.ExecProc;
+    QTransrp.FieldByName('CODIGO').AsInteger := Gen_Codigo.Params[0].Value;
+  end;
+end;
+
+procedure TForm_Fiado.QTransrpNewRecord(DataSet: TDataSet);
+begin
+  ColocaZero(QTransrp);
+  DataSet['TRANSACAO'] := QTrans.FieldByName('CODIGO').AsInteger;
+  DataSet['PAGTO'] := '0';
+end;
+
+procedure TForm_Fiado.Timer_DadosTimer(Sender: TObject);
+var
+SR: TSearchRec;
+I: Integer;
+F1, F2: TextFile;
+S: String;
+begin
+  Timer_Dados.Enabled := False;
+  Sair.Enabled := False;
+  try
+    I := FindFirst(Caminho_Rx + Arq_Ent + '*.0??', faAnyFile, SR);
+    try
+      while I = 0 do
+      begin
+        AssignFile(F2, Caminho_Rx + SR.Name);
+        try
+          Reset(F2);
+          ReadLn(F2, S);
+        finally
+          CloseFile(F2);
+        end;
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT CNPJ, NOME, ENDERECO, BAIRRO, CIDADE, UF');
+        QRel.Sql.Add('FROM CLIENTE');
+        QRel.Sql.Add('WHERE');
+//        if Copy(S, 1, 3) = '000' then
+//          QRel.Sql.Add('(CLIENTE.CNPJ = ' + #39 + Copy(S, 4, 3) + '.' + Copy(S, 7, 3) + '.' + Copy(S, 10, 3) + '-' + Copy(S, 13, 2) + #39 + ')')
+//        else
+//          QRel.Sql.Add('(CLIENTE.CNPJ = ' + #39 + Copy(S, 1, 2) + '.' + Copy(S, 3, 3) + '.' + Copy(S, 6, 3) + '/' + Copy(S, 9, 4) + '-' + Copy(S, 13, 2) + #39 + ')');
+        QRel.Sql.Add('(CLIENTE.CODIGO = ' + #39 + Copy(S, 1, 14) + #39 + ')');
+        QRel.Open;
+        if QRel.RecordCount > 0 then
+        begin
+          AssignFile(F1, Caminho_Tx + Arq_Inf);
+          try
+            Rewrite(F1);
+            WriteLn(F1, 'Cliente : ' + ForcaComprimento(QRel.FieldByName('NOME').AsString, 30, ' '));
+            WriteLn(F1, 'CPF/CNPJ: ' + QRel.FieldByName('CNPJ').AsString);
+            WriteLn(F1, 'Endereco: ' + ForcaComprimento(QRel.FieldByName('ENDERECO').AsString, 30, ' '));
+            WriteLn(F1, 'Bairro  : ' + ForcaComprimento(QRel.FieldByName('BAIRRO').AsString, 30, ' '));
+            WriteLn(F1, 'Cidade  : ' + ForcaComprimento(QRel.FieldByName('CIDADE').AsString + '-' + QRel.FieldByName('UF').AsString, 30, ' '));
+          finally
+            CloseFile(F1);
+          end;
+        end
+        else
+        begin
+          AssignFile(F1, Caminho_Tx + Arq_Inf);
+          try
+            Rewrite(F1);
+            WriteLn(F1, '');
+          finally
+            CloseFile(F1);
+          end;  
+        end;
+        RenameFile(Caminho_Tx + Arq_Inf, Caminho_Tx + Arq_Inf + Copy(SR.Name, (length(SR.Name) - 3), 4));
+        DeleteFile(Caminho_Rx + SR.Name);
+        Application.ProcessMessages;
+        I := FindNext(SR);
+      end;
+    finally
+      FindClose(SR);
+    end;
+  finally
+    Timer_Dados.Enabled := True;
+    Sair.Enabled := True;
+  end;
+end;
+
+procedure TForm_Fiado.Timer_LogsTimer(Sender: TObject);
+var
+SR: TSearchRec;
+I, iT, X: Integer;
+F2: TextFile;
+S, DT, OP, HR: String;
+Log_Certo: Boolean;
+begin
+  Timer_Logs.Enabled := False;
+  Sair.Enabled := False;
+  Logs.Open;
+  Fechamento.Open;
+  Formas.Open;
+  DSMain.DataSet.Open;
+  DSDetail.DataSet.Open;
+  DSContas.DataSet.Open;
+  try
+    for X := 1 to 2 do
+    begin
+      if X = 1 then
+        I := FindFirst(Caminho_Rx + 'RV*.0??', faAnyFile, SR)
+      else
+        I := FindFirst(Caminho_Rx + 'PV*.0??', faAnyFile, SR);
+      try
+        while I = 0 do
+        begin
+          AssignFile(F2, Caminho_Rx + SR.Name);
+          Reset(F2);
+          try
+            Log_Certo := False;
+            while not Eof(F2) do
+            begin
+              ReadLn(F2, S);
+              if (Copy(S, 1, 1) = '0') or (Copy(S, 1, 1) = '6') then 
+                Log_Certo := True;
+              Application.ProcessMessages;
+            end;
+          finally
+            CloseFile(F2);
+          end;
+          if not Log_Certo then
+            RenameFile(Caminho_Rx + SR.Name, Caminho_Rx + SR.Name + '.Erro');
+          Application.ProcessMessages;
+          I := FindNext(SR);
+        end;
+      finally
+        FindClose(SR);
+      end;
+      Application.ProcessMessages;
+    end;
+
+    I := FindFirst(Caminho_Rx + 'RV*.0??', faAnyFile, SR);
+    try
+      while I = 0 do
+      begin
+        AssignFile(F2, Caminho_Rx + SR.Name);
+        Reset(F2);
+        iT := 1;
+        try
+          while not Eof(F2) do
+          begin
+            ReadLn(F2, S);
+            if Copy(S, 1, 1) = '0' then  // Abertura de Cupom
+            begin
+              DT := Copy(S, 29, 2) + '/' + Copy(S, 31, 2) + '/' + Copy(S, 33, 4);
+              OP := Copy(S, 15, 14);
+              HR := Copy(S, 37, 2) + ':' + Copy(S, 39, 2) + ':' + Copy(S, 41, 2);
+            end;
+            if (Copy(S, 1, 1) = '1') or (Copy(S, 1, 1) = '2') then  // Venda ou Cancelamento de Item
+            begin
+              QEstoque.Close;
+              QEstoque.Params[0].Value := Copy(S, 36, 13);
+              QEstoque.Open;
+              if QEstoque.RecordCount > 0 then
+              begin
+                Logs.Append;
+                Logs.FieldByName('ITEM').AsInteger := iT;
+                Logs.FieldByName('CUPOM').AsString := Copy(S, 2, 6);
+                Logs.FieldByName('DATA').AsDateTime := StrToDate(DT);
+                Logs.FieldByName('CAIXA').AsString := Copy(S, 8, 3);
+                Logs.FieldByName('COD_PRODUTO').AsInteger := QEstoque.FieldByName('CODIGO').AsInteger;
+                Logs.FieldByName('COD_BARRA').AsString := QEstoque.FieldByName('COD_BARRA').AsString;
+                Logs.FieldByName('DESCRICAO').AsString := QEstoque.FieldByName('DESCRICAO').AsString;
+                Logs.FieldByName('COD_TRIBUTO').AsInteger := QEstoque.FieldByName('COD_TRIBUTO').AsInteger;
+                Logs.FieldByName('ICMS').AsFloat := QEstoque.FieldByName('ICMS').AsFloat;
+                Logs.FieldByName('IPI').AsFloat := QEstoque.FieldByName('IPI').AsFloat;
+                if Copy(S, 1, 1) = '2' then
+                  Logs.FieldByName('QUANTIDADE').AsFloat := (StrToFloat(Copy(S, 49, 9)) / 1000) * -1
+                else
+                  Logs.FieldByName('QUANTIDADE').AsFloat := (StrToFloat(Copy(S, 49, 9)) / 1000);
+                Logs.FieldByName('VR_UNITARIO').AsFloat := (StrToFloat(Copy(S, 58, 12)) / 100);
+                Logs.FieldByName('DESCONTO').AsFloat := (StrToFloat(Copy(S, 70, 12)) / 100);
+                Logs.FieldByName('VR_COMPRA').AsFloat := QEstoque.FieldByName('VALOR_COMPRA').AsFloat;
+                Logs.FieldByName('LOCALIZACAO').AsInteger := QEstoque.FieldByName('LOCALIZACAO').AsInteger;
+                Logs.FieldByName('OPERADOR').AsString := OP;
+                Logs.FieldByName('VALOR').AsFloat := Logs.FieldByName('QUANTIDADE').AsFloat * (Logs.FieldByName('VR_UNITARIO').AsFloat - Logs.FieldByName('DESCONTO').AsFloat);
+                Logs.Post;
+                Inc(iT);
+              end;
+            end;
+            if Copy(S, 1, 1) = '6' then  // Cancelamento de cupom
+            begin
+              QRel.Sql.Clear;
+              QRel.Sql.Add('DELETE FROM LOGS');
+              QRel.Sql.Add('WHERE');
+              QRel.Sql.Add('(CUPOM = ' + #39 + Copy(S, 43, 6) + #39 + ')');
+              QRel.Sql.Add('AND (CAIXA = ' + #39 + Copy(S, 8, 3) + #39 + ')');
+              QRel.ExecSql;
+              QRel.Sql.Clear;
+              QRel.Sql.Add('DELETE FROM FECHAMENTO');
+              QRel.Sql.Add('WHERE');
+              QRel.Sql.Add('(CUPOM = ' + #39 + Copy(S, 43, 6) + #39 + ')');
+              QRel.Sql.Add('AND (CAIXA = ' + #39 + Copy(S, 8, 3) + #39 + ')');
+              QRel.ExecSql;
+              QRel.Sql.Clear;
+              QRel.Sql.Add('DELETE FROM TRANS');
+              QRel.Sql.Add('WHERE');
+              QRel.Sql.Add('(NUM_DOC = ' + #39 + Copy(S, 43, 6) + #39 + ')');
+              QRel.Sql.Add('AND (SERIE = ' + #39 + 'ECF' + #39 + ')');
+              QRel.ExecSql;
+            end;
+            if Copy(S, 1, 1) = '3' then  // Pagamento
+            begin
+              if Formas.FindKey([StrToInt(Copy(S, 29, 2))]) then
+              begin
+                Fechamento.Append;
+                Fechamento.FieldByName('CUPOM').AsString := Copy(S, 2, 6);
+                Fechamento.FieldByName('CAIXA').AsString := Copy(S, 8, 3);
+                Fechamento.FieldByName('DATA').AsDateTime := StrToDate(DT);
+                Fechamento.FieldByName('FORMA').AsString := Formas.FieldByName('NOME').AsString;
+                if Copy(S, 138, 1) = 'D' then
+                  Fechamento.FieldByName('VALOR').AsFloat := (StrToFloat(Copy(S, 83, 12)) / 100) - (StrToFloat(Copy(S, 95, 12)) / 100);
+                if Copy(S, 138, 1) = 'A' then
+                  Fechamento.FieldByName('VALOR').AsFloat := (StrToFloat(Copy(S, 83, 12)) / 100) + (StrToFloat(Copy(S, 95, 12)) / 100);
+                Fechamento.FieldByName('OPERADOR').AsString := OP;
+                Fechamento.FieldByName('HORA').AsString := HR;
+                Fechamento.FieldByName('FUNCIONARIO').AsString := Copy(S, 107, 5);
+                Fechamento.Post;
+              end;
+            end;
+            Application.ProcessMessages;
+          end;
+        finally
+          CloseFile(F2);
+        end;
+        if not DirectoryExists('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2)) then
+          MkDir('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2));
+        if FileExists('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2) + '\' + SR.Name) then
+          DeleteFile('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2) + '\' + SR.Name);
+        MoveFile(PChar(Caminho_Rx + SR.Name), PChar('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2) + '\' + SR.Name));
+        Application.ProcessMessages;
+        I := FindNext(SR);
+      end;
+    finally
+      FindClose(SR);
+    end;
+
+    I := FindFirst(Caminho_Rx + 'PV*.0??', faAnyFile, SR);
+    try
+      while I = 0 do
+      begin
+        AssignFile(F2, Caminho_Rx + SR.Name);
+        Reset(F2);
+        DT := Copy(DateToStr(date), 1, 2) + '/' + Copy(DateToStr(date), 4, 2) + '/' + Copy(DateToStr(date), 7, 4);
+        try
+          while not Eof(F2) do
+          begin
+            ReadLn(F2, S);
+            if Copy(S, 1, 1) = '0' then  // Abertura de Cupom
+            begin
+              DT := Copy(S, 29, 2) + '/' + Copy(S, 31, 2) + '/' + Copy(S, 33, 4);
+              DSMain.DataSet.Append;
+              DSMain.DataSet.FieldByName('DATA').AsDateTime := StrToDate(DT);
+              DSMain.DataSet.FieldByName('NUM_DOC').AsString := Copy(S, 2, 6);
+              DSMain.DataSet.FieldByName('SERIE').AsString := 'ECF';
+              DSMain.DataSet.FieldByName('CFOP').AsString := '9999';
+              DataBase1.StartTransaction;
+              try
+                DSMain.DataSet.Post;
+                TBDEDataSet(DSMain.DataSet).ApplyUpdates;
+                TBDEDataSet(DSMain.DataSet).CommitUpdates;
+                DataBase1.Commit;
+              except
+                DataBase1.Rollback;
+                TBDEDataSet(DSMain.DataSet).CancelUpdates;
+              end;
+            end;
+            if (Copy(S, 1, 1) = '1') or (Copy(S, 1, 1) = '2') then  // Venda ou Cancelamento de Item
+            begin
+              QEstoque.Close;
+              QEstoque.Params[0].Value := Copy(S, 36, 13);
+              QEstoque.Open;
+              if QEstoque.RecordCount > 0 then
+              begin
+                DSDetail.DataSet.Append;
+                DSDetail.DataSet.FieldByName('COD_PRODUTO').AsString := QEstoque.FieldByName('CODIGO').AsString;
+                DSDetail.DataSet.FieldByName('DESCRICAO').AsString := QEstoque.FieldByName('DESCRICAO').AsString;
+                DSDetail.DataSet.FieldByName('COD_TRIBUTO').AsString := QEstoque.FieldByName('COD_TRIBUTO').AsString;
+                DSDetail.DataSet.FieldByName('ICMS').AsString := QEstoque.FieldByName('ICMS').AsString;
+                DSDetail.DataSet.FieldByName('VR_UNITARIO').AsFloat := (StrToFloat(Copy(S, 58, 12)) / 100);
+                if Copy(S, 1, 1) = '2' then
+                  DSDetail.DataSet.FieldByName('QUANTIDADE').AsFloat := (StrToFloat(Copy(S, 49, 9)) / 1000) * -1
+                else
+                  DSDetail.DataSet.FieldByName('QUANTIDADE').AsFloat := (StrToFloat(Copy(S, 49, 9)) / 1000);
+                DSDetail.DataSet.FieldByName('DESCONTO').AsFloat := (StrToFloat(Copy(S, 70, 12)) / 100);
+                DSDetail.DataSet.FieldByName('VALOR').AsFloat := DSDetail.DataSet.FieldByName('QUANTIDADE').AsFloat * (DSDetail.DataSet.FieldByName('VR_UNITARIO').AsFloat - DSDetail.DataSet.FieldByName('DESCONTO').AsFloat);
+                DSDetail.DataSet.FieldByName('VR_COMPRA').AsFloat := QEstoque.FieldByName('VALOR_COMPRA').AsFloat;
+                DataBase1.StartTransaction;
+                try
+                  DSDetail.DataSet.Post;
+                  TBDEDataSet(DSDetail.DataSet).ApplyUpdates;
+                  TBDEDataSet(DSDetail.DataSet).CommitUpdates;
+                  DataBase1.Commit;
+                except
+                  DataBase1.Rollback;
+                  TBDEDataSet(DSDetail.DataSet).CancelUpdates;
+                end;
+              end;
+            end;
+            if Copy(S, 1, 1) = '3' then  // Dados do Cliente
+            begin
+              QRel.Sql.Clear;
+              QRel.Sql.Add('SELECT CODIGO, NOME');
+              QRel.Sql.Add('FROM CLIENTE');
+              QRel.Sql.Add('WHERE');
+              if Campo_Pesq = 'CNPJ' then
+              begin
+                if Copy(S, 112, 3) = '000' then
+                  QRel.Sql.Add('(CNPJ = ' + #39 + Copy(S, 115, 3) + '.' + Copy(S, 118, 3) + '.' + Copy(S, 121, 3) + '-' + Copy(S, 124, 2) + #39 + ')')
+                else
+                  QRel.Sql.Add('(CNPJ = ' + #39 + Copy(S, 112, 2) + '.' + Copy(S, 114, 3) + '.' + Copy(S, 117, 3) + '/' + Copy(S, 120, 4) + '-' + Copy(S, 124, 2) + #39 + ')');
+              end
+              else
+                QRel.Sql.Add('(CODIGO = ' + #39 + Copy(S, 112, 14) + #39 + ')');
+              QRel.Open;
+              DSMain.DataSet.Edit;
+              DSMain.DataSet.FieldByName('VALOR').AsFloat := (StrToFloat(Copy(S, 83, 12)) / 100);
+              DSMain.DataSet.FieldByName('ODOMETRO').AsFloat := (StrToFloat(Copy(S, 126, 12)) / 100);
+              if Copy(S, 138, 1) = 'D' then
+                DSMain.DataSet.FieldByName('DESCONTO').AsFloat := (StrToFloat(Copy(S, 95, 12)) / 100);
+              if Copy(S, 138, 1) = 'A' then
+                DSMain.DataSet.FieldByName('ACRESCIMO').AsFloat := (StrToFloat(Copy(S, 95, 12)) / 100);
+              DSMain.DataSet.FieldByName('FUNCIONARIO').AsString := Copy(S, 107, 5);
+              DSMain.DataSet.FieldByName('FORNE_CLIENTE').AsString := QRel.FieldByName('CODIGO').AsString;
+              DSMain.DataSet.FieldByName('VALOR').AsFloat := DSMain.DataSet.FieldByName('VALOR').AsFloat + DSMain.DataSet.FieldByName('ACRESCIMO').AsFloat - DSMain.DataSet.FieldByName('DESCONTO').AsFloat;
+              DSMain.DataSet.FieldByName('HISTORICO').AsString := 'Vr. cupom fiscal nº ' + Copy(S, 2, 6) + '-' + QRel.FieldByName('NOME').AsString;
+              DataBase1.StartTransaction;
+              try
+                DSMain.DataSet.Post;
+                TBDEDataSet(DSMain.DataSet).ApplyUpdates;
+                TBDEDataSet(DSMain.DataSet).CommitUpdates;
+                DataBase1.Commit;
+              except
+                DataBase1.Rollback;
+                TBDEDataSet(DSMain.DataSet).CancelUpdates;
+              end;
+            end;
+            if Copy(S, 1, 1) = '4' then  // Parcelamento
+            begin
+              DSContas.DataSet.Append;
+              DSContas.DataSet.FieldByName('PARCELA').AsString := Copy(S, 29, 5);
+              DSContas.DataSet.FieldByName('DT_VENCIMENTO').AsString := Copy(S, 34, 2) + '/' + Copy(S, 36, 2) + '/' + Copy(S, 38, 4);
+              DSContas.DataSet.FieldByName('VALOR').AsFloat := (StrToFloat(Copy(S, 42, 12)) / 100);
+              DSContas.DataSet.FieldByName('CAIXA_BANCO').AsString := Copy(S, 54, 2);
+              DataBase1.StartTransaction;
+              try
+                DSContas.DataSet.Post;
+                TBDEDataSet(DSContas.DataSet).ApplyUpdates;
+                TBDEDataSet(DSContas.DataSet).CommitUpdates;
+                DataBase1.Commit;
+              except
+                DataBase1.Rollback;
+                TBDEDataSet(DSContas.DataSet).CancelUpdates;
+              end;
+            end;
+            Application.ProcessMessages;
+          end;
+        finally
+          CloseFile(F2);
+        end;
+        if not DirectoryExists('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2)) then
+          MkDir('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2));
+        if FileExists('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2) + '\' + SR.Name) then
+          DeleteFile('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2) + '\' + SR.Name);
+        MoveFile(PChar(Caminho_Rx + SR.Name), PChar('C:\Retag\Logs\' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 9, 2) + '\' + SR.Name));
+        Application.ProcessMessages;
+        I := FindNext(SR);
+      end;
+    finally
+      FindClose(SR);
+    end;
+  finally
+    Timer_Logs.Enabled := True;
+    Sair.Enabled := True;
+    Logs.Close;
+    Fechamento.Close;
+    Formas.Close;
+    DSMain.DataSet.Close;
+    DSDetail.DataSet.Close;
+    DSContas.DataSet.Close;
+  end;
+end;
+
+procedure TForm_Fiado.LogsBeforePost(DataSet: TDataSet);
+begin
+  if Logs.State = dsInsert then
+  begin
+    Gen_Codigo.StoredProcName := 'PROC_GENLOGS';
+    Gen_Codigo.Prepare;
+    Gen_Codigo.ExecProc;
+    Logs.FieldByName('CODIGO').AsInteger := Gen_Codigo.Params[0].Value;
+  end;
+end;
+
+procedure TForm_Fiado.FechamentoBeforePost(DataSet: TDataSet);
+begin
+  if Fechamento.State = dsInsert then
+  begin
+    Gen_Codigo.StoredProcName := 'PROC_GENFECHAMENTO';
+    Gen_Codigo.Prepare;
+    Gen_Codigo.ExecProc;
+    Fechamento.FieldByName('CODIGO').AsInteger := Gen_Codigo.Params[0].Value;
+  end;
+end;
+
+end.

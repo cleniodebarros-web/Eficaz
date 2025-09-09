@@ -1,0 +1,1882 @@
+unit UPlano_Contas;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, rxToolEdit, Buttons, rxCurrEdit, DBCtrls,
+  QRCtrls, QuickRpt, IBDatabase, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client;
+
+type
+  TFrmPlano_Contas = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    Alfabeto: TTabSet;
+    StatusBar1: TStatusBar;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    DESCRICAO: TEdit;
+    TIPO_CONTA: TComboBox;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    NIVEL: TComboBox;
+    Label4: TLabel;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    SUB_CATEGORIA: TCurrencyEdit;
+    Label5: TLabel;
+    TIPO_TABELA: TEdit;
+    DBText1: TDBText;
+    DataContas: TDataSource;
+    btnConta: TSpeedButton;
+    btnPesquisa: TBitBtn;
+    btnGera: TBitBtn;
+    Plano: TQuickRep;
+    QRBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRDBText3: TQRDBText;
+    QRBand2: TQRBand;
+    QRDBText2: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRShape3: TQRShape;
+    btnImprime: TBitBtn;
+    Label6: TLabel;
+    COD_CONTABIL: TEdit;
+    btnImporta: TButton;
+    Panel3: TPanel;
+    Button1: TButton;
+    Label7: TLabel;
+    ESPECIAL: TComboBox;
+    QTabela: TFDQuery;
+    IQuery: TFDQuery;
+    Qcontas: TFDQuery;
+    QPlano: TFDQuery;
+    Q2011: TFDQuery;
+    dt_alteracao: TDateEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    CONTA_REF: TEdit;
+    Label10: TLabel;
+    cod_conta_contabil: TEdit;
+    Label11: TLabel;
+    EMPRESA: TCurrencyEdit;
+    btnEmpresa: TSpeedButton;
+    DBText2: TDBText;
+    QEmpresa: TFDQuery;
+    DataEmpresa: TDataSource;
+    Label12: TLabel;
+    DESCRICAO_CONTABIL: TEdit;
+    Label13: TLabel;
+    Classe: TComboBox;
+    Label14: TLabel;
+    Grupo_dre: TComboBox;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure AlfabetoClick(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure SUB_CATEGORIAExit(Sender: TObject);
+    procedure btnContaClick(Sender: TObject);
+    procedure SUB_CATEGORIAKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btnGeraClick(Sender: TObject);
+    procedure QRBand2BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure btnImprimeClick(Sender: TObject);
+    procedure DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure btnImportaClick(Sender: TObject);
+    procedure Button1Click(Sender: TObject);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure EMPRESAExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+    procedure GravaPlano(Codigo, Descricao, Altsaldo, Chave: String);
+    function Existe_Lancamento: Boolean;
+  end;
+
+var
+  FrmPlano_Contas: TFrmPlano_Contas;
+  Operacao: String;
+  ID: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UPesquisa;
+
+{$R *.dfm}
+
+procedure TFrmPlano_Contas.GravaPlano(Codigo, Descricao, Altsaldo, Chave: String);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('INSERT INTO PLANO( ' +
+                 'CODIGO,    DESCRICAO,    ALTSALDO,    CHAVE) VALUES(' +
+                 ':CODIGO,   :DESCRICAO,   :ALTSALDO,   :CHAVE)');
+
+  IQuery.ParamByName('CODIGO').AsString    := Codigo;
+  IQuery.ParamByName('DESCRICAO').AsString := Descricao;
+  IQuery.ParamByName('ALTSALDO').AsString  := Altsaldo;
+  IQuery.ParamByName('CHAVE').AsString     := Chave;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+end;
+
+function TFrmPlano_Contas.Existe_Lancamento;
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM RAZAO');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(CONTA_DB LIKE :CONTA)');
+  IQuery.Sql.Add('OR (CONTA_CR LIKE :CONTA)');
+
+  IQuery.ParamByName('CONTA').AsString := QTabela.FieldByName('COD_CONTABIL').AsString + '%';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if IQuery.IsEmpty then
+    Result := False
+  else
+    Result := True;
+end;
+
+procedure TFrmPlano_Contas.AlfabetoClick(Sender: TObject);
+begin
+  if Alfabeto.TabIndex <> 26 then
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ') AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')';
+  end
+  else
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')';
+  end;
+
+  if  FrmPrincipal.Config.FieldByName('FILTRO_PLANO').AsString = 'True' Then
+    CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ') AND (ESPECIAL = ' + #39 + 'SIM' + #39 + ')';
+
+
+  CmdOrderBy := 'ORDER BY TABELA_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmPlano_Contas.Botoes_Editing;
+begin
+  btnPrior.Enabled    := False;
+  btnNext.Enabled     := False;
+  btnInsert.Enabled   := False;
+  btnEdit.Enabled     := False;
+  btnDelete.Enabled   := False;
+  btnSave.Enabled     := True;
+  btnDiscard.Enabled  := True;
+  btnRetorna.Enabled  := False;
+  btnConta.Enabled    := True;
+  btnPesquisa.Enabled := False;
+  btnGera.Enabled     := False;
+  btnImprime.Enabled  := False;
+  btnImporta.Enabled  := False;
+end;
+
+procedure TFrmPlano_Contas.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled   := True;
+    btnDelete.Enabled := True;
+  end
+  else
+  begin
+    btnEdit.Enabled   := False;
+    btnDelete.Enabled := False;
+  end;
+
+  btnSave.Enabled     := False;
+  btnDiscard.Enabled  := False;
+  btnRetorna.Enabled  := True;
+  btnConta.Enabled    := False;
+  btnPesquisa.Enabled := True;
+  btnGera.Enabled     := True;
+  btnImprime.Enabled  := True;
+  btnImporta.Enabled  := True;
+end;
+
+procedure TFrmPlano_Contas.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Conta')) and (SUB_CATEGORIA.Text <> '') then
+  begin
+    QContas.Close;
+
+    QContas.ParamByName('TABELA_ID').AsInteger := StrToInt(SUB_CATEGORIA.Text);
+
+    QContas.Prepare;
+    QContas.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA.Text <> '') then
+  begin
+    QEmpresa.Close;
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA.Text);
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+
+
+
+
+  end;
+
+procedure TFrmPlano_Contas.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmPlano_Contas.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO TABELAS(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO TABELAS(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO TABELAS(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO TABELAS(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'INSERT INTO TABELAS(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  Habilitar(False);
+end;
+
+procedure TFrmPlano_Contas.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE TABELAS SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE TABELAS SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE TABELAS SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE TABELAS SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+     if Temp is TDateEdit then
+    begin
+      if Sql = 'UPDATE TABELAS SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+
+  end;
+
+  Sql := Sql + ' WHERE (TABELA_ID = :ID) AND (TIPO_TABELA = :TIPO_TABELA)';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger         := QTabela.FieldByName('TABELA_ID').AsInteger;
+  IQuery.ParamByName('TIPO_TABELA').AsString := '4';
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QTabela.Locate('TABELA_ID', ID, [loCaseInsensitive]);
+
+  Habilitar(False);
+end;
+
+procedure TFrmPlano_Contas.EMPRESAExit(Sender: TObject);
+begin
+    DetailSearch('Empresa');
+end;
+
+function TFrmPlano_Contas.Validacao: Boolean;
+begin
+  Result := False;
+
+  DESCRICAO.Color     := clWindow;
+  NIVEL.Color         := clWindow;
+  TIPO_CONTA.Color    := clWindow;
+  SUB_CATEGORIA.Color := clWindow;
+
+  if Descricao.Text = '' then
+  begin
+    Application.MessageBox('Informe a Descrição', PChar(Msg_Title), mb_IconStop);
+
+    DESCRICAO.Color := clYellow;
+    DESCRICAO.SetFocus;
+
+    exit;
+  end;
+
+  if (NIVEL.Text <> 'ANALÍTICA') and (NIVEL.Text <> 'SINTÉTICA') and (NIVEL.Text <> 'CARACTERÍSTICA') and (NIVEL.Text <> 'CONTA DE PATRIMÔNIO') and (NIVEL.Text <> 'CONTA DE RESULTADO') and (NIVEL.Text <> 'ESTRUTURA PATRIMONIAL') and (NIVEL.Text <> 'NATUREZA E FINALIDADE') and (NIVEL.Text <> 'RESULTADO ECONÔMICO') and (NIVEL.Text <> 'SISTEMA PRÓPRIO') then
+  begin
+    Application.MessageBox('Nível inválido', PChar(Msg_Title), mb_IconStop);
+
+    NIVEL.Color := clYellow;
+    NIVEL.SetFocus;
+
+    exit;
+  end;
+
+  if (NIVEL.Text = 'ANALÍTICA') and (QContas.IsEmpty) then
+  begin
+    Application.MessageBox('Campo Sub-Categoria de está incompleto', PChar(Msg_Title), mb_IconWarning);
+
+    SUB_CATEGORIA.Color := clYellow;
+    SUB_CATEGORIA.SetFocus;
+
+    exit;
+  end;
+
+  if (NIVEL.Text <> 'ANALÍTICA') and (SUB_CATEGORIA.Value > 0) then
+  begin
+    Application.MessageBox('Não é preciso informar a Conta Sub-Categoria', PChar(Msg_Title), mb_IconWarning);
+
+    NIVEL.Color := clYellow;
+    NIVEL.SetFocus;
+
+    exit;
+  end;
+
+  if FrmPrincipal.Config.FieldByName('PLANO_PROPRIO').AsString = 'True' then
+  begin
+    if (NIVEL.Text = 'ANALÍTICA') and (not QContas.IsEmpty) then
+    begin
+      if (length(QContas.FieldByName('COD_CONTABIL').AsString) <> 10) and (length(QContas.FieldByName('COD_CONTABIL').AsString) <> 15) then
+      begin
+        Application.MessageBox('Conta Sintética inválida', PChar(Msg_Title), mb_IconStop);
+
+        SUB_CATEGORIA.Color := clYellow;
+        SUB_CATEGORIA.SetFocus;
+
+        exit;
+      end;
+    end;
+
+    if (TIPO_CONTA.Text <> 'ATIVO CIRCULANTE') and (TIPO_CONTA.Text <> 'REALIZ. A L. PRAZO') and (TIPO_CONTA.Text <> 'ATIVO PERMANENTE') and (TIPO_CONTA.Text <> 'COMP. DO ATIVO') and (TIPO_CONTA.Text <> 'PASSIVO CIRCULANTE') and (TIPO_CONTA.Text <> 'EXIGÍVEL A L. PRAZO') and (TIPO_CONTA.Text <> 'RES. EXERC. FUTUROS') and (TIPO_CONTA.Text <> 'PATRIMÔNIO LÍQUIDO') and (TIPO_CONTA.Text <> 'COMP. DO PASSIVO') and (TIPO_CONTA.Text <> 'RECEITA') and (TIPO_CONTA.Text <> 'DESPESA') and (TIPO_CONTA.Text <> 'APUR.  RESULTADO') then
+    begin
+      Application.MessageBox('Tipo da Conta inválido', PChar(Msg_Title), mb_IconStop);
+
+      TIPO_CONTA.Color := clYellow;
+      TIPO_CONTA.SetFocus;
+
+      exit;
+    end;
+  end
+  else
+  begin
+    if (TIPO_CONTA.Text <> 'ATIVO') and (TIPO_CONTA.Text <> 'ATIVO CIRCULANTE') and (TIPO_CONTA.Text <> 'REALIZÁVEL') and (TIPO_CONTA.Text <> 'REALIZ. LONGO PRAZO') and (TIPO_CONTA.Text <> 'ATIVO PERMANENTE') and (TIPO_CONTA.Text <> 'COMPENSAÇÕES ATIVAS') and (TIPO_CONTA.Text <> 'PASSIVO') and (TIPO_CONTA.Text <> 'PASSIVO CIRCULANTE') and (TIPO_CONTA.Text <> 'EXIGÍVEL') and (TIPO_CONTA.Text <> 'EXIG. A LONGO PRAZO') and (TIPO_CONTA.Text <> 'RES. EXERC. FUTUROS') and (TIPO_CONTA.Text <> 'PATRIMÔNIO LÍQUIDO') and (TIPO_CONTA.Text <> 'COMP. PASSIVAS') and (TIPO_CONTA.Text <> 'RESULTADO') then
+    begin
+      Application.MessageBox('Tipo da Conta inválido', PChar(Msg_Title), mb_IconStop);
+
+      TIPO_CONTA.Color := clYellow;
+      TIPO_CONTA.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  Result := True;
+end;
+
+procedure TFrmPlano_Contas.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmPlano_Contas.QRBand2BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  if (QPlano.FieldByName('CODIGO').AsString = '2') or (QPlano.FieldByName('CODIGO').AsString = '3') or (QPlano.FieldByName('CODIGO').AsString = '4') or (QPlano.FieldByName('CODIGO').AsString = '6') then
+    Plano.NewPage;
+
+  if length(QPlano.FieldByName('CODIGO').AsString) <= 4 then
+  begin
+    QRDBText2.Font.Style := [(fsBold)];
+    QRDBText5.Font.Style := [(fsBold)];
+    QRDBText6.Font.Style := [(fsBold)];
+
+    QRBand2.Height := 34;
+    QRDBText2.Top  := 9;
+    QRDBText5.Top  := 9;
+    QRDBText6.Top  := 9;
+  end
+  else
+  begin
+    if QPlano.FieldByName('ALTSALDO').AsString = 'NÃO' then
+    begin
+      QRDBText2.Font.Style := [(fsBold)];
+      QRDBText5.Font.Style := [(fsBold)];
+      QRDBText6.Font.Style := [(fsBold)];
+
+      QRband2.Height := 34;
+      QRDBText2.Top  := 9;
+      QRDBText5.Top  := 9;
+      QRDBText6.Top  := 9;
+    end
+    else
+    begin
+      QRDBText2.Font.Style := [];
+      QRDBText5.Font.Style := [];
+      QRDBText6.Font.Style := [];
+
+      QRBand2.Height := 17;
+      QRDBText2.Top  := 1;
+      QRDBText5.Top  := 1;
+      QRDBText6.Top  := 1;
+    end;
+  end;
+end;
+
+procedure TFrmPlano_Contas.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '  /  /    ';
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Date := QTabela.FieldByName(TDateEdit(Temp).Name).AsDateTime;
+    end;
+  end;
+
+  TIPO_TABELA.Text := '4';
+  DetailSearch('');
+end;
+
+procedure TFrmPlano_Contas.SUB_CATEGORIAExit(Sender: TObject);
+begin
+  DetailSearch('Conta');
+
+  TIPO_CONTA.Text := QContas.FieldByName('TIPO_CONTA').AsString;
+
+  if not QContas.IsEmpty then
+  begin
+    QPlano.Sql.Clear;
+    QPlano.Sql.Add('SELECT COUNT(*) TOTAL');
+    QPlano.Sql.Add('FROM TABELAS');
+    QPlano.Sql.Add('WHERE');
+    QPlano.Sql.Add('(SUB_CATEGORIA = :SUB_CATEGORIA)');
+    QPlano.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+    QPlano.Sql.Add('AND (NIVEL = :NIVEL)');
+    QPlano.Sql.Add('AND (STATUS = :STATUS)');
+
+    QPlano.ParamByName('SUB_CATEGORIA').AsInteger := QContas.FieldByName('TABELA_ID').AsInteger;
+    QPlano.ParamByName('TIPO_TABELA').AsString    := '4';
+    QPlano.ParamByName('NIVEL').AsString          := 'ANALÍTICA';
+    QPlano.ParamByName('STATUS').AsString         := 'A';
+
+    QPlano.Prepare;
+    QPlano.Open;
+
+    if (Operacao = 'Inserindo') and (FrmPrincipal.Config.FieldByName('PLANO_PROPRIO').AsString = 'True') then
+      COD_CONTABIL.Text := QContas.FieldByName('COD_CONTABIL').AsString + '.' +
+                           StrZero(IntToStr(QPlano.FieldByName('TOTAL').AsInteger + 1), 4, 0);
+  end;
+end;
+
+procedure TFrmPlano_Contas.SUB_CATEGORIAKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = SUB_CATEGORIA) then
+    btnContaClick(Self);
+    
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmPlano_Contas.btnContaClick(Sender: TObject);
+begin
+  try
+    SUB_CATEGORIA.Value := GetConsulta('CONTASSIN', 0, 0, StrToInt(SUB_CATEGORIA.Text));
+  except
+    SUB_CATEGORIA.Value := GetConsulta('CONTASSIN', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmPlano_Contas.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if (FrmPrincipal.Config.FieldByName('PLANO_PROPRIO').AsString = 'True') and (NIVEL.Text <> 'ANALÍTICA') then
+  begin
+    Application.MessageBox('Conta não pode ser excluída', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Existe_Lancamento then
+  begin
+    Application.MessageBox('Conta não pode ser excluída. Existe Lançamento', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM TABELAS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(SUB_CATEGORIA = :SUB_CATEGORIA)');
+    IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+    IQuery.ParamByName('SUB_CATEGORIA').AsInteger := QTabela.FieldByName('TABELA_ID').AsInteger;
+    IQuery.ParamByName('TIPO_TABELA').AsString    := '4';
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM TABELAS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TABELA_ID = :ID)');
+    IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+    IQuery.ParamByName('ID').AsInteger         := QTabela.FieldByName('TABELA_ID').AsInteger;
+    IQuery.ParamByName('TIPO_TABELA').AsString := '4';
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    Set_Campos(False);
+    
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+    QContas.Close;
+end;
+
+procedure TFrmPlano_Contas.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+    QContas.Close;
+
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmPlano_Contas.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if (FrmPrincipal.Config.FieldByName('PLANO_PROPRIO').AsString = 'True') and (NIVEL.Text = 'SINTÉTICA') then
+  begin
+    Application.MessageBox('Conta não pode ser alterada', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM RAZAO');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(CONTA_DB = :CONTA) OR (CONTA_CR = :CONTA)');
+
+  IQuery.ParamByName('CONTA').AsString := COD_CONTABIL.Text;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+    COD_CONTABIL.ReadOnly := True;
+  
+  Operacao := 'Alterando';
+  ID := QTabela.FieldByName('TABELA_ID').AsInteger;
+  Botoes_Editing;
+  Habilitar(True);
+
+  Consulta.TabVisible := False;
+  
+  DESCRICAO.SetFocus;
+end;
+
+procedure TFrmPlano_Contas.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA.Text));
+  except
+    EMPRESA.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmPlano_Contas.btnGeraClick(Sender: TObject);
+var
+Grau: String;
+begin
+  try
+    Panel3.Visible := True;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM PLANO');
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('ALTER TABLE CLIENTES DISABLE TRIGGER CLIENTES_UP');
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    if FrmPrincipal.Config.FieldByName('PLANO_PROPRIO').AsString = 'False' then
+    begin
+      GravaPlano('1', 'ATIVO', 'NÃO', '');
+      GravaPlano('1.1', 'ATIVO CIRCULANTE', 'NÃO', '');
+      GravaPlano('1.1.1', 'DISPONÍVEL','NÃO','');
+      GravaPlano('1.1.1.1', 'CAIXA GERAL', 'NÃO','');
+      GravaPlano('1.1.1.2', 'BANCOS - CONTA MOVIMENTO', 'NÃO','');
+      GravaPlano('1.1.1.3', 'APLICAÇÃO DE LIQUIDEZ IMEDIATA', 'NÃO','');
+      GravaPlano('1.1.2', 'REALIZÁVEL A CURTO PRAZO', 'NÃO','');
+      GravaPlano('1.1.2.1', 'CLIENTES', 'NÃO','');
+      GravaPlano('1.2', 'REALIZÁVEL A LONGO PRAZO', 'NÃO','');
+      GravaPlano('1.3', 'ATIVO PERMANENTE', 'NÃO','');
+      GravaPlano('1.9', 'COMEPNSAÇÕES ATIVAS', 'NÃO','');
+      GravaPlano('2', 'PASSIVO', 'NÃO','');
+      GravaPlano('2.1', 'PASSIVO CIRCULANTE', 'NÃO','');
+      GravaPlano('2.1.2', 'EXIGÍVEL A CURTO PRAZO', 'NÃO','');
+      GravaPlano('2.1.2.1', 'FORNECEDORES', 'NÃO','');
+      GravaPlano('2.2', 'EXIGÍVEL A LONGO PRAZO', 'NÃO','');
+      GravaPlano('2.3', 'RESULTADO DE EXERCÍCIOS FUTUROS','NÃO','');
+      GravaPlano('2.4', 'PATRIMÔNIO LÍQUIDO','NÃO','');
+      GravaPlano('2.9', 'COMEPNSAÇÕES PASSIVAS', 'NÃO','');
+      GravaPlano('3', 'RESULTADO', 'NÃO','');
+
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM BANCOS');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+
+      QPlano.ParamByName('STATUS').AsString := 'A';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        if QPlano.FieldByName('TIPO').AsString = 'CAIXA' then
+          Grau := '1'
+        else if QPlano.FieldByName('TIPO').AsString = 'BANCO' then
+          Grau := '2'
+        else if QPlano.FieldByName('TIPO').AsString = 'APLICAÇÃO' then
+          Grau := '3';
+
+        GravaPlano('1.1.1.' + Grau + '.' + StrZero(QPlano.FieldByName('BANCO_ID').AsString, 2, 0),
+                              QPlano.FieldByName('DESCRICAO').AsString, 'SIM', 'B' +
+                              StrZero(QPlano.FieldByName('BANCO_ID').AsString, 2, 0));
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE BANCOS SET COD_CONTABIL = :COD_CONTABIL');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(BANCO_ID = :BANCO_ID)');
+
+        IQuery.ParamByName('COD_CONTABIL').AsString := '1.1.1.' + Grau + '.' + StrZero(QPlano.FieldByName('BANCO_ID').AsString, 2, 0);
+        IQuery.ParamByName('BANCO_ID').AsInteger    := QPlano.FieldByName('BANCO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+
+        Panel3.Caption := QPlano.FieldByName('DESCRICAO').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM CLIENTES');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+
+      QPlano.ParamByName('STATUS').AsString := 'A';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        GravaPlano('1.1.2.1' + Grau + '.' + StrZero(QPlano.FieldByName('CLIENTE_ID').AsString, 4, 0),
+                               Copy(QPlano.FieldByName('NOME').AsString, 1, 70), 'SIM', 'C' +
+                               StrZero(QPlano.FieldByName('CLIENTE_ID').AsString, 4, 0));
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE CLIENTES SET COD_CONTABIL = :COD_CONTABIL');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(CLIENTE_ID = :CLIENTE_ID)');
+
+        IQuery.ParamByName('COD_CONTABIL').AsString := '1.1.2.1' + Grau + '.' + StrZero(QPlano.FieldByName('CLIENTE_ID').AsString, 4, 0);
+        IQuery.ParamByName('CLIENTE_ID').AsInteger  := QPlano.FieldByName('CLIENTE_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+
+        Panel3.Caption := QPlano.FieldByName('NOME').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM FORNECEDORES');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+
+      QPlano.ParamByName('STATUS').AsString := 'A';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        GravaPlano('2.1.2.1' + Grau + '.' + StrZero(QPlano.FieldByName('FORNECEDOR_ID').AsString, 4, 0),
+                               QPlano.FieldByName('NOME').AsString, 'SIM', 'F' +
+                               StrZero(QPlano.FieldByName('FORNECEDOR_ID').AsString, 4, 0));
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE FORNECEDORES SET COD_CONTABIL = :COD_CONTABIL');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(FORNECEDOR_ID = :FORNECEDOR_ID)');
+
+        IQuery.ParamByName('COD_CONTABIL').AsString   := '2.1.2.1' + Grau + '.' + StrZero(QPlano.FieldByName('FORNECEDOR_ID').AsString, 4, 0);
+        IQuery.ParamByName('FORNECEDOR_ID').AsInteger := QPlano.FieldByName('FORNECEDOR_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+
+        Panel3.Caption := QPlano.FieldByName('NOME').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM TABELAS');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+      QPlano.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+      QPlano.ParamByName('STATUS').AsString      := 'A';
+      QPlano.ParamByName('TIPO_TABELA').AsString := '4';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        if QPlano.FieldByName('TIPO_CONTA').AsString = 'ATIVO' then
+          Grau := '1.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'ATIVO CIRCULANTE' then
+          Grau := '1.1.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'REALIZÁVEL' then
+          Grau := '1.1.2.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'REALIZ. LONGO PRAZO' then
+          Grau := '1.2.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'ATIVO PERMANENTE' then
+          Grau := '1.3.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'COMPENSAÇÕES ATIVAS' then
+          Grau := '1.9.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'PASSIVO' then
+          Grau := '2.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'PASSIVO CIRCULANTE' then
+          Grau := '2.1.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'EXIGÍVEL' then
+          Grau := '2.1.2.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'EXIG. A LONGO PRAZO' then
+          Grau := '2.2.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'RES. EXERC. FUTUROS' then
+          Grau := '2.3.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'PATRIMÔNIO LÍQUIDO' then
+          Grau := '2.4.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'COMP. PASSIVAS' then
+          Grau := '2.9.'
+        else if QPlano.FieldByName('TIPO_CONTA').AsString = 'RESULTADO' then
+          Grau := '3.';
+
+        if QPlano.FieldByName('SUB_CATEGORIA').AsInteger = 0 then
+        begin
+          GravaPlano(Grau + StrZero(QPlano.FieldByName('TABELA_ID').AsString, 4, 0),
+                                    QPlano.FieldByName('DESCRICAO').AsString, 'NÃO', '');
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('UPDATE TABELAS SET COD_CONTABIL = :COD_CONTABIL');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(TABELA_ID = :TABELA_ID)');
+          IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+          IQuery.ParamByName('COD_CONTABIL').AsString := Grau + StrZero(QPlano.FieldByName('TABELA_ID').AsString, 4, 0);
+          IQuery.ParamByName('TABELA_ID').AsInteger   := QPlano.FieldByName('TABELA_ID').AsInteger;
+          IQuery.ParamByName('TIPO_TABELA').AsString  := '4';
+
+          IQuery.Prepare;
+          IQuery.ExecSql;
+
+
+        end
+        else
+        begin
+          GravaPlano(Grau + StrZero(QPlano.FieldByName('SUB_CATEGORIA').AsString, 4, 0) + '.' +
+                            StrZero(QPlano.FieldByName('TABELA_ID').AsString, 4, 0),
+                                    QPlano.FieldByName('DESCRICAO').AsString, 'SIM', 'A' +
+                                    StrZero(QPlano.FieldByName('TABELA_ID').AsString, 4, 0));
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('UPDATE TABELAS SET COD_CONTABIL = :COD_CONTABIL');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(TABELA_ID = :TABELA_ID)');
+          IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+          IQuery.ParamByName('COD_CONTABIL').AsString := Grau + StrZero(QPlano.FieldByName('SUB_CATEGORIA').AsString, 4, 0) + '.' + StrZero(QPlano.FieldByName('TABELA_ID').AsString, 4, 0);
+          IQuery.ParamByName('TABELA_ID').AsInteger   := QPlano.FieldByName('TABELA_ID').AsInteger;
+          IQuery.ParamByName('TIPO_TABELA').AsString  := '4';
+
+          IQuery.Prepare;
+          IQuery.ExecSql;
+
+
+        end;
+
+        Panel3.Caption := QPlano.FieldByName('DESCRICAO').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+    end
+    else
+    begin
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM BANCOS');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+
+      QPlano.ParamByName('STATUS').AsString := 'A';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        if QPlano.FieldByName('COD_CONTABIL').AsString <> '' then
+          GravaPlano(QPlano.FieldByName('COD_CONTABIL').AsString,
+                     QPlano.FieldByName('DESCRICAO').AsString, 'SIM', 'B' +
+                     StrZero(QPlano.FieldByName('BANCO_ID').AsString, 2, 0));
+
+        Panel3.Caption := QPlano.FieldByName('DESCRICAO').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM CLIENTES');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+      QPlano.Sql.Add('AND (TIPO_CLIENTE = :TIPO_CLIENTE)');
+
+      QPlano.ParamByName('STATUS').AsString       := 'A';
+      QPlano.ParamByName('TIPO_CLIENTE').AsString := 'PESSOA JURÍDICA';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        if QPlano.FieldByName('COD_CONTABIL').AsString <> '' then
+          GravaPlano(QPlano.FieldByName('COD_CONTABIL').AsString,
+                     Copy(QPlano.FieldByName('NOME').AsString, 1, 70), 'SIM', 'C' +
+                     StrZero(QPlano.FieldByName('CLIENTE_ID').AsString, 4, 0));
+
+        Panel3.Caption := QPlano.FieldByName('NOME').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM FORNECEDORES');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+
+      QPlano.ParamByName('STATUS').AsString := 'A';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        if QPlano.FieldByName('COD_CONTABIL').AsString <> '' then
+          GravaPlano(QPlano.FieldByName('COD_CONTABIL').AsString,
+                     QPlano.FieldByName('NOME').AsString, 'SIM', 'F' +
+                     StrZero(QPlano.FieldByName('FORNECEDOR_ID').AsString, 4, 0));
+
+        Panel3.Caption := QPlano.FieldByName('NOME').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+
+      QPlano.Sql.Clear;
+      QPlano.Sql.Add('SELECT * FROM TABELAS');
+      QPlano.Sql.Add('WHERE');
+      QPlano.Sql.Add('(STATUS = :STATUS)');
+      QPlano.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+      QPlano.ParamByName('STATUS').AsString      := 'A';
+      QPlano.ParamByName('TIPO_TABELA').AsString := '4';
+
+      QPlano.Prepare;
+      QPlano.Open;
+
+      QPlano.First;
+      while not QPlano.Eof do
+      begin
+        if QPlano.FieldByName('COD_CONTABIL').AsString <> '' then
+        begin
+          if QPlano.FieldByName('NIVEL').AsString = 'ANALÍTICA' then
+            GravaPlano(QPlano.FieldByName('COD_CONTABIL').AsString,
+                       QPlano.FieldByName('DESCRICAO').AsString, 'SIM', 'A' +
+                       StrZero(QPlano.FieldByName('TABELA_ID').AsString, 4, 0))
+          else
+            GravaPlano(QPlano.FieldByName('COD_CONTABIL').AsString,
+                       QPlano.FieldByName('DESCRICAO').AsString, 'NÃO', '');
+        end;
+
+        Panel3.Caption := QPlano.FieldByName('DESCRICAO').AsString;
+
+        Application.ProcessMessages;
+        QPlano.Next;
+      end;
+    end;
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('ALTER TABLE CLIENTES ENABLE TRIGGER CLIENTES_UP');
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+    QPlano.Sql.Clear;
+    QPlano.Sql.Add('SELECT * FROM PLANO');
+    QPlano.Sql.Add('ORDER BY CODIGO');
+
+    QPlano.Prepare;
+    QPlano.Open;
+
+    Plano.PreviewModal;
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+  finally
+    Panel3.Visible := False;
+    Panel3.Caption := 'Aguarde...';
+  end;
+end;
+
+procedure TFrmPlano_Contas.btnImportaClick(Sender: TObject);
+var
+F1: TextFile;
+S, Cod_Plano: String;
+Colunas: TStringList;
+ID: Integer;
+begin
+  FrmPrincipal.OpenDialog1.Title      := 'Selecione o Arquivo';
+  FrmPrincipal.OpenDialog1.DefaultExt := '*.Txt';
+  FrmPrincipal.OpenDialog1.Filter     := 'Arquivos Txt (*.Txt)|*.Txt|Arquivos Csv (*.Csv)|*.Txt|Todos os Arquivos (*.*)|*.*';
+  FrmPrincipal.OpenDialog1.InitialDir := ExtractFilePath(ParamStr(0));
+
+  if Application.MessageBox('Plano de Contas Padrão ANS?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    if FrmPrincipal.OpenDialog1.Execute then
+    begin
+      try
+        Panel3.Visible := True;
+{
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('DELETE FROM TABELAS');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(TIPO_TABELA = :TIPO_TABELA)');
+
+        IQuery.ParamByName('TIPO_TABELA').AsString := '4';
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+}
+        AssignFile(F1, FrmPrincipal.OpenDialog1.FileName);
+        Reset(F1);
+
+        QTabela.Last;
+        
+        ID := (QTabela.FieldByName('TABELA_ID').AsInteger + 1);
+
+        while not Eof(F1) do
+        begin
+          ReadLn(F1, S);
+
+          try
+            Colunas := TStringList.Create;
+
+            Colunas.Text := StringReplace(S, ';', #13, [rfReplaceAll]);
+
+            Panel3.Caption := Colunas.Strings[1];
+
+            Application.ProcessMessages;
+
+            try
+              if length(Colunas.Strings[0]) <= 5 then
+                Cod_Plano := Colunas.Strings[0]
+              else if length(Colunas.Strings[0]) = 6 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 1)
+              else if length(Colunas.Strings[0]) = 7 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 2)
+              else if length(Colunas.Strings[0]) = 8 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 3)
+              else if length(Colunas.Strings[0]) = 9 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 4)
+              else if length(Colunas.Strings[0]) = 10 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 4) + '.' + Copy(Colunas.Strings[0], 10, 1)
+              else if length(Colunas.Strings[0]) = 11 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 4) + '.' + Copy(Colunas.Strings[0], 10, 2)
+              else if length(Colunas.Strings[0]) = 12 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 4) + '.' + Copy(Colunas.Strings[0], 10, 3)
+              else if length(Colunas.Strings[0]) = 13 then
+                Cod_Plano := Copy(Colunas.Strings[0], 1, 5) + '.' + Copy(Colunas.Strings[0], 6, 4) + '.' + Copy(Colunas.Strings[0], 10, 4);
+
+              IQuery.Sql.Clear;
+              IQuery.Sql.Add('SELECT * FROM TABELAS');
+              IQuery.Sql.Add('WHERE');
+              IQuery.Sql.Add('(COD_CONTABIL = :COD_CONTABIL)');
+
+              IQuery.ParamByName('COD_CONTABIL').AsString := Cod_Plano;
+
+              IQuery.Prepare;
+              IQuery.Open;
+
+              if IQuery.IsEmpty then
+              begin
+                IQuery.Sql.Clear;
+                IQuery.Sql.Add('INSERT INTO TABELAS( ' +
+                               'TABELA_ID,    DESCRICAO,     NIVEL,        SUB_CATEGORIA, ' +
+                               'TIPO_CONTA,   COD_CONTABIL,  TIPO_TABELA,  STATUS) VALUES(' +
+                               ':TABELA_ID,   :DESCRICAO,    :NIVEL,       :SUB_CATEGORIA, ' +
+                               ':TIPO_CONTA,  :COD_CONTABIL, :TIPO_TABELA, :STATUS)');
+
+                IQuery.ParamByName('TABELA_ID').AsInteger     := ID;
+                IQuery.ParamByName('DESCRICAO').AsString      := Copy(Colunas.Strings[1], 1, 70);
+                IQuery.ParamByName('NIVEL').AsString          := 'SINTÉTICA';
+                IQuery.ParamByName('SUB_CATEGORIA').AsInteger := 0;
+                IQuery.ParamByName('TIPO_CONTA').AsString     := '';
+                IQuery.ParamByName('COD_CONTABIL').AsString   := Cod_Plano;
+                IQuery.ParamByName('TIPO_TABELA').AsString    := '4';
+                IQuery.ParamByName('STATUS').AsString         := 'A';
+
+                IQuery.Prepare;
+                IQuery.ExecSql;
+
+
+
+                Inc(ID);
+              end
+              else
+              begin
+                IQuery.Sql.Clear;
+                IQuery.Sql.Add('UPDATE TABELAS SET DESCRICAO = :DESCRICAO');
+                IQuery.Sql.Add('WHERE');
+                IQuery.Sql.Add('(COD_CONTABIL = :COD_CONTABIL)');
+
+                IQuery.ParamByName('DESCRICAO').AsString    := Copy(Colunas.Strings[1], 1, 70);
+                IQuery.ParamByName('COD_CONTABIL').AsString := Cod_Plano;
+
+                IQuery.Prepare;
+                IQuery.ExecSql;
+
+
+              end;
+            except
+
+            end;
+          finally
+            Colunas.Free;
+          end;
+
+          Application.ProcessMessages;
+        end;
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('SET GENERATOR GEN_CONTAS TO ' + IntToStr(ID));
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+      finally
+        CloseFile(F1);
+        Panel3.Visible := False;
+        Panel3.Caption := 'Aguarde...';
+      end;
+    end;
+  end
+  else
+  begin
+    if FrmPrincipal.OpenDialog1.Execute then
+    begin
+      try
+        Panel3.Visible := True;
+
+        AssignFile(F1, FrmPrincipal.OpenDialog1.FileName);
+        Reset(F1);
+
+        while not Eof(F1) do
+        begin
+          ReadLn(F1, S);
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('INSERT INTO TABELAS( ' +
+                         'TABELA_ID,    DESCRICAO,     NIVEL,    SUB_CATEGORIA, ' +
+                         'TIPO_CONTA,   COD_CONTABIL,  TIPO_TABELA) VALUES(' +
+                         ':TABELA_ID,   :DESCRICAO,    :NIVEL,   :SUB_CATEGORIA, ' +
+                         ':TIPO_CONTA,  :COD_CONTABIL, :TIPO_TABELA)');
+
+          IQuery.ParamByName('TABELA_ID').AsInteger     := StrToInt(Alltrim(SemMascara(Copy(S, 1, 6))));
+          IQuery.ParamByName('DESCRICAO').AsString      := Alltrim(Copy(S, 22, 70));
+          IQuery.ParamByName('NIVEL').AsString          := Alltrim(Copy(S, 94, 15));
+          IQuery.ParamByName('SUB_CATEGORIA').AsInteger := StrToInt(Alltrim(SemMascara(Copy(S, 112, 6))));
+          IQuery.ParamByName('TIPO_CONTA').AsString     := Alltrim(Copy(S, 120, 16));
+          IQuery.ParamByName('COD_CONTABIL').AsString   := Alltrim(Copy(S, 225, 20));
+          IQuery.ParamByName('TIPO_TABELA').AsString    := '4';
+
+          IQuery.Prepare;
+          IQuery.ExecSql;
+
+
+
+          Panel3.Caption := Alltrim(Copy(S, 22, 70));
+
+          Application.ProcessMessages;
+        end;
+      finally
+        CloseFile(F1);
+        Panel3.Visible := False;
+        Panel3.Caption := 'Aguarde...';
+      end;
+    end;
+  end;
+
+  if FrmPrincipal.Config.FieldByName('MOSTRAR_CADASTROS').AsString = 'True' then
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')';
+  end
+  else
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (TABELA_ID IS NULL) AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (TABELA_ID IS NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')';
+  end;
+
+  if  FrmPrincipal.Config.FieldByName('FILTRO_PLANO').AsString = 'True' Then
+    CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ') AND (ESPECIAL = ' + #39 + 'SIM' + #39 + ')';
+
+  CmdOrderBy := 'ORDER BY TABELA_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmPlano_Contas.btnImprimeClick(Sender: TObject);
+begin
+  QPlano.Sql.Clear;
+  QPlano.Sql.Add('SELECT * FROM PLANO');
+  QPlano.Sql.Add('ORDER BY CODIGO');
+
+  QPlano.Prepare;
+  QPlano.Open;
+
+  if QPlano.IsEmpty then
+    Application.MessageBox('Não há dados para serem impressos', PChar(Msg_Title), mb_IconInformation)
+  else
+    Plano.PreviewModal;
+end;
+
+procedure TFrmPlano_Contas.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  QContas.Close;
+
+  Consulta.TabVisible := False;
+  
+  DESCRICAO.SetFocus;
+end;
+
+procedure TFrmPlano_Contas.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmPlano_Contas.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+begin
+  Condicao := GetPesquisa('CONTAS');
+
+  if Condicao <> '' then
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := Condicao
+    else
+      CmdSelectNull := Condicao + ' AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')';
+  end;
+
+  if  FrmPrincipal.Config.FieldByName('FILTRO_PLANO').AsString = 'True' Then
+    CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ') AND (ESPECIAL = ' + #39 + 'SIM' + #39 + ')';
+
+  CmdOrderBy := 'ORDER BY TABELA_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  Set_Campos(False);
+  
+  Botoes_Normal;
+end;
+
+procedure TFrmPlano_Contas.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmPlano_Contas.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmPlano_Contas.btnSaveClick(Sender: TObject);
+begin
+  DetailSearch('');
+
+  Dt_Alteracao.Date := Date;
+
+  if Validacao then
+  begin
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdSelectNull := 'WHERE (DESCRICAO = :DESCRICAO) AND (STATUS = :STATUS) AND (TIPO_TABELA = :TIPO_TABELA)';
+      CmdOrderBy   := 'ORDER BY TABELA_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.ParamByName('DESCRICAO').AsString   := DESCRICAO.Text;
+      QTabela.ParamByName('STATUS').AsString      := 'A';
+      QTabela.ParamByName('TIPO_TABELA').AsString := '4';
+
+      QTabela.Prepare;
+      QTabela.Open;
+      
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    if FrmPrincipal.Config.FieldByName('PLANO_PROPRIO').AsString = 'False' then
+      COD_CONTABIL.ReadOnly := True
+    else
+      COD_CONTABIL.ReadOnly := False;
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+      QContas.Close;
+
+    Habilitar(False);
+    Botoes_Normal;
+    Operacao := '';
+    Consulta.TabVisible := True;
+  end;
+end;
+
+procedure TFrmPlano_Contas.Button1Click(Sender: TObject);
+var
+Sub_Conta, Codigo: String;
+begin
+  if not InputQuery('Importação de Contas', 'Sub-Conta:', Sub_Conta) then
+    exit;
+
+  if not InputQuery('Importação de Contas', 'Codigo:', Codigo) then
+    exit;
+
+  Q2011.Sql.Clear;
+  Q2011.Sql.Add('SELECT * FROM TABELAS');
+  Q2011.Sql.Add('WHERE');
+  Q2011.Sql.Add('(TIPO_TABELA = :TIPO_TABELA)');
+  Q2011.Sql.Add('AND (NIVEL = :NIVEL)');
+  Q2011.Sql.Add('AND (COD_CONTABIL LIKE :COD_CONTABIL)');
+  Q2011.Sql.Add('ORDER BY COD_CONTABIL');
+
+  Q2011.ParamByName('TIPO_TABELA').AsString  := '4';
+  Q2011.ParamByName('NIVEL').AsString        := 'ANALÍTICA';
+  Q2011.ParamByName('COD_CONTABIL').AsString := Codigo + '%';
+
+  Q2011.Prepare;
+  Q2011.Open;
+
+  Q2011.First;
+  while not Q2011.Eof do
+  begin
+    btnInsertClick(Sender);
+
+    DESCRICAO.Text     := Q2011.FieldByName('DESCRICAO').AsString;
+    NIVEL.Text         := 'ANALÍTICA';
+    SUB_CATEGORIA.Text := Sub_Conta;
+
+    SUB_CATEGORIAExit(Sender);
+
+    TIPO_CONTA.Text    := 'ATIVO CIRCULANTE';
+    TIPO_TABELA.Text   := '4';
+
+    btnSaveClick(Sender);
+
+    Application.ProcessMessages;
+    Q2011.Next;
+  end;
+end;
+
+procedure TFrmPlano_Contas.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmPlano_Contas.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F3) and (QTabela.FieldByName('STATUS').AsString = 'A')  and (not Existe_Lancamento)   then
+  begin
+    ID := QTabela.FieldByName('TABELA_ID').AsInteger;
+    
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE TABELAS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(SUB_CATEGORIA = :SUB_CATEGORIA)');
+    IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+    IQuery.ParamByName('STATUS').AsString         := 'D';
+    IQuery.ParamByName('SUB_CATEGORIA').AsInteger := QTabela.FieldByName('TABELA_ID').AsInteger;
+    IQuery.ParamByName('TIPO_TABELA').AsString    := '4';
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE TABELAS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TABELA_ID = :TABELA_ID)');
+    IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+    IQuery.ParamByName('STATUS').AsString      := 'D';
+    IQuery.ParamByName('TABELA_ID').AsInteger  := QTabela.FieldByName('TABELA_ID').AsInteger;
+    IQuery.ParamByName('TIPO_TABELA').AsString := '4';
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    QTabela.Locate('TABELA_ID', ID, [loCaseInsensitive]);
+  end;
+
+  if (Key = Vk_F4) and (QTabela.FieldByName('STATUS').AsString = 'D')  then
+  begin
+    ID := QTabela.FieldByName('TABELA_ID').AsInteger;
+
+   
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE TABELAS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(SUB_CATEGORIA = :SUB_CATEGORIA)');
+    IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+    IQuery.ParamByName('STATUS').AsString         := 'A';
+    IQuery.ParamByName('SUB_CATEGORIA').AsInteger := QTabela.FieldByName('TABELA_ID').AsInteger;
+    IQuery.ParamByName('TIPO_TABELA').AsString    := '4';
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE TABELAS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TABELA_ID = :TABELA_ID)');
+    IQuery.Sql.Add('AND (TIPO_TABELA = :TIPO_TABELA)');
+
+    IQuery.ParamByName('STATUS').AsString      := 'A';
+    IQuery.ParamByName('TABELA_ID').AsInteger  := QTabela.FieldByName('TABELA_ID').AsInteger;
+    IQuery.ParamByName('TIPO_TABELA').AsString := '4';
+    
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    QTabela.Locate('TABELA_ID', ID, [loCaseInsensitive]);
+
+  end;
+end;
+
+procedure TFrmPlano_Contas.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmPlano_Contas.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmPlano_Contas.DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+    
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmPlano_Contas.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmPlano_Contas.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmPlano_Contas.FormCreate(Sender: TObject);
+begin
+
+  if FrmData.QAcesso.FieldByName('LIBERA').AsString = 'SIM' then
+    BtnGera.Enable   := True
+  Else
+    BtnGera.Enable   := False;
+
+
+
+  DBGrid1.Columns[0].Width := 50;
+  DBGrid1.Columns[1].Width := 267;
+  DBGrid1.Columns[2].Width := 105;
+  DBGrid1.Columns[3].Width := 105;
+  DBGrid1.Columns[4].Width := 105;
+  DBGrid1.Columns[5].Width := 39;
+
+  CmdSelect := QTabela.Sql.Text;
+
+  if FrmPrincipal.Config.FieldByName('PLANO_PROPRIO').AsString = 'True' then
+  begin
+    COD_CONTABIL.ReadOnly := False;
+
+    TIPO_CONTA.Items.Clear;
+
+    TIPO_CONTA.Items.Add('ATIVO CIRCULANTE');
+    TIPO_CONTA.Items.Add('REALIZ. A L. PRAZO');
+    TIPO_CONTA.Items.Add('ATIVO PERMANENTE');
+    TIPO_CONTA.Items.Add('COMP. DO ATIVO');
+    TIPO_CONTA.Items.Add('PASSIVO CIRCULANTE');
+    TIPO_CONTA.Items.Add('EXIGÍVEL A L. PRAZO');
+    TIPO_CONTA.Items.Add('RES. EXERC. FUTUROS');
+    TIPO_CONTA.Items.Add('PATRIMÔNIO LÍQUIDO');
+    TIPO_CONTA.Items.Add('COMP. DO PASSIVO');
+    TIPO_CONTA.Items.Add('RECEITA');
+    TIPO_CONTA.Items.Add('DESPESA');
+    TIPO_CONTA.Items.Add('APUR.  RESULTADO');
+  end
+  else
+    COD_CONTABIL.ReadOnly := True;
+
+  if FrmPrincipal.Config.FieldByName('MOSTRAR_CADASTROS').AsString = 'True' then
+  begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True'  then
+      CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')';
+  end
+  else
+  begin
+    IF  FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' then
+      CmdSelectNull := 'WHERE (TABELA_ID IS NULL) AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (TABELA_ID IS NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ')';
+  end;
+
+  if  FrmPrincipal.Config.FieldByName('FILTRO_PLANO').AsString = 'True' Then
+    CmdSelectNull := 'WHERE (TABELA_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ') AND (TIPO_TABELA = ' + #39 + '4' + #39 + ') AND (ESPECIAL = ' + #39 + 'SIM' + #39 + ')';
+
+  CmdOrderBy := 'ORDER BY TABELA_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+
+  QTabela.Prepare;
+  QTabela.Open;
+  Consulta.Show;
+end;
+
+procedure TFrmPlano_Contas.FormShow(Sender: TObject);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT DESCRICAO FROM TABELAS WHERE (TIPO_TABELA = ''R'') ORDER BY DESCRICAO');
+  IQuery.Prepare;
+  IQuery.open;
+
+  Grupo_dre.Items.Clear;
+
+  IQuery.First;
+  while not IQuery.eof do
+  Begin
+   Grupo_Dre.Items.Add(IQuery.FieldByName('DESCRICAO').AsString);
+   IQuery.Next;
+  End;
+
+
+  DBGrid1.SetFocus;
+end;
+
+end.

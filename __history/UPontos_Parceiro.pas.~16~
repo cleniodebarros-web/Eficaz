@@ -1,0 +1,333 @@
+unit UPontos_Parceiro;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DBTables, DB, IBCustomDataSet, IBQuery, Buttons, ExtCtrls,
+  rxCurrEdit, Mask, rxToolEdit, QRCtrls, QuickRpt, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmPontos_Parceiro = class(TForm)
+    Dtmen: TDateEdit;
+    Label1: TLabel;
+    Dtmai: TDateEdit;
+    Label2: TLabel;
+    Vendedor: TCurrencyEdit;
+    btnVendedor: TSpeedButton;
+    Bevel1: TBevel;
+    btnRetorna: TBitBtn;
+    DataVendedor: TDataSource;
+    btnExecuta: TBitBtn;
+    Rel_Vendas_Vendedor: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel7: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel13: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRLabel4: TQRLabel;
+    DetailBand1: TQRBand;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape4: TQRShape;
+    QRLabel20: TQRLabel;
+    QRExpr3: TQRExpr;
+    QRGroup1: TQRGroup;
+    QRDBText3: TQRDBText;
+    QRBand2: TQRBand;
+    QRShape3: TQRShape;
+    QRLabel2: TQRLabel;
+    QRExpr6: TQRExpr;
+    QRGroup2: TQRGroup;
+    QRDBText9: TQRDBText;
+    QRBand3: TQRBand;
+    QRShape5: TQRShape;
+    QRExpr7: TQRExpr;
+    QRLabel1: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRel: TFDQuery;
+    QVendedor: TFDQuery;
+    Chk_Sintetico: TCheckBox;
+    Rel_Vendas_Sintetico: TQuickRep;
+    QRBand4: TQRBand;
+    QRSysData3: TQRSysData;
+    QRLabel12: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel14: TQRLabel;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRLabel21: TQRLabel;
+    QRGroup3: TQRGroup;
+    QRDBText11: TQRDBText;
+    QRBand5: TQRBand;
+    QRDBText12: TQRDBText;
+    QRDBText15: TQRDBText;
+    GrupoFuncionarioRodape: TQRBand;
+    QRExpr10: TQRExpr;
+    QRShape8: TQRShape;
+    QRBand6: TQRBand;
+    QRExpr13: TQRExpr;
+    QRLabel15: TQRLabel;
+    QRShape9: TQRShape;
+    QRLabel17: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRDBText5: TQRDBText;
+    QRLabel5: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRLabel8: TQRLabel;
+    QRDBText6: TQRDBText;
+    QRExpr4: TQRExpr;
+    QRExpr5: TQRExpr;
+    QRExpr8: TQRExpr;
+    QRLabel16: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRDBText13: TQRDBText;
+    QRExpr9: TQRExpr;
+    QRExpr11: TQRExpr;
+    QRExpr12: TQRExpr;
+    QRExpr14: TQRExpr;
+    QRExpr15: TQRExpr;
+    QRDBText14: TQRDBText;
+    QRLabel10: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBText1: TQRDBText;
+    QRExpr16: TQRExpr;
+    QRExpr17: TQRExpr;
+    QRExpr18: TQRExpr;
+    procedure btnVendedorClick(Sender: TObject);
+    procedure VendedorKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure btnRetornaClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPontos_Parceiro: TFrmPontos_Parceiro;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta;
+
+{$R *.dfm}
+
+procedure TFrmPontos_Parceiro.btnExecutaClick(Sender: TObject);
+begin
+// 125, 327
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT DT_TRANS, VALOR ,CREDITO_PARCEIRO , DEBITO_PARCEIRO, HIST, NOME, LEGENDA');
+  QRel.Sql.Add('FROM(');
+
+  QRel.Sql.Add('SELECT DT_TRANS, VALOR , PARCEIRO_PTS CREDITO_PARCEIRO, 0 DEBITO_PARCEIRO, SUBSTRING( TRANSACOES.historico FROM 7 for 40) as HIST, FUNCIONARIOS.NOME, FINALIZADORAS.LEGENDA');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('INNER JOIN FUNCIONARIOS');
+  QRel.Sql.Add('ON (FUNCIONARIOS.FUNCIONARIO_ID = TRANSACOES.PARCEIRO_ID)');
+  QRel.Sql.Add('LEFT JOIN FINALIZADORAS');
+  QRel.Sql.Add('ON (FINALIZADORAS.FINALIZADORA_ID = TRANSACOES.FINALIZADORA_ID)');
+  QRel.Sql.Add('LEFT JOIN COMPL_NFISCAL');
+  QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = COMPL_NFISCAL.TRANSACAO_ID)');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_VDA)');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DP_VDA)');
+
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  end
+  else
+  begin
+    if  FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+    begin
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+    QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    end;
+  end;
+
+  QRel.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add('AND (TIPO_VENDA = :TIPO_VENDA)');
+  QRel.Sql.Add('AND (TRANSACOES.MODELO <> :MODELO)');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+  QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS_NFCE))');
+
+
+  if StrToInt(Vendedor.Text) > 0 then
+  begin
+    QRel.Sql.Add('AND (TRANSACOES.PARCEIRO_ID = :VENDEDOR_ID)');
+    QRel.ParamByName('VENDEDOR_ID').AsInteger := StrToInt(Vendedor.Text);
+  end
+  else
+    QRel.Sql.Add('AND (TRANSACOES.PARCEIRO_ID > 0)');
+
+  QRel.Sql.Add('UNION ALL');
+  QRel.Sql.Add('SELECT DT_TRANS, VALOR , PARCEIRO_PTS CREDITO_PARCEIRO, (VALOR * -1) DEBITO_PARCEIRO  ,  SUBSTRING( TRANSACOES.historico FROM 0 for 40) as HIST, FUNCIONARIOS.NOME, ''Dinheiro'' LEGENDA');
+  QRel.Sql.Add('FROM TRANSACOES');
+  QRel.Sql.Add('INNER JOIN FUNCIONARIOS');
+  QRel.Sql.Add('ON (FUNCIONARIOS.FUNCIONARIO_ID = TRANSACOES.PARCEIRO_ID)');
+  QRel.Sql.Add('WHERE (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+  QRel.Sql.Add('AND (TRANSACOES.CONDUTA = ''05'')');
+  QRel.Sql.Add('AND (TRANSACOES.DEPTO = ''05'')');
+  QRel.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+  QRel.Sql.Add(') AS TESTE');
+  QRel.Sql.Add('ORDER BY NOME, LEGENDA, DT_TRANS');
+
+  if Chk_Sintetico.Checked then
+  begin
+    QRel.Sql.Clear;
+
+    QRel.Sql.Add('SELECT FUNCIONARIOS.NOME, FINALIZADORAS.LEGENDA, Sum(VR_ACRESCIMO) VR_ACRESCIMO, Sum(VR_DESCONTO) VR_DESCONTO, SUM(TRANSACOES.VALOR) VALOR, SUM(PARCEIRO_PTS) PARCEIRO_PTS');
+    QRel.Sql.Add('FROM TRANSACOES');
+    QRel.Sql.Add('INNER JOIN FUNCIONARIOS');
+    QRel.Sql.Add('ON (FUNCIONARIOS.FUNCIONARIO_ID = TRANSACOES.PARCEIRO_ID)');
+    QRel.Sql.Add('LEFT JOIN FINALIZADORAS');
+    QRel.Sql.Add('ON (FINALIZADORAS.FINALIZADORA_ID = TRANSACOES.FINALIZADORA_ID)');
+    QRel.Sql.Add('LEFT JOIN COMPL_NFISCAL');
+    QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = COMPL_NFISCAL.TRANSACAO_ID)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+    QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CD_VDA)');
+    QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DP_VDA)');
+
+    if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+    begin
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+      QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    end
+    else
+    begin
+      if  FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+      begin
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+      QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      end;
+    end;
+
+
+    QRel.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TIPO_VENDA = :TIPO_VENDA)');
+    QRel.Sql.Add('AND (TRANSACOES.MODELO <> :MODELO)');
+    QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+    QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS_NFCE))');
+
+
+    if StrToInt(Vendedor.Text) > 0 then
+    begin
+      QRel.Sql.Add('AND (TRANSACOES.PARCEIRO_ID = :VENDEDOR_ID)');
+      QRel.ParamByName('VENDEDOR_ID').AsInteger := StrToInt(Vendedor.Text);
+    end
+    else
+      QRel.Sql.Add('AND (TRANSACOES.PARCEIRO_ID > 0)');
+
+    QRel.Sql.Add('GROUP BY FUNCIONARIOS.NOME, FINALIZADORAS.LEGENDA');
+    //QRel.Sql.Add('ORDER BY FUNCIONARIOS.NOME, FINALIZADORAS.LEGENDA, TRANSACOES.DT_TRANS');
+
+  end;
+
+  QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QRel.ParamByName('CD_VDA').AsString       := '01';
+  QRel.ParamByName('DP_VDA').AsString       := '07';
+
+  QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+  QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+  QRel.ParamByName('TIPO_VENDA').AsString   := 'VENDA';
+  QRel.ParamByName('MODELO').AsString       := '99';
+
+  QRel.Prepare;
+  QRel.Open;
+
+  //if Chk_reduzir_historico.Checked then
+     QRDBText4.DataField := 'HIST';
+ // else
+ //    QRDBText4.DataField := 'HISTORICO';
+
+
+  QRLabel13.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+  QRLabel18.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+  if QRel.IsEmpty then
+    Application.MessageBox('Não há dados para serem impressos', PChar(Msg_Title), mb_IconInformation)
+  else
+    if Chk_Sintetico.Checked then
+      Rel_Vendas_Sintetico.PreviewModal
+    else
+      Rel_Vendas_Vendedor.PreviewModal;
+
+end;
+
+procedure TFrmPontos_Parceiro.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmPontos_Parceiro.btnVendedorClick(Sender: TObject);
+begin
+  try
+    Vendedor.Value := GetConsulta('PESSOAL', 0, 0, StrToInt(Vendedor.Text));
+  except
+    Vendedor.Value := GetConsulta('PESSOAL', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmPontos_Parceiro.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmPontos_Parceiro.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   // Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmPontos_Parceiro.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmPontos_Parceiro.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+end;
+
+procedure TFrmPontos_Parceiro.VendedorKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Vendedor) then
+    btnVendedorClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+end.

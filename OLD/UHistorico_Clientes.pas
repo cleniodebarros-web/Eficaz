@@ -1,0 +1,819 @@
+unit UHistorico_Clientes;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, Grids, DBGrids, ComCtrls, DB, IBCustomDataSet, IBQuery, Buttons,
+  StdCtrls, Mask, rxToolEdit, rxCurrEdit, DBCtrls, ExtCtrls, QuickRpt, QRCtrls,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmHistorico_Clientes = class(TForm)
+    Panel2: TPanel;
+    Label1: TLabel;
+    btnCliente: TSpeedButton;
+    DBText1: TDBText;
+    Cliente: TCurrencyEdit;
+    Panel1: TPanel;
+    DataCliente: TDataSource;
+    Label3: TLabel;
+    Label5: TLabel;
+    Label8: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label16: TLabel;
+    Label4: TLabel;
+    Label7: TLabel;
+    Label9: TLabel;
+    Label15: TLabel;
+    Label6: TLabel;
+    Label12: TLabel;
+    PageControl1: TPageControl;
+    TabSheet1: TTabSheet;
+    DBGrid1: TDBGrid;
+    TabSheet2: TTabSheet;
+    DBGrid2: TDBGrid;
+    TabSheet3: TTabSheet;
+    DBGrid3: TDBGrid;
+    DataCompras: TDataSource;
+    DataItens: TDataSource;
+    DataParcelas: TDataSource;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Label2: TLabel;
+    Label17: TLabel;
+    Rel_Historico: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel7: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel10: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRLabel9: TQRLabel;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRSubDetail1: TQRSubDetail;
+    QRDBText3: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRBand1: TQRBand;
+    QRLabel1: TQRLabel;
+    btnImprimir: TBitBtn;
+    QRShape3: TQRShape;
+    QRLabel2: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRShape4: TQRShape;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRBand2: TQRBand;
+    QRLabel11: TQRLabel;
+    QRExpr1: TQRExpr;
+    QRLabel13: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel18: TQRLabel;
+    QRShape5: TQRShape;
+    QRDBText5: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRShape6: TQRShape;
+    QRLabel19: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRLabel20: TQRLabel;
+    QRDBText18: TQRDBText;
+    QRMemo2: TQRMemo;
+    Label18: TLabel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRDBText19: TQRDBText;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel30: TQRLabel;
+    QRBand3: TQRBand;
+    QRSysData3: TQRSysData;
+    QRExpr2: TQRExpr;
+    QRLabel31: TQRLabel;
+    Sintetico: TQuickRep;
+    QRBand4: TQRBand;
+    QRDBText20: TQRDBText;
+    QRSysData4: TQRSysData;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRShape7: TQRShape;
+    QRShape8: TQRShape;
+    QRLabel34: TQRLabel;
+    QRSysData5: TQRSysData;
+    QRLabel35: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRDBText21: TQRDBText;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRBand5: TQRBand;
+    QRDBText22: TQRDBText;
+    QRDBText23: TQRDBText;
+    QRDBText24: TQRDBText;
+    QRDBText25: TQRDBText;
+    QRBand6: TQRBand;
+    QRExpr3: TQRExpr;
+    QRLabel37: TQRLabel;
+    QCliente: TFDQuery;
+    QCompras: TFDQuery;
+    QItens: TFDQuery;
+    QSintetico: TFDQuery;
+    QVencimento: TFDQuery;
+    QRel: TFDQuery;
+    QParcelas: TFDQuery;
+    HISTORICO: TQuickRep;
+    QRBand7: TQRBand;
+    QRDBText26: TQRDBText;
+    QRSysData6: TQRSysData;
+    QRLabel38: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    QRLabel43: TQRLabel;
+    QRSysData7: TQRSysData;
+    QRLabel44: TQRLabel;
+    QRLabel45: TQRLabel;
+    QRLabel47: TQRLabel;
+    QRLabel48: TQRLabel;
+    QRLabel49: TQRLabel;
+    QRLabel50: TQRLabel;
+    QRLabel51: TQRLabel;
+    QRLabel52: TQRLabel;
+    QRBand8: TQRBand;
+    QRDBText28: TQRDBText;
+    QRDBText29: TQRDBText;
+    QRDBText30: TQRDBText;
+    QRDBText33: TQRDBText;
+    QRDBText36: TQRDBText;
+    SummaryBand1: TQRBand;
+    QRGroup1: TQRGroup;
+    QRDBText38: TQRDBText;
+    QRBand9: TQRBand;
+    QRExpr5: TQRExpr;
+    QRLabel56: TQRLabel;
+    table_historico: TFDMemTable;
+    table_historiconome: TStringField;
+    table_historiconum_doc: TStringField;
+    table_historicodt_trans: TDateField;
+    table_historicovalor: TFloatField;
+    table_historicodt_vencimento: TDateField;
+    table_historicoparcela: TStringField;
+    table_historicodt_pagamento: TDateField;
+    table_historicotransacao_id: TIntegerField;
+    table_historicoValor_parcela: TFloatField;
+    table_historicovalor_pago: TFloatField;
+    QRDBText31: TQRDBText;
+    QRDBText32: TQRDBText;
+    QRDBText34: TQRDBText;
+    QRLabel53: TQRLabel;
+    Btn_Relatorio: TBitBtn;
+    table_historicoatraso: TFloatField;
+    QRExpr4: TQRExpr;
+    QPagamentos: TFDQuery;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnClienteClick(Sender: TObject);
+    procedure ClienteChange(Sender: TObject);
+    procedure ClienteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure TabSheet2Show(Sender: TObject);
+    procedure TabSheet3Show(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure DetailBand1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure btnImprimirClick(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DtmenEnter(Sender: TObject);
+    procedure QComprasAfterOpen(DataSet: TDataSet);
+    procedure QParcelasAfterOpen(DataSet: TDataSet);
+    procedure QItensAfterOpen(DataSet: TDataSet);
+    procedure FormShow(Sender: TObject);
+    procedure Btn_RelatorioClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure ClienteSearch;
+  end;
+
+var
+  FrmHistorico_Clientes: TFrmHistorico_Clientes;
+  cod_cliente : Integer;
+  procedure Historico(id_cliente: Integer);
+
+
+implementation
+
+uses
+  UData, UPrincipal, UConsulta;
+
+{$R *.dfm}
+
+procedure Historico(id_cliente: Integer);
+begin
+  Cod_cliente := id_cliente;
+
+  if not ThereIs('Trans. de Estoque - Venda') then
+    TFrmHistorico_Clientes.Create(Application);
+
+
+  if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
+    FrmPrincipal.Cascade;
+end;
+
+procedure TFrmHistorico_Clientes.ClienteSearch;
+begin
+  QCliente.Close;
+  QCliente.ParamByName('CLIENTE_ID').AsInteger := StrToInt(Cliente.Text);
+  QCliente.Prepare;
+  QCliente.Open;
+end;
+
+procedure TFrmHistorico_Clientes.DetailBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  QItens.Sql.Clear;
+  QItens.Sql.Add('SELECT * FROM TRANSITENS');
+  QItens.Sql.Add('WHERE');
+  QItens.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+  QItens.ParamByName('TRANSACAO_ID').AsInteger := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+
+  QItens.Prepare;
+  QItens.Open;
+
+  QParcelas.Sql.Clear;
+  QParcelas.Sql.Add('SELECT * FROM TRANSPARCELAS');
+  QParcelas.Sql.Add('WHERE');
+  QParcelas.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+  QParcelas.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+  QParcelas.ParamByName('TRANSACAO_ID').AsInteger  := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+  QParcelas.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+
+  QParcelas.Prepare;
+  QParcelas.Open;
+
+  QRMemo2.Lines.Clear;
+  QRMemo2.Lines.Add('Parcelamento');
+  QRMemo2.Lines.Add('============');
+
+  QParcelas.First;
+  while not QParcelas.Eof do
+  begin
+    if QParcelas.FieldByName('VALOR').AsFloat = 0 then
+    begin
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT * FROM TRANSACOES');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(SAIDA_ID = :SAIDA_ID)');
+
+      QRel.ParamByName('SAIDA_ID').AsInteger := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+
+      QRel.Prepare;
+      QRel.Open;
+
+      if QRel.FieldByName('DT_TRANS').AsDateTime > QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime then
+        QRMemo2.Lines.Add('Venc.: ' + QParcelas.FieldByName('DT_VENCIMENTO').AsString + ' - ' +
+                          FormatFloat('#,##0.00', QRel.FieldByName('VALOR_PARCELA').AsFloat) + ' Pagto.: ' +
+                          QRel.FieldByName('DT_TRANS').AsString + ' - ' + FormatFloat('#,##0.00', QRel.FieldByName('VALOR').AsFloat) +
+                          ' Atr.: ' + FloatToStr((QRel.FieldByName('DT_TRANS').AsDateTime - QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime)) + ' dias')
+      else
+        QRMemo2.Lines.Add('Venc.: ' + QParcelas.FieldByName('DT_VENCIMENTO').AsString + ' - ' +
+                          FormatFloat('#,##0.00', QRel.FieldByName('VALOR_PARCELA').AsFloat) + ' Pagto.: ' +
+                          QRel.FieldByName('DT_TRANS').AsString + ' - ' + FormatFloat('#,##0.00', QRel.FieldByName('VALOR').AsFloat));
+    end
+    else
+    begin
+      if (QParcelas.FieldByName('VALOR').AsFloat > 0) and (QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime <= FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+        QRMemo2.Lines.Add('Venc.: ' + QParcelas.FieldByName('DT_VENCIMENTO').AsString + ' - ' +
+                          FormatFloat('#,##0.00', QParcelas.FieldByName('VALOR').AsFloat) +
+                          ' Atr.: ' + FloatToStr((FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime - QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime)) + ' dias')
+      else
+        QRMemo2.Lines.Add('Venc.: ' + QParcelas.FieldByName('DT_VENCIMENTO').AsString + ' - ' + FormatFloat('#,##0.00', QParcelas.FieldByName('VALOR').AsFloat));
+    end;
+
+    Application.ProcessMessages;
+    QParcelas.Next;
+  end;
+end;
+
+procedure TFrmHistorico_Clientes.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmHistorico_Clientes.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   // Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmHistorico_Clientes.btnClienteClick(Sender: TObject);
+begin
+  try
+    Cliente.Value := GetConsulta('CLIENTES', 0, 0, StrToInt(Cliente.Text));
+  except
+    Cliente.Value := GetConsulta('CLIENTES', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmHistorico_Clientes.btnExecutaClick(Sender: TObject);
+var
+DB, MEDIA_ATR: Real;
+CONT_ATR: Integer;
+begin
+  try
+    btnExecuta.Enabled  := False;
+    btnRetorna.Enabled  := False;
+    btnImprimir.Enabled := False;
+
+    Table_Historico.Open;
+    Table_Historico.EmptyDataSet;
+
+
+    if Cliente.Value = 0 then
+      exit;
+
+    DB        := 0;
+    MEDIA_ATR := 0;
+    CONT_ATR  := 0;
+
+    Label6.Caption  := '';
+    Label11.Caption := FormatFloat('#,##0.00', QCliente.FieldByName('LIMITE').AsFloat);
+    Label12.Caption := '';
+    Label13.Caption := '';
+    Label14.Caption := '';
+    Label15.Caption := '';
+    Label16.Caption := '';
+    Label17.Caption := QCliente.FieldByName('BLOQUEADO').AsString;
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT TRANSPARCELAS.*');
+    QRel.Sql.Add('FROM TRANSPARCELAS');
+    QRel.Sql.Add('INNER JOIN TRANSACOES');
+    QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+    if not Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+    QRel.Sql.Add('AND (TRANSACOES.CLIENTE_ID = :CLIENTE_ID)');
+    QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QRel.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+    QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+    QRel.Sql.Add('AND (TRANSPARCELAS.VALOR > 0)');
+    QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+    QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+    QRel.Sql.Add('ORDER BY TRANSPARCELAS.DT_VENCIMENTO');
+
+    QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+    QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    if not Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+
+    QRel.ParamByName('CLIENTE_ID').AsInteger    := StrToInt(Cliente.Text);
+    QRel.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QRel.ParamByName('CONDUTA').AsString        := '01';
+    QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QRel.Last;
+    while not QRel.Bof do
+    begin
+      DB              := (DB + QRel.FieldByName('VALOR').AsFloat);
+      Label14.Caption := QRel.FieldByName('DT_VENCIMENTO').AsString;
+      Label15.Caption := FormatFloat('#,##0.00', QRel.FieldByName('VALOR').AsFloat);
+
+      Application.ProcessMessages;
+      QRel.Prior;
+    end;
+
+    Label16.Caption := FormatFloat('#,##0.00', DB);
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT AVG(TRANSACOES.VALOR) MEDIA');
+    QRel.Sql.Add('FROM TRANSACOES');
+    QRel.Sql.Add('INNER JOIN TRANSPARCELAS');
+    QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSPARCELAS.TRANSACAO_ID)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+    if not Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+    QRel.Sql.Add('AND (TRANSACOES.CLIENTE_ID = :CLIENTE_ID)');
+    QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+    QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+
+    QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+    QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+    QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+   if not Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+    QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+
+    QRel.ParamByName('CLIENTE_ID').AsInteger    := StrToInt(Cliente.Text);
+    QRel.ParamByName('CONDUTA').AsString        := '01';
+    QRel.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+    QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+    QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+
+    QRel.Prepare;
+    QRel.Open;
+
+    Label13.Caption := FormatFloat('#,##0.00', QRel.FieldByName('MEDIA').AsFloat);
+
+    QCompras.Sql.Clear;
+    QCompras.Sql.Add('SELECT TRANSACOES.*, FUNCIONARIOS.NOME');
+    QCompras.Sql.Add('FROM TRANSACOES');
+    QCompras.Sql.Add('LEFT JOIN FUNCIONARIOS');
+    QCompras.Sql.Add('ON (TRANSACOES.VENDEDOR_ID = FUNCIONARIOS.FUNCIONARIO_ID)');
+    QCompras.Sql.Add('WHERE');
+    QCompras.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QCompras.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+   if not Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+    QCompras.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+    QCompras.Sql.Add('AND (TRANSACOES.CLIENTE_ID = :CLIENTE_ID)');
+    QCompras.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QCompras.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QCompras.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+    QCompras.Sql.Add('ORDER BY TRANSACOES.DT_TRANS');
+
+    QCompras.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+    QCompras.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+    QCompras.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    if not  Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+    QCompras.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+
+    QCompras.ParamByName('CLIENTE_ID').AsInteger  := StrToInt(Cliente.Text);
+    QCompras.ParamByName('CONDUTA').AsString      := '01';
+    QCompras.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+
+    QCompras.Prepare;
+    QCompras.Open;
+
+    QCompras.Last;
+
+    Label6.Caption := QCompras.FieldByName('DT_TRANS').AsString;
+
+    QCompras.First;
+
+    while not QCompras.Eof do
+    begin
+      if QCompras.FieldByName('COND_PAGTO').AsString = 'A PRAZO' then
+      begin
+        QParcelas.Sql.Clear;
+        QParcelas.Sql.Add('SELECT * FROM TRANSPARCELAS');
+        QParcelas.Sql.Add('WHERE');
+        QParcelas.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+        QParcelas.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+        QParcelas.ParamByName('TRANSACAO_ID').AsInteger  := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+        QParcelas.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+
+        QParcelas.Prepare;
+        QParcelas.Open;
+
+        QParcelas.First;
+        while not QParcelas.Eof do
+        begin
+          if QParcelas.FieldByName('BANCO_ID').AsFloat > 0 then
+          begin
+            QPagamentos.Sql.Clear;
+            QPagamentos.Sql.Add('SELECT * FROM TRANSACOES');
+            QPagamentos.Sql.Add('WHERE');
+            QPagamentos.Sql.Add('(SAIDA_ID = :SAIDA_ID)');
+
+            QPagamentos.ParamByName('SAIDA_ID').AsInteger := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+
+            QPagamentos.Prepare;
+            QPagamentos.Open;
+
+           IF (not QPagamentos.IsEmpty) and (QParcelas.FieldByName('BANCO_ID').AsFloat > 0) Then
+           Begin
+            MEDIA_ATR := (MEDIA_ATR + (QPagamentos.FieldByName('DT_TRANS').AsDateTime - QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime));
+            CONT_ATR  := (CONT_ATR + 1);
+           End;
+
+          end;
+
+          if (QParcelas.FieldByName('VALOR').AsFloat > 0) and (QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime <= FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+          begin
+            MEDIA_ATR := (MEDIA_ATR + (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime - QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime));
+            CONT_ATR  := (CONT_ATR + 1);
+          end;
+
+          try
+            Table_Historico.Append;
+            Table_Historico.FieldByName('TRANSACAO_ID').AsInteger   := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+
+            Table_Historico.FieldByName('PARCELA').AsString         := QParcelas.FieldByName('PARCELA_ID').AsString;
+            Table_Historico.FieldByName('DT_VENCIMENTO').AsDateTime := QParcelas.FieldByName('DT_VENCIMENTO').AsDateTime;
+            Table_Historico.FieldByName('VALOR_PARCELA').AsFloat    := QParcelas.FieldByName('VALOR').AsFloat;
+            Table_Historico.FieldByName('NOME').AsString            := QCliente.FieldByName('NOME').AsString;
+
+
+
+
+            if (not QPagamentos.IsEmpty) and (QParcelas.FieldByName('BANCO_ID').AsFloat > 0)  Then
+            Begin
+            Table_Historico.FieldByName('DT_PAGAMENTO').AsDateTime  := QPagamentos.FieldByName('DT_TRANS').AsDateTime;
+            Table_Historico.FieldByName('VALOR_PAGO').AsFloat       := QPagamentos.FieldByName('VALOR').AsFloat;
+            Table_Historico.FieldByName('VALOR').AsFloat            := 0; //QCompras.FieldByName('VALOR').AsFloat;
+            End
+            Else
+            Table_Historico.FieldByName('VALOR').AsFloat            := QParcelas.FieldByName('VALOR').AsFloat;
+
+            if (QParcelas.FieldByName('BANCO_ID').AsFloat = 0) and (QCompras.FieldByName('PARCELA_ID').AsString = 'F') Then
+            Begin
+            Table_Historico.FieldByName('VALOR').AsFloat            := 0;
+            Table_Historico.FieldByName('PARCELA').AsString         := QParcelas.FieldByName('PARCELA_ID').AsString + '-(Múltiplo Pgto.)';
+            End;
+
+
+            Table_Historico.FieldByName('DT_TRANS').AsDateTime      := QCompras.FieldByName('DT_TRANS').AsDateTime;
+            Table_Historico.FieldByName('NUM_DOC').AsString         := QCompras.FieldByName('NUM_DOC').AsString;
+
+            if (MEDIA_ATR > 0) and (not QRel.IsEmpty) Then
+            Table_Historico.FieldByName('ATRASO').AsFloat           := MEDIA_ATR
+            Else
+            Table_Historico.FieldByName('ATRASO').AsFloat           := 0;
+
+          Table_Historico.Post;
+          Except
+
+            on e:Exception do
+            begin
+              Application.MessageBox(PChar('Erro:' + #13 +
+                'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+            end;
+
+          end;
+
+          QPagamentos.close;
+          MEDIA_ATR := 0;
+
+          Application.ProcessMessages;
+          QParcelas.Next;
+        end;
+      end;
+
+      Application.ProcessMessages;
+
+      QCompras.Next;
+    end;
+
+    QCompras.First;
+
+    if CONT_ATR > 0 then
+    begin
+      MEDIA_ATR := (MEDIA_ATR / CONT_ATR);
+      Label12.Caption := FormatFloat('#,##0.00', MEDIA_ATR);
+    end;
+
+
+
+  finally
+    btnExecuta.Enabled  := True;
+    btnRetorna.Enabled  := True;
+    btnImprimir.Enabled := True;
+  end;
+end;
+
+procedure TFrmHistorico_Clientes.btnImprimirClick(Sender: TObject);
+begin
+  if not QCompras.IsEmpty then
+  begin
+    QRLabel21.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+    QRLabel23.Caption := 'Limite de Crédito: ' + Label11.Caption;
+    QRLabel24.Caption := 'Média de Atraso (dias): ' + Label12.Caption;
+    QRLabel25.Caption := 'Média de Faturamento: ' + Label13.Caption;
+    QRLabel28.Caption := 'Data Última Compra: ' + Label6.Caption;
+    QRLabel27.Caption := 'Próximo Déb. a Vencer: ' + Label14.Caption;
+    QRLabel26.Caption := 'Vr. do Próx. Débito: ' + Label15.Caption;
+    QRLabel29.Caption := 'Saldo Devedor: ' + Label16.Caption;
+    QRLabel30.Caption := 'Bloqueado: ' + Label17.Caption;
+
+    if Application.MessageBox('Deseja imprimir um relatório analítico?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+      Begin
+      Rel_Historico.Prepare;
+      Rel_Historico.PreviewModal;
+      End
+    else
+    begin
+      QSintetico.Sql.Clear;
+      QSintetico.Sql.Add('SELECT TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, SUM(TRANSITENS.QUANTIDADE) QUANTIDADE, SUM(TRANSITENS.VR_TOTAL + TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_ACRESCIMO + TRANSITENS.VR_IPI - TRANSITENS.DESC_RODAPE) VR_TOTAL');
+      QSintetico.Sql.Add('FROM TRANSITENS');
+      QSintetico.Sql.Add('INNER JOIN PRODUTOS');
+      QSintetico.Sql.Add('ON (TRANSITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+      QSintetico.Sql.Add('INNER JOIN TRANSACOES');
+      QSintetico.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QSintetico.Sql.Add('WHERE');
+      QSintetico.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QSintetico.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+      if not Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+      QSintetico.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      QSintetico.Sql.Add('AND (TRANSACOES.CLIENTE_ID = :CLIENTE_ID)');
+      QSintetico.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+      QSintetico.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+      QSintetico.Sql.Add('GROUP BY TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO');
+      QSintetico.Sql.Add('ORDER BY PRODUTOS.DESCRICAO');
+
+      QSintetico.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+      QSintetico.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+      QSintetico.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+      if not Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
+      QSintetico.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+
+      QSintetico.ParamByName('CLIENTE_ID').AsInteger  := StrToInt(Cliente.Text);
+      QSintetico.ParamByName('CONDUTA').AsString      := '01';
+      QSintetico.ParamByName('BALANCO').AsString      := 'AGRUPADO';
+
+      QSintetico.Prepare;
+      QSintetico.Open;
+
+      QRLabel33.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+      Sintetico.Prepare;
+      Sintetico.PreviewModal;
+    end;
+  end;
+end;
+
+procedure TFrmHistorico_Clientes.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmHistorico_Clientes.Btn_RelatorioClick(Sender: TObject);
+Begin
+Table_Historico.Open;
+Historico.PreviewModal;
+end;
+
+procedure TFrmHistorico_Clientes.ClienteChange(Sender: TObject);
+begin
+  if Cliente.Value > 0 then
+    ClienteSearch;
+end;
+
+procedure TFrmHistorico_Clientes.ClienteKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Cliente) then
+    btnClienteClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmHistorico_Clientes.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmHistorico_Clientes.FormCreate(Sender: TObject);
+begin
+  //Dtmen.Date := StrToDate('01/01/1900');
+  //Dtmai.Date := StrToDate('31/12/2050');
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+  DBGrid1.Columns[0].Width := 75;
+  DBGrid1.Columns[1].Width := 75;
+  DBGrid1.Columns[2].Width := 100;
+  DBGrid1.Columns[3].Width := 330;
+  DBGrid1.Columns[4].Width := 90;
+
+  DBGrid2.Columns[0].Width := 44;
+  DBGrid2.Columns[1].Width := 300;
+  DBGrid2.Columns[2].Width := 80;
+  DBGrid2.Columns[3].Width := 80;
+  DBGrid2.Columns[4].Width := 80;
+  DBGrid2.Columns[5].Width := 80;
+
+  DBGrid3.Columns[0].Width := 70;
+  DBGrid3.Columns[1].Width := 64;
+  DBGrid3.Columns[2].Width := 131;
+  DBGrid3.Columns[3].Width := 157;
+  DBGrid3.Columns[4].Width := 157;
+  DBGrid3.Columns[5].Width := 85;
+end;
+
+procedure TFrmHistorico_Clientes.FormShow(Sender: TObject);
+begin
+ if cod_Cliente > 0 then
+ begin
+  Cliente.Value := (Cod_cliente);
+  btnExecutaClick(self);
+ end;
+end;
+
+procedure TFrmHistorico_Clientes.QComprasAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QCompras.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmHistorico_Clientes.QItensAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QItens.FieldByName('VR_UNITARIO')).DisplayFormat  := '#,##0.00';
+TFloatField(QItens.FieldByName('VR_DESCONTO')).DisplayFormat  := '#,##0.00';
+TFloatField(QItens.FieldByName('VR_TOTAL')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmHistorico_Clientes.QParcelasAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QParcelas.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmHistorico_Clientes.TabSheet2Show(Sender: TObject);
+begin
+  if not QCompras.IsEmpty then
+  begin
+    QItens.Sql.Clear;
+    QItens.Sql.Add('SELECT * FROM TRANSITENS');
+    QItens.Sql.Add('WHERE');
+    QItens.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+    QItens.ParamByName('TRANSACAO_ID').AsInteger := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+
+    QItens.Prepare;
+    QItens.Open;
+  end;
+end;
+
+procedure TFrmHistorico_Clientes.TabSheet3Show(Sender: TObject);
+begin
+  if not QCompras.IsEmpty then
+  begin
+    QParcelas.Sql.Clear;
+    QParcelas.Sql.Add('SELECT * FROM TRANSPARCELAS');
+    QParcelas.Sql.Add('WHERE');
+    QParcelas.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    QParcelas.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+    QParcelas.ParamByName('TRANSACAO_ID').AsInteger  := QCompras.FieldByName('TRANSACAO_ID').AsInteger;
+    QParcelas.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+
+    QParcelas.Prepare;
+    QParcelas.Open;
+  end;
+end;
+
+end.

@@ -1,0 +1,561 @@
+unit UEstoque_Filiais;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, DB, IBCustomDataSet, Grids, DBGrids, IBQuery,
+  IBUpdateSQL, ExtCtrls, rxToolEdit, Mask, rxCurrEdit, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client,pcnConversaoNFe,pcnConversao;
+
+type
+  TFrmManifesto_Destinatario = class(TForm)
+    Panel1: TPanel;
+    btnRetorna: TBitBtn;
+    Produto_id: TCurrencyEdit;
+    Transacao_id: TCurrencyEdit;
+    btnOk: TBitBtn;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    NUM_SERIE: TEdit;
+    Panel2: TPanel;
+    Label2: TLabel;
+    Panel3: TPanel;
+    lblStatus: TLabel;
+    Panel4: TPanel;
+    Lblfornecedor: TLabel;
+    lblchave: TLabel;
+    lblvalor: TLabel;
+    ComboBox1: TComboBox;
+    Label4: TLabel;
+    QSearch: TFDQuery;
+    lblfuncionario: TLabel;
+    lbldatamanifesto: TLabel;
+    QFuncionario: TFDQuery;
+    procedure Grid_ItensKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure btnOkClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Insert;
+    procedure Edit;
+  end;
+
+var
+  FrmManifesto_Destinatario: TFrmManifesto_Destinatario;
+  Id_Trans, Id_Prod, Id_Soma,tp_manifesto,tp_gravacao: Integer;
+  Desc_Prod,chave:String;
+  Altera: Boolean;
+
+  procedure ManifestoDoc(Origem,Transacao, tp: Integer ; chave_xml :String);
+
+implementation
+
+uses
+  UData, UPrincipal;
+
+{$R *.dfm}
+
+procedure ManifestoDoc(Origem,Transacao, tp: Integer ; chave_xml :String);
+begin
+  Id_Trans     := Transacao;
+  tp_manifesto := tp;
+  Chave        := Chave_Xml;
+  tp_gravacao  := Origem;
+
+  Application.CreateForm(TFrmManifesto_Destinatario, FrmManifesto_destinatario);
+  try
+   if tp_manifesto = 0 then
+   Begin
+   FrmManifesto_destinatario.ComboBox1.enabled    := true;
+   FrmManifesto_destinatario.LblStatus.Font.Color := clred;
+   FrmManifesto_destinatario.LblStatus.Caption    := 'Nota Fiscal sem Manifesto de Recebimento';
+   FrmManifesto_destinatario.btnOk.enabled        := True;
+   End
+   else if tp_manifesto = 1 then
+   Begin
+   FrmManifesto_destinatario.ComboBox1.enabled    := False;
+   FrmManifesto_destinatario.LblStatus.Font.Color := clGreen;
+   FrmManifesto_destinatario.LblStatus.Caption    := 'Ciência de operação';
+   FrmManifesto_destinatario.btnOk.enabled        := False;
+   End
+   else if tp_manifesto = 2 then
+   Begin
+   FrmManifesto_destinatario.ComboBox1.enabled    := True;
+   FrmManifesto_destinatario.LblStatus.Font.Color := clBlue;
+   FrmManifesto_destinatario.LblStatus.Caption    := 'Confirmação de operação';
+   FrmManifesto_destinatario.btnOk.enabled        := True;
+   End
+   else if  tp_manifesto = 3 then
+   Begin
+   FrmManifesto_destinatario.ComboBox1.enabled    := False;
+   FrmManifesto_destinatario.LblStatus.Font.Color := clred;
+   FrmManifesto_destinatario.LblStatus.Caption    := 'Desconhecimento de operação';
+   FrmManifesto_destinatario.btnOk.enabled        := False;
+   End
+   else if tp_manifesto = 4 then
+   Begin
+   FrmManifesto_destinatario.ComboBox1.enabled    := False;
+   FrmManifesto_destinatario.LblStatus.Font.Color := clred;
+   FrmManifesto_destinatario.LblStatus.Caption    := 'Operação não realizada';
+   FrmManifesto_destinatario.btnOk.enabled        := False;
+   End;
+
+    FrmManifesto_destinatario.ShowModal;
+  finally
+    FrmManifesto_destinatario.Release;
+  end;
+end;
+
+procedure TFrmManifesto_Destinatario.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO TRANSITENS_SERIE(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSITENS_SERIE(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO TRANSITENS_SERIE(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSITENS_SERIE(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSITENS_SERIE(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+end;
+
+procedure TFrmManifesto_Destinatario.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE TRANSITENS_SERIE SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE TRANSITENS_SERIE SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE TRANSITENS_SERIE SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE TRANSITENS_SERIE SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'UPDATE TRANSITENS_SERIE SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+  end;
+
+
+  Sql := Sql + ' WHERE (PRODUTO_ID = :ID) AND (TRANSACAO_ID = :TRANSACAO_ID)';
+
+  
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+  end;
+
+  IQuery.ParamByName('ID').AsInteger           := Id_Prod;
+  IQuery.ParamByName('TRANSACAO_ID').AsInteger := Id_Trans;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QTabela.Locate('TRANSACAO_ID', Id_Trans, [loCaseInsensitive]);
+
+end;
+
+
+
+procedure TFrmManifesto_Destinatario.btnOkClick(Sender: TObject);
+begin
+
+  if ComboBox1.ItemIndex = 0 Then
+  close
+  Else
+  Begin
+
+      FrmPrincipal.ACBrNFe1.EventoNFe.evento.Clear;
+
+      with FrmPrincipal.ACBrNFe1.EventoNFe.Evento.Add do
+      begin
+      infEvento.CNPJ           := SemMascara(FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString);
+      infEvento.dhEvento       := Now;
+
+      if ComboBox1.ItemIndex = 1 Then
+      infEvento.tpEvento       := teManifDestCiencia;
+
+      if ComboBox1.ItemIndex = 2 Then
+      infEvento.tpEvento       := teManifDestConfirmacao;
+
+      if ComboBox1.ItemIndex = 3 Then
+      infEvento.tpEvento       := teManifDestDesconhecimento;
+
+      if ComboBox1.ItemIndex = 4 Then
+      Begin
+      infEvento.tpEvento         := teManifDestOperNaoRealizada;
+      infEvento.detEvento.xJust  := 'Operação referente a manifestação da nota fiscal de compara não realizada'
+      End;
+
+      infEvento.cOrgao         := 91;
+      infEvento.chNFe          := chave;
+
+      end;
+
+
+
+      if FrmPrincipal.ACBrNFe1.EnviarEvento(1) then
+      begin
+        with FrmPrincipal.ACBrNFe1.WebServices.EnvEvento do
+        begin
+         SHOWMESSAGE(IntToStr(EventoRetorno.retEvento.Items[0].RetInfEvento.cStat));
+
+         if ((EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 128) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135)
+         or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 138))  then
+
+
+         if tp_gravacao = 0 Then
+         Begin
+            QSearch.Sql.Clear;
+            QSearch.Sql.Add('ALTER TABLE TRANSACOES DISABLE TRIGGER TRANSACOES_UP');
+
+            QSearch.Prepare;
+            QSearch.ExecSql;
+
+
+            QSearch.Sql.Clear;
+            QSearch.Sql.Add('UPDATE TRANSACOES SET MANIFESTO = :MANIFESTO, FUNC_MANIFESTO = :FUNC_MANIFESTO, DT_MANIFESTO = :DT_MANIFESTO');
+            QSearch.Sql.Add('WHERE');
+            QSearch.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+
+            QSearch.ParamByName('TRANSACAO_ID').AsInteger   := Id_Trans;
+            QSearch.ParamByName('MANIFESTO').AsInteger      := ComboBox1.ItemIndex;
+            QSearch.ParamByName('FUNC_MANIFESTO').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+            QSearch.ParamByName('DT_MANIFESTO').AsDateTime  := DATE() + TIME;
+
+            QSearch.Prepare;
+            QSearch.ExecSql;
+
+            QSearch.Sql.Clear;
+            QSearch.Sql.Add('ALTER TABLE TRANSACOES ENABLE TRIGGER TRANSACOES_UP');
+
+            QSearch.Prepare;
+            QSearch.ExecSql;
+         End
+         Else
+         Begin
+           TRY
+            QSearch.Sql.Clear;
+            QSearch.Sql.Add('UPDATE DISTRIBUICAONOTAS SET MANIFESTO = :MANIFESTO, FUNC_MANIFESTO = :FUNC_MANIFESTO, DT_MANIFESTO = :DT_MANIFESTO');
+            QSearch.Sql.Add('WHERE');
+            QSearch.Sql.Add('(CHAVE_NFE = :CHAVE_NFE AND XML = 1)');
+
+
+            QSearch.ParamByName('CHAVE_NFE').AsString       := CHAVE; // StrZero(IntToStr(Id_Trans),15,0);
+            QSearch.ParamByName('MANIFESTO').AsInteger      := ComboBox1.ItemIndex;
+            QSearch.ParamByName('FUNC_MANIFESTO').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+            QSearch.ParamByName('DT_MANIFESTO').AsDateTime  := DATE() + TIME;
+
+            QSearch.Prepare;
+            QSearch.ExecSql;
+           EXCEPT
+
+            on e:Exception do
+            begin
+              Application.MessageBox(PChar('Erro:' + #13 +
+                'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+            end;
+
+
+
+           END;
+
+
+
+         End;
+
+            Application.MessageBox('Manifesto do documento efetuado com sucesso.', PChar(Msg_Title), MB_ICONINFORMATION);
+            close;
+        end;
+
+      end
+      else
+       begin
+        with FrmPrincipal.ACBrNFe1.WebServices.EnvEvento do
+        begin
+        raise Exception.Create(
+          'Ocorreram erros ao tentar efetuar a Manifestação:' + sLineBreak +
+          'Lote: '     + IntToStr(EventoRetorno.idLote) + sLineBreak +
+          'Ambiente: ' + TpAmbToStr(EventoRetorno.tpAmb) + sLineBreak +
+          'Orgao: '    + IntToStr(EventoRetorno.cOrgao) + sLineBreak +
+           sLineBreak +
+          'Status: '   + IntToStr(EventoRetorno.cStat) + sLineBreak +
+          'Motivo: '   + EventoRetorno.xMotivo
+          );
+        end;
+       end;
+  End;
+
+
+end;
+
+procedure TFrmManifesto_Destinatario.FormCreate(Sender: TObject);
+begin
+{
+Altera := False;
+Label1.Caption    := Desc_prod;
+Produto_id.Value   := Id_prod;
+Transacao_id.Value := Id_Trans;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS_SERIE');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+  IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('TRANSACAO_ID').AsInteger := Id_Trans;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger   := Id_prod;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  Begin
+   // N_di.Text        := IQuery.FieldByName('N_DI').AsString;
+   // Dt_DI.Date       := IQuery.FieldByName('DT_DI').AsDateTime;
+    AddProd.Text       := IQuery.FieldByName('addprod').AsString;
+   //Uf_Desemb.Text    := IQuery.FieldByName('UF_DESEMB').AsString;
+   //Loc_Desemb.Text   := IQuery.FieldByName('LOC_DESEMB').AsString;
+   //Dt_Desemb.Date    := IQuery.FieldByName('DT_Desemb').AsDateTime;
+    Altera := True;
+  End;
+ }
+
+//Dt_DI.Date      := Date;
+//Dt_Desemb.Date  := Date;
+end;
+
+procedure TFrmManifesto_Destinatario.FormShow(Sender: TObject);
+begin
+
+ IF TP_GRAVACAO = 0 Then
+ Begin
+ IQuery.Sql.Clear;
+ IQuery.Sql.Add('SELECT CNPJ, NOME, VALOR, CHAVE_NFE, TRANSACOES.FUNCIONARIO_ID FUNC_MANIFESTO  FROM TRANSACOES ');
+ IQuery.Sql.Add('INNER JOIN FORNECEDORES ON FORNECEDORES.FORNECEDOR_ID = TRANSACOES.FORNECEDOR_ID');
+ IQuery.Sql.Add('WHERE TRANSACAO_ID = :TRANSACAO_ID');
+ IQuery.ParamByName('TRANSACAO_ID').AsInteger := id_trans;
+ IQuery.Prepare;
+ IQuery.Open;
+
+ Lblfornecedor.Caption := 'Fornecedor: ' + IQuery.FieldByName('NOME').AsString;
+ lblchave.Caption      := 'Chave Nfe : ' + IQuery.FieldByName('CHAVE_NFE').AsString;
+ lblvalor.Caption      := 'Valor : R$' + FloatToStrF(IQuery.FieldByName('VALOR').AsFloat, ffNumber,15,2);
+
+   if IQuery.FieldByName('FUNC_MANIFESTO').AsInteger > 0 Then
+   Begin
+
+    QFuncionario.Sql.Clear;
+    QFuncionario.Sql.Add('SELECT NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+    QFuncionario.ParamByName('FUNCIONARIO_ID').AsInteger := IQuery.FieldByName('FUNC_MANIFESTO').AsInteger;
+    QFuncionario.prepare;
+    QFuncionario.Open;
+
+    lblfuncionario.Caption   := 'Funcionário: ' + QFuncionario.Fieldbyname('NOME').AsString;
+    lbldatamanifesto.Caption := 'Data/Hora do Manifesto: ' + DateTimeToStr(IQuery.FieldByName('DT_MANIFESTO').AsDateTime);
+
+
+   End;
+ End
+ Else
+ Begin
+ IQuery.Sql.Clear;
+ IQuery.Sql.Add('SELECT CNPJ, NOME, VALOR, CHAVE_NFE, FUNC_MANIFESTO FROM DISTRIBUICAONOTAS ');
+ IQuery.Sql.Add('WHERE CHAVE_NFE = :CHAVE_NFE');
+ IQuery.ParamByName('CHAVE_NFE').AsString := Chave;
+ IQuery.Prepare;
+ IQuery.Open;
+
+ Lblfornecedor.Caption := 'Fornecedor: ' + IQuery.FieldByName('NOME').AsString;
+ lblchave.Caption      := 'Chave Nfe : ' + IQuery.FieldByName('CHAVE_NFE').AsString;
+ lblvalor.Caption      := 'Valor : R$' + FloatToStrF(IQuery.FieldByName('VALOR').AsFloat, ffNumber,15,2);
+
+   if IQuery.FieldByName('FUNC_MANIFESTO').AsInteger > 0 Then
+   Begin
+
+    QFuncionario.Sql.Clear;
+    QFuncionario.Sql.Add('SELECT NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+    QFuncionario.ParamByName('FUNCIONARIO_ID').AsInteger := IQuery.FieldByName('FUNC_MANIFESTO').AsInteger;
+    QFuncionario.prepare;
+    QFuncionario.Open;
+
+    lblfuncionario.Caption   := 'Funcionário: ' + QFuncionario.Fieldbyname('NOME').AsString;
+    lbldatamanifesto.Caption := 'Data/Hora do Manifesto: ' + DateTimeToStr(IQuery.FieldByName('DT_MANIFESTO').AsDateTime);
+
+
+   End;
+
+ End;
+
+ if tp_manifesto = 0 Then
+ ComboBox1.ItemIndex  := 0
+ else if tp_manifesto = 1 Then
+ ComboBox1.ItemIndex  := 1
+ else if tp_manifesto = 2 Then
+ ComboBox1.ItemIndex  := 2
+ else if tp_manifesto = 3 Then
+ ComboBox1.ItemIndex  := 3
+ else if tp_manifesto = 4 Then
+ ComboBox1.ItemIndex  := 4;
+
+
+
+end;
+
+procedure TFrmManifesto_Destinatario.Grid_ItensKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #46 then
+    Key := #44;
+
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+end;
+
+end.

@@ -1,0 +1,487 @@
+unit UProgramar_Balancas;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ExtCtrls, StdCtrls, Buttons, DB, IBCustomDataSet, IBQuery,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.ComCtrls;
+
+type
+  TFrmProgramar_Balancas = class(TForm)
+    Bevel1: TBevel;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Qtabela: TFDQuery;
+    PageControl1: TPageControl;
+    Balanças: TTabSheet;
+    TabSheet1: TTabSheet;
+    Label2: TLabel;
+    Nome_Setor: TEdit;
+    Label1: TLabel;
+    Balanca: TComboBox;
+    TCD: TCheckBox;
+    TCD_GERTEC: TCheckBox;
+    Alterados: TCheckBox;
+    Tcd_Tanca: TCheckBox;
+    procedure btnExecutaClick(Sender: TObject);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure Nome_SetorKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure BalancaKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormCreate(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmProgramar_Balancas: TFrmProgramar_Balancas;
+
+implementation
+
+uses
+  UData, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmProgramar_Balancas.BalancaKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmProgramar_Balancas.btnExecutaClick(Sender: TObject);
+var
+F1, F2,F3: TextFile;
+Indice: Integer;
+Cod_Produto, Tipo_Peso: String;
+begin
+  btnExecuta.Enabled := False;
+  btnRetorna.Enabled := False;
+  Nome_Setor.Enabled := False;
+  Alterados.Enabled  := False;
+  Balanca.Enabled    := False;
+
+  try
+    QTabela.Sql.Clear;
+    QTabela.Sql.Add('SELECT * FROM PRODUTOS');
+    QTabela.Sql.Add('WHERE');
+    QTabela.Sql.Add('(PRECO_VAREJO > 0)');
+    QTabela.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+     if ((NOT TCD.Checked) and (NOT TCD_GERTEC.Checked) and (NOT Tcd_Tanca.Checked)) then
+     QTabela.Sql.Add('AND (PESAVEL = :PESAVEL)');
+
+    if Alterados.Checked then
+      QTabela.Sql.Add('AND ((DT_ATUALIZACAO >= :DT_ATUALIZACAO) OR (DT_PRECO >= :DT_PRECO))');
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    begin
+      QTabela.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+      QTabela.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+    end;
+
+    QTabela.Sql.Add('AND (STATUS = :STATUS)');
+    QTabela.Sql.Add('ORDER BY COD_BARRA');
+
+    if ((NOT TCD.Checked) and (NOT TCD_GERTEC.Checked) and (NOT Tcd_Tanca.Checked) ) then
+    QTabela.ParamByName('PESAVEL').AsString     := 'SIM';
+
+    QTabela.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QTabela.ParamByName('STATUS').AsString      := 'A';
+
+    if Alterados.Checked then
+    begin
+      QTabela.ParamByName('DT_ATUALIZACAO').AsDateTime := date - 7;
+      QTabela.ParamByName('DT_PRECO').AsDateTime       := date;
+    end;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    if Balanca.Text = 'Filizola' then
+    begin
+      FrmPrincipal.OpenDialog1.FileName := 'CADTXT.TXT';
+      if FrmPrincipal.OpenDialog1.Execute then
+      begin
+        AssignFile(F1, FrmPrincipal.OpenDialog1.FileName);
+        Rewrite(F1);
+
+        AssignFile(F2, 'Setortxt.txt');
+        Rewrite(F2);
+
+        try
+          Indice := 1;
+
+          QTabela.First;
+          while not QTabela.Eof do
+          begin
+            if QTabela.FieldByName('CODRED').AsString <> '' then
+              Cod_Produto := QTabela.FieldByName('CODRED').AsString
+            else
+              Cod_Produto := Copy(QTabela.FieldByName('COD_BARRA').AsString, 7, 6);
+
+            if QTabela.FieldByName('UNIDADE_VENDA').AsString = 'KG' then
+              Tipo_Peso := 'P'
+            else
+              Tipo_Peso := 'U';
+
+            Append(F1);
+
+            if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QTabela.FieldByName('PROMO_INICIAL').AsDateTime) and
+               (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QTabela.FieldByName('PROMO_FINAL').AsDateTime) and (QTabela.FieldByName('PRECO_PROMOCAO').AsFloat > 0) then
+              WriteLn(F1, Cod_Produto + Tipo_Peso + // 8, 6
+                          ForcaComprimento(QTabela.FieldByName('DESCRICAO').AsString, 22, ' ') +
+                          StrZero(QTabela.FieldByName('PRECO_PROMOCAO').AsString, 7, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 3, 0))
+            else
+              WriteLn(F1, Cod_Produto + Tipo_Peso + // 8, 6
+                          ForcaComprimento(QTabela.FieldByName('DESCRICAO').AsString, 22, ' ') +
+                          StrZero(QTabela.FieldByName('PRECO_VAREJO').AsString, 7, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 3, 0));
+            Append(F2);
+
+            WriteLn(F2, ForcaComprimento(Nome_Setor.Text, 12, ' ') + Cod_Produto +
+                        StrZero(IntToStr(Indice), 4, 0) + '000');
+            Inc(Indice);
+
+            Application.ProcessMessages;
+            QTabela.Next;
+          end;
+        finally
+          CloseFile(F1);
+          CloseFile(F2);
+        end;
+      end;
+    end
+    ELSE if Balanca.Text = 'Combo Elgin' then
+    begin
+      FrmPrincipal.OpenDialog1.FileName := 'CADTXT.TXT';
+      if FrmPrincipal.OpenDialog1.Execute then
+      begin
+        AssignFile(F1, FrmPrincipal.OpenDialog1.FileName);
+        Rewrite(F1);
+
+        AssignFile(F2, 'Setortxt.txt');
+        Rewrite(F2);
+
+        try
+          Indice := 1;
+
+          QTabela.First;
+          while not QTabela.Eof do
+          begin
+            if QTabela.FieldByName('CODRED').AsString <> '' then
+              Cod_Produto :=  '0' + QTabela.FieldByName('CODRED').AsString
+            else
+              Cod_Produto := Copy(QTabela.FieldByName('COD_BARRA').AsString, 7, 6);
+
+            if QTabela.FieldByName('UNIDADE_VENDA').AsString = 'KG' then
+              Tipo_Peso := 'P'
+            else
+              Tipo_Peso := 'U';
+
+            Append(F1);
+
+            if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QTabela.FieldByName('PROMO_INICIAL').AsDateTime) and
+               (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QTabela.FieldByName('PROMO_FINAL').AsDateTime) and (QTabela.FieldByName('PRECO_PROMOCAO').AsFloat > 0) then
+              WriteLn(F1, Cod_Produto + Tipo_Peso + // 8, 6
+                          ForcaComprimento(QTabela.FieldByName('DESCRICAO').AsString, 22, ' ') +
+                          StrZero(QTabela.FieldByName('PRECO_PROMOCAO').AsString, 7, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 3, 0))
+            else
+              WriteLn(F1, Cod_Produto + Tipo_Peso + // 8, 6
+                          ForcaComprimento(QTabela.FieldByName('DESCRICAO').AsString, 22, ' ') +
+                          StrZero(QTabela.FieldByName('PRECO_VAREJO').AsString, 7, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 3, 0));
+            Append(F2);
+
+            WriteLn(F2, ForcaComprimento(Nome_Setor.Text, 12, ' ') + Cod_Produto +
+                        StrZero(IntToStr(Indice), 4, 0) + '000');
+            Inc(Indice);
+
+            Application.ProcessMessages;
+            QTabela.Next;
+          end;
+        finally
+          CloseFile(F1);
+          CloseFile(F2);
+        end;
+      end;
+    end
+    else if Balanca.Text = 'Toledo' then
+    begin
+      FrmPrincipal.OpenDialog1.FileName := 'TXITENS.TXT';
+      if FrmPrincipal.OpenDialog1.Execute then
+      begin
+        AssignFile(F1, FrmPrincipal.OpenDialog1.FileName);
+        Rewrite(F1);
+
+        AssignFile(F2, 'Txteclas.txt');
+        Rewrite(F2);
+
+        try
+          QTabela.First;
+          while not QTabela.Eof do
+          begin
+            if QTabela.FieldByName('CODRED').AsString <> '' then
+              Cod_Produto := QTabela.FieldByName('CODRED').AsString
+            else
+              Cod_Produto := Copy(QTabela.FieldByName('COD_BARRA').AsString, 7, 6);
+            Cod_Produto := StrZero(Cod_Produto,6,0);
+
+            Append(F1);
+
+            if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QTabela.FieldByName('PROMO_INICIAL').AsDateTime) and
+               (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QTabela.FieldByName('PROMO_FINAL').AsDateTime) and (QTabela.FieldByName('PRECO_PROMOCAO').AsFloat > 0) then
+              WriteLn(F1, StrZero(QTabela.FieldByName('BALDPT').AsString, 2, 0) +
+                          StrZero(QTabela.FieldByName('ETIQUETA').AsString, 2, 0) +
+                          QTabela.FieldByName('BALTIPO').AsString +
+                          Cod_Produto + // 8, 6
+                          StrZero(QTabela.FieldByName('PRECO_PROMOCAO').AsString, 6, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 3, 0) +
+                          QTabela.FieldByName('DESCRICAO').AsString)
+            else
+              WriteLn(F1, StrZero(QTabela.FieldByName('BALDPT').AsString, 2, 0) +
+                          StrZero(QTabela.FieldByName('ETIQUETA').AsString, 2, 0) +
+                          QTabela.FieldByName('BALTIPO').AsString +
+                          Cod_Produto + // 8, 6
+                          StrZero(QTabela.FieldByName('PRECO_VAREJO').AsString, 6, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 3, 0) +
+                          QTabela.FieldByName('DESCRICAO').AsString);
+
+            Append(F2);
+
+            WriteLn(F2, StrZero(QTabela.FieldByName('BALDPT').AsString, 2, 0) +
+                        Cod_Produto + // 7, 6
+                        StrZero(QTabela.FieldByName('BALTECLA').AsString, 3, 0));
+
+            Application.ProcessMessages;
+            QTabela.Next;
+          end;
+        finally
+          CloseFile(F1);
+          CloseFile(F2);
+        end;
+      end;
+    end
+    else if Balanca.Text = 'Urano' then
+    begin
+      if FrmPrincipal.OpenDialog1.Execute then
+      begin
+        AssignFile(F1, FrmPrincipal.OpenDialog1.FileName);
+        Rewrite(F1);
+
+        try
+          QTabela.First;
+          while not QTabela.Eof do
+          begin
+            if QTabela.FieldByName('CODRED').AsString <> '' then
+              Cod_Produto := QTabela.FieldByName('CODRED').AsString
+            else
+              Cod_Produto := Copy(QTabela.FieldByName('COD_BARRA').AsString, 7, 6);
+
+            Append(F1);
+
+              if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QTabela.FieldByName('PROMO_INICIAL').AsDateTime) and
+                 (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QTabela.FieldByName('PROMO_FINAL').AsDateTime) and (QTabela.FieldByName('PRECO_PROMOCAO').AsFloat > 0) then
+              WriteLn(F1, Cod_Produto + // 8, 6
+                          '*' +
+                          '0' +
+                          ForcaComprimento(QTabela.FieldByName('DESCRICAO').AsString, 20, ' ') +
+                          StrZero(QTabela.FieldByName('PRECO_PROMOCAO').AsString, 9, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 5, 0) +
+                          'D')
+            else
+              WriteLn(F1, Cod_Produto + // 8, 6
+                          '*' +
+                          '0' +
+                          ForcaComprimento(QTabela.FieldByName('DESCRICAO').AsString, 20, ' ') +
+                          StrZero(QTabela.FieldByName('PRECO_VAREJO').AsString, 9, 2) +
+                          StrZero(QTabela.FieldByName('VALIDADE').AsString, 5, 0) +
+                          'D');
+
+            Application.ProcessMessages;
+            QTabela.Next;
+          end;
+        finally
+          CloseFile(F1);
+        end;
+      end;
+    end;
+
+    if (TCD.Checked) OR (TCD_Gertec.Checked ) or (Tcd_Tanca.Checked) then
+    bEGIN
+
+
+      if TCD.Checked then
+      begin
+        if FrmPrincipal.OpenDialog1.Execute then
+        begin
+          AssignFile(F2, FrmPrincipal.OpenDialog1.FileName);
+          Rewrite(F2);
+
+        end;
+      end;
+
+      if TCD_Gertec.Checked then
+      begin
+        if FrmPrincipal.OpenDialog1.Execute then
+        begin
+          AssignFile(F3, FrmPrincipal.OpenDialog1.FileName);
+          Rewrite(F3);
+
+        end;
+      end;
+
+      if Tcd_Tanca.Checked then
+      begin
+        if FrmPrincipal.OpenDialog1.Execute then
+        begin
+          AssignFile(F3, FrmPrincipal.OpenDialog1.FileName);
+          Rewrite(F3);
+
+        end;
+      end;
+
+
+      try
+       QTabela.First;
+       while not QTabela.eof  do
+       Begin
+
+        if TCD.Checked then
+        begin
+          if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QTabela.FieldByName('PROMO_INICIAL').AsDateTime) and
+             (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QTabela.FieldByName('PROMO_FINAL').AsDateTime) and (QTabela.FieldByName('PRECO_PROMOCAO').AsFloat > 0) then
+            WriteLn(F2, ForcaComprimento(Copy(QTabela.FieldByName('COD_BARRA').AsString, 1, 13), 13, ' ') + ';' +
+                        ForcaComprimento(Copy(StringReplace(QTabela.FieldByName('DESCRICAO').AsString,';','',[rfReplaceAll, rfIgnoreCase]), 1, 20), 20, ' ') + ';' +
+                        StrZero(QTabela.FieldByName('PRECO_PROMOCAO').AsString, 12, 2))
+          else
+            WriteLn(F2, ForcaComprimento(Copy(QTabela.FieldByName('COD_BARRA').AsString, 1, 13), 13, ' ') + ';' +
+                        ForcaComprimento(Copy(StringReplace(QTabela.FieldByName('DESCRICAO').AsString,';','',[rfReplaceAll, rfIgnoreCase]), 1, 20), 20, ' ') + ';' +
+                        StrZero(QTabela.FieldByName('PRECO_VAREJO').AsString, 12, 2));
+        end;
+
+        if TCD_GERTEC.Checked then
+        begin
+          if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QTabela.FieldByName('PROMO_INICIAL').AsDateTime) and
+             (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QTabela.FieldByName('PROMO_FINAL').AsDateTime) and (QTabela.FieldByName('PRECO_PROMOCAO').AsFloat > 0) then
+            WriteLn(F3, ForcaComprimento(Copy(QTabela.FieldByName('COD_BARRA').AsString, 1, 13), 13, ' ') +
+                        '|' +
+                        ForcaComprimento(Copy(QTabela.FieldByName('DESCRICAO').AsString, 1, 20), 20, ' ') +
+                        '|'+
+                        FloatToStrF(QTabela.FieldByName('PRECO_PROMOCAO').AsFloat,ffNumber,4,2) + '|' + '40' + '|' +
+                        '40' + '|' + 'RED' + '|' + '80' + '|' + '80' + '|' + 'WITE' + '|' + 'WHITE' + '|' +
+                        '|' + '|' + '|' )
+          else
+            WriteLn(F3, ForcaComprimento(Copy(QTabela.FieldByName('COD_BARRA').AsString, 1, 13), 13, ' ') +
+                        '|' +
+                        ForcaComprimento(Copy(QTabela.FieldByName('DESCRICAO').AsString, 1, 20), 20, ' ') +
+                        '|'+
+                        FloatToStrF(QTabela.FieldByName('PRECO_VAREJO').AsFloat,ffNumber,4,2) + '|' + '40' + '|' +
+                        '40' + '|' + 'RED' + '|' + '80' + '|' + '80' + '|' + 'WITE' + '|' + 'WHITE' + '|' +
+                        '|' + '|' + '|' )
+        end;
+
+        if Tcd_Tanca.Checked then
+        begin
+          if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QTabela.FieldByName('PROMO_INICIAL').AsDateTime) and
+             (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QTabela.FieldByName('PROMO_FINAL').AsDateTime) and (QTabela.FieldByName('PRECO_PROMOCAO').AsFloat > 0) then
+            WriteLn(F3, ForcaComprimento(Copy(QTabela.FieldByName('COD_BARRA').AsString, 1, 13), 13, ' ') +
+                        '|' +
+                        ForcaComprimento(Copy(QTabela.FieldByName('DESCRICAO').AsString, 1, 20), 20, ' ') +
+                        '|'+
+                        StrZero(QTabela.FieldByName('PRECO_VAREJO').AsString, 20, 2))
+
+
+                       // FloatToStrF(QTabela.FieldByName('PRECO_PROMOCAO').AsFloat,ffNumber,4,2) + '|' + '40' + '|' +
+                       // '40' + '|' + 'RED' + '|' + '80' + '|' + '80' + '|' + 'WITE' + '|' + 'WHITE' + '|' +
+                       // '|' + '|' + '|' )
+          else
+            WriteLn(F3, ForcaComprimento(Copy(QTabela.FieldByName('COD_BARRA').AsString, 1, 13), 13, ' ') +
+                        '|' +
+                        ForcaComprimento(Copy(QTabela.FieldByName('DESCRICAO').AsString, 1, 20), 20, ' ') +
+                        '|'+
+                        StrZero(QTabela.FieldByName('PRECO_VAREJO').AsString, 20, 2));
+
+                       // FloatToStrF(QTabela.FieldByName('PRECO_VAREJO').AsFloat,ffNumber,4,2) + '|' + '40' + '|' +
+                       // '40' + '|' + 'RED' + '|' + '80' + '|' + '80' + '|' + 'WITE' + '|' + 'WHITE' + '|' +
+                       // '|' + '|' + '|' )
+
+
+
+
+        end;
+
+
+
+        Application.ProcessMessages;
+        QTabela.Next;
+       End;
+
+
+      finally
+
+      if TCD.Checked then
+        CloseFile(F2);
+
+      if TCD_Gertec.Checked then
+        CloseFile(F3);
+
+      if Tcd_Tanca.Checked then
+        CloseFile(F3);
+
+      end;
+
+    end;
+
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+    Nome_Setor.Enabled := True;
+    Alterados.Enabled  := True;
+    Balanca.Enabled    := True;
+  end;
+
+  Application.MessageBox('Procedimento executado com sucesso', PChar(Msg_Title), mb_IconInformation);
+end;
+
+procedure TFrmProgramar_Balancas.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmProgramar_Balancas.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmProgramar_Balancas.FormCreate(Sender: TObject);
+begin
+  FrmPrincipal.OpenDialog1.Title      := 'Selecione o Arquivo';
+  FrmPrincipal.OpenDialog1.DefaultExt := '*.txt';
+  FrmPrincipal.OpenDialog1.Filter     := 'Arquivos TXT (*.txt)|Todos os Arquivos (*.*)|*.*';
+  FrmPrincipal.OpenDialog1.InitialDir := ExtractFilePath(ParamStr(0));
+end;
+
+procedure TFrmProgramar_Balancas.Nome_SetorKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+end.

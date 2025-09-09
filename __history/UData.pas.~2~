@@ -1,0 +1,334 @@
+unit UData;
+
+interface
+
+uses
+  Forms,SysUtils, Classes, DB, IBDatabase, IBCustomDataSet, IBTable, IBQuery, Dialogs,Windows,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option,IdHashMessageDigest,
+  FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Comp.Client,
+  FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Phys.PG, FireDAC.Moni.Base,
+  FireDAC.Moni.RemoteClient, FireDAC.VCLUI.Wait, FireDAC.Comp.UI,
+  FireDAC.ConsoleUI.Wait, FireDAC.Moni.FlatFile, FireDAC.FMXUI.Wait,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient;
+
+type
+  TFrmData = class(TDataModule)
+    DbF_Eficaz: TFDConnection;
+    QAcesso: TFDQuery;
+    Qusuarios: TFDQuery;
+    FDPhysPgDriverLink1: TFDPhysPgDriverLink;
+    FDMoniRemoteClientLink1: TFDMoniRemoteClientLink;
+    FDGUIxWaitCursor1: TFDGUIxWaitCursor;
+    FDMoniFlatFileClientLink1: TFDMoniFlatFileClientLink;
+    QRegistro: TFDQuery;
+    IdTCPClient1: TIdTCPClient;
+    procedure DataModuleCreate(Sender: TObject);
+    procedure DbF_EficazRecover(ASender: TObject;
+      const AInitiator: IFDStanObject; AException: Exception;
+      var AAction: TFDPhysConnectionRecoverAction);
+    procedure DbF_EficazAfterConnect(Sender: TObject);
+    function VerificarPdv(ip,porta:string):boolean;
+    procedure DbF_EficazBeforeConnect(Sender: TObject);
+
+  private
+
+    { Private declarations }
+  public
+
+    { Public declarations }
+  end;
+
+var
+  FrmData: TFrmData;
+  Usuarios : integer;
+  Md5 : TIdHashMessageDigest5;
+  function WinVersion: string;
+
+
+
+
+
+implementation
+
+uses
+  UPrincipal;
+
+{$R *.dfm}
+
+function TFrmData.VerificarPdv(ip,porta:string):boolean;
+Begin
+   try
+   if IdTCPClient1.Connected Then
+     IdTCPClient1.Disconnect;
+
+     try
+     IdTCPClient1.Host := IP;
+     IdTCPClient1.Port := StrToInt(porta);
+     IdTCPClient1.ConnectTimeout := 60000;
+     IdTCPClient1.Connect;
+     Except
+      Result :=False;
+     end;
+     IF IdTCPClient1.Connected then
+     Result :=True
+     else
+     Result :=False;
+   except
+   // ShoWmessage ('DEU PROBLEMA!!!') ;
+     //carga_Vendas;
+     //     Close;
+     {
+     on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro:' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+             }
+   end;
+EnD;
+
+
+
+function WinVersion: string;
+var
+  VersionInfo: TOSVersionInfo;
+begin
+  VersionInfo.dwOSVersionInfoSize:=SizeOf(VersionInfo);
+  GetVersionEx(VersionInfo);
+  Result:='';
+  with VersionInfo do
+  begin
+    case dwPlatformId of
+      1:
+        case dwMinorVersion of
+          0: Result:='Windows 95';
+          10: Result:='Windows 98';
+          90: Result:='Windows Me';
+        end;
+      2:
+        case dwMajorVersion of
+          3: Result:='Windows NT 3.51';
+          4: Result:='Windows NT 4.0';
+          5:
+            case dwMinorVersion of
+              0: Result:='Windows 2000';
+              1: Result:='Windows XP';
+            end;
+        end;
+    end;
+   Result := INtToStr(dwPlatformId);
+  end;
+ // if (Result='') then
+ //   Result:= 'Sistema operacional desconhecido.';
+end;
+
+
+
+procedure TFrmData.DataModuleCreate(Sender: TObject);
+var
+InputString,senha,InputData: String;
+begin
+
+   if DbF_Eficaz.Connected then
+   DbF_Eficaz.Connected := False;
+
+
+   FDPhysPgDriverLink1.VendorLib := ExtractFilePath(ParamStr(0))+ '\DllsPG\libpq.dll';
+
+
+
+   DbF_Eficaz.Params.Clear;
+
+   AjustaData;
+
+
+
+   Md5 :=  TIdHashMessageDigest5.Create;
+
+ { try
+   If (WinVersion = '1') and (Copy((ExtractFilePath(ParamStr(0))),1,11) = 'C:\Eficaz7\')   Then
+   Begin
+   EnDecryptFile(ExtractFilePath(ParamStr(0)) + 'Eficaz.ini' , 'c:\Windows\System32\' +  Copy(DateToStr(date),1,2) + Copy(DateToStr(date),4,2) + Copy(DateToStr(date),7,4)   + 'P.sys' ,39);
+   Arq_Ini          := 'c:\Windows\System32\' + LeIni(Arq_Ini, 'Conexão Postgres', 'Server Name') + Copy(DateToStr(date),1,2) + Copy(DateToStr(date),4,2) + Copy(DateToStr(date),7,4)  + 'P.sys';
+   // Arq_Ini          :=  ExtractFilePath(ParamStr(0)) + 'Eficaz.ini';
+   End
+   Else
+   Begin
+   EnDecryptFile(ExtractFilePath(ParamStr(0)) + 'Eficaz.ini' , ExtractFilePath(ParamStr(0)) + '\Cce\' + Copy(DateToStr(date),1,2) + Copy(DateToStr(date),4,2) + Copy(DateToStr(date),7,4) +  'P.sys' ,39);
+   Arq_Ini          := ExtractFilePath(ParamStr(0)) + '\Cce\' + LeIni(Arq_Ini, 'Conexão Postgres', 'Server Name')  + Copy(DateToStr(date),1,2) + Copy(DateToStr(date),4,2) + Copy(DateToStr(date),7,4)  +  'P.sys';
+   End;
+  Except
+
+  end; }
+
+   Arq_Ini          := ExtractFilePath(ParamStr(0))+ 'Eficaz.ini';
+
+   Senha := 'EficazArilmaq'; //MD5.HashStringAsHex('BANCO DE DADOS CLENIO BARROS' + Copy(DateToStr(date), 1, 2) + Copy(DateToStr(date), 4, 2) + Copy(DateToStr(date), 7, 4));
+
+
+
+
+  TRY
+
+      if (LeIni(Arq_Ini, 'Conexão Postgres', 'User Name') <> '') and (LeIni( Arq_Ini, 'Conexão Postgres', 'Password') <> '') then
+      Begin
+
+        if not VerificarPdv(LeIni(Arq_Ini, 'Conexão Postgres', 'Server Name'),LeIni(Arq_Ini, 'Conexão Postgres', 'Porta')) then
+        begin
+          Application.MessageBox(PChar('Servidor Postgres: '+ LeIni(Arq_Ini, 'Conexão Postgres', 'Server Name')+':'+ LeIni(Arq_Ini, 'Conexão Postgres', 'Porta') +#13+ 'Não ativo favor verificar!'), PChar(Msg_Title), mb_IconInformation);
+          Application.Terminate;
+        end;
+
+         DbF_Eficaz.Params.Clear;
+         DbF_Eficaz.Params.Add('Database= ' +  LeIni(Arq_Ini, 'Conexão Postgres', 'Base Name'));
+         DbF_Eficaz.Params.Add('User_Name= ' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'User Name'),3));
+         DbF_Eficaz.Params.Add('Password= ' + DecryptMsg(LeIni(Arq_Ini, 'Conexão Postgres', 'Password'),3));
+         DbF_Eficaz.Params.Add('Server= ' +  LeIni(Arq_Ini, 'Conexão Postgres', 'Server Name'));
+         DbF_Eficaz.Params.Add('Port= ' +  LeIni(Arq_Ini, 'Conexão Postgres', 'Porta'));
+         DbF_Eficaz.Params.Add('MonitorBy=Remote');
+         DbF_Eficaz.Params.Add('DriverID=PG');
+         DbF_Eficaz.Params.Add('Poled=True');
+
+      End
+      else
+      begin
+
+         DbF_Eficaz.Params.Clear;
+         DbF_Eficaz.Params.Add('Database= ' +  LeIni(Arq_Ini, 'Conexão Postgres', 'Base Name'));
+         DbF_Eficaz.Params.Add('User_Name= postgres');
+         DbF_Eficaz.Params.Add('Password=' + senha );
+         DbF_Eficaz.Params.Add('Server= ' +  LeIni(Arq_Ini, 'Conexão Postgres', 'Server Name'));
+         DbF_Eficaz.Params.Add('Port= ' +  LeIni(Arq_Ini, 'Conexão Postgres', 'Porta'));
+         DbF_Eficaz.Params.Add('MonitorBy=Custom');
+         DbF_Eficaz.Params.Add('DriverID=PG');
+
+      end;
+      // ShowMessage(DbF_Eficaz.Params.Text);
+         DbF_Eficaz.Connected := True;
+
+       //  GravaIni(Arq_Ini, 'Conexão', 'Password',EncryptMsg(senha,9));
+  except
+
+
+    { TRY
+
+       DbF_Eficaz.Params.Clear;
+       DbF_Eficaz.Params.Add('Database= ' +  LeIni(Arq_Ini, 'Conexão', 'Base Name'));
+       DbF_Eficaz.Params.Add('User_Name= postgres');
+       DbF_Eficaz.Params.Add('Password=' + DecryptMsg(LeIni(Arq_Ini, 'Conexão', 'Password'),9)) ;
+       DbF_Eficaz.Params.Add('Server= ' +  LeIni(Arq_Ini, 'Conexão', 'Server Name'));
+       DbF_Eficaz.Params.Add('MonitorBy=Custom');
+       DbF_Eficaz.Params.Add('DriverID=PG');
+
+       DbF_Eficaz.Connected := True;
+
+
+       QRegistro.SQL.Clear;
+       QRegistro.SQL.Add('ALTER ROLE POSTGRES WITH ENCRYPTED PASSWORD '  + #39 + senha + #39 + '');
+
+       QRegistro.Prepare;
+       QRegistro.ExecSQL;
+
+       Application.MessageBox('Senha do banco atualizada com sucesso!','Eficaz', MB_IconStop + MB_OK);
+
+       //ShowMessage(senha);
+
+
+       GravaIni(Arq_Ini, 'Conexão', 'Password',EncryptMsg(senha,9));
+
+       Application.Terminate;
+
+     except
+      InputData   := InputBox('Sistema Eficaz Ltda', 'Digite a última data de abertura do Sistema - DD/MM/AAAA' , '');
+
+      Senha       := EncryptMsg(MD5.HashStringAsHex('BANCO DE DADOS CLENIO BARROS' + Copy(InputData, 1, 2) + Copy(InputData, 4, 2) + Copy(InputData, 7, 4)),9);
+
+      InputString := InputBox('Sistema Eficaz Ltda', 'Digite a Senha do Banco' , Senha);
+
+        if InputString <> ''   then
+        begin
+          try
+            DbF_Eficaz.Params.Clear;
+            DbF_Eficaz.Params.Add('Database= ' +  LeIni(Arq_Ini, 'Conexão', 'Base Name'));
+            DbF_Eficaz.Params.Add('User_Name= postgres');
+            DbF_Eficaz.Params.Add('Password=' + DecryptMsg(InputString,9)) ;
+            DbF_Eficaz.Params.Add('Server= ' +  LeIni(Arq_Ini, 'Conexão', 'Server Name'));
+            DbF_Eficaz.Params.Add('MonitorBy=Custom');
+            DbF_Eficaz.Params.Add('DriverID=PG');
+
+            DbF_Eficaz.Connected := True;
+
+            QRegistro.SQL.Clear;
+            QRegistro.SQL.Add('ALTER ROLE POSTGRES WITH ENCRYPTED PASSWORD '  + #39 + DecryptMsg(senha,9) + #39 + '');
+
+
+            QRegistro.Prepare;
+            QRegistro.ExecSQL;
+
+            Application.MessageBox('Senha do banco atualizada com sucesso!','Eficaz', MB_IconStop + MB_OK);
+
+            GravaIni(Arq_Ini, 'Conexão', 'Password',senha);
+
+          except
+           Application.MessageBox('Erro de conexão, verifique Servidor,Banco,Usuário e Senha!','Eficaz', MB_IconStop + MB_OK);
+           Application.Terminate;
+          end;
+
+        end
+        else
+        Begin
+         Application.MessageBox('Erro de conexão, verifique Servidor,Banco,Usuário e Senha!','Eficaz', MB_IconStop + MB_OK);
+         Application.Terminate;
+        End
+
+     END; }
+
+
+   // Application.MessageBox('Erro de conexão, verifique Servidor,Banco,Usuário e Senha!','Eficaz', MB_IconStop + MB_OK);
+   // Application.Terminate;
+
+  END;
+end;
+
+procedure TFrmData.DbF_EficazAfterConnect(Sender: TObject);
+begin
+      QUsuarios.SQL.Clear;
+      QUsuarios.SQL.Add('SELECT COUNT(*) USUARIOS FROM PG_STAT_ACTIVITY WHERE DATNAME = :BASE ');
+      QUsuarios.ParamByName('BASE').AsString :=  LeIni(Arq_Ini, 'Conexão Postgres', 'Base Name');
+      QUsuarios.Prepare;
+      QUsuarios.Open;
+
+      if GetSerialID = '1049663085' Then
+      Usuarios :=  1
+      Else
+      Usuarios := QUsuarios.FieldByname('USUARIOS').AsInteger;
+end;
+
+procedure TFrmData.DbF_EficazBeforeConnect(Sender: TObject);
+begin
+
+ if DbF_Eficaz.Connected then
+ DbF_Eficaz.Connected := False;
+
+end;
+
+procedure TFrmData.DbF_EficazRecover(ASender: TObject;
+  const AInitiator: IFDStanObject; AException: Exception;
+  var AAction: TFDPhysConnectionRecoverAction);
+var
+  iRes: Integer;
+begin
+  iRes :=Application.MessageBox(PChar('Conexão com o banco: '+ LeIni(Arq_Ini, 'Conexão Postgres', 'Base Name') +
+    ' perdida.' + #13 +'Deseja tentar reconectar ao banco?'), PChar(Msg_Title),
+    MB_YESNO + mb_IconQuestion + mb_DefButton1);
+  case iRes of
+  1:     AAction := faRetry ;
+  2:     AAction := faFail;
+  //2:     AAction := faOfflineAbort;
+  end;
+ // Log('Connection is recovering');
+end;
+
+end.

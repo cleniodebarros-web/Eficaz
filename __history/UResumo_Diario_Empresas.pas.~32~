@@ -1,0 +1,4033 @@
+unit UResumo_Diario_Empresas;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, ExtCtrls, rxCurrEdit, rxToolEdit, DBTables, DB,
+  IBCustomDataSet, IBQuery, QRCtrls, QuickRpt, Buttons, DBCtrls,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.Grids, Vcl.DBGrids, Datasnap.DBClient, frxClass, frxDBSet, sMemo;
+
+type
+  TFrmResumo_Diario_Empresas = class(TForm)
+    Label1: TLabel;
+    Bevel1: TBevel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Resumo: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    DetailBand1: TQRBand;
+    QRGroup1: TQRGroup;
+    QRDBText1: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape2: TQRShape;
+    QRExpr1: TQRExpr;
+    QRLabel10: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRShape4: TQRShape;
+    QRExpr2: TQRExpr;
+    QRShape5: TQRShape;
+    QRExpr3: TQRExpr;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Label2: TLabel;
+    Caixa_Banco: TCurrencyEdit;
+    btnCaixa_Banco: TSpeedButton;
+    Resumo1: TQuickRep;
+    QRBand2: TQRBand;
+    QRDBText10: TQRDBText;
+    QRSysData3: TQRSysData;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRLabel11: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRBand3: TQRBand;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRGroup2: TQRGroup;
+    QRDBText18: TQRDBText;
+    QRBand4: TQRBand;
+    QRShape8: TQRShape;
+    QRExpr4: TQRExpr;
+    QRShape9: TQRShape;
+    QRExpr5: TQRExpr;
+    QRShape10: TQRShape;
+    QRExpr6: TQRExpr;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    Label3: TLabel;
+    Tipo_Rel: TComboBox;
+    Detalhe_conta: TQuickRep;
+    QRBand7: TQRBand;
+    QRDBText21: TQRDBText;
+    QRSysData7: TQRSysData;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRShape14: TQRShape;
+    QRShape15: TQRShape;
+    QRLabel29: TQRLabel;
+    QRSysData8: TQRSysData;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRGroup3: TQRGroup;
+    QRDBText28: TQRDBText;
+    DataConta: TDataSource;
+    DataFinalizadora: TDataSource;
+    Resumo_Sintetico: TQuickRep;
+    QRBand5: TQRBand;
+    QRDBText9: TQRDBText;
+    QRSysData5: TQRSysData;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRShape11: TQRShape;
+    QRShape12: TQRShape;
+    QRLabel22: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRBand6: TQRBand;
+    QRDBText17: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRExpr7: TQRExpr;
+    SummaryBand1: TQRBand;
+    QRShape13: TQRShape;
+    QRExpr8: TQRExpr;
+    QRExpr9: TQRExpr;
+    QRExpr10: TQRExpr;
+    Resumo2: TQuickRep;
+    QRBand10: TQRBand;
+    QRDBText27: TQRDBText;
+    QRSysData9: TQRSysData;
+    QRLabel35: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRShape17: TQRShape;
+    QRShape19: TQRShape;
+    QRLabel38: TQRLabel;
+    QRSysData10: TQRSysData;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRLabel43: TQRLabel;
+    QRLabel44: TQRLabel;
+    QRLabel45: TQRLabel;
+    QRBand11: TQRBand;
+    QRDBText29: TQRDBText;
+    QRDBText30: TQRDBText;
+    QRDBText31: TQRDBText;
+    QRDBText32: TQRDBText;
+    QRDBText33: TQRDBText;
+    QRDBText34: TQRDBText;
+    QRGroup4: TQRGroup;
+    QRDBText35: TQRDBText;
+    QRBand12: TQRBand;
+    QRShape20: TQRShape;
+    QRExpr12: TQRExpr;
+    QRShape21: TQRShape;
+    QRExpr14: TQRExpr;
+    QRShape22: TQRShape;
+    QRExpr15: TQRExpr;
+    QRLabel46: TQRLabel;
+    QRDBText36: TQRDBText;
+    QConta: TFDQuery;
+    QFinalizadora: TFDQuery;
+    QRel: TFDQuery;
+    Table_Temp: TFDMemTable;
+    Label9: TLabel;
+    C_CUSTO_ID: TCurrencyEdit;
+    btnCentro_Custo: TSpeedButton;
+    DBText5: TDBText;
+    QCusto: TFDQuery;
+    DataCusto: TDataSource;
+    QRLabel47: TQRLabel;
+    QSearch: TFDQuery;
+    Label10: TLabel;
+    EMPRESA_ID: TCurrencyEdit;
+    btnEmpresa: TSpeedButton;
+    QEmpresa: TFDQuery;
+    DataEmpresa: TDataSource;
+    Label4: TLabel;
+    CONTA_ID: TCurrencyEdit;
+    DBText3: TDBText;
+    btnConta: TSpeedButton;
+    DBText1: TDBText;
+    QRBand13: TQRBand;
+    QRBand14: TQRBand;
+    QRDBText38: TQRDBText;
+    QRDBText39: TQRDBText;
+    QRDBText40: TQRDBText;
+    QRDBText41: TQRDBText;
+    QRDBText42: TQRDBText;
+    QRBand9: TQRBand;
+    QRShape16: TQRShape;
+    QRExpr11: TQRExpr;
+    QRShape18: TQRShape;
+    QRExpr13: TQRExpr;
+    QItens: TFDQuery;
+    Fdac_Temp: TFDMemTable;
+    Detalhe_Conta_Itens: TQuickRep;
+    QRBand8: TQRBand;
+    QRDBText22: TQRDBText;
+    QRSysData11: TQRSysData;
+    QRLabel48: TQRLabel;
+    QRLabel49: TQRLabel;
+    QRShape23: TQRShape;
+    QRShape24: TQRShape;
+    QRLabel50: TQRLabel;
+    QRSysData12: TQRSysData;
+    QRLabel51: TQRLabel;
+    QRLabel52: TQRLabel;
+    QRLabel53: TQRLabel;
+    QRLabel54: TQRLabel;
+    QRLabel55: TQRLabel;
+    QRLabel56: TQRLabel;
+    QRGroup5: TQRGroup;
+    QRDBText23: TQRDBText;
+    QRBand15: TQRBand;
+    QRBand16: TQRBand;
+    QRDBText25: TQRDBText;
+    QRDBText37: TQRDBText;
+    QRDBText43: TQRDBText;
+    QRBand17: TQRBand;
+    QRShape26: TQRShape;
+    QRExpr17: TQRExpr;
+    QRDBText26: TQRDBText;
+    QRDBText44: TQRDBText;
+    Detalhe_recpag: TQuickRep;
+    QRBand18: TQRBand;
+    QRDBText24: TQRDBText;
+    QRSysData13: TQRSysData;
+    QRLabel57: TQRLabel;
+    QRLabel58: TQRLabel;
+    QRShape25: TQRShape;
+    QRShape27: TQRShape;
+    QRLabel59: TQRLabel;
+    QRSysData14: TQRSysData;
+    QRLabel60: TQRLabel;
+    QRLabel61: TQRLabel;
+    QRLabel62: TQRLabel;
+    QRLabel64: TQRLabel;
+    QRLabel65: TQRLabel;
+    QRGroup6: TQRGroup;
+    QRDBText45: TQRDBText;
+    QRBand19: TQRBand;
+    QRBand20: TQRBand;
+    QRDBText46: TQRDBText;
+    QRDBText48: TQRDBText;
+    QRDBText49: TQRDBText;
+    QRDBText50: TQRDBText;
+    QRBand21: TQRBand;
+    QRShape28: TQRShape;
+    QRExpr16: TQRExpr;
+    Detalhe_Itens_Rec: TQuickRep;
+    QRBand22: TQRBand;
+    QRDBText47: TQRDBText;
+    QRSysData15: TQRSysData;
+    QRLabel63: TQRLabel;
+    QRLabel66: TQRLabel;
+    QRShape29: TQRShape;
+    QRShape30: TQRShape;
+    QRLabel67: TQRLabel;
+    QRSysData16: TQRSysData;
+    QRLabel68: TQRLabel;
+    QRLabel69: TQRLabel;
+    QRLabel70: TQRLabel;
+    QRLabel71: TQRLabel;
+    QRLabel72: TQRLabel;
+    QRLabel73: TQRLabel;
+    QRGroup7: TQRGroup;
+    QRDBText51: TQRDBText;
+    QRBand23: TQRBand;
+    QRBand24: TQRBand;
+    QRDBText52: TQRDBText;
+    QRDBText53: TQRDBText;
+    QRDBText54: TQRDBText;
+    QRDBText55: TQRDBText;
+    QRDBText56: TQRDBText;
+    QRBand25: TQRBand;
+    QRShape31: TQRShape;
+    QRExpr18: TQRExpr;
+    QRLabel74: TQRLabel;
+    QRDBText57: TQRDBText;
+    Resumo_Sintetico_competencia: TQuickRep;
+    QRBand26: TQRBand;
+    QRDBText58: TQRDBText;
+    QRSysData17: TQRSysData;
+    QRLabel75: TQRLabel;
+    QRLabel76: TQRLabel;
+    QRShape32: TQRShape;
+    QRShape33: TQRShape;
+    QRLabel77: TQRLabel;
+    QRSysData18: TQRSysData;
+    QRLabel78: TQRLabel;
+    QRLabel79: TQRLabel;
+    QRLabel80: TQRLabel;
+    QRLabel81: TQRLabel;
+    QRLabel82: TQRLabel;
+    QRBand27: TQRBand;
+    QRDBText59: TQRDBText;
+    QRDBText60: TQRDBText;
+    QRDBText61: TQRDBText;
+    QRExpr19: TQRExpr;
+    QRBand28: TQRBand;
+    QRShape34: TQRShape;
+    QRExpr20: TQRExpr;
+    QRExpr21: TQRExpr;
+    QRExpr22: TQRExpr;
+    QRLabel83: TQRLabel;
+    QRLabel84: TQRLabel;
+    QRLabel85: TQRLabel;
+    QRDBText62: TQRDBText;
+    QRDBText63: TQRDBText;
+    QRExpr23: TQRExpr;
+    QRExpr24: TQRExpr;
+    QRExpr25: TQRExpr;
+    QRExpr26: TQRExpr;
+    QRShape35: TQRShape;
+    Relatorio_Principal: TfrxReport;
+    Relatorio_Editar: TfrxReport;
+    FrxDSCredito: TfrxDBDataset;
+    QLayoutFastReport: TFDQuery;
+    FrxDSDebito: TfrxDBDataset;
+    Button1: TButton;
+    CDDebito: TClientDataSet;
+    CDCredito: TClientDataSet;
+    Detalhe_Itens_Transf_Recebidas: TQuickRep;
+    QRBand29: TQRBand;
+    QRDBText64: TQRDBText;
+    QRSysData19: TQRSysData;
+    QRLabel86: TQRLabel;
+    QRLabel87: TQRLabel;
+    QRShape36: TQRShape;
+    QRShape37: TQRShape;
+    QRLabel88: TQRLabel;
+    QRSysData20: TQRSysData;
+    QRLabel89: TQRLabel;
+    QRLabel90: TQRLabel;
+    QRLabel91: TQRLabel;
+    QRLabel92: TQRLabel;
+    QRLabel93: TQRLabel;
+    QRLabel94: TQRLabel;
+    QRLabel95: TQRLabel;
+    QRGroup8: TQRGroup;
+    QRDBText65: TQRDBText;
+    QRBand30: TQRBand;
+    QRBand31: TQRBand;
+    QRDBText66: TQRDBText;
+    QRDBText67: TQRDBText;
+    QRDBText69: TQRDBText;
+    QRDBText70: TQRDBText;
+    QRDBText71: TQRDBText;
+    QRBand32: TQRBand;
+    QRShape38: TQRShape;
+    QRExpr27: TQRExpr;
+    QRDBText72: TQRDBText;
+    QRLabel96: TQRLabel;
+    QRExpr28: TQRExpr;
+    Detalhe_Itens_Ordem_Servico: TQuickRep;
+    QRBand33: TQRBand;
+    QRDBText68: TQRDBText;
+    QRSysData21: TQRSysData;
+    QRLabel97: TQRLabel;
+    QRLabel98: TQRLabel;
+    QRShape39: TQRShape;
+    QRShape40: TQRShape;
+    QRLabel99: TQRLabel;
+    QRSysData22: TQRSysData;
+    QRLabel101: TQRLabel;
+    v: TQRLabel;
+    QRLabel104: TQRLabel;
+    QRLabel105: TQRLabel;
+    QRLabel107: TQRLabel;
+    QRGroup9: TQRGroup;
+    QRDBText73: TQRDBText;
+    QRBand34: TQRBand;
+    QRBand35: TQRBand;
+    QRDBText74: TQRDBText;
+    QRDBText75: TQRDBText;
+    QRDBText76: TQRDBText;
+    QRDBText78: TQRDBText;
+    QRDBText79: TQRDBText;
+    QRExpr29: TQRExpr;
+    QRBand36: TQRBand;
+    QRShape41: TQRShape;
+    QRExpr30: TQRExpr;
+    QRLabel100: TQRLabel;
+    resumo_movimento_filial: TFDMemTable;
+    resumo_movimento_filialQUANTIDADE_C: TCurrencyField;
+    resumo_movimento_filialDESCRICAO: TStringField;
+    resumo_movimento_filialNOME: TStringField;
+    resumo_movimento_filialDT_ORDEM: TDateField;
+    resumo_movimento_filialPRODUTO_ID: TIntegerField;
+    resumo_movimento_filialVR_TOTAL: TFloatField;
+    resumo_movimento_filialNUM_DOC: TStringField;
+    QFilial: TFDQuery;
+    Progresso: TLabel;
+    IBQuery: TFDQuery;
+    QRBand37: TQRBand;
+    QRExpr32: TQRExpr;
+    QRLabel106: TQRLabel;
+    QRLabel108: TQRLabel;
+    QRLabel102: TQRLabel;
+    QRDBText77: TQRDBText;
+    frxDBDataset1: TfrxDBDataset;
+    frxDBDataset2: TfrxDBDataset;
+    FastReportQRel: TfrxDBDataset;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+    procedure btnCaixa_BancoClick(Sender: TObject);
+    procedure QRBand2AfterPrint(Sender: TQRCustomBand; BandPrinted: Boolean);
+    procedure ColumnHeaderBand1AfterPrint(Sender: TQRCustomBand;
+      BandPrinted: Boolean);
+    procedure Caixa_BancoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnContaClick(Sender: TObject);
+    procedure CONTA_IDExit(Sender: TObject);
+    procedure CONTA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Tipo_RelChange(Sender: TObject);
+    procedure FinalizadoraBoxClick(Sender: TObject);
+    procedure btnCentro_CustoClick(Sender: TObject);
+    procedure QRBand5BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure QRBand8AfterPrint(Sender: TQRCustomBand; BandPrinted: Boolean);
+    procedure QRBand14BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure Relatorio_PrincipalLoadTemplate(Report: TfrxReport;
+      const TemplateName: string);
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure DetailSearch(Tabela: String);
+  end;
+
+var
+  FrmResumo_Diario_Empresas: TFrmResumo_Diario_Empresas;
+  TIPO :String;
+  FilialDB: TFDConnection;
+
+implementation
+
+uses
+  Uprincipal, UData, UConsulta;
+
+{$R *.dfm}
+
+procedure TFrmResumo_Diario_Empresas.DetailSearch(Tabela: String);
+Begin
+if ((Tabela = '') or (Tabela = 'Conta')) and (CONTA_ID.Text <> '') then
+  begin
+    QConta.Close;
+
+    QConta.ParamByName('TABELA_ID').AsInteger := StrToInt(CONTA_ID.Text);
+
+    QConta.Prepare;
+    QConta.Open;
+  end;
+End;
+
+
+procedure TFrmResumo_Diario_Empresas.btnCaixa_BancoClick(Sender: TObject);
+begin
+  try
+    Caixa_Banco.Value := GetConsulta('BANCOS', 0, 0, StrToInt(Caixa_Banco.Text));
+  except
+    Caixa_Banco.Value := GetConsulta('BANCOS', 0, 0, 0);
+  end;
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.btnCentro_CustoClick(Sender: TObject);
+begin
+ try
+    C_CUSTO_ID.Value := GetConsulta('CCUSTO', 0, 0, StrToInt(C_CUSTO_ID.Text));
+  except
+    C_CUSTO_ID.Value := GetConsulta('CCUSTO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmResumo_Diario_Empresas.btnContaClick(Sender: TObject);
+begin
+  try
+    CONTA_ID.Value := GetConsulta('CONTAS', 0, 0, StrToInt(CONTA_ID.Text));
+  except
+    CONTA_ID.Value := GetConsulta('CONTAS', 0, 0, 0);
+  end;
+
+  DetailSearch('Conta');
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA_ID.Text));
+  except
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmResumo_Diario_Empresas.btnExecutaClick(Sender: TObject);
+var
+Sub_Tit, Temp_Name: String;
+texto_fastrep: TfrxMemoView;
+total_credito, total_debito,total_despesa,total_custo,total_receita,total_imposto,resultado: Real;
+
+begin
+  if Tipo_Rel.Text = 'Analítico' then
+  begin
+    try
+      btnExecuta.Enabled := False;
+      btnRetorna.Enabled := False;
+
+      try
+        with Table_Temp do
+        begin
+
+          Temp_Name    := Copy(TimeToStr(time), 1, 2) + Copy(TimeToStr(time), 4, 2) + Copy(TimeToStr(time), 7, 2);
+
+
+          with FieldDefs do
+          begin
+            Clear;
+            Add('ID', ftAutoInc, 0, False);
+            Add('CONDUTA', ftString, 100, False);
+            Add('DT_TRANS', ftDate, 0, False);
+            Add('NUM_DOC', ftString, 7, False);
+            Add('HISTORICO', ftString, 40, False);
+            Add('ACRESCIMO', ftFloat, 0, False);
+            Add('DESCONTO', ftFloat, 0, False);
+            Add('VALOR', ftFloat, 0, False);
+            Add('BANCO_ID',ftInteger,0,False);
+            Add('BANCO_ID_PAGTO',ftInteger,0,False);
+            Add('CLIENTE_ID',ftInteger,0,False);
+            Add('NOME',ftString,40,False);
+            Add('VALOR_REC',ftFloat,0,False);
+            Add('NOME_CONTA',ftString,40,False);
+            Add('TIPO',ftString,40,False);
+          end;
+
+          with IndexDefs do
+          begin
+            Clear;
+            Add('', 'ID', [ixPrimary, ixUnique]);
+            Add('TEMP', 'CONDUTA', [ixCaseInsensitive, ixDescending]);
+          end;
+          Open;
+        end;
+      except
+       Application.MessageBox('Ocorreu um erro ao criar um arquivo temporário', PChar(Msg_Title), mb_IconStop);
+       exit;
+      end;
+
+      {QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO NOME_CONTA, TRANSACOES.*, CLIENTES.NOME , FINALIZADORAS.TIPO_TRANSACAO, CLIENTES.CLIENTE_ID, TRANSPARCELAS.BANCO_ID BANCO_ID_PAGTO, TRANSPARCELAS.VALOR VALOR_REC, TRANSPARCELAS.PARCELA_ID PARCELAS FROM TRANSACOES ');
+      QRel.Sql.Add('LEFT JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.SQL.Add('LEFT JOIN CLIENTES ON CLIENTES.CLIENTE_ID = TRANSACOES.CLIENTE_ID ');
+      QRel.SQL.Add('LEFT JOIN FINALIZADORAS ON FINALIZADORAS.FINALIZADORA_ID = TRANSACOES.FINALIZADORA_ID ');
+      QRel.SQL.Add('LEFT JOIN TRANSPARCELAS ON TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID ');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+    //QRel.Sql.Add('AND ((TRANSPARCELAS.BANCO_ID = 0) OR (TRANSPARCELAS.BANCO_ID IS NULL))');
+      QRel.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL) ');
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      if Caixa_banco.Value <> 0 then
+       QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+       if C_Custo_id.Value <> 0 then
+       QRel.Sql.Add('AND (TRANSACOES.C_CUSTO_ID = :CUSTO_ID)');
+
+       QRel.Sql.Add('ORDER BY DT_ENT_SAI, NUM_DOC , NOME ');
+
+       IF EMPRESA_ID.Value = 0 Then
+        QRel.ParamByName('ESPECIAL').AsString    := 'SIM'
+       else
+        QRel.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+      QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+      QRel.ParamByName('BALANCO').AsString      := 'AGRUPADO';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+      if C_CUSTO_ID.Value <> 0 then
+      QRel.ParamByName('CUSTO_ID').AsInteger    := StrToInt(C_CUSTO_ID.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+      QRel.First;
+      while not QRel.Eof do
+      begin
+
+        if (QRel.FieldByName('PARCELA_ID').AsString = 'F') OR (QRel.FieldByName('PARCELA_ID').AsString = '0000F')  Then
+        Begin
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger > 0) and (QRel.FieldByName('TIPO_VENDA').AsString = 'VENDA')
+            and (Copy(QRel.FieldByName('PARCELAS').AsString,4,2) = '00') then
+            Begin
+              Sub_Tit  := '*** Venda a Vista ***';
+              Tipo     := 'CREDITO';
+            End;
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger > 0) and (QRel.FieldByName('TIPO_VENDA').AsString = 'VENDA')
+             and (Copy(QRel.FieldByName('PARCELAS').AsString,4,2) = '02') then
+             Begin
+              Sub_Tit := '*** Venda Cheque ***';
+              Tipo    := 'CREDITO';
+             End;
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger > 0) and (QRel.FieldByName('TIPO_VENDA').AsString = 'VENDA')
+            and (Copy(QRel.FieldByName('PARCELAS').AsString,4,2) >= '03') then
+            Begin
+              Sub_Tit := '*** Venda a Cartão ***';
+              Tipo    := 'CREDITO';
+            End;
+
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07')  AND (QRel.FieldByName('CLIENTE_ID').AsInteger > 0) AND (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger = 0) then
+            Begin
+              Sub_Tit := '*** Venda a Prazo ***';
+              Tipo    := 'CREDITO';
+            End;
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') AND (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger = 0) AND (QRel.FieldByName('VALOR_REC').AsFloat > 0) then
+            Begin
+            Sub_Tit := '*** Parcelas a Receber ***';
+            Tipo    := 'CREDITO';
+            End;
+
+        End
+        Else
+        Begin
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A VISTA') and (QRel.FieldByName('TIPO_VENDA').AsString = 'VENDA') then
+           Begin
+            Sub_Tit := '*** Venda a Vista ***';
+            Tipo    := 'CREDITO';
+           End;
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') and (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger > 0)  then
+          Begin
+          Sub_Tit := '*** Entrada de venda a Prazo ***';
+          Tipo    := 'CREDITO';
+          End;
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') AND (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger = 0) AND (QRel.FieldByName('VALOR_REC').AsFloat > 0) then
+           Begin
+            Sub_Tit := '*** Parcelas a Receber ***';
+            Tipo    := 'CREDITO';
+           End;
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'CARTAO') AND (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger = 0) then
+           Begin
+            Sub_Tit := '*** Venda a Cartão ***';
+            Tipo    := 'CREDITO';
+           End;
+
+         if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'CHEQUE') AND (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger = 0) then
+           Begin
+            Sub_Tit := '*** Venda Cheque ***';
+            Tipo    := 'CREDITO';
+           End;
+
+        End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('TIPO_VENDA').AsString <> 'VENDA') then
+          Begin
+          Sub_Tit := '*** Outras Vendas ***';
+          Tipo    := 'CREDITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString <> '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A VISTA') then
+          Begin
+          Sub_Tit := '*** Receita a Vista ***';
+          Tipo    := 'CREDITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A VISTA') and (QRel.FieldByName('TIPO_COMPRA').AsString = 'COMPRA') then
+          Begin
+          Sub_Tit := '*** Compra a Vista ***';
+          Tipo    := 'DEBITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('TIPO_COMPRA').AsString <> 'COMPRA') then
+          BEGIN
+          Sub_Tit := '*** Outras Compras ***';
+          Tipo    := 'CREDITO';
+          END;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('DEPTO').AsString <> '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A VISTA') then
+          Begin
+          Sub_Tit := '*** Despesa a Vista ***';
+          Tipo    := 'CREDITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString <> '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') then
+          Begin
+          Sub_Tit := '*** Receita a Prazo ***';
+          Tipo    := 'CREDITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('DEPTO').AsString = '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') then
+          Begin
+          Sub_Tit := '*** Compra a Prazo ***';
+          Tipo    := 'DEBITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('DEPTO').AsString <> '07') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') then
+          Begin
+          Sub_Tit := '*** Despesa a Prazo ***';
+          Tipo    := 'DEBITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('DEPTO').AsString = '10') then
+          Begin
+          Sub_Tit := '*** Devolução de Venda ***';
+          Tipo    := 'DEBITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('DEPTO').AsString = '10') then
+          Begin
+          Sub_Tit := '*** Devolução de Compra ***';
+          Tipo    := 'CREDITO';
+          End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('DEPTO').AsString = '04') then
+         Begin
+          Sub_Tit := '*** Transf. Entre Contas ***';
+          Tipo    := 'DEBITO';
+         End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '07') and (QRel.FieldByName('BANCO_ID_PAGTO').AsInteger = 0)   then
+         Begin
+          Sub_Tit := '*** Recebimento de Contas ***';
+          Tipo    := 'CREDITO';
+         End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '08') then
+        Begin
+          Sub_Tit := '*** Pagamento de Contas ***';
+          Tipo    := 'DEBITO';
+        End;
+
+        if QRel.FieldByName('CONDUTA').AsString = '17' then
+        Begin
+          Sub_Tit := '*** Consumo de Estoque ***';
+          Tipo    := 'CREDITO';
+        End;
+
+        if QRel.FieldByName('CONDUTA').AsString = '18' then
+        Begin
+          Sub_Tit := '*** Dev. de Consumo de Estoque ***';
+          Tipo    := 'DEBITO';
+        End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '19') and (QRel.FieldByName('DEPTO').AsString = '07') then
+        Begin
+          Sub_Tit := '*** Entrada de Produto Acabado ***';
+          Tipo    := 'CREDITO';
+        End;
+
+        if (QRel.FieldByName('CONDUTA').AsString = '20') and (QRel.FieldByName('DEPTO').AsString = '07') then
+        Begin
+          Sub_Tit := '*** Transferência de Estoque ***';
+          Tipo    := 'DEBITO';
+        End;
+
+        Table_Temp.Append;
+        Table_Temp.FieldByName('CONDUTA').AsString     := Sub_Tit + ' - ' + QRel.FieldByName('NOME_CONTA').AsString ;
+        Table_Temp.FieldByName('DT_ENT_SAI').AsString  := QRel.FieldByName('DT_ENT_SAI').AsString;
+        Table_Temp.FieldByName('NUM_DOC').AsString     := QRel.FieldByName('NUM_DOC').AsString;
+        Table_Temp.FieldByName('HISTORICO').AsString   := QRel.FieldByName('HISTORICO').AsString + ' Parc.:' + QRel.FieldByName('PARCELAS').AsString;
+        Table_Temp.FieldByName('ACRESCIMO').AsFloat    := QRel.FieldByName('VR_ACRESCIMO').AsFloat;
+        Table_Temp.FieldByName('NOME_CONTA').AsString  := QRel.FieldByName('NOME_CONTA').AsString;
+        Table_Temp.FieldByName('TIPO').AsString        := TIPO;
+
+        if (QRel.FieldByName('PARCELA_ID').AsString = 'F') OR (QRel.FieldByName('PARCELA_ID').AsString = '0000F')  Then
+        Begin
+        Table_Temp.FieldByName('VALOR').AsFloat        := QRel.FieldByName('VALOR_REC').AsFloat;
+        Table_Temp.FieldByName('DESCONTO').AsFloat     := 0;
+        End
+        Else
+        Begin
+        Table_Temp.FieldByName('VALOR').AsFloat        := QRel.FieldByName('VALOR').AsFloat;
+        Table_Temp.FieldByName('DESCONTO').AsFloat     := QRel.FieldByName('VR_DESCONTO').AsFloat;
+        End;
+
+        Table_Temp.FieldByName('BANCO_ID').AsInteger         := QRel.FieldByName('BANCO_ID').AsInteger;
+        Table_Temp.FieldByName('BANCO_ID_PAGTO').AsInteger   := QRel.FieldByName('BANCO_ID_PAGTO').AsInteger;
+        Table_Temp.FieldByName('CLIENTE_ID').AsInteger       := QRel.FieldByName('CLIENTE_ID').AsInteger;
+        Table_Temp.FieldByName('NOME').AsString              := QRel.FieldByName('NOME').AsString;
+
+        if (((QRel.FieldByName('CONDUTA').AsString = '01') OR (QRel.FieldByName('CONDUTA').AsString = '02') ) and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO')) then
+        Begin
+        Table_Temp.FieldByName('VALOR').AsFloat        := QRel.FieldByName('VALOR_REC').AsFloat;
+        Table_Temp.FieldByName('DESCONTO').AsFloat     := 0;
+        End;
+
+
+        Table_Temp.Post;
+        Progresso.Caption := Sub_Tit + ' - ' + QRel.FieldByName('NOME_CONTA').AsString;
+        Application.ProcessMessages;
+        QRel.Next;
+      end;
+
+      Begin
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT TABELAS.DESCRICAO NOME_CONTA, TRANSACOES.*,  TRANSPARCELAS.VALOR AS VR_RECEBIMENTO, TRANSPARCELAS.DT_VENCIMENTO,TRANSPARCELAS.PARCELA_ID PARCELAS ');
+        QRel.Sql.Add('FROM TRANSACOES');
+        QRel.Sql.Add('INNER JOIN TABELAS');
+        QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+        QRel.Sql.Add('LEFT JOIN TRANSPARCELAS');
+        QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSPARCELAS.TRANSACAO_ID)');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+        IF EMPRESA_ID.Value = 0 Then
+        QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+        else
+        QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+        QRel.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+        QRel.Sql.Add('AND (TRANSACOES.DT_ENT_SAI <> TRANSPARCELAS.DT_VENCIMENTO)');
+        QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID > 0)');
+        QRel.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+        QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO) ');
+
+         if Caixa_banco.Value <> 0 then
+         QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+           if C_Custo_id.Value <> 0 then
+        QRel.Sql.Add('AND (TRANSACOES.C_CUSTO_ID = :CUSTO_ID)');
+
+
+        QRel.Sql.Add('ORDER BY TRANSACOES.DT_ENT_SAI, TRANSACOES.NUM_DOC ');
+
+
+        IF EMPRESA_ID.Value = 0 Then
+        QRel.ParamByName('ESPECIAL').AsString    := 'SIM'
+        else
+        QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+        QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+        QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+        QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+        QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+
+         if Caixa_banco.Value <> 0 then
+        QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+        if C_CUSTO_ID.Value <> 0 then
+        QRel.ParamByName('CUSTO_ID').AsInteger    := StrToInt(C_CUSTO_ID.Text);
+
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+
+        while not QRel.Eof do
+        begin
+
+          if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') AND (QRel.FieldByName('DT_VENCIMENTO').AsDateTime = QRel.FieldByName('DT_ENT_SAI').AsDateTime) AND
+             (QRel.FieldByName('PARCELAS').AsString = '01/11')  then
+          Begin
+            Sub_Tit := '*** Entrada de venda a Prazo   ***';
+            Tipo    := 'DEBITO';
+
+          End;
+
+          if (QRel.FieldByName('CONDUTA').AsString = '01') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') AND (QRel.FieldByName('DT_VENCIMENTO').AsDateTime <> QRel.FieldByName('DT_ENT_SAI').AsDateTime)  then
+          Begin
+            Sub_Tit := '*** Recebimento de Contas ***';
+            Tipo    := 'CREDITO';
+          End;
+
+          if (QRel.FieldByName('CONDUTA').AsString = '02') and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') then
+          Begin
+            Sub_Tit := '*** Pagamento de Contas ***';
+            Tipo    := 'DEBITO';
+          End;
+
+          Table_Temp.Append;
+          Table_Temp.FieldByName('CONDUTA').AsString   := Sub_Tit + ' - ' + QRel.FieldByName('NOME_CONTA').AsString;
+          Table_Temp.FieldByName('DT_ENT_SAI').AsString  := QRel.FieldByName('DT_ENT_SAI').AsString;
+          Table_Temp.FieldByName('NUM_DOC').AsString   := QRel.FieldByName('NUM_DOC').AsString;
+          Table_Temp.FieldByName('HISTORICO').AsString := QRel.FieldByName('HISTORICO').AsString;
+          Table_Temp.FieldByName('ACRESCIMO').AsFloat  := 0;
+          Table_Temp.FieldByName('DESCONTO').AsFloat   := 0;
+          Table_Temp.FieldByName('VALOR').AsFloat      := QRel.FieldByName('VR_RECEBIMENTO').AsFloat;
+          Table_Temp.FieldByName('NOME_CONTA').AsString  := QRel.FieldByName('NOME_CONTA').AsString;
+          Table_Temp.FieldByName('TIPO').AsString      := TIPO;
+
+          Table_Temp.Post;
+
+          Progresso.Caption := Sub_Tit + ' - ' + QRel.FieldByName('NOME_CONTA').AsString;
+          Application.ProcessMessages;
+          QRel.Next;
+
+        end;
+      End;
+      
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO NOME_CONTA, TRANSACOES.*, CLIENTES.NOME CLIENTE');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('INNER JOIN CLIENTES ON TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID');
+      QRel.Sql.Add('WHERE ');
+      QRel.Sql.Add('(CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO)');
+      QRel.Sql.Add('AND (COND_PAGTO = :COND_PAGTO)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.PARCELA_ID <> :PARCELA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL) ');
+
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('ORDER BY DT_ENT_SAI, CLIENTE, NUM_DOC');
+
+      QRel.ParamByName('CONDUTA').AsString      := '01';
+      QRel.ParamByName('DEPTO').AsString        := '07';
+      QRel.ParamByName('COND_PAGTO').AsString   := 'A PRAZO';
+      QRel.ParamByName('PARCELA_ID').AsString   := 'F';
+
+      IF EMPRESA_ID.Value = 0 Then
+       QRel.ParamByName('ESPECIAL').AsString    := 'SIM'
+      else
+       QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+
+      QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+      QRel.ParamByName('TIPO_TABELA').AsString  := '4';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+
+      QRel.Prepare;
+      QRel.Open;
+      QRel.First;
+
+        while not QRel.Eof do
+        Begin
+
+          Sub_Tit := '*** Venda a Prazo *** - ' + QRel.FieldByName('NOME_CONTA').AsString;
+
+          Table_Temp.Append;
+          Table_Temp.FieldByName('CONDUTA').AsString     := Sub_Tit + ' - ' + QRel.FieldByName('NOME_CONTA').AsString ;
+          Table_Temp.FieldByName('DT_ENT_SAI').AsString  := QRel.FieldByName('DT_ENT_SAI').AsString;
+          Table_Temp.FieldByName('NUM_DOC').AsString     := QRel.FieldByName('NUM_DOC').AsString;
+          Table_Temp.FieldByName('HISTORICO').AsString   := QRel.FieldByName('HISTORICO').AsString;
+          Table_Temp.FieldByName('ACRESCIMO').AsFloat    := QRel.FieldByName('VR_ACRESCIMO').AsFloat;
+          Table_Temp.FieldByName('VALOR').AsFloat        := QRel.FieldByName('VALOR').AsFloat;
+          Table_Temp.FieldByName('VALOR_REC').AsFloat    := QRel.FieldByName('VALOR').AsFloat;
+          Table_Temp.FieldByName('DESCONTO').AsFloat     := QRel.FieldByName('VR_DESCONTO').AsFloat;
+          Table_Temp.FieldByName('BANCO_ID').AsInteger   := QRel.FieldByName('BANCO_ID').AsInteger;
+          Table_Temp.FieldByName('CLIENTE_ID').AsInteger := QRel.FieldByName('CLIENTE_ID').AsInteger;
+          Table_Temp.FieldByName('NOME').AsString        := QRel.FieldByName('CLIENTE').AsString;
+          Table_Temp.FieldByName('NOME_CONTA').AsString  := QRel.FieldByName('NOME_CONTA').AsString;
+          Table_Temp.FieldByName('TIPO').AsString        := 'CREDITO';
+
+
+          Table_Temp.Post;
+
+          Progresso.Caption := Sub_Tit + ' - ' + QRel.FieldByName('NOME_CONTA').AsString;
+          Application.ProcessMessages;
+          QRel.Next;
+
+        End;
+
+      // venda a prazo muitiplos pagamentos!!
+
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO NOME_CONTA, TRANSACOES.*, CLIENTES.NOME CLIENTE, TRANSPARCELAS.VALOR VALOR_REC, TRANSPARCELAS.BANCO_ID BANCO_ID_PAGTO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('LEFT JOIN CLIENTES ON TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID');
+      QRel.Sql.Add('INNER JOIN TRANSPARCELAS ON TRANSACOES.TRANSACAO_ID = TRANSPARCELAS.TRANSACAO_ID');
+      QRel.Sql.Add('WHERE ');
+      QRel.Sql.Add('(CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO)');
+      QRel.Sql.Add('AND (COND_PAGTO = :COND_PAGTO)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND ((TRANSACOES.PARCELA_ID = :PARCELA_ID) OR (TRANSACOES.PARCELA_ID = :PARCELA_ID1) )');
+      QRel.Sql.Add('AND (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL) ');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('ORDER BY DT_ENT_SAI, CLIENTE, NUM_DOC');
+
+      QRel.ParamByName('CONDUTA').AsString      := '01';
+      QRel.ParamByName('DEPTO').AsString        := '07';
+      QRel.ParamByName('COND_PAGTO').AsString   := 'A PRAZO';
+      QRel.ParamByName('PARCELA_ID').AsString   := '0000F';
+      QRel.ParamByName('PARCELA_ID1').AsString  := 'F';
+
+      IF EMPRESA_ID.Value = 0 Then
+       QRel.ParamByName('ESPECIAL').AsString    := 'SIM'
+      else
+       QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+      QRel.First;
+      }
+
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT DT_ENT_SAI ,NUM_DOC,HISTORICO, VR_ACRESCIMO,VR_DESCONTO,VALOR,BANCO_ID, CLASSE , DESCRICAO, (COALESCE(CREDITO, 0)) CREDITO, (COALESCE(DEBITO, 0)) DEBITO, TIPO ');
+      QRel.Sql.Add('FROM(');
+
+      QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,TRANSACOES.VR_ACRESCIMO,TRANSACOES.VR_DESCONTO,TRANSACOES.VALOR,TRANSACOES.BANCO_ID,');
+      QRel.Sql.Add('TABELAS.CLASSE ,TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO,  CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO,');
+      QRel.Sql.Add('CASE WHEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) > 0 THEN ''DEBITO'' ELSE ''CREDITO'' END  TIPO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :VISTA)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      // FORNECEDORES PAGOS
+      QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,TRANSACOES.VR_ACRESCIMO,TRANSACOES.VR_DESCONTO,TRANSACOES.VALOR,TRANSACOES.BANCO_ID,');
+      QRel.Sql.Add('TABELAS.CLASSE, ''FORNECEDORES PAGOS'' DESCRICAO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO , ''DEBITO'' TIPO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      // RECEBIMENTOS
+      QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,TRANSACOES.VR_ACRESCIMO,TRANSACOES.VR_DESCONTO,TRANSACOES.VALOR,TRANSACOES.BANCO_ID,');
+      QRel.Sql.Add('TABELAS.CLASSE, ''RECEBIMENTOS'' DESCRICAO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO , ''DEBITO'' TIPO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.SAIDA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_REC)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+
+     // novos creditos operacionais
+      QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,TRANSACOES.VR_ACRESCIMO,TRANSACOES.VR_DESCONTO,TRANSACOES.VALOR,TRANSACOES.BANCO_ID,');
+      QRel.Sql.Add('TABELAS.CLASSE ,TABELAS.DESCRICAO, COALESCE((PRODUTOS.CUSTO_COMPRA * TRANSITENS.QUANTIDADE), 0) CREDITO, 0 DEBITO, ''DEBITO'' TIPO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSITENS');
+      QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN PRODUTOS');
+      QRel.Sql.Add('ON (PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_IDD = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_CRED)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+      //QRel.Sql.Add('GROUP BY TABELAS.DESCRICAO,TABELAS.CLASSE');
+
+      QRel.Sql.Add('UNION ALL');
+
+     // novos debitos operacionais
+      QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,TRANSACOES.VR_ACRESCIMO,TRANSACOES.VR_DESCONTO,TRANSACOES.VALOR,TRANSACOES.BANCO_ID,');
+      QRel.Sql.Add('TABELAS.CLASSE, TABELAS.DESCRICAO, 0 CREDITO, COALESCE((PRODUTOS.CUSTO_COMPRA * TRANSITENS.QUANTIDADE), 0) DEBITO , ''DEBITO'' TIPO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSITENS');
+      QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN PRODUTOS');
+      QRel.Sql.Add('ON (PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_IDC = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_DEB)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+      //QRel.Sql.Add('GROUP BY TABELAS.DESCRICAO,TABELAS.CLASSE');
+
+      //RECEBIMENTOS/PAGAMENTOS EFETUADOS
+     {
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,TRANSACOES.VR_ACRESCIMO,TRANSACOES.VR_DESCONTO,TRANSACOES.VALOR,TRANSACOES.BANCO_ID,');
+      QRel.Sql.Add('TABELAS.CLASSE, TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :DESCONTO) THEN COALESCE((TRANSACOES.VALOR_PARCELA - TRANSACOES.VALOR), 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :JUROS) THEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) END DEBITO, CASE WHEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) > 0 THEN ''DEBITO'' ELSE ''CREDITO'' END  TIPO ');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND ((TRANSACOES.CONDUTA = :COND_PAGTO) or (TRANSACOES.CONDUTA = :COND_REC))');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND ((TRANSACOES.SERIE = :JUROS) OR (TRANSACOES.SERIE = :DESCONTO))');
+      }
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,TRANSACOES.VR_ACRESCIMO,TRANSACOES.VR_DESCONTO,TRANSACOES.VALOR,TRANSACOES.BANCO_ID,');
+      QRel.Sql.Add('TABELAS.CLASSE, TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END DEBITO , CASE WHEN COALESCE(TRANSPARCELAS.VALOR, 0) > 0 THEN ''DEBITO'' ELSE ''CREDITO'' END TIPO');
+      QRel.Sql.Add('FROM TRANSPARCELAS');
+      QRel.Sql.Add('INNER JOIN TRANSACOES');
+      QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :PRAZO)');
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID > 0)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      QRel.Sql.Add(') as teste');
+
+     // QRel.Sql.Add('GROUP BY TESTE.DESCRICAO,TESTE.CLASSE,TESTE.TIPO');
+
+      QRel.Sql.Add('ORDER BY TESTE.DESCRICAO,TESTE.DT_ENT_SAI');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+      QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+      QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+      QRel.ParamByName('PRAZO').AsString          := 'A PRAZO';
+     // QRel.ParamByName('VISTA').AsString          := 'A VISTA';
+      QRel.ParamByName('COND_CRED').AsString      := '01';
+      QRel.ParamByName('DPT_CRED').AsString       := '03';
+      QRel.ParamByName('COND_DEB').AsString       := '02';
+      QRel.ParamByName('DPT_DEB').AsString        := '02';
+      QRel.ParamByName('DPT_EST').AsString        := '07';
+      QRel.ParamByName('COND_REC').AsString       := '07';
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+      QRel.ParamByName('COND_PAGTO').AsString     := '08';
+    //  QRel.ParamByName('DESCONTO').AsString       := 'D';
+    //  QRel.ParamByName('JUROS').AsString          := 'J';
+    //  QRel.ParamByName('NORMAL').AsString         := 'N';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+
+
+      QRel.Prepare;
+      QRel.Open;
+      QRel.First;
+
+        while not QRel.Eof do
+        Begin
+
+         // Sub_Tit := '*** Venda a Prazo *** - ' + QRel.FieldByName('NOME_CONTA').AsString; ;
+
+          Table_Temp.Append;
+          Table_Temp.FieldByName('CONDUTA').AsString     := QRel.FieldByName('DESCRICAO').AsString;
+          Table_Temp.FieldByName('DT_TRANS').AsString    := QRel.FieldByName('DT_ENT_SAI').AsString;
+          Table_Temp.FieldByName('NUM_DOC').AsString     := QRel.FieldByName('NUM_DOC').AsString;
+          Table_Temp.FieldByName('HISTORICO').AsString   := QRel.FieldByName('HISTORICO').AsString;
+          Table_Temp.FieldByName('ACRESCIMO').AsFloat    := QRel.FieldByName('VR_ACRESCIMO').AsFloat;
+          Table_Temp.FieldByName('VALOR').AsFloat        := QRel.FieldByName('VALOR').AsFloat;
+          Table_Temp.FieldByName('VALOR_REC').AsFloat    := QRel.FieldByName('VALOR').AsFloat;
+          Table_Temp.FieldByName('DESCONTO').AsFloat     := QRel.FieldByName('VR_DESCONTO').AsFloat;
+          Table_Temp.FieldByName('BANCO_ID').AsInteger   := QRel.FieldByName('BANCO_ID').AsInteger;
+          Table_Temp.FieldByName('CLIENTE_ID').AsInteger := 0;//QRel.FieldByName('CLIENTE_ID').AsInteger;
+          Table_Temp.FieldByName('NOME').AsString        := '';//QRel.FieldByName('CLIENTE').AsString;
+          Table_Temp.FieldByName('NOME_CONTA').AsString  := QRel.FieldByName('DESCRICAO').AsString;
+          Table_Temp.FieldByName('TIPO').AsString        := '';
+
+
+          Table_Temp.Post;
+
+
+          Progresso.Caption := QRel.FieldByName('DESCRICAO').AsString;
+
+          Application.ProcessMessages;
+
+          QRel.Next;
+
+        END;
+
+
+      Table_Temp.IndexName := 'TEMP';
+
+      if Table_Temp.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      Else
+      Begin
+
+        QLayoutFastReport.SQL.Clear;
+        QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+        QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+        QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+        QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'UResumo_Diario';
+        QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+        QLayoutFastReport.Open();
+
+        Relatorio_Principal.Clear;
+
+
+        Relatorio_Principal.InheritFromTemplate('UResumo_Diario_Analitico.fr3');
+
+        Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text,'Resumo Movimento Diario Analítico');
+
+      //Herança UItensAbaixoDoMinimoRDP_Sintetico.fr3 -> Base_Relatorio_Agrupado_1.fr3 -> Base_Cabecalho.fr3
+
+        Relatorio_Principal.ShowReport();
+
+        Progresso.Caption := '';
+
+        {if caixa_banco.Value <> 0 then
+        Begin
+           QRlabel18.Enabled := True;
+           QRLabel18.Caption := 'Caixa/Banco : 00' + Caixa_banco.Text;
+           QRlabel19.Enabled := True;
+           QRLabel19.Caption := 'Caixa/Banco : 00' + Caixa_banco.Text;
+        End
+        ELSE
+        Begin
+          QRlabel18.Enabled := False;
+           QRlabel19.Enabled := False;
+        End;
+
+        IF EMPRESA_ID.Value > 0 Then
+        QRDBText3.DataSet := QEmpresa
+        else
+        QRDBText3.DataSet := FrmPrincipal.QEmpresa;
+
+        Resumo.Prepare;
+        Resumo.PreviewModal;
+        }
+      End;
+
+    finally
+      Table_Temp.Close;
+      btnExecuta.Enabled := True;
+      btnRetorna.Enabled := True;
+    end;
+  end;
+
+  if Tipo_Rel.Text = 'Sintético' then
+  begin
+    try
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT CLASSE , DESCRICAO, SUM(COALESCE(CREDITO, 0)) CREDITO, SUM(COALESCE(DEBITO, 0)) DEBITO ');
+      QRel.Sql.Add('FROM(');
+
+      // FORNECEDORES PAGOS
+      QRel.Sql.Add('SELECT TABELAS.CLASSE, ''FORNECEDORES PAGOS'' DESCRICAO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO ');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      // RECEBIMENTOS
+      QRel.Sql.Add('SELECT TABELAS.CLASSE, ''RECEBIMENTOS'' DESCRICAO, COALESCE(TRANSACOES.VALOR, 0) CREDITO , 0 DEBITO  ');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.SAIDA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_REC)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+       QRel.Sql.Add('UNION ALL');
+
+
+      //Lançamentos Debito/Crédito
+
+      QRel.Sql.Add('SELECT TABELAS.CLASSE ,TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO,  CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO');
+     // QRel.Sql.Add('CASE WHEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) > 0 THEN ''DEBITO'' ELSE ''CREDITO'' END  TIPO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :VISTA)');
+
+
+      QRel.Sql.Add(') as teste');
+
+      QRel.Sql.Add('GROUP BY TESTE.DESCRICAO,TESTE.CLASSE');
+
+      QRel.Sql.Add('ORDER BY TESTE.CLASSE,TESTE.DESCRICAO');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+    //  QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+      QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+     // QRel.ParamByName('PRAZO').AsString          := 'A PRAZO';
+     // QRel.ParamByName('VISTA').AsString          := 'A VISTA';
+      QRel.ParamByName('COND_CRED').AsString      := '01';
+      QRel.ParamByName('DPT_CRED').AsString       := '03';
+      QRel.ParamByName('COND_DEB').AsString       := '02';
+      QRel.ParamByName('DPT_DEB').AsString        := '02';
+      QRel.ParamByName('DPT_EST').AsString        := '07';
+      QRel.ParamByName('COND_REC').AsString       := '07';
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+      QRel.ParamByName('COND_PAGTO').AsString     := '08';
+     // QRel.ParamByName('DESCONTO').AsString       := 'D';
+     // QRel.ParamByName('JUROS').AsString          := 'J';
+    //  QRel.ParamByName('NORMAL').AsString         := 'N';
+
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+      QRLabel21.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      IF EMPRESA_ID.Value > 0 Then
+        QRDBText9.DataSet := QEmpresa
+      else
+        QRDBText9.DataSet := FrmPrincipal.QEmpresa;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+      Begin
+        QLayoutFastReport.SQL.Clear;
+        QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+        QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+        QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+        QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'UResumo_Diario';
+        QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+        QLayoutFastReport.Open();
+
+        Relatorio_Principal.Clear;
+
+
+        Relatorio_Principal.InheritFromTemplate('UResumo_Diario_Sintetico.fr3');
+
+        Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text,'Resumo Movimento Diario Sintetico');
+
+      //Herança UItensAbaixoDoMinimoRDP_Sintetico.fr3 -> Base_Relatorio_Agrupado_1.fr3 -> Base_Cabecalho.fr3
+
+        Relatorio_Principal.ShowReport();
+       //Resumo_Sintetico.Prepare;
+       //Resumo_Sintetico.PreviewModal;
+      End;
+    except
+
+    on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro:' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+    end;
+  end;
+
+  if (Tipo_Rel.Text = 'Sintético(Caixa)') or (Tipo_Rel.Text = 'Sintético(Competência)')  then
+  begin
+    try
+
+     QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT GRUPO_DRE, CLASSE, DESCRICAO, SUM(COALESCE(CREDITO, 0)) CREDITO, SUM(COALESCE(DEBITO, 0)) DEBITO, SUM(COALESCE(CREDITO_CX, 0)) CREDITO_CX, SUM(COALESCE(DEBITO_CX, 0)) DEBITO_CX FROM');
+      QRel.Sql.Add('(');
+     // MOVIMENTO A PRAZO
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE ,TABELAS.CLASSE, TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO, 0 CREDITO_CX, 0 DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :PRAZO)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      // MOVIMENTO A VISTA  CAIXA
+
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE, TABELAS.CLASSE ,TABELAS.DESCRICAO, 0 CREDITO,0 DEBITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO_CX, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :VISTA)');
+
+
+      QRel.Sql.Add('UNION ALL');
+
+      // MOVIMENTO A VISTA  CARTAO
+
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE, TABELAS.CLASSE ,TABELAS.DESCRICAO, 0 CREDITO,0 DEBITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO_CX, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = ''CARTAO'')');
+
+
+      QRel.Sql.Add('UNION ALL');
+
+      // MOVIMENTO A VISTA  COMPETENCIA
+
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE,TABELAS.CLASSE ,TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO, 0 CREDITO_CX,0 DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :VISTA)');
+
+
+      QRel.Sql.Add('UNION ALL');
+
+      // MOVIMENTO A VISTA  COMPETENCIA  CARTAO
+
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE,TABELAS.CLASSE ,TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO, 0 CREDITO_CX,0 DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = ''CARTAO'')');
+
+
+      QRel.Sql.Add('UNION ALL');
+
+      // PAGAMENTOS
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE, TABELAS.CLASSE, TABELAS.DESCRICAO, 0 DEBITO, 0 CREDITO, 0 CREDITO_CX, COALESCE(TRANSACOES.VALOR, 0) DEBITO_CX  ');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      // RECEBIMENTOS
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE, TABELAS.CLASSE, TABELAS.DESCRICAO, 0 DEBITO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) CREDITO_CX, 0 DEBITO_CX  ');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.SAIDA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :DPT_EST)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+    //  QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      // novos debitos operacionais
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE, TABELAS.CLASSE, TABELAS.DESCRICAO, COALESCE(SUM(PRODUTOS.CUSTO_COMPRA * TRANSITENS.QUANTIDADE), 0) CREDITO, 0 DEBITO, 0 CREDITO_CX , 0 DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSITENS');
+      QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN PRODUTOS');
+      QRel.Sql.Add('ON (PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_IDD = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_CRED)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+      QRel.Sql.Add('GROUP BY TABELAS.GRUPO_DRE,TABELAS.DESCRICAO,TABELAS.CLASSE');
+
+      QRel.Sql.Add('UNION ALL');
+
+      // novos creditos operacionais
+      QRel.Sql.Add('SELECT TABELAS.GRUPO_DRE, TABELAS.CLASSE, TABELAS.DESCRICAO, 0 CREDITO, COALESCE(SUM(PRODUTOS.CUSTO_COMPRA * TRANSITENS.QUANTIDADE), 0) DEBITO, 0 CREDITO_CX , 0 DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSITENS');
+      QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN PRODUTOS');
+      QRel.Sql.Add('ON (PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_IDC = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+          QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+        end
+        else
+        begin
+            if FrmPrincipal.config.FieldByName('TOTALIZADOR_G').AsString <> 'True'  then
+            begin
+              QRel.Sql.Add('AND (TRANSACOES.TPCTB = :TPCTB)');
+              QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+            end;
+        end;
+
+
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_CRED)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+      QRel.Sql.Add('GROUP BY TABELAS.GRUPO_DRE, TABELAS.DESCRICAO,TABELAS.CLASSE');
+
+      {
+      //RECEBIMENTOS/PAGAMENTOS EFETUADOS
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, 0 CREDITO, 0 DEBITO, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :DESCONTO) THEN COALESCE((TRANSACOES.VALOR_PARCELA - TRANSACOES.VALOR), 0) END CREDITO_CX, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :JUROS) THEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) END DEBITO_CX');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND ((TRANSACOES.CONDUTA = :COND_PAGTO) or (TRANSACOES.CONDUTA = :COND_REC))');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND ((TRANSACOES.SERIE = :JUROS) OR (TRANSACOES.SERIE = :DESCONTO))');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, 0 CREDITO , 0 DEBITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END CREDITO_CX, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END DEBITO_CX ');
+      QRel.Sql.Add('FROM TRANSPARCELAS');
+      QRel.Sql.Add('INNER JOIN TRANSACOES');
+      QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :PRAZO)');
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID > 0)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+      }
+
+      QRel.Sql.Add(') as teste');
+
+      QRel.Sql.Add('GROUP BY TESTE.GRUPO_DRE, TESTE.DESCRICAO, TESTE.CLASSE');
+
+      QRel.Sql.Add('ORDER BY TESTE.GRUPO_DRE, TESTE.CLASSE, TESTE.DESCRICAO');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+     // QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+    //  QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+      QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+      QRel.ParamByName('PRAZO').AsString          := 'A PRAZO';
+      QRel.ParamByName('VISTA').AsString          := 'A VISTA';
+      QRel.ParamByName('COND_CRED').AsString      := '01';
+      QRel.ParamByName('DPT_CRED').AsString       := '03';
+      QRel.ParamByName('COND_DEB').AsString       := '02';
+      QRel.ParamByName('DPT_DEB').AsString        := '02';
+      QRel.ParamByName('DPT_EST').AsString        := '07';
+      //QRel.ParamByName('COND_REC').AsString       := '07';
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+      QRel.ParamByName('COND_PAGTO').AsString     := '08';
+    // QRel.ParamByName('DESCONTO').AsString       := 'D';
+    // QRel.ParamByName('JUROS').AsString          := 'J';
+     //   QRel.ParamByName('NORMAL').AsString         := 'N';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+      QRLabel76.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      IF EMPRESA_ID.Value > 0 Then
+        QRDBText9.DataSet := QEmpresa
+      else
+        QRDBText58.DataSet := FrmPrincipal.QEmpresa;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+      Begin
+
+       Resumo_Sintetico_competencia.Prepare;
+       Resumo_Sintetico_competencia.PreviewModal;
+
+        total_credito := 0;
+        total_debito  := 0;
+
+       {
+          Deixei o select igual o original, então para separar o caixa do competência, crei dois ClienteDataSet,
+          chamados CDCredito e CDDebito, então percorro o select, se a opção for 'Sintético(Caixa)', vou adicionando
+          nos datasets os valors de CREDITO_CX e DEDITO_CX, caso a opção seja 'Sintético(Competência)', acrescento
+          os valors de CREDITO e DEBITO EM CDDebito.
+          Dessa forma, o relatório para os dois é o mesmo, mudo apenas o título.
+        }
+
+        if (Tipo_Rel.Text = 'Sintético(Caixa)') then
+        begin
+
+          QRel.First;
+          while not QRel.Eof do
+          begin
+
+            if (QRel.FieldByName('CREDITO_CX').AsFloat > 0) then
+            begin
+
+              total_credito := total_credito + QRel.FieldByName('CREDITO_CX').AsFloat;
+              CDCredito.Append;
+
+              CDCredito.FieldByName('GRUPO_DRE').AsString    := QRel.FieldByName('GRUPO_DRE').AsString;
+              CDCredito.FieldByName('DESCRICAO').AsString    := QRel.FieldByName('DESCRICAO').AsString;
+              CDCredito.FieldByName('VALOR_CREDITO').AsFloat := QRel.FieldByName('CREDITO_CX').AsFloat;
+              CDCredito.Post;
+
+               If Copy(QRel.FieldByName('DESCRICAO').AsString,1,7) = 'RECEITA' Then
+              total_receita := total_receita +  QRel.FieldByName('CREDITO_CX').AsFloat;
+
+
+              //Dentro do crédito, tive que colocar o débito pois apareceu uma situação, onde havia crédito e débito ao mesmo tempo
+              //no select, e só somava o valor do crédito faltando o débito, então sempre que for crédito eu verifico se tem o
+              //débito junto para acresta-lo.
+              {
+              if (QRel.FieldByName('DEBITO_CX').AsFloat > 0) then
+              begin
+
+                total_debito := total_debito +  QRel.FieldByName('DEBITO_CX').AsFloat;
+                CDDebito.Append;
+                CDDebito.FieldByName('DESCRICAO').AsString := QRel.FieldByName('DESCRICAO').AsString;
+                CDDebito.FieldByName('VALOR_DEBITO').AsFloat := QRel.FieldByName('DEBITO_CX').AsFloat;
+                CDDebito.Post;
+
+              end;
+              }
+            end
+            else if (QRel.FieldByName('DEBITO_CX').AsFloat > 0) then
+            begin
+              total_debito := total_debito +  QRel.FieldByName('DEBITO_CX').AsFloat;
+              CDDebito.Append;
+              CDDebito.FieldByName('GRUPO_DRE').AsString    := QRel.FieldByName('GRUPO_DRE').AsString;
+              CDDebito.FieldByName('DESCRICAO').AsString    := QRel.FieldByName('DESCRICAO').AsString;
+              CDDebito.FieldByName('VALOR_DEBITO').AsFloat  := QRel.FieldByName('DEBITO_CX').AsFloat;
+              CDDebito.Post;
+
+              If Copy(QRel.FieldByName('DESCRICAO').AsString,1,7) = 'IMPOSTO' Then
+              total_imposto := total_imposto +  QRel.FieldByName('DEBITO_CX').AsFloat;
+
+               If Copy(QRel.FieldByName('DESCRICAO').AsString,1,5) = 'CUSTO' Then
+              total_custo := total_custo +  QRel.FieldByName('DEBITO_CX').AsFloat;
+
+              If Copy(QRel.FieldByName('DESCRICAO').AsString,1,7) = 'DESPESA' Then
+              total_despesa := total_despesa +  QRel.FieldByName('DEBITO_CX').AsFloat;
+
+            end;
+            QRel.Next
+          end;
+        end
+        else if (Tipo_Rel.Text = 'Sintético(Competência)')  then
+        begin
+          QRel.First;
+          while not QRel.Eof do
+          begin
+
+            if (QRel.FieldByName('CREDITO').AsFloat > 0) then
+            begin
+
+              total_credito := total_credito + QRel.FieldByName('CREDITO').AsFloat;
+              CDCredito.Append;
+              CDCredito.FieldByName('GRUPO_DRE').AsString    := QRel.FieldByName('GRUPO_DRE').AsString;
+              CDCredito.FieldByName('DESCRICAO').AsString    := QRel.FieldByName('DESCRICAO').AsString;
+              CDCredito.FieldByName('VALOR_CREDITO').AsFloat := QRel.FieldByName('CREDITO').AsFloat;
+              CDCredito.Post;
+
+              If Copy(QRel.FieldByName('DESCRICAO').AsString,1,7) = 'RECEITA' Then
+              total_receita := total_receita +  QRel.FieldByName('CREDITO').AsFloat;
+
+              //Dentro do crédito, tive que colocar o débito pois apareceu uma situação, onde havia crédito e débito ao mesmo tempo
+              //no select, e só somava o valor do crédito faltando o débito, então sempre que for crédito eu verifico se tem o
+              //débito junto para acresta-lo.
+             { if (QRel.FieldByName('DEBITO').AsFloat > 0) then
+              begin
+                total_debito := total_debito +  QRel.FieldByName('DEBITO').AsFloat;
+                CDDebito.Append;
+                CDDebito.FieldByName('DESCRICAO').AsString := QRel.FieldByName('DESCRICAO').AsString;
+                CDDebito.FieldByName('VALOR_DEBITO').AsFloat := QRel.FieldByName('DEBITO').AsFloat;
+                CDDebito.Post;
+              end;
+              }
+            end
+            else if (QRel.FieldByName('DEBITO').AsFloat > 0) then
+            begin
+              total_debito := total_debito +  QRel.FieldByName('DEBITO').AsFloat;
+              CDDebito.Append;
+              CDDebito.FieldByName('GRUPO_DRE').AsString   := QRel.FieldByName('GRUPO_DRE').AsString;
+              CDDebito.FieldByName('DESCRICAO').AsString   := QRel.FieldByName('DESCRICAO').AsString;
+              CDDebito.FieldByName('VALOR_DEBITO').AsFloat := QRel.FieldByName('DEBITO').AsFloat;
+              CDDebito.Post;
+
+              If Copy(QRel.FieldByName('DESCRICAO').AsString,1,7) = 'IMPOSTO' Then
+              total_imposto := total_imposto +  QRel.FieldByName('DEBITO').AsFloat;
+
+               If Copy(QRel.FieldByName('DESCRICAO').AsString,1,5) = 'CUSTO' Then
+              total_custo := total_custo +  QRel.FieldByName('DEBITO').AsFloat;
+
+              If Copy(QRel.FieldByName('DESCRICAO').AsString,1,7) = 'DESPESA' Then
+              total_despesa := total_despesa +  QRel.FieldByName('DEBITO').AsFloat;
+            end;
+
+            QRel.Next
+          end;
+        end;
+        if (CDCredito.IsEmpty and CDDebito.IsEmpty) then
+        begin
+          Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation);
+          Exit;
+        end;
+
+        //ShowMessage(IntToStr(QRel.RecordCount));
+        //Pego todos os arquivos que são necessários para abertura do relátório, incluindo as heranças.
+        QLayoutFastReport.SQL.Clear;
+        QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+        QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+        QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+        QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := UnitName;
+        QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+        QLayoutFastReport.Open();
+
+        Relatorio_Principal.Clear;
+
+
+        Relatorio_Principal.InheritFromTemplate('UResumo_Diario_Empresas_Sintetico_Caixa.fr3');
+
+        texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Credito'));
+
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_credito);
+        end;
+
+        texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Debito'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_debito);
+        end;
+
+        texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Custo'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_Custo);
+        end;
+
+        texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Imposto'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_Imposto);
+        end;
+
+        texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Receita'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_Receita);
+        end;
+
+         texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Despesa'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_Despesa);
+        end;
+
+         texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Receita_Liquida'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_Receita - total_Imposto );
+        end;
+
+         texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Lucro_Bruto'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_Receita - (total_Imposto + total_Custo) );
+        end;
+
+        texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Total_Resultado'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '#,##0.00' , total_Receita - (total_Imposto + total_Custo + total_Despesa) );
+            resultado := total_Receita - (total_Imposto + total_Custo + total_Despesa) ;
+        end;
+
+        texto_fastrep:= TfrxMemoView(Relatorio_Principal.FindComponent('b_rel_simples_report_Summary_Percentual_Faturamento'));
+        if texto_fastrep <> nil then
+        begin
+            texto_fastrep.Text := FormatFloat( '##0.00' , (resultado / total_Receita) * 100)  + '%';
+        end;
+
+        if (Tipo_Rel.Text = 'Sintético(Caixa)') then
+        begin
+          Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text, 'Demonstração do Resultado do Exercício(DRE) '+ #13 +'Regima de Caixa');
+        end
+        else if (Tipo_Rel.Text = 'Sintético(Competência)') then
+        begin
+          Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text, 'Demonstração do Resultado do Exercício(DRE) '+ #13 +'Regime de Competência');
+        end;
+
+
+        //Herança UVendas_Vendedor_Normal.fr3 -> Base_Relatorio_Agrupado_2.fr3 -> Base_Cabecalho.fr3
+        //Herança UVendas_Vendedor_Sintetico.fr3 -> Base_Relatorio_Agrupado_1.fr3 -> Base_Cabecalho.fr3
+
+        Relatorio_Principal.ShowReport();
+
+
+        if CDCredito.Active then
+          CDCredito.EmptyDataSet;
+
+        if CDDebito.Active then
+          CDDebito.EmptyDataSet;
+
+
+
+      End;
+    except
+
+    on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro:' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+    end;
+  end;
+
+
+  if Tipo_Rel.Text = 'Sintético(Trasnferências)' then
+  begin
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT DESCRICAO, SUM(COALESCE(CREDITO, 0)) CREDITO, SUM(COALESCE(DEBITO, 0)) DEBITO FROM');
+      QRel.Sql.Add('(');
+
+     // novos creditos operacionais conta transferencia local
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, COALESCE(SUM(PRODUTOS.CUSTO_COMPRA * TRANSITENS.QUANTIDADE), 0) CREDITO, 0 DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSITENS');
+      QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN PRODUTOS');
+      QRel.Sql.Add('ON (PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_IDDL = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_CRED)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+      QRel.Sql.Add('GROUP BY TABELAS.DESCRICAO');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE <> :NORMAL)');
+
+      QRel.Sql.Add(') as teste');
+
+      QRel.Sql.Add('GROUP BY TESTE.DESCRICAO');
+
+      QRel.Sql.Add('ORDER BY TESTE.DESCRICAO');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+      QRel.ParamByName('COND_CRED').AsString      := '01';
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+      QRel.ParamByName('COND_PAGTO').AsString     := '08';
+      //QRel.ParamByName('NORMAL').AsString         := 'N';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+      QRLabel21.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      IF EMPRESA_ID.Value > 0 Then
+        QRDBText9.DataSet := QEmpresa
+      else
+        QRDBText9.DataSet := FrmPrincipal.QEmpresa;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+      Begin
+        QLayoutFastReport.SQL.Clear;
+        QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+        QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+        QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+        QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'UResumo_Diario';;
+        QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+        QLayoutFastReport.Open();
+
+        Relatorio_Principal.Clear;
+
+        Relatorio_Principal.InheritFromTemplate('UResumo_Diario_Sintetico.fr3');
+
+        Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text,'Resumo Diario Sintético');
+
+        //Herança UResumo_Diario_Sintetico.fr3 -> Base_Relatorio_Simples.fr3 -> Base_Cabecalho.fr3
+        Relatorio_Principal.ShowReport();
+
+       //Resumo_Sintetico.Prepare;
+       //Resumo_Sintetico.PreviewModal;
+      End;
+
+
+  end;
+
+  if Tipo_Rel.Text = 'Sintético(Conta Especial)' then
+  begin
+    try
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT DESCRICAO, SUM(COALESCE(CREDITO, 0)) CREDITO, SUM(COALESCE(DEBITO, 0)) DEBITO FROM');
+      QRel.Sql.Add('(');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :VISTA)');
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, COALESCE(TRANSACOES.VALOR, 0) CREDITO, 0 DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.SAIDA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_REC)');
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, COALESCE(TRANSACOES.VALOR, 0) CREDITO, 0 DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.SAIDA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_REC)');
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE <> :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE <> :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :DESCONTO) THEN COALESCE((TRANSACOES.VALOR_PARCELA - TRANSACOES.VALOR), 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :JUROS) THEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND ((TRANSACOES.CONDUTA = :COND_PAGTO) or (TRANSACOES.CONDUTA = :COND_REC))');
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND ((TRANSACOES.SERIE = :JUROS) OR (TRANSACOES.SERIE = :DESCONTO))');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSPARCELAS');
+      QRel.Sql.Add('INNER JOIN TRANSACOES');
+      QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :PRAZO)');
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID > 0)');
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      QRel.Sql.Add(') as teste');
+
+      QRel.Sql.Add('GROUP BY DESCRICAO');
+      QRel.Sql.Add('ORDER BY DESCRICAO');
+
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+      QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+      QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+      QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+      QRel.ParamByName('VISTA').AsString          := 'A VISTA';
+      QRel.ParamByName('PRAZO').AsString          := 'A PRAZO';
+      QRel.ParamByName('COND_CRED').AsString      := '01';
+      QRel.ParamByName('DPT_CRED').AsString       := '03';
+      QRel.ParamByName('COND_DEB').AsString       := '02';
+      QRel.ParamByName('DPT_DEB').AsString        := '02';
+      QRel.ParamByName('DPT_EST').AsString        := '07';
+      QRel.ParamByName('COND_REC').AsString       := '07';
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+      QRel.ParamByName('COND_PAGTO').AsString     := '08';
+      QRel.ParamByName('DESCONTO').AsString       := 'D';
+      QRel.ParamByName('JUROS').AsString          := 'J';
+     // QRel.ParamByName('NORMAL').AsString         := 'N';
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+      QRLabel21.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+      Begin
+        QLayoutFastReport.SQL.Clear;
+        QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+        QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+        QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+        QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'UResumo_Diario';
+        QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+        QLayoutFastReport.Open();
+
+        Relatorio_Principal.Clear;
+
+        Relatorio_Principal.InheritFromTemplate('UResumo_Diario_Sintetico.fr3');
+
+        Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text,'Resumo Diario Conta Especial');
+
+        //Herança UResumo_Diario_Sintetico.fr3 -> Base_Relatorio_Simples.fr3 -> Base_Cabecalho.fr3
+        Relatorio_Principal.ShowReport();
+      End;
+        //Resumo_Sintetico.PreviewModal;
+    except
+
+    end;
+  end;
+
+  if Tipo_Rel.Text = 'Detalhado por Conta' then
+  Begin
+   Try
+     QRel.Sql.Clear;
+     QRel.Sql.Add('SELECT TRANSACAO_ID, DESCRICAO, DT_ENT_SAI,  NUM_DOC, HISTORICO , CREDITO, DEBITO  FROM');
+     QRel.Sql.Add('(');
+
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID,TABELAS.DESCRICAO, TRANSACOES.DT_ENT_SAI,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+     // QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_CRED)');
+      //QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :PRAZO)');
+
+      QRel.Sql.Add('UNION ALL');
+      {
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID, TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :VISTA)');
+     {
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID,  TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.SAIDA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+      // fornecedores pagos
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID,  TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE <> :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+       }
+
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID,  TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :DESCONTO) THEN COALESCE((TRANSACOES.VALOR_PARCELA - TRANSACOES.VALOR), 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :JUROS) THEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      QRel.Sql.Add('AND ((TRANSACOES.CONDUTA = :COND_PAGTO) or (TRANSACOES.CONDUTA = :COND_REC))');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND ((TRANSACOES.SERIE = :JUROS) OR (TRANSACOES.SERIE = :DESCONTO))');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID,  TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSPARCELAS');
+      QRel.Sql.Add('INNER JOIN TRANSACOES');
+      QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :PRAZO)');
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID > 0)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      QRel.Sql.Add(') as teste');
+
+      if Conta_id.Value > 0  then
+      QRel.Sql.Add('WHERE DESCRICAO = :DESCRICAO_CONTA');
+
+      QRel.Sql.Add('ORDER BY TESTE.DESCRICAO,TESTE.DT_ENT_SAI,TESTE.TRANSACAO_ID');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+     //QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+     QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+     QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+     QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+     QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+     QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+    // QRel.ParamByName('VISTA').AsString          := 'A VISTA';
+     QRel.ParamByName('PRAZO').AsString          := 'A PRAZO';
+     QRel.ParamByName('COND_CRED').AsString      := '01';
+     QRel.ParamByName('DPT_CRED').AsString       := '03';
+     QRel.ParamByName('COND_DEB').AsString       := '02';
+     QRel.ParamByName('DPT_DEB').AsString        := '02';
+     QRel.ParamByName('DPT_EST').AsString        := '07';
+     QRel.ParamByName('COND_REC').AsString       := '07';
+     QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+     QRel.ParamByName('COND_PAGTO').AsString     := '08';
+     QRel.ParamByName('DESCONTO').AsString       := 'D';
+     QRel.ParamByName('JUROS').AsString          := 'J';
+    // QRel.ParamByName('NORMAL').AsString         := 'N';
+
+    if Caixa_banco.Value <> 0 then
+       QRel.ParamByName('BANCO_ID').AsInteger        := StrToInt(Caixa_banco.Text);
+
+    if Conta_id.Value > 0  then
+       QRel.ParamByName('DESCRICAO_CONTA').AsString  := QConta.FieldByname('DESCRICAO').AsString ;
+
+      QRel.Prepare;
+      QRel.Open;
+
+
+      QRLabel28.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+      Begin
+
+        QLayoutFastReport.SQL.Clear;
+        QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+        QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+        QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+        QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'UResumo_Diario';
+        QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+        QLayoutFastReport.Open();
+
+        Relatorio_Principal.Clear;
+
+        Relatorio_Principal.InheritFromTemplate('UResumo_Diario_Detalhado_Conta.fr3');
+
+        Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text,'Resumo Diario Detalhado por Conta');
+
+        //Herança UResumo_Diario_Sintetico.fr3 -> Base_Relatorio_Simples.fr3 -> Base_Cabecalho.fr3
+        Relatorio_Principal.ShowReport();
+
+       // Detalhe_Conta.PreviewModal;
+      End;
+
+
+   except
+
+   on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro relatorio conta detalhada!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+   End;
+  End;
+
+  if Tipo_Rel.Text = 'Detalhado por Conta(Transferências)' then
+  Begin
+
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT TRANSACAO_ID, DESCRICAO, DT_TRANS,  NUM_DOC, HISTORICO , CREDITO, DEBITO  FROM');
+      QRel.Sql.Add('(');
+
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID,TABELAS.DESCRICAO, TRANSACOES.DT_ENT_SAI DT_TRANS,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO, COALESCE(SUM(PRODUTOS.CUSTO_COMPRA * TRANSITENS.QUANTIDADE), 0) CREDITO, 0 DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSITENS');
+      QRel.Sql.Add('ON (TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN PRODUTOS');
+      QRel.Sql.Add('ON (PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_IDDL = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_CRED)');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('GROUP BY TRANSACOES.TRANSACAO_ID,TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI ,TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO');
+
+      QRel.Sql.Add(') as teste');
+
+      QRel.Sql.Add('ORDER BY TESTE.DT_TRANS');
+
+      IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+      QRel.ParamByName('COND_CRED').AsString      := '01';
+      QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+
+      if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger    := StrToInt(Caixa_banco.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+
+      QRLabel28.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+      Begin
+        QLayoutFastReport.SQL.Clear;
+        QLayoutFastReport.SQL.Add('SELECT NOME_ARQUIVO, ARQUIVO_RELATORIO FROM CONFIG_RELATORIOS');
+        QLayoutFastReport.SQL.Add('WHERE NOME_RELATORIO = :NOME_RELATORIO');
+        QLayoutFastReport.SQL.Add('OR NOME_RELATORIO = :BASE;');
+        QLayoutFastReport.ParamByName('NOME_RELATORIO').AsString := 'UResumo_Diario';
+        QLayoutFastReport.ParamByName('BASE').AsString := 'base';
+        QLayoutFastReport.Open();
+
+        Relatorio_Principal.Clear;
+
+        Relatorio_Principal.InheritFromTemplate('UResumo_Diario_Detalhado_Conta.fr3');
+
+        Relatorio_Principal := FrmPrincipal.Configura_Relatorio_FastReport(Relatorio_Principal, 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text,'Resumo Diario Detalhado por Conta');
+
+        //Herança UResumo_Diario_Sintetico.fr3 -> Base_Relatorio_Simples.fr3 -> Base_Cabecalho.fr3
+        Relatorio_Principal.ShowReport();
+
+        Detalhe_Conta.PreviewModal;
+
+      End;
+       // Detalhe_Conta.PreviewModal;
+
+  End;
+
+  if Tipo_Rel.Text = 'Detalhado por Conta(Itens)' then
+  Begin
+   try
+
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT TRANSACAO_ID, CONTA , DT_ENT_SAI, PRODUTO_ID, DESCRICAO, QUANTIDADE,VR_TOTAL');
+    QRel.SQL.Add('FROM(');
+    QRel.SQL.Add('SELECT TRANSITENS.TRANSACAO_ID, TABELAS.DESCRICAO CONTA ,TRANSACOES.DT_ENT_SAI,PRODUTO_ID, TRANSITENS.DESCRICAO DESCRICAO, SUM(TRANSITENS.QUANTIDADE) QUANTIDADE, SUM(VR_TOTAL - (TRANSITENS.QUANTIDADE*DESC_RODAPE)) VR_TOTAL');
+    QRel.SQL.Add('FROM TRANSITENS');
+    QRel.SQL.Add('INNER JOIN TRANSACOES on TRANSITENS.transacao_id =TRANSACOES.transacao_id');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM notas_canceladas_nfce)');
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+
+    if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+     QRel.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID,PRODUTO_ID,CONTA,DT_ENT_SAI,TRANSITENS.DESCRICAO');
+
+    QRel.SQL.Add('UNION ALL');
+
+    QRel.SQL.Add('SELECT TRANSITENS.TRANSACAO_ID, TABELAS.DESCRICAO CONTA ,TRANSACOES.DT_ENT_SAI,TRANSITENS.PRODUTO_ID, TRANSITENS.DESCRICAO DESCRICAO, SUM(TRANSITENS.QUANTIDADE) QUANTIDADE, ');
+    QRel.SQL.Add('SUM(PRODUTOS.CUSTO_COMPRA * TRANSITENS.QUANTIDADE) - SUM(TRANSITENS.QUANTIDADE*DESC_RODAPE) VR_TOTAL');
+    QRel.SQL.Add('FROM TRANSITENS');
+    QRel.SQL.Add('INNER JOIN TRANSACOES on TRANSITENS.transacao_id = TRANSACOES.transacao_id');
+    QRel.SQL.Add('INNER JOIN PRODUTOS on PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((TRANSACOES.CONTA_IDC = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM notas_canceladas_nfce)');
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+
+    if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+     QRel.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID,TRANSITENS.PRODUTO_ID,CONTA,DT_ENT_SAI,TRANSITENS.DESCRICAO');
+
+
+    QRel.SQL.Add(') as TESTE');
+
+     if Conta_id.Value > 0  then
+      QRel.Sql.Add('WHERE CONTA = :DESCRICAO_CONTA');
+
+    QRel.Sql.Add('ORDER BY TESTE.CONTA,TESTE.DESCRICAO');
+
+
+    if Caixa_banco.Value <> 0 then
+       QRel.ParamByName('BANCO_ID').AsInteger        := StrToInt(Caixa_banco.Text);
+
+    if Conta_id.Value > 0  then
+       QRel.ParamByName('DESCRICAO_CONTA').AsString  := QConta.FieldByname('DESCRICAO').AsString ;
+
+     QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+     QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+     QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+     QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+     QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+
+      QRLabel49.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+        Detalhe_Conta_ITENS.PreviewModal;
+
+
+   except
+
+   on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro relatorio conta detalhada ITENS!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+   end;
+
+
+  End;
+
+
+  if Tipo_Rel.Text = 'Detalhado por Conta(Itens-Recebimentos)' then
+  Begin
+   try
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT TRANSACAO_ID, NUM_DOC, CONTA , DT_ENT_SAI, PRODUTO_ID, DESCRICAO, QUANTIDADE,VR_TOTAL');
+    QRel.SQL.Add('FROM(');
+    QRel.SQL.Add('SELECT TRANSITENS.TRANSACAO_ID, NUM_DOC, TABELAS.DESCRICAO CONTA ,TRANSACOES.DT_ENT_SAI,PRODUTO_ID, TRANSITENS.DESCRICAO DESCRICAO, SUM(TRANSITENS.QUANTIDADE) QUANTIDADE, SUM(VR_TOTAL - (TRANSITENS.QUANTIDADE*DESC_RODAPE)) VR_TOTAL');
+    QRel.SQL.Add('FROM TRANSITENS');
+    QRel.SQL.Add('INNER JOIN TRANSACOES on TRANSACOES.SAIDA_ID = TRANSITENS.TRANSACAO_ID');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((TRANSITENS.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM notas_canceladas_nfce)');
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+
+    if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+     QRel.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID,PRODUTO_ID,CONTA,DT_ENT_SAI,TRANSITENS.DESCRICAO,NUM_DOC');
+
+    QRel.SQL.Add(') as TESTE');
+
+     if Conta_id.Value > 0  then
+      QRel.Sql.Add('WHERE CONTA = :DESCRICAO_CONTA');
+
+    QRel.Sql.Add('ORDER BY TESTE.CONTA,TESTE.TRANSACAO_ID,TESTE.NUM_DOC,TESTE.DESCRICAO');
+
+
+    if Caixa_banco.Value <> 0 then
+       QRel.ParamByName('BANCO_ID').AsInteger        := StrToInt(Caixa_banco.Text);
+
+    if Conta_id.Value > 0  then
+       QRel.ParamByName('DESCRICAO_CONTA').AsString  := QConta.FieldByname('DESCRICAO').AsString ;
+
+     QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+     QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+     QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+     QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+     QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+     QRel.ParamByName('CONDUTA').AsString        := '07';
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+
+      QRLabel66.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+        Detalhe_ITENS_REC.PreviewModal;
+
+
+   except
+
+   on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro relatorio conta detalhada ITENS!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+   end;
+
+
+  End;
+
+  if Tipo_Rel.Text = 'Detalhado por Conta(Itens-Custo)' then
+  Begin
+   try
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT TRANSACAO_ID, NUM_DOC, CONTA , DT_ENT_SAI, PRODUTO_ID, DESCRICAO, QUANTIDADE,VR_TOTAL');
+    QRel.SQL.Add('FROM(');
+    QRel.SQL.Add('SELECT TRANSITENS.TRANSACAO_ID, NUM_DOC, TABELAS.DESCRICAO CONTA ,TRANSACOES.DT_ENT_SAI,TRANSITENS.PRODUTO_ID, TRANSITENS.DESCRICAO DESCRICAO, SUM(TRANSITENS.QUANTIDADE) QUANTIDADE, SUM(PRODUTOS.CUSTO_COMPRA) VR_TOTAL');
+    QRel.SQL.Add('FROM TRANSITENS');
+    QRel.SQL.Add('INNER JOIN TRANSACOES on TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((TRANSITENS.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('INNER JOIN PRODUTOS ON (PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID)');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA) AND (TRANSACOES.DEPTO = :DEPTO)  ');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+    QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM notas_canceladas_nfce)');
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+
+    if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+     QRel.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID,NUM_DOC,DT_ENT_SAI,TRANSITENS.PRODUTO_ID,CONTA,TRANSITENS.DESCRICAO');
+
+
+     QRel.SQL.Add('UNION ALL');
+
+     QRel.SQL.Add('SELECT PEDITENS.PEDIDO_ID, ''Pedido Venda'' NUM_DOC, TABELAS.DESCRICAO CONTA ,PEDIDOS.DT_PEDIDO DT_ENT_SAI, PEDITENS.PRODUTO_ID, PEDITENS.DESCRICAO , ');
+     QRel.SQL.Add('SUM(PEDITENS.QUANTIDADE) QUANTIDADE, SUM(PRODUTOS.CUSTO_COMPRA) VR_TOTAL');
+     QRel.SQL.Add('FROM PEDITENS');
+     QRel.SQL.Add('INNER JOIN PEDIDOS on PEDITENS.PEDIDO_ID = PEDIDOS.PEDIDO_ID');
+     QRel.SQL.Add('INNER JOIN PRODUTOS on PRODUTOS.PRODUTO_ID = PEDITENS.PRODUTO_ID');
+     QRel.SQL.Add('INNER JOIN TABELAS');
+     QRel.SQL.Add('ON ((PEDITENS.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+     QRel.SQL.Add('WHERE (PEDIDOS.DT_PEDIDO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+     QRel.Sql.Add('AND PEDIDOS.STATUS = ''FATURADO'' ');
+     QRel.Sql.Add('AND (PEDIDOS.TRANSACAO_ID = 0 OR PEDIDOS.TRANSACAO_ID IS NULL)');
+     QRel.Sql.Add('AND PEDITENS.CONTA_ID > 0');
+
+     QRel.Sql.Add('GROUP BY PEDITENS.PEDIDO_ID,PEDITENS.PRODUTO_ID,TABELAS.DESCRICAO, PEDIDOS.DT_PEDIDO,PEDITENS.DESCRICAO');
+
+     {
+     QRel.SQL.Add('UNION ALL');
+
+     QRel.SQL.Add('SELECT ORDEM_ITENS.ORDEM_ID, ''Ordem Serviço'' NUM_DOC, TABELAS.DESCRICAO CONTA ,ORDEM_SERVICO.DT_ORDEM DT_ENT_SAI, ORDEM_ITENS.CODIGO_ITEM PRODUTO_ID, ORDEM_ITENS.DESCRICAO , ');
+     QRel.SQL.Add('SUM(ORDEM_ITENS.QUANTIDADE) QUANTIDADE, SUM(PRODUTOS.CUSTO_COMPRA) VR_TOTAL');
+     QRel.SQL.Add('FROM ORDEM_ITENS');
+     QRel.SQL.Add('INNER JOIN ORDEM_SERVICO ON ORDEM_ITENS.ORDEM_ID = ORDEM_SERVICO.ORDEM_ID');
+     QRel.SQL.Add('INNER JOIN PRODUTOS on PRODUTOS.PRODUTO_ID = ORDEM_ITENS.CODIGO_ITEM');
+     QRel.SQL.Add('INNER JOIN TABELAS');
+     QRel.SQL.Add('ON ((ORDEM_ITENS.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+     QRel.SQL.Add('WHERE (ORDEM_SERVICO.DT_ORDEM BETWEEN :DT_INICIAL AND :DT_FINAL)');
+     QRel.Sql.Add('AND ORDEM_SERVICO.STATUS = ''FATURADO'' ');
+     QRel.Sql.Add('AND (ORDEM_SERVICO.TRANSACAO_ID = 0 OR ORDEM_SERVICO.TRANSACAO_ID IS NULL)');
+     QRel.Sql.Add('AND ORDEM_ITENS.CONTA_ID > 0');
+
+     QRel.Sql.Add('GROUP BY ORDEM_ITENS.ORDEM_ID, ORDEM_ITENS.CODIGO_ITEM, TABELAS.DESCRICAO, ORDEM_SERVICO.DT_ORDEM, ORDEM_ITENS.DESCRICAO');
+
+     }
+
+     QRel.SQL.Add(') as TESTE');
+
+     if Conta_id.Value > 0  then
+      QRel.Sql.Add('WHERE CONTA = :DESCRICAO_CONTA');
+
+     QRel.Sql.Add('ORDER BY TESTE.CONTA,TESTE.NUM_DOC,TESTE.DESCRICAO,TESTE.TRANSACAO_ID');
+
+
+    if Caixa_banco.Value <> 0 then
+       QRel.ParamByName('BANCO_ID').AsInteger        := StrToInt(Caixa_banco.Text);
+
+    if Conta_id.Value > 0  then
+       QRel.ParamByName('DESCRICAO_CONTA').AsString  := QConta.FieldByname('DESCRICAO').AsString ;
+
+     QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+     QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+     QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+     QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+     QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+     QRel.ParamByName('CONDUTA').AsString        := '01';
+     QRel.ParamByName('DEPTO').AsString          := '07';
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+
+      QRLabel87.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+        Detalhe_Itens_Transf_Recebidas.PreviewModal;
+
+
+   except
+
+   on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro relatorio conta detalhada ITENS!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+   end;
+
+
+  End;
+
+  if Tipo_Rel.Text = 'Relatório Ordem de Serviço(Itens-Custo)' then
+  Begin
+   try
+
+     resumo_movimento_filial.Open;
+     resumo_movimento_filial.EmptyDataSet;
+
+     QSearch.Sql.Clear;
+     QSearch.Sql.Text := 'SELECT RAZAO , BANCO,USUARIO,SENHA,IP,PORTA,CNPJ FROM EMPRESAS WHERE EMPRESA_ID = :EMPRESA_ID AND STATUS = ''A''';
+     QSearch.ParamByName('EMPRESA_ID').AsInteger := StrToInt(Empresa_id.Text);
+     QSearch.Prepare;
+     QSearch.Open;
+
+
+
+      FilialDb.Free;
+      FilialDb := TFDConnection.Create(nil);
+     try
+
+      FilialDb.Params.Clear;
+      FilialDb.Params.Add('Database= ' + QSearch.FieldByName('BANCO').AsString );
+      FilialDb.Params.Add('User_Name= ' + QSearch.FieldByName('USUARIO').AsString );
+      FilialDb.Params.Add('Password=' + QSearch.FieldByName('SENHA').AsString );
+      FilialDb.Params.Add('Server= ' +  QSearch.FieldByName('IP').AsString );
+      FilialDb.Params.Add('Port= ' + QSearch.FieldByName('PORTA').AsString);
+      FilialDb.Params.Add('DriverID=PG');
+      FilialDb.Params.Add('MonitorBy=Remote');
+      FilialDb.Connected:=True;
+      FilialDb.Open();
+
+
+     Except
+       Application.MessageBox('Filial não conectada favor verificar!','Eficaz', MB_ICONERROR + MB_OK);
+     end;
+
+     if FilialDb.Connected  Then
+     Begin
+       Progresso.font.color := clgreen;
+       Progresso.Caption    := 'Filial OnLine';
+
+       QFilial.Connection :=FilialDb;
+
+
+      QFilial.SQL.Clear;
+      QFilial.SQL.Add('SELECT  NUM_DOC,  NOME , DT_ORDEM, PRODUTO_ID, PRODUTO_ID_MATRIZ, DESCRICAO, QUANTIDADE,VR_TOTAL');
+      QFilial.SQL.Add('FROM(');
+      QFilial.SQL.Add('SELECT ORDEM_SERVICO.ORDEM_ID NUM_DOC, FUNCIONARIOS.NOME ,ORDEM_SERVICO.DT_ORDEM, CODIGO_ITEM PRODUTO_ID,PRODUTO_ID_MATRIZ,');
+      QFilial.SQL.Add('ORDEM_ITENS.DESCRICAO DESCRICAO, SUM(ORDEM_ITENS.QUANTIDADE) QUANTIDADE, SUM(PRODUTOS.CUSTO_COMPRA) VR_TOTAL');
+      QFilial.SQL.Add('FROM ORDEM_ITENS');
+      QFilial.SQL.Add('INNER JOIN ORDEM_SERVICO on ORDEM_SERVICO.ORDEM_ID = ORDEM_ITENS.ORDEM_ID');
+      QFilial.SQL.Add('INNER JOIN FUNCIONARIOS ON FUNCIONARIOS.FUNCIONARIO_ID = ORDEM_SERVICO.FUNCIONARIO');
+      QFilial.SQL.Add('INNER JOIN PRODUTOS ON (PRODUTOS.PRODUTO_ID = ORDEM_ITENS.codigo_item)');
+      QFilial.SQL.Add('WHERE (ORDEM_SERVICO.DT_ORDEM BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QFilial.SQL.Add('AND (ORDEM_ITENS.tp_prod_serv  = ''P'') AND (ORDEM_SERVICO.STATUS = ''FATURADO'') ');
+      QFilial.SQL.Add('GROUP BY NOME , ORDEM_ITENS.CODIGO_ITEM ,DT_ORDEM, NUM_DOC,ORDEM_ITENS.DESCRICAO, PRODUTO_ID_MATRIZ');
+      QFilial.SQL.Add(') as TESTE ORDER BY NUM_DOC,PRODUTO_ID');
+
+      QFilial.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QFilial.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+      QFilial.Prepare;
+      QFilial.Open;
+      QFilial.First;
+
+      while not Qfilial.eof do
+      Begin
+
+
+       resumo_movimento_filial.Append;
+
+       resumo_movimento_filial.FieldByName('NOME').AsString        := QFilial.FieldByName('NOME').AsString;
+       resumo_movimento_filial.FieldByName('NUM_DOC').AsString     := QFilial.FieldByName('NUM_DOC').AsString;
+       resumo_movimento_filial.FieldByName('DT_ORDEM').AsDateTime  := QFilial.FieldByName('DT_ORDEM').AsDateTime;
+       resumo_movimento_filial.FieldByName('PRODUTO_ID').AsInteger := QFilial.FieldByName('PRODUTO_ID').AsInteger;
+       resumo_movimento_filial.FieldByName('DESCRICAO').AsString   := QFilial.FieldByName('DESCRICAO').AsString;
+       resumo_movimento_filial.FieldByName('QUANTIDADE').AsFloat   := QFilial.FieldByName('QUANTIDADE').AsFloat;
+
+       IBQuery.Sql.Clear;
+       IBQuery.Sql.Text := 'SELECT CUSTO_COMPRA FROM PRODUTOS WHERE PRODUTO_ID = :PRODUTO_ID';
+       IBQuery.ParamByName('PRODUTO_ID').AsInteger := QFilial.FieldByName('PRODUTO_ID_MATRIZ').AsInteger;
+       IBQuery.Prepare;
+       IBQuery.Open;
+
+       resumo_movimento_filial.FieldByName('VR_TOTAL').AsFloat   := IBQuery.FieldByName('CUSTO_COMPRA').AsFloat;
+
+       resumo_movimento_filial.Post;
+
+       Progresso.Caption := 'Produto: ' + QFilial.FieldByName('DESCRICAO').AsString;
+
+       Application.ProcessMessages;
+
+
+       QFilial.Next;
+      End;
+
+      Progresso.Caption := '';
+
+     End
+     Else
+     Begin
+       Progresso.font.color := clred;
+       Progresso.Caption    := 'Filial OffLine';
+     End;
+
+    {
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT  NUM_DOC,  NOME , DT_ORDEM, PRODUTO_ID, DESCRICAO, QUANTIDADE,VR_TOTAL');
+    QRel.SQL.Add('FROM(');
+    QRel.SQL.Add('SELECT ''ORDEM SERVIÇO'' NUM_DOC, FUNCIONARIOS.NOME ,ORDEM_SERVICO.DT_ORDEM, CODIGO_ITEM PRODUTO_ID,');
+    QRel.SQL.Add('ORDEM_ITENS.DESCRICAO DESCRICAO, SUM(ORDEM_ITENS.QUANTIDADE) QUANTIDADE, SUM(PRODUTOS.CUSTO_COMPRA) VR_TOTAL');
+    QRel.SQL.Add('FROM ORDEM_ITENS');
+    QRel.SQL.Add('INNER JOIN ORDEM_SERVICO on ORDEM_SERVICO.ORDEM_ID = ORDEM_ITENS.ORDEM_ID');
+    QRel.SQL.Add('INNER JOIN FUNCIONARIOS ON FUNCIONARIOS.FUNCIONARIO_ID = ORDEM_SERVICO.FUNCIONARIO');
+    QRel.SQL.Add('INNER JOIN PRODUTOS ON (PRODUTOS.PRODUTO_ID = ORDEM_ITENS.codigo_item)');
+    QRel.SQL.Add('WHERE (ORDEM_SERVICO.DT_ORDEM BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.SQL.Add('AND (ORDEM_ITENS.tp_prod_serv  = ''P'')');
+    QRel.SQL.Add('GROUP BY NOME , ORDEM_ITENS.CODIGO_ITEM ,DT_ORDEM,NUM_DOC,ORDEM_ITENS.DESCRICAO');
+    QRel.SQL.Add(') as TESTE');
+
+
+
+
+
+
+
+
+    if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+     QRel.Sql.Add('GROUP BY TRANSITENS.TRANSACAO_ID,NUM_DOC,DT_ENT_SAI,TRANSITENS.PRODUTO_ID,CONTA,TRANSITENS.DESCRICAO');
+
+    QRel.SQL.Add(') as TESTE');
+
+     if Conta_id.Value > 0  then
+      QRel.Sql.Add('WHERE CONTA = :DESCRICAO_CONTA');
+
+    QRel.Sql.Add('ORDER BY TESTE.CONTA,TESTE.NUM_DOC,TESTE.DESCRICAO,TESTE.TRANSACAO_ID');
+
+
+    if Caixa_banco.Value <> 0 then
+       QRel.ParamByName('BANCO_ID').AsInteger        := StrToInt(Caixa_banco.Text);
+
+    if Conta_id.Value > 0  then
+       QRel.ParamByName('DESCRICAO_CONTA').AsString  := QConta.FieldByname('DESCRICAO').AsString ;
+     }
+
+   //  QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+   //  QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+   //  QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+   //  QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+   //  QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+   //  QRel.ParamByName('CONDUTA').AsString        := '01';
+   //  QRel.ParamByName('DEPTO').AsString          := '07';
+   {
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+    }
+    //  QRel.Prepare;
+    //  QRel.Open;
+
+      // resumo_movimento_filial.IndexFieldNames := 'NOME;DT_ORDEM' + ':D';
+      // resumo_movimento_filial.Filter   := 'VR_TOTAL = 0';
+      // resumo_movimento_filial.Filtered := True;
+
+      QRLabel98.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if resumo_movimento_filial.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+        Detalhe_Itens_Ordem_Servico.PreviewModal;
+
+
+   except
+
+   on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro relatorio conta detalhada ITENS!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+   end;
+
+
+  End;
+
+
+  if Tipo_Rel.Text = 'Detalhado por Conta(Receb./Pagamentos)' then
+  Begin
+   try
+
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT TRANSACAO_ID, CONTA , NUM_DOC, DT_ENT_SAI, CLI_FOR_ID, NOME , VALOR');
+    QRel.SQL.Add('FROM(');
+    QRel.SQL.Add('SELECT TRANSACOES.TRANSACAO_ID, TABELAS.DESCRICAO CONTA ,TRANSACOES.NUM_DOC ,TRANSACOES.DT_ENT_SAI,TRANSACOES.CLIENTE_ID CLI_FOR_ID, CLIENTES.NOME,TRANSACOES.VALOR');
+    QRel.SQL.Add('FROM TRANSACOES ORIGEM');
+    QRel.SQL.Add('INNER JOIN TRANSACOES on TRANSACOES.SAIDA_ID= ORIGEM.TRANSACAO_ID');
+    QRel.SQL.Add('INNER JOIN CLIENTES on TRANSACOES.CLIENTE_ID =CLIENTES.CLIENTE_ID');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.SQL.Add('UNION ALL');
+    QRel.SQL.Add('SELECT TRANSACOES.TRANSACAO_ID, TABELAS.DESCRICAO CONTA ,TRANSACOES.NUM_DOC ,TRANSACOES.DT_ENT_SAI,TRANSACOES.FORNECEDOR_ID CLI_FOR_ID, FORNECEDORES.NOME,TRANSACOES.VALOR');
+    QRel.SQL.Add('FROM TRANSACOES ORIGEM');
+    QRel.SQL.Add('INNER JOIN TRANSACOES on TRANSACOES.ENTRADA_ID= ORIGEM.TRANSACAO_ID');
+    QRel.SQL.Add('INNER JOIN FORNECEDORES on TRANSACOES.FORNECEDOR_ID =FORNECEDORES.FORNECEDOR_ID');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+    QRel.SQL.Add('UNION ALL');
+    QRel.SQL.Add('SELECT TRANSACOES.TRANSACAO_ID, TABELAS.DESCRICAO CONTA , TRANSACOES.NUM_DOC,TRANSACOES.DT_ENT_SAI,TRANSACOES.CLIENTE_ID CLI_FOR_ID, CLIENTES.NOME,TRANSACOES.VALOR');
+    QRel.SQL.Add('FROM TRANSACOES');
+    QRel.SQL.Add('inner join CLIENTES on TRANSACOES.CLIENTE_ID =CLIENTES.CLIENTE_ID');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.SQL.Add('AND (TRANSACOES.COND_PAGTO  = :COND_PAGTO)');
+    QRel.SQL.Add('UNION ALL');
+    QRel.SQL.Add('SELECT TRANSACOES.TRANSACAO_ID, TABELAS.DESCRICAO CONTA , TRANSACOES.NUM_DOC ,TRANSACOES.DT_ENT_SAI,TRANSACOES.FORNECEDOR_ID CLI_FOR_ID, FORNECEDORES.NOME,TRANSACOES.VALOR');
+    QRel.SQL.Add('FROM TRANSACOES');
+    QRel.SQL.Add('INNER JOIN FORNECEDORES on TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID');
+    QRel.SQL.Add('INNER JOIN TABELAS');
+    QRel.SQL.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+    QRel.SQL.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.SQL.Add('AND (TRANSACOES.COND_PAGTO  = :COND_PAGTO)');
+
+
+    if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+    QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.Sql.Add('AND (TABELAS.ESPECIAL = :ESPECIAL)')
+      else
+      QRel.Sql.Add('AND (TABELAS.EMPRESA = :EMPRESA_ID)');
+
+    QRel.SQL.Add(') as TESTE');
+
+     if Conta_id.Value > 0  then
+      QRel.Sql.Add('WHERE CONTA = :DESCRICAO_CONTA');
+
+    QRel.Sql.Add('ORDER BY TESTE.CONTA,TESTE.NOME');
+
+
+    if Caixa_banco.Value <> 0 then
+       QRel.ParamByName('BANCO_ID').AsInteger        := StrToInt(Caixa_banco.Text);
+
+    if Conta_id.Value > 0  then
+       QRel.ParamByName('DESCRICAO_CONTA').AsString  := QConta.FieldByname('DESCRICAO').AsString ;
+
+     QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+     QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+     QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+     QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+     QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+     QRel.ParamByName('COND_PAGTO').AsString     := 'A VISTA';
+
+     IF EMPRESA_ID.Value = 0 Then
+      QRel.ParamByName('ESPECIAL').AsString       := 'SIM'
+      else
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+
+      QRel.Prepare;
+      QRel.Open;
+
+
+      QRLabel58.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+        Detalhe_recpag.PreviewModal;
+
+
+   except
+
+   on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro relatorio conta detalhada recebimentos!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+
+   end;
+
+
+  End;
+
+
+
+
+
+  if Tipo_Rel.Text = 'Detalhado por Conta Especial' then
+  Begin
+   Try
+     QRel.Sql.Clear;
+     QRel.Sql.Add('SELECT DESCRICAO, DT_ENT_SAI,  NUM_DOC, HISTORICO , CREDITO, DEBITO  FROM');
+     QRel.Sql.Add('(');
+     QRel.Sql.Add('SELECT TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI, TRANSACOES.NUM_DOC,TRANSACOES.HISTORICO,0 CREDITO,COALESCE(TRANSACOES.VALOR, 0) DEBITO');
+     QRel.Sql.Add('FROM TRANSACOES');
+     QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+     QRel.Sql.Add('INNER JOIN TABELAS ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+     QRel.Sql.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+     QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID) AND (TRANSACOES.TPCTB <= :TPCTB) AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+     QRel.Sql.Add('AND TABELAS.ESPECIAL = :ESPECIAL');
+     QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+     if Caixa_banco.Value <> 0 then
+     QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     //QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+     QRel.Sql.Add('UNION ALL');
+
+     QRel.Sql.Add('SELECT TABELAS.DESCRICAO,TRANSACOES.DT_ENT_SAI , TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, CASE ');
+     QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :DESCONTO) THEN COALESCE((TRANSACOES.VALOR_PARCELA - TRANSACOES.VALOR), 0) END CREDITO, CASE');
+     QRel.Sql.Add('WHEN (TRANSACOES.SERIE = :JUROS) THEN COALESCE((TRANSACOES.VALOR - TRANSACOES.VALOR_PARCELA), 0) END DEBITO');
+     QRel.Sql.Add('FROM TRANSACOES');
+     QRel.Sql.Add('INNER JOIN TABELAS ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+     QRel.Sql.Add('WHERE (TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+     QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID) AND (TRANSACOES.TPCTB <= :TPCTB)');
+     QRel.Sql.Add('AND ((TRANSACOES.CONDUTA = :COND_PAGTO) or (TRANSACOES.CONDUTA = :COND_REC))');
+     QRel.Sql.Add('AND TABELAS.ESPECIAL = :ESPECIAL');
+     QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+     if Caixa_banco.Value <> 0 then
+     QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     QRel.Sql.Add('AND ((TRANSACOES.SERIE = :JUROS) OR (TRANSACOES.SERIE = :DESCONTO))');
+
+     QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, TRANSACOES.DT_ENT_SAI , TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSPARCELAS.VALOR, 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSPARCELAS');
+      QRel.Sql.Add('INNER JOIN TRANSACOES');
+      QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :PRAZO)');
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID > 0)');
+      QRel.Sql.Add('AND TABELAS.ESPECIAL = :ESPECIAL');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, TRANSACOES.DT_ENT_SAI , TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, 0 CREDITO, COALESCE(TRANSACOES.VALOR, 0) DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.ENTRADA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_PAGTO)');
+      QRel.Sql.Add('AND TABELAS.ESPECIAL = :ESPECIAL');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE <> :NORMAL)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, TRANSACOES.DT_ENT_SAI , TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_CRED) AND ((TRANSACOES.DEPTO = :DPT_CRED) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END CREDITO, CASE');
+      QRel.Sql.Add('WHEN ((TRANSACOES.CONDUTA = :COND_DEB) AND ((TRANSACOES.DEPTO = :DPT_DEB) OR (TRANSACOES.DEPTO = :DPT_EST))) THEN COALESCE(TRANSACOES.VALOR, 0) END DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((TRANSACOES.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :VISTA)');
+      QRel.Sql.Add('AND TABELAS.ESPECIAL = :ESPECIAL');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+
+      QRel.Sql.Add('UNION ALL');
+
+      QRel.Sql.Add('SELECT TABELAS.DESCRICAO, TRANSACOES.DT_ENT_SAI , TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, COALESCE(TRANSACOES.VALOR, 0) CREDITO, 0 DEBITO');
+      QRel.Sql.Add('FROM TRANSACOES');
+      QRel.Sql.Add('INNER JOIN TRANSACOES ORIGEM');
+      QRel.Sql.Add('ON (TRANSACOES.SAIDA_ID = ORIGEM.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN TABELAS');
+      QRel.Sql.Add('ON ((ORIGEM.CONTA_ID = TABELAS.TABELA_ID) AND (TABELAS.TIPO_TABELA = :TIPO_TABELA))');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :COND_REC)');
+      QRel.Sql.Add('AND TABELAS.ESPECIAL = :ESPECIAL');
+      QRel.SQL.Add('AND TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS)');
+
+      if Caixa_banco.Value <> 0 then
+      QRel.Sql.Add('AND (TRANSACOES.BANCO_ID = :BANCO_ID)');
+     // QRel.Sql.Add('AND (TRANSACOES.SERIE = :NORMAL)');
+
+
+     QRel.Sql.Add(')as teste');
+     if Conta_id.Value > 0  then
+     QRel.Sql.Add('WHERE DESCRICAO = :DESCRICAO_CONTA');
+
+     QRel.Sql.Add('ORDER BY DESCRICAO,DT_ENT_SAI,HISTORICO');
+
+     QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+     QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+     QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+     QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+     QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+     QRel.ParamByName('BALANCO').AsString        := 'AGRUPADO';
+     QRel.ParamByName('VISTA').AsString          := 'A VISTA';
+     QRel.ParamByName('PRAZO').AsString          := 'A PRAZO';
+     QRel.ParamByName('COND_CRED').AsString      := '01';
+     QRel.ParamByName('DPT_CRED').AsString       := '03';
+     QRel.ParamByName('COND_DEB').AsString       := '02';
+     QRel.ParamByName('DPT_DEB').AsString        := '02';
+     QRel.ParamByName('DPT_EST').AsString        := '07';
+     QRel.ParamByName('COND_REC').AsString       := '07';
+     QRel.ParamByName('TIPO_TABELA').AsString    := '4';
+     QRel.ParamByName('COND_PAGTO').AsString     := '08';
+     QRel.ParamByName('DESCONTO').AsString       := 'D';
+     QRel.ParamByName('JUROS').AsString          := 'J';
+    //QRel.ParamByName('NORMAL').AsString        := 'N';
+     QRel.ParamByName('ESPECIAL').AsString       := 'SIM';
+
+    if Caixa_banco.Value <> 0 then
+      QRel.ParamByName('BANCO_ID').AsInteger        := StrToInt(Caixa_banco.Text);
+
+    if Conta_id.Value > 0  then
+      QRel.ParamByName('DESCRICAO_CONTA').AsString  := QConta.FieldByname('DESCRICAO').AsString ;
+
+      QRel.Prepare;
+      QRel.Open;
+
+      QRLabel28.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+      if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+        Detalhe_Conta.PreviewModal;
+
+   except
+   {on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro ao importar produtos!' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;}
+
+   End;
+  End;
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmResumo_Diario_Empresas.Button1Click(Sender: TObject);
+begin
+FrmPrincipal.Salva_Relatorio_FastReport_Bd('UResumo_Diario', 'vendas');
+end;
+
+procedure TFrmResumo_Diario_Empresas.Caixa_BancoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmResumo_Diario_Empresas.ColumnHeaderBand1AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+if caixa_banco.Value <> 0 then
+Begin
+  QRlabel19.Enabled := True;
+  QRLabel19.Caption := 'Caixa/Banco : ' + Caixa_banco.Text;
+End;
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.CONTA_IDExit(Sender: TObject);
+begin
+DeTailSearch('Conta');
+end;
+
+procedure TFrmResumo_Diario_Empresas.CONTA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = CONTA_ID) then
+    btnContaClick(Self);
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmResumo_Diario_Empresas.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    //Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmResumo_Diario_Empresas.EMPRESA_IDExit(Sender: TObject);
+begin
+    QEmpresa.Close;
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+end;
+
+procedure TFrmResumo_Diario_Empresas.FinalizadoraBoxClick(Sender: TObject);
+begin
+try
+    QFinalizadora.Open;
+  except
+    Application.MessageBox('Erro ao conectar com o Banco de Dados', PChar(Msg_Title), mb_IconStop);
+    Application.Terminate;
+  end;
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmResumo_Diario_Empresas.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+  Fdac_Temp.Free;
+  Fdac_Temp := TFDMemTable.Create(nil);
+
+  TRY
+    with Fdac_Temp.FieldDefs do
+    begin
+      Clear;
+      Add('TRANSACAO_ID', ftInteger, 0, False);
+      Add('PRODUTO_ID', ftInteger, 0, False);
+      Add('DESCRICAO', ftString, 70, False);
+      Add('QUANTIDADE', ftFloat, 0, False);
+      Add('DESC_RODAPE', ftFloat, 0, False);
+      Add('VR_TOTAL', ftFloat, 0, False);
+    end;
+
+    with Fdac_Temp.IndexDefs do
+    begin
+      Clear;
+      Add('TEMP', 'TRANSACAO_ID;PRODUTO_ID', [ixCaseInsensitive]);
+    end;
+    Fdac_Temp.IndexName := 'TEMP';
+    Fdac_Temp.CreateDataSet;
+    Fdac_Temp.Open;
+
+    except on E: Exception do
+     ShowMessage( E.Message );
+  end;
+
+  //Quando o campo for string, depois do ftString é obrigatório o tamanho que o campo vai ocupar na tabela.
+  CDCredito.FieldDefs.Add('GRUPO_DRE', ftString, 50, False);
+  CDCredito.FieldDefs.Add('DESCRICAO', ftString, 50, False);
+  CDCredito.FieldDefs.Add('VALOR_CREDITO', ftFloat, 0, False);
+  CDCredito.CreateDataSet;
+
+  CDDebito.FieldDefs.Add('GRUPO_DRE', ftString, 50, False);
+  CDDebito.FieldDefs.Add('DESCRICAO', ftString, 50, False);
+  CDDebito.FieldDefs.Add('VALOR_DEBITO', ftFloat, 0, False);
+  CDDebito.CreateDataSet;
+
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.QRBand14BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+
+  {
+ if Fdac_Temp.Locate('TRANSACAO_ID', VarArrayOf([QRel.FieldByName('TRANSACAO_ID').AsInteger]), [loCaseInsensitive]) then
+ begin
+  QRMemo1.Lines.Clear;
+  QRMemo1.Enabled := True;
+  QRBand14.Height := 50;
+
+  QRMemo1.Lines.Add((StrZero(Fdac_Temp.FieldByName('PRODUTO_ID').AsString,6,0) + '-' + Fdac_Temp.FieldByName('DESCRICAO').AsString));
+  {
+  while not Fdac_Temp.Eof do
+  begin
+  QRMemo1.Height   := QRMemo1.Height + 10 ;
+  QRBand14.Height  := QRBand14.Height + 10;
+  QRMemo1.Lines.Add((StrZero(Fdac_Temp.FieldByName('PRODUTO_ID').AsString,6,0) + '-' + Fdac_Temp.FieldByName('DESCRICAO').AsString));
+
+  Fdac_Temp.Next;
+  end;
+
+  QRBand14.Height := QRBand14.Height + 5;
+ end
+ else
+ begin
+ QRMemo1.Enabled := False;
+ QRMemo1.Height  := 25 ;
+ QRBand14.Height := 20;
+ end;
+ {
+
+ QItens.SQL.Clear;
+ QItens.SQL.Text := 'SELECT PRODUTO_ID,DESCRICAO,QUANTIDADE,DESC_RODAPE,VR_TOTAL FROM TRANSITENS WHERE TRANSACAO_ID = :TRANSACAO_ID';
+ QItens.ParamByName('TRANSACAO_ID').AsInteger := StrToInt(QRDBText22.DataSet.FieldByName('TRANSACAO_ID').DisplayText);
+ QItens.Prepare;
+ QItens.Open();
+
+ if not QItens.IsEmpty then
+ begin
+  QRMemo1.Lines.Clear;
+  QRMemo1.Enabled := True;
+  QRBand14.Height := 50;
+  QItens.First;
+
+  while not QItens.Eof do
+  begin
+  QRMemo1.Height   := QRMemo1.Height + 10 ;
+  QRBand14.Height  := QRBand14.Height + 10;
+  QRMemo1.Lines.Add((StrZero(QItens.FieldByName('PRODUTO_ID').AsString,6,0) + '-' + QItens.FieldByName('DESCRICAO').AsString));
+  QItens.Next;
+  end;
+  QRBand14.Height := QRBand14.Height + 5;
+ end
+ else
+ Begin
+ QRMemo1.Enabled := False;
+ QRMemo1.Height  := 25 ;
+ QRBand14.Height := 20;
+ End;
+ }
+end;
+
+procedure TFrmResumo_Diario_Empresas.QRBand2AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+if caixa_banco.Value <> 0 then
+Begin
+  QRlabel18.Enabled := True;
+  QRLabel18.Caption := 'Caixa/Banco : ' + Caixa_banco.Text;
+End;
+end;
+
+procedure TFrmResumo_Diario_Empresas.QRBand5BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+ QRLabel47.Caption := '';
+
+ QSearch.Sql.Clear;
+ QSearch.Sql.Text := 'SELECT DESCRICAO FROM TABELAS WHERE TIPO_TABELA = :TIPO_TABELA AND TABELA_ID = :TABELA_ID';
+ QSearch.ParamByName('TIPO_TABELA').AsString := '2';
+ QSearch.ParamByName('TABELA_ID').AsInteger  := StrToInt(C_CUSTO_ID.Text);
+ QSearch.Prepare;
+ QSearch.open;
+
+ QRLabel47.Caption := QSearch.FieldByName('DESCRICAO').AsString;
+
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.QRBand8AfterPrint(Sender: TQRCustomBand;
+  BandPrinted: Boolean);
+begin
+
+
+ //ShowMessage(QSearch.FieldByName('descricao').AsString)
+
+
+end;
+
+procedure TFrmResumo_Diario_Empresas.Relatorio_PrincipalLoadTemplate(
+  Report: TfrxReport; const TemplateName: string);
+var
+  BlobStream: TStream;
+
+begin
+  QLayoutFastReport.First;
+  while not QLayoutFastReport.Eof do
+  begin
+    //ShowMessage(TemplateName + ' ' + QLayoutFastReport.FieldByName('NOME_RELATORIO').AsString);
+    if AnsiCompareText(QLayoutFastReport.FieldByName('NOME_ARQUIVO').AsString, TemplateName) = 0 then
+    begin
+      //ShowMessage(TemplateName + ' ' + QLayoutFastReport.FieldByName('NOME_ARQUIVO').AsString);
+      //ShowMessage('Cheguei aqui');
+      BlobStream := TMemoryStream.Create;
+      TBlobField(QLayoutFastReport.FieldByName('ARQUIVO_RELATORIO')).SaveToStream(BlobStream);
+      BlobStream.Position := 0;
+      Report.LoadFromStream(BlobStream);
+      BlobStream.Free;
+      break;
+    end;
+    QLayoutFastReport.Next;
+  end;
+end;
+
+procedure TFrmResumo_Diario_Empresas.Tipo_RelChange(Sender: TObject);
+begin
+
+  if (Tipo_Rel.Text = 'Detalhado por Conta') or (Tipo_Rel.Text = 'Detalhado por Conta(Itens)') OR (Tipo_Rel.Text = 'Detalhado por Conta(Receb./Pagamentos)')
+      OR (Tipo_Rel.Text = 'Detalhado por Conta(Itens-Custo)')   then
+  Begin
+  Label4.Visible      := True;
+  Conta_Id.Visible    := True;
+  BtnConta.Visible    := True;
+  DBText3.Visible     := True;
+
+  End;
+
+  if Tipo_Rel.Text = 'Analítico' then
+  Begin
+  Label4.Visible             := False;
+  Conta_Id.Visible           := False;
+  BtnConta.Visible           := False;
+  DBtext3.Visible            := False;
+
+  End;
+
+  if Tipo_Rel.Text = 'Sintético' then
+  Begin
+  Label4.Visible             := False;
+  Conta_Id.Visible           := False;
+  BtnConta.Visible           := False;
+  DBtext3.Visible            := False;
+  End;
+
+  IF COPY (Tipo_Rel.Text,1,19) <>  'Detalhado por Conta' Then
+  Begin
+  Conta_Id.Visible           := False;
+  BtnConta.Visible           := False;
+  Label4.Visible             := False;
+  End;
+
+
+
+end;
+end.

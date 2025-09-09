@@ -1,0 +1,1922 @@
+object FrmFornecedores: TFrmFornecedores
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Fornecedores'
+  ClientHeight = 479
+  ClientWidth = 737
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poDesktopCenter
+  Scaled = False
+  Visible = True
+  OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label21: TLabel
+    Left = 439
+    Top = 352
+    Width = 28
+    Height = 13
+    Caption = 'e-mail'
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 737
+    Height = 436
+    ActivePage = Manutencao
+    Align = alClient
+    TabOrder = 0
+    object Consulta: TTabSheet
+      Caption = '&Consulta'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Alfabeto: TTabSet
+        Left = 0
+        Top = 387
+        Width = 729
+        Height = 21
+        Align = alBottom
+        AutoScroll = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        SoftTop = True
+        Style = tsModernTabs
+        Tabs.Strings = (
+          'A'
+          'B'
+          'C'
+          'D'
+          'E'
+          'F'
+          'G'
+          'H'
+          'I'
+          'J'
+          'K'
+          'L'
+          'M'
+          'N'
+          'O'
+          'P'
+          'Q'
+          'R'
+          'S'
+          'T'
+          'U'
+          'V'
+          'W'
+          'X'
+          'Y'
+          'Z'
+          'Todos')
+        OnClick = AlfabetoClick
+      end
+      object StatusBar1: TStatusBar
+        Left = 0
+        Top = 368
+        Width = 729
+        Height = 19
+        Panels = <
+          item
+            Text = '<F3> - Desativar'
+            Width = 177
+          end
+          item
+            Text = '<F4> - Reativar'
+            Width = 177
+          end
+          item
+            Text = '<F5> - Localizar p/ C'#243'digo'
+            Width = 177
+          end
+          item
+            Text = '<F7> - Localizar p/ Nome'
+            Width = 177
+          end>
+      end
+      object DBGrid1: TDBGrid
+        Left = 0
+        Top = 0
+        Width = 729
+        Height = 368
+        Align = alClient
+        Color = clInfoBk
+        DataSource = DataTabela
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clBlue
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit, dgTitleClick]
+        ParentFont = False
+        ReadOnly = True
+        TabOrder = 0
+        TitleFont.Charset = ANSI_CHARSET
+        TitleFont.Color = clBlue
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnDblClick = DBGrid1DblClick
+        OnKeyDown = DBGrid1KeyDown
+        OnKeyPress = DBGrid1KeyPress
+        OnTitleClick = DBGrid1TitleClick
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'FORNECEDOR_ID'
+            Title.Alignment = taRightJustify
+            Title.Caption = 'ID'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TIPO_FORNECEDOR'
+            Title.Caption = 'Tipo Forne'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'NOME'
+            Title.Caption = 'Nome'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'CNPJ'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'TELEFONE_1'
+            Title.Caption = 'Telefone'
+            Width = 59
+            Visible = True
+          end
+          item
+            Alignment = taCenter
+            Expanded = False
+            FieldName = 'STATUS'
+            Title.Alignment = taCenter
+            Title.Caption = 'Status'
+            Width = 38
+            Visible = True
+          end>
+      end
+    end
+    object Manutencao: TTabSheet
+      Caption = '&Manuten'#231#227'o'
+      ImageIndex = 1
+      OnShow = ManutencaoShow
+      object Panel2: TPanel
+        Left = 0
+        Top = 0
+        Width = 729
+        Height = 41
+        Align = alTop
+        BevelOuter = bvNone
+        TabOrder = 0
+        object btnPrior: TBitBtn
+          Left = 14
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'Anterior'
+          TabOrder = 0
+          OnClick = btnPriorClick
+        end
+        object btnNext: TBitBtn
+          Left = 117
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'Pr'#243'ximo'
+          TabOrder = 1
+          OnClick = btnNextClick
+        end
+        object btnInsert: TBitBtn
+          Left = 221
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Incluir'
+          TabOrder = 2
+          OnClick = btnInsertClick
+        end
+        object btnEdit: TBitBtn
+          Left = 324
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'A&lterar'
+          TabOrder = 3
+          OnClick = btnEditClick
+        end
+        object btnDelete: TBitBtn
+          Left = 427
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Excluir'
+          TabOrder = 4
+          OnClick = btnDeleteClick
+        end
+        object btnSave: TBitBtn
+          Left = 530
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = '&Salvar'
+          TabOrder = 5
+          OnClick = btnSaveClick
+        end
+        object btnDiscard: TBitBtn
+          Left = 635
+          Top = 6
+          Width = 75
+          Height = 25
+          Caption = 'C&ancelar'
+          TabOrder = 6
+          OnClick = btnDiscardClick
+        end
+      end
+      object PageControl2: TPageControl
+        Left = 3
+        Top = 37
+        Width = 716
+        Height = 368
+        ActivePage = Empresa
+        TabOrder = 1
+        object Empresa: TTabSheet
+          Caption = 'Empresa'
+          object Label18: TLabel
+            Left = 4
+            Top = 270
+            Width = 54
+            Height = 13
+            Caption = 'Home Page'
+          end
+          object Label16: TLabel
+            Left = 4
+            Top = 242
+            Width = 76
+            Height = 13
+            Caption = 'Ramo/Atividade'
+          end
+          object Label12: TLabel
+            Left = 4
+            Top = 190
+            Width = 18
+            Height = 13
+            Caption = 'Fax'
+          end
+          object Label14: TLabel
+            Left = 4
+            Top = 216
+            Width = 59
+            Height = 13
+            Caption = 'Ins. Est./RG'
+          end
+          object Label10: TLabel
+            Left = 4
+            Top = 139
+            Width = 19
+            Height = 13
+            Caption = 'CEP'
+          end
+          object Label9: TLabel
+            Left = 4
+            Top = 113
+            Width = 43
+            Height = 13
+            Caption = 'Munic'#237'pio'
+          end
+          object Label6: TLabel
+            Left = 4
+            Top = 87
+            Width = 65
+            Height = 13
+            Caption = 'Complemento'
+          end
+          object Label5: TLabel
+            Left = 4
+            Top = 61
+            Width = 45
+            Height = 13
+            Caption = 'Endere'#231'o'
+          end
+          object Label4: TLabel
+            Left = 4
+            Top = 35
+            Width = 71
+            Height = 13
+            Caption = 'Nome Fantasia'
+          end
+          object Label3: TLabel
+            Left = 4
+            Top = 9
+            Width = 60
+            Height = 13
+            Caption = 'Raz'#227'o Social'
+          end
+          object Label19: TLabel
+            Left = 435
+            Top = 242
+            Width = 73
+            Height = 13
+            Caption = 'e-mail/Empresa'
+          end
+          object Label17: TLabel
+            Left = 436
+            Top = 219
+            Width = 39
+            Height = 13
+            Caption = 'Contato'
+          end
+          object Label15: TLabel
+            Left = 438
+            Top = 35
+            Width = 48
+            Height = 13
+            Caption = 'CNPJ/CPF'
+          end
+          object Label11: TLabel
+            Left = 438
+            Top = 191
+            Width = 51
+            Height = 13
+            Caption = 'Telefone 2'
+          end
+          object Label2: TLabel
+            Left = 438
+            Top = 165
+            Width = 45
+            Height = 13
+            Caption = 'C'#243'd. Pa'#237's'
+          end
+          object btnPais: TSpeedButton
+            Left = 585
+            Top = 162
+            Width = 64
+            Height = 21
+            Cursor = crHandPoint
+            Caption = '(F7)'
+            Flat = True
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Glyph.Data = {
+              06020000424D0602000000000000760000002800000028000000140000000100
+              0400000000009001000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+              FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+              FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+              333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+              333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+              777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+              FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+              FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+              333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+              88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+              F777333333333088FFF003333333333337333337733333333333088FFF033333
+              333333337F33337333333333333308FFF09333333333333378F3373333333333
+              333330FF0933333333333333378F733333333333333333003333333333333333
+              33773333333333333333}
+            NumGlyphs = 2
+            ParentFont = False
+            OnClick = btnPaisClick
+          end
+          object btnIBGE: TSpeedButton
+            Left = 585
+            Top = 84
+            Width = 64
+            Height = 21
+            Cursor = crHandPoint
+            Caption = '(F7)'
+            Flat = True
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Glyph.Data = {
+              06020000424D0602000000000000760000002800000028000000140000000100
+              0400000000009001000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+              FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+              FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+              333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+              333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+              777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+              FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+              FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+              333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+              88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+              F777333333333088FFF003333333333337333337733333333333088FFF033333
+              333333337F33337333333333333308FFF09333333333333378F3373333333333
+              333330FF0933333333333333378F733333333333333333003333333333333333
+              33773333333333333333}
+            NumGlyphs = 2
+            ParentFont = False
+            OnClick = btnIBGEClick
+          end
+          object Label24: TLabel
+            Left = 438
+            Top = 87
+            Width = 49
+            Height = 13
+            Caption = 'C'#243'd. IBGE'
+          end
+          object Label8: TLabel
+            Left = 438
+            Top = 139
+            Width = 33
+            Height = 13
+            Caption = 'Estado'
+          end
+          object Label7: TLabel
+            Left = 438
+            Top = 113
+            Width = 28
+            Height = 13
+            Caption = 'Bairro'
+          end
+          object Label25: TLabel
+            Left = 437
+            Top = 61
+            Width = 37
+            Height = 13
+            Caption = 'N'#250'mero'
+          end
+          object Label20: TLabel
+            Left = 438
+            Top = 9
+            Width = 78
+            Height = 13
+            Caption = 'Tipo Fornecedor'
+          end
+          object Label23: TLabel
+            Left = 3
+            Top = 167
+            Width = 51
+            Height = 13
+            Caption = 'Telefone 1'
+          end
+          object URL: TEdit
+            Left = 82
+            Top = 266
+            Width = 301
+            Height = 21
+            CharCase = ecLowerCase
+            Enabled = False
+            MaxLength = 80
+            TabOrder = 25
+            OnKeyDown = NOMEKeyDown
+          end
+          object ATIVIDADE: TEdit
+            Left = 82
+            Top = 240
+            Width = 165
+            Height = 21
+            Enabled = False
+            MaxLength = 30
+            TabOrder = 23
+            OnExit = ATIVIDADEExit
+            OnKeyDown = NOMEKeyDown
+          end
+          object INSCRICAO: TEdit
+            Left = 82
+            Top = 213
+            Width = 165
+            Height = 21
+            Enabled = False
+            MaxLength = 15
+            TabOrder = 20
+            OnKeyDown = NOMEKeyDown
+          end
+          object FAX: TMaskEdit
+            Left = 82
+            Top = 187
+            Width = 86
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            EditMask = '(99) 9999-9999;1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 14
+            ParentFont = False
+            TabOrder = 17
+            Text = '(  )     -    '
+            OnKeyDown = NOMEKeyDown
+          end
+          object CEP: TMaskEdit
+            Left = 82
+            Top = 136
+            Width = 67
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            Enabled = False
+            EditMask = '99999-999;1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 9
+            ParentFont = False
+            TabOrder = 10
+            Text = '     -   '
+            OnKeyDown = NOMEKeyDown
+          end
+          object NOME: TEdit
+            Left = 82
+            Top = 6
+            Width = 301
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            MaxLength = 40
+            TabOrder = 0
+            OnKeyDown = NOMEKeyDown
+          end
+          object FANTASIA: TEdit
+            Left = 82
+            Top = 32
+            Width = 247
+            Height = 21
+            Enabled = False
+            MaxLength = 30
+            TabOrder = 3
+            OnKeyDown = NOMEKeyDown
+          end
+          object ENDERECO: TEdit
+            Left = 82
+            Top = 58
+            Width = 301
+            Height = 21
+            Enabled = False
+            MaxLength = 40
+            TabOrder = 4
+            OnKeyDown = NOMEKeyDown
+          end
+          object COMPLEMENTO: TEdit
+            Left = 82
+            Top = 84
+            Width = 175
+            Height = 21
+            Enabled = False
+            MaxLength = 20
+            TabOrder = 6
+            OnKeyDown = NOMEKeyDown
+          end
+          object MUNICIPIO: TEdit
+            Left = 82
+            Top = 109
+            Width = 175
+            Height = 21
+            Enabled = False
+            MaxLength = 30
+            TabOrder = 8
+            OnKeyDown = NOMEKeyDown
+          end
+          object SUFRAMA: TEdit
+            Left = 266
+            Top = 136
+            Width = 29
+            Height = 21
+            Enabled = False
+            MaxLength = 9
+            TabOrder = 11
+            Visible = False
+            OnKeyDown = NOMEKeyDown
+          end
+          object TIPO: TEdit
+            Left = 266
+            Top = 163
+            Width = 29
+            Height = 21
+            Enabled = False
+            MaxLength = 7
+            TabOrder = 16
+            Visible = False
+            OnKeyDown = NOMEKeyDown
+          end
+          object COD_CONTABIL: TEdit
+            Left = 266
+            Top = 188
+            Width = 29
+            Height = 21
+            MaxLength = 20
+            TabOrder = 18
+            Visible = False
+            OnKeyDown = NOMEKeyDown
+          end
+          object EMAIL: TEdit
+            Left = 521
+            Top = 240
+            Width = 175
+            Height = 21
+            CharCase = ecLowerCase
+            Enabled = False
+            MaxLength = 60
+            TabOrder = 24
+            OnKeyDown = NOMEKeyDown
+          end
+          object CONTATO: TEdit
+            Left = 521
+            Top = 216
+            Width = 165
+            Height = 21
+            Enabled = False
+            MaxLength = 30
+            TabOrder = 22
+            OnKeyDown = NOMEKeyDown
+          end
+          object CNPJ: TMaskEdit
+            Left = 521
+            Top = 31
+            Width = 133
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            Text = ''
+            OnKeyDown = NOMEKeyDown
+          end
+          object TELEFONE_2: TMaskEdit
+            Left = 521
+            Top = 189
+            Width = 77
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            EditMask = '9999-9999;1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 9
+            ParentFont = False
+            TabOrder = 19
+            Text = '    -    '
+            OnKeyDown = NOMEKeyDown
+          end
+          object COD_PAIS: TEdit
+            Left = 521
+            Top = 162
+            Width = 56
+            Height = 21
+            Enabled = False
+            MaxLength = 5
+            TabOrder = 15
+            OnKeyDown = NOMEKeyDown
+          end
+          object IBGE: TEdit
+            Left = 521
+            Top = 84
+            Width = 61
+            Height = 21
+            Enabled = False
+            MaxLength = 7
+            TabOrder = 7
+            OnExit = IBGEExit
+            OnKeyDown = NOMEKeyDown
+          end
+          object ESTADO: TComboBox
+            Left = 521
+            Top = 136
+            Width = 56
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 2
+            ParentFont = False
+            TabOrder = 12
+            OnKeyDown = TIPO_FORNECEDORKeyDown
+            Items.Strings = (
+              'AC'
+              'AL'
+              'AP'
+              'AM'
+              'BA'
+              'CE'
+              'DF'
+              'ES'
+              'GO'
+              'MA'
+              'MG'
+              'MT'
+              'MS'
+              'PA'
+              'PB'
+              'PR'
+              'PE'
+              'PI'
+              'RJ'
+              'RN'
+              'RS'
+              'RO'
+              'RR'
+              'SC'
+              'SP'
+              'SE'
+              'TO')
+          end
+          object BAIRRO: TEdit
+            Left = 521
+            Top = 110
+            Width = 175
+            Height = 21
+            Enabled = False
+            MaxLength = 20
+            TabOrder = 9
+            OnKeyDown = NOMEKeyDown
+          end
+          object NUMERO: TEdit
+            Left = 521
+            Top = 58
+            Width = 56
+            Height = 21
+            Enabled = False
+            MaxLength = 6
+            TabOrder = 5
+            OnKeyDown = NOMEKeyDown
+          end
+          object TIPO_FORNECEDOR: TComboBox
+            Left = 521
+            Top = 6
+            Width = 174
+            Height = 21
+            CharCase = ecUpperCase
+            Color = clWhite
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 15
+            ParentFont = False
+            TabOrder = 1
+            OnChange = TIPO_FORNECEDORChange
+            OnKeyDown = TIPO_FORNECEDORKeyDown
+            Items.Strings = (
+              'PESSOA F'#205'SICA'
+              'PESSOA JUR'#205'DICA')
+          end
+          object DDD: TMaskEdit
+            Left = 81
+            Top = 160
+            Width = 26
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            EditMask = '(99);1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 4
+            ParentFont = False
+            TabOrder = 13
+            Text = '(  )'
+            OnChange = DDD_RChange
+            OnKeyDown = NOMEKeyDown
+          end
+          object TELEFONE_1: TMaskEdit
+            Left = 129
+            Top = 160
+            Width = 77
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 9
+            ParentFont = False
+            TabOrder = 14
+            Text = ''
+            OnKeyDown = NOMEKeyDown
+          end
+          object funcionario_id: TCurrencyEdit
+            Left = 302
+            Top = 136
+            Width = 47
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 26
+            Visible = False
+            ZeroEmpty = False
+          end
+          object FORNECEDOR_ID: TCurrencyEdit
+            Left = 302
+            Top = 163
+            Width = 47
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 27
+            Visible = False
+            ZeroEmpty = False
+          end
+          object chk_produtor: TCheckBox
+            Left = 266
+            Top = 218
+            Width = 87
+            Height = 17
+            Caption = 'Produtor Rural'
+            Enabled = False
+            TabOrder = 21
+            OnClick = chk_produtorClick
+          end
+          object Produtor_r: TCurrencyEdit
+            Left = 356
+            Top = 136
+            Width = 47
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 28
+            Visible = False
+            ZeroEmpty = False
+          end
+          object btnPagamentos: TButton
+            Left = 435
+            Top = 272
+            Width = 75
+            Height = 25
+            Caption = 'Pagamentos'
+            Enabled = False
+            TabOrder = 29
+            OnClick = btnPagamentosClick
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = 'Representante'
+          ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          object Label1: TLabel
+            Left = 3
+            Top = 48
+            Width = 33
+            Height = 13
+            Caption = 'Celular'
+          end
+          object Label13: TLabel
+            Left = 3
+            Top = 21
+            Width = 72
+            Height = 13
+            Caption = 'Representante'
+          end
+          object Label22: TLabel
+            Left = 3
+            Top = 72
+            Width = 70
+            Height = 13
+            Caption = 'e-mail/Repres.'
+          end
+          object Label64: TLabel
+            Left = 3
+            Top = 104
+            Width = 51
+            Height = 13
+            Caption = 'Anota'#231#245'es'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+          end
+          object DDD_R: TMaskEdit
+            Left = 81
+            Top = 45
+            Width = 26
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            EditMask = '(99);1;_'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 4
+            ParentFont = False
+            TabOrder = 1
+            Text = '(  )'
+            OnChange = DDD_RChange
+            OnKeyDown = NOMEKeyDown
+          end
+          object TELEFONE_R: TMaskEdit
+            Left = 113
+            Top = 45
+            Width = 75
+            Height = 21
+            CharCase = ecUpperCase
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 9
+            ParentFont = False
+            TabOrder = 2
+            Text = ''
+            OnKeyDown = NOMEKeyDown
+          end
+          object Representante: TEdit
+            Left = 81
+            Top = 18
+            Width = 372
+            Height = 21
+            Enabled = False
+            MaxLength = 80
+            TabOrder = 0
+            OnKeyDown = NOMEKeyDown
+          end
+          object EMAIL_REPRESENTANTE: TEdit
+            Left = 81
+            Top = 72
+            Width = 372
+            Height = 21
+            CharCase = ecLowerCase
+            Enabled = False
+            MaxLength = 60
+            TabOrder = 3
+            OnKeyDown = NOMEKeyDown
+          end
+          object ANOTACOES: TMemo
+            Left = 81
+            Top = 99
+            Width = 565
+            Height = 174
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 4
+          end
+        end
+        object TabSheet1: TTabSheet
+          Caption = 'Consulta RFB'
+          ImageIndex = 2
+          OnShow = TabSheet1Show
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
+          object Label50: TLabel
+            Left = 7
+            Top = 149
+            Width = 96
+            Height = 16
+            Caption = 'Digite o Captcha'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Arial'
+            Font.Style = []
+            ParentFont = False
+          end
+          object Panel3: TPanel
+            Left = 7
+            Top = 11
+            Width = 292
+            Height = 127
+            BevelKind = bkTile
+            BevelOuter = bvNone
+            Color = clWhite
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentBackground = False
+            ParentFont = False
+            TabOrder = 0
+            object Image1: TImage
+              Left = 0
+              Top = 0
+              Width = 288
+              Height = 104
+              Align = alClient
+              Center = True
+              Proportional = True
+              Stretch = True
+              ExplicitLeft = 8
+              ExplicitTop = -2
+            end
+            object LabAtualizarCaptcha: TLabel
+              Left = 0
+              Top = 104
+              Width = 288
+              Height = 19
+              Cursor = crHandPoint
+              Align = alBottom
+              Alignment = taCenter
+              AutoSize = False
+              Caption = 'Atualizar Captcha'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clBlue
+              Font.Height = -16
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold, fsUnderline]
+              ParentFont = False
+              OnClick = LabAtualizarCaptchaClick
+              ExplicitLeft = -24
+              ExplicitTop = 103
+            end
+          end
+          object Captcha: TRichEdit
+            Left = 6
+            Top = 166
+            Width = 145
+            Height = 35
+            Enabled = False
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -20
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Lines.Strings = (
+              '')
+            ParentFont = False
+            TabOrder = 1
+            OnKeyPress = CaptchaKeyPress
+          end
+          object btnConsultar: TButton
+            Left = 179
+            Top = 166
+            Width = 120
+            Height = 35
+            Caption = 'Consultar RFB'
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
+            TabOrder = 2
+            OnClick = btnConsultarClick
+          end
+          object Dados_Empresa: TRichEdit
+            Left = 344
+            Top = 11
+            Width = 361
+            Height = 310
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -12
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            Lines.Strings = (
+              '')
+            ParentFont = False
+            TabOrder = 3
+            Visible = False
+          end
+        end
+      end
+      object Fornecedores: TQuickRep
+        Left = 0
+        Top = 5000
+        Width = 794
+        Height = 1123
+        DataSet = IQuery
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Arial'
+        Font.Style = []
+        Functions.Strings = (
+          'PAGENUMBER'
+          'COLUMNNUMBER'
+          'REPORTTITLE')
+        Functions.DATA = (
+          '0'
+          '0'
+          #39#39)
+        Options = [FirstPageHeader, LastPageFooter]
+        Page.Columns = 1
+        Page.Orientation = poPortrait
+        Page.PaperSize = Default
+        Page.Continuous = False
+        Page.Values = (
+          127.000000000000000000
+          2970.000000000000000000
+          127.000000000000000000
+          2100.000000000000000000
+          127.000000000000000000
+          127.000000000000000000
+          0.000000000000000000)
+        PrinterSettings.Copies = 1
+        PrinterSettings.OutputBin = First
+        PrinterSettings.Duplex = False
+        PrinterSettings.FirstPage = 0
+        PrinterSettings.LastPage = 0
+        PrinterSettings.UseStandardprinter = False
+        PrinterSettings.UseCustomBinCode = False
+        PrinterSettings.CustomBinCode = 0
+        PrinterSettings.ExtendedDuplex = 0
+        PrinterSettings.UseCustomPaperCode = False
+        PrinterSettings.CustomPaperCode = 0
+        PrinterSettings.PrintMetaFile = False
+        PrinterSettings.PrintQuality = 0
+        PrinterSettings.Collate = 0
+        PrinterSettings.ColorOption = 0
+        PrintIfEmpty = True
+        ReportTitle = 'Relat'#243'rio de Fornecedores'
+        SnapToGrid = True
+        Units = MM
+        Zoom = 100
+        PrevFormStyle = fsNormal
+        PreviewInitialState = wsMaximized
+        PreviewWidth = 500
+        PreviewHeight = 500
+        PrevInitialZoom = qrZoomToWidth
+        PreviewDefaultSaveType = stQRP
+        PreviewLeft = 0
+        PreviewTop = 0
+        object QRBand1: TQRBand
+          Left = 48
+          Top = 48
+          Width = 698
+          Height = 75
+          AlignToBottom = False
+          TransparentBand = False
+          ForceNewColumn = False
+          ForceNewPage = False
+          Size.Values = (
+            198.437500000000000000
+            1846.791666666667000000)
+          PreCaluculateBandHeight = False
+          KeepOnOnePage = False
+          BandType = rbPageHeader
+          object QRSysData1: TQRSysData
+            Left = 0
+            Top = 16
+            Width = 162
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              0.000000000000000000
+              42.333333333333330000
+              428.625000000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            Data = qrsDateTime
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Text = 'Data/Hora : '
+            Transparent = False
+            ExportAs = exptText
+            FontSize = 8
+          end
+          object Cabec: TQRLabel
+            Left = 445
+            Top = 1
+            Width = 253
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1177.395833333333000000
+              2.645833333333333000
+              669.395833333333300000)
+            XLColumn = 0
+            Alignment = taRightJustify
+            AlignToBand = True
+            Caption = 'Sistema de Adm. de Empresas - Eficaz'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRSysData2: TQRSysData
+            Left = 585
+            Top = 16
+            Width = 113
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1547.812500000000000000
+              42.333333333333330000
+              298.979166666666700000)
+            XLColumn = 0
+            Alignment = taRightJustify
+            AlignToBand = True
+            Color = clWhite
+            Data = qrsPageNumber
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Text = 'P'#225'gina : '
+            Transparent = False
+            ExportAs = exptText
+            FontSize = 8
+          end
+          object QRLabel3: TQRLabel
+            Left = 233
+            Top = 31
+            Width = 232
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              616.479166666666700000
+              82.020833333333330000
+              613.833333333333300000)
+            XLColumn = 0
+            Alignment = taCenter
+            AlignToBand = True
+            Caption = '*** RELAT'#211'RIO DE FORNECEDORES ***'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = [fsBold]
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRShape1: TQRShape
+            Left = 0
+            Top = 46
+            Width = 698
+            Height = 4
+            Size.Values = (
+              10.583333333333330000
+              0.000000000000000000
+              121.708333333333300000
+              1846.791666666667000000)
+            XLColumn = 0
+            Shape = qrsHorLine
+            VertAdjust = 0
+          end
+          object QRDBText3: TQRDBText
+            Left = 0
+            Top = 1
+            Width = 36
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              0.000000000000000000
+              2.645833333333333000
+              95.250000000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = FrmPrincipal.QEmpresa
+            DataField = 'RAZAO'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRLabel1: TQRLabel
+            Left = 0
+            Top = 52
+            Width = 50
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              0.000000000000000000
+              137.583333333333300000
+              132.291666666666700000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'C'#243'd. ID'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRLabel10: TQRLabel
+            Left = 60
+            Top = 52
+            Width = 29
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              158.750000000000000000
+              137.583333333333300000
+              76.729166666666670000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'Nome'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRLabel2: TQRLabel
+            Left = 370
+            Top = 52
+            Width = 22
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              978.958333333333300000
+              137.583333333333300000
+              58.208333333333330000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'DDD'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRShape3: TQRShape
+            Left = 0
+            Top = 69
+            Width = 698
+            Height = 4
+            Size.Values = (
+              10.583333333333330000
+              0.000000000000000000
+              182.562500000000000000
+              1846.791666666667000000)
+            XLColumn = 0
+            Shape = qrsHorLine
+            VertAdjust = 0
+          end
+          object QRLabel4: TQRLabel
+            Left = 414
+            Top = 52
+            Width = 57
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1095.375000000000000000
+              137.583333333333300000
+              150.812500000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'Tel. - 1'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRLabel5: TQRLabel
+            Left = 496
+            Top = 52
+            Width = 57
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1312.333333333333000000
+              137.583333333333300000
+              150.812500000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'Tel. - 2'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRLabel6: TQRLabel
+            Left = 571
+            Top = 52
+            Width = 57
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1510.770833333333000000
+              137.583333333333300000
+              150.812500000000000000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Caption = 'CNPJ/CPF'
+            Color = clWhite
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+        end
+        object QRBand2: TQRBand
+          Left = 48
+          Top = 123
+          Width = 698
+          Height = 17
+          AlignToBottom = False
+          TransparentBand = False
+          ForceNewColumn = False
+          ForceNewPage = False
+          Size.Values = (
+            44.979166666666670000
+            1846.791666666667000000)
+          PreCaluculateBandHeight = False
+          KeepOnOnePage = False
+          BandType = rbDetail
+          object QRDBText2: TQRDBText
+            Left = 0
+            Top = 1
+            Width = 92
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              0.000000000000000000
+              2.645833333333333000
+              243.416666666666700000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = IQuery
+            DataField = 'FORNECEDOR_ID'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRDBText5: TQRDBText
+            Left = 60
+            Top = 1
+            Width = 29
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              158.750000000000000000
+              2.645833333333333000
+              76.729166666666670000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = IQuery
+            DataField = 'NOME'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRDBText6: TQRDBText
+            Left = 370
+            Top = 1
+            Width = 22
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              978.958333333333300000
+              2.645833333333333000
+              58.208333333333330000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = IQuery
+            DataField = 'DDD'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRDBText1: TQRDBText
+            Left = 571
+            Top = 1
+            Width = 29
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1510.770833333333000000
+              2.645833333333333000
+              76.729166666666670000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = IQuery
+            DataField = 'CNPJ'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRDBText4: TQRDBText
+            Left = 496
+            Top = 1
+            Width = 71
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1312.333333333333000000
+              2.645833333333333000
+              187.854166666666700000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = IQuery
+            DataField = 'TELEFONE_2'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+          object QRDBText7: TQRDBText
+            Left = 414
+            Top = 1
+            Width = 71
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1095.375000000000000000
+              2.645833333333333000
+              187.854166666666700000)
+            XLColumn = 0
+            Alignment = taLeftJustify
+            AlignToBand = False
+            Color = clWhite
+            DataSet = IQuery
+            DataField = 'TELEFONE_1'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
+        end
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 436
+    Width = 737
+    Height = 43
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 1
+    object btnComeca_Com: TSpeedButton
+      Left = 424
+      Top = 10
+      Width = 32
+      Height = 21
+      Cursor = crHandPoint
+      Flat = True
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clNavy
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = [fsBold]
+      Glyph.Data = {
+        06020000424D0602000000000000760000002800000028000000140000000100
+        0400000000009001000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+        FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+        FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+        333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+        333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+        777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+        FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+        FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+        333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+        88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+        F777333333333088FFF003333333333337333337733333333333088FFF033333
+        333333337F33337333333333333308FFF09333333333333378F3373333333333
+        333330FF0933333333333333378F733333333333333333003333333333333333
+        33773333333333333333}
+      NumGlyphs = 2
+      ParentFont = False
+      OnClick = btnComeca_ComClick
+    end
+    object btnRetorna: TBitBtn
+      Left = 638
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Retorna'
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+        F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+        000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+        337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+        45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+        3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+        F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+        000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+        337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+        4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+        7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+        333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+        0000}
+      NumGlyphs = 2
+      TabOrder = 2
+      OnClick = btnRetornaClick
+    end
+    object btnPesquisa: TBitBtn
+      Left = 557
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Pesquisa'
+      Glyph.Data = {
+        06020000424D0602000000000000760000002800000028000000140000000100
+        0400000000009001000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+        FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+        FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+        333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+        333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+        777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+        FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+        FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+        333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+        88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+        F777333333333088FFF003333333333337333337733333333333088FFF033333
+        333333337F33337333333333333308FFF09333333333333378F3373333333333
+        333330FF0933333333333333378F733333333333333333003333333333333333
+        33773333333333333333}
+      NumGlyphs = 2
+      TabOrder = 1
+      OnClick = btnPesquisaClick
+    end
+    object btnImprime: TBitBtn
+      Left = 477
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Relat'#243'rio'
+      TabOrder = 0
+      OnClick = btnImprimeClick
+    end
+    object Comeca_Com: TLabeledEdit
+      Left = 50
+      Top = 10
+      Width = 372
+      Height = 21
+      EditLabel.Width = 41
+      EditLabel.Height = 13
+      EditLabel.Caption = 'Localizar'
+      LabelPosition = lpLeft
+      TabOrder = 3
+      OnEnter = Comeca_ComEnter
+      OnKeyPress = Comeca_ComKeyPress
+    end
+  end
+  object DataTabela: TDataSource
+    AutoEdit = False
+    DataSet = QTabela
+    Left = 208
+    Top = 383
+  end
+  object QTabela: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      ''
+      'SELECT * FROM FORNECEDORES')
+    Left = 240
+    Top = 320
+  end
+  object IQuery: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      '')
+    Left = 304
+    Top = 312
+  end
+  object QIbge: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      ''
+      'SELECT * FROM IBGE'
+      'WHERE'
+      '(CODIGO = :IBGE)')
+    Left = 368
+    Top = 280
+    ParamData = <
+      item
+        Name = 'IBGE'
+        ParamType = ptInput
+      end>
+  end
+  object QPlano: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    Left = 288
+    Top = 395
+  end
+  object ACBrConsultaCNPJ1: TACBrConsultaCNPJ
+    ProxyPort = '8080'
+    PesquisarIBGE = False
+    IniServicos = 
+      'C:\Program Files (x86)\Embarcadero\RAD Studio\12.0\bin\ACBrConsu' +
+      'ltaCNPJServicos.ini'
+    Left = 288
+    Top = 170
+  end
+  object ACBrConsultaCPF1: TACBrConsultaCPF
+    ProxyPort = '8080'
+    IniServicos = 
+      'C:\Program Files (x86)\Embarcadero\RAD Studio\12.0\bin\ACBrConsu' +
+      'ltaCPFServicos.ini'
+    Left = 334
+    Top = 170
+  end
+  object Timer1: TTimer
+    Enabled = False
+    Interval = 100
+    OnTimer = Timer1Timer
+    Left = 376
+    Top = 168
+  end
+end

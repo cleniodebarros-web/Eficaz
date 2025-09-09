@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2012/03/17 20:25:39.481.pas,C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Unit2.pas=C:\Documents and Settings\Rubinho\Meus documentos\Fontes\Eficaz 2009\Atu_Versao\UAtualiza.pas</Transaction>
+    <Transaction>2012/03/17 20:25:39.497.dfm,C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Unit2.dfm=C:\Documents and Settings\Rubinho\Meus documentos\Fontes\Eficaz 2009\Atu_Versao\UAtualiza.dfm</Transaction>
+    <Transaction>2012/03/17 20:25:44.294.dproj,C:\Documents and Settings\Rubinho\Meus documentos\RAD Studio\Projects\Project2.dproj=C:\Documents and Settings\Rubinho\Meus documentos\Fontes\Eficaz 2009\Atu_Versao\Atu_Versao.dproj</Transaction>
+    <Transaction>2018/04/03 15:54:11.000.762,C:\Projetos\Integrados\Xe5\Fontes_xe5\Postgres\NewEficaz7_7.1.1.5_XE5\Atu_Versao\Atu_Versao.dproj=C:\Projetos\Integrados\Xe5\Fontes_xe5\Postgres\NewEficaz7_7.1.1.5_XE5\Atu_Versao\Atu_Versao_Pdv.dproj</Transaction>
+    <Transaction>2018/04/03 15:54:57.000.143,C:\Projetos\Integrados\Xe5\Fontes_xe5\Postgres\NewEficaz7_7.1.1.5_XE5\Atu_Versao\UAtualiza.dfm=C:\Projetos\Integrados\Xe5\Fontes_xe5\Postgres\NewEficaz7_7.1.1.5_XE5\Atu_Versao\UAtualiza_Pdv.dfm</Transaction>
+  </Transactions>
+</BorlandProject>

@@ -1,0 +1,619 @@
+unit URemarca;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, IBCustomDataSet, IBQuery, StdCtrls, Buttons, ExtCtrls, Mask,
+  rxToolEdit, rxCurrEdit, DBCtrls, Math, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client;
+
+type
+  TFrmRemarca = class(TForm)
+    Label15: TLabel;
+    Label16: TLabel;
+    Label17: TLabel;
+    Label23: TLabel;
+    Label20: TLabel;
+    Tipo_Remarca: TRadioGroup;
+    Label18: TLabel;
+    Label19: TLabel;
+    Custo_Atual: TRxCalcEdit;
+    Despesas: TRxCalcEdit;
+    Margem_Lucro: TRxCalcEdit;
+    PMZ: TRxCalcEdit;
+    Pr_Venda_Atual: TRxCalcEdit;
+    Preco_Sugerido: TRxCalcEdit;
+    Novo_Preco: TRxCalcEdit;
+    Panel1: TPanel;
+    btnRetorna: TBitBtn;
+    DBNavigator1: TDBNavigator;
+    DataTabela: TDataSource;
+    DBText1: TDBText;
+    btnRemarca: TBitBtn;
+    Label1: TLabel;
+    Margem_Atual: TRxCalcEdit;
+    Rem_Margem_Atual: TCheckBox;
+    Label2: TLabel;
+    Quantidade: TRxCalcEdit;
+    Label3: TLabel;
+    Pr_Prazo_Atual: TRxCalcEdit;
+    Label4: TLabel;
+    Preco_Prazo_Sugerido: TRxCalcEdit;
+    Label5: TLabel;
+    NOVO_PRECO_PRAZO: TRxCalcEdit;
+    BtnRemarcaT: TBitBtn;
+    BtnRemarcaCusto: TBitBtn;
+    Atualiz_Estoque_Minimo: TCheckBox;
+    Estoque_minimo: TRxCalcEdit;
+    lbl1: TLabel;
+    QTabela: TFDQuery;
+    QUpdate: TFDQuery;
+    QCalculos: TFDQuery;
+    QIndices: TFDQuery;
+    Label6: TLabel;
+    Label7: TLabel;
+    QUANT_MAXIMA: TRxCalcEdit;
+    PRECO_ATACADO: TRxCalcEdit;
+    procedure FormCreate(Sender: TObject);
+    procedure DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+    procedure Tipo_RemarcaClick(Sender: TObject);
+    procedure btnRemarcaClick(Sender: TObject);
+    procedure Margem_AtualExit(Sender: TObject);
+    procedure Novo_PrecoExit(Sender: TObject);
+    procedure BtnRemarcaTClick(Sender: TObject);
+    procedure BtnRemarcaCustoClick(Sender: TObject);
+    procedure Atualiz_Estoque_MinimoClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Set_Campos;
+  end;
+
+var
+  FrmRemarca: TFrmRemarca;
+  ID: Integer;
+  procedure Remarca(Transacao: Integer);
+
+implementation
+
+uses
+  UData, UPrincipal;
+
+{$R *.dfm}
+
+procedure Remarca(Transacao: Integer);
+begin
+  ID := Transacao;
+  Application.CreateForm(TFrmRemarca, FrmRemarca);
+  try
+    FrmRemarca.ShowModal;
+  finally
+    FrmRemarca.Release;
+  end;
+end;
+
+procedure TFrmRemarca.Set_Campos;
+var
+Base_Calc_Desc_Rodape, Vl_Prod, Perc_Desc, Perc_Frt, Perc_Desp,Perc_Desp_Custo ,New_Custo, Vl_Sbt, Perc_Sub, Desc_Footer, ICMS_Sub: Real;
+New_IPI, New_Frt, New_Desp, New_Desp_Custo, New_FCP, Cst_Entr, New_PMZ, New_Sugestao, Perc_IPI,Perc_fcp,New_Dif_ICMS: Real;
+begin
+  try
+
+    Perc_Desp       := 0;
+    Perc_Desp_Custo := 0;
+    Perc_Desc       := 0;
+    Perc_Frt        := 0;
+    Desc_Footer     := 0;
+
+    Base_Calc_Desc_Rodape := QTabela.FieldByName('VALOR_PRODUTOS').AsFloat;
+    Vl_Prod               := QTabela.FieldByName('VALOR_PRODUTOS').AsFloat;
+
+    if (QTabela.FieldByName('VR_DESCONTO').AsFloat > 0) and (Base_Calc_Desc_Rodape > 0) then
+      Perc_Desc := ((QTabela.FieldByName('VR_DESCONTO').AsFloat * 100) / Base_Calc_Desc_Rodape)
+    else
+      Perc_Desc := 0;
+
+    if (QTabela.FieldByName('VR_FRETE').AsFloat > 0) and (Vl_Prod > 0) then
+      Perc_Frt := ((QTabela.FieldByName('VR_FRETE').AsFloat * 100) / Vl_Prod)
+    else
+      Perc_Frt := 0;
+
+    if (QTabela.FieldByName('VR_ACRESCIMO').AsFloat > 0) and (Vl_Prod > 0) then
+      Perc_Desp := ((QTabela.FieldByName('VR_ACRESCIMO').AsFloat * 100) / Vl_Prod)
+    else
+      Perc_Desp := 0;
+
+    if (QTabela.FieldByName('VR_OUTROS').AsFloat > 0) and (Vl_Prod > 0) then
+      Perc_Desp := (Perc_Desp + ((QTabela.FieldByName('VR_OUTROS').AsFloat * 100) / Vl_Prod))
+    else
+      Perc_Desp := Perc_Desp;
+
+     if (QTabela.FieldByName('DESPESAS_CUSTO').AsFloat > 0) and (Vl_Prod > 0) then
+      Perc_Desp_Custo := (Perc_Desp + ((QTabela.FieldByName('DESPESAS_CUSTO').AsFloat * 100) / Vl_Prod))
+    else
+      Perc_Desp_Custo := 0;
+
+
+
+    QCalculos.Sql.Clear;
+    QCalculos.Sql.Add('SELECT SUM(VR_TOTAL) AS VALOR');
+    QCalculos.Sql.Add('FROM TRANSITENS');
+    QCalculos.Sql.Add('WHERE');
+    QCalculos.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    QCalculos.Sql.Add('AND (CST LIKE :CST1 OR CST LIKE :CST2 OR CST LIKE :CST3 OR CST LIKE :CST4)');
+
+    QCalculos.ParamByName('TRANSACAO_ID').AsInteger := ID;
+    QCalculos.ParamByName('CST1').AsString          := '%10';
+    QCalculos.ParamByName('CST2').AsString          := '%30';
+    QCalculos.ParamByName('CST3').AsString          := '%60';
+    QCalculos.ParamByName('CST4').AsString          := '%70';
+
+    QCalculos.Prepare;
+    QCalculos.Open;
+
+    Vl_Sbt := QCalculos.FieldByName('VALOR').AsFloat;
+
+    if (QTabela.FieldByName('VR_ICMS_ST').AsFloat > 0) and (Vl_Sbt > 0) then
+      Perc_Sub := ((QTabela.FieldByName('VR_ICMS_ST').AsFloat * 100) / Vl_Sbt)
+    else
+      Perc_Sub := 0;
+
+    New_Custo := (QTabela.FieldByName('VR_UNITARIO').AsFloat - QTabela.FieldByName('DESC_ITEM').AsFloat);
+
+    if Perc_Desc > 0 then
+      Desc_Footer := ((Perc_Desc * New_Custo) / 100)
+    else
+      Desc_Footer := 0;
+
+    //if QTabela.FieldByName('DESC_ITEM_RODAPE').AsFloat > 0  then
+    //    Desc_Footer :=  QTabela.FieldByName('DESC_ITEM_RODAPE').AsFloat / QTabela.FieldByName('QUANTIDADE').AsFloat;
+
+    IF QTabela.FieldByName('DESC_ITEM_RODAPE').AsFloat > 0 Then
+    Desc_Footer :=  (QTabela.FieldByName('DESC_ITEM_RODAPE').AsFloat / QTabela.FieldByName('QUANTIDADE').AsFloat)
+    else
+    Desc_Footer := 0;
+
+    New_Custo := New_Custo - Desc_Footer;
+    ICMS_Sub  := 0;
+
+    if QTabela.FieldByName('VR_IPI').AsFloat > 0  then
+    begin
+      New_IPI  := (QTabela.FieldByName('VR_IPI').AsFloat / QTabela.FieldByName('QUANTIDADE').AsFloat);
+      Perc_IPI := ((New_IPI * 100) / (QTabela.FieldByName('VR_UNITARIO').AsFloat - QTabela.FieldByName('DESC_ITEM').AsFloat));
+    end
+    else
+    begin
+      New_IPI  := 0;
+      Perc_IPI := 0;
+    end;
+
+    if QTabela.FieldByName('VR_FCP').AsFloat > 0  then
+    begin
+      New_FCP  := (QTabela.FieldByName('VR_FCP').AsFloat / QTabela.FieldByName('QUANTIDADE').AsFloat);
+      Perc_FCP := ((New_FCP * 100) / (QTabela.FieldByName('VR_UNITARIO').AsFloat - QTabela.FieldByName('DESC_ITEM').AsFloat));
+    end
+    else
+    begin
+      New_FCP  := 0;
+      New_FCP := 0;
+    end;
+
+
+    if Perc_Frt > 0 then
+      New_Frt := ((New_Custo * Perc_Frt) / 100)
+    else
+      New_Frt := 0;
+
+    if Perc_Desp > 0 then
+      New_Desp := ((New_Custo * Perc_Desp) / 100)
+    else
+      New_Desp := 0;
+
+    if Perc_Desp_Custo > 0 then
+      New_Desp_Custo := ((New_Custo * Perc_Desp_Custo) / 100)
+    else
+      New_Desp_Custo := 0;
+
+
+
+  //Alterado a pedido de Regivaldo 20/04/15
+  //  if (Copy(QTabela.FieldByName('CST').AsString, 2, 2) = '10') or (Copy(QTabela.FieldByName('CST').AsString, 2, 2) = '30') or
+  //     (Copy(QTabela.FieldByName('CST').AsString, 2, 2) = '60') or (Copy(QTabela.FieldByName('CST').AsString, 2, 2) = '70') then
+ //   begin
+  //    if (QTabela.FieldByName('VR_ICMS_ST').AsFloat > 0) and (Vl_Sbt > 0) then
+  //      ICMS_Sub := ((New_Custo * Perc_Sub) / 100);
+      //Ratear icms_st somente para os itens que possuirem valor
+
+      if QTabela.FieldByName('VALOR_ICMS_ST').AsFloat > 0 then
+        ICMS_Sub := (QTabela.FieldByName('VALOR_ICMS_ST').AsFloat / QTabela.FieldByName('QUANTIDADE').AsFloat);
+
+
+  //  end;
+
+    //Cst_Entr := New_Custo + New_IPI + New_Frt + New_Desp + New_Fcp + New_Desp_Custo + ICMS_Sub;
+
+    if ICMS_Sub = 0 then
+    begin
+      New_PMZ      := ((New_Custo - ((New_Custo * QTabela.FieldByName('ICMS_ENTRADA').AsFloat) / 100)) / (1 - ((QIndices.FieldByName('VALOR').AsFloat + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QTabela.FieldByName('ICMS_SAIDA').AsFloat) / 100)));
+      New_Sugestao := ((New_Custo - ((New_Custo * QTabela.FieldByName('ICMS_ENTRADA').AsFloat) / 100)) / (1 - ((QIndices.FieldByName('VALOR').AsFloat + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QTabela.FieldByName('ICMS_SAIDA').AsFloat + QTabela.FieldByName('MARGEM_LUCRO').AsFloat) / 100)));
+
+    end
+    else
+    begin
+    
+      New_PMZ      := (New_Custo / (1 - ((QIndices.FieldByName('VALOR').AsFloat + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QTabela.FieldByName('ICMS_SAIDA').AsFloat) / 100)));
+      New_Sugestao := (New_Custo / (1 - ((QIndices.FieldByName('VALOR').AsFloat + Perc_IPI + Perc_Frt + Perc_Desp + Perc_Sub + QTabela.FieldByName('ICMS_SAIDA').AsFloat + QTabela.FieldByName('MARGEM_LUCRO').AsFloat) / 100)));
+      New_Dif_ICMS := 0;
+
+    end;
+
+    if  FrmPrincipal.Config.FieldByName('DIFERENCA_ICMS').AsString = 'True' Then
+    Begin
+
+    if (Copy(QTabela.FieldByName('CFOP').AsString,1,1) = '2') and (QTabela.FieldByName('ICMS_SAIDA').AsFloat > QTabela.FieldByName('ICMS_ENTRADA').AsFloat) AND (QTabela.FieldByName('VALOR_ICMS').AsFloat > 0 )  then
+      New_Dif_ICMS := ((New_Custo * (QTabela.FieldByName('ICMS_SAIDA').AsFloat - QTabela.FieldByName('ICMS_ENTRADA').AsFloat)) / 100)
+    else
+      New_Dif_ICMS := 0;
+    End;
+    {
+    showmessage(FloatToStr(New_Custo));
+    showmessage(FloatToStr(New_IPI));
+    showmessage(FloatToStr(New_Frt));
+    showmessage(FloatToStr(New_Fcp));
+    showmessage(FloatToStr(New_Desp_Custo));
+    showmessage(FloatToStr(ICMS_Sub));
+    showmessage(FloatToStr(New_Dif_ICMS));
+    }
+
+    Cst_Entr := New_Custo + New_IPI + New_Frt + New_Desp + New_Fcp + New_Desp_Custo + ICMS_Sub + New_Dif_ICMS ;
+    {
+    ShowMessage('Cst_Entr: ' + FloatToStr(Cst_Entr) + #13 +
+                'New_Custo: ' + FloatToStr(New_Custo) + #13 +
+                'New_IPI: ' + FloatToStr(New_IPI) + #13 +
+                'New_Frt: ' + FloatToStr(New_Frt) + #13 +
+                'New_Desp: ' + FloatToStr(New_Desp) + #13 +
+                'New_Fcp: ' + FloatToStr(New_Fcp) + #13 +
+                'New_Desp_Custo: ' + FloatToStr(New_Desp_Custo) + #13 +
+                'ICMS_Sub: ' + FloatToStr(ICMS_Sub) + #13 +
+                'New_Dif_ICMS: ' + FloatToStr(New_Dif_ICMS));
+    }
+    Custo_Atual.Value    := Cst_Entr;
+    Despesas.Value       := (QIndices.FieldByName('VALOR').AsFloat + QTabela.FieldByName('ICMS_SAIDA').AsFloat);
+    Margem_Lucro.Value   := QTabela.FieldByName('MARGEM_LUCRO').AsFloat;
+    PMZ.Value            := New_PMZ;
+    Pr_Venda_Atual.Value := QTabela.FieldByName('PRECO_VAREJO').AsFloat;
+    Preco_Sugerido.Value := New_Sugestao;
+    Pr_Prazo_Atual.Value := QTabela.FieldByName('PRECO_PRAZO').AsFloat;
+    Preco_Prazo_Sugerido.Value := New_Sugestao;
+    Quantidade.Value     := QTabela.FieldByName('QUANTIDADE').AsFloat;
+    Estoque_minimo.Value := QTabela.FieldByName('QUANT_MINIMA').AsFloat;
+    Preco_Atacado.Value  := QTabela.FieldByName('PRECO_ATACADO').AsFloat;
+    Quant_Maxima.Value   := QTabela.FieldByName('QUANT_MAXIMA').AsFloat;
+
+    try
+      Margem_Atual.Value   := RoundTo((((Pr_Venda_Atual.Value - Custo_Atual.Value) * 100) / Custo_Atual.Value), -2);
+    except
+
+    end;
+
+    if Tipo_Remarca.ItemIndex = 1 then
+    Begin
+      Novo_Preco.Value       := (Cst_Entr + ((Cst_Entr * QTabela.FieldByName('MARGEM_LUCRO').AsFloat) / 100));
+      Novo_Preco_Prazo.Value := (Cst_Entr + ((Cst_Entr * QTabela.FieldByName('MARGEM_LUCRO').AsFloat) / 100));
+    End
+    else
+    Begin
+      Novo_Preco.Value       := New_Sugestao;
+      Novo_Preco_Prazo.Value := New_Sugestao;
+    End;
+  finally
+
+  end;
+end;
+
+procedure TFrmRemarca.Tipo_RemarcaClick(Sender: TObject);
+begin
+  Set_Campos;
+end;
+
+procedure TFrmRemarca.Atualiz_Estoque_MinimoClick(Sender: TObject);
+begin
+if Atualiz_Estoque_Minimo.Checked then
+Estoque_minimo.Enabled := True
+else
+Estoque_minimo.Enabled := False;
+
+end;
+
+procedure TFrmRemarca.btnRemarcaClick(Sender: TObject);
+begin
+  try
+    QUpdate.Sql.Clear;
+    QUpdate.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO = :PRECO_PRAZO, DT_PRECO = :DT_PRECO, PRECO_ATACADO = :PRECO_ATACADO , QUANT_MAXIMA = :QUANT_MAXIMA, ' +
+                     'ULT_QUANTIDADE = :ULT_QUANTIDADE, MARGEM_LUCRO = :MARGEM_LUCRO, QUANT_MINIMA = :ESTOQUE_MINIMO, FUNCIONARIO_ID = :FUNCIONARIO_ID ' +
+                                         'WHERE ' +
+                                         '(PRODUTO_ID = :PRODUTO_ID)');
+
+    QUpdate.ParamByName('PRECO_VAREJO').AsFloat   := Novo_Preco.Value;
+    QUpdate.ParamByName('PRECO_PRAZO').AsFloat    := Novo_Preco_Prazo.Value;
+    QUpdate.ParamByName('DT_PRECO').AsDateTime    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QUpdate.ParamByName('PRODUTO_ID').AsInteger   := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QUpdate.ParamByName('ULT_QUANTIDADE').AsFloat := QTabela.FieldByName('QUANTIDADE').AsFloat;
+    QUpdate.ParamByName('ESTOQUE_MINIMO').AsFloat := Estoque_minimo.VALUE;
+    QUpdate.ParamByName('FUNCIONARIO_ID').AsInteger :=  FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+    QUpdate.ParamByName('PRECO_ATACADO').AsFloat  := PRECO_ATACADO.Value;
+    QUpdate.ParamByName('QUANT_MAXIMA').AsFloat   := QUANT_MAXIMA.Value;
+
+    if Rem_Margem_Atual.Checked then
+      QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Atual.Value
+    else
+      QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Lucro.Value;
+
+    QUpdate.Prepare;
+    QUpdate.ExecSql;
+
+
+
+    if (not QTabela.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+      Carga_PDV_Off_Line(QTabela.FieldByName('PRODUTO_ID').AsInteger, 0);
+
+    if QTabela.FieldByName('FAMILIA_ID').AsInteger > 0 then
+    begin
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, DT_PRECO = :DT_PRECO, MARGEM_LUCRO = :MARGEM_LUCRO, FUNCIONARIO_ID = :FUNCIONARIO_ID, QUANT_MAXIMA = :QUANT_MAXIMA , PRECO_ATACADO = :PRECO_ATACADO ' +
+                                           'WHERE ' +
+                                           '(FAMILIA_ID = :FAMILIA_ID)' +
+                                           'AND (PRODUTO_ID <> :PRODUTO_ID)');
+
+      QUpdate.ParamByName('PRECO_VAREJO').AsFloat     := Novo_Preco.Value;
+      QUpdate.ParamByName('DT_PRECO').AsDateTime      := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QUpdate.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+      if Rem_Margem_Atual.Checked then
+        QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Atual.Value
+      else
+        QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Lucro.Value;
+
+      QUpdate.ParamByName('FAMILIA_ID').AsInteger := QTabela.FieldByName('FAMILIA_ID').AsInteger;
+      QUpdate.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QUpdate.ParamByName('PRECO_ATACADO').AsFloat  := PRECO_ATACADO.Value;
+      QUpdate.ParamByName('QUANT_MAXIMA').AsFloat   := QUANT_MAXIMA.Value;
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+
+
+    end;
+
+
+    QUpdate.Sql.Clear;
+    QUpdate.Sql.Add('UPDATE TRANSITENS SET REMARCA = 1 WHERE PRODUTO_ID = :PRODUTO_ID AND TRANSACAO_ID = :TRANSACAO_ID');
+    QUpdate.ParamByName('PRODUTO_ID').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QUpdate.ParamByName('TRANSACAO_ID').AsInteger   := ID;
+
+     QUpdate.Prepare;
+     QUpdate.ExecSql;
+
+
+
+   // if (not QTabela.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+   //   Carga_PDV_Off_Line(QTabela.FieldByName('PRODUTO_ID').AsInteger, 0);
+  except
+   on e:Exception do
+        begin
+          //Application.MessageBox(PChar('Erro:' + #13 +  'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+          Application.MessageBox(Pchar('Não foi possível atualizar o preço devido a um erro interno:' + #13 + 'Erro: ' + e.Message) , PChar(Msg_Title), mb_IconInformation);
+
+        end;
+
+  end;
+  end;
+
+procedure TFrmRemarca.BtnRemarcaCustoClick(Sender: TObject);
+var
+Margem_total : Real;
+begin
+if Application.MessageBox('Deseja realmente remarcar todos os produtos(Preço de Custo) desta nota?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+ Begin
+  Margem_Total := Margem_Atual.Value;
+  QTabela.First;
+    while not QTabela.Eof do
+    Begin
+    Set_Campos;
+      try
+        QUpdate.Sql.Clear;
+        QUpdate.Sql.Add('UPDATE PRODUTOS SET CUSTO_COMPRA = :CUSTO_COMPRA,  DT_COMPRA = :DT_COMPRA, FUNCIONARIO_ID = :FUNCIONARIO_ID,REMARCA = 0 ' +
+                                             'WHERE ' +
+                                             '(PRODUTO_ID = :PRODUTO_ID)');
+
+        QUpdate.ParamByName('CUSTO_COMPRA').AsFloat   := CUSTO_ATUAL.Value;
+        QUpdate.ParamByName('DT_COMPRA').AsDateTime   := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+        QUpdate.ParamByName('PRODUTO_ID').AsInteger   := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        QUpdate.ParamByName('FUNCIONARIO_ID').AsInteger :=  FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+
+        QUpdate.Prepare;
+        QUpdate.ExecSql;
+
+
+
+        if (not QTabela.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+          Carga_PDV_Off_Line(QTabela.FieldByName('PRODUTO_ID').AsInteger, 0);
+
+        if QTabela.FieldByName('FAMILIA_ID').AsInteger > 0 then
+        begin
+          QUpdate.Sql.Clear;
+          QUpdate.Sql.Add('UPDATE PRODUTOS SET CUSTO_COMPRA = :CUSTO_COMPRA,  DT_COMPRA = :DT_COMPRA, FUNCIONARIO_ID = :FUNCIONARIO_ID ' +
+                                               'WHERE ' +
+                                               '(FAMILIA_ID = :FAMILIA_ID)' +
+                                               'AND (PRODUTO_ID <> :PRODUTO_ID)');
+
+          QUpdate.ParamByName('CUSTO_COMPRA').AsFloat   := CUSTO_ATUAL.Value;
+          QUpdate.ParamByName('DT_COMPRA').AsDateTime   := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          QUpdate.ParamByName('FAMILIA_ID').AsInteger := QTabela.FieldByName('FAMILIA_ID').AsInteger;
+          QUpdate.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+          QUpdate.ParamByName('FUNCIONARIO_ID').AsInteger :=  FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+          QUpdate.Prepare;
+          QUpdate.ExecSql;
+
+
+        end;
+
+        if (not QTabela.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+          Carga_PDV_Off_Line(QTabela.FieldByName('PRODUTO_ID').AsInteger, 0);
+      except
+        // Application.MessageBox('Não foi possível atualizar o preço devido a um erro interno', PChar(Msg_Title), mb_IconInformation);
+
+       on e:Exception do
+        begin
+
+         Application.MessageBox(Pchar('Não foi possível atualizar o preço devido a um erro interno:' + #13 + e.Message) , PChar(Msg_Title), mb_IconInformation);
+          //Application.MessageBox(PChar('Erro:' + #13 +
+          ///  'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+
+        end;
+
+      end;
+
+
+     QTabela.Next
+    End;
+  Application.MessageBox(' Todos Produtos(Preço de Custo) da nota  foram remarcados.', PChar(Msg_Title), mb_IconInformation);
+ End
+ Else
+  Application.MessageBox('Nenhum produto(Preço de Custo) desta nota foi remarcado.', PChar(Msg_Title), mb_IconInformation);
+end;
+
+procedure TFrmRemarca.BtnRemarcaTClick(Sender: TObject);
+var
+Margem_total : Real;
+begin
+if Application.MessageBox('Deseja realmente remarcar todos os produtos desta nota?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+ Begin
+  Margem_Total := Margem_Atual.Value;
+  QTabela.First;
+    while not QTabela.Eof do
+    Begin
+    Set_Campos;
+      try
+        QUpdate.Sql.Clear;
+        QUpdate.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO = :PRECO_PRAZO, DT_PRECO = :DT_PRECO, ULT_QUANTIDADE = :ULT_QUANTIDADE, MARGEM_LUCRO = :MARGEM_LUCRO, FUNCIONARIO_ID = :FUNCIONARIO_ID ' +
+                                             'WHERE ' +
+                                             '(PRODUTO_ID = :PRODUTO_ID)');
+
+        QUpdate.ParamByName('PRECO_VAREJO').AsFloat   := Novo_Preco.Value;
+        QUpdate.ParamByName('PRECO_PRAZO').AsFloat    := Novo_Preco_Prazo.Value;
+        QUpdate.ParamByName('DT_PRECO').AsDateTime    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+        QUpdate.ParamByName('PRODUTO_ID').AsInteger   := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        QUpdate.ParamByName('ULT_QUANTIDADE').AsFloat := QTabela.FieldByName('QUANTIDADE').AsFloat;
+        QUpdate.ParamByName('FUNCIONARIO_ID').AsInteger :=  FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        if Rem_Margem_Atual.Checked then
+          QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Total
+        else
+          QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Lucro.Value;
+
+        QUpdate.Prepare;
+        QUpdate.ExecSql;
+
+
+
+        if (not QTabela.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+          Carga_PDV_Off_Line(QTabela.FieldByName('PRODUTO_ID').AsInteger, 0);
+
+        if QTabela.FieldByName('FAMILIA_ID').AsInteger > 0 then
+        begin
+          QUpdate.Sql.Clear;
+          QUpdate.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, DT_PRECO = :DT_PRECO, MARGEM_LUCRO = :MARGEM_LUCRO, FUNCIONARIO_ID = :FUNCIONARIO_ID' +
+                                               'WHERE ' +
+                                               '(FAMILIA_ID = :FAMILIA_ID)' +
+                                               'AND (PRODUTO_ID <> :PRODUTO_ID)');
+
+          QUpdate.ParamByName('PRECO_VAREJO').AsFloat := Novo_Preco.Value;
+          QUpdate.ParamByName('DT_PRECO').AsDateTime  := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          QUpdate.ParamByName('FUNCIONARIO_ID').AsInteger :=  FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+          if Rem_Margem_Atual.Checked then
+            QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Atual.Value
+          else
+            QUpdate.ParamByName('MARGEM_LUCRO').AsFloat := Margem_Lucro.Value;
+
+          QUpdate.ParamByName('FAMILIA_ID').AsInteger := QTabela.FieldByName('FAMILIA_ID').AsInteger;
+          QUpdate.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+          QUpdate.Prepare;
+          QUpdate.ExecSql;
+
+
+        end;
+
+        QUpdate.Sql.Clear;
+        QUpdate.Sql.Add('UPDATE TRANSITENS SET REMARCA = 1 WHERE PRODUTO_ID = :PRODUTO_ID AND TRANSACAO_ID = :TRANSACAO_ID');
+        QUpdate.ParamByName('PRODUTO_ID').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        QUpdate.ParamByName('TRANSACAO_ID').AsInteger   := ID;
+
+         QUpdate.Prepare;
+         QUpdate.ExecSql;
+
+
+        if (not QTabela.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+          Carga_PDV_Off_Line(QTabela.FieldByName('PRODUTO_ID').AsInteger, 0);
+      except
+         Application.MessageBox('Não foi possível atualizar o preço devido a um erro interno', PChar(Msg_Title), mb_IconInformation);
+      end;
+     QTabela.Next
+    End;
+  Application.MessageBox(' Todos Produtos da nota  foram remarcados.', PChar(Msg_Title), mb_IconInformation);
+ End
+ Else
+  Application.MessageBox('Nenhum produto desta nota foi remarcado.', PChar(Msg_Title), mb_IconInformation);
+end;
+
+procedure TFrmRemarca.DBNavigator1Click(Sender: TObject; Button: TNavigateBtn);
+begin
+  Set_Campos;
+end;
+
+procedure TFrmRemarca.FormCreate(Sender: TObject);
+begin
+  QTabela.Sql.Clear;
+  QTabela.Sql.Add('SELECT TRANSITENS.PRODUTO_ID, TRANSITENS.VR_UNITARIO,TRANSITENS.VR_FCP, TRANSITENS.VR_DESCONTO AS DESC_ITEM,TRANSITENS.DESC_RODAPE AS DESC_ITEM_RODAPE, TRANSITENS.QUANTIDADE, TRANSITENS.ALIQUOTA_ICMS AS ICMS_ENTRADA, ' +
+                  'TRANSITENS.VR_IPI, TRANSITENS.CST, TRANSITENS.VALOR_ICMS_ST, TRANSACOES.VR_DESCONTO, TRANSACOES.VR_FRETE, TRANSACOES.DESPESAS_CUSTO,TRANSITENS.CFOP,TRANSITENS.VALOR_ICMS,' +
+                  'TRANSACOES.VR_ACRESCIMO, TRANSACOES.VR_ICMS_ST, TRANSACOES.VALOR_PRODUTOS, TRANSACOES.VR_OUTROS,TRANSACOES.TIPO_IMP, ' +
+                  'PRODUTOS.QUANT_MINIMA, PRODUTOS.CUSTOMEDIO, PRODUTOS.ESTOQUE_INICIAL, PRODUTOS.MARGEM_LUCRO, PRODUTOS.FAMILIA_ID, ' +
+                  'PRODUTOS.ALIQUOTA_ICMS AS ICMS_SAIDA, PRODUTOS.PRECO_VAREJO, PRODUTOS.PRECO_PRAZO, PRODUTOS.DESCRICAO,PRODUTOS.QUANT_MAXIMA , PRODUTOS.PRECO_ATACADO ');
+  QTabela.Sql.Add('FROM TRANSITENS');
+  QTabela.Sql.Add('INNER JOIN TRANSACOES');
+  QTabela.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+  QTabela.Sql.Add('INNER JOIN PRODUTOS');
+  QTabela.Sql.Add('ON (TRANSITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+  QTabela.Sql.Add('WHERE');
+  QTabela.Sql.Add('(TRANSACOES.TRANSACAO_ID = :TRANSACAO_ID) AND (TRANSITENS.TP_PROD_SERV = ''P'')');
+  QTabela.Sql.Add('ORDER BY TRANSITENS.SEQUENCIA');
+
+  QTabela.ParamByName('TRANSACAO_ID').AsInteger := ID;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  QIndices.Open;
+
+  Set_Campos;
+end;
+
+procedure TFrmRemarca.Margem_AtualExit(Sender: TObject);
+begin
+Novo_Preco.Value := (Custo_atual.value + ((Custo_atual.value * Margem_atual.Value) / 100))
+end;
+
+procedure TFrmRemarca.Novo_PrecoExit(Sender: TObject);
+begin
+Margem_Atual.Value   := RoundTo((((Novo_Preco.Value - Custo_Atual.Value) * 100) / Custo_Atual.Value), -2);
+end;
+
+end.

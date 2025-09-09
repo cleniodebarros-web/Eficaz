@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Agrupado_1.fr3" ReportOptions.CreateDate="44550,4765025694" ReportOptions.LastChange="44550,6244410764" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportTableAgenda" DataSetName="Fdac_Temp_UExtrato_Movimentacao_cliente"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperSize="9">
+    <inherited Name="b_cabecalho">
+      <inherited Name="b_cabecalho_data_hora_atual"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Extrato de Movimentação de &#13;&#10;Clientes"/>
+      <inherited Name="b_cabecalho_periodo_analisado"/>
+      <inherited Name="b_cabecalho_razao_social"/>
+      <inherited Name="b_cabecalho_logo"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens">
+      <inherited Name="b_cabecalho_titulo_item_texto" Width="33,66141" Text="Data"/>
+      <inherited Name="b_cabecalho_espaco_branco"/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="64,25201" Top="2,77953" Width="56,33859" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="N° Doc."/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="132,28355" Top="2,77953" Width="67,67718" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Histórico"/>
+      <TfrxMemoView Name="Memo13" AllowVectorExport="True" Left="361,83488" Top="2,77953" Width="60,11812" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Dt.Venc."/>
+      <TfrxMemoView Name="Memo14" AllowVectorExport="True" Left="491,3389" Top="3,77953" Width="41,22047" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Valor"/>
+      <TfrxMemoView Name="Memo15" AllowVectorExport="True" Left="468,66172" Top="2,77953" Width="22,32282" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Tp"/>
+      <TfrxMemoView Name="Memo16" AllowVectorExport="True" Left="555,59091" Top="2,77953" Width="48,77953" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Débito"/>
+      <TfrxMemoView Name="Memo17" AllowVectorExport="True" Left="619,84292" Top="2,77953" Width="41,22047" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Juros"/>
+      <TfrxMemoView Name="Memo18" AllowVectorExport="True" Left="684,09493" Top="2,77953" Width="52,55906" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Crédito"/>
+      <TfrxMemoView Name="Memo19" AllowVectorExport="True" Left="426,08689" Top="2,77953" Width="41,22047" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Parc."/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_groupheader" Condition="&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;NOME&#34;&#62;">
+      <inherited Name="b_rel_agrupado3_shape2"/>
+      <inherited Name="b_rel_agrupado1_groupheader_item1" Text="[Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;NOME&#34;]"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_groupfooter" Top="359,05535" Visible="False">
+      <inherited Name="b_rel_agrupado1_groufooter_item1"/>
+      <inherited Name="b_rel_agrupado1_groufooter_shape1"/>
+    </inherited>
+    <inherited Name="b_rel_agrupado1_report_Summary" Height="45,23624" Top="498,89796">
+      <inherited Name="b_rel_agrupado1_report_Summary_resultado" Width="57,10235" Text="Resultado &#62; "/>
+      <inherited Name="b_rel_simples_shape1"/>
+      <TfrxMemoView Name="Memo21" AllowVectorExport="True" Left="197,53556" Top="9,55906" Width="89,7953" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;valor_multa&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo22" AllowVectorExport="True" Left="139,84261" Top="7,55906" Width="57,10235" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Multa ="/>
+      <TfrxMemoView Name="Memo23" AllowVectorExport="True" Left="367,61441" Top="9,55906" Width="89,7953" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;debito&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo24" AllowVectorExport="True" Left="306,14193" Top="7,55906" Width="60,88188" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Débito ="/>
+      <TfrxMemoView Name="Memo25" AllowVectorExport="True" Left="533,91373" Top="9,55906" Width="89,7953" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',sum(&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;JUROS&#34;&#62;))]"/>
+      <TfrxMemoView Name="Memo26" AllowVectorExport="True" Left="472,44125" Top="7,55906" Width="53,32282" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Juros = "/>
+      <TfrxMemoView Name="Memo27" AllowVectorExport="True" Left="254,22851" Top="28,45671" Width="89,7953" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',(Sum(&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;DEBITO&#34;&#62;))+(Sum(&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;JUROS&#34;&#62;))+(Sum(&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;VALOR_MULTA&#34;&#62;)))]"/>
+      <TfrxMemoView Name="Memo28" AllowVectorExport="True" Left="139,84261" Top="26,45671" Width="113,7953" Height="18,77953" AutoWidth="True" Font.Charset="0" Font.Color="8421504" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Saldo Devedor ="/>
+    </inherited>
+    <inherited Name="Footer1" Height="30,33859" Top="408,18924" Visible="True">
+      <inherited Name="b_rel_agrupado1_report_Summary_resultado2" Top="7,77953" Width="737,41775" Text="Tipo &#62; (C)-Crédito            (D)-Débito            (R)-Receita            (V)-Venda"/>
+      <inherited Name="b_rel_agrupado1_shape2"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976378" Left="0" Top="317,48052" Width="755,906" ColumnWidth="0" ColumnGap="0" DataSet="FastReportTableAgenda" DataSetName="Fdac_Temp_UExtrato_Movimentacao_cliente" RowCount="0">
+      <TfrxMemoView Name="Memo1" AllowVectorExport="True" Left="7,55906" Top="0,22047" Width="53,66929134" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;DT_TRANS_EXIBIR&#34;]"/>
+      <TfrxMemoView Name="Memo2" AllowVectorExport="True" Left="64,25201" Top="1" Width="64,251968503937" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;NUM_DOC&#34;]"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="132,28355" Top="1" Width="222,23632787" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;HISTORICO&#34;]"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="361,83488" Top="1" Width="53,66929134" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;DT_VENC_EXIBIR&#34;]"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="426,08689" Top="1" Width="34,77165354" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;PARCELA_ID&#34;]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="468,66172" Top="1" Width="14,2047" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;TP&#34;]"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="491,3389" Top="1" Width="59,55906" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;VALOR_ORIGEM&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="555,59091" Top="1" Width="59,71653543" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;DEBITO&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo9" AllowVectorExport="True" Left="619,84292" Top="1" Width="59,71653543" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;JUROS&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="684,09493" Top="1" Width="59,71653543" Height="15" DataSet="FrmPosicao_Estoque.DataSetIQuery" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;Fdac_Temp_UExtrato_Movimentacao_cliente.&#34;CREDITO&#34;&#62;)]"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" PaperSize="9"/>
+</inherited>

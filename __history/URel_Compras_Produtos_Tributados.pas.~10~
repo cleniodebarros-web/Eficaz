@@ -1,0 +1,219 @@
+unit URel_Compras_Produtos_Tributados;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, Mask, rxToolEdit, DB, IBCustomDataSet, IBQuery,
+  QuickRpt, QRCtrls, Buttons, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client,QRExport, Vcl.DBLookup, Vcl.DBCtrls, qrpctrls;
+
+type
+  TFrmRel_Compras_Produtos_Tributados = class(TForm)
+    Label1: TLabel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Bevel1: TBevel;
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    Label5: TLabel;
+    Ordem_Relatorio: TComboBox;
+    QRel: TFDQuery;
+    CompraProdutosTributadosSintetico: TQuickRep;
+    QRBand6: TQRBand;
+    QRSysData5: TQRSysData;
+    QRLabel15: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRLabel24: TQRLabel;
+    QRShape8: TQRShape;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRShape9: TQRShape;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRDBText10: TQRDBText;
+    GrupoFinalizadoraAnalitico: TQRGroup;
+    QRDBText14: TQRDBText;
+    DetalherFinalizadoraAnalitico: TQRBand;
+    QRDBText15: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRDBText18: TQRDBText;
+    FooterFinalizadoraAnalitico: TQRBand;
+    QRExpr15: TQRExpr;
+    QRLabel33: TQRLabel;
+    QRExpr17: TQRExpr;
+    QRShape10: TQRShape;
+    QRBand7: TQRBand;
+    QRExpr20: TQRExpr;
+    QRExpr21: TQRExpr;
+    QRPShape1: TQRPShape;
+    QRLabel34: TQRLabel;
+    CompraProdutosTributadosAnalitico: TQuickRep;
+    QRBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    QRLabel2: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRLabel5: TQRLabel;
+    QRShape2: TQRShape;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRBand2: TQRBand;
+    QRExpr1: TQRExpr;
+    QRExpr2: TQRExpr;
+    QRPShape2: TQRPShape;
+    QRLabel4: TQRLabel;
+    QRBand8: TQRBand;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRDBText3: TQRDBText;
+    QRLabel10: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRLabel11: TQRLabel;
+    QRDBText7: TQRDBText;
+    RadioGroup1: TRadioGroup;
+    procedure FormCreate(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure OrdemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmRel_Compras_Produtos_Tributados: TFrmRel_Compras_Produtos_Tributados;
+
+implementation
+
+uses
+  UData, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmRel_Compras_Produtos_Tributados.btnExecutaClick(Sender: TObject);
+begin
+// 200, 325
+  try
+    //ShowMessage(Tipo_Rel.Items[Tipo_Rel.ItemIndex]);
+    //Exit;
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT TRANSACOES.DT_TRANS, TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, PRODUTOS.COD_BARRA, SUM(TRANSITENS.QUANTIDADE) QTD_COMPRA,');
+    QRel.SQL.Add('TRANSITENS.ALIQUOTA_ICMS, SUM(TRANSITENS.BASE_CALC_ICMS) BASE_CALC_ICMS, SUM(TRANSITENS.VALOR_ICMS) VALOR_ICMS');
+    QRel.SQL.Add('FROM TRANSITENS');
+    QRel.SQL.Add('INNER JOIN TRANSACOES ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QRel.SQL.Add('INNER JOIN PRODUTOS ON (TRANSITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+    QRel.SQL.Add('INNER JOIN TABELAS ON (PRODUTOS.GRUPO_ID = TABELAS.TABELA_ID AND TABELAS.TIPO_TABELA = ''7'')');
+    QRel.SQL.Add('WHERE');
+    QRel.SQL.Add('(TRANSACOES.DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.SQL.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QRel.SQL.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QRel.SQL.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+    QRel.SQL.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+    QRel.SQL.Add('AND (TRANSACOES.BALANCO <> :BALANCO)');
+    QRel.SQL.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN(SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+    QRel.SQL.Add('AND (TRANSITENS.ALIQUOTA_ICMS > 0)');
+    QRel.SQL.Add('GROUP BY TRANSACOES.DT_TRANS, TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, PRODUTOS.COD_BARRA, TABELAS.DESCRICAO, TRANSITENS.ALIQUOTA_ICMS');
+
+    if Ordem_Relatorio.Items[Ordem_Relatorio.ItemIndex] = 'Data' then
+    begin
+      QRel.SQL.Add('ORDER BY TRANSACOES.DT_TRANS');
+    end
+    else
+    begin
+      QRel.SQL.Add('ORDER BY PRODUTOS.DESCRICAO');
+    end;
+
+    QRel.ParamByName('DT_INICIAL').AsDate := Dtmen.Date;
+    QRel.ParamByName('DT_FINAL').AsDate := Dtmai.Date;
+    QRel.ParamByName('CONDUTA').AsString := '02';
+    QRel.ParamByName('DEPTO').AsString := '07';
+    QRel.ParamByName('TPCTB').AsString := FrmData.QAcesso.FieldByName('TPCTB').AsString;;
+    QRel.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QRel.ParamByName('BALANCO').AsString := 'AGRUPADO';
+
+    QRel.Prepare;
+    QRel.Open;
+
+    if QRel.IsEmpty then
+      begin
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation);
+        Exit;
+      end;
+
+
+    QRLabel31.Caption := 'Período Analisado: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+    QRLabel8.Caption  := 'Período Analisado: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+    CompraProdutosTributadosAnalitico.Preview()
+
+
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+end;
+
+procedure TFrmRel_Compras_Produtos_Tributados.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmRel_Compras_Produtos_Tributados.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmRel_Compras_Produtos_Tributados.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    //Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmRel_Compras_Produtos_Tributados.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmRel_Compras_Produtos_Tributados.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+  if FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL' then
+    RadioGroup1.ItemIndex := 1
+  else
+    RadioGroup1.ItemIndex := 2;
+
+end;
+
+procedure TFrmRel_Compras_Produtos_Tributados.OrdemKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+end.

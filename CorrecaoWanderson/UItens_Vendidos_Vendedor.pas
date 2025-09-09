@@ -1,0 +1,234 @@
+unit UItens_Vendidos_Vendedor;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, ExtCtrls, rxCurrEdit, rxToolEdit, Buttons, DBCtrls,
+  DB, IBCustomDataSet, IBQuery, QuickRpt, QRCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmItens_Vendidos_Vendedor = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Bevel1: TBevel;
+    Dtmen: TDateEdit;
+    Funcionario_id: TCurrencyEdit;
+    Dtmai: TDateEdit;
+    btnFuncionario: TSpeedButton;
+    DataFuncionario: TDataSource;
+    DBText1: TDBText;
+    Itens_Vendidos_Caixa: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    DetailBand1: TQRBand;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    SummaryBand1: TQRBand;
+    QRLabel10: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRGroup1: TQRGroup;
+    QRDBText5: TQRDBText;
+    QRShape4: TQRShape;
+    QRDBText6: TQRDBText;
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    QRLabel6: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRDBText11: TQRDBText;
+    QRExpr1: TQRExpr;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRDBText7: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRShape2: TQRShape;
+    QRBand1: TQRBand;
+    QRExpr2: TQRExpr;
+    QRLabel14: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRDBText8: TQRDBText;
+    QFuncionario: TFDQuery;
+    QRel: TFDQuery;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure btnFuncionarioClick(Sender: TObject);
+    procedure Funcionario_idKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Funcionario_idChange(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure SearchFuncionario;
+  end;
+
+var
+  FrmItens_Vendidos_Vendedor: TFrmItens_Vendidos_Vendedor;
+
+implementation
+
+uses
+  UData, UConsulta, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmItens_Vendidos_Vendedor.SearchFuncionario;
+begin
+  QFuncionario.Close;
+
+  QFuncionario.ParamByName('FUNCIONARIO_ID').AsInteger   := StrToInt(FUNCIONARIO_ID.Text);
+
+  QFuncionario.Prepare;
+  QFuncionario.Open;
+
+  if QFuncionario.IsEmpty then
+    btnExecuta.Enabled := False
+  else
+    btnExecuta.Enabled := True;
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.btnFuncionarioClick(Sender: TObject);
+begin
+  try
+    Funcionario_id.Value := GetConsulta('PESSOAL', 0, 0, StrToInt(Funcionario_id.Text));
+  except
+    Funcionario_id.Value := GetConsulta('PESSOAL', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.btnExecutaClick(Sender: TObject);
+begin
+// 125, 325
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT TABELAS.DESCRICAO GRUPO,TRANSACOES.DT_TRANS, TRANSACOES.CONDUTA, TRANSACOES.DEPTO, TRANSACOES.NUM_DOC, TRANSACOES.VR_ACRESCIMO, TRANSACOES.VR_DESCONTO DESCONTO_VENDA, TRANSACOES.VALOR, TRANSITENS.*');
+    QRel.Sql.Add('FROM TRANSITENS');
+    QRel.Sql.Add('INNER JOIN TRANSACOES');
+    QRel.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    QRel.Sql.Add('INNER JOIN PRODUTOS');
+    QRel.Sql.Add('ON (TRANSITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+    QRel.Sql.Add('INNER JOIN TABELAS');
+    QRel.Sql.Add('ON (PRODUTOS.GRUPO_ID = TABELAS.TABELA_ID)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)');
+    QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+    QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+    QRel.Sql.Add('AND (TRANSACOES.VENDEDOR_ID = :VENDEDOR_ID)');
+    QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+    QRel.Sql.Add('AND (TRANSACOES.DEPTO = :DEPTO)');
+    QRel.Sql.Add('AND (TRANSACOES.TRANSACAO_ID NOT IN (SELECT TRANSACAO_ID FROM NOTAS_CANCELADAS))');
+    QRel.Sql.Add('AND (TABELAS.TIPO_TABELA = :TIPO_TABELA)');
+
+    if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')) > 0 then
+      begin
+        QRel.Sql.Add('AND (PRODUTOS.GRUPO_ID = :GRUPO_ID)');
+        QRel.ParamByName('GRUPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo'));
+      end;
+
+    QRel.Sql.Add('ORDER BY TRANSITENS.TRANSACAO_ID, TRANSACOES.NUM_DOC');
+
+    QRel.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+    QRel.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+    QRel.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QRel.ParamByName('TPCTB').AsString        := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QRel.ParamByName('VENDEDOR_ID').AsInteger    := QFuncionario.FieldByName('FUNCIONARIO_ID').AsInteger;
+    QRel.ParamByName('CONDUTA').AsString      := '01';
+    QRel.ParamByName('DEPTO').AsString        := '07';
+    QRel.ParamByName('TIPO_TABELA').AsString  := '7';
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QRLabel1.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+
+    if QRel.IsEmpty then
+      Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+    else
+      Itens_Vendidos_Caixa.PreviewModal;
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.Funcionario_idChange(Sender: TObject);
+begin
+  if Funcionario_id.Value > 0 then
+    SearchFuncionario;
+
+  if QFuncionario.IsEmpty then
+    btnExecuta.Enabled := False
+  else
+    btnExecuta.Enabled := True;
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.Funcionario_idKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Funcionario_id) then
+    btnFuncionarioClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    //Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmItens_Vendidos_Vendedor.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+end;
+
+end.

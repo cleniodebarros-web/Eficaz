@@ -1,0 +1,1272 @@
+unit UAgenda_Pagamento_Recebimento;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, ExtCtrls, rxCurrEdit, Mask, rxToolEdit, Buttons, DB,
+  IBCustomDataSet, IBQuery, QRCtrls, QuickRpt,Math, RDprint, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client, Vcl.Grids, Vcl.DBGrids, FireDAC.Stan.Async, FireDAC.DApt;
+
+type
+  TFrmAgenda_Pagamento_Recebimento = class(TForm)
+    Label1: TLabel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Label2: TLabel;
+    Forne_Cliente: TCurrencyEdit;
+    Bevel1: TBevel;
+    Tipo_Agenda: TComboBox;
+    Classe: TEdit;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Tipo_Documento: TComboBox;
+    Label6: TLabel;
+    Grupo: TComboBox;
+    btnForne_Cliente: TSpeedButton;
+    Agenda_Data: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    DetailBand1: TQRBand;
+    SummaryBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel7: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRExpr2: TQRExpr;
+    QRGroup1: TQRGroup;
+    QRDBText9: TQRDBText;
+    QRLabel4: TQRLabel;
+    QRBand1: TQRBand;
+    QRExpr1: TQRExpr;
+    QRLabel2: TQRLabel;
+    QRLabel9: TQRLabel;
+    Agenda_Nome: TQuickRep;
+    QRBand2: TQRBand;
+    QRDBText10: TQRDBText;
+    QRSysData3: TQRSysData;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRShape2: TQRShape;
+    QRShape4: TQRShape;
+    QRLabel13: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRBand3: TQRBand;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRBand4: TQRBand;
+    QRExpr3: TQRExpr;
+    QRLabel23: TQRLabel;
+    QRGroup2: TQRGroup;
+    QRDBText18: TQRDBText;
+    QRBand5: TQRBand;
+    QRExpr4: TQRExpr;
+    QRLabel25: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRDBText19: TQRDBText;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    empresas: TCheckBox;
+    QRLabel27: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRLabel28: TQRLabel;
+    Chk_Juros: TCheckBox;
+    QRDBText20: TQRDBText;
+    Label7: TLabel;
+    Historico: TEdit;
+    chk_exibir_dados: TCheckBox;
+    RDprint1: TRDprint;
+    CheckBox1: TCheckBox;
+    Label8: TLabel;
+    Dias_atraso: TCurrencyEdit;
+    QRLabel29: TQRLabel;
+    QRDBText21: TQRDBText;
+    QRLabel30: TQRLabel;
+    QRDBText22: TQRDBText;
+    QRLabel31: TQRLabel;
+    QRDBText23: TQRDBText;
+    QRDBText24: TQRDBText;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRDBText25: TQRDBText;
+    QRLabel34: TQRLabel;
+    QRDBText26: TQRDBText;
+    QRLabel35: TQRLabel;
+    QRDBText27: TQRDBText;
+    Chk_Historico: TCheckBox;
+    QRMemo1: TQRMemo;
+    QRDBText15: TQRDBText;
+    QRDBText28: TQRDBText;
+    Chk_Perdas: TCheckBox;
+    QRLabel18: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRLabel38: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    Lista_notas_P: TQRMemo;
+    QRShape6: TQRShape;
+    Table_agenda: TFDMemTable;
+    table_agenda_cli: TFDMemTable;
+    QDetalhe: TFDQuery;
+    QRel: TFDQuery;
+    IQuery: TFDQuery;
+    Chk_SomentePerdas: TCheckBox;
+    QRLabel42: TQRLabel;
+    QRDBText30: TQRDBText;
+    chk_compra: TCheckBox;
+    QRDBText31: TQRDBText;
+    QRLabel43: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRDBText29: TQRDBText;
+    QRLabel36: TQRLabel;
+    Lista_notas_V: TQRMemo;
+    Lista_notas_D: TQRMemo;
+    Lista_notas_VA: TQRMemo;
+    Lista_notas_P2: TQRMemo;
+    Lista_notas_V2: TQRMemo;
+    Lista_notas_D2: TQRMemo;
+    Lista_notas_VA2: TQRMemo;
+    QRShape5: TQRShape;
+    procedure FormCreate(Sender: TObject);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnForne_ClienteClick(Sender: TObject);
+    procedure Forne_ClienteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Tipo_AgendaChange(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure QRGroup1BeforePrint(Sender: TQRCustomBand;
+      var PrintBand: Boolean);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure DtmenEnter(Sender: TObject);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure GrupoChange(Sender: TObject);
+    procedure chk_exibir_dadosClick(Sender: TObject);
+    procedure QRBand3BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure Chk_SomentePerdasClick(Sender: TObject);
+    procedure Chk_PerdasClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Soma;
+  end;
+
+var
+  FrmAgenda_Pagamento_Recebimento: TFrmAgenda_Pagamento_Recebimento;
+  Vr_soma,Vr_Despesas,Vr_Total,Vr_Juros,Dias,Dif,Correc, Subtotal, Total_Geral,Multa,Vr_Multa : Real;
+  P1, P2, P3, P4, P5, P6, P7, Linha, Pagina,cliente,Y: Integer;
+  Vr_soma_cli,Vr_Despesas_cli,Vr_Total_cli,Vr_Juros_cli,Vr_multa_cli:Real;
+implementation
+
+uses
+  UConsulta, UPrincipal, UData;
+
+{$R *.dfm}
+
+procedure TFrmAgenda_Pagamento_Recebimento.Soma;
+Begin
+  try
+    Vr_Soma     := 0;
+    Vr_Despesas := 0;
+    Vr_Total    := 0;
+    Vr_Juros    := 0;
+    Dias        := 0;
+    Vr_Multa    := 0;
+
+    Table_agenda.First;
+    while not Table_agenda.Eof do
+    begin
+
+      Vr_Soma          := (Vr_Soma + Table_agenda.FieldByName('VALOR').AsFloat);
+      Vr_Despesas      := (Vr_Despesas + Table_agenda.FieldByName('VALOR_DESPESAS').AsFloat);
+
+
+     /// if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime > Table_agenda.FieldByName('DT_VENCIMENTO').AsDateTime) and (FrmPrincipal.Config.FieldByName('JUROS_MENSAL').AsFloat > 0) then
+      if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= (Table_agenda.FieldByName('DT_VENCIMENTO').AsDateTime + FrmPrincipal.Config.FieldByName('CARENCIA').AsInteger)) and (FrmPrincipal.Config.FieldByName('JUROS_MENSAL').AsFloat > 0)
+          AND (Table_agenda.FieldByName('DUPLICATA').AsString <> 'MENSALIDADE') then
+      begin
+        Dif    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime - (Table_agenda.FieldByName('DT_VENCIMENTO').AsDateTime + FrmPrincipal.Config.FieldByName('CARENCIA').AsInteger);
+        Correc := ((((Table_agenda.FieldByName('VALOR').AsFloat * FrmPrincipal.Config.FieldByName('JUROS_MENSAL').AsFloat) / 100) / 30) * Dif);
+        Correc := RoundTo(Correc, -2);
+        Vr_Juros     := Correc + Vr_Juros;
+        Dias := Dias + Dif;
+      end;
+
+      if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime > Table_agenda.FieldByName('DT_VENCIMENTO').AsDateTime) AND (Table_agenda.FieldByName('ESPECIE').AsString <> 'RESTANTE')
+          and (FrmPrincipal.Config.FieldByName('MULTA').AsFloat > 0) AND (Table_agenda.FieldByName('DUPLICATA').AsString <> 'MENSALIDADE') then
+      Begin
+      Multa  := ((Table_agenda.FieldByName('VALOR').AsFloat * FrmPrincipal.Config.FieldByName('MULTA').AsFloat) / 100);
+      Multa  := RoundTo(Multa, -2);
+      Vr_Multa := Multa + Vr_Multa;
+      End;
+      Application.ProcessMessages;
+      Table_agenda.Next;
+    end;
+     Table_agenda.First;
+
+     Vr_Total     := (Vr_Soma + Vr_Juros + Vr_Multa);
+
+  finally
+  end;
+End;
+
+procedure TFrmAgenda_Pagamento_Recebimento.btnExecutaClick(Sender: TObject);
+var
+Nome:string;
+begin
+// 229, 327
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+    if not Table_agenda.IsEmpty then
+    begin
+     Table_agenda.Close;
+     Table_agenda.Open;
+    end;
+
+    if not Table_agenda_cli.IsEmpty then
+    begin
+     Table_agenda_cli.Close;
+     Table_agenda_cli.Open;
+    end;
+
+
+
+    QRel.Sql.Clear;
+
+    if Tipo_Agenda.Text = 'Recebimento' then
+    begin
+      QRLabel3.Caption  := '*** AGENDA DE RECEBIMENTO ***';
+      QRLabel11.Caption := '*** AGENDA DE RECEBIMENTO ***';
+
+      {if  not Chk_Teste.Checked  Then
+      bEGIN
+      QRel.Sql.Add('SELECT TRANSACAO_ID,CLIENTE_ID,HISTORICO_CLI, ESPECIE, DT_VENCIMENTO, PARCELA_ID, DUPLICATA, VALOR,VALOR_DESPESAS, NUM_DOC, HISTORICO, DT_TRANS, NOME, DDD,TELEFONE_1,');
+      QRel.Sql.Add('ENDERECO, NUMERO, COMPLEMENTO, BAIRRO, MUNICIPIO, ESTADO, CNPJ, INSCRICAO, ATRASO');
+      QRel.Sql.Add('FROM(');
+      end; }
+
+      QRel.Sql.Add('SELECT TRANSACOES.TRANSACAO_ID,CLIENTES.CLIENTE_ID,CLIENTES.HISTORICO HISTORICO_CLI, CLIENTES.SPC_SERASA, TRANSPARCELAS.ESPECIE, TRANSPARCELAS.DT_VENCIMENTO, TRANSPARCELAS.PARCELA_ID,');
+      QRel.Sql.Add('TRANSPARCELAS.DUPLICATA, TRANSPARCELAS.VALOR,TRANSPARCELAS.VALOR_DESPESAS, TRANSACOES.NUM_DOC,');
+      QRel.Sql.Add('TRANSACOES.HISTORICO, TRANSACOES.DT_TRANS,CLIENTES.NOME, CLIENTES.DDD, CLIENTES.TELEFONE_1, CLIENTES.ENDERECO, CLIENTES.NUMERO, CLIENTES.COMPLEMENTO, CLIENTES.BAIRRO, CLIENTES.MUNICIPIO, CLIENTES.ESTADO, CLIENTES.CNPJ, CLIENTES.INSCRICAO,');
+      QRel.Sql.Add('CASE WHEN ((SELECT DT_MOVIMENTO FROM ABERTURA) - TRANSPARCELAS.DT_VENCIMENTO) > 0 THEN ((SELECT DT_MOVIMENTO FROM ABERTURA) - TRANSPARCELAS.DT_VENCIMENTO) ELSE 0 END ATRASO');
+      QRel.Sql.Add('FROM TRANSPARCELAS');
+      QRel.Sql.Add('INNER JOIN TRANSACOES');
+      QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN CLIENTES');
+      QRel.Sql.Add('ON (TRANSACOES.CLIENTE_ID = CLIENTES.CLIENTE_ID)');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.VALOR > 0)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.DT_VENCIMENTO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+
+     if Tipo_Documento.Text <> '' then
+      begin
+        QRel.Sql.Add('AND (TRANSPARCELAS.ESPECIE = :ESPECIE)');
+
+        if Tipo_Documento.Text = 'VAZIO' Then
+        QRel.ParamByName('ESPECIE').AsString := ''
+        Else
+        QRel.ParamByName('ESPECIE').AsString := Tipo_Documento.Text
+
+      end;
+
+      if empresas.Checked then
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      if Classe.Text <> '' then
+      begin
+        QRel.Sql.Add('AND (CLIENTES.TIPO = :CLASSE)');
+        QRel.ParamByName('CLASSE').AsString := Classe.Text;
+      end;
+
+      if Historico.Text <> '' then
+      begin
+        QRel.Sql.Add('AND (TRANSACOES.HISTORICO LIKE :HISTORICO)');
+        QRel.ParamByName('HISTORICO').AsString := '%' + HISTORICO.Text + '%';
+      end;
+
+       if Forne_Cliente.Value > 0 then
+       begin
+        QRel.Sql.Add('AND (TRANSACOES.CLIENTE_ID = :CLIENTE_ID)');
+
+        QRel.ParamByName('CLIENTE_ID').AsInteger := StrToInt(FORNE_CLIENTE.Text);
+       end;
+
+
+
+      if chk_Perdas.Checked = False then
+      BEGIN
+        if Forne_Cliente.Value > 0 then
+        begin
+         QRel.Sql.Add('AND ((TRANSACOES.CLIENTE_ID = :CLIENTE_ID) AND (TRANSPARCELAS.PERDA <> 1) OR (TRANSPARCELAS.PERDA IS NULL)) ');
+        end
+        Else
+         QRel.Sql.Add('AND ((TRANSPARCELAS.PERDA <> 1) OR (TRANSPARCELAS.PERDA IS NULL)) ');
+      END;
+
+      if chk_SomentePerdas.Checked = True then
+      Begin
+        if Forne_Cliente.Value > 0 then
+        begin
+         QRel.Sql.Add('AND ((TRANSACOES.CLIENTE_ID = :CLIENTE_ID) AND (PERDA = 1)) ');
+        end
+        Else
+         QRel.Sql.Add('AND (PERDA = 1) ');
+      End;
+
+     { if chk_SomentePerdas.Checked = True then
+      Begin
+        if Forne_Cliente.Value > 0 then
+        begin
+         QRel.Sql.Add('AND ((TRANSACOES.CLIENTE_ID = :CLIENTE_ID) AND (TRANSPARCELAS.PERDA <> 1) OR (TRANSPARCELAS.PERDA IS NULL)) ');
+        end
+        Else
+         QRel.Sql.Add('AND (PERDA = 1) ');
+      End;}
+
+
+      {if  not Chk_Teste.Checked  Then
+      Begin
+        QRel.Sql.Add(')');
+
+        if Dias_atraso.value > 0   then
+        begin
+          QRel.Sql.Add('WHERE (ATRASO >= :DIAS)');
+          QRel.ParamByName('DIAS').AsInteger := StrToInt(Dias_atraso.Text);
+        end;
+      End; }
+
+      if Grupo.Text = 'Data' then
+      QRel.Sql.Add('ORDER BY DT_VENCIMENTO, NOME')
+      else if Dias_atraso.value > 0    then
+      QRel.Sql.Add('ORDER BY ATRASO,DT_VENCIMENTO,NOME')
+      Else
+      QRel.Sql.Add('ORDER BY NOME,DT_VENCIMENTO');
+
+
+      QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+      if empresas.Checked then
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+      if Forne_Cliente.Value > 0 then
+      QRel.ParamByName('CLIENTE_ID').AsInteger    := StrToInt(Forne_Cliente.Text);
+
+      QRel.ParamByName('CONDUTA').AsString        := '01';
+      QRel.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+      QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      
+      QRel.Prepare;
+      QRel.Open;
+
+
+
+      QRel.First;
+      while not QRel.Eof do
+      Begin
+
+        Table_agenda.Append;
+        Table_agenda.FieldByName('TRANSACAO_ID').AsInteger    := QRel.FieldByName('TRANSACAO_ID').AsInteger;
+        Table_agenda.FieldByName('CLIENTE_ID').AsInteger      := QRel.FieldByName('CLIENTE_ID').AsInteger;
+        Table_agenda.FieldByName('HISTORICO_CLI').AsString    := QRel.FieldByName('HISTORICO_CLI').AsString;
+        Table_agenda.FieldByName('ESPECIE').AsString          := QRel.FieldByName('ESPECIE').AsString;
+        Table_agenda.FieldByName('DT_VENCIMENTO').AsDateTime  := QRel.FieldByName('DT_VENCIMENTO').AsDateTime;
+        Table_agenda.FieldByName('PARCELA_ID').AsString       := QRel.FieldByName('PARCELA_ID').AsString;
+        Table_agenda.FieldByName('DUPLICATA').AsString        := QRel.FieldByName('DUPLICATA').AsString;
+        Table_agenda.FieldByName('VALOR').AsFloat             := QRel.FieldByName('VALOR').AsFloat;
+        Table_agenda.FieldByName('VALOR_DESPESAS').AsFloat    := QRel.FieldByName('VALOR_DESPESAS').AsFloat;
+        Table_agenda.FieldByName('NUM_DOC').AsString          := QRel.FieldByName('NUM_DOC').AsString;
+        Table_agenda.FieldByName('HISTORICO').AsString        := QRel.FieldByName('HISTORICO').AsString;
+        Table_agenda.FieldByName('DT_TRANS').AsDateTime       := QRel.FieldByName('DT_TRANS').AsDateTime;
+        Table_agenda.FieldByName('NOME').AsString             := Copy(QRel.FieldByName('NOME').AsString, 1, 40);
+        Table_agenda.FieldByName('DDD').AsString              := QRel.FieldByName('DDD').AsString;
+        Table_agenda.FieldByName('TELEFONE_1').AsString       := QRel.FieldByName('TELEFONE_1').AsString;
+        Table_agenda.FieldByName('ENDERECO').AsString         := Copy(QRel.FieldByName('ENDERECO').AsString, 1, 40);
+        Table_agenda.FieldByName('NUMERO').AsString           := QRel.FieldByName('NUMERO').AsString;
+        Table_agenda.FieldByName('COMPLEMENTO').AsString      := Copy(QRel.FieldByName('COMPLEMENTO').AsString,1,20);
+        Table_agenda.FieldByName('BAIRRO').AsString           := QRel.FieldByName('BAIRRO').AsString;
+        Table_agenda.FieldByName('MUNICIPIO').AsString        := QRel.FieldByName('MUNICIPIO').AsString;
+        Table_agenda.FieldByName('ESTADO').AsString           := QRel.FieldByName('ESTADO').AsString;
+        Table_agenda.FieldByName('CNPJ').AsString             := QRel.FieldByName('CNPJ').AsString;
+        Table_agenda.FieldByName('INSCRICAO').AsString        := QRel.FieldByName('INSCRICAO').AsString;
+        Table_agenda.FieldByName('ATRASO').AsiNTEGER          := QRel.FieldByName('ATRASO').AsInteger;
+        Table_agenda.FieldByName('SPC_SERASA').AsString       := QRel.FieldByName('SPC_SERASA').AsString;
+
+        Table_agenda.Post;
+
+
+        Table_agenda_cli.Append;
+        Table_agenda_cli.FieldByName('TRANSACAO_ID').AsInteger    := QRel.FieldByName('TRANSACAO_ID').AsInteger;
+        Table_agenda_cli.FieldByName('CLIENTE_ID').AsInteger      := QRel.FieldByName('CLIENTE_ID').AsInteger;
+        Table_agenda_cli.FieldByName('HISTORICO_CLI').AsString    := QRel.FieldByName('HISTORICO_CLI').AsString;
+        Table_agenda_cli.FieldByName('ESPECIE').AsString          := QRel.FieldByName('ESPECIE').AsString;
+        Table_agenda_cli.FieldByName('DT_VENCIMENTO').AsDateTime  := QRel.FieldByName('DT_VENCIMENTO').AsDateTime;
+        Table_agenda_cli.FieldByName('PARCELA_ID').AsString       := QRel.FieldByName('PARCELA_ID').AsString;
+        Table_agenda_cli.FieldByName('DUPLICATA').AsString        := QRel.FieldByName('DUPLICATA').AsString;
+        Table_agenda_cli.FieldByName('VALOR').AsFloat             := QRel.FieldByName('VALOR').AsFloat;
+        Table_agenda_cli.FieldByName('VALOR_DESPESAS').AsFloat    := QRel.FieldByName('VALOR_DESPESAS').AsFloat;
+        Table_agenda_cli.FieldByName('NUM_DOC').AsString          := QRel.FieldByName('NUM_DOC').AsString;
+        Table_agenda_cli.FieldByName('HISTORICO').AsString        := QRel.FieldByName('HISTORICO').AsString;
+        Table_agenda_cli.FieldByName('DT_TRANS').AsDateTime       := QRel.FieldByName('DT_TRANS').AsDateTime;
+        Table_agenda_cli.FieldByName('NOME').AsString             := Copy(QRel.FieldByName('NOME').AsString, 1, 40);
+        Table_agenda_cli.FieldByName('DDD').AsString              := QRel.FieldByName('DDD').AsString;
+        Table_agenda_cli.FieldByName('TELEFONE_1').AsString       := QRel.FieldByName('TELEFONE_1').AsString;
+        Table_agenda_cli.FieldByName('ENDERECO').AsString         := Copy(QRel.FieldByName('ENDERECO').AsString, 1, 40);
+        Table_agenda_cli.FieldByName('NUMERO').AsString           := QRel.FieldByName('NUMERO').AsString;
+        Table_agenda_cli.FieldByName('COMPLEMENTO').AsString      := Copy(QRel.FieldByName('COMPLEMENTO').AsString,1,20);
+        Table_agenda_cli.FieldByName('BAIRRO').AsString           := QRel.FieldByName('BAIRRO').AsString;
+        Table_agenda_cli.FieldByName('MUNICIPIO').AsString        := QRel.FieldByName('MUNICIPIO').AsString;
+        Table_agenda_cli.FieldByName('ESTADO').AsString           := QRel.FieldByName('ESTADO').AsString;
+        Table_agenda_cli.FieldByName('CNPJ').AsString             := QRel.FieldByName('CNPJ').AsString;
+        Table_agenda_cli.FieldByName('INSCRICAO').AsString        := QRel.FieldByName('INSCRICAO').AsString;
+        Table_agenda_cli.FieldByName('ATRASO').AsiNTEGER          := QRel.FieldByName('ATRASO').AsInteger;
+
+        Table_agenda_cli.Post;
+
+
+        Application.ProcessMessages;
+        QRel.Next;
+
+      End;
+
+
+
+      if Dias_atraso.value > 0   then
+      begin
+          Table_agenda.Filter :='ATRASO >= '+ Dias_atraso.Text;
+          Table_agenda.Filtered := True;
+      end
+      else
+      Table_agenda.Filtered := False;
+
+
+      if Grupo.Text = 'Data' then
+      Table_agenda.IndexName := 'DATA'
+      else if Dias_atraso.value > 0    then
+      Table_agenda.IndexName := 'DATA'
+      Else
+      Table_agenda.IndexName := 'TEMP';
+
+      Table_agenda.Open;
+
+     if((Chk_Juros.Checked) and (Tipo_Agenda.Text = 'Recebimento')) then
+     Begin
+      SOMA;
+      QRlabel23.Caption := 'Total:';
+      QRlabel27.Enabled := True;
+      QRlabel27.Caption := 'Total+Juros+Desp.: ' + FloatToStrF(Vr_Total,ffNumber,15,2);
+      QRlabel38.Enabled := True;
+      QRlabel38.Caption := 'Total+Juros+Desp.: ' + FloatToStrF(Vr_Total_cli,ffNumber,15,2);
+
+      if Vr_Juros > 0  then
+      Begin
+      QRlabel26.Enabled := True;
+      QRlabel26.Caption := 'Juros: ' + FloatToStrF(Vr_Juros,ffNumber,15,2);
+      QRlabel37.Enabled := True;
+      QRlabel37.Caption := 'Juros: ' + FloatToStrF(Vr_Juros_cli,ffNumber,15,2);
+      End;
+      if (Vr_Despesas > 0) or (Vr_Multa > 0)   then
+      Begin
+      QRlabel28.Enabled := True;
+      QRlabel28.Caption := 'Despesas+Multa: ' + FloatToStrF((Vr_Despesas + Vr_Multa),ffNumber,15,2);
+      QRlabel18.Enabled := True;
+      QRlabel18.Caption := 'Despesas+Multa: ' + FloatToStrF((Vr_Despesas_cli + Vr_Multa_cli),ffNumber,15,2);
+      End;
+
+     // QRlabel23.Left := 267;
+     // QRExpr3.Left   := 350;
+     End
+     Else
+     Begin
+      QRlabel23.Caption := 'Total';
+      QRlabel26.Enabled := False;
+      QRlabel27.Enabled := False;
+      QRlabel28.Enabled := False;
+      QRlabel23.Left := 526;
+      QRExpr3.Left   := 605;
+     End;
+
+     if Dias_atraso.value > 0   then
+     begin
+     QRLabel24.Caption    := 'Dias de Atraso';
+     QRDBText11.DataField := 'ATRASO';
+     end
+     else
+     begin
+     QRLabel24.Caption    := 'Histórico';
+     QRDBText11.DataField := 'HISTORICO';
+     end;
+
+    end;
+
+    if Tipo_Agenda.Text = 'Pagamento' then
+    begin
+      QRLabel3.Caption  := '*** AGENDA DE PAGAMENTO ***';
+      QRLabel11.Caption := '*** AGENDA DE PAGAMENTO ***';
+
+      QRel.Sql.Add('SELECT FORNECEDORES.FORNECEDOR_ID CLIENTE_ID, TRANSPARCELAS.DT_VENCIMENTO, TRANSPARCELAS.PARCELA_ID, TRANSPARCELAS.DUPLICATA, TRANSPARCELAS.VALOR, TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, TRANSACOES.DT_TRANS, FORNECEDORES.NOME,');
+      QRel.Sql.Add('FORNECEDORES.DDD, FORNECEDORES.TELEFONE_1,FORNECEDORES.ENDERECO, FORNECEDORES.NUMERO, FORNECEDORES.COMPLEMENTO, FORNECEDORES.BAIRRO, FORNECEDORES.MUNICIPIO, FORNECEDORES.ESTADO, FORNECEDORES.CNPJ, FORNECEDORES.INSCRICAO');
+      QRel.Sql.Add('FROM TRANSPARCELAS');
+      QRel.Sql.Add('INNER JOIN TRANSACOES');
+      QRel.Sql.Add('ON (TRANSPARCELAS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+      QRel.Sql.Add('INNER JOIN FORNECEDORES');
+      QRel.Sql.Add('ON (TRANSACOES.FORNECEDOR_ID = FORNECEDORES.FORNECEDOR_ID)');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(TRANSPARCELAS.TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.VALOR > 0)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.BANCO_ID = 0)');
+      QRel.Sql.Add('AND (TRANSPARCELAS.DT_VENCIMENTO BETWEEN :DT_INICIAL AND :DT_FINAL)');
+      QRel.Sql.Add('AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMENTO IS NULL))');
+
+      if Tipo_Documento.Text <> '' then
+      begin
+        QRel.Sql.Add('AND (TRANSPARCELAS.ESPECIE = :ESPECIE)');
+        QRel.ParamByName('ESPECIE').AsString := Tipo_Documento.Text;
+      end;
+      if empresas.Checked then
+      QRel.Sql.Add('AND (TRANSACOES.EMPRESA_ID = :EMPRESA_ID)');
+
+      QRel.Sql.Add('AND (TRANSACOES.CONDUTA = :CONDUTA)');
+      QRel.Sql.Add('AND (TRANSACOES.COND_PAGTO = :COND_PAGTO)');
+      QRel.Sql.Add('AND (TRANSACOES.TPCTB <= :TPCTB)');
+
+      if Classe.Text <> '' then
+      begin
+        QRel.Sql.Add('AND (FORNECEDORES.TIPO = :CLASSE)');
+        QRel.ParamByName('CLASSE').AsString := Classe.Text;
+      end;
+
+      if Historico.Text <> '' then
+      begin
+        QRel.Sql.Add('AND (TRANSACOES.HISTORICO CONTAINING :HISTORICO)');
+        QRel.ParamByName('HISTORICO').AsString := HISTORICO.Text;
+      end;
+
+      if Forne_Cliente.Value > 0 then
+      begin
+        QRel.Sql.Add('AND (FORNECEDORES.FORNECEDOR_ID = :FORNECEDOR_ID)');
+        QRel.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Forne_Cliente.Text);
+      end;
+
+      if chk_Perdas.Checked = false then
+      QRel.Sql.Add('AND ((PERDA IS NULL) OR (PERDA = 0)) ');
+
+       if chk_Compra.Checked = True then
+      QRel.Sql.Add('AND (TRANSACOES.DEPTO = ''07'') ');
+
+      if Grupo.Text = 'Data' then
+        QRel.Sql.Add('ORDER BY TRANSPARCELAS.DT_VENCIMENTO ')
+      else
+        QRel.Sql.Add('ORDER BY FORNECEDORES.NOME, TRANSACOES.DT_TRANS');
+
+      QRel.ParamByName('TIPO_TRANSACAO').AsString := 'T';
+      QRel.ParamByName('DT_INICIAL').AsDateTime   := Dtmen.Date;
+      QRel.ParamByName('DT_FINAL').AsDateTime     := Dtmai.Date;
+
+      if empresas.Checked then
+      QRel.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+      QRel.ParamByName('CONDUTA').AsString        := '02';
+      QRel.ParamByName('COND_PAGTO').AsString     := 'A PRAZO';
+      QRel.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QRel.Prepare;
+      QRel.Open;
+
+     //Table_agenda.Free;
+     //Table_agenda := TFDMemTable.Create(nil);
+
+
+      QRel.First;
+      while not QRel.Eof do
+      Begin
+
+        Table_agenda.Append;
+       // Table_agenda.FieldByName('TRANSACAO_ID').AsInteger    := QRel.FieldByName('TRANSACAO_ID').AsInteger;
+        Table_agenda.FieldByName('CLIENTE_ID').AsInteger      := QRel.FieldByName('CLIENTE_ID').AsInteger;
+       // Table_agenda.FieldByName('DOCUMENTO').AsString        := QRel.FieldByName('CNPJ').AsString;
+       // Table_agenda.FieldByName('ESPECIE').AsString          := QRel.FieldByName('ESPECIE').AsString;
+        Table_agenda.FieldByName('DT_VENCIMENTO').AsDateTime  := QRel.FieldByName('DT_VENCIMENTO').AsDateTime;
+        Table_agenda.FieldByName('PARCELA_ID').AsString       := QRel.FieldByName('PARCELA_ID').AsString;
+        Table_agenda.FieldByName('DUPLICATA').AsString        := QRel.FieldByName('DUPLICATA').AsString;
+        Table_agenda.FieldByName('VALOR').AsFloat             := QRel.FieldByName('VALOR').AsFloat;
+       // Table_agenda.FieldByName('VALOR_DESPESAS').AsFloat    := QRel.FieldByName('VALOR_DESPESAS').AsFloat;
+        Table_agenda.FieldByName('NUM_DOC').AsString          := QRel.FieldByName('NUM_DOC').AsString;
+        Table_agenda.FieldByName('HISTORICO').AsString        := QRel.FieldByName('HISTORICO').AsString;
+        Table_agenda.FieldByName('DT_TRANS').AsDateTime       := QRel.FieldByName('DT_TRANS').AsDateTime;
+        Table_agenda.FieldByName('NOME').AsString             := Copy(QRel.FieldByName('NOME').AsString, 1, 40);
+        Table_agenda.FieldByName('DDD').AsString              := QRel.FieldByName('DDD').AsString;
+        Table_agenda.FieldByName('TELEFONE_1').AsString       := QRel.FieldByName('TELEFONE_1').AsString;
+        Table_agenda.FieldByName('ENDERECO').AsString         := Copy(QRel.FieldByName('ENDERECO').AsString, 1, 40);
+        Table_agenda.FieldByName('NUMERO').AsString           := QRel.FieldByName('NUMERO').AsString;
+        Table_agenda.FieldByName('COMPLEMENTO').AsString      := Copy(QRel.FieldByName('COMPLEMENTO').AsString,1,20);
+        Table_agenda.FieldByName('BAIRRO').AsString           := QRel.FieldByName('BAIRRO').AsString;
+        Table_agenda.FieldByName('MUNICIPIO').AsString        := QRel.FieldByName('MUNICIPIO').AsString;
+        Table_agenda.FieldByName('ESTADO').AsString           := QRel.FieldByName('ESTADO').AsString;
+        Table_agenda.FieldByName('CNPJ').AsString             := QRel.FieldByName('CNPJ').AsString;
+        Table_agenda.FieldByName('INSCRICAO').AsString        := QRel.FieldByName('INSCRICAO').AsString;
+       // Table_agenda.FieldByName('ATRASO').AsiNTEGER          := QRel.FieldByName('ATRASO').AsInteger;
+
+        Table_agenda.Post;
+
+        Application.ProcessMessages;
+        QRel.Next;
+
+      End;
+
+      if Grupo.Text = 'Data' then
+      Table_agenda.IndexName := 'DATA'
+      Else if  Grupo.Text = 'Forne/Cliente' then
+      Table_agenda.IndexName := 'NOME'
+      else if Dias_atraso.value > 0        then
+      Table_agenda.IndexName := 'DATA'
+      Else
+      Table_agenda.IndexName := 'TEMP';
+
+
+
+      Table_agenda.Open;
+    end;
+
+    QRLabel1.Caption  := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+    QRLabel12.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+    QRLabel39.Caption := Tipo_Documento.Text;
+    QRLabel40.Caption := Tipo_Documento.Text;
+    {
+    QRlabel23.Caption := 'Total';
+    QRlabel26.Enabled := False;
+    QRlabel27.Enabled := False;
+    QRlabel28.Enabled := False;
+    QRlabel23.Left := 526;
+    QRExpr3.Left   := 605;
+    }
+
+
+    if Table_Agenda.IsEmpty then
+      Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+    else
+    begin
+      if (Grupo.Text = 'Data') or (Grupo.Text = '')  then
+        bEGIN
+        //Table_agenda.IndexName := 'DT_VENCIMENTO';
+        Agenda_Data.PreviewModal
+        end
+      else if ((Grupo.Text = 'Forne/Cliente') or (Grupo.Text = '')) and (not chk_exibir_dados.Checked)  then
+      Begin
+        QRGroup2.Height := 20;
+        QRLabel30.Enabled := False;
+        QRLabel35.Enabled := False;
+        QRLabel31.Enabled := False;
+        QRLabel32.Enabled := False;
+        QRLabel29.Enabled := False;
+        QRLabel33.Enabled := False;
+        QRLabel34.Enabled := False;
+        QRDBText22.Enabled := False;
+        QRDBText27.Enabled := False;
+        QRDBText23.Enabled := False;
+        QRDBText24.Enabled := False;
+        QRDBText21.Enabled := False;
+        QRDBText15.Enabled := False;
+        QRDBText25.Enabled := False;
+        QRDBText26.Enabled := False;
+        Agenda_Nome.PreviewModal;
+      End
+
+      Else
+      begin
+        QRGroup2.Height := 65;
+        QRLabel30.Enabled := True;
+        QRLabel35.Enabled := True;
+        QRLabel31.Enabled := True;
+        QRLabel32.Enabled := True;
+        QRLabel29.Enabled := True;
+        QRLabel33.Enabled := True;
+        QRLabel34.Enabled := True;
+        QRDBText22.Enabled := True;
+        QRDBText27.Enabled := True;
+        QRDBText23.Enabled := True;
+        QRDBText24.Enabled := True;
+        QRDBText21.Enabled := True;
+        QRDBText15.Enabled := True;
+        QRDBText25.Enabled := True;
+        QRDBText26.Enabled := True;
+        Agenda_Nome.PreviewModal;
+      end;
+    end;
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.btnForne_ClienteClick(
+  Sender: TObject);
+begin
+  if Tipo_Agenda.Text = 'Pagamento' then
+  begin
+    try
+      Forne_Cliente.Value := GetConsulta('FORNECEDORES', 0, 0, StrToInt(Forne_Cliente.Text));
+    except
+      Forne_Cliente.Value := GetConsulta('FORNECEDORES', 0, 0, 0);
+    end;
+  end;
+
+  if Tipo_Agenda.Text = 'Recebimento' then
+  begin
+    try
+      Forne_Cliente.Value := GetConsulta('CLIENTES', 0, 0, StrToInt(Forne_Cliente.Text));
+    except
+      Forne_Cliente.Value := GetConsulta('CLIENTES', 0, 0, 0);
+    end;
+  end;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.chk_exibir_dadosClick(
+  Sender: TObject);
+begin
+  if (chk_exibir_dados.Checked) and (Tipo_Agenda.text = 'Recebimento') then
+  Chk_Historico.Visible := True
+  Else
+  begin
+  Chk_Historico.Visible := False;
+  Chk_Historico.Checked := False;
+  end;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.Chk_PerdasClick(Sender: TObject);
+begin
+if chk_perdas.Checked then
+Chk_SomentePerdas.Enabled := False
+Else
+Chk_SomentePerdas.Enabled := True;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.Chk_SomentePerdasClick(
+  Sender: TObject);
+begin
+if Chk_SomentePerdas.Checked then
+ Begin
+ Chk_perdas.Checked := True;
+ chk_perdas.Enabled := False;
+ End
+Else
+chk_perdas.Enabled := True;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.DtmenKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    //Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+   // Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TABELAS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(TIPO_TABELA = :TIPO_TABELA)');
+  IQuery.Sql.Add('ORDER BY DESCRICAO');
+
+  IQuery.ParamByName('TIPO_TABELA').AsString := 'D';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  TIPO_DOCUMENTO.Items.Clear;
+
+  IQuery.First;
+  while not IQuery.Eof do
+  begin
+    TIPO_DOCUMENTO.Items.Add(Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 25));
+
+    Application.ProcessMessages;
+    IQuery.Next;
+  end;
+
+  TRY
+      with Table_agenda.FieldDefs do
+      begin
+        Clear;
+        Add('ACESSO', ftAutoInc, 0, False);
+        Add('TRANSACAO_ID', ftInteger, 0, False);
+        Add('CLIENTE_ID', ftInteger, 0, False);
+        Add('HISTORICO_CLI', ftString, 250, False);
+        Add('ESPECIE', ftString, 20, False);
+        Add('DT_VENCIMENTO', ftDate, 0, False);
+        Add('PARCELA_ID', ftString, 5, False);
+        Add('DUPLICATA', ftString, 20, False);
+        Add('VALOR', ftFloat, 0, False);
+        Add('VALOR_DESPESAS', ftFloat, 0, False);
+        Add('NUM_DOC', ftString, 9, False);
+        Add('HISTORICO', ftString, 150, False);
+        Add('DT_TRANS', ftDate, 0, False);
+        Add('NOME', ftString, 40, False);
+        Add('DDD', ftString, 3, False);
+        Add('TELEFONE_1', ftString, 15, False);
+        Add('ENDERECO', ftString, 40, False);
+        Add('NUMERO', ftString, 5, False);
+        Add('COMPLEMENTO', ftString, 20, False);
+        Add('BAIRRO', ftString, 40, False);
+        Add('MUNICIPIO', ftString, 40, False);
+        Add('ESTADO', ftString, 5, False);
+        Add('CNPJ', ftString, 18, False);
+        Add('INSCRICAO', ftString, 15, False);
+        Add('ATRASO', ftInteger, 0, False);
+        Add('SPC_SERASA', ftString, 3, False);
+
+      end;
+
+      with Table_agenda.IndexDefs do
+      begin
+        Clear;
+        Add('', 'ACESSO', [ixPrimary, ixUnique]);
+        Add('TEMP', 'NOME;DT_VENCIMENTO', [ixCaseInsensitive]);
+        Add('DATA','DT_VENCIMENTO;NOME', [ixCaseInsensitive]);
+        Add('NOME','NOME;DT_TRANS', [ixCaseInsensitive]);
+      end;
+      Table_agenda.IndexName := 'TEMP';
+      Table_agenda.CreateDataSet;
+      Table_agenda.Open;
+
+  except on E: Exception do
+           ShowMessage( E.Message );
+  end;
+
+  TRY
+      with Table_agenda_cli.FieldDefs do
+      begin
+        Clear;
+        Add('ACESSO', ftAutoInc, 0, False);
+        Add('TRANSACAO_ID', ftInteger, 0, False);
+        Add('CLIENTE_ID', ftInteger, 0, False);
+        Add('HISTORICO_CLI', ftString, 250, False);
+        Add('ESPECIE', ftString, 20, False);
+        Add('DT_VENCIMENTO', ftDate, 0, False);
+        Add('PARCELA_ID', ftString, 5, False);
+        Add('DUPLICATA', ftString, 20, False);
+        Add('VALOR', ftFloat, 0, False);
+        Add('VALOR_DESPESAS', ftFloat, 0, False);
+        Add('NUM_DOC', ftString, 9, False);
+        Add('HISTORICO', ftString, 150, False);
+        Add('DT_TRANS', ftDate, 0, False);
+        Add('NOME', ftString, 40, False);
+        Add('DDD', ftString, 3, False);
+        Add('TELEFONE_1', ftString, 15, False);
+        Add('ENDERECO', ftString, 40, False);
+        Add('NUMERO', ftString, 5, False);
+        Add('COMPLEMENTO', ftString, 20, False);
+        Add('BAIRRO', ftString, 40, False);
+        Add('MUNICIPIO', ftString, 40, False);
+        Add('ESTADO', ftString, 5, False);
+        Add('CNPJ', ftString, 18, False);
+        Add('INSCRICAO', ftString, 15, False);
+        Add('ATRASO', ftInteger, 0, False);
+
+      end;
+
+      with Table_agenda_cli.IndexDefs do
+      begin
+        Clear;
+        Add('', 'ACESSO', [ixPrimary, ixUnique]);
+        Add('TEMP', 'NOME;DT_VENCIMENTO', [ixCaseInsensitive]);
+      end;
+      Table_agenda_cli.IndexName := 'TEMP';
+      Table_agenda_cli.CreateDataSet;
+      Table_agenda_cli.Open;
+
+  except on E: Exception do
+           ShowMessage( E.Message );
+  end;
+
+
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.Forne_ClienteKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Forne_Cliente) then
+    btnForne_ClienteClick(Self);
+    
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.GrupoChange(Sender: TObject);
+begin
+      if Grupo.Text = 'Forne/Cliente' then
+      begin
+         chk_exibir_dados.Visible := True;
+      end
+      else
+      begin
+         chk_exibir_dados.Visible := False;
+         chk_exibir_dados.Checked := False;
+      end;
+
+      
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.QRBand3BeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+begin
+ if  (Tipo_Agenda.Text = 'Recebimento')  then
+ bEGIN
+  if Copy(Table_agenda.FieldByName('HISTORICO').AsString,1,11) = 'Agrupamento' then
+  bEGIN
+  QRDBText19.Font.Style := [fsBold];
+  QRDBText12.Font.Style := [fsBold];
+  QRDBText11.Font.Style := [fsBold];
+  QRDBText13.Font.Style := [fsBold];
+  QRDBText14.Font.Style := [fsBold];
+  QRDBText16.Font.Style := [fsBold];
+  QRDBText17.Font.Style := [fsBold];
+  QRBand3.Height      := 97;
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT *');
+    IQuery.Sql.Add('FROM TRANSPARCELAS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(AGRUPAMENTO = :AGRUPAMENTO)');
+    IQuery.Sql.Add('ORDER BY DT_VENCIMENTO');
+
+    IQuery.ParamByName('AGRUPAMENTO').AsInteger := Table_agenda.FieldByName('TRANSACAO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+    IQuery.First;
+
+    //Lista_notas.Lines.Clear;
+    Lista_notas_P.Lines.Clear;
+    Lista_notas_V.Lines.Clear;
+    Lista_notas_d.Lines.Clear;
+    Lista_notas_VA.Lines.Clear;
+
+    Lista_notas_P2.Lines.Clear;
+    Lista_notas_V2.Lines.Clear;
+    Lista_notas_d2.Lines.Clear;
+    Lista_notas_VA2.Lines.Clear;
+
+    Lista_notas_P.Lines.Add('Parcela');
+    Lista_notas_V.Lines.Add('Vencimento');
+    Lista_notas_D.Lines.Add('    Duplicata');
+    Lista_notas_VA.Lines.Add('       Valor');
+    IF IQuery.RecordCount  > 4 Then
+    Begin
+    Lista_notas_P2.Lines.Add('Parcela');
+    Lista_notas_V2.Lines.Add('Vencimento');
+    Lista_notas_D2.Lines.Add('    Duplicata');
+    Lista_notas_VA2.Lines.Add('       Valor');
+    End;
+
+    while not IQuery.Eof do
+    begin
+     if  (Lista_notas_P.Lines.Count <=4) Then
+     bEGIN
+
+     Lista_notas_P.Lines.Add(IQuery.FieldByName('PARCELA_ID').AsString);
+     Lista_notas_V.Lines.Add(DateToStr(IQuery.FieldByName('DT_VENCIMENTO').AsDateTime));
+     //Lista_notas_D.Lines.Add(ForcaComprimento(' ' ,15 - Length(IQuery.FieldByName('DUPLICATA').AsString), ' ') + IQuery.FieldByName('DUPLICATA').AsString);
+     Lista_notas_D.Lines.Add(StrZero(IQuery.FieldByName('DUPLICATA').AsString,13,0));
+     //Lista_notas_VA.Lines.Add(FloatToStrF(IQuery.FieldByName('VALOR_ORI').ASFLOAT,ffNumber,15,2));
+     //showmessage((IntToStr(Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))) + ' - ' +FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat)));
+
+     if Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat)) <= 5 Then
+     Lista_notas_VA.Lines.Add(' ' + ForcaComprimento(' ', (13 - Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))), ' ') +
+                          FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))
+     Else
+     Lista_notas_VA.Lines.Add(ForcaComprimento(' ', (13 - Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))), ' ') +
+                          FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat));
+     end
+     ELSE
+     Begin
+     Lista_notas_P2.Lines.Add(IQuery.FieldByName('PARCELA_ID').AsString);
+     Lista_notas_V2.Lines.Add(DateToStr(IQuery.FieldByName('DT_VENCIMENTO').AsDateTime));
+     //Lista_notas_D.Lines.Add(ForcaComprimento(' ' ,15 - Length(IQuery.FieldByName('DUPLICATA').AsString), ' ') + IQuery.FieldByName('DUPLICATA').AsString);
+     Lista_notas_D2.Lines.Add(StrZero(IQuery.FieldByName('DUPLICATA').AsString,13,0));
+     //Lista_notas_VA.Lines.Add(FloatToStrF(IQuery.FieldByName('VALOR_ORI').ASFLOAT,ffNumber,15,2));
+     //showmessage((IntToStr(Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))) + ' - ' +FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat)));
+
+     if Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat)) <= 5 Then
+     Lista_notas_VA2.Lines.Add(' ' + ForcaComprimento(' ', (13 - Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))), ' ') +
+                          FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))
+     Else
+     Lista_notas_VA2.Lines.Add(ForcaComprimento(' ', (13 - Length(FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat))), ' ') +
+                          FormatFloat('##0.00', IQuery.FieldByName('VALOR_ORI').AsFloat));
+     End;
+     Application.ProcessMessages;
+    IQuery.Next;
+    end;
+
+  end
+  Else
+  Begin
+  Lista_notas_P.Lines.Clear;
+  Lista_notas_V.Lines.Clear;
+  Lista_notas_d.Lines.Clear;
+  Lista_notas_VA.Lines.Clear;
+  Lista_notas_P2.Lines.Clear;
+  Lista_notas_V2.Lines.Clear;
+  Lista_notas_d2.Lines.Clear;
+  Lista_notas_VA2.Lines.Clear;
+
+  QRDBText19.Font.Style := [];
+  QRDBText12.Font.Style := [];
+  QRDBText11.Font.Style := [];
+  QRDBText13.Font.Style := [];
+  QRDBText14.Font.Style := [];
+  QRDBText16.Font.Style := [];
+  QRDBText17.Font.Style := [];
+  QRBand3.Height     := 16;
+  End;
+
+ end
+ else
+ begin
+  QRDBText19.Font.Style := [];
+  QRDBText12.Font.Style := [];
+  QRDBText11.Font.Style := [];
+  QRDBText13.Font.Style := [];
+  QRDBText14.Font.Style := [];
+  QRDBText16.Font.Style := [];
+  QRDBText17.Font.Style := [];
+  QRBand3.Height     := 16;
+
+ end;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.QRGroup1BeforePrint(
+  Sender: TQRCustomBand; var PrintBand: Boolean);
+begin
+
+   QRLabel4.Caption := DiaExtenso(Table_agenda.FieldByName('DT_VENCIMENTO').AsDateTime);
+
+
+
+   if chk_exibir_dados.Checked then
+    begin
+     if Chk_Historico.Checked then
+     begin
+      if Table_agenda.FieldByName('HISTORICO_CLI').AsString <> '' then
+      QRGroup2.Height     := 195
+      Else
+      QRGroup2.Height     := 69;
+
+      QRLabel36.Enabled   := True;
+      QRMemo1.Enabled     := True;
+      QRMemo1.Lines.Clear;
+      QRMemo1.Lines.Text  := Table_agenda.FieldByName('HISTORICO_CLI').AsString;
+     end
+     Else
+     begin
+      QRGroup2.Height     := 65;
+      QRLabel36.Enabled   := False;
+      QRMemo1.Enabled     := False;
+     end;
+    end
+   //QRGroup2.Height     := 65
+   Else
+   QRGroup2.Height     := 20;
+
+
+
+ if (Chk_Juros.Checked) and (Tipo_Agenda.Text = 'Recebimento') then
+ Begin
+
+    Table_agenda_cli.Filter := 'CLIENTE_ID =' + Table_agenda.FieldByName('CLIENTE_ID').AsString;
+    Table_agenda_cli.Filtered := True;
+    Table_agenda_cli.First;
+    try
+      Vr_Soma_cli     := 0;
+      Vr_Despesas_cli := 0;
+      Vr_Total_cli    := 0;
+      Vr_Juros_cli    := 0;
+      Vr_Multa_cli    := 0;
+
+      while not Table_agenda_cli.Eof do
+      begin
+
+        Vr_Soma_cli      := (Vr_Soma_cli + Table_agenda_cli.FieldByName('VALOR').AsFloat);
+        Vr_Despesas_cli  := (Vr_Despesas_cli + Table_agenda_cli.FieldByName('VALOR_DESPESAS').AsFloat);
+
+        if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime > Table_agenda_cli.FieldByName('DT_VENCIMENTO').AsDateTime) and (FrmPrincipal.Config.FieldByName('JUROS_MENSAL').AsFloat > 0)
+            and (Table_agenda_cli.FieldByName('DUPLICATA').AsString <> 'MENSALIDADE')  then
+        begin
+          Dif    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime - (Table_agenda_cli.FieldByName('DT_VENCIMENTO').AsDateTime + FrmPrincipal.Config.FieldByName('CARENCIA').AsInteger);
+          Correc := ((((Table_agenda_cli.FieldByName('VALOR').AsFloat * FrmPrincipal.Config.FieldByName('JUROS_MENSAL').AsFloat) / 100) / 30) * Dif);
+          Correc := RoundTo(Correc, -2);
+          Vr_Juros_cli := Correc + Vr_Juros_cli;
+          Dias := Dias + Dif;
+        end;
+
+        if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime > Table_agenda_cli.FieldByName('DT_VENCIMENTO').AsDateTime) AND (Table_agenda_cli.FieldByName('ESPECIE').AsString <> 'RESTANTE')
+            and (FrmPrincipal.Config.FieldByName('MULTA').AsFloat > 0) and (Table_agenda_cli.FieldByName('DUPLICATA').AsString <> 'MENSALIDADE')  then
+        Begin
+        Multa  := ((Table_agenda_cli.FieldByName('VALOR').AsFloat * FrmPrincipal.Config.FieldByName('MULTA').AsFloat) / 100);
+        Multa  := RoundTo(Multa, -2);
+        Vr_Multa_cli := Multa + Vr_Multa_cli;
+        End;
+
+        Application.ProcessMessages;
+        Table_agenda_cli.Next;
+      end;
+      //Table_agenda.First;
+
+       Vr_Total_cli := (Vr_Soma_cli + Vr_Juros_cli + Vr_Multa_cli);
+    finally
+
+    end;
+    Table_agenda_cli.Filtered := False;
+    //able_agenda.First;
+
+   //end;
+
+
+  QRlabel38.Enabled := True;
+  QRlabel38.Caption := 'Total+Juros+Desp.: ' + FloatToStrF(Vr_Total_cli,ffNumber,15,2);
+
+  if Vr_Juros_cli >= 0  then
+  Begin
+  QRlabel37.Enabled := True;
+  QRlabel37.Caption := 'Juros: ' + FloatToStrF(Vr_Juros_cli,ffNumber,15,2);
+  End;
+  if (Vr_Despesas_cli >= 0) or (Vr_Multa_cli >= 0)   then
+  Begin
+  QRlabel18.Enabled := True;
+  QRlabel18.Caption := 'Despesas+Multa: ' + FloatToStrF((Vr_Despesas_cli + Vr_Multa_cli),ffNumber,15,2);
+  End;
+
+  QRlabel23.Enabled := False;
+  QRExpr3.Enabled   := False;
+ // QRlabel23.Left := 267;
+ // QRExpr3.Left   := 350;
+ End
+ Else
+ Begin
+  QRlabel23.Caption := 'Total';
+  QRlabel38.Enabled := False;
+  QRlabel37.Enabled := False;
+  QRlabel18.Enabled := False;
+  QRlabel25.Left := 526;
+  QRExpr4.Left   := 605;
+ End;
+
+end;
+
+
+procedure TFrmAgenda_Pagamento_Recebimento.RDprint1NewPage(Sender: TObject;
+  Pagina: Integer);
+begin
+      RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+      RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 130, 'Sistema de Automação de empresas Eficaz', []);
+      RDprint1.Imp(02, 01, 'Data/Hora: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+      RDprint1.impDir(02, 80, 130, 'Página: ' + IntToStr(Pagina), []);
+
+
+         if Tipo_Agenda.Text = 'Pagamento' then
+            RDprint1.impC(03, 67, '*** AGENDA DE PAGAMENTO ***',[negrito]);
+
+         if Tipo_Agenda.Text = 'Recebimento' then
+            RDprint1.impC(03, 67, '*** AGENDA DE RECEBIMENTO ***',[negrito]);
+
+      RDprint1.imp(04, 01, 'Período:'+ datetoStr(dtmen.date) + ' à ' + datetoStr(dtmai.date));
+      RDprint1.LinhaH(05,01,130,0,false);
+
+      P1 := 01;
+      P2 := 14;
+      P3 := 30;
+      P4 := 65;
+      P5 := 85;
+      P6 := 95;
+      P7 := 115;
+
+
+      RDprint1.imp(06, P1, 'Data');
+      RDprint1.imp(06, P2, 'Dt. Vencimento');
+      RDprint1.imp(06, P3, 'Histórico');
+      RDprint1.imp(06, P4, 'Nº Doc.');
+      RDprint1.imp(06, P5, 'Parc');
+      RDprint1.imp(06, P6, 'Ch. Dupl.');
+      RDprint1.imp(06, P7+6, 'Valor');
+      RDprint1.LinhaH(07,01,130,0,false);
+      Linha := 08;
+end;
+
+procedure TFrmAgenda_Pagamento_Recebimento.Tipo_AgendaChange(Sender: TObject);
+begin
+  if (Tipo_Agenda.Text = 'Pagamento') or (Tipo_Agenda.Text = 'Recebimento') then
+    btnForne_Cliente.Visible:= True
+  else
+    btnForne_Cliente.Visible:= False;
+
+  if (Tipo_Agenda.Text = 'Recebimento')  then
+  Chk_Juros.Visible := True
+  Else
+  Chk_Juros.Visible := False;
+  
+end;
+
+end.

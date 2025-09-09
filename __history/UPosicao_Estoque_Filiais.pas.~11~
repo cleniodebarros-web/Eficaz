@@ -1,0 +1,523 @@
+unit UPosicao_Estoque_Filiais;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DB, IBCustomDataSet, IBQuery, ExtCtrls, QRCtrls, QuickRpt,
+  Buttons, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,QRExport ;
+
+type
+  TFrmPosicao_Estoque_Filiais = class(TForm)
+    Label1: TLabel;
+    Bevel1: TBevel;
+    Data: TComboBox;
+    Posicao: TQuickRep;
+    QRBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRDBText3: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRShape3: TQRShape;
+    QRBand2: TQRBand;
+    QRDBText2: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRBand3: TQRBand;
+    QRExpr2: TQRExpr;
+    QRLabel4: TQRLabel;
+    QRDBText4: TQRDBText;
+    QRLabel5: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRExpr1: TQRExpr;
+    Label2: TLabel;
+    Preco: TComboBox;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Selecao: TComboBox;
+    Label3: TLabel;
+    QRDBText1: TQRDBText;
+    QRLabel9: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRLabel16: TQRLabel;
+    GroupBox1: TGroupBox;
+    Intermediario: TCheckBox;
+    Consumo: TCheckBox;
+    Imobilizado: TCheckBox;
+    Servicos: TCheckBox;
+    Insumos: TCheckBox;
+    outras: TCheckBox;
+    SubProduto: TCheckBox;
+    Acabado: TCheckBox;
+    Processo: TCheckBox;
+    Embalagem: TCheckBox;
+    Prima: TCheckBox;
+    Revenda: TCheckBox;
+    Label60: TLabel;
+    TIPO_ITEM: TComboBox;
+    IQuery: TFDQuery;
+    chk_exportar: TCheckBox;
+    QEmpresa: TFDQuery;
+    Label4: TLabel;
+    LISTA_EMPRESA: TComboBox;
+    lbl_Online: TLabel;
+    posicao_produtos_filial: TFDMemTable;
+    QSearch: TFDQuery;
+    posicao_produtos_filialPRODUTO_ID: TIntegerField;
+    posicao_produtos_filialCUSTO_COMPRA: TCurrencyField;
+    posicao_produtos_filialVALOR_COMPRA: TCurrencyField;
+    posicao_produtos_filialCUSTOMEDIO: TCurrencyField;
+    posicao_produtos_filialPRECO_VAREJO: TCurrencyField;
+    posicao_produtos_filialQUANTIDADE_C: TCurrencyField;
+    posicao_produtos_filialDESCRICAO: TStringField;
+    posicao_produtos_filialUNIDADE_VENDA: TStringField;
+    posicao_produtos_filialCOD_BARRA: TStringField;
+    QFilial: TFDQuery;
+    posicao_produtos_filialDT_MOVIMENTO: TDateTimeField;
+    Progresso: TLabel;
+    QFilial_Empresa: TFDQuery;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure DataKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure QRBand1BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure PosicaoBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure LISTA_EMPRESAExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmPosicao_Estoque_Filiais: TFrmPosicao_Estoque_Filiais;
+  Num_Page: Integer;
+  FilialDB: TFDConnection;
+
+implementation
+
+uses
+  UData, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmPosicao_Estoque_Filiais.btnExecutaClick(Sender: TObject);
+begin
+// 151, 325
+  try
+
+
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+    Posicao_produtos_filial.Open;
+    Posicao_produtos_filial.EmptyDataSet;
+
+    if Data.Text <> '' then
+    begin
+
+      Qempresa.Open;
+      QFilial.Sql.Clear;
+
+      if Data.Text <> 'Hoje' then
+      begin
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+          QFilial.Sql.Add('SELECT posicao_produtos.PRODUTO_ID, posicao_produtos.CUSTO_COMPRA, posicao_produtos.VALOR_COMPRA, ' +
+                         'posicao_produtos.CUSTOMEDIO, posicao_produtos.PRECO_VAREJO, posicao_produtos.PRECO_ATACADO, posicao_produtos.QUANTIDADE_C AS QUANTIDADE, produtos.DESCRICAO, PRODUTOS.UNIDADE_VENDA, PRODUTOS.COD_BARRA,PRODUTOS.PRODUTO_ID_MATRIZ')
+        else
+          QFilial.Sql.Add('SELECT posicao_produtos.PRODUTO_ID, posicao_produtos.CUSTO_COMPRA, posicao_produtos.VALOR_COMPRA, ' +
+                         'posicao_produtos.CUSTOMEDIO, posicao_produtos.PRECO_VAREJO, posicao_produtos.PRECO_ATACADO, posicao_produtos.QUANTIDADE_G AS QUANTIDADE, produtos.DESCRICAO, PRODUTOS.UNIDADE_VENDA, PRODUTOS.COD_BARRA,PRODUTOS.PRODUTO_ID_MATRIZ');
+
+        QFilial.Sql.Add('FROM posicao_produtos');
+        QFilial.Sql.Add('LEFT JOIN PRODUTOS');
+        QFilial.Sql.Add('ON (posicao_produtos.PRODUTO_ID = PRODUTOS.PRODUTO_ID) AND (posicao_produtos.DT_MOVIMENTO = :DT_MOVIMENTO)');
+        QFilial.Sql.Add('WHERE');
+        QFilial.Sql.Add('(PRODUTOS.EMPRESA_ID = :EMPRESA_ID)');
+
+        if Tipo_item.Text <> ''  then
+        QFilial.Sql.Add('AND (PRODUTOS.TIPO_ITEM = :TIPO) ');
+
+        if Tipo_item.Text <> ''  then
+        QFilial.ParamByName('TIPO').AsString := Tipo_item.Text;
+
+        QFilial.ParamByName('DT_MOVIMENTO').AsDateTime := StrToDate(Data.Text);
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          if Selecao.Text = 'Igual a 0' then
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_C = 0)')
+          else if Selecao.Text = 'Maior do que 0' then
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_C > 0)')
+          else if Selecao.Text = 'Menor do que 0' then
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_C < 0)')
+          else if Selecao.Text = 'Todos' then
+            QFilial.Sql.Add('AND ((posicao_produtos.QUANTIDADE_C < 0) OR (posicao_produtos.QUANTIDADE_C = 0) OR (posicao_produtos.QUANTIDADE_C > 0))')
+          else
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_C <> 0)');
+        end
+        else
+        begin
+          if Selecao.Text = 'Igual a 0' then
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_G = 0)')
+          else if Selecao.Text = 'Maior do que 0' then
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_G > 0)')
+          else if Selecao.Text = 'Menor do que 0' then
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_G < 0)')
+          else if Selecao.Text = 'Todos' then
+            QFilial.Sql.Add('AND ((posicao_produtos.QUANTIDADE_G < 0) OR (posicao_produtos.QUANTIDADE_C = 0) OR (posicao_produtos.QUANTIDADE_C > 0))')
+          else
+            QFilial.Sql.Add('AND (posicao_produtos.QUANTIDADE_G <> 0)');
+        end;
+      end
+      else
+      begin
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+          QFilial.Sql.Add('SELECT PRODUTO_ID, DESCRICAO, CUSTO_COMPRA, VALOR_COMPRA, CUSTOMEDIO, PRECO_VAREJO, PRECO_ATACADO, UNIDADE_VENDA, QUANTIDADE_C AS QUANTIDADE, COD_BARRA')
+        else
+          QFilial.Sql.Add('SELECT PRODUTO_ID, DESCRICAO, CUSTO_COMPRA, VALOR_COMPRA, CUSTOMEDIO, PRECO_VAREJO, PRECO_ATACADO, UNIDADE_VENDA, QUANTIDADE_G AS QUANTIDADE, COD_BARRA');
+
+        QFilial.Sql.Add('FROM PRODUTOS');
+        QFilial.Sql.Add('WHERE');
+        QFilial.Sql.Add('(EMPRESA_ID = :EMPRESA_ID)');
+
+        if Tipo_item.Text <> ''  then
+         QFilial.Sql.Add('AND (PRODUTOS.TIPO_ITEM = :TIPO) ');
+
+        if Tipo_item.Text <> ''  then
+         QFilial.ParamByName('TIPO').AsString := Tipo_item.Text;
+
+
+        if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        begin
+          QFilial.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+          QFilial.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+        end;
+
+        if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        begin
+          if Selecao.Text = 'Igual a 0' then
+            QFilial.Sql.Add('AND (QUANTIDADE_C = 0)')
+          else if Selecao.Text = 'Maior do que 0' then
+            QFilial.Sql.Add('AND (QUANTIDADE_C > 0)')
+          else if Selecao.Text = 'Menor do que 0' then
+            QFilial.Sql.Add('AND (QUANTIDADE_C < 0)')
+          else if Selecao.Text = 'Todos' then
+            QFilial.Sql.Add('AND ((QUANTIDADE_C < 0) OR (QUANTIDADE_C = 0) OR (QUANTIDADE_C > 0))')
+          else
+            QFilial.Sql.Add('AND (QUANTIDADE_C <> 0)');
+        end
+        else
+        begin
+          if Selecao.Text = 'Igual a 0' then
+            QFilial.Sql.Add('AND (QUANTIDADE_G = 0)')
+          else if Selecao.Text = 'Maior do que 0' then
+            QFilial.Sql.Add('AND (QUANTIDADE_G > 0)')
+          else if Selecao.Text = 'Menor do que 0' then
+            QFilial.Sql.Add('AND (QUANTIDADE_G < 0)')
+          else if Selecao.Text = 'Todos' then
+            QFilial.Sql.Add('AND ((QUANTIDADE_G < 0) OR (QUANTIDADE_G = 0) OR (QUANTIDADE_G > 0))')
+          else
+            QFilial.Sql.Add('AND (QUANTIDADE_G <> 0)');
+        end;
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor')) > 0 then
+      begin
+        QFilial.Sql.Add('AND (PRODUTOS.FORNECEDOR_ID = :FORNECEDOR_ID)');
+
+        QFilial.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')) > 0 then
+      begin
+        QFilial.Sql.Add('AND (PRODUTOS.GRUPO_ID = :GRUPO_ID)');
+
+        QFilial.ParamByName('GRUPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')) > 0 then
+      begin
+        QFilial.Sql.Add('AND (PRODUTOS.SUBTIPO_ID = :SUBTIPO_ID)');
+
+        QFilial.ParamByName('SUBTIPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) = 0 then
+      begin
+        if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')) > 0 then
+        begin
+          QFilial.Sql.Add('AND (PRODUTOS.LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+          QFilial.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização'));
+        end;
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial')) > 0 then
+      begin
+        QFilial.Sql.Add('AND (PRODUTOS.PRODUTO_ID BETWEEN :PRODUTO_INICIAL AND :PRODUTO_FINAL)');
+
+        QFilial.ParamByName('PRODUTO_INICIAL').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial'));
+        QFilial.ParamByName('PRODUTO_FINAL').AsInteger   := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Final'));
+      end;
+
+      QFilial.ParamByName('EMPRESA_ID').AsInteger := QFilial_Empresa.FieldByName('EMPRESA_ID').AsInteger;
+
+      QFilial.Sql.Add('ORDER BY DESCRICAO');
+      QFilial.Prepare;
+      QFilial.Open;
+      QFilial.First;
+
+      Progresso.visible := True;
+
+
+      while not Qfilial.eof do
+      Begin
+       Posicao_produtos_filial.Append;
+
+       Posicao_produtos_filial.FieldByName('PRODUTO_ID').AsInteger    := QFilial.FieldByName('PRODUTO_ID').AsInteger;
+       Posicao_produtos_filial.FieldByName('DT_MOVIMENTO').AsDateTime := StrToDate(Data.Text);;
+
+       IQuery.Sql.Clear;
+       IQuery.Sql.Text := 'SELECT CUSTO_COMPRA,VALOR_COMPRA,CUSTOMEDIO FROM PRODUTOS WHERE PRODUTO_ID = :PRODUTO_ID';
+       IQuery.ParamByName('PRODUTO_ID').AsInteger :=   QFilial.FieldByName('PRODUTO_ID_MATRIZ').AsInteger;
+       IQuery.Prepare;
+       IQuery.Open;
+
+       Posicao_produtos_filial.FieldByName('CUSTO_COMPRA').AsFloat := IQuery.FieldByName('CUSTO_COMPRA').AsFloat;
+       Posicao_produtos_filial.FieldByName('VALOR_COMPRA').AsFloat := IQuery.FieldByName('VALOR_COMPRA').AsFloat;
+       Posicao_produtos_filial.FieldByName('CUSTOMEDIO').AsFloat   := IQuery.FieldByName('CUSTOMEDIO').AsFloat;
+       Posicao_produtos_filial.FieldByName('PRECO_VAREJO').AsFloat := QFilial.FieldByName('PRECO_VAREJO').AsFloat;
+       Posicao_produtos_filial.FieldByName('QUANTIDADE').AsFloat := QFilial.FieldByName('QUANTIDADE').AsFloat;
+       Posicao_produtos_filial.FieldByName('DESCRICAO').AsString   := QFilial.FieldByName('DESCRICAO').AsString;
+       Posicao_produtos_filial.FieldByName('UNIDADE_VENDA').AsString   := QFilial.FieldByName('UNIDADE_VENDA').AsString;
+       Posicao_produtos_filial.FieldByName('COD_BARRA').AsString   := QFilial.FieldByName('COD_BARRA').AsString;
+
+
+       Posicao_produtos_filial.Post;
+
+       Progresso.Caption := 'Produto: ' + QFilial.FieldByName('DESCRICAO').AsString;
+       Qfilial.Next;
+
+       Application.ProcessMessages;
+
+      End;
+
+
+
+      QRLabel1.Caption := 'Data: ' + Data.Text;
+      QRLabel2.Caption := 'Preço: ' + Preco.Text;
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo') = '0' then
+        QRLabel6.Caption := 'Grupo: TODOS'
+      else
+        QRLabel6.Caption := 'Grupo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')), '7');
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
+        QRLabel7.Caption := 'Sub-Tipo: TODOS'
+      else
+        QRLabel7.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
+
+      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização') = '0' then
+        QRLabel8.Caption := 'Localização: TODAS'
+      else
+        QRLabel8.Caption := 'Localização: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')), '8');
+
+      if Preco.Text = 'Valor Compra' then
+      begin
+        QRDBText8.DataField := 'VALOR_COMPRA';
+        QRExpr1.Expression  := '(Posicao_produtos_filial.VALOR_COMPRA * Posicao_produtos_filial.QUANTIDADE)';
+        QRExpr2.Expression  := 'Sum(Posicao_produtos_filial.VALOR_COMPRA * Posicao_produtos_filial.QUANTIDADE)';
+      end
+      else if Preco.Text = 'Custo Compra' then
+      begin
+        QRDBText8.DataField := 'CUSTO_COMPRA';
+        QRExpr1.Expression  := '(Posicao_produtos_filial.CUSTO_COMPRA * Posicao_produtos_filial.QUANTIDADE)';
+        QRExpr2.Expression  := 'Sum(Posicao_produtos_filial.CUSTO_COMPRA * Posicao_produtos_filial.QUANTIDADE)';
+      end
+      else if Preco.Text = 'Customédio' then
+      begin
+        QRDBText8.DataField := 'CUSTOMEDIO';
+        QRExpr1.Expression  := '(Posicao_produtos_filial.CUSTOMEDIO * Posicao_produtos_filial.QUANTIDADE)';
+        QRExpr2.Expression  := 'Sum(Posicao_produtos_filial.CUSTOMEDIO * Posicao_produtos_filial.QUANTIDADE)';
+      end
+      else if Preco.Text = 'Pr. Varejo' then
+      begin
+        QRDBText8.DataField := 'PRECO_VAREJO';
+        QRExpr1.Expression  := '(Posicao_produtos_filial.PRECO_VAREJO * Posicao_produtos_filial.QUANTIDADE)';
+        QRExpr2.Expression  := 'Sum(Posicao_produtos_filial.PRECO_VAREJO * Posicao_produtos_filial.QUANTIDADE)';
+      end;
+
+      if QFilial.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+      else
+       Begin
+       Posicao.Prepare;
+       //Posicao.ExportToFilter(TQRXLSFilter.Create(ExtractFilePath(ParamStr(0)) + 'Exportados\Posicao_' +Data.Text + '.xls'));
+       Posicao.PreviewModal;
+         if chk_exportar.Checked Then
+         Begin
+         Posicao.ExportToFilter(TQRXLSFilter.Create(ExtractFilePath(ParamStr(0)) + 'Exportados\Inventario_' + Copy(Data.Text,1,2) + Copy(Data.Text,4,2) + Copy(Data.Text,7,4)  + '.xls'));
+         Application.MessageBox(PChar('Arquivo exportado para : ' + ExtractFilePath(ParamStr(0)) + 'Exportados\Inventario_' + Copy(Data.Text,1,2) + Copy(Data.Text,4,2) + Copy(Data.Text,7,4)  + '.xls') , PChar(Msg_Title), mb_IconInformation);
+         End;
+       //Application.MessageBox(PChar('Arquivo exportado para : ' + ExtractFilePath(ParamStr(0)) + 'Exportados\Posicao_' +Data.Text + '.xls') , PChar(Msg_Title), mb_IconInformation)
+       End;
+    end
+    else
+      Application.MessageBox('Necessário informar uma data', PChar(Msg_Title), mb_IconInformation)
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;
+end;
+
+procedure TFrmPosicao_Estoque_Filiais.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmPosicao_Estoque_Filiais.LISTA_EMPRESAExit(Sender: TObject);
+begin
+
+  QSearch.Sql.Clear;
+  QSearch.Sql.Text := 'SELECT BANCO,USUARIO,SENHA,IP,PORTA,CNPJ FROM EMPRESAS WHERE RAZAO = :RAZAO AND STATUS = ''A''';
+  QSearch.ParamByName('RAZAO').AsString := Lista_Empresa.Text;
+  QSearch.Prepare;
+  QSearch.Open;
+
+
+
+  FilialDb.Free;
+  FilialDb := TFDConnection.Create(nil);
+ try
+  FilialDb.Params.Clear;
+  FilialDb.Params.Add('Database= ' + QSearch.FieldByName('BANCO').AsString );
+  FilialDb.Params.Add('User_Name= ' + QSearch.FieldByName('USUARIO').AsString );
+  FilialDb.Params.Add('Password='+ QSearch.FieldByName('SENHA').AsString );
+  FilialDb.Params.Add('Server= ' +  QSearch.FieldByName('IP').AsString );
+  FilialDb.Params.Add('Port= ' + QSearch.FieldByName('PORTA').AsString);
+  FilialDb.Params.Add('DriverID=PG');
+  FilialDb.Params.Add('MonitorBy=Remote');
+  FilialDb.Connected:=True;
+  FilialDb.Open();
+ Except
+   Application.MessageBox('Filial não conectada favor verificar!','Eficaz', MB_ICONERROR + MB_OK);
+ end;
+
+  if FilialDb.Connected  Then
+  Begin
+  lbl_online.font.color := clgreen;
+  lbl_online.Caption := 'Filial OnLine';
+  End
+  Else
+  Begin
+  lbl_online.font.color := clred;
+  lbl_online.Caption := 'Filial OffLIne';
+  End;
+
+
+   if FilialDb.Connected  Then
+   Begin
+
+    QFilial.Connection :=FilialDb;
+    QFilial_Empresa.Connection :=FilialDb;
+
+    QFilial.Sql.Clear;
+    QFilial.Sql.Add('SELECT DISTINCT DT_MOVIMENTO');
+    QFilial.Sql.Add('FROM posicao_produtos');
+    QFilial.Sql.Add('ORDER BY DT_MOVIMENTO');
+    QFilial.Prepare;
+    QFilial.Open;
+
+    Data.Items.Clear;
+    Data.Items.Add('Hoje');
+
+    QFilial.First;
+    while not QFilial.Eof do
+    begin
+      Data.Items.Add(QFilial.FieldByName('DT_MOVIMENTO').AsString);
+      Application.ProcessMessages;
+      QFilial.Next;
+    end;
+
+
+
+    QFilial_Empresa.Sql.Text := 'SELECT * FROM EMPRESAS WHERE CNPJ = :CNPJ AND STATUS = ''A''';
+    QFilial_Empresa.ParamByName('CNPJ').AsString :=  QSearch.FieldByName('CNPJ').AsString;
+    QFilial_Empresa.Prepare;
+    QFilial_Empresa.open;
+
+
+
+   End;
+
+
+
+
+end;
+
+procedure TFrmPosicao_Estoque_Filiais.DataKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmPosicao_Estoque_Filiais.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmPosicao_Estoque_Filiais.FormShow(Sender: TObject);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM EMPRESAS');
+  IQuery.Sql.Add('ORDER BY EMPRESA_ID');
+  IQuery.Prepare;
+  IQuery.Open;
+
+  Lista_Empresa.Items.Clear;
+
+
+  IQuery.First;
+  while not IQuery.Eof do
+  begin
+    Lista_Empresa.Items.Add(IQuery.FieldByName('RAZAO').AsString);
+    Application.ProcessMessages;
+    IQuery.Next;
+  end;
+
+
+end;
+
+procedure TFrmPosicao_Estoque_Filiais.PosicaoBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  Num_Page := 2;
+end;
+
+procedure TFrmPosicao_Estoque_Filiais.QRBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  QRLabel16.Caption := 'Página: ' + IntToStr(Num_Page);
+  Inc(Num_Page);
+end;
+
+end.

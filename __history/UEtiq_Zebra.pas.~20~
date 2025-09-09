@@ -1,0 +1,3595 @@
+unit UEtiq_Zebra;
+
+interface                                                   
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, DBTables, Mask, rxToolEdit, rxCurrEdit, Buttons, Grids, DBGrids,
+  StdCtrls, ComCtrls, ExtCtrls, IBCustomDataSet, IBQuery, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client, ACBrBarCode, Vcl.DBCtrls, RLReport,
+  RLBarcode,ShellApi;
+
+type
+  TFrmEtiq_Zebra = class(TForm)
+    Panel2: TPanel;
+    Label2: TLabel;
+    Preco: TCheckBox;
+    Modelo: TComboBox;
+    Panel1: TPanel;
+    Label1: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    btnSeleciona: TButton;
+    Posicao: TCheckBox;
+    GroupBox1: TGroupBox;
+    Novos: TRadioGroup;
+    Dtmen: TDateTimePicker;
+    Dtmai: TDateTimePicker;
+    Start_Wait: TEdit;
+    Impressora: TComboBox;
+    DBGrid1: TDBGrid;
+    btnProduto: TSpeedButton;
+    DataEstoque: TDataSource;
+    btnRetorna: TBitBtn;
+    btnExecuta: TBitBtn;
+    Porta: TComboBox;
+    QEstoque: TFDQuery;
+    Relat: TFDMemTable;
+    Image1: TImage;
+    Codigo: TCurrencyEdit;
+    ACBrBarCode1: TACBrBarCode;
+    GroupBox2: TGroupBox;
+    Entrada_Id: TCurrencyEdit;
+    btnTransacao: TSpeedButton;
+    Label5: TLabel;
+    DBText5: TDBText;
+    DataEntrada: TDataSource;
+    QEntrada: TFDQuery;
+    QFornecedor: TFDQuery;
+    stat1: TStatusBar;
+    Label6: TLabel;
+    CheckBox1: TCheckBox;
+    procedure btnProdutoClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure CodigoKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnSelecionaClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure Start_WaitKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);                            
+    procedure btnExecutaClick(Sender: TObject);
+    procedure RelatAfterOpen(DataSet: TDataSet);
+    procedure btnTransacaoClick(Sender: TObject);
+    procedure Entrada_IdExit(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ImpressoraChange(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmEtiq_Zebra: TFrmEtiq_Zebra;
+
+  const TSCLib = 'TSCLib.dll';
+  procedure about();stdcall;far;external TSCLib;
+  procedure openport(PrinterName:AnsiString);stdcall;far;external TSCLib;
+
+  procedure downloadpcx(filename, image_name:AnsiString);stdcall;far;external TSCLib;
+  procedure setup(width, height, speed, density, sensor, vertical, offset:AnsiString);stdcall;far;external TSCLib;
+  procedure formfeed();stdcall;far;external TSCLib;
+  procedure nobackfeed();stdcall;far;external TSCLib;
+  procedure clearbuffer();stdcall;far;external TSCLib;
+  procedure printerfont(x, y, fonttype, rotation, xmul,	ymul, text:AnsiString);stdcall;far;external TSCLib;
+  procedure windowsfont(x, y,	fontheight, rotation,	fontstyle, fontunderline:integer; szFaceName, content:AnsiString);stdcall;far;external TSCLib;
+  procedure barcode(x, y,	barcodetype, height, readable,	rotation, narrow,	wide, code:AnsiString);stdcall;far;external TSCLib;
+  procedure sendcommand(printercommand:AnsiString);stdcall;far;external TSCLib;
+  procedure printlabel(labels, copy:AnsiString);stdcall;far;external TSCLib;
+  procedure closeport();stdcall;far;external TSCLib;
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UEtiquetas_Laser, UEtiquetas_Novos;
+
+{$R *.dfm}
+
+procedure TFrmEtiq_Zebra.btnExecutaClick(Sender: TObject);
+var
+F, MyFile: TextFile;
+D1, D2, D3, D4, B1, B2, B3, B4, P1, P2, P3, P4, ID1, ID2, ID3, ID4,E1, LcLinha,D1B,D2B,D3B: String;
+X, Q, Qtde: Integer;
+begin
+  GravaIni(Arq_Ini, 'Impressora C鏚igo Barras','Impressora', Impressora.Text);
+  GravaIni(Arq_Ini, 'Impressora C鏚igo Barras','Modelo', Modelo.Text);
+  GravaIni(Arq_Ini, 'Impressora C鏚igo Barras','Porta', Porta.Text);
+
+  if Preco.Checked then
+  GravaIni(Arq_Ini, 'Impressora C鏚igo Barras','Imprime Pre蔞','True')
+  Else
+  GravaIni(Arq_Ini, 'Impressora C鏚igo Barras','Imprime Pre蔞','False');
+
+  if Posicao.Checked then
+  GravaIni(Arq_Ini, 'Impressora C鏚igo Barras','Posi誽o Pre蔞','True')
+  Else
+  GravaIni(Arq_Ini, 'Impressora C鏚igo Barras','Posi誽o Pre蔞','False');
+
+
+
+
+  try
+    if Impressora.Text = 'Argox' then
+    begin
+      if Modelo.Text = '3 Colunas' then
+      begin
+        D1 := '';
+        D2 := '';
+        D3 := '';
+        B1 := '';
+        B2 := '';
+        B3 := '';
+        P1 := '';
+        P2 := '';
+        P3 := '';
+        Q := 0;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            Inc(Q);
+
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 17);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 17);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 3 then
+            begin
+              D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 17);
+              B3 := Relat.FieldByName('CODBARRAS').AsString;
+              P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              AssignFile(F, Porta.Text);
+              Rewrite(F);
+              try
+                LcLinha := Chr(2) + 'qA';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'c0000';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KI503';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'O0220';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'f220';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KW0797';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KI7' + chr(2);
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'V0';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'L';
+                WriteLn(F, lcLinha );
+                LcLinha := 'H12';
+                WriteLn(F, lcLinha );
+                LcLinha := 'PC';
+                WriteLn(F, lcLinha );
+                LcLinha := 'A2';
+                WriteLn(F, lcLinha );
+                LcLinha := 'D11';
+                WriteLn(F, lcLinha );
+
+                LcLinha := '121100000300010' + D1;
+                WriteLn(F, lcLinha );
+                LcLinha := '131100000100010R$ ' + P1;
+                WriteLn(F, lcLinha );
+                LcLinha := '1F2202000400010' + B1;
+                WriteLn(F, lcLinha );
+
+                LcLinha := '121100000300150' + D2;
+                WriteLn(F, lcLinha );
+                LcLinha := '131100000100150R$ ' + P2;
+                WriteLn(F, lcLinha );
+                LcLinha := '1F2202000400150' + B2;
+                WriteLn(F, lcLinha );
+
+                LcLinha := '121100000300290' + D3;
+                WriteLn(F, lcLinha );
+                LcLinha := '131100000100290R$ ' + P3;
+                WriteLn(F, lcLinha );
+                LcLinha := '1F2202000400290' + B3;
+                WriteLn(F, lcLinha );
+
+                LcLinha := Chr(94) + '01';
+                WriteLn(F, lcLinha );
+                LcLinha := 'Q0001';
+                WriteLn(F, lcLinha );
+                LcLinha := 'E';
+                WriteLn(F, lcLinha );
+              finally
+                CloseFile(F);
+              end;
+
+              D1 := '';
+              D2 := '';
+              D3 := '';
+              B1 := '';
+              B2 := '';
+              B3 := '';
+              P1 := '';
+              P2 := '';
+              P3 := '';
+              Q := 0;
+              Sleep(2000);
+            end;
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if (Q <= 2) and ((D1 <> '') or (D2 <> '')) then
+        begin
+          AssignFile(F, Porta.Text);
+          Rewrite(F);
+          try
+            LcLinha := Chr(2) + 'qA';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'c0000';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'KI503';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'O0220';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'f220';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'KW0797';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'KI7' + chr(2);
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'V0';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'L';
+            WriteLn(F, lcLinha );
+            LcLinha := 'H12';
+            WriteLn(F, lcLinha );
+            LcLinha := 'PC';
+            WriteLn(F, lcLinha );
+            LcLinha := 'A2';
+            WriteLn(F, lcLinha );
+            LcLinha := 'D11';
+            WriteLn(F, lcLinha );
+
+            LcLinha := '121100000300010' + D1;
+            WriteLn(F, lcLinha );
+            LcLinha := '131100000100010R$ ' + P1;
+            WriteLn(F, lcLinha );
+            LcLinha := '1F2202000400010' + B1;
+            WriteLn(F, lcLinha );
+
+            if D2 <> '' then
+            begin
+              LcLinha := '121100000300150' + D2;
+              WriteLn(F, lcLinha );
+              LcLinha := '131100000100150R$ ' + P2;
+              WriteLn(F, lcLinha );
+              LcLinha := '1F2202000400150' + B2;
+              WriteLn(F, lcLinha );
+            end;
+
+            LcLinha := Chr(94) + '01';
+            WriteLn(F, lcLinha );
+            LcLinha := 'Q0001';
+            WriteLn(F, lcLinha );
+            LcLinha := 'E';
+            WriteLn(F, lcLinha );
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if Modelo.Text = 'G獼dola Individual' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          AssignFile(F, Porta.Text);
+          Rewrite(F);
+          try
+            LcLinha := Chr(2) + 'qA';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'c0000';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'KI503';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'O0220';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'f220';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'KW0797';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'KI7' + chr(2);
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'V0';
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(2) + 'L';
+            WriteLn(F, lcLinha );
+            LcLinha := 'H12';
+            WriteLn(F, lcLinha );
+            LcLinha := 'PC';
+            WriteLn(F, lcLinha );
+            LcLinha := 'A2';
+            WriteLn(F, lcLinha );
+            LcLinha := 'D11';
+            WriteLn(F, lcLinha );
+            LcLinha := '141100000800110' +  Copy(Relat.FieldByName('DESCRICAO').AsString,1,20);
+            WriteLn(F, lcLinha );
+            LcLinha := '141100000600110' +  Copy(Relat.FieldByName('DESCRICAO').AsString,21,20);
+            WriteLn(F, lcLinha );
+            LcLinha := '421100000140048' + '';
+            WriteLn(F, lcLinha );
+            LcLinha := '421100000140064' + '';
+            WriteLn(F, lcLinha );
+            LcLinha := '161100000100180R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            WriteLn(F, lcLinha );
+            LcLinha := '421100000140082 ';
+            WriteLn(F, lcLinha );
+            LcLinha := '1F2302300100010' + Relat.FieldByName('CODBARRAS').AsString;
+            WriteLn(F, lcLinha );
+            LcLinha := Chr(94) + '01';
+            WriteLn(F, lcLinha );
+            LcLinha := 'Q0001';
+            WriteLn(F, lcLinha );
+            LcLinha := 'E';
+            WriteLn(F, lcLinha );
+          finally
+            CloseFile(F);
+          end;
+
+          Sleep(2000);
+          
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;
+    end;
+
+    if Impressora.Text = 'Datamax (G獼dola)' then
+    begin
+      Relat.First;
+      while not Relat.Eof do
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Datamax') = 'COM1' then
+          AssignFile(MyFile, 'COM1')
+        else
+          AssignFile(MyFile, 'COM2');
+
+        Rewrite(MyFile);
+        try
+          Writeln(MyFile, #2 + 'L' + #13);
+          Writeln(MyFile, 'D11' + #13);
+          Writeln(MyFile, '1F6204000020010' + Relat.FieldByName('CODBARRAS').AsString + #13);
+          Writeln(MyFile, '161104000600010' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(MyFile, '161104000020210' + 'R$  ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + #13);
+          Writeln(MyFile, 'Q' + StrZero(Relat.FieldByName('UNID_COMPRA').AsString, 4, 0));
+          Writeln(MyFile, 'E' + #13);
+        finally
+          CloseFile(MyFile);
+        end;
+
+        Sleep(2000);
+
+        Application.ProcessMessages;
+        Relat.Next;
+      end;
+    end;
+
+    if Impressora.Text = 'Datamax (Produto)' then
+    begin
+      Relat.First;
+      while not Relat.Eof do
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Datamax') = 'COM1' then
+          AssignFile(MyFile, 'COM1')
+        else
+          AssignFile(MyFile, 'COM2');
+
+        Rewrite(MyFile);
+        try
+          Writeln(MyFile, #2 + 'L' + #13);
+          Writeln(MyFile, 'D11' + #13);
+          Writeln(MyFile, '121101200600008' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+          Writeln(MyFile, '121101200600143' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+          Writeln(MyFile, '121101200600272' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+          Writeln(MyFile, '111101200520008' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(MyFile, '111101200520143' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(MyFile, '111101200520272' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+          Writeln(MyFile, '1F6204000020008' + Relat.FieldByName('CODBARRAS').AsString + #13);
+          Writeln(MyFile, '1F6204000020143' + Relat.FieldByName('CODBARRAS').AsString + #13);
+          Writeln(MyFile, '1F6204000020272' + Relat.FieldByName('CODBARRAS').AsString + #13);
+          Writeln(MyFile, 'Q' + StrZero(Relat.FieldByName('UNID_COMPRA').AsString, 4, 0) + #13);
+          Writeln(MyFile, 'E' + #13);
+        finally
+          CloseFile(MyFile);
+        end;
+
+        Sleep(2000);
+
+        Application.ProcessMessages;
+        Relat.Next;
+      end;
+    end;
+
+
+
+    if Impressora.Text = 'Elgin' then
+    begin
+      if Modelo.Text = '1 Coluna' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+            B2 := Relat.FieldByName('CODBARRAS').AsString;
+            P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+              AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+              AssignFile(F, Porta.Text);
+
+            Rewrite(F);
+            try
+              WriteLn(F, 'I8,A,001');
+              WriteLn(F, 'N');
+              WriteLn(F, 'D11');
+              WriteLn(F, 'A60,20,0,3,1,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24) + '"');
+              WriteLn(F, 'A65,115,0,2,1,0,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+              WriteLn(F, 'A260,100,0,3,1,2,N,"' + 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + '"');
+              WriteLn(F, 'P1');
+            finally
+              CloseFile(F);
+            end;
+
+            Sleep(2000);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;
+
+      if Modelo.Text = '2 Colunas' then
+      begin
+        D1 := '';
+        D2 := '';
+        B1 := '';
+        B2 := '';
+        P1 := '';
+        P2 := '';
+        Q := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, Porta.Text);
+
+              Rewrite(F);
+              try
+                WriteLn(F, 'I8,A,001');
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+              D1 := '';
+              D2 := '';
+              B1 := '';
+              B2 := '';
+              P1 := '';
+              P2 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 2 then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+           AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+          else
+           AssignFile(F, Porta.Text);
+           Rewrite(F);
+          try
+            WriteLn(F, 'I8,A,001');
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+            WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if (Modelo.Text = '3 Colunas') or (Modelo.Text = '3 Colunas (S/Barra)') then
+      begin
+        D1 := '';
+        D2 := '';
+        D3 := '';
+        B1 := '';
+        B2 := '';
+        B3 := '';
+        P1 := '';
+        P2 := '';
+        P3 := '';
+        Q := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 3 then
+            begin
+              D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B3 := Relat.FieldByName('CODBARRAS').AsString;
+              P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+               AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+               AssignFile(F, Porta.Text);
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'I8,A,001');
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'S3');
+                WriteLn(F, 'JF');
+                WriteLn(F, 'A45,2,0,1,1,2,N,"' + E1 + '"');
+                WriteLn(F, 'A45,30,0,1,1,2,N,"' + D1 + '"');
+
+                if Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B35,60,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A335,2,0,1,1,2,N,"' + E1 + '"');
+                WriteLn(F, 'A335,30,0,1,1,2,N,"' + D2 + '"');
+
+                if Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B325,60,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'A615,2,0,1,1,2,N,"' + E1 + '"');
+                WriteLn(F, 'A615,30,0,1,1,2,N,"' + D3 + '"');
+
+                if Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B605,60,0,E30,2,9,62,B,"' + B3 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A615,2,1,2,2,1,N,"' + P3 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+
+              D1 := '';
+              D2 := '';
+              D3 := '';
+              B1 := '';
+              B2 := '';
+              B3 := '';
+              P1 := '';
+              P2 := '';
+              P3 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if (Q >= 2) then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+           AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+          else
+           AssignFile(F, Porta.Text);
+          Rewrite(F);
+
+          try
+            WriteLn(F, 'I8,A,001');
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'S3');
+            WriteLn(F, 'JF');
+            WriteLn(F, 'A45,2,0,1,1,2,N,"' + E1 + '"');
+            WriteLn(F, 'A45,30,0,1,1,2,N,"' + D1 + '"');
+
+            if Modelo.Text = '3 Colunas' then
+              WriteLn(F, 'B35,60,0,E30,2,9,62,B,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+            WriteLn(F, 'A335,2,0,1,1,2,N,"' + E1 + '"');
+            WriteLn(F, 'A335,30,0,1,1,2,N,"' + D2 + '"');
+
+            if Modelo.Text = '3 Colunas' then
+              WriteLn(F, 'B325,60,0,E30,2,9,62,B,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+            WriteLn(F, 'A615,2,0,1,1,2,N,"' + E1 + '"');
+            WriteLn(F, 'A615,30,0,1,1,2,N,"' + D3 + '"');
+
+            if Modelo.Text = '3 Colunas' then
+              WriteLn(F, 'B605,60,0,E30,2,9,62,B,"' + B3 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A615,2,1,2,2,1,N,"' + P3 + '"');
+
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+          if (Modelo.Text = '3 Colunas Especial') then
+          begin
+            D1 := '';
+            D1b:= '';
+            D2 := '';
+            D2B:= '';
+            D3 := '';
+            D3B:= '';
+            B1 := '';
+            B2 := '';
+            B3 := '';
+            P1 := '';
+            P2 := '';
+            P3 := '';
+            Q := 1;
+
+           Relat.First;
+           if not Digito(Relat.FieldByName('CODBARRAS').AsString) then
+           Application.MessageBox(PChar('O item ' + Relat.FieldByName('DESCRICAO').AsString + ' n緌 possui um C鏚igo de Barras v嫮ido!'), PChar(Msg_Title), mb_IconWarning)
+           Else
+           Begin
+            while not Relat.Eof do
+            begin
+              for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 15);
+                  D1b := Copy(Relat.FieldByName('DESCRICAO').AsString, 16, 15);
+                  B1 := Relat.FieldByName('CODBARRAS').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 15);
+                  D2b := Copy(Relat.FieldByName('DESCRICAO').AsString, 16, 15);
+                  B2 := Relat.FieldByName('CODBARRAS').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+                end;
+
+                if Q = 3 then
+                begin
+                  D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 15);
+                  D3b := Copy(Relat.FieldByName('DESCRICAO').AsString, 16, 15);;
+                  B3 := Relat.FieldByName('CODBARRAS').AsString;
+                  P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+                  if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                  else
+                  AssignFile(F, Porta.Text);
+
+                  Rewrite(F);
+
+                  {
+                  N
+                  D11
+                  ZT
+                  Q400,032
+                  q760
+                  A210,35,1,2,1,2,N,"LAMINA LORD AMA"
+                  A180,35,1,2,1,2,N,"COMPLEMENTO DAS "
+                  B130,45,1,E30,2,9,62,B,"6222001551311"
+                  A45,35,1,3,2,1,N,"R$ 2,31"
+
+                  A465,35,1,2,1,2,N,"LAMINA LORD VER"
+                  A435,35,1,2,1,2,N,"COMPLEMENTO DAS "
+                  B385,45,1,E30,2,9,62,B,"6222001551310"
+                  A300,35,1,3,2,1,N,"R$ 2,29"
+
+                  A720,35,1,2,1,2,N,"LAMINA LORD rox"
+                  A690,35,1,2,1,2,N,"COMPLEMENTO DAS"
+                  B640,45,1,E30,2,9,62,B,"6222001551315"
+                  A555,35,1,3,2,1,N,"R$ 2,48"
+
+                  P1
+                  }
+
+                  try
+                    WriteLn(F, 'I8,A,001');
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'Q400,032');
+                    WriteLn(F, 'q760');
+                    WriteLn(F, 'A210,35,1,2,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'A180,35,1,2,1,2,N,"' + D1B + '"');
+
+
+                    if Modelo.Text = '3 Colunas Especial' then
+                      WriteLn(F, 'B130,45,1,E30,2,9,62,B,"' + B1 + '"');
+
+                    if Preco.Checked then
+                      WriteLn(F, 'A45,35,1,2,2,1,N,"' + P1 + '"');
+
+                    WriteLn(F, 'A465,35,1,2,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'A435,35,1,2,1,2,N,"' + D2B + '"');
+
+                    if Modelo.Text = '3 Colunas Especial' then
+                      WriteLn(F, 'B385,45,1,E30,2,9,62,B,"' + B2 + '"');
+
+                    if Preco.Checked then
+                      WriteLn(F, 'A300,35,1,2,2,1,N,"' + P2 + '"');
+
+                    WriteLn(F, 'A720,35,1,2,1,2,N,"' + D3 + '"');
+                    WriteLn(F, 'A690,35,1,2,1,2,N,"' + D3B + '"');
+
+                    if Modelo.Text = '3 Colunas Especial' then
+                      WriteLn(F, 'B640,45,1,E30,2,9,62,B,"' + B3 + '"');
+
+                    if Preco.Checked then
+                      WriteLn(F, 'A555,35,1,2,2,1,N,"' + P3 + '"');
+
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D1b:= '';
+                  D2 := '';
+                  D2B:= '';
+                  D3 := '';
+                  D3B:= '';
+                  B1 := '';
+                  B2 := '';
+                  B3 := '';
+                  P1 := '';
+                  P2 := '';
+                  P3 := '';
+                   Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              Relat.Next;
+            end;
+
+            if (Q >= 2)  then
+            begin
+             if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+             else
+                  AssignFile(F, Porta.Text);
+
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'I8,A,001');
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'Q400,032');
+                WriteLn(F, 'q760');
+                WriteLn(F, 'A210,35,1,2,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A180,35,1,2,1,2,N,"' + D1B + '"');
+
+
+                if Modelo.Text = '3 Colunas Especial' then
+                  WriteLn(F, 'B130,45,1,E30,2,9,62,B,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A45,35,1,2,2,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A465,35,1,2,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A435,35,1,2,1,2,N,"' + D2B + '"');
+
+                if Modelo.Text = '3 Colunas Especial' then
+                  WriteLn(F, 'B385,45,1,E30,2,9,62,B,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A300,35,1,2,2,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'A720,35,1,2,1,2,N,"' + D3 + '"');
+                WriteLn(F, 'A690,35,1,2,1,2,N,"' + D3B + '"');
+
+                if Modelo.Text = '3 Colunas Especial' then
+                  WriteLn(F, 'B640,45,1,E30,2,9,62,B,"' + B3 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A555,35,1,2,2,1,N,"' + P3 + '"');
+
+                WriteLn(F, 'P1');
+
+
+              finally
+                CloseFile(F);
+              end;
+            end;
+           End;
+          end;
+
+      if Modelo.Text = '4 Colunas' then
+      begin
+        D1 := '';
+        D2 := '';
+        D3 := '';
+        D4 := '';
+        B1 := '';
+        B2 := '';
+        B3 := '';
+        B4 := '';
+        P1 := '';
+        P2 := '';
+        P3 := '';
+        P4 := '';
+        Q := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B1 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B2 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 3 then
+            begin
+              D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B3 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 4 then
+            begin
+              D4 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B4 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P4 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+               AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+               AssignFile(F, Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'I8,A,001');
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'S3');
+                WriteLn(F, 'JF');
+                WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+                WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+                WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+                WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+                WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+                WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+                WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+                WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+                WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+                WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+              D1 := '';
+              D2 := '';
+              D3 := '';
+              D4 := '';
+              B1 := '';
+              B2 := '';
+              B3 := '';
+              B4 := '';
+              P1 := '';
+              P2 := '';
+              P3 := '';
+              P4 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 4 then
+        begin
+          AssignFile(F, Porta.Text);
+          Rewrite(F);
+          try
+            WriteLn(F, 'I8,A,001');
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'S3');
+            WriteLn(F, 'JF');
+            WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+            WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+            WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+            WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+            WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+            WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+            WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+            WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+            WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+            WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if Modelo.Text = 'G獼dola (2 Colunas)' then
+      begin
+        D1 := '';
+        D2 := '';
+        B1 := '';
+        B2 := '';
+        P1 := '';
+        P2 := '';
+        Q := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+               AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+               AssignFile(F, Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'I8,A,001');
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'S3');
+                WriteLn(F, 'JF');
+                WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+              D1 := '';
+              D2 := '';
+              B1 := '';
+              B2 := '';
+              P1 := '';
+              P2 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 2 then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+           AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+          else
+           AssignFile(F, Porta.Text);
+          Rewrite(F);
+          try
+            WriteLn(F, 'I8,A,001');
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'S3');
+            WriteLn(F, 'JF');
+            WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+            WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if Modelo.Text = 'G獼dola Individual' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+             AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+             AssignFile(F, Porta.Text);
+            Rewrite(F);
+            try
+              WriteLn(F, 'I8,A,001');
+              WriteLn(F, 'N');
+              WriteLn(F, 'S3');
+              WriteLn(F, 'JF');
+              WriteLn(F, 'A140,15,0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+              WriteLn(F, 'A140,60,0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+              WriteLn(F, 'B31,115,0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+              WriteLn(F, 'A31,190,0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+              WriteLn(F, 'A460,104,0,5,2,2,N,"' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + '"');
+              WriteLn(F, 'A350,128,0,3,3,3,N,"R$"');
+              WriteLn(F, 'P1');
+         
+            finally
+              CloseFile(F);
+            end;
+
+            Sleep(2000);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;
+
+      if Modelo.Text = 'G獼dola Individual 2 Pre蔞s(A Vista/Atacado)' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            AssignFile(F, Porta.Text);
+            Rewrite(F);
+            begin
+              try
+
+                WriteLn(F, 'N');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna Descricao') + ','  + LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s', 'Linha Descricao') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 25) + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna Descricao 1') + ',' + LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s', 'Linha Descricao 1') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 26, 14) + '"');
+                WriteLn(F, 'B'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna Barras ')+ ',' + LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s', 'Linha Barras') + ',0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna Preco')+ ',' +LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s', 'Linha Preco') + ',0,3,2,2,N,"' + FormatFloat('0.00', Relat.FieldByName('PRECO_ATACADO').AsFloat) + '(ATAC.'+FloatToStr(Relat.FieldByName('QUANT_MAXIMA').AsFloat)+' UN)"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna R$') + ',' + LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s', 'Linha R$') + ',0,3,2,2,N,"R$"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna Preco2')+ ',' +LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s', 'Linha Preco2') + ',0,3,2,2,N,"' + FormatFloat('0.00', Relat.FieldByName('PRECO_VENDA').AsFloat)+'(VAREJO)"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna R$2') + ',' + LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s', 'Linha R$2') + ',0,3,2,2,N,"R$"');
+
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'ELGIN L42 2 Pre蔞s','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'ELGIN L42 2 Pre蔞s','Linha Descricao Barras') + ',0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'P1');
+
+              finally
+                CloseFile(F);
+              end;
+
+            end;
+
+            Sleep(2000);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;
+    end;
+
+    if (Impressora.Text = 'Zebra') or (Impressora.Text = 'Tanca') then
+    begin
+      if Modelo.Text = '1 Coluna' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+
+            D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+            B2 := Relat.FieldByName('CODBARRAS').AsString;
+            P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+              AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+              AssignFile(F, Porta.Text);
+
+            Rewrite(F);
+            try
+              WriteLn(F, 'N');
+              WriteLn(F, 'D11');
+              WriteLn(F, 'A60,20,0,3,1,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24) + '"');
+              WriteLn(F, 'A65,115,0,2,1,0,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+              WriteLn(F, 'A260,100,0,3,1,2,N,"' + 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + '"');
+              WriteLn(F, 'P1');
+
+            finally
+              CloseFile(F);
+            end;
+            Sleep(2000);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;
+
+      if Modelo.Text = '2 Colunas' then
+      begin
+
+        D1 := '';
+        D2 := '';
+        B1 := '';
+        B2 := '';
+        P1 := '';
+        P2 := '';
+        Q  := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+                  AssignFile(F, Porta.Text);
+
+              Rewrite(F);
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+              D1 := '';
+              D2 := '';
+              B1 := '';
+              B2 := '';
+              P1 := '';
+              P2 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 2 then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+           AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+          else
+           AssignFile(F, Porta.Text);
+           Rewrite(F);
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+            WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if (Modelo.Text = '3 Colunas') or (Modelo.Text = '3 Colunas (S/Barra)') then
+      begin
+        D1 := '';
+        D2 := '';
+        D3 := '';
+        B1 := '';
+        B2 := '';
+        B3 := '';
+        P1 := '';
+        P2 := '';
+        P3 := '';
+        Q := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 3 then
+            begin
+              D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B3 := Relat.FieldByName('CODBARRAS').AsString;
+              P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+               AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+               AssignFile(F, Porta.Text);
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+
+                if (Impressora.Text = 'Tanca') Then
+                Begin
+                WriteLn(F, 'Q200,24');
+                WriteLn(F, 'q840');
+                End
+                Else
+                WriteLn(F, 'Q176,16');
+
+
+                WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+                if (Modelo.Text = '3 Colunas') then
+                Begin
+                 if (Impressora.Text = 'Tanca')  Then
+                    WriteLn(F, 'B35,50,0,E30,3,2,80,B,"' + B1 + '"')
+                 Else
+                    WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+                End;
+
+                if Preco.Checked then
+                  WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+                if (Modelo.Text = '3 Colunas') then
+                Begin
+                 if (Impressora.Text = 'Tanca') Then
+                  WriteLn(F, 'B325,50,0,E30,3,2,80,B,"' + B2 + '"')
+                 else
+                  WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+                End;
+
+
+                if Preco.Checked then
+                  WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+                if (Modelo.Text = '3 Colunas') then
+                Begin
+                  if (Impressora.Text = 'Tanca')  Then
+                  WriteLn(F, 'B605,50,0,E30,3,2,80,B,"' + B3 + '"')
+                  Else
+                  WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+                End;
+
+                if Preco.Checked then
+                  WriteLn(F, 'A615,2,1,2,2,1,N,"' + P3 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+
+              D1 := '';
+              D2 := '';
+              D3 := '';
+              B1 := '';
+              B2 := '';
+              B3 := '';
+              P1 := '';
+              P2 := '';
+              P3 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if (Q >= 2) then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+           AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+          else
+           AssignFile(F, Porta.Text);
+          Rewrite(F);
+
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+
+            if (Impressora.Text = 'Tanca')  Then
+            Begin
+            WriteLn(F, 'Q200,24');
+            WriteLn(F, 'q840');
+            End
+            Else
+            WriteLn(F, 'Q176,16');
+
+            WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+            if (Modelo.Text = '3 Colunas') then
+            Begin
+             if (Impressora.Text = 'Tanca')  Then
+                WriteLn(F, 'B35,50,0,E30,3,2,80,B,"' + B1 + '"')
+             Else
+                WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+            End;
+
+
+            if Preco.Checked then
+              WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+            WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+            if (Modelo.Text = '3 Colunas') then
+            Begin
+             if (Impressora.Text = 'Tanca') Then
+              WriteLn(F, 'B325,50,0,E30,3,2,80,B,"' + B2 + '"')
+             else
+              WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+            End;
+
+
+            if Preco.Checked then
+              WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+            WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+            if (Modelo.Text = '3 Colunas') then
+            Begin
+              if (Impressora.Text = 'Tanca')  Then
+              WriteLn(F, 'B605,50,0,E30,3,2,80,B,"' + B3 + '"')
+              Else
+              WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+            End;
+
+            if Preco.Checked then
+              WriteLn(F, 'A615,2,1,2,2,1,N,"' + P3 + '"');
+
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if Modelo.Text = '4 Colunas' then
+      begin
+        D1 := '';
+        D2 := '';
+        D3 := '';
+        D4 := '';
+        B1 := '';
+        B2 := '';
+        B3 := '';
+        B4 := '';
+        P1 := '';
+        P2 := '';
+        P3 := '';
+        P4 := '';
+        Q := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B1 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B2 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 3 then
+            begin
+              D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B3 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 4 then
+            begin
+              D4 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B4 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P4 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+               AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+               AssignFile(F, Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+                WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+                WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+                WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+                WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+                WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+                WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+                WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+                WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+                WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+              D1 := '';
+              D2 := '';
+              D3 := '';
+              D4 := '';
+              B1 := '';
+              B2 := '';
+              B3 := '';
+              B4 := '';
+              P1 := '';
+              P2 := '';
+              P3 := '';
+              P4 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 4 then
+        begin
+          AssignFile(F, Porta.Text);
+          Rewrite(F);
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+            WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+            WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+            WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+            WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+            WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+            WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+            WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+            WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+            WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if Modelo.Text = 'G獼dola (2 Colunas)' then
+      begin
+        D1 := '';
+        D2 := '';
+        B1 := '';
+        B2 := '';
+        P1 := '';
+        P2 := '';
+        Q := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+               AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+               AssignFile(F, Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+              D1 := '';
+              D2 := '';
+              B1 := '';
+              B2 := '';
+              P1 := '';
+              P2 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 2 then
+        begin
+          if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+           AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+          else
+           AssignFile(F, Porta.Text);
+          Rewrite(F);
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+            WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+            WriteLn(F, 'P1');
+          finally
+            CloseFile(F);
+          end;
+        end;
+      end;
+
+      if Modelo.Text = 'G獼dola Individual' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+             AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+             AssignFile(F, Porta.Text);
+            Rewrite(F);
+
+            if (Impressora.Text = 'Tanca') Then
+            Begin
+              try
+
+                P1 := FormatFloat('0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+                P1 := StringReplace(P1, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+
+                WriteLn(F, 'N');
+                WriteLn(F, 'Q240,24');
+                WriteLn(F, 'q840');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Descricao') + ','  + LeIni(Arq_Ini, 'Tanca', 'Linha Descricao') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 25) + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Descricao 1') + ',' + LeIni(Arq_Ini, 'Tanca', 'Linha Descricao 1') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 26, 14) + '"');
+                WriteLn(F, 'B'+ LeIni(Arq_Ini,'Tanca','Coluna Barras ')+ ',' + LeIni(Arq_Ini, 'Tanca', 'Linha Barras') + ',0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Preco')+ ',' +LeIni(Arq_Ini, 'Tanca', 'Linha Preco') + ',0,5,2,2,N,"' + P1 + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna R$') + ',' + LeIni(Arq_Ini, 'Tanca', 'Linha R$') + ',0,3,3,3,N,"R$"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'Tanca','Linha Descricao Barras') + ',0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'P1');
+
+              finally
+                CloseFile(F);
+              end;
+            End
+            Else
+            Begin
+
+              try
+
+                //Alterado dia 21/05/2021, pegar configura誽o do ini para impressora zebra, g獼dula individual
+                {
+                WriteLn(F, 'N');
+                WriteLn(F, 'A140,15,0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+                WriteLn(F, 'A140,60,0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+                WriteLn(F, 'B31,115,0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'A31,190,0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'A460,104,0,5,2,2,N,"' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + '"');
+                WriteLn(F, 'A350,128,0,3,3,3,N,"R$"');
+                WriteLn(F, 'P1');
+                }
+                WriteLn(F, 'N');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao') + ','  + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 25) + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao 1') + ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao 1') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 26, 14) + '"');
+                WriteLn(F, 'B'+ LeIni(Arq_Ini,'Zebra','Coluna Barras ')+ ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Barras') + ',0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Preco')+ ',' +LeIni(Arq_Ini, 'Zebra', 'Linha Preco') + ',0,5,2,2,N,"' + FormatFloat('0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna R$') + ',' + LeIni(Arq_Ini, 'Zebra', 'Linha R$') + ',0,3,3,3,N,"R$"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'Zebra','Linha Descricao Barras') + ',0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            End;
+
+            Sleep(2000);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;
+
+      if  Modelo.Text = 'G獼dola Individual 2 Pre蔞s(A Vista/A Prazo)' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            AssignFile(F, Porta.Text);
+            Rewrite(F);
+            if (Impressora.Text = 'Tanca')  Then
+            Begin
+              try
+
+                P1 := FormatFloat('0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+                P1 := StringReplace(P1, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+
+                WriteLn(F, 'N');
+                WriteLn(F, 'Q240,24');
+                WriteLn(F, 'q840');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Descricao') + ','  + LeIni(Arq_Ini, 'Tanca', 'Linha Descricao') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 25) + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Descricao 1') + ',' + LeIni(Arq_Ini, 'Tanca', 'Linha Descricao 1') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 26, 14) + '"');
+                WriteLn(F, 'B'+ LeIni(Arq_Ini,'Tanca','Coluna Barras ')+ ',' + LeIni(Arq_Ini, 'Tanca', 'Linha Barras') + ',0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Preco')+ ',' +LeIni(Arq_Ini, 'Tanca', 'Linha Preco') + ',0,5,2,2,N,"' + P1 + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna R$') + ',' + LeIni(Arq_Ini, 'Tanca', 'Linha R$') + ',0,3,3,3,N,"R$"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Tanca','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'Tanca','Linha Descricao Barras') + ',0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            End
+            Else
+            begin
+                P1 :=  FormatFloat('0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+               // P1 := StringReplace(P1, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+
+                P2 := FormatFloat('0.00', Relat.FieldByName('PRECO_PRAZO').AsFloat);
+               // P2 := StringReplace(P2, ',', '.', [rfReplaceAll, rfIgnoreCase]);
+
+
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna Descricao') + ','  + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 25) + '"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna Descricao 1') + ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao 1') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 26, 14) + '"');
+                WriteLn(F, 'B'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna Barras ')+ ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Barras') + ',0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna Preco')+ ',' +LeIni(Arq_Ini, 'Zebra 2 Pre蔞s', 'Linha Preco') + ',0,3,2,2,N,"' + P1 + '(VISTA)"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna R$') + ',' + LeIni(Arq_Ini, 'Zebra 2 Pre蔞s', 'Linha R$') + ',0,3,2,2,N,"R$"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna Preco2')+ ',' +LeIni(Arq_Ini, 'Zebra 2 Pre蔞s', 'Linha Preco2') + ',0,3,2,2,N,"' + P2 + '(PRAZO)"');
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna R$2') + ',' + LeIni(Arq_Ini, 'Zebra 2 Pre蔞s', 'Linha R$2') + ',0,3,2,2,N,"R$"');
+
+                WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra 2 Pre蔞s','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'Zebra','Linha Descricao Barras') + ',0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+
+            end;
+
+            Sleep(2000);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;
+
+
+    end;
+
+    if Impressora.Text = 'Zebra GT800' then
+    begin
+
+      if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '' then
+      begin
+        AssignFile(F,ExtractFilePath(ParamStr(0)) + 'login_ftp.txt' );
+        Rewrite(F);
+        WriteLn(F, 'open ' + LeIni(Arq_Ini, 'Zebra GT800', 'Ip') );
+        WriteLn(F, 'barros');
+        WriteLn(F, 'baros');
+        WriteLn(F, 'put ' + ExtractFilePath(ParamStr(0)) + 'etiquetas.txt');
+        WriteLn(F, 'quit');
+        CloseFile(F);
+      end;
+
+
+      if Modelo.Text = '1 Coluna' then
+      begin
+        if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '' then
+        Begin
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'GT800.bat');
+          Rewrite(F);
+          WriteLn(F,'@echo off');
+          WriteLn(F,'ftp -s:login_ftp.txt');
+          CloseFile(F);
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'etiquetas.txt' );
+          Rewrite(F);
+        End;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+            B2 := Relat.FieldByName('CODBARRAS').AsString;
+            P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+            if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+            begin
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+              AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+              AssignFile(F, Porta.Text);
+              Rewrite(F);
+            end;
+
+            try
+              WriteLn(F, 'N');
+              WriteLn(F, 'D11');
+              WriteLn(F, 'Q176,16');
+              WriteLn(F, 'A60,20,0,3,1,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24) + '"');
+              WriteLn(F, 'A65,115,0,2,1,0,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+
+              if Preco.Checked then
+                WriteLn(F, 'A260,100,0,3,1,2,N,"' + 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + '"');
+
+              WriteLn(F, 'P1');
+            finally
+             if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+             CloseFile(F);
+            end;
+
+            Sleep(2000);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+        if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '')  then
+        Begin
+        Closefile(F);
+        ShellExecute(handle,'open',PChar(ExtractFilePath(ParamStr(0)) + 'GT800.bat'), '','',SW_HIDE);
+        End;
+      end;
+
+      if Modelo.Text = '2 Colunas' then
+      begin
+        D1 := '';
+        D2 := '';
+        B1 := '';
+        B2 := '';
+        P1 := '';
+        P2 := '';
+        Q := 1;
+
+
+         if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '' then
+        Begin
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'GT800.bat');
+          Rewrite(F);
+          WriteLn(F,'@echo off');
+          WriteLn(F,'ftp -s:login_ftp.txt');
+          CloseFile(F);
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'etiquetas.txt' );
+          Rewrite(F);
+        End;
+
+        Relat.First;
+       if not Digito(Relat.FieldByName('CODBARRAS').AsString) then
+       Application.MessageBox(PChar('O item ' + Relat.FieldByName('DESCRICAO').AsString + ' n緌 possui um C鏚igo de Barras v嫮ido!'), PChar(Msg_Title), mb_IconWarning)
+       Else
+       Begin
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+              begin
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                AssignFile(F, Porta.Text);
+                Rewrite(F);
+              end;
+
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'Q176,16');
+                WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+
+              end;
+
+              D1 := '';
+              D2 := '';
+              B1 := '';
+              B2 := '';
+              P1 := '';
+              P2 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 2 then
+        begin
+          if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+            AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+            AssignFile(F, Porta.Text);
+            Rewrite(F);
+          end;
+
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'Q176,16');
+            WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+            WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+            WriteLn(F, 'P1');
+          finally
+           if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+            CloseFile(F);
+
+          end;
+        end;
+        if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '')  then
+        Begin
+        Closefile(F);
+        ShellExecute(handle,'open',PChar(ExtractFilePath(ParamStr(0)) + 'GT800.bat'), '','',SW_HIDE);
+        End;
+       End;
+      end;
+
+      if (Modelo.Text = '3 Colunas') or (Modelo.Text = '3 Colunas (S/Barra)') then
+      begin
+
+        D1 := '';
+        D2 := '';
+        D3 := '';
+        B1 := '';
+        B2 := '';
+        B3 := '';
+        P1 := '';
+        P2 := '';
+        P3 := '';
+        Q := 1;
+
+        if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '' then
+        Begin
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'GT800.bat');
+          Rewrite(F);
+          WriteLn(F,'@echo off');
+          WriteLn(F,'ftp -s:login_ftp.txt');
+          CloseFile(F);
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'etiquetas.txt' );
+          Rewrite(F);
+        End;
+
+       Relat.First;
+       if not Digito(Relat.FieldByName('CODBARRAS').AsString) then
+       Application.MessageBox(PChar('O item ' + Relat.FieldByName('DESCRICAO').AsString + ' n緌 possui um C鏚igo de Barras v嫮ido!'), PChar(Msg_Title), mb_IconWarning)
+       Else
+       Begin
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 3 then
+            begin
+
+              D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B3 := Relat.FieldByName('CODBARRAS').AsString;
+              P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+              begin
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                AssignFile(F, Porta.Text);
+
+                Rewrite(F);
+              end;
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'Q176,16');
+                WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+                if Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+                if Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+                if Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A605,2,1,2,2,1,N,"' + P3 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+               if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+               CloseFile(F);
+              end;
+
+              D1 := ' ';
+              D2 := ' ';
+              D3 := ' ';
+              B1 := ' ';
+              B2 := ' ';
+              B3 := ' ';
+              P1 := ' ';
+              P2 := ' ';
+              P3 := ' ';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+
+        end;
+
+        if (Q >= 2)  then
+        begin
+
+
+          if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+            AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+            AssignFile(F, Porta.Text);
+
+            Rewrite(F);
+          end;
+
+
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'Q176,16');
+            WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+            if Modelo.Text = '3 Colunas' then
+              WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+            WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+            if Modelo.Text = '3 Colunas' then
+              WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+            WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+            if Modelo.Text = '3 Colunas' then
+              WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A605,2,1,2,2,1,N,"' + P3 + '"');
+
+            WriteLn(F, 'P1');
+          finally
+            if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+            CloseFile(F);
+          end;
+
+        end;
+        if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '')  then
+        Begin
+        Closefile(F);
+        ShellExecute(handle,'open',PChar(ExtractFilePath(ParamStr(0)) + 'GT800.bat'), '','',SW_HIDE);
+        End;
+       End;
+      end;
+
+     if Modelo.Text = '4 Colunas' then
+     begin
+        D1 := '';
+        D2 := '';
+        D3 := '';
+        D4 := '';
+        B1 := '';
+        B2 := '';
+        B3 := '';
+        B4 := '';
+        P1 := '';
+        P2 := '';
+        P3 := '';
+        P4 := '';
+        Q := 1;
+
+        if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '' then
+        Begin
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'GT800.bat');
+          Rewrite(F);
+          WriteLn(F,'@echo off');
+          WriteLn(F,'ftp -s:login_ftp.txt');
+          CloseFile(F);
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'etiquetas.txt' );
+          Rewrite(F);
+        End;
+
+
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B1 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B2 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 3 then
+            begin
+              D3 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B3 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P3 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 4 then
+            begin
+              D4 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 16);
+              B4 := Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(Relat.FieldByName('INTEGRACAO').AsString, 5, 0), 3, 3);
+              P4 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+              begin
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                AssignFile(F, Porta.Text);
+                Rewrite(F);
+              end;
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'Q176,16');
+                WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+                WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+                WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+                WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+                WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+                WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+                WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+                WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+                WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+                WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+                WriteLn(F, 'P1');
+              finally
+
+              end;
+
+              D1 := '';
+              D2 := '';
+              D3 := '';
+              D4 := '';
+              B1 := '';
+              B2 := '';
+              B3 := '';
+              B4 := '';
+              P1 := '';
+              P2 := '';
+              P3 := '';
+              P4 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 4 then
+        begin
+
+          if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+            AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+            AssignFile(F, Porta.Text);
+            Rewrite(F);
+          end;
+
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'Q176,16');
+            WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+            WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+            WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+            WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+            WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+            WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+            WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+            WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+            WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+            WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+            WriteLn(F, 'P1');
+          finally
+            if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+            CloseFile(F);
+          end;
+        end;
+
+        if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '')  then
+        Begin
+        Closefile(F);
+        ShellExecute(handle,'open',PChar(ExtractFilePath(ParamStr(0)) + 'GT800.bat'), '','',SW_HIDE);
+        End;
+
+     end;
+
+      if Modelo.Text = 'G獼dola (2 Colunas)' then
+      begin
+        D1 := '';
+        D2 := '';
+        B1 := '';
+        B2 := '';
+        P1 := '';
+        P2 := '';
+        Q := 1;
+
+        if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '' then
+        Begin
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'GT800.bat');
+          Rewrite(F);
+          WriteLn(F,'@echo off');
+          WriteLn(F,'ftp -s:login_ftp.txt');
+          CloseFile(F);
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'etiquetas.txt' );
+          Rewrite(F);
+
+        End;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+              B1 := Relat.FieldByName('CODBARRAS').AsString;
+              P1 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            end;
+
+            if Q = 2 then
+            begin
+              D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 24);
+              B2 := Relat.FieldByName('CODBARRAS').AsString;
+              P2 := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+
+              if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+              begin
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                AssignFile(F, Porta.Text);
+                Rewrite(F);
+              end;
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'Q176,16');
+                WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+                if Preco.Checked then
+                  WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+               if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+               CloseFile(F);
+              end;
+
+              D1 := '';
+              D2 := '';
+              B1 := '';
+              B2 := '';
+              P1 := '';
+              P2 := '';
+              Q := 0;
+
+              Sleep(2000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if Q < 2 then
+        begin
+
+          if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+            AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+            else
+            AssignFile(F, Porta.Text);
+            Rewrite(F);
+          end;
+
+          try
+            WriteLn(F, 'N');
+            WriteLn(F, 'D11');
+            WriteLn(F, 'Q176,16');
+            WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+            WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+            WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+            WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+            if Preco.Checked then
+              WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+            WriteLn(F, 'P1');
+          finally
+            if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+            CloseFile(F);
+          end;
+        end;
+
+        if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '')  then
+        Begin
+        Closefile(F);
+        ShellExecute(handle,'open',PChar(ExtractFilePath(ParamStr(0)) + 'GT800.bat'), '','',SW_HIDE);
+        End;
+
+      end;
+
+      if Modelo.Text = 'G獼dola Individual' then
+      begin
+
+        if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '' then
+        Begin
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'GT800.bat');
+          Rewrite(F);
+          WriteLn(F,'@echo off');
+          WriteLn(F,'ftp -s:login_ftp.txt');
+          CloseFile(F);
+
+          AssignFile(F,ExtractFilePath(ParamStr(0)) + 'etiquetas.txt' );
+          Rewrite(F);
+
+        End;
+
+
+
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+
+            if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
+            begin
+
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+              AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+              else
+              AssignFile(F, Porta.Text);
+              Rewrite(F);
+            end;
+
+            try
+              WriteLn(F, 'N');
+              WriteLn(F, 'Q176,16');
+              WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao') + ','  + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+              WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao 1') + ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao 1') + ',0,3,2,2,N,"' + Copy(Relat.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+              WriteLn(F, 'B'+ LeIni(Arq_Ini,'Zebra','Coluna Barras ')+ ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Barras') + ',0,1,2,9,70,N,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+              WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Preco')+ ',' +LeIni(Arq_Ini, 'Zebra', 'Linha Preco') + ',0,5,2,2,N,"' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat) + '"');
+              WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna R$') + ',' + LeIni(Arq_Ini, 'Zebra', 'Linha R$') + ',0,3,3,3,N,"R$"');
+              WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'Zebra','Linha Descricao Barras') + ',0,1,2,2,R,"' + Relat.FieldByName('CODBARRAS').AsString + '"');
+              WriteLn(F, 'P1');
+            finally
+             if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+             CloseFile(F);
+            end;
+
+            Sleep(2000);
+
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') <> '')  then
+        Begin
+        Closefile(F);
+        ShellExecute(handle,'open',PChar(ExtractFilePath(ParamStr(0)) + 'GT800.bat'), '','',SW_HIDE);
+        End;
+      end;
+    end;
+
+
+
+    if Impressora.Text = 'TSC TTP-244 Plus' then
+    begin
+      D1  := '';
+      D2  := '';
+      B1  := '';
+      B2  := '';
+      P1  := '';
+      P2  := '';
+      ID1 := '';
+      ID2 := '';
+      Q := 1;
+
+      Relat.First;
+      while not Relat.Eof do
+      begin
+        for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+        begin
+          if Q = 1 then
+          begin
+            D1  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 30);
+            B1  := Relat.FieldByName('CODBARRAS').AsString;
+            if Preco.Checked then
+            P1  := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            ID1 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+          end;
+
+          if Q = 2 then
+          begin
+            D2  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 30);
+            B2  := Relat.FieldByName('CODBARRAS').AsString;
+            if Preco.Checked then
+            P2  := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            ID2 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+
+            openport('TSC TTP-244 Plus');
+            clearbuffer;
+            nobackfeed();
+            setup('100', '75', '3', '10', '0', '2', '0');
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(ID1));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(D1));
+//            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(P1));
+            barcode(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda'), LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha C鏚. Barra Etiq. Superior'), 'EAN13', '90', '0', '180', '2', '4', B1);
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Barra Etiq. Superior')), 35, 180, 2, 0, '標楷體', PChar(B1));
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(ID1 + ' - ' + B1));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(D1));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(P1));
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(ID2));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(D2));
+//            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(P2));
+            barcode(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita'), LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha C鏚. Barra Etiq. Superior'), 'EAN13', '90', '0', '180', '2', '4', B2);
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Barra Etiq. Superior')), 35, 180, 2, 0, '標楷體', PChar(B2));
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(ID2 + ' - ' + B2));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(D2));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(P2));
+
+            printlabel('1', '1');
+
+            nobackfeed();
+            clearbuffer;
+            closeport;
+
+            D1  := '';
+            D2  := '';
+            B1  := '';
+            B2  := '';
+            P1  := '';
+            P2  := '';
+            ID1 := '';
+            ID2 := '';
+            Q  := 0;
+
+            Sleep(2000);
+          end;
+
+          if Q = 2 then
+          begin
+            D2  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 30);
+            B2  := Relat.FieldByName('CODBARRAS').AsString;
+            if Preco.Checked then
+            P2  := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            ID2 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+
+            openport('TSC TTP-244 Plus');
+            clearbuffer;
+            nobackfeed();
+            setup('100', '75', '3', '10', '0', '2', '0');
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(ID1));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(D1));
+//            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(P1));
+            barcode(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda'), LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha C鏚. Barra Etiq. Superior'), 'EAN13', '90', '0', '180', '2', '4', B1);
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Barra Etiq. Superior')), 35, 180, 2, 0, '標楷體', PChar(B1));
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(ID1 + ' - ' + B1));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(D1));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(P1));
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(ID2));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(D2));
+//            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(P2));
+            barcode(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita'), LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha C鏚. Barra Etiq. Superior'), 'EAN13', '90', '0', '180', '2', '4', B2);
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Barra Etiq. Superior')), 35, 180, 2, 0, '標楷體', PChar(B2));
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(ID2 + ' - ' + B2));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(D2));
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(P2));
+
+            printlabel('1', '1');
+
+            nobackfeed();
+            clearbuffer;
+            closeport;
+
+            D1  := '';
+            D2  := '';
+            B1  := '';
+            B2  := '';
+            P1  := '';
+            P2  := '';
+            ID1 := '';
+            ID2 := '';
+            Q  := 0;
+
+            Sleep(2000);
+          end;
+
+          Inc(Q);
+        end;
+
+        Application.ProcessMessages;
+        Relat.Next;
+      end;
+
+      if (D1 <> '') or (D2 <> '') then
+      begin
+        openport('TSC TTP-244 Plus');
+        clearbuffer;
+        nobackfeed();
+        setup('100', '75', '3', '10', '0', '2', '0');
+
+        if D1 <> '' then
+        begin
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(ID1));
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(D1));
+//          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(P1));
+          barcode(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda'), LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha C鏚. Barra Etiq. Superior'), 'EAN13', '90', '0', '180', '2', '4', B1);
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Barra Etiq. Superior')), 35, 180, 2, 0, '標楷體', PChar(B1));
+
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(ID1 + ' - ' + B1));
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(D1));
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(P1));
+        end;
+
+        if D2 <> '' then
+        begin
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(ID2));
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(D2));
+//          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Superior')), 22, 180, 2, 0, '標楷體', PChar(P2));
+          barcode(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita'), LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha C鏚. Barra Etiq. Superior'), 'EAN13', '90', '0', '180', '2', '4', B2);
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Barra Etiq. Superior')), 35, 180, 2, 0, '標楷體', PChar(B2));
+
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha ID Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(ID2 + ' - ' + B2));
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Descr. Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(D2));
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'TSC TTP-244 Plus', 'Linha Pre蔞 Etiq. Inferior')), 22, 180, 2, 0, '標楷體', PChar(P2));
+        end;
+
+        printlabel('1', '1');
+
+        nobackfeed();
+        clearbuffer;
+        closeport;
+      end;
+    end;
+
+     if (Impressora.Text = 'Bematech MP-4200(Bobina)') then
+      begin
+
+
+        if FrmPrincipal.ACBrPosPrinter1.Ativo then
+            FrmPrincipal.ACBrPosPrinter1.DESATIVAR;
+
+        FrmPrincipal.ACBrPosPrinter1.ColunasFonteNormal    := 24;
+        FrmPrincipal.ACBrPosPrinter1.porta                 :=  LeIni(Arq_Ini, 'Impressora C鏚igo Barras','Porta');
+
+        FrmPrincipal.ACBrPosPrinter1.CortaPapel := True;
+        FrmPrincipal.ACBrPosPrinter1.Ativar;
+
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          // FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('</zera>');
+          // FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('<barra_mostrar>0</barra_mostrar>');
+          // FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('<barra_largura>0</barra_largura>');
+          // FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('<barra_altura>0</barra_altura>');
+           FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('</ce>');
+
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+
+            FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('</Linha_Simples>');
+            FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('<e><n>' + Relat.FieldByName('DESCRICAO').AsString+ '</e></n>');
+            FrmPrincipal.ACBrPosPrinter1.Imprimirlinha(Relat.FieldByName('CODBARRAS').AsString);
+            FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('<ean13>'+Relat.FieldByName('CODBARRAS').AsString+'</ean13>');
+
+
+            if Preco.Checked then
+            FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('<e><n>' + 'R$' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat)+'</e></n>');
+
+            FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('</Linha_Simples>');
+            FrmPrincipal.ACBrPosPrinter1.Imprimirlinha('</corte_parcial>');
+          end;
+
+            Relat.Next;
+        end;
+
+      End;
+
+
+
+    if Impressora.Text = 'Bematech LB-1000' then
+    begin
+     if (Modelo.Text = '3 Colunas') Then
+     Begin
+        D1  := '';
+        D2  := '';
+        D3  := '';
+        B1  := '';
+        B2  := '';
+        B3  := '';
+        P1  := '';
+        P2  := '';
+        P3  := '';
+        ID1 := '';
+        ID2 := '';
+        ID3 := '';
+        Q   := 1;
+
+        Relat.First;
+        while not Relat.Eof do
+        begin
+          for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+          begin
+            if Q = 1 then
+            begin
+              D1  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B1  := Relat.FieldByName('CODBARRAS').AsString;
+              if Preco.Checked then
+              P1  := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+              ID1 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+            end;
+
+            if Q = 2 then
+            begin
+
+              D2  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B2  := Relat.FieldByName('CODBARRAS').AsString;
+              if Preco.Checked then
+              P2  := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+              ID2 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+            end;
+
+             { openport('Bematech LB-1000');
+              clearbuffer;
+              nobackfeed();
+
+              setup(Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Largura Etiqueta')), Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Altura Etiqueta')), '3', '10', '0', '2', '0');
+
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D1));
+              barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B1));
+              if Preco.Checked then
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')) - 230, 30, 25, 90, 2, 0, '標楷體', PChar(P1));
+
+
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D2));
+              barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B2);
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B2));
+              if Preco.Checked then
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')) - 230, 30, 25, 90, 2, 0, '標楷體', PChar(P2));
+
+              printlabel('1', '1');
+
+              nobackfeed();
+              clearbuffer;
+              closeport;
+
+              D1  := '';
+              D2  := '';
+              D3  := '';
+              B1  := '';
+              B2  := '';
+              B3  := '';
+              P1  := '';
+              P2  := '';
+              P3  := '';
+              ID1 := '';
+              ID2 := '';
+              ID3 := '';
+              Q  := 0;
+
+              Sleep(2000);
+            end; }
+
+            if Q = 3 then
+            begin
+
+              D3  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+              B3  := Relat.FieldByName('CODBARRAS').AsString;
+
+              if Preco.Checked then
+              P3  := 'R$ ' + FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+              ID3 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+
+              openport('Bematech LB-1000');
+              clearbuffer;
+              nobackfeed();
+              setup(Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Largura Etiqueta')), Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Altura Etiqueta')), '3', '10', '0', '2', '0');
+
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D1));
+              barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B1));
+
+              if Preco.Checked then
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')) - 230, 35, 26, 90, 2, 0, '標楷體', PChar(P1));
+
+
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D2));
+              barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B2);
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B2));
+
+              if Preco.Checked then
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')) - 230, 35, 26, 90, 2, 0, '標楷體', PChar(P2));
+
+
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D3));
+              barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B3);
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B3));
+
+              if Preco.Checked then
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')) - 230, 35, 26, 90, 2, 0, '標楷體', PChar(P3));
+
+
+
+              printlabel('1', '1');
+
+              nobackfeed();
+              clearbuffer;
+              closeport;
+
+              D1  := '';
+              D2  := '';
+              D3  := '';
+              B1  := '';
+              B2  := '';
+              B3  := '';
+              P1  := '';
+              P2  := '';
+              P3  := '';
+              ID1 := '';
+              ID2 := '';
+              ID3 := '';
+              Q  := 0;
+
+              Sleep(1000);
+            end;
+
+            Inc(Q);
+          end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+
+        if (D1 <> '') or (D2 <> '') or (D3 <> '') then
+        begin
+          openport('Bematech LB-1000');
+          clearbuffer;
+          nobackfeed();
+          setup(Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Largura Etiqueta')), Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Altura Etiqueta')), '3', '10', '0', '2', '0');
+
+          if D1 <> '' then
+          begin
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D1));
+            barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B1));
+            if Preco.Checked then
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')) - 230, 35, 26, 90, 2, 0, '標楷體', PChar(P1));
+          end;
+
+          if D2 <> '' then
+          begin
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D1));
+            barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B1));
+            if Preco.Checked then
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')) - 230, 35, 26, 90, 2, 0, '標楷體', PChar(P1));
+          end;
+
+          if D3 <> '' then
+          begin
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Etiqueta')), 22, 180, 2, 0, '標楷體', PChar(D1));
+            barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '標楷體', PChar(B1));
+            if Preco.Checked then
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')) - 230, 35, 26, 90, 2, 0, '標楷體', PChar(P1));
+          end;
+
+          printlabel('1', '1');
+
+          nobackfeed();
+          clearbuffer;
+          closeport;
+
+        end;
+     End;
+
+      {if Modelo.Text = 'G獼dola Individual' then
+      begin
+        Relat.First;
+        while not Relat.Eof do
+        begin
+         // for X := 1 to Relat.FieldByName('UNID_COMPRA').AsInteger do
+         // begin
+
+          D1  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 20);
+          D2 := Copy(Relat.FieldByName('DESCRICAO').AsString, 21, 20);
+          B1  := Relat.FieldByName('CODBARRAS').AsString;
+          P1  := FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+          ID1 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+
+          openport('Bematech LB-1000');
+          clearbuffer;
+          nobackfeed();
+          setup('140', '30', '3', '10', '0', '2', '0');
+
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Individual')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Individual')), 40, 180, 2, 0, '標楷體', PChar(D1));
+          windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Individual')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Individual')) - 30, 40, 180, 2, 0, '標楷體', PChar(D2));
+          barcode('800', LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Individual'), 'EAN13','80', '0', '180', '2', '1', B1);
+          windowsfont(800, StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Individual')), 25, 180, 2, 0, '標楷體', PChar(B1));
+          windowsfont(400, 155, 140, 180, 2, 0, '標楷體', PChar(P1));
+          windowsfont(500 + (Length(P1) * 5), 110, 60, 180, 2, 0, '標楷體', 'R$');
+
+
+          printlabel('1', '1');
+
+          nobackfeed();
+          clearbuffer;
+          closeport;
+          //end;
+
+          Application.ProcessMessages;
+          Relat.Next;
+        end;
+      end;}
+
+        if Modelo.Text = 'G獼dola Individual' then
+        begin
+          Relat.First;
+          while not Relat.Eof do
+          begin
+           // for X := 1 to IQuery.FieldByName('UNID_COMPRA').AsInteger do
+           // begin
+
+            D1  := Copy(Relat.FieldByName('DESCRICAO').AsString, 1, 30);
+            D2  := Copy(Relat.FieldByName('DESCRICAO').AsString, 31, 30);
+            B1  := Relat.FieldByName('CODBARRAS').AsString;
+            P1  := FormatFloat('#,##0.00', Relat.FieldByName('PRECO_VENDA').AsFloat);
+            ID1 := StrZero(Relat.FieldByName('INTEGRACAO').AsString, 6, 0);
+
+
+            openport('Bematech LB-1000');
+
+
+            clearbuffer;
+            nobackfeed();
+            setup(Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Largura Etiqueta Individual')), Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Altura Etiqueta Individual')), '3', '10', '0', '2', '0');
+
+
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Individual')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Individual')), 40, 180, 2, 0, '標楷體', PChar(D1));
+
+            IF D2 <> '' then
+            windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Individual')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descri誽o Individual')) - 30, 40, 180, 2, 0, '標楷體', PChar(D2));
+
+            barcode('800', LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha C鏚. Barra Individual'), 'EAN13','80', '0', '180', '2', '1', B1);
+            windowsfont(800, StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Individual')), 25, 180, 2, 0, '標楷體', PChar(B1));
+            windowsfont(400, 155, 140, 180, 2, 0, '標楷體', PChar(P1));
+            windowsfont(500 + (Length(P1) * 5), 110, 60, 180, 2, 0, '標楷體', 'R$');
+            windowsfont(700, StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Individual')) - 28, 20, 180, 2, 0, '標楷體', 'Eficaz Automa誽o');
+
+            printlabel('1', '1');
+
+            nobackfeed();
+            clearbuffer;
+            closeport;
+            //end;
+            Application.ProcessMessages;
+            Relat.Next;
+          end;
+        end;
+    end;
+
+    if Impressora.Text = 'Laser/Jato de Tinta' then
+    begin
+      Application.CreateForm(TFrmEtiquetas_Laser, FrmEtiquetas_Laser);
+
+      Relat.First;
+      while not Relat.Eof do
+      begin
+        Qtde := Relat.FieldByName('UNID_COMPRA').AsInteger;
+
+        if Qtde = 0 then
+          Qtde := 1;
+
+        for X := 1 to Qtde do
+        begin
+
+          FrmEtiquetas_Laser.AcbrBarcode1.Text := Relat.FieldByName('CODBARRAS').AsString;
+          FrmEtiquetas_Laser.AcbrBarcode1. DrawBarcode(FrmEtiquetas_Laser.Image1.Canvas);
+          //GerarCodigo(Relat.FieldByName('CODBARRAS').AsString,FrmEtiquetas_Laser.Image1.Canvas);
+         // FrmEtiquetas_Laser.AsBarcode1.Text := FrmEtiquetas_Laser.Table_Temp.FieldByName('COD_BARRA').AsString;
+         // FrmEtiquetas_Laser.AsBarcode1.DrawBarcode(FrmEtiquetas_Laser.Image1.Canvas);
+          FrmEtiquetas_Laser.Table_Temp.Append;
+          FrmEtiquetas_Laser.Table_Temp.FieldByName('COD_BARRA').AsString    := Relat.FieldByName('CODBARRAS').AsString;
+          FrmEtiquetas_Laser.Table_Temp.FieldByName('DESCRICAO').AsString    := Relat.FieldByName('DESCRICAO').AsString;
+          FrmEtiquetas_Laser.Table_Temp.FieldByName('PRECO_VAREJO').AsString := Relat.FieldByName('PRECO_VENDA').AsString;
+          FrmEtiquetas_Laser.Table_Temp.FieldByName('IMAGEM').Assign(FrmEtiquetas_Laser.Image1.Picture);
+          FrmEtiquetas_Laser.Table_Temp.FieldByName('R$').AsString           :=  'R$';
+          FrmEtiquetas_Laser.Table_Temp.Post;
+        end;
+
+        Application.ProcessMessages;
+        Relat.Next;
+      end;
+
+      try
+        FrmEtiquetas_Laser.ShowModal;
+      finally
+        FrmEtiquetas_Laser.Release;
+      end;
+    end;
+  finally
+
+  end;
+end;
+
+procedure TFrmEtiq_Zebra.btnProdutoClick(Sender: TObject);
+begin
+  try
+    Codigo.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, StrToInt(Codigo.Text));
+  except
+    Codigo.Value := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, 0);
+  end;
+end;
+
+procedure TFrmEtiq_Zebra.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmEtiq_Zebra.btnSelecionaClick(Sender: TObject);
+begin
+  Relat.EmptyDataSet;
+  if CheckBox1.Checked then
+  begin
+    QEstoque.SQL.Clear;
+    QEstoque.SQL.Add('SELECT * FROM PRODUTOS');
+    QEstoque.SQL.Add('WHERE COPIAS_ETIQUETA > 0');
+    QEstoque.Prepare;
+    QEstoque.Open;
+    QEstoque.First;
+    while not QEstoque.Eof do
+    begin
+      Relat.Append;
+      Relat.FieldByName('CODBARRAS').AsString    := QEstoque.FieldByName('COD_BARRA').AsString;
+      Relat.FieldByName('INTEGRACAO').AsString   := QEstoque.FieldByName('PRODUTO_ID').AsString;
+      Relat.FieldByName('DESCRICAO').AsString    := QEstoque.FieldByName('DESCRICAO').AsString;
+      Relat.FieldByName('PRECO_VENDA').AsFloat   := QEstoque.FieldByName('PRECO_VAREJO').AsFloat;
+      Relat.FieldByName('PRECO_PRAZO').AsFloat   := QEstoque.FieldByName('PRECO_PRAZO').AsFloat;
+      Relat.FieldByName('PRECO_ATACADO').AsFloat := QEstoque.FieldByName('PRECO_ATACADO').AsFloat;
+      Relat.FieldByName('QUANT_MAXIMA').AsFloat  := QEstoque.FieldByName('QUANT_MAXIMA').AsFloat;
+      Relat.FieldByName('UNID_COMPRA').AsInteger := QEstoque.FieldByName('COPIAS_ETIQUETA').AsInteger;
+
+      Relat.Post;
+      Application.ProcessMessages;
+      QEstoque.Next;
+    end;
+  end;
+
+  if Novos.ItemIndex = 1 then
+  begin
+    QEstoque.Sql.Clear;
+    QEstoque.Sql.Add('SELECT * FROM PRODUTOS');
+    QEstoque.Sql.Add('WHERE');
+
+    if Codigo.Value > 0 then
+    begin
+      QEstoque.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+      QEstoque.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Codigo.Text);
+    end
+    else
+    begin
+      QEstoque.Sql.Add('((DT_COMPRA BETWEEN :DT_INICIAL AND :DT_FINAL) OR (DT_ATUALIZACAO BETWEEN :DT_INICIAL AND :DT_FINAL))');
+
+      QEstoque.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+      QEstoque.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+    end;
+
+    if Start_Wait.Text <> '' then
+    begin
+      QEstoque.Sql.Add('AND (DESCRICAO LIKE :DESCRICAO)');
+
+      QEstoque.ParamByName('DESCRICAO').AsString := Start_Wait.Text + '%';
+    end;
+
+    QEstOque.Sql.Add('AND (STATUS = :STATUS)');
+
+    QEstoque.ParamByName('STATUS').AsString := 'A';
+  end
+  else
+  begin
+    QEstoque.Sql.Clear;
+    QEstoque.Sql.Add('SELECT * FROM PRODUTOS');
+    QEstoque.Sql.Add('WHERE');
+
+    if Codigo.Value > 0 then
+    begin
+      QEstoque.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+      QEstoque.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Codigo.Text);
+    end
+    else
+    begin
+      QEstoque.Sql.Add('((DT_PRECO BETWEEN :DT_INICIAL AND :DT_FINAL))');
+
+      QEstoque.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+      QEstoque.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+    end;
+
+    if Posicao.Checked then
+      QEstoque.Sql.Add('AND (QUANTIDADE_C > 0)');
+
+    if Start_Wait.Text <> '' then
+    begin
+      QEstoque.Sql.Add('AND (DESCRICAO LIKE :DESCRICAO)');
+
+      QEstoque.ParamByName('DESCRICAO').AsString := Start_Wait.Text + '%';
+    end;
+
+    QEstOque.Sql.Add('AND (STATUS = :STATUS)');
+
+    QEstoque.ParamByName('STATUS').AsString := 'A';
+  end;
+
+  if Entrada_id.Value > 0 then
+  Begin
+   if not QFornecedor.IsEmpty then
+   Begin
+    QEstoque.SQL.Clear;
+    QEstoque.SQL.Add('SELECT PRODUTOS.* ,TRANSACOES.TRANSACAO_ID FROM TRANSITENS');
+    QEstoque.SQL.Add('INNER JOIN TRANSACOES ON TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID');
+    QEstoque.SQL.Add('INNER JOIN PRODUTOS ON PRODUTOS.PRODUTO_ID = TRANSITENS.PRODUTO_ID');
+    QEstoque.SQL.Add('WHERE CONDUTA = :CONDUTA AND DEPTO = :DEPTO AND TRANSACOES.TRANSACAO_ID = :TRANSACAO_ID');
+
+    QEstoque.ParamByName('CONDUTA').AsString := '02';
+    QEstoque.ParamByName('DEPTO').AsString   := '07';
+    QEstoque.ParamByName('TRANSACAO_ID').AsInteger := StrToInt(Entrada_id.Text);
+    QEstoque.Sql.Add('ORDER BY TRANSITENS.DESCRICAO')
+
+   End;
+  End
+  Else
+  QEstoque.Sql.Add('ORDER BY DESCRICAO');
+
+  QEstoque.Prepare;
+  QEstoque.Open;
+
+
+  QEstoque.First;
+  while not QEstoque.Eof do
+  begin
+   // if not Digito(QEstoque.FieldByName('COD_BARRA').AsString) then
+   //   Application.MessageBox(PChar('O item ' + QEstoque.FieldByName('DESCRICAO').AsString + ' n緌 possui um C鏚igo de Barras v嫮ido'), PChar(Msg_Title), mb_IconWarning)
+   // else
+    begin
+
+      Relat.Append;
+      Relat.FieldByName('CODBARRAS').AsString    := QEstoque.FieldByName('COD_BARRA').AsString;
+      Relat.FieldByName('INTEGRACAO').AsString   := QEstoque.FieldByName('PRODUTO_ID').AsString;
+      Relat.FieldByName('DESCRICAO').AsString    := QEstoque.FieldByName('DESCRICAO').AsString;
+      Relat.FieldByName('PRECO_VENDA').AsFloat   := QEstoque.FieldByName('PRECO_VAREJO').AsFloat;
+      Relat.FieldByName('PRECO_PRAZO').AsFloat   := QEstoque.FieldByName('PRECO_PRAZO').AsFloat;
+      Relat.FieldByName('PRECO_ATACADO').AsFloat := QEstoque.FieldByName('PRECO_ATACADO').AsFloat;
+      Relat.FieldByName('QUANT_MAXIMA').AsFloat  := QEstoque.FieldByName('QUANT_MAXIMA').AsFloat;
+
+
+      if Novos.ItemIndex = 1 then
+        Relat.FieldByName('UNID_COMPRA').AsInteger := QEstoque.FieldByName('ULT_QUANTIDADE').AsInteger
+      else
+        Relat.FieldByName('UNID_COMPRA').AsInteger := QEstoque.FieldByName('QUANTIDADE_G').AsInteger;
+
+      if Modelo.Text = 'G獼dola Individual' then
+        Relat.FieldByName('UNID_COMPRA').AsInteger := 1;
+
+      Relat.Post;
+    end;
+
+    Application.ProcessMessages;
+    QEstoque.Next;
+  end;
+
+  if Relat.IsEmpty then
+    Application.MessageBox('Sem produtos para os par滵etros informados', PChar(Msg_Title), mb_IconStop);
+
+  Codigo.Value := 0;
+  Codigo.SetFocus;
+end;
+
+procedure TFrmEtiq_Zebra.btnTransacaoClick(Sender: TObject);
+begin
+  try
+    ENTRADA_ID.Value := GetConsulta('TRANS_COMPRA', 0, 0, StrToInt(ENTRADA_ID.Text));
+  except
+    ENTRADA_ID.Value := GetConsulta('TRANS_COMPRA', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmEtiq_Zebra.CodigoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if (Key = VK_F7) and (Sender = Codigo)then
+    btnProdutoClick(Sender);
+
+   if (Key = VK_F7) and (Sender = ENTRADA_ID)then
+   btnTransacaoClick(Sender);
+end;
+
+procedure TFrmEtiq_Zebra.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+Cont:Integer;
+begin
+if (Key = Vk_F4)  then
+   begin
+    DataEstoque.DataSet.Delete;
+    DBGrid1.Refresh;
+   end;
+
+
+end;
+
+procedure TFrmEtiq_Zebra.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+end;
+
+procedure TFrmEtiq_Zebra.Entrada_IdExit(Sender: TObject);
+begin
+  try
+   QFornecedor.SQL.Clear;
+   QFornecedor.SQL.Add('SELECT TRANSACOES.TRANSACAO_ID, FORNECEDORES.NOME FROM TRANSACOES');
+   QFornecedor.SQL.Add('INNER JOIN FORNECEDORES ON FORNECEDORES.FORNECEDOR_ID = TRANSACOES.FORNECEDOR_ID');
+   QFornecedor.SQL.Add('WHERE CONDUTA = :CONDUTA AND DEPTO =:DEPTO AND TRANSACAO_ID = :TRANSACAO_ID');
+   QFornecedor.ParamByName('CONDUTA').AsString:= '02';
+   QFornecedor.ParamByName('DEPTO').AsString  := '07';
+   QFornecedor.ParamByName('TRANSACAO_ID').AsInteger := StrToint(Entrada_id.Text);
+   QFornecedor.Prepare;
+   QFornecedor.Open();
+  except
+
+  end;
+
+end;
+
+procedure TFrmEtiq_Zebra.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  QEstoque.SQL.Clear;
+  QEstoque.SQL.Add('SELECT * FROM PRODUTOS');
+  QEstoque.SQL.Add('WHERE COPIAS_ETIQUETA > 0');
+  QEstoque.Prepare;
+  QEstoque.Open;
+
+  if (not QEstoque.IsEmpty) and (Application.MessageBox('Deseja manter as impress髊s enviadas pelo aplicativo?' + #13 + 'Recomendado manter caso precise enviar a mesma impress緌 novamente.', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) <> IDYES) then
+  begin
+    QEstoque.SQL.Clear;
+    QEstoque.SQL.Add('UPDATE PRODUTOS SET COPIAS_ETIQUETA = 0 WHERE COPIAS_ETIQUETA > 0');
+    QEstoque.Prepare;
+    QEstoque.Execute;
+  end;
+
+  Relat.Close;
+  Action := caFree;
+end;
+
+procedure TFrmEtiq_Zebra.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := date;
+  Dtmai.Date := date;
+
+  if LeIni(Arq_Ini, 'Impressora C鏚igo Barras','Impressora') <> '' then
+  Begin
+  Impressora.Text      := LeIni(Arq_Ini, 'Impressora C鏚igo Barras','Impressora');
+  Modelo.Text          := LeIni(Arq_Ini, 'Impressora C鏚igo Barras','Modelo');
+  Porta.Text           := LeIni(Arq_Ini, 'Impressora C鏚igo Barras','Porta');
+
+  if LeIni(Arq_Ini, 'Impressora C鏚igo Barras','Imprime Pre蔞') = 'True' then
+      Preco.Checked := True
+    else
+      Preco.Checked := False;
+
+  if LeIni(Arq_Ini, 'Impressora C鏚igo Barras','Posi誽o Pre蔞') = 'True' then
+      Posicao.Checked := True
+    else
+      Posicao.Checked := False;
+
+  End;
+
+end;
+
+procedure TFrmEtiq_Zebra.FormShow(Sender: TObject);
+var
+Temp_Name: String;
+begin
+  with Relat do
+  begin
+
+    Temp_Name    := Copy(TimeToStr(time), 1, 2) + Copy(TimeToStr(time), 4, 2) + Copy(TimeToStr(time), 7, 2);
+
+
+    with FieldDefs do
+    begin
+      Clear;
+      Add('CODBARRAS', ftString, 13, False);
+      Add('INTEGRACAO', ftInteger, 0, False);
+      Add('DESCRICAO', ftString, 40, False);
+      Add('PRECO_VENDA', ftFloat, 0, False);
+      Add('PRECO_PRAZO', ftFloat, 0, False);
+      Add('UNID_COMPRA', ftInteger, 0, False);
+      Add('PRECO_ATACADO', ftFloat, 0, False);
+      Add('QUANT_MAXIMA', ftFloat, 0, False);
+    end;
+    with IndexDefs do
+    begin
+      Clear;
+    end;
+    Open;
+  end;
+end;
+
+procedure TFrmEtiq_Zebra.ImpressoraChange(Sender: TObject);
+begin
+  if impressora.text = 'Bematech MP-4200(Bobina)'Then
+  Begin
+  modelo.Text := 'Bobina';
+  Modelo.Enabled := False;
+  End
+  Else
+  Begin
+  Modelo.Enabled := True;
+  modelo.Text := '';
+  End;
+
+end;
+
+procedure TFrmEtiq_Zebra.RelatAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(Relat.FieldByName('PRECO_VENDA')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmEtiq_Zebra.Start_WaitKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+end.

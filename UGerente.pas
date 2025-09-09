@@ -1,0 +1,133 @@
+unit UGerente;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, DB, ExtCtrls, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.Imaging.jpeg;
+
+type
+  TFrmGerente = class(TForm)
+    Panel1: TPanel;
+    QTeclado: TFDQuery;
+    QOperador: TFDQuery;
+    Label1: TLabel;
+    GetOperador: TEdit;
+    procedure GetOperadorKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure GetOperadorKeyPress(Sender: TObject; var Key: Char);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    Tipo: string;
+    procedure Search_Teclado(Key: Word);
+    procedure Search_Operador(Operador: String);
+  end;
+
+var
+  FrmGerente: TFrmGerente;
+
+  // procedure Menu_Fiscal_PAF_ECF; far; external 'Supervisor.Dll';
+  // procedure Menu_Fiscal_PAF_ECF2; far; external 'Supervisor2.Dll';
+
+implementation
+
+uses
+  UData, UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmGerente.Search_Teclado(Key: Word);
+begin
+
+  QTeclado.Sql.Clear;
+  QTeclado.Sql.Add('SELECT * FROM TECLADO');
+  QTeclado.Sql.Add('WHERE');
+  QTeclado.Sql.Add('(TECLA = :TECLA)');
+
+  QTeclado.ParamByName('TECLA').AsInteger := Key;
+
+  QTeclado.Prepare;
+  QTeclado.Open;
+
+end;
+
+procedure TFrmGerente.Search_Operador(Operador: String);
+begin
+  QOperador.Sql.Clear;
+  QOperador.Sql.Add('SELECT * FROM OPERADORES');
+  QOperador.Sql.Add('WHERE');
+  QOperador.Sql.Add('(OPERADOR_ID = :OPERADOR_ID)');
+
+  QOperador.ParamByName('OPERADOR_ID').AsString := Copy(Operador, 1, 14);
+
+  QOperador.Prepare;
+  QOperador.Open;
+end;
+
+procedure TFrmGerente.FormCreate(Sender: TObject);
+begin
+  //DrawControl(GetOperador);
+  GetOperador.Text := '';
+end;
+
+procedure TFrmGerente.FormShow(Sender: TObject);
+begin
+  Label1.Caption := 'Digite a senha';
+  GetOperador.Text := '';
+end;
+
+procedure TFrmGerente.GetOperadorKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+
+  Search_Teclado(Key);
+
+  if QTeclado.IsEmpty then
+    exit;
+
+  if QTeclado.FieldByName('CONTEUDO').AsString <> '' then
+  begin
+    if Key in [96 .. 105] then
+    else
+      GetOperador.Text := GetOperador.Text + QTeclado.FieldByName
+        ('CONTEUDO').AsString;
+  end;
+
+  if (QTeclado.FieldByName('FUNCAO').AsString = 'PROD') and
+    (GetOperador.Text <> '') then
+  begin
+
+    Search_Operador(StrZero(GetOperador.Text, 14, 0));
+
+    if (not QOperador.IsEmpty) then
+      FrmGerente.ModalResult := mrOK
+    else
+      Label1.Caption := 'Senha inválida.';
+  end;
+
+  if QTeclado.FieldByName('FUNCAO').AsString = 'ESC' then
+    FrmGerente.ModalResult := mrCancel;
+
+  if QTeclado.FieldByName('FUNCAO').AsString = 'LIMPA' then
+  begin
+    Label1.Caption := 'Digite a senha';
+    GetOperador.Text := '';
+  end;
+end;
+
+procedure TFrmGerente.GetOperadorKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key in ['0' .. '9'] then
+  else
+   Key := #0;
+end;
+
+end.

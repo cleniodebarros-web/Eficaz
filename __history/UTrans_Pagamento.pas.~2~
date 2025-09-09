@@ -1,0 +1,1043 @@
+unit UTrans_Pagamento;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, DBCtrls, rxCurrEdit, rxToolEdit,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmTrans_Pagamento = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    BALANCO: TComboBox;
+    Label2: TLabel;
+    Label9: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label6: TLabel;
+    Label18: TLabel;
+    Label11: TLabel;
+    DT_TRANS: TDateEdit;
+    EMPRESA_ID: TCurrencyEdit;
+    CONTA_ID: TCurrencyEdit;
+    HISTORICO: TEdit;
+    DataEmpresa: TDataSource;
+    DataBanco: TDataSource;
+    DBText1: TDBText;
+    DBText3: TDBText;
+    CONDUTA: TEdit;
+    DEPTO: TEdit;
+    TPCTB: TEdit;
+    Label12: TLabel;
+    BANCO_ID: TCurrencyEdit;
+    DBText4: TDBText;
+    btnConta: TSpeedButton;
+    btnBanco: TSpeedButton;
+    VALOR: TRxCalcEdit;
+    DataConta: TDataSource;
+    DT_MOVIMENTO: TDateEdit;
+    Dias: TTabSet;
+    AUTORIZ_ID: TCurrencyEdit;
+    Label7: TLabel;
+    Label1: TLabel;
+    COMPLEMENTO: TEdit;
+    FORNECEDOR_ID: TCurrencyEdit;
+    VALOR_PARCELA: TRxCalcEdit;
+    PARCELA_ID: TEdit;
+    SERIE: TEdit;
+    btnPesquisa: TBitBtn;
+    ENTRADA_ID: TCurrencyEdit;
+    DataFluxo_Caixa: TDataSource;
+    Label8: TLabel;
+    FLUXO_CAIXA_ID: TCurrencyEdit;
+    btnFluxoCaixa: TSpeedButton;
+    DBText6: TDBText;
+    NUM_DOC: TEdit;
+    Label3: TLabel;
+    Label10: TLabel;
+    Label13: TLabel;
+    DT_ENT_SAI: TDateEdit;
+    Label14: TLabel;
+    DBText2: TDBText;
+    DataFornecedor: TDataSource;
+    Lbl_Funcionario: TLabel;
+    QTabela: TFDQuery;
+    IQuery: TFDQuery;
+    QEmpresa: TFDQuery;
+    QBanco: TFDQuery;
+    QFluxo_Caixa: TFDQuery;
+    QConta: TFDQuery;
+    QFornecedor: TFDQuery;
+    QRel: TFDQuery;
+    hora: TEdit;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure BANCO_IDExit(Sender: TObject);
+    procedure btnContaClick(Sender: TObject);
+    procedure btnBancoClick(Sender: TObject);
+    procedure CONTA_IDExit(Sender: TObject);
+    procedure DiasClick(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ConsultaShow(Sender: TObject);
+    procedure DT_TRANSKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FLUXO_CAIXA_IDExit(Sender: TObject);
+    procedure btnFluxoCaixaClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure DT_TRANSEnter(Sender: TObject);
+    procedure DT_TRANSExit(Sender: TObject);
+    procedure QTabelaAfterOpen(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    function Validacao: Boolean;
+  end;
+
+var
+  FrmTrans_Pagamento: TFrmTrans_Pagamento;
+  Operacao: String;
+  ID: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, USeleciona_Credores, UPesquisa;
+
+{$R *.dfm}
+
+procedure TFrmTrans_Pagamento.ConsultaShow(Sender: TObject);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+    btnDiscardClick(Self);
+end;
+
+procedure TFrmTrans_Pagamento.CONTA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Conta');
+end;
+
+procedure TFrmTrans_Pagamento.BANCO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Banco');
+end;
+
+procedure TFrmTrans_Pagamento.Botoes_Editing;
+begin
+  btnPrior.Enabled      := False;
+  btnNext.Enabled       := False;
+  btnInsert.Enabled     := False;
+  btnDelete.Enabled     := False;
+  btnSave.Enabled       := True;
+  btnDiscard.Enabled    := True;
+  btnRetorna.Enabled    := False;
+  btnConta.Enabled      := True;
+  btnBanco.Enabled      := True;
+  btnPesquisa.Enabled   := False;
+  btnFluxoCaixa.Enabled := True;
+end;
+
+procedure TFrmTrans_Pagamento.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+    btnDelete.Enabled := True
+  else
+    btnDelete.Enabled := False;
+
+  btnSave.Enabled       := False;
+  btnDiscard.Enabled    := False;
+  btnRetorna.Enabled    := True;
+  btnConta.Enabled      := False;
+  btnBanco.Enabled      := False;
+  btnPesquisa.Enabled   := True;
+  btnFluxoCaixa.Enabled := False;
+end;
+
+procedure TFrmTrans_Pagamento.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA_ID.Text <> '') then
+  begin
+    QEmpresa.Close;
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Banco')) and (BANCO_ID.Text <> '') then
+  begin
+    QBanco.Close;
+    QBanco.ParamByName('BANCO_ID').AsInteger := StrToInt(BANCO_ID.Text);
+    QBanco.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+    QBanco.Prepare;
+    QBanco.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Conta')) and (CONTA_ID.Text <> '') then
+  begin
+    QConta.Close;
+    QConta.ParamByName('TABELA_ID').AsInteger := StrToInt(CONTA_ID.Text);
+    QConta.Prepare;
+    QConta.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Fluxo Caixa')) and (FLUXO_CAIXA_ID.Text <> '') then
+  begin
+    QFluxo_Caixa.Close;
+    QFluxo_Caixa.ParamByName('FLUXO_CAIXA_ID').AsInteger := StrToInt(FLUXO_CAIXA_ID.Text);
+    QFluxo_Caixa.Prepare;
+    QFluxo_Caixa.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Fornecedor')) and (Fornecedor_ID.Text <> '') then
+  begin
+    QFornecedor.Close;
+    QFornecedor.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(Fornecedor_ID.Text);
+    QFornecedor.Prepare;
+    QFornecedor.Open;
+  end;
+
+end;
+
+procedure TFrmTrans_Pagamento.DiasClick(Sender: TObject);
+begin
+  if Dias.TabIndex <> (Dias.Tabs.Count - 1) then
+  begin
+    CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+    CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := StrToDate(StrZero(IntToStr(Dias.TabIndex + 1), 2, 0) + '/' + Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 7));
+    QTabela.ParamByName('CONDUTA').AsString        := '08';
+    QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end
+  else
+  begin
+    CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO <= :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+    CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QTabela.ParamByName('CONDUTA').AsString        := '08';
+    QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmTrans_Pagamento.DT_TRANSEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmTrans_Pagamento.DT_TRANSExit(Sender: TObject);
+begin
+DT_ENT_SAI.Date := DT_TRANS.Date;
+end;
+
+procedure TFrmTrans_Pagamento.DT_TRANSKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   // Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmTrans_Pagamento.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TRxCalcEdit(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO TRANSACOES(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'INSERT INTO TRANSACOES(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TRxCalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+ 
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxcalcEdit(Temp).Value;
+   If  (FrmPrincipal.Config.FieldByName('AUDITORIA').AsString = 'True') Then
+    Begin
+
+      if Temp is TEdit Then  //or (Temp is TComboBox) or (Temp is TCurrencyEdit) or (Temp is TRxCalcEdit) or (Temp is TDateEdit) then
+      Begin
+       if (QTabela.FieldbyName(TEdit(Temp).Name).AsString <> TEdit(Temp).Text)  Then
+       GravarLog('PAGAMENTO','INSERIR',DateToStr(date),TimeToStr(time),TEdit(Temp).Name,TEdit(Temp).Text,QTabela.FieldbyName(TEdit(Temp).Name).AsString,FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+      End;
+      if Temp is TComboBox   Then
+      Begin
+       if (QTabela.FieldbyName(TComboBox(Temp).Name).AsString <> TComboBox(Temp).Text)  Then
+       GravarLog('PAGAMENTO','INSERIR',DateToStr(date),TimeToStr(time),TComboBox(Temp).Name,TComboBox(Temp).Text,QTabela.FieldbyName(TComboBox(Temp).Name).AsString,FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+      End;
+      if Temp is TCurrencyEdit   Then
+      Begin
+       if  FloatToStr(QTabela.FieldbyName(TCurrencyEdit(Temp).Name).AsFloat) <> (TCurrencyEdit(Temp).Text) Then
+       GravarLog('PAGAMENTO','INSERIR',DateToStr(date),TimeToStr(time),TCurrencyEdit(Temp).Name,FloatToStr(TCurrencyEdit(Temp).Value),FloatToStr(QTabela.FieldbyName(TCurrencyEdit(Temp).Name).AsFloat),FrmData.QAcesso.FieldByName('FORNECEDOR_ID').AsInteger,QTabela.FieldByName('CLIENTE_ID').AsInteger);
+      End;
+      if Temp is TRxCalcEdit   Then
+      Begin
+       if  FloatToStr(QTabela.FieldbyName(TRxCalcEdit(Temp).Name).AsFloat) <> (TRxCalcEdit(Temp).Text)  Then
+       GravarLog('PAGAMENTO','INSERIR',DateToStr(date),TimeToStr(time),TRxCalcEdit(Temp).Name,TRxCalcEdit(Temp).Text,QTabela.FieldbyName(TRxCalcEdit(Temp).Name).AsString,FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+      End;
+      if Temp is TDateEdit   Then
+      Begin
+       if (QTabela.FieldbyName(TDateEdit(Temp).Name).AsDateTime <> TDateEdit(Temp).Date) Then
+       GravarLog('PAGAMENTO','INSERIR',DateToStr(date),TimeToStr(time),TDateEdit(Temp).Name,DateToStr(TDateEdit(Temp).Date),DateToStr(QTabela.FieldbyName(TDateEdit(Temp).Name).AsDateTime),FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+      End;
+
+    end;
+
+
+
+
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  Habilitar(False);
+end;
+
+procedure TFrmTrans_Pagamento.EMPRESA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Empresa');
+end;
+
+procedure TFrmTrans_Pagamento.EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = CONTA_ID) then
+    btnContaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = BANCO_ID) then
+    btnBancoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = FLUXO_CAIXA_ID) then
+    btnFluxoCaixaClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmTrans_Pagamento.Validacao: Boolean;
+begin
+  Result := False;
+
+  BANCO_ID.Color       := clWindow;
+  EMPRESA_ID.Color     := clWindow;
+  CONTA_ID.Color       := clWindow;
+  VALOR.Color          := clWindow;
+  FLUXO_CAIXA_ID.Color := clWindow;
+  DT_TRANS.Color       := clWindow;
+
+  if DT_TRANS.Date <= FrmPrincipal.QEmpresa.FieldByName('DT_ULT_FOLHA').AsDateTime then
+  begin
+    Application.MessageBox('Data inválida. Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    DT_TRANS.Color := clYellow;
+    DT_TRANS.SetFocus;
+    exit;
+  end;
+
+  if QEmpresa.IsEmpty then
+  begin
+    Application.MessageBox('Empresa inexistente', PChar(Msg_Title), mb_IconStop);
+    EMPRESA_ID.Color := clYellow;
+    EMPRESA_ID.SetFocus;
+    exit;
+  end;
+
+  if QBanco.IsEmpty then
+  begin
+    Application.MessageBox('Caixa/Banco inexistente', PChar(Msg_Title), mb_IconStop);
+    BANCO_ID.Color := clYellow;
+    BANCO_ID.SetFocus;
+    exit;
+  end;
+
+  if not Existe_Plano(QBanco.FieldByName('COD_CONTABIL').AsString) then
+  begin
+    Application.MessageBox('Caixa/Banco inexistente no plano de contas. Gere o plano de contas novamente', PChar(Msg_Title), mb_IconStop);
+    BANCO_ID.Color := clYellow;
+    BANCO_ID.SetFocus;
+    exit;
+  end;
+
+  if VALOR.Value <= 0 then
+  begin
+    Application.MessageBox('Valor inválido', PChar(Msg_Title), mb_IconStop);
+    VALOR.Color := clYellow;
+    VALOR.SetFocus;
+    exit;
+  end;
+
+  if (BALANCO.Text <> 'LIBERADO') and (BALANCO.Text <> 'BLOQUEADO') then
+  begin
+    Application.MessageBox('Status inválido', PChar(Msg_Title), mb_IconStop);
+    BALANCO.Color := clYellow;
+    BALANCO.SetFocus;
+    exit;
+  end;
+
+  if VALOR.Value < VALOR_PARCELA.Value then
+  begin
+    if Application.MessageBox('O pagamento da parcela é parcial?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton1) = idYes then
+      SERIE.Text := 'P'
+    else
+    begin
+      SERIE.Text := 'D';
+
+      if QConta.IsEmpty then
+      begin
+        Application.MessageBox('Campo Conta Desconto está incompleto', PChar(Msg_Title), mb_IconStop);
+        CONTA_ID.Color := clYellow;
+        CONTA_ID.SetFocus;
+        exit;
+      end;
+    end;
+  end;
+
+  if VALOR.Value > VALOR_PARCELA.Value then
+  begin
+    SERIE.Text := 'J';
+
+    if QConta.IsEmpty then
+    begin
+      Application.MessageBox('Campo Juros está incompleto', PChar(Msg_Title), mb_IconStop);
+      CONTA_ID.Color := clYellow;
+      CONTA_ID.SetFocus;
+      exit;
+    end;
+  end;
+
+  if (QFluxo_Caixa.IsEmpty) or (Copy(QFluxo_Caixa.FieldByName('DESCRICAO').AsString, 1, 3) <> '(-)') then
+  begin
+    Application.MessageBox('Fluxo de Caixa inexistente ou inválido', PChar(Msg_Title), mb_IconStop);
+    FLUXO_CAIXA_ID.Color := clYellow;
+    FLUXO_CAIXA_ID.SetFocus;
+    exit;
+  end;
+
+  Result := True;
+end;
+
+procedure TFrmTrans_Pagamento.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Pagamento.QTabelaAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QTabela.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmTrans_Pagamento.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := 0;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := QTabela.FieldByName(TDateEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+    end;
+  end;
+
+  if QTabela.FieldByName('FUNCIONARIO_ID').AsInteger > 0 then
+  begin
+   QRel.SQL.Clear;
+   QRel.SQL.Add('SELECT NOME FROM FUNCIONARIOS WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+   QRel.ParamByName('FUNCIONARIO_ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+   QRel.Prepare;
+   QRel.Open;
+
+    Lbl_Funcionario.Visible := True;
+    Lbl_Funcionario.Caption := 'Funcionário: ' + Copy(QREl.FieldByName('NOME').AsString,1,15);
+
+  end
+  Else
+  Begin
+    Lbl_Funcionario.Visible := False;
+    Lbl_Funcionario.Caption := '';
+  End;
+
+
+  DetailSearch('');
+
+  CONDUTA.Text := '08';
+  DEPTO.Text   := '';
+  TPCTB.Text   := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+end;
+
+procedure TFrmTrans_Pagamento.btnBancoClick(Sender: TObject);
+begin
+  try
+    BANCO_ID.Value := GetConsulta('BANCOS', 0, 0, StrToInt(BANCO_ID.Text));
+  except
+    BANCO_ID.Value := GetConsulta('BANCOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.btnContaClick(Sender: TObject);
+begin
+  try
+    CONTA_ID.Value := GetConsulta('PLANO', 0, 0, StrToInt(CONTA_ID.Text));
+  except
+    CONTA_ID.Value := GetConsulta('PLANO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.btnDeleteClick(Sender: TObject);
+VAR
+I: Integer;
+Temp: TComponent;
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if QTabela.FieldByName('DT_TRANS').AsDateTime <= FrmPrincipal.QEmpresa.FieldByName('DT_ULT_FOLHA').AsDateTime then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+
+     If  (FrmPrincipal.Config.FieldByName('AUDITORIA').AsString = 'True') Then
+     Begin
+
+       for I := 0 to (ComponentCount - 1) do
+      begin
+        Temp := Components[I];
+        if Temp is TEdit Then  //or (Temp is TComboBox) or (Temp is TCurrencyEdit) or (Temp is TRxCalcEdit) or (Temp is TDateEdit) then
+        Begin
+         //if (QTabela.FieldbyName(TEdit(Temp).Name).AsString <> TEdit(Temp).Text)  Then
+         GravarLog('PAGAMENTO','DELETAR',DateToStr(date),TimeToStr(time),TEdit(Temp).Name,TEdit(Temp).Text,QTabela.FieldbyName(TEdit(Temp).Name).AsString,FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+        End;
+        if Temp is TComboBox   Then
+        Begin
+         //if (QTabela.FieldbyName(TComboBox(Temp).Name).AsString <> TComboBox(Temp).Text)  Then
+         GravarLog('PAGAMENTO','DELETAR',DateToStr(date),TimeToStr(time),TComboBox(Temp).Name,TComboBox(Temp).Text,QTabela.FieldbyName(TComboBox(Temp).Name).AsString,FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+        End;
+        if Temp is TCurrencyEdit   Then
+        Begin
+         //if  FloatToStr(QTabela.FieldbyName(TCurrencyEdit(Temp).Name).AsFloat) <> (TCurrencyEdit(Temp).Text) Then
+         GravarLog('PAGAMENTO','DELETAR',DateToStr(date),TimeToStr(time),TCurrencyEdit(Temp).Name,FloatToStr(TCurrencyEdit(Temp).Value),FloatToStr(QTabela.FieldbyName(TCurrencyEdit(Temp).Name).AsFloat),FrmData.QAcesso.FieldByName('FORNECEDOR_ID').AsInteger,QTabela.FieldByName('CLIENTE_ID').AsInteger);
+        End;
+        if Temp is TRxCalcEdit   Then
+        Begin
+         //if  FloatToStr(QTabela.FieldbyName(TRxCalcEdit(Temp).Name).AsFloat) <> (TRxCalcEdit(Temp).Text)  Then
+         GravarLog('PAGAMENTO','DELETAR',DateToStr(date),TimeToStr(time),TRxCalcEdit(Temp).Name,TRxCalcEdit(Temp).Text,QTabela.FieldbyName(TRxCalcEdit(Temp).Name).AsString,FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+        End;
+        if Temp is TDateEdit   Then
+        Begin
+         //if (QTabela.FieldbyName(TDateEdit(Temp).Name).AsDateTime <> TDateEdit(Temp).Date) Then
+         GravarLog('PAGAMENTO','DELETAR',DateToStr(date),TimeToStr(time),TDateEdit(Temp).Name,DateToStr(TDateEdit(Temp).Date),DateToStr(QTabela.FieldbyName(TDateEdit(Temp).Name).AsDateTime),FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger,QTabela.FieldByName('FORNECEDOR_ID').AsInteger);
+        End;
+      end;
+     End;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM TRANSACOES');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TRANSACAO_ID = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+    QTabela.Prepare;
+    QTabela.Open;
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QBanco.Close;
+    QConta.Close;
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QBanco.Close;
+    QConta.Close;
+  end;
+
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmTrans_Pagamento.btnFluxoCaixaClick(Sender: TObject);
+begin
+  try
+    FLUXO_CAIXA_ID.Value := GetConsulta('FLUXO_CAIXA', 0, 0, StrToInt(FLUXO_CAIXA_ID.Text));
+  except
+    FLUXO_CAIXA_ID.Value := GetConsulta('FLUXO_CAIXA', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  QEmpresa.Close;
+  QBanco.Close;
+  QConta.Close;
+
+  DT_TRANS.Date        := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.Date    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_ENT_SAI.Date      := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  BALANCO.Text         := 'LIBERADO';
+  AUTORIZ_ID.Value     := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+  FLUXO_CAIXA_ID.Value := 3;
+  HORA.Text            := TimeToStr(TIME);
+
+  if LeIni(Arq_Ini, 'Sistema', 'Caixa') <> '' then
+    BANCO_ID.Value := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Caixa'));
+
+  Application.CreateForm(TFrmSeleciona_Credores, FrmSeleciona_Credores);
+  try
+    if (FrmSeleciona_Credores.ShowModal = mrOk) and (not FrmSeleciona_Credores.QTabela.IsEmpty) then
+    begin
+      VALOR_PARCELA.Value := FrmSeleciona_Credores.QTabela.FieldByName('VALOR').AsFloat;
+      VALOR.Value         := FrmSeleciona_Credores.QTabela.FieldByName('VALOR').AsFloat;
+      HISTORICO.Text      := FrmSeleciona_Credores.QTabela.FieldByName('HISTORICO').AsString;
+      NUM_DOC.Text        := FrmSeleciona_Credores.QTabela.FieldByName('NUM_DOC').AsString;
+      PARCELA_ID.Text     := FrmSeleciona_Credores.QTabela.FieldByName('PARCELA_ID').AsString;
+      FORNECEDOR_ID.Value := FrmSeleciona_Credores.QTabela.FieldByName('FORNECEDOR_ID').AsInteger;
+      EMPRESA_ID.Value    := FrmSeleciona_Credores.QTabela.FieldByName('EMPRESA_ID').AsInteger;
+      ENTRADA_ID.Value    := FrmSeleciona_Credores.QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+      COMPLEMENTO.Text    := 'Duplicata :' + FrmSeleciona_Credores.QTabela.FieldByName('DUPLICATA').AsString + ' Venc.: ' + FrmSeleciona_Credores.QTabela.FieldByName('DT_VENCIMENTO').AsString;
+
+      Consulta.TabVisible := False;
+      DT_TRANS.SetFocus;
+    end
+    else
+      btnDiscardClick(Self);
+  finally
+    FrmSeleciona_Credores.Release;
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Pagamento.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+begin
+  Condicao := GetPesquisa('TRANS PAGAMENTO');
+
+  if Condicao <> '' then
+  begin
+    CmdSelectNull := Condicao + ' AND (CONDUTA = :CONDUTA) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+
+    QTabela.ParamByName('CONDUTA').AsString     := '08';
+    QTabela.ParamByName('TPCTB').AsString       := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+
+  CmdOrderBy := 'ORDER BY TRANSACAO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Pagamento.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmTrans_Pagamento.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmTrans_Pagamento.btnSaveClick(Sender: TObject);
+begin
+  DetailSearch('');
+
+  if VALOR.Value = VALOR_PARCELA.Value then
+  begin
+    CONTA_ID.Value := 0;
+    SERIE.Text     := 'N';
+  end;
+
+  if Validacao then
+  begin
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+      CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QTabela.ParamByName('CONDUTA').AsString        := '08';
+      QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+      QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+      QTabela.Prepare;
+      QTabela.Open;
+      QTabela.Last;
+    end;
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+    begin
+      QEmpresa.Close;
+      QBanco.Close;
+      QConta.Close;
+    end;
+
+    Habilitar(False);
+    Botoes_Normal;
+    Operacao := '';
+    Consulta.TabVisible := True;
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmTrans_Pagamento.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmTrans_Pagamento.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+end;
+
+procedure TFrmTrans_Pagamento.FLUXO_CAIXA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Fluxo Caixa');
+end;
+
+procedure TFrmTrans_Pagamento.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmTrans_Pagamento.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmTrans_Pagamento.FormCreate(Sender: TObject);
+var
+X, Ult_Dia: Integer;
+begin
+  DBGrid1.Columns[0].Width := 54;
+  DBGrid1.Columns[1].Width := 76;
+  DBGrid1.Columns[2].Width := 77;
+  DBGrid1.Columns[3].Width := 78;
+  DBGrid1.Columns[4].Width := 72;
+  DBGrid1.Columns[5].Width := 73;
+  DBGrid1.Columns[6].Width := 105;
+
+  Ult_Dia := StrToInt(Copy(DateToStr(Ult_Dia_Mes(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime)), 1, 2));
+  Dias.Tabs.Clear;
+
+  for X := 1 to Ult_Dia do
+    Dias.Tabs.Add(IntToStr(X));
+
+  Dias.Tabs.Add('Todos');
+
+  DT_MOVIMENTO.MinDate := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.MaxDate := StrToDate('31/12/2026');
+
+  CmdSelect     := QTabela.Sql.Text;
+  CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';
+  CmdOrderBy    := 'ORDER BY TRANSACAO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  QTabela.ParamByName('CONDUTA').AsString        := '08';
+  QTabela.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+  QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+  QTabela.Prepare;
+  QTabela.Open;
+  Consulta.Show;
+end;
+
+procedure TFrmTrans_Pagamento.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+end;
+
+end.

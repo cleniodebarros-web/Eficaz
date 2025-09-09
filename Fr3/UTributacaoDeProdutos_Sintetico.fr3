@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<inherited ParentReport="Base_Relatorio_Simples_LandScape.fr3" ReportOptions.CreateDate="44601,6572893519" ReportOptions.LastChange="44601,6699679167" ScriptText.Text="&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;{&#13;&#10;**********Script from parent report**********&#13;&#10;begin&#13;&#10;&#13;&#10;end.&#13;&#10;}&#13;&#10;}&#13;&#10;}">
+  <Datasets>
+    <item DataSet="FastReportQRel" DataSetName="QRel_UTributacaoDeProdutos"/>
+  </Datasets>
+  <inherited Name="DataPage1"/>
+  <inherited Name="Fim" PaperSize="9">
+    <inherited Name="b_cabecalho">
+      <inherited Name="b_cabecalho_data_hora_atual"/>
+      <inherited Name="b_cabecalho_contador_pagina"/>
+      <inherited Name="b_cabecalho_nome_relatorio" Text="Tributação de Produtos"/>
+      <inherited Name="b_cabecalho_periodo_analisado"/>
+      <inherited Name="b_cabecalho_razao_social"/>
+      <inherited Name="b_cabecalho_logo"/>
+      <inherited Name="b_cabecalho_texto_groupheader"/>
+      <inherited Name="b_cabecalho_texto_masterdata"/>
+      <inherited Name="b_cabecalho_texto_groupfooter"/>
+    </inherited>
+    <inherited Name="b_cabecalho_titulo_itens">
+      <inherited Name="b_cabecalho_titulo_item_texto" Width="75,23624" Text="Descrição"/>
+      <inherited Name="b_cabecalho_espaco_branco"/>
+      <TfrxMemoView Name="Memo7" AllowVectorExport="True" Left="472,44125" Top="3,77953" Width="75,23624" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cst Icms"/>
+      <TfrxMemoView Name="Memo8" AllowVectorExport="True" Left="578,26809" Top="3,77953" Width="75,23624" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Aliq.Icms"/>
+      <TfrxMemoView Name="Memo10" AllowVectorExport="True" Left="672,75634" Top="3,77953" Width="101,69295" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Redução Icms"/>
+      <TfrxMemoView Name="Memo11" AllowVectorExport="True" Left="789,92177" Top="3,77953" Width="135,70872" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cst Pis/Cofins Ent."/>
+      <TfrxMemoView Name="Memo12" AllowVectorExport="True" Left="941,10297" Top="3,77953" Width="135,70872" Height="18,77953" Font.Charset="0" Font.Color="16777215" Font.Height="-15" Font.Name="Roboto" Font.Style="1" Frame.Typ="0" ParentFont="False" Text="Cst Pis/Cofins Saí."/>
+    </inherited>
+    <inherited Name="b_rel_simples_landscape_report_Summary" Top="343,93723" Visible="False">
+      <inherited Name="b_rel_simples_landscape_resultado"/>
+      <inherited Name="b_rel_simples_shape1"/>
+    </inherited>
+    <TfrxMasterData Name="MasterData1" FillType="ftBrush" FillGap.Top="0" FillGap.Left="0" FillGap.Bottom="0" FillGap.Right="0" Frame.Typ="0" Height="18,8976378" Left="0" Top="264,5671" Width="1084,72511" ColumnWidth="0" ColumnGap="0" DataSet="FastReportQRel" DataSetName="QRel_UTributacaoDeProdutos" RowCount="0">
+      <TfrxMemoView Name="Memo1" AllowVectorExport="True" Left="7,55906" Top="0" Width="452,63018" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UTributacaoDeProdutos.&#34;DESCRICAO&#34;]"/>
+      <TfrxMemoView Name="Memo2" AllowVectorExport="True" Left="472,44125" Top="0" Width="67,11812" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UTributacaoDeProdutos.&#34;CST_ICMS&#34;]"/>
+      <TfrxMemoView Name="Memo3" AllowVectorExport="True" Left="578,26809" Top="0" Width="67,11812" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UTributacaoDeProdutos.&#34;ALIQUOTA_ICMS&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo4" AllowVectorExport="True" Left="672,75634" Top="0" Width="67,11812" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[FormatFloat('#,##0.00',&#60;QRel_UTributacaoDeProdutos.&#34;REDUCAO_ICMS&#34;&#62;)]"/>
+      <TfrxMemoView Name="Memo5" AllowVectorExport="True" Left="789,92177" Top="0" Width="67,11812" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UTributacaoDeProdutos.&#34;CST_PIS_COFINS_ENTRADA&#34;]"/>
+      <TfrxMemoView Name="Memo6" AllowVectorExport="True" Left="941,10297" Top="0" Width="67,11812" Height="15" DataSetName="DataSetIQuery" Font.Charset="0" Font.Color="8421504" Font.Height="-12" Font.Name="Roboto" Font.Style="0" Frame.Typ="0" ParentFont="False" Text="[QRel_UTributacaoDeProdutos.&#34;CST_PIS_COFINS_SAIDA&#34;]"/>
+    </TfrxMasterData>
+  </inherited>
+  <inherited Name="Data"/>
+  <inherited Name="Page1" Orientation="poPortrait" PaperWidth="210" PaperHeight="297" PaperSize="9"/>
+</inherited>

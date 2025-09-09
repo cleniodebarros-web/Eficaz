@@ -1,0 +1,179 @@
+object FrmAvisos: TFrmAvisos
+  Left = 0
+  Top = 0
+  Caption = 'Avisos'
+  ClientHeight = 315
+  ClientWidth = 760
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  OldCreateOrder = False
+  Visible = True
+  OnClose = FormClose
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Panel1: TPanel
+    Left = 0
+    Top = 0
+    Width = 761
+    Height = 249
+    Caption = 'Panel1'
+    TabOrder = 1
+    object DBGrid1: TDBGrid
+      Left = 1
+      Top = 1
+      Width = 759
+      Height = 247
+      Align = alClient
+      Color = clInfoBk
+      DataSource = DataTabela
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clBlue
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      Options = [dgEditing, dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgCancelOnExit, dgTitleClick]
+      ParentFont = False
+      TabOrder = 0
+      TitleFont.Charset = ANSI_CHARSET
+      TitleFont.Color = clBlue
+      TitleFont.Height = -11
+      TitleFont.Name = 'Tahoma'
+      TitleFont.Style = []
+      OnColExit = DBGrid1ColExit
+      OnExit = DBGrid1Exit
+      OnKeyDown = DBGrid1KeyDown
+      OnKeyPress = DBGrid1KeyPress
+      Columns = <
+        item
+          Expanded = False
+          FieldName = 'NOME'
+          Title.Caption = 'Nome'
+          Width = 251
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'RAZAO'
+          Title.Caption = 'Empresa'
+          Width = 236
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AVISO1_HORA'
+          Font.Charset = ANSI_CHARSET
+          Font.Color = clBlue
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
+          Title.Caption = 'Primeiro Aviso'
+          Width = 84
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AVISO2_HORA'
+          Title.Caption = 'Segundo Aviso'
+          Width = 84
+          Visible = True
+        end
+        item
+          Expanded = False
+          FieldName = 'AVISO3_HORA'
+          Title.Caption = 'Terceiro Aviso'
+          Width = 84
+          Visible = True
+        end>
+    end
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Top = 249
+    Width = 760
+    Height = 19
+    Align = alNone
+    Color = clSilver
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Panels = <
+      item
+        Text = '<F4> - Exclui Registro'
+        Width = 150
+      end
+      item
+        Text = '<F7> - Localiza Empresa/Funcion'#225'rio'
+        Width = 220
+      end
+      item
+        Text = '<F9> - Encerra'
+        Width = 239
+      end>
+    UseSystemFont = False
+  end
+  object btnRetorna: TBitBtn
+    Left = 676
+    Top = 279
+    Width = 75
+    Height = 25
+    Caption = '&Retorna'
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+      F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+      000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+      337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+      45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+      3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+      F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+      000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+      337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+      4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+      7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+      333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+      0000}
+    NumGlyphs = 2
+    TabOrder = 0
+    OnClick = btnRetornaClick
+  end
+  object QSub_Detail: TFDQuery
+    BeforePost = QSub_DetailBeforePost
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      'SELECT * FROM AVISOS'
+      'INNER JOIN FUNCIONARIOS'
+      'ON AVISOS.FUNCIONARIO_ID = FUNCIONARIOS.FUNCIONARIO_ID'
+      'INNER JOIN EMPRESAS'
+      'ON AVISOS.EMPRESA_ID = EMPRESAS.EMPRESA_ID'
+      'ORDER BY FUNCIONARIOS.NOME'
+      '')
+    Left = 72
+    Top = 176
+  end
+  object IQuery: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 120
+    Top = 176
+  end
+  object DataTabela: TDataSource
+    DataSet = QSub_Detail
+    Left = 168
+    Top = 176
+  end
+end

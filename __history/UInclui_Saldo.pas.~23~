@@ -1,0 +1,117 @@
+unit UInclui_Saldo;
+
+interface
+
+uses
+  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
+  Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.StdCtrls, Vcl.Buttons, Vcl.Mask,
+  RxToolEdit, RxCurrEdit, FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, Data.DB,
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmInclui_Saldo = class(TForm)
+    Label1: TLabel;
+    VALOR_ADICIONADO: TCurrencyEdit;
+    Label2: TLabel;
+    ComboBox1: TComboBox;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    IQuery: TFDQuery;
+    LabelAtual: TLabel;
+    LabelNovo: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    procedure FormShow(Sender: TObject);
+    procedure VALOR_ADICIONADOChange(Sender: TObject);
+    procedure BitBtn1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmInclui_Saldo: TFrmInclui_Saldo;
+  Id_Trans, Id_cli, Id_fun: Integer;
+  saldo: Real;
+  Nome_Funcionario:String;
+
+  procedure IncluiSaldo(cliente_id,funcionario_id: Integer; saldo_atual: Real);
+
+implementation
+
+uses
+  UData, UPrincipal;
+
+{$R *.dfm}
+
+
+procedure IncluiSaldo(cliente_id,funcionario_id: Integer; saldo_atual: Real);
+begin
+
+  Id_Cli    := cliente_id;
+  id_fun    := funcionario_id;
+  saldo     := saldo_atual;
+
+  Application.CreateForm(TFrmInclui_Saldo, FrmInclui_Saldo);
+  try
+    FrmInclui_Saldo.ShowModal;
+  finally
+    FrmInclui_Saldo.Release;
+  end;
+end;
+
+procedure TFrmInclui_Saldo.BitBtn1Click(Sender: TObject);
+begin
+  IQuery.SQL.Clear;
+  IQuery.SQL.Add('UPDATE CLIENTES');
+  IQuery.SQL.Add('SET SALDO_CONTA = :SALDO_CONTA');
+  IQuery.SQL.Add('WHERE CLIENTE_ID = :CLIENTE_ID');
+  IQuery.ParamByName('CLIENTE_ID').AsInteger := Id_cli;
+  IQuery.ParamByName('SALDO_CONTA').AsFloat  := saldo + VALOR_ADICIONADO.Value;
+  IQuery.Prepare;
+  IQuery.ExecSQL;
+
+  IQuery.SQL.Clear;
+  IQuery.SQL.Add('INSERT INTO CLIENTES_SALDO (');
+  IQuery.SQL.Add('CLIENTE_ID, FUNCIONARIO_ID, SALDO_ANTERIOR, VALOR_ADICIONADO, SALDO_NOVO, HISTORICO) VALUES (');
+  IQuery.SQL.Add(':CLIENTE_ID, :FUNCIONARIO_ID, :SALDO_ANTERIOR, :VALOR_ADICIONADO, :SALDO_NOVO, :HISTORICO)');
+  IQuery.ParamByName('CLIENTE_ID').AsInteger     := Id_cli;
+  IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := Id_fun;
+  IQuery.ParamByName('SALDO_ANTERIOR').AsFloat   := saldo;
+  IQuery.ParamByName('VALOR_ADICIONADO').AsFloat := VALOR_ADICIONADO.Value;
+  IQuery.ParamByName('SALDO_NOVO').AsFloat       := saldo + VALOR_ADICIONADO.Value;
+  IQuery.ParamByName('HISTORICO').AsString       := 'ENTRADA DE SALDO';
+  IQuery.Prepare;
+  IQuery.ExecSQL;
+end;
+
+procedure TFrmInclui_Saldo.VALOR_ADICIONADOChange(Sender: TObject);
+begin
+  LabelNovo.Caption := 'R$ ' + FormatFloat('#,##0.00',saldo + VALOR_ADICIONADO.Value);
+end;
+
+procedure TFrmInclui_Saldo.FormShow(Sender: TObject);
+begin
+  IQuery.SQL.Clear;
+  IQuery.SQL.Add('SELECT * FROM FINALIZADORAS');
+  IQuery.SQL.Add('WHERE TIPO_TRANSACAO NOT IN (2,8)'); //2 é a prazo e 8 é o próprio saldo
+  IQuery.SQL.Add('ORDER BY FINALIZADORA_ID');
+  IQuery.Prepare;
+  IQuery.Open;
+
+  ComboBox1.Items.Clear;
+  while not IQuery.Eof do
+  begin
+    ComboBox1.Items.Add(IQuery.FieldByName('DESCRICAO').AsString);
+    IQuery.Next;
+  end;
+  ComboBox1.ItemIndex := 0;
+
+  LabelAtual.Caption := 'R$ ' + FormatFloat('#,##0.00',saldo);
+  LabelNovo.Caption := 'R$ ' + FormatFloat('#,##0.00',saldo);
+end;
+
+end.

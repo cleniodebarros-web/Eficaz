@@ -1,0 +1,531 @@
+object Frm_Backup: TFrm_Backup
+  Left = 192
+  Top = 114
+  HorzScrollBar.Visible = False
+  VertScrollBar.Visible = False
+  BorderIcons = []
+  BorderStyle = bsSingle
+  Caption = 'Backup/Restore'
+  ClientHeight = 525
+  ClientWidth = 524
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'MS Sans Serif'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label4: TLabel
+    Left = 7
+    Top = 304
+    Width = 59
+    Height = 13
+    Caption = 'Path Backup'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+  end
+  object SpeedButton1: TSpeedButton
+    Left = 454
+    Top = 299
+    Width = 40
+    Height = 21
+    Cursor = crHandPoint
+    Caption = '...'
+    Flat = True
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    Glyph.Data = {
+      06020000424D0602000000000000760000002800000028000000140000000100
+      0400000000009001000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+      FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+      FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+      333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+      333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+      777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+      FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+      FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+      333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+      88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+      F777333333333088FFF003333333333337333337733333333333088FFF033333
+      333333337F33337333333333333308FFF09333333333333378F3373333333333
+      333330FF0933333333333333378F733333333333333333003333333333333333
+      33773333333333333333}
+    NumGlyphs = 2
+    ParentFont = False
+    OnClick = btnBackupClick
+  end
+  object PageControl1: TPageControl
+    Left = 0
+    Top = 0
+    Width = 524
+    Height = 484
+    ActivePage = TabSheet1
+    Align = alClient
+    TabOrder = 0
+    object TabSheet1: TTabSheet
+      Caption = 'Manuten'#231#227'o'
+      object Bevel1: TBevel
+        Left = 0
+        Top = 1
+        Width = 516
+        Height = 160
+        Shape = bsFrame
+      end
+      object Bevel2: TBevel
+        Left = 0
+        Top = 167
+        Width = 516
+        Height = 138
+        Shape = bsFrame
+      end
+      object Label20: TLabel
+        Left = 3
+        Top = 251
+        Width = 59
+        Height = 13
+        Caption = 'Path Backup'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object btnBackup: TSpeedButton
+        Left = 448
+        Top = 248
+        Width = 40
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '...'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnBackupClick
+      end
+      object Label1: TLabel
+        Left = 3
+        Top = 224
+        Width = 77
+        Height = 13
+        Caption = 'Banco de Dados'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label8: TLabel
+        Left = 3
+        Top = 197
+        Width = 53
+        Height = 13
+        Caption = 'IP Servidor'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 217
+        Top = 218
+        Width = 26
+        Height = 13
+        Caption = 'Porta'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 218
+        Top = 199
+        Width = 26
+        Height = 13
+        Caption = 'Porta'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object Label5: TLabel
+        Left = 3
+        Top = 278
+        Width = 72
+        Height = 13
+        Caption = 'Arquvo backup'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+      end
+      object BtnRestore: TSpeedButton
+        Left = 448
+        Top = 275
+        Width = 40
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '...'
+        Enabled = False
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = BtnRestoreClick
+      end
+      object Memo1: TMemo
+        Left = 0
+        Top = 311
+        Width = 516
+        Height = 145
+        Align = alBottom
+        ScrollBars = ssVertical
+        TabOrder = 10
+      end
+      object GroupBox1: TGroupBox
+        Left = 3
+        Top = 10
+        Width = 504
+        Height = 71
+        Caption = 'Op'#231#245'es'
+        Enabled = False
+        TabOrder = 0
+        object Chk_Data: TCheckBox
+          Left = 6
+          Top = 35
+          Width = 129
+          Height = 17
+          Caption = 'Somente Dados'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 0
+        end
+        object Chk_Shema: TCheckBox
+          Left = 190
+          Top = 35
+          Width = 115
+          Height = 17
+          Caption = 'Somente shema'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 1
+        end
+        object Chk_disable: TCheckBox
+          Left = 337
+          Top = 35
+          Width = 129
+          Height = 17
+          Caption = 'Desabilita Triggers'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'MS Sans Serif'
+          Font.Style = [fsBold]
+          ParentFont = False
+          TabOrder = 2
+        end
+      end
+      object Path_Backup: TEdit
+        Left = 80
+        Top = 248
+        Width = 362
+        Height = 21
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 7
+      end
+      object Animate1: TAnimate
+        Left = 113
+        Top = 87
+        Width = 272
+        Height = 60
+        Color = clHighlightText
+        CommonAVI = aviCopyFile
+        ParentColor = False
+        StopFrame = 22
+      end
+      object Banco_Dados: TEdit
+        Left = 80
+        Top = 221
+        Width = 177
+        Height = 21
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ReadOnly = True
+        ShowHint = True
+        TabOrder = 6
+      end
+      object IP_Servidor: TEdit
+        Left = 80
+        Top = 194
+        Width = 132
+        Height = 21
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ReadOnly = True
+        ShowHint = True
+        TabOrder = 3
+      end
+      object Porta: TEdit
+        Left = 249
+        Top = 194
+        Width = 85
+        Height = 21
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ReadOnly = True
+        ShowHint = True
+        TabOrder = 4
+      end
+      object CheckBox1: TCheckBox
+        Left = 340
+        Top = 197
+        Width = 152
+        Height = 17
+        Caption = 'Habilitar Par'#226'metros'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 5
+        OnClick = CheckBox1Click
+      end
+      object Chk_Backup: TCheckBox
+        Left = 80
+        Top = 171
+        Width = 129
+        Height = 17
+        Caption = 'Backup'
+        Checked = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        State = cbChecked
+        TabOrder = 1
+        OnClick = Chk_BackupClick
+      end
+      object Chk_Restore: TCheckBox
+        Left = 256
+        Top = 171
+        Width = 129
+        Height = 17
+        Caption = 'Restore'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = [fsBold]
+        ParentFont = False
+        TabOrder = 2
+        OnClick = Chk_RestoreClick
+      end
+      object Path_Restore: TEdit
+        Left = 80
+        Top = 275
+        Width = 362
+        Height = 21
+        Enabled = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
+        ParentShowHint = False
+        ShowHint = True
+        TabOrder = 8
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Ajuda'
+      ImageIndex = 1
+      object RichEdit1: TRichEdit
+        Left = 0
+        Top = 0
+        Width = 516
+        Height = 456
+        Align = alClient
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'MS Sans Serif'
+        Font.Style = []
+        Lines.Strings = (
+          '--data-only'
+          
+            '    Exporta somente os dados, n'#227'o o esquema (defini'#231#245'es dos dado' +
+            's). '
+          '   '
+          ''
+          '--schema-only'
+          ''
+          '    Salva somente as defini'#231#245'es de objetos (esquema), n'#227'o dados.'
+          ''
+          ''
+          '--disable-triggers'
+          ''
+          
+            '    Esta op'#231#227'o s'#243' '#233' relevante quando se cria um despejo somente ' +
+            'de dados. '
+          
+            '    Ele instrui pg_dump para incluir comandos para desativar tem' +
+            'porariamente, '
+          
+            '    os gatilhos das tabelas de destino enquanto os dados s'#227'o rec' +
+            'arregados. '
+          
+            '    Use isto se voc'#234' tem verifica'#231#245'es de integridade referencial' +
+            ', ou outros gatilhos '
+          
+            '    nas tabelas que voc'#234' n'#227'o deseja utilizar durante a recarga d' +
+            'os dados.')
+        ParentFont = False
+        ReadOnly = True
+        ScrollBars = ssVertical
+        TabOrder = 0
+      end
+    end
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 484
+    Width = 524
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 1
+    object btnRetorna: TButton
+      Left = 445
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = '&Retorna'
+      ModalResult = 2
+      TabOrder = 1
+    end
+    object BitBtn2: TBitBtn
+      Left = 364
+      Top = 6
+      Width = 75
+      Height = 25
+      Caption = 'Iniciar'
+      TabOrder = 0
+      OnClick = BitBtn2Click
+    end
+  end
+  object OpenDialog1: TOpenDialog
+    DefaultExt = '*.GDB'
+    FileName = 'EFICAZ.FBK'
+    Filter = 
+      'Arquivos de Backup (*.FBK)|*.FBK|Arquivos de Backup (*.FDB)|*.FD' +
+      'B'
+    Title = 'Arquivos de Backup'
+    Left = 280
+    Top = 280
+  end
+  object ShellResources1: TShellResources
+    Left = 448
+    Top = 120
+  end
+end

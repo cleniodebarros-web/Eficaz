@@ -1,0 +1,4810 @@
+object FrmCTe: TFrmCTe
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Dados Complementares da Cte Eletr'#244'nico (Remetente)'
+  ClientHeight = 626
+  ClientWidth = 515
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  PopupMenu = Menu_GeraXML
+  Position = poScreenCenter
+  Scaled = False
+  OnCreate = FormCreate
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label3: TLabel
+    Left = 6
+    Top = 9
+    Width = 52
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Data Sa'#237'da'
+  end
+  object Label4: TLabel
+    Left = 214
+    Top = 9
+    Width = 44
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Hr. Sa'#237'da'
+  end
+  object Label2: TLabel
+    Left = 384
+    Top = 9
+    Width = 28
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'CFOP'
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object Bevel2: TBevel
+    Left = 8
+    Top = 589
+    Width = 495
+    Height = 4
+    Shape = bsTopLine
+  end
+  object Label5: TLabel
+    Left = 5
+    Top = 339
+    Width = 71
+    Height = 13
+    Caption = 'Forma Emiss'#227'o'
+  end
+  object Label6: TLabel
+    Left = 302
+    Top = 338
+    Width = 59
+    Height = 13
+    Caption = 'Fin. Emiss'#227'o'
+  end
+  object Label9: TLabel
+    Left = 6
+    Top = 427
+    Width = 58
+    Height = 13
+    Caption = 'Cod. Pagto.'
+  end
+  object Label11: TLabel
+    Left = 5
+    Top = 312
+    Width = 80
+    Height = 13
+    Caption = 'Tipo Servi'#231'o CTe'
+  end
+  object Label13: TLabel
+    Left = 5
+    Top = 285
+    Width = 80
+    Height = 13
+    Caption = 'Tomador Servi'#231'o'
+  end
+  object Label17: TLabel
+    Left = 6
+    Top = 34
+    Width = 70
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Data Previs'#227'o '
+  end
+  object Label18: TLabel
+    Left = 214
+    Top = 34
+    Width = 59
+    Height = 13
+    Alignment = taRightJustify
+    Caption = 'Hr. Previs'#227'o'
+  end
+  object Label14: TLabel
+    Left = 221
+    Top = 426
+    Width = 62
+    Height = 13
+    Caption = 'Notas Fiscais'
+  end
+  object Bevel4: TBevel
+    Left = 4
+    Top = 386
+    Width = 495
+    Height = 5
+    Shape = bsTopLine
+  end
+  object Label65: TLabel
+    Left = 7
+    Top = 397
+    Width = 65
+    Height = 13
+    Caption = 'Complemento'
+  end
+  object Label66: TLabel
+    Left = 5
+    Top = 366
+    Width = 145
+    Height = 13
+    Caption = 'Ch. Cte Original (Substitui'#231#227'o)'
+  end
+  object btnGera: TButton
+    Left = 343
+    Top = 593
+    Width = 75
+    Height = 25
+    Caption = '&Gerar CTe'
+    TabOrder = 17
+    OnClick = btnGeraClick
+  end
+  object DT_SAIDA: TDateEdit
+    Left = 90
+    Top = 6
+    Width = 90
+    Height = 21
+    CheckOnExit = True
+    DialogTitle = 'Selecione a Data'
+    NumGlyphs = 2
+    TabOrder = 3
+    OnEnter = DT_SAIDAEnter
+    OnExit = DT_SAIDAExit
+    OnKeyDown = DT_SAIDAKeyDown
+  end
+  object HR_SAIDA: TMaskEdit
+    Left = 280
+    Top = 6
+    Width = 49
+    Height = 21
+    EditMask = '99:99'
+    MaxLength = 5
+    TabOrder = 4
+    Text = '  :  '
+    OnKeyDown = DT_SAIDAKeyDown
+  end
+  object CFOP_COMPL: TEdit
+    Left = 426
+    Top = 6
+    Width = 73
+    Height = 21
+    MaxLength = 4
+    TabOrder = 5
+    OnExit = CFOP_COMPLExit
+    OnKeyDown = DT_SAIDAKeyDown
+  end
+  object TRANSACAO_ID: TCurrencyEdit
+    Left = 536
+    Top = 126
+    Width = 73
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DecimalPlaces = 0
+    DisplayFormat = '0;-0'
+    TabOrder = 1
+    Visible = False
+    ZeroEmpty = False
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+  end
+  object NO_DOC_FISCAL: TCurrencyEdit
+    Left = 305
+    Top = 423
+    Width = 73
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DecimalPlaces = 0
+    DisplayFormat = '0;-0'
+    TabOrder = 2
+    Visible = False
+    ZeroEmpty = False
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+  end
+  object FORMA_EMISSAO: TComboBox
+    Left = 89
+    Top = 335
+    Width = 197
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 25
+    ParentFont = False
+    TabOrder = 11
+    Text = 'NORMAL'
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+    Items.Strings = (
+      'NORMAL'
+      'CONTING'#202'NCIA FS'
+      'CONTING'#202'NCIA C/ SCAN'
+      'CONTING'#202'NCIA C/ SVCSP'
+      'CONTING'#202'NCIA VIA DPEC'
+      'CONTING'#202'NCIA FS-DA')
+  end
+  object FINALIDADE_EMISSAO: TComboBox
+    Left = 384
+    Top = 335
+    Width = 114
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 25
+    ParentFont = False
+    TabOrder = 12
+    Text = '1-CTE NORMAL'
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+    Items.Strings = (
+      '1-CTE NORMAL'
+      '2-CTE COMPLEMENTO'
+      '3-CTE ANULA'#199#195'O'
+      '4-CTE SUBISTITUTO')
+  end
+  object btnRetorna: TBitBtn
+    Left = 423
+    Top = 593
+    Width = 75
+    Height = 25
+    Caption = '&Retorna'
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+      F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+      000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+      337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+      45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+      3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+      F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+      000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+      337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+      4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+      7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+      333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+      0000}
+    ModalResult = 2
+    NumGlyphs = 2
+    TabOrder = 18
+  end
+  object COND_PAGTO: TComboBox
+    Left = 89
+    Top = 423
+    Width = 111
+    Height = 21
+    Style = csDropDownList
+    CharCase = ecUpperCase
+    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 7
+    ParentFont = False
+    TabOrder = 15
+    OnExit = COND_PAGTOExit
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+    Items.Strings = (
+      'A VISTA'
+      'A PRAZO')
+  end
+  object Empresa_id: TCurrencyEdit
+    Left = 536
+    Top = 151
+    Width = 73
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DecimalPlaces = 0
+    DisplayFormat = '0;-0'
+    TabOrder = 0
+    Visible = False
+    ZeroEmpty = False
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+  end
+  object TIPO_SERVICO: TComboBox
+    Left = 90
+    Top = 308
+    Width = 409
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 25
+    ParentFont = False
+    TabOrder = 10
+    Text = 'NORMAL'
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+    Items.Strings = (
+      'NORMAL'
+      'SUBCONTRATA'#199#195'O'
+      'REDESPACHO'
+      'INTERMEDI'#193'RIO'
+      'TRANSPORTE DE PESSOAS'
+      'MULTIMODAL')
+  end
+  object TOMADOR_SERVICO: TComboBox
+    Left = 89
+    Top = 281
+    Width = 409
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 25
+    ParentFont = False
+    TabOrder = 9
+    Text = 'REMETENTE'
+    OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+    Items.Strings = (
+      'REMETENTE'
+      'EXPEDIDOR'
+      'RECEBEDOR'
+      'DESTINAT'#193'RIO'
+      'OUTROS')
+  end
+  object DT_PREVISAO: TDateEdit
+    Left = 90
+    Top = 29
+    Width = 89
+    Height = 21
+    CheckOnExit = True
+    DialogTitle = 'Selecione a Data'
+    NumGlyphs = 2
+    TabOrder = 6
+    OnEnter = DT_SAIDAEnter
+    OnKeyDown = DT_SAIDAKeyDown
+  end
+  object HR_PREVISAO: TMaskEdit
+    Left = 280
+    Top = 31
+    Width = 49
+    Height = 21
+    EditMask = '99:99'
+    MaxLength = 5
+    TabOrder = 7
+    Text = '  :  '
+    OnKeyDown = DT_SAIDAKeyDown
+  end
+  object Button1: TButton
+    Left = 250
+    Top = 593
+    Width = 86
+    Height = 25
+    Caption = 'Imprimir &Recbio'
+    TabOrder = 19
+    OnClick = Button1Click
+  end
+  object PageControl1: TPageControl
+    Left = 3
+    Top = 53
+    Width = 500
+    Height = 222
+    ActivePage = Tab_Remetente
+    TabOrder = 8
+    object Tab_Remetente: TTabSheet
+      Caption = 'Remetente'
+      object Label36: TLabel
+        Left = 2
+        Top = 7
+        Width = 48
+        Height = 13
+        Caption = 'CNPJ/CPF'
+      end
+      object btnFornecedor: TSpeedButton
+        Left = 262
+        Top = 4
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnFornecedorClick
+      end
+      object Label40: TLabel
+        Left = 333
+        Top = 7
+        Width = 46
+        Height = 13
+        Caption = 'Insc. Est.'
+      end
+      object Label33: TLabel
+        Left = 2
+        Top = 34
+        Width = 72
+        Height = 13
+        Caption = 'Nome/R. Social'
+      end
+      object Label37: TLabel
+        Left = 2
+        Top = 59
+        Width = 45
+        Height = 13
+        Caption = 'Endere'#231'o'
+      end
+      object Label20: TLabel
+        Left = 2
+        Top = 86
+        Width = 37
+        Height = 13
+        Caption = 'N'#250'mero'
+      end
+      object Label39: TLabel
+        Left = 2
+        Top = 115
+        Width = 13
+        Height = 13
+        Caption = 'UF'
+      end
+      object Label19: TLabel
+        Left = 146
+        Top = 86
+        Width = 28
+        Height = 13
+        Caption = 'Bairro'
+      end
+      object lbl1: TLabel
+        Left = 146
+        Top = 115
+        Width = 53
+        Height = 13
+        Caption = 'C'#243'd. IBGE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object btnIBGE: TSpeedButton
+        Left = 285
+        Top = 109
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnIBGEClick
+      end
+      object Label38: TLabel
+        Left = 305
+        Top = 86
+        Width = 43
+        Height = 13
+        Caption = 'Munic'#237'pio'
+      end
+      object lbl6: TLabel
+        Left = 396
+        Top = 115
+        Width = 19
+        Height = 13
+        Caption = 'CEP'
+      end
+      object Label21: TLabel
+        Left = 2
+        Top = 139
+        Width = 28
+        Height = 13
+        Caption = 'E-Mail'
+      end
+      object CNPJ_TRANSPORTADOR: TEdit
+        Left = 82
+        Top = 4
+        Width = 174
+        Height = 21
+        CharCase = ecUpperCase
+        MaxLength = 14
+        TabOrder = 0
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object INSCRICAO_TRANSPORTADOR: TEdit
+        Left = 381
+        Top = 4
+        Width = 110
+        Height = 21
+        MaxLength = 15
+        TabOrder = 1
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object NOME_TRANSPORTADOR: TEdit
+        Left = 82
+        Top = 31
+        Width = 409
+        Height = 21
+        MaxLength = 50
+        TabOrder = 2
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object ENDERECO_TRANSPORTADOR: TEdit
+        Left = 83
+        Top = 56
+        Width = 409
+        Height = 21
+        MaxLength = 40
+        TabOrder = 3
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object UF_TRANSPORTADOR: TComboBox
+        Left = 82
+        Top = 109
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 7
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object N_TRANSPORTADOR: TEdit
+        Left = 82
+        Top = 83
+        Width = 56
+        Height = 21
+        MaxLength = 30
+        TabOrder = 4
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object IBGE: TEdit
+        Left = 218
+        Top = 109
+        Width = 61
+        Height = 21
+        MaxLength = 7
+        TabOrder = 8
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object BAIRRO_TRANSPORTADOR: TEdit
+        Left = 184
+        Top = 83
+        Width = 115
+        Height = 21
+        MaxLength = 30
+        TabOrder = 5
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object MUNICIPIO_TRANSPORTADOR: TEdit
+        Left = 355
+        Top = 83
+        Width = 136
+        Height = 21
+        MaxLength = 30
+        TabOrder = 6
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object CEP_TRANSPORTADOR: TMaskEdit
+        Left = 424
+        Top = 110
+        Width = 67
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        EditMask = '99999-999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 9
+        ParentFont = False
+        TabOrder = 9
+        Text = '     -   '
+      end
+      object EMAIL_TRANSPORTADOR: TEdit
+        Left = 82
+        Top = 136
+        Width = 279
+        Height = 21
+        MaxLength = 60
+        TabOrder = 10
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Transporte'
+      ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Label12: TLabel
+        Left = 1
+        Top = 6
+        Width = 53
+        Height = 13
+        Caption = 'Transporte'
+      end
+      object Label46: TLabel
+        Left = 207
+        Top = 6
+        Width = 59
+        Height = 13
+        Caption = 'Peso L'#237'quido'
+      end
+      object lbl2: TLabel
+        Left = 415
+        Top = 7
+        Width = 13
+        Height = 13
+        Caption = 'Un'
+      end
+      object lbl3: TLabel
+        Left = 1
+        Top = 34
+        Width = 75
+        Height = 13
+        Caption = 'Lota'#231#227'o/'#212'nibus'
+      end
+      object Label34: TLabel
+        Left = 205
+        Top = 32
+        Width = 61
+        Height = 13
+        Caption = 'Placa Ve'#237'culo'
+      end
+      object Label35: TLabel
+        Left = 379
+        Top = 36
+        Width = 50
+        Height = 13
+        Caption = 'UF/Ve'#237'culo'
+      end
+      object Label10: TLabel
+        Left = 1
+        Top = 61
+        Width = 34
+        Height = 13
+        Caption = 'RNTRC'
+      end
+      object Label1: TLabel
+        Left = 396
+        Top = 61
+        Width = 20
+        Height = 13
+        Caption = 'Tipo'
+      end
+      object lbl5: TLabel
+        Left = 1
+        Top = 89
+        Width = 66
+        Height = 13
+        Caption = 'Cpf/Motorista'
+      end
+      object lbl4: TLabel
+        Left = 227
+        Top = 89
+        Width = 45
+        Height = 13
+        Caption = 'Motorista'
+      end
+      object Label41: TLabel
+        Left = 0
+        Top = 141
+        Width = 39
+        Height = 13
+        Caption = 'Volumes'
+      end
+      object Label16: TLabel
+        Left = 119
+        Top = 141
+        Width = 80
+        Height = 13
+        Caption = 'Produto Principal'
+      end
+      object Label7: TLabel
+        Left = 1
+        Top = 171
+        Width = 102
+        Height = 13
+        Caption = 'Desc.Servi'#231'o/Caract.'
+      end
+      object Label8: TLabel
+        Left = 353
+        Top = 172
+        Width = 64
+        Height = 13
+        Caption = 'UF Embarque'
+      end
+      object Label53: TLabel
+        Left = 207
+        Top = 61
+        Width = 45
+        Height = 13
+        Caption = 'Renavam'
+      end
+      object Label54: TLabel
+        Left = 2
+        Top = 113
+        Width = 64
+        Height = 13
+        Caption = 'Reg.Estadual'
+      end
+      object Label55: TLabel
+        Left = 227
+        Top = 113
+        Width = 16
+        Height = 13
+        Caption = 'Taf'
+      end
+      object Label64: TLabel
+        Left = 335
+        Top = 141
+        Width = 52
+        Height = 13
+        Caption = 'Peso Bruto'
+      end
+      object TIPO_TRANSPORTE: TComboBox
+        Left = 82
+        Top = 5
+        Width = 118
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ItemIndex = 0
+        MaxLength = 25
+        ParentFont = False
+        TabOrder = 0
+        Text = 'RODOVI'#193'RIO'
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'RODOVI'#193'RIO'
+          'A'#201'REO'
+          'AQUAVI'#193'RIO'
+          'FERROVI'#193'RIO'
+          'DUTOVI'#193'RIO')
+      end
+      object PESO_LIQUIDO: TRxCalcEdit
+        Left = 273
+        Top = 5
+        Width = 88
+        Height = 21
+        Margins.Left = 4
+        Margins.Top = 1
+        DecimalPlaces = 3
+        DisplayFormat = '0.000;-0.000'
+        NumGlyphs = 2
+        TabOrder = 1
+        ZeroEmpty = False
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+      end
+      object Unidade: TComboBox
+        Left = 442
+        Top = 6
+        Width = 49
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 3
+        ParentFont = False
+        TabOrder = 2
+        Text = 'KG'
+        Items.Strings = (
+          'KG'
+          'M3'
+          'UN'
+          'TN'
+          'LT')
+      end
+      object Lotacao: TComboBox
+        Left = 82
+        Top = 31
+        Width = 118
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 3
+        ParentFont = False
+        TabOrder = 3
+        Text = 'N'#195'O'
+        OnChange = LotacaoChange
+        Items.Strings = (
+          'SIM'
+          'N'#195'O')
+      end
+      object PLACA_VEICULO: TEdit
+        Left = 272
+        Top = 31
+        Width = 70
+        Height = 21
+        CharCase = ecUpperCase
+        MaxLength = 7
+        TabOrder = 4
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object UF_VEICULO: TComboBox
+        Left = 435
+        Top = 31
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 5
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object INSTRUCOES_2: TMemo
+        Left = 82
+        Top = 58
+        Width = 73
+        Height = 21
+        MaxLength = 8
+        TabOrder = 6
+        OnExit = INSTRUCOES_2Exit
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+      end
+      object Tipo_Veiculo: TComboBox
+        Left = 422
+        Top = 58
+        Width = 69
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 8
+        Text = 'TRA'#199#195'O'
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'REBOQUE'
+          'TRA'#199#195'O')
+      end
+      object CPF_MOTORISTA: TEdit
+        Left = 82
+        Top = 84
+        Width = 142
+        Height = 21
+        MaxLength = 30
+        TabOrder = 9
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object Motorista: TEdit
+        Left = 273
+        Top = 84
+        Width = 216
+        Height = 21
+        MaxLength = 50
+        TabOrder = 10
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object QUANTIDADE_VOLUMES: TCurrencyEdit
+        Left = 82
+        Top = 138
+        Width = 31
+        Height = 21
+        Margins.Left = 4
+        Margins.Top = 1
+        DecimalPlaces = 0
+        DisplayFormat = '0;-0'
+        TabOrder = 13
+        ZeroEmpty = False
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+      end
+      object PROD_PRINCIPAL: TEdit
+        Left = 205
+        Top = 140
+        Width = 124
+        Height = 21
+        MaxLength = 60
+        TabOrder = 14
+        Text = 'DIVERSOS'
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object LOCAL_EMBARQUE: TEdit
+        Left = 106
+        Top = 167
+        Width = 220
+        Height = 21
+        MaxLength = 30
+        TabOrder = 16
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object UF_EMBARQUE: TComboBox
+        Left = 435
+        Top = 168
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 17
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object RENAVAM_VEICULO: TEdit
+        Left = 272
+        Top = 58
+        Width = 118
+        Height = 21
+        MaxLength = 11
+        TabOrder = 7
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object registro_estadual: TEdit
+        Left = 83
+        Top = 111
+        Width = 138
+        Height = 21
+        Enabled = False
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 25
+        ParentFont = False
+        TabOrder = 11
+        OnExit = registro_estadualExit
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object taf: TEdit
+        Left = 273
+        Top = 111
+        Width = 216
+        Height = 21
+        Enabled = False
+        MaxLength = 12
+        TabOrder = 12
+        OnExit = tafExit
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object Peso_Bruto: TRxCalcEdit
+        Left = 401
+        Top = 138
+        Width = 88
+        Height = 21
+        Margins.Left = 4
+        Margins.Top = 1
+        DecimalPlaces = 3
+        DisplayFormat = '0.000;-0.000'
+        NumGlyphs = 2
+        TabOrder = 15
+        ZeroEmpty = False
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+      end
+    end
+    object TabSheet3: TTabSheet
+      Caption = 'Expedidor'
+      ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Label15: TLabel
+        Left = 1
+        Top = 5
+        Width = 48
+        Height = 13
+        Caption = 'CNPJ/CPF'
+      end
+      object Label22: TLabel
+        Left = 1
+        Top = 32
+        Width = 72
+        Height = 13
+        Caption = 'Nome/R. Social'
+      end
+      object Label23: TLabel
+        Left = 1
+        Top = 57
+        Width = 45
+        Height = 13
+        Caption = 'Endere'#231'o'
+      end
+      object Label24: TLabel
+        Left = 1
+        Top = 84
+        Width = 37
+        Height = 13
+        Caption = 'N'#250'mero'
+      end
+      object Label25: TLabel
+        Left = 1
+        Top = 113
+        Width = 13
+        Height = 13
+        Caption = 'UF'
+      end
+      object Label26: TLabel
+        Left = 143
+        Top = 84
+        Width = 28
+        Height = 13
+        Caption = 'Bairro'
+      end
+      object Label27: TLabel
+        Left = 143
+        Top = 113
+        Width = 53
+        Height = 13
+        Caption = 'C'#243'd. IBGE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label28: TLabel
+        Left = 302
+        Top = 84
+        Width = 43
+        Height = 13
+        Caption = 'Munic'#237'pio'
+      end
+      object BtnIbgeExpedidor: TSpeedButton
+        Left = 282
+        Top = 107
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = BtnIbgeExpedidorClick
+      end
+      object Label29: TLabel
+        Left = 393
+        Top = 113
+        Width = 19
+        Height = 13
+        Caption = 'CEP'
+      end
+      object Label30: TLabel
+        Left = 330
+        Top = 5
+        Width = 46
+        Height = 13
+        Caption = 'Insc. Est.'
+      end
+      object btnexpedidor: TSpeedButton
+        Left = 259
+        Top = 2
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnexpedidorClick
+      end
+      object Label51: TLabel
+        Left = 1
+        Top = 139
+        Width = 28
+        Height = 13
+        Caption = 'E-Mail'
+      end
+      object Label71: TLabel
+        Left = 0
+        Top = 167
+        Width = 74
+        Height = 13
+        Caption = 'Ch. Cte Origem'
+      end
+      object N_EXPEDIDOR: TEdit
+        Left = 79
+        Top = 81
+        Width = 56
+        Height = 21
+        MaxLength = 30
+        TabOrder = 4
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object UF_EXPEDIDOR: TComboBox
+        Left = 79
+        Top = 107
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 7
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object IBGE_EXPEDIDOR: TEdit
+        Left = 215
+        Top = 107
+        Width = 61
+        Height = 21
+        MaxLength = 7
+        TabOrder = 8
+      end
+      object BAIRRO_EXPEDIDOR: TEdit
+        Left = 181
+        Top = 81
+        Width = 115
+        Height = 21
+        MaxLength = 30
+        TabOrder = 5
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object CEP_EXPEDIDOR: TMaskEdit
+        Left = 421
+        Top = 108
+        Width = 67
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        EditMask = '99999-999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 9
+        ParentFont = False
+        TabOrder = 9
+        Text = '     -   '
+      end
+      object MUNICIPIO_EXPEDIDOR: TEdit
+        Left = 352
+        Top = 81
+        Width = 136
+        Height = 21
+        MaxLength = 30
+        TabOrder = 6
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object ENDERECO_EXPEDIDOR: TEdit
+        Left = 79
+        Top = 54
+        Width = 409
+        Height = 21
+        MaxLength = 40
+        TabOrder = 3
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object NOME_EXPEDIDOR: TEdit
+        Left = 79
+        Top = 29
+        Width = 409
+        Height = 21
+        MaxLength = 50
+        TabOrder = 2
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object CNPJ_EXPEDIDOR: TEdit
+        Left = 79
+        Top = 2
+        Width = 174
+        Height = 21
+        CharCase = ecUpperCase
+        MaxLength = 14
+        TabOrder = 0
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object INSCRICAO_EXPEDIDOR: TEdit
+        Left = 378
+        Top = 2
+        Width = 110
+        Height = 21
+        MaxLength = 15
+        TabOrder = 1
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object email_expedidor: TEdit
+        Left = 79
+        Top = 136
+        Width = 279
+        Height = 21
+        MaxLength = 60
+        TabOrder = 10
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object sub_chave_cte: TEdit
+        Left = 80
+        Top = 163
+        Width = 278
+        Height = 21
+        MaxLength = 44
+        TabOrder = 11
+      end
+    end
+    object TabSheet4: TTabSheet
+      Caption = 'Recebedor'
+      ImageIndex = 3
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Label31: TLabel
+        Left = 1
+        Top = 7
+        Width = 48
+        Height = 13
+        Caption = 'CNPJ/CPF'
+      end
+      object Label32: TLabel
+        Left = 1
+        Top = 34
+        Width = 72
+        Height = 13
+        Caption = 'Nome/R. Social'
+      end
+      object Label42: TLabel
+        Left = 1
+        Top = 59
+        Width = 45
+        Height = 13
+        Caption = 'Endere'#231'o'
+      end
+      object Label43: TLabel
+        Left = 1
+        Top = 86
+        Width = 37
+        Height = 13
+        Caption = 'N'#250'mero'
+      end
+      object Label44: TLabel
+        Left = 1
+        Top = 115
+        Width = 13
+        Height = 13
+        Caption = 'UF'
+      end
+      object Label45: TLabel
+        Left = 144
+        Top = 85
+        Width = 28
+        Height = 13
+        Caption = 'Bairro'
+      end
+      object Label47: TLabel
+        Left = 144
+        Top = 114
+        Width = 53
+        Height = 13
+        Caption = 'C'#243'd. IBGE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object Label48: TLabel
+        Left = 303
+        Top = 85
+        Width = 43
+        Height = 13
+        Caption = 'Munic'#237'pio'
+      end
+      object SpeedButton3: TSpeedButton
+        Left = 283
+        Top = 108
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnIBGEClick
+      end
+      object Label49: TLabel
+        Left = 394
+        Top = 114
+        Width = 19
+        Height = 13
+        Caption = 'CEP'
+      end
+      object Label50: TLabel
+        Left = 331
+        Top = 6
+        Width = 46
+        Height = 13
+        Caption = 'Insc. Est.'
+      end
+      object btnrecebedor: TSpeedButton
+        Left = 261
+        Top = 4
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnrecebedorClick
+      end
+      object Label52: TLabel
+        Left = 1
+        Top = 139
+        Width = 28
+        Height = 13
+        Caption = 'E-Mail'
+      end
+      object N_RECEBEDOR: TEdit
+        Left = 80
+        Top = 82
+        Width = 56
+        Height = 21
+        MaxLength = 30
+        TabOrder = 0
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object UF_RECEBEDOR: TComboBox
+        Left = 80
+        Top = 108
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 1
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object IBGE_RECEBEDOR: TEdit
+        Left = 216
+        Top = 108
+        Width = 61
+        Height = 21
+        MaxLength = 7
+        TabOrder = 2
+      end
+      object BAIRRO_RECEBEDOR: TEdit
+        Left = 182
+        Top = 82
+        Width = 115
+        Height = 21
+        MaxLength = 30
+        TabOrder = 3
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object CEP_RECEBEDOR: TMaskEdit
+        Left = 422
+        Top = 109
+        Width = 67
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        EditMask = '99999-999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 9
+        ParentFont = False
+        TabOrder = 4
+        Text = '     -   '
+      end
+      object MUNICIPIO_RECEBEDOR: TEdit
+        Left = 353
+        Top = 82
+        Width = 136
+        Height = 21
+        MaxLength = 30
+        TabOrder = 5
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object ENDERECO_RECEBEDOR: TEdit
+        Left = 80
+        Top = 55
+        Width = 409
+        Height = 21
+        MaxLength = 40
+        TabOrder = 6
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object NOME_RECEBEDOR: TEdit
+        Left = 80
+        Top = 30
+        Width = 409
+        Height = 21
+        MaxLength = 50
+        TabOrder = 7
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object CNPJ_RECEBEDOR: TEdit
+        Left = 80
+        Top = 3
+        Width = 174
+        Height = 21
+        CharCase = ecUpperCase
+        MaxLength = 14
+        TabOrder = 8
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object INSCRICAO_RECEBEDOR: TEdit
+        Left = 379
+        Top = 3
+        Width = 110
+        Height = 21
+        MaxLength = 15
+        TabOrder = 9
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object email_recebedor: TEdit
+        Left = 80
+        Top = 136
+        Width = 279
+        Height = 21
+        MaxLength = 60
+        TabOrder = 10
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+    end
+    object TabSheet1: TTabSheet
+      Caption = 'Dados de Coleta'
+      ImageIndex = 4
+      ExplicitLeft = 8
+      ExplicitTop = 28
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Label67: TLabel
+        Left = 0
+        Top = 13
+        Width = 48
+        Height = 13
+        Caption = 'CNPJ/CPF'
+      end
+      object btnColeta: TSpeedButton
+        Left = 257
+        Top = 9
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = btnColetaClick
+      end
+      object Label68: TLabel
+        Left = 330
+        Top = 13
+        Width = 46
+        Height = 13
+        Caption = 'Insc. Est.'
+      end
+      object Label69: TLabel
+        Left = 0
+        Top = 42
+        Width = 72
+        Height = 13
+        Caption = 'Nome/R. Social'
+      end
+      object Label70: TLabel
+        Left = 0
+        Top = 71
+        Width = 45
+        Height = 13
+        Caption = 'Endere'#231'o'
+      end
+      object Label72: TLabel
+        Left = 0
+        Top = 97
+        Width = 37
+        Height = 13
+        Caption = 'N'#250'mero'
+      end
+      object Label73: TLabel
+        Left = 311
+        Top = 97
+        Width = 43
+        Height = 13
+        Caption = 'Munic'#237'pio'
+      end
+      object Label74: TLabel
+        Left = 0
+        Top = 126
+        Width = 13
+        Height = 13
+        Caption = 'UF'
+      end
+      object Label75: TLabel
+        Left = 152
+        Top = 97
+        Width = 28
+        Height = 13
+        Caption = 'Bairro'
+      end
+      object Label76: TLabel
+        Left = 159
+        Top = 124
+        Width = 85
+        Height = 13
+        Caption = 'N'#250'mero da ordem'
+      end
+      object Label77: TLabel
+        Left = 324
+        Top = 124
+        Width = 24
+        Height = 13
+        Caption = 'Serie'
+      end
+      object CNPJ_COLETA: TEdit
+        Left = 78
+        Top = 9
+        Width = 174
+        Height = 21
+        CharCase = ecUpperCase
+        MaxLength = 14
+        TabOrder = 0
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object INSCRICAO_COLETA: TEdit
+        Left = 380
+        Top = 10
+        Width = 110
+        Height = 21
+        MaxLength = 15
+        TabOrder = 1
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object NOME_COLETA: TEdit
+        Left = 78
+        Top = 38
+        Width = 409
+        Height = 21
+        MaxLength = 50
+        TabOrder = 2
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object ENDERECO_COLETA: TEdit
+        Left = 78
+        Top = 66
+        Width = 409
+        Height = 21
+        MaxLength = 40
+        TabOrder = 3
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object N_COLETA: TEdit
+        Left = 78
+        Top = 93
+        Width = 56
+        Height = 21
+        MaxLength = 30
+        TabOrder = 4
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object BAIRRO_COLETA: TEdit
+        Left = 190
+        Top = 93
+        Width = 115
+        Height = 21
+        MaxLength = 30
+        TabOrder = 5
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object MUNICIPIO_COLETA: TEdit
+        Left = 356
+        Top = 93
+        Width = 136
+        Height = 21
+        MaxLength = 30
+        TabOrder = 6
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object UF_COLETA: TComboBox
+        Left = 78
+        Top = 119
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 7
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object N_ORDEM: TEdit
+        Left = 250
+        Top = 121
+        Width = 56
+        Height = 21
+        MaxLength = 5
+        TabOrder = 8
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object S_ORDEM: TEdit
+        Left = 362
+        Top = 121
+        Width = 31
+        Height = 21
+        MaxLength = 3
+        TabOrder = 9
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+    end
+  end
+  object PageControl2: TPageControl
+    Left = 7
+    Top = 448
+    Width = 497
+    Height = 139
+    ActivePage = Nota_Fiscal
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    ParentFont = False
+    TabOrder = 16
+    object Nota_Fiscal: TTabSheet
+      Caption = 'Notas Fiscais'
+      object Grid_Notas: TDBGrid
+        Left = -3
+        Top = 1
+        Width = 525
+        Height = 114
+        DataSource = DataNotas
+        Enabled = False
+        Options = [dgEditing, dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgCancelOnExit]
+        TabOrder = 0
+        TitleFont.Charset = DEFAULT_CHARSET
+        TitleFont.Color = clWindowText
+        TitleFont.Height = -11
+        TitleFont.Name = 'Tahoma'
+        TitleFont.Style = []
+        OnKeyDown = Grid_NotasKeyDown
+        OnKeyPress = Grid_NotasKeyPress
+        Columns = <
+          item
+            Expanded = False
+            FieldName = 'num_doc'
+            Title.Alignment = taCenter
+            Title.Caption = 'N'#186' Nota Fiscal'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'serie'
+            Title.Alignment = taCenter
+            Title.Caption = 'Serie'
+            Width = 29
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'modelo'
+            Title.Alignment = taCenter
+            Title.Caption = 'Modelo'
+            Width = 45
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'dt_emissao'
+            Title.Alignment = taCenter
+            Title.Caption = 'Emiss'#227'o'
+            Width = 62
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'cfop'
+            Title.Alignment = taCenter
+            Title.Caption = 'Cfop'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'base_icms_normal'
+            Title.Caption = 'Base Icms'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'vr_icms_normal'
+            Title.Caption = 'Valor Icms'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'base_icms_st'
+            Title.Caption = 'Base Icms St'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'vr_icms_st'
+            Title.Caption = 'Icms St'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'valor_produtos'
+            Title.Caption = 'Vr. Produtos'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'valor'
+            Title.Caption = 'Valor NF'
+            Width = 75
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'romaneio'
+            Title.Alignment = taCenter
+            Title.Caption = 'Romaneio'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'pedido'
+            Title.Alignment = taCenter
+            Title.Caption = 'Pedido'
+            Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'chave_nfe'
+            Title.Alignment = taCenter
+            Title.Caption = 'Chave_Nfe'
+            Visible = True
+          end>
+      end
+      object StatusBar2: TStatusBar
+        Left = 0
+        Top = 114
+        Width = 521
+        Height = 19
+        Align = alNone
+        Panels = <
+          item
+            Text = '<F7> - Loc. Num. S'#233'rie'
+            Width = 250
+          end
+          item
+            Text = '<Ctrl + Del> - Apagar'
+            Width = 164
+          end>
+      end
+    end
+    object TabSheet5: TTabSheet
+      Caption = 'Municipio Origem'
+      ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Label56: TLabel
+        Left = 10
+        Top = 42
+        Width = 43
+        Height = 13
+        Caption = 'Munic'#237'pio'
+      end
+      object Label57: TLabel
+        Left = 214
+        Top = 43
+        Width = 13
+        Height = 13
+        Caption = 'UF'
+      end
+      object Label58: TLabel
+        Left = 4
+        Top = 14
+        Width = 53
+        Height = 13
+        Caption = 'C'#243'd. IBGE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object BtnIbgeOrigem: TSpeedButton
+        Left = 132
+        Top = 11
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = BtnIbgeOrigemClick
+      end
+      object Label59: TLabel
+        Left = 27
+        Top = 68
+        Width = 19
+        Height = 13
+        Caption = 'CEP'
+      end
+      object Municipio_Origem: TEdit
+        Left = 65
+        Top = 39
+        Width = 136
+        Height = 21
+        MaxLength = 30
+        TabOrder = 1
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object Uf_Origem: TComboBox
+        Left = 243
+        Top = 41
+        Width = 56
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 2
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object IBGe_Origem: TEdit
+        Left = 65
+        Top = 11
+        Width = 61
+        Height = 21
+        MaxLength = 7
+        TabOrder = 0
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object Cep_Origem: TMaskEdit
+        Left = 65
+        Top = 66
+        Width = 67
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        EditMask = '99999-999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 9
+        ParentFont = False
+        TabOrder = 3
+        Text = '     -   '
+      end
+    end
+    object TabSheet6: TTabSheet
+      Caption = 'Municipio Destino'
+      ImageIndex = 2
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
+      object Label60: TLabel
+        Left = 12
+        Top = 42
+        Width = 43
+        Height = 13
+        Caption = 'Munic'#237'pio'
+      end
+      object Label61: TLabel
+        Left = 236
+        Top = 41
+        Width = 13
+        Height = 13
+        Caption = 'UF'
+      end
+      object Label62: TLabel
+        Left = 24
+        Top = 71
+        Width = 19
+        Height = 13
+        Caption = 'CEP'
+      end
+      object Label63: TLabel
+        Left = 6
+        Top = 14
+        Width = 53
+        Height = 13
+        Caption = 'C'#243'd. IBGE'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+      object BtnIbgeDestino: TSpeedButton
+        Left = 134
+        Top = 11
+        Width = 69
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        OnClick = BtnIbgeDestinoClick
+      end
+      object Municipio_Destino: TEdit
+        Left = 67
+        Top = 39
+        Width = 141
+        Height = 21
+        MaxLength = 30
+        TabOrder = 1
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+      object Uf_Destino: TComboBox
+        Left = 273
+        Top = 39
+        Width = 61
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 2
+        ParentFont = False
+        TabOrder = 2
+        OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+        Items.Strings = (
+          'AC'
+          'AL'
+          'AP'
+          'AM'
+          'BA'
+          'CE'
+          'DF'
+          'ES'
+          'GO'
+          'MA'
+          'MG'
+          'MT'
+          'MS'
+          'PA'
+          'PB'
+          'PR'
+          'PE'
+          'PI'
+          'RJ'
+          'RN'
+          'RS'
+          'RO'
+          'RR'
+          'SC'
+          'SP'
+          'SE'
+          'TO')
+      end
+      object Cep_Destino: TMaskEdit
+        Left = 67
+        Top = 66
+        Width = 72
+        Height = 21
+        CharCase = ecUpperCase
+        Color = clWhite
+        EditMask = '99999-999;1;_'
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        MaxLength = 9
+        ParentFont = False
+        TabOrder = 3
+        Text = '     -   '
+      end
+      object Ibge_Destino: TEdit
+        Left = 67
+        Top = 11
+        Width = 66
+        Height = 21
+        MaxLength = 7
+        TabOrder = 0
+        OnKeyDown = DT_SAIDAKeyDown
+      end
+    end
+  end
+  object Instrucoes: TMemo
+    Left = 89
+    Top = 392
+    Width = 410
+    Height = 21
+    Lines.Strings = (
+      '')
+    TabOrder = 14
+  end
+  object cte_origem: TEdit
+    Left = 156
+    Top = 362
+    Width = 278
+    Height = 21
+    MaxLength = 44
+    TabOrder = 13
+  end
+  object Rel_Coleta: TQuickRep
+    Tag = 1
+    Left = 679
+    Top = 77
+    Width = 794
+    Height = 1123
+    DataSet = QTabela
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Arial'
+    Font.Style = []
+    Functions.Strings = (
+      'PAGENUMBER'
+      'COLUMNNUMBER'
+      'REPORTTITLE')
+    Functions.DATA = (
+      '0'
+      '0'
+      #39#39)
+    Options = [FirstPageHeader, LastPageFooter]
+    Page.Columns = 1
+    Page.Orientation = poPortrait
+    Page.PaperSize = A4
+    Page.Continuous = False
+    Page.Values = (
+      100.000000000000000000
+      2970.000000000000000000
+      100.000000000000000000
+      2100.000000000000000000
+      100.000000000000000000
+      100.000000000000000000
+      0.000000000000000000)
+    PrinterSettings.Copies = 1
+    PrinterSettings.OutputBin = Auto
+    PrinterSettings.Duplex = False
+    PrinterSettings.FirstPage = 0
+    PrinterSettings.LastPage = 0
+    PrinterSettings.UseStandardprinter = False
+    PrinterSettings.UseCustomBinCode = False
+    PrinterSettings.CustomBinCode = 0
+    PrinterSettings.ExtendedDuplex = 0
+    PrinterSettings.UseCustomPaperCode = False
+    PrinterSettings.CustomPaperCode = 0
+    PrinterSettings.PrintMetaFile = False
+    PrinterSettings.PrintQuality = 0
+    PrinterSettings.Collate = 0
+    PrinterSettings.ColorOption = 0
+    PrintIfEmpty = True
+    SnapToGrid = True
+    Units = MM
+    Zoom = 100
+    PrevFormStyle = fsNormal
+    PreviewInitialState = wsMaximized
+    PreviewWidth = 500
+    PreviewHeight = 500
+    PrevInitialZoom = qrZoomToFit
+    PreviewDefaultSaveType = stQRP
+    PreviewLeft = 0
+    PreviewTop = 0
+    object QRShape1: TQRShape
+      Left = 43
+      Top = 96
+      Width = 728
+      Height = 1038
+      Size.Values = (
+        2746.375000000000000000
+        113.770833333333300000
+        254.000000000000000000
+        1926.166666666667000000)
+      XLColumn = 0
+      Shape = qrsRectangle
+      VertAdjust = 0
+    end
+    object QRShape2: TQRShape
+      Left = 50
+      Top = 118
+      Width = 354
+      Height = 25
+      Size.Values = (
+        66.145833333333330000
+        132.291666666666700000
+        312.208333333333300000
+        936.625000000000000000)
+      XLColumn = 0
+      Shape = qrsRectangle
+      VertAdjust = 0
+    end
+    object QRLabel1: TQRLabel
+      Left = 142
+      Top = 123
+      Width = 198
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        375.708333333333300000
+        325.437500000000000000
+        523.875000000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'ORDEM DE COLETA DE CARGA'
+      Color = clWhite
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRShape3: TQRShape
+      Left = 411
+      Top = 120
+      Width = 354
+      Height = 25
+      Size.Values = (
+        66.145833333333330000
+        1087.437500000000000000
+        317.500000000000000000
+        936.625000000000000000)
+      XLColumn = 0
+      Shape = qrsRectangle
+      VertAdjust = 0
+    end
+    object QR_NUMERO: TQRLabel
+      Left = 434
+      Top = 124
+      Width = 105
+      Height = 17
+      Enabled = False
+      Size.Values = (
+        44.979166666666670000
+        1148.291666666667000000
+        328.083333333333300000
+        277.812500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'N                        '
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QR_SEIRIE: TQRLabel
+      Left = 585
+      Top = 124
+      Width = 35
+      Height = 17
+      Enabled = False
+      Size.Values = (
+        44.979166666666670000
+        1547.812500000000000000
+        328.083333333333300000
+        92.604166666666670000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'SERIE'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QR_VIA: TQRLabel
+      Left = 705
+      Top = 124
+      Width = 21
+      Height = 17
+      Enabled = False
+      Size.Values = (
+        44.979166666666670000
+        1865.312500000000000000
+        328.083333333333300000
+        55.562500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'VIA'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRShape4: TQRShape
+      Left = 51
+      Top = 149
+      Width = 354
+      Height = 138
+      Size.Values = (
+        365.125000000000000000
+        134.937500000000000000
+        394.229166666666700000
+        936.625000000000000000)
+      XLColumn = 0
+      Shape = qrsRectangle
+      VertAdjust = 0
+    end
+    object QRShape5: TQRShape
+      Left = 411
+      Top = 149
+      Width = 354
+      Height = 138
+      Size.Values = (
+        365.125000000000000000
+        1087.437500000000000000
+        394.229166666666700000
+        936.625000000000000000)
+      XLColumn = 0
+      Shape = qrsRectangle
+      VertAdjust = 0
+    end
+    object QRDBText1: TQRDBText
+      Left = 158
+      Top = 180
+      Width = 116
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        418.041666666666700000
+        476.250000000000000000
+        306.916666666666700000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'nome_transportador'
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel2: TQRLabel
+      Left = 57
+      Top = 179
+      Width = 95
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        150.812500000000000000
+        473.604166666666700000
+        251.354166666666700000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Nome Emitente:'
+      Color = clWhite
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRLabel3: TQRLabel
+      Left = 57
+      Top = 202
+      Width = 60
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        150.812500000000000000
+        534.458333333333300000
+        158.750000000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Endere'#231'o:'
+      Color = clWhite
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText2: TQRDBText
+      Left = 123
+      Top = 203
+      Width = 137
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        325.437500000000000000
+        537.104166666666700000
+        362.479166666666700000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'endereco_transportador'
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel4: TQRLabel
+      Left = 57
+      Top = 227
+      Width = 51
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        150.812500000000000000
+        600.604166666666700000
+        134.937500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'N'#250'mero:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText3: TQRDBText
+      Left = 113
+      Top = 227
+      Width = 93
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        298.979166666666700000
+        600.604166666666700000
+        246.062500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'n_transportador'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel5: TQRLabel
+      Left = 228
+      Top = 228
+      Width = 40
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        603.250000000000000000
+        603.250000000000000000
+        105.833333333333300000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Bairro:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText4: TQRDBText
+      Left = 274
+      Top = 228
+      Width = 120
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        724.958333333333300000
+        603.250000000000000000
+        317.500000000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'bairro_transportador'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel6: TQRLabel
+      Left = 57
+      Top = 250
+      Width = 45
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        150.812500000000000000
+        661.458333333333300000
+        119.062500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Cidade:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText5: TQRDBText
+      Left = 109
+      Top = 248
+      Width = 140
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        288.395833333333300000
+        656.166666666666700000
+        370.416666666666700000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'municipio_transportador'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel7: TQRLabel
+      Left = 273
+      Top = 251
+      Width = 21
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        722.312500000000000000
+        664.104166666666700000
+        55.562500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'UF:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText6: TQRDBText
+      Left = 300
+      Top = 251
+      Width = 97
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        793.750000000000000000
+        664.104166666666700000
+        256.645833333333300000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'uf_transportador'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel8: TQRLabel
+      Left = 58
+      Top = 156
+      Width = 32
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        153.458333333333300000
+        412.750000000000000000
+        84.666666666666670000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Cnpj:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText7: TQRDBText
+      Left = 96
+      Top = 155
+      Width = 110
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        254.000000000000000000
+        410.104166666666700000
+        291.041666666666700000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'cnpj_transportador'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel9: TQRLabel
+      Left = 206
+      Top = 155
+      Width = 57
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        545.041666666666700000
+        410.104166666666700000
+        150.812500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Inscri'#231#227'o:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText8: TQRDBText
+      Left = 269
+      Top = 154
+      Width = 136
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        711.729166666666700000
+        407.458333333333300000
+        359.833333333333300000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'inscricao_transportador'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRBand1: TQRBand
+      Left = 38
+      Top = 38
+      Width = 718
+      Height = 40
+      AlignToBottom = False
+      TransparentBand = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        105.833333333333300000
+        1899.708333333333000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbTitle
+    end
+    object QRLabel10: TQRLabel
+      Left = 416
+      Top = 157
+      Width = 32
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1100.666666666667000000
+        415.395833333333300000
+        84.666666666666670000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Cnpj:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText9: TQRDBText
+      Left = 454
+      Top = 156
+      Width = 66
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1201.208333333333000000
+        412.750000000000000000
+        174.625000000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'cnpj_coleta'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel11: TQRLabel
+      Left = 564
+      Top = 156
+      Width = 57
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1492.250000000000000000
+        412.750000000000000000
+        150.812500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Inscri'#231#227'o:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText10: TQRDBText
+      Left = 627
+      Top = 151
+      Width = 92
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1658.937500000000000000
+        399.520833333333300000
+        243.416666666666700000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'inscricao_coleta'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel12: TQRLabel
+      Left = 415
+      Top = 180
+      Width = 106
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1098.020833333333000000
+        476.250000000000000000
+        280.458333333333300000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Nome Remetente:'
+      Color = clWhite
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText11: TQRDBText
+      Left = 527
+      Top = 181
+      Width = 75
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1394.354166666667000000
+        478.895833333333300000
+        198.437500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'nome_coleta'
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel13: TQRLabel
+      Left = 415
+      Top = 203
+      Width = 60
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1098.020833333333000000
+        537.104166666666700000
+        158.750000000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Endere'#231'o:'
+      Color = clWhite
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText12: TQRDBText
+      Left = 481
+      Top = 204
+      Width = 96
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1272.645833333333000000
+        539.750000000000000000
+        254.000000000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'endereco_coleta'
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel14: TQRLabel
+      Left = 415
+      Top = 228
+      Width = 51
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1098.020833333333000000
+        603.250000000000000000
+        134.937500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'N'#250'mero:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText13: TQRDBText
+      Left = 471
+      Top = 228
+      Width = 49
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1246.187500000000000000
+        603.250000000000000000
+        129.645833333333300000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'n_coleta'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel15: TQRLabel
+      Left = 586
+      Top = 229
+      Width = 40
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1550.458333333333000000
+        605.895833333333300000
+        105.833333333333300000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Bairro:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText14: TQRDBText
+      Left = 632
+      Top = 229
+      Width = 76
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1672.166666666667000000
+        605.895833333333300000
+        201.083333333333300000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'bairro_coleta'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel16: TQRLabel
+      Left = 415
+      Top = 251
+      Width = 45
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1098.020833333333000000
+        664.104166666666700000
+        119.062500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'Cidade:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText15: TQRDBText
+      Left = 467
+      Top = 249
+      Width = 96
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1235.604166666667000000
+        658.812500000000000000
+        254.000000000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'municipio_coleta'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+    object QRLabel17: TQRLabel
+      Left = 631
+      Top = 252
+      Width = 21
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1669.520833333333000000
+        666.750000000000000000
+        55.562500000000000000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Caption = 'UF:'
+      Color = clWhite
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FontSize = 10
+    end
+    object QRDBText16: TQRDBText
+      Left = 658
+      Top = 252
+      Width = 53
+      Height = 17
+      Size.Values = (
+        44.979166666666670000
+        1740.958333333333000000
+        666.750000000000000000
+        140.229166666666700000)
+      XLColumn = 0
+      Alignment = taLeftJustify
+      AlignToBand = False
+      Color = clWhite
+      DataSet = QTabela
+      DataField = 'uf_coleta'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      Transparent = False
+      ExportAs = exptText
+      WrapStyle = BreakOnSpaces
+      FullJustify = False
+      MaxBreakChars = 0
+      FontSize = 10
+    end
+  end
+  object Button2: TButton
+    Left = 55
+    Top = 593
+    Width = 189
+    Height = 25
+    Caption = 'Imprimir &Ordem de coleta de carga'
+    TabOrder = 21
+    OnClick = Button2Click
+  end
+  object Button3: TButton
+    Left = 5
+    Top = 593
+    Width = 44
+    Height = 25
+    Caption = 'fr3'
+    TabOrder = 22
+    Visible = False
+    OnClick = Button3Click
+  end
+  object Menu_GeraXML: TPopupMenu
+    Left = 831
+    Top = 17
+    object GerarXML: TMenuItem
+      Caption = 'Gerar XML'
+      OnClick = GerarXMLClick
+    end
+  end
+  object DataNotas: TDataSource
+    DataSet = QNotas
+    Left = 623
+    Top = 13
+  end
+  object RDprint1: TRDprint
+    ImpressoraPersonalizada.NomeImpressora = 'Modelo Personalizado - (Epson)'
+    ImpressoraPersonalizada.AvancaOitavos = '27 48'
+    ImpressoraPersonalizada.AvancaSextos = '27 50'
+    ImpressoraPersonalizada.SaltoPagina = '12'
+    ImpressoraPersonalizada.TamanhoPagina = '27 67 66'
+    ImpressoraPersonalizada.Negrito = '27 69'
+    ImpressoraPersonalizada.Italico = '27 52'
+    ImpressoraPersonalizada.Sublinhado = '27 45 49'
+    ImpressoraPersonalizada.Expandido = '27 14'
+    ImpressoraPersonalizada.Normal10 = '18 27 80'
+    ImpressoraPersonalizada.Comprimir12 = '18 27 77'
+    ImpressoraPersonalizada.Comprimir17 = '27 80 27 15'
+    ImpressoraPersonalizada.Comprimir20 = '27 77 27 15'
+    ImpressoraPersonalizada.Reset = '27 80 18 20 27 53 27 70 27 45 48'
+    ImpressoraPersonalizada.Inicializar = '27 64'
+    OpcoesPreview.PaginaZebrada = True
+    OpcoesPreview.Remalina = False
+    OpcoesPreview.CaptionPreview = 'Rdprint Preview'
+    OpcoesPreview.PreviewZoom = 100
+    OpcoesPreview.CorPapelPreview = clWhite
+    OpcoesPreview.CorLetraPreview = clBlack
+    OpcoesPreview.Preview = True
+    OpcoesPreview.BotaoSetup = Ativo
+    OpcoesPreview.BotaoImprimir = Ativo
+    OpcoesPreview.BotaoGravar = Ativo
+    OpcoesPreview.BotaoLer = Ativo
+    OpcoesPreview.BotaoProcurar = Ativo
+    OpcoesPreview.BotaoPDF = Ativo
+    OpcoesPreview.BotaoEMAIL = Ativo
+    Margens.Left = 10
+    Margens.Right = 10
+    Margens.Top = 10
+    Margens.Bottom = 10
+    Autor = Deltress
+    RegistroUsuario.NomeRegistro = 'EFICAZ AUTOMA'#199'O E SISTEMAS LTDA '
+    RegistroUsuario.SerieProduto = 'GROUP-0214/02002'
+    RegistroUsuario.AutorizacaoKey = 'HE4F-X2AQ-8IYJ-211Q-IGUV'
+    About = 'RDprint 5.0 - Registrado'
+    Acentuacao = Transliterate
+    CaptionSetup = 'Rdprint Setup'
+    TitulodoRelatorio = 'Gerado por RDprint'
+    UsaGerenciadorImpr = True
+    CorForm = clBtnFace
+    CorFonte = clBlack
+    Impressora = Bobina
+    Mapeamento.Strings = (
+      '//--- Grafico Compativel com Windows/USB ---//'
+      '//'
+      'GRAFICO=GRAFICO'
+      'HP=GRAFICO'
+      'DESKJET=GRAFICO'
+      'LASERJET=GRAFICO'
+      'INKJET=GRAFICO'
+      'STYLUS=GRAFICO'
+      'EPL=GRAFICO'
+      'USB=GRAFICO'
+      '//'
+      '//--- Linha Epson Matricial 9 e 24 agulhas ---//'
+      '//'
+      'EPSON=EPSON'
+      'GENERIC=EPSON'
+      'TEXT=EPSON'
+      'LX-300=EPSON'
+      'LX-810=EPSON'
+      'FX-2170=EPSON'
+      'FX-1170=EPSON'
+      'LQ-1170=EPSON'
+      'LQ-2170=EPSON'
+      'OKIDATA=EPSON'
+      '//'
+      '//--- Rima e Emilia ---//'
+      '//'
+      'RIMA=RIMA'
+      'EMILIA=RIMA'
+      '//'
+      '//--- Linha HP/Xerox padr'#227'o PCL ---//'
+      '//'
+      'PCL=HP'
+      '//'
+      '//--- Impressoras 40 Colunas ---//'
+      '//'
+      'DARUMA=BOBINA'
+      'SIGTRON=BOBINA'
+      'SWEDA=BOBINA'
+      'BEMATECH=BOBINA')
+    MostrarProgresso = True
+    TamanhoQteLinhas = 66
+    TamanhoQteColunas = 80
+    TamanhoQteLPP = Seis
+    NumerodeCopias = 1
+    FonteTamanhoPadrao = S10cpp
+    FonteEstiloPadrao = []
+    Orientacao = poPortrait
+    Left = 695
+    Top = 17
+  end
+  object QTabela: TFDQuery
+    Active = True
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      'SELECT * FROM COMPL_CTEFISCAL')
+    Left = 1055
+    Top = 1
+  end
+  object QCfop: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM CFOP'
+      'WHERE'
+      '(COD_CFOP = :COD_CFOP)')
+    Left = 1023
+    Top = 9
+    ParamData = <
+      item
+        Name = 'COD_CFOP'
+        ParamType = ptInput
+      end>
+  end
+  object QProdutos: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 991
+    Top = 9
+  end
+  object QParceiro: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 959
+    Top = 9
+  end
+  object QNatOper: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 927
+    Top = 9
+  end
+  object QTransacao: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 895
+    Top = 9
+  end
+  object QDetalhe: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 863
+    Top = 5
+  end
+  object QParcelas: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 759
+    Top = 17
+  end
+  object IQuery: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 727
+    Top = 17
+  end
+  object QNotas: TFDQuery
+    Active = True
+    BeforeEdit = QNotasBeforeEdit
+    BeforePost = QNotasBeforePost
+    OnNewRecord = QNotasNewRecord
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM TRANSITENS_NOTAS'
+      'WHERE'
+      '(TRANSACAO_ID = :TRANSACAO_ID)'
+      'ORDER BY DT_EMISSAO, NUM_DOC')
+    Left = 583
+    Top = 17
+    ParamData = <
+      item
+        Name = 'TRANSACAO_ID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
+  end
+  object QConfig_CTEFiscal: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 551
+    Top = 17
+  end
+  object QItens: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 519
+    Top = 17
+  end
+  object USql_Notas: TFDUpdateSQL
+    Connection = FrmData.DbF_Eficaz
+    InsertSQL.Strings = (
+      'insert into TRANSITENS_NOTAS'
+      '  (TRANSACAO_ID,  '
+      '   NUM_DOC,'
+      '   MODELO,'
+      '   SERIE,'
+      '  CFOP,'
+      ' BASE_ICMS_NORMAL,'
+      'VR_ICMS_NORMAL,'
+      'BASE_ICMS_ST,'
+      'VR_ICMS_ST,'
+      'VALOR_PRODUTOS,'
+      'VALOR, '
+      'CHAVE_NFE)             '
+      'values'
+      '   ( :TRANSACAO_ID,'
+      '     :NUM_DOC,'
+      '     :MODELO,'
+      '     :SERIE,'
+      '     :CFOP, '
+      '     :BASE_ICMS_NORMAL,'
+      '     :VR_ICMS_NORMAL,'
+      '     :BASE_ICMS_ST,'
+      '     :VR_ICMS_ST,'
+      '     :VALOR_PRODUTOS,'
+      '     :VALOR, '
+      '     :CHAVE_NFE)')
+    ModifySQL.Strings = (
+      'update TRANSITENS_NOTAS'
+      'set  '
+      '    SERIE                         = :SERIE , '
+      '    MODELO                     = :MODELO ,   '
+      '    DT_EMISSAO              = :DT_EMISSAO  ,     '
+      '    CFOP                          = :CFOP,'
+      '    CHAVE_NFE                = :CHVE_NFE,   '
+      '    ROMANEIO                 = :ROMANEIO,   '
+      '    PEDIDO                       = :PEDIDO ,'
+      '    BASE_ICMS_NORMAL = :BASE_ICMS_NORMAL ,'
+      '    VR_ICMS_NORMAL     = :VR_ICMS_NORMAL  , '
+      '    BASE_ICMS_ST           = :BASE_ICMS_ST , '
+      '    VR_ICMS_ST               = :VR_ICMS_ST,'
+      '    VALOR_PRODUTOS    = :VALOR_PRODUTOS ,    '
+      '    VALOR                        = :VALOR'
+      'where'
+      '  NUM_DOC = :OLD_NUM_DOC and'
+      '  TRANSACAO_ID = :OLD_TRANSACAO_ID')
+    DeleteSQL.Strings = (
+      'delete from TRANSITENS_NOTAS'
+      'where'
+      '  NUM_DOC = :OLD_NUM_DOC and'
+      '  TRANSACAO_ID = :OLD_TRANSACAO_ID')
+    Left = 663
+    Top = 17
+  end
+  object QSearch: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 1087
+    Top = 9
+  end
+  object Relatorio_Cte: TfrxReport
+    Version = '6.9.3'
+    DataSet = frxDBDataset1
+    DataSetName = 'frxDBDataset1'
+    DotMatrixReport = False
+    IniFile = '\Software\Fast Reports'
+    PreviewOptions.Buttons = [pbPrint, pbLoad, pbSave, pbExport, pbZoom, pbFind, pbOutline, pbPageSetup, pbTools, pbEdit, pbNavigator, pbExportQuick, pbCopy, pbSelection]
+    PreviewOptions.Zoom = 1.000000000000000000
+    PrintOptions.Printer = 'Default'
+    PrintOptions.PrintOnSheet = 0
+    ReportOptions.CreateDate = 44901.721295567100000000
+    ReportOptions.LastChange = 44903.467216030090000000
+    ScriptLanguage = 'PascalScript'
+    ScriptText.Strings = (
+      'begin'
+      ''
+      'end.')
+    Left = 552
+    Top = 192
+    Datasets = <
+      item
+        DataSet = frxDBDataset1
+        DataSetName = 'frxDBDataset1'
+      end>
+    Variables = <>
+    Style = <>
+    object Data: TfrxDataPage
+      Height = 1000.000000000000000000
+      Width = 1000.000000000000000000
+    end
+    object Page1: TfrxReportPage
+      PaperWidth = 210.000000000000000000
+      PaperHeight = 297.000000000000000000
+      PaperSize = 9
+      LeftMargin = 10.000000000000000000
+      RightMargin = 10.000000000000000000
+      TopMargin = 10.000000000000000000
+      BottomMargin = 10.000000000000000000
+      Frame.Typ = []
+      EndlessWidth = True
+      MirrorMode = []
+      object PageHeader1: TfrxPageHeader
+        FillType = ftBrush
+        Frame.Typ = []
+        Height = 256.212740000000000000
+        Top = 18.897650000000000000
+        Width = 718.110700000000000000
+        object Shape1: TfrxShapeView
+          AllowVectorExport = True
+          Left = 3.779530000000000000
+          Top = 42.779530000000000000
+          Width = 351.496290000000000000
+          Height = 158.740260000000000000
+          Frame.Typ = []
+        end
+        object Memo2: TfrxMemoView
+          AllowVectorExport = True
+          Left = 11.338590000000000000
+          Top = 50.338590000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Emitente:')
+        end
+        object frxDBDataset1nome_transportador: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 79.370130000000000000
+          Top = 51.118120000000000000
+          Width = 264.567100000000000000
+          Height = 18.897650000000000000
+          DataField = 'nome_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."nome_transportador"]')
+        end
+        object Shape2: TfrxShapeView
+          AllowVectorExport = True
+          Left = 362.834880000000000000
+          Top = 43.559060000000000000
+          Width = 351.496290000000000000
+          Height = 158.740260000000000000
+          Frame.Typ = []
+        end
+        object Memo3: TfrxMemoView
+          AllowVectorExport = True
+          Left = 11.338590000000000000
+          Top = 77.574830000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Endere'#231'o:')
+        end
+        object Memo4: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 79.370130000000000000
+          Top = 78.354360000000000000
+          Width = 264.567100000000000000
+          Height = 18.897650000000000000
+          DataField = 'endereco_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."endereco_transportador"]')
+        end
+        object Memo5: TfrxMemoView
+          AllowVectorExport = True
+          Left = 11.338590000000000000
+          Top = 100.252010000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'N'#250'mero:')
+        end
+        object Memo6: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 79.370130000000000000
+          Top = 101.031540000000000000
+          Width = 30.236240000000000000
+          Height = 18.897650000000000000
+          DataField = 'n_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."n_transportador"]')
+        end
+        object Memo7: TfrxMemoView
+          AllowVectorExport = True
+          Left = 124.724490000000000000
+          Top = 100.252010000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Bairro:')
+        end
+        object Memo8: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 170.078850000000000000
+          Top = 101.031540000000000000
+          Width = 173.858380000000000000
+          Height = 18.897650000000000000
+          DataField = 'bairro_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."bairro_transportador"]')
+        end
+        object Memo9: TfrxMemoView
+          AllowVectorExport = True
+          Left = 11.338590000000000000
+          Top = 130.488250000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Cidade:')
+        end
+        object Memo10: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 79.370130000000000000
+          Top = 131.267780000000000000
+          Width = 181.417440000000000000
+          Height = 18.897650000000000000
+          DataField = 'municipio_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."municipio_transportador"]')
+        end
+        object Memo11: TfrxMemoView
+          AllowVectorExport = True
+          Left = 272.126160000000000000
+          Top = 130.488250000000000000
+          Width = 26.456710000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'UF:')
+        end
+        object Memo12: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 302.362400000000000000
+          Top = 131.267780000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          DataField = 'uf_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."uf_transportador"]')
+        end
+        object Memo13: TfrxMemoView
+          AllowVectorExport = True
+          Left = 12.118120000000000000
+          Top = 160.724490000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'CNPJ:')
+        end
+        object Memo14: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 66.031540000000000000
+          Top = 161.283550000000000000
+          Width = 120.944960000000000000
+          Height = 18.897650000000000000
+          DataField = 'cnpj_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."cnpj_transportador"]')
+        end
+        object Memo15: TfrxMemoView
+          AllowVectorExport = True
+          Left = 196.535560000000000000
+          Top = 160.724490000000000000
+          Width = 68.031540000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Inscri'#231#227'o:')
+        end
+        object Memo16: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 269.346630000000000000
+          Top = 161.283550000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          DataField = 'inscricao_transportador'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."inscricao_transportador"]')
+        end
+        object Memo17: TfrxMemoView
+          AllowVectorExport = True
+          Left = 370.393940000000000000
+          Top = 51.118120000000000000
+          Width = 71.811070000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Remetente:')
+        end
+        object Memo18: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 443.764070000000000000
+          Top = 52.897650000000000000
+          Width = 264.567100000000000000
+          Height = 18.897650000000000000
+          DataField = 'nome_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."nome_coleta"]')
+        end
+        object Memo19: TfrxMemoView
+          AllowVectorExport = True
+          Left = 370.393940000000000000
+          Top = 78.354360000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Endere'#231'o:')
+        end
+        object Memo20: TfrxMemoView
+          AllowVectorExport = True
+          Left = 370.393940000000000000
+          Top = 101.031540000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'N'#250'mero:')
+        end
+        object Memo21: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 438.425480000000000000
+          Top = 101.811070000000000000
+          Width = 30.236240000000000000
+          Height = 18.897650000000000000
+          DataField = 'n_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."n_coleta"]')
+        end
+        object Memo22: TfrxMemoView
+          AllowVectorExport = True
+          Left = 483.779840000000000000
+          Top = 101.031540000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Bairro:')
+        end
+        object Memo23: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 529.134200000000000000
+          Top = 101.811070000000000000
+          Width = 173.858380000000000000
+          Height = 18.897650000000000000
+          DataField = 'bairro_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."bairro_coleta"]')
+        end
+        object Memo24: TfrxMemoView
+          AllowVectorExport = True
+          Left = 370.393940000000000000
+          Top = 131.267780000000000000
+          Width = 60.472480000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Cidade:')
+        end
+        object Memo25: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 438.425480000000000000
+          Top = 132.047310000000000000
+          Width = 181.417440000000000000
+          Height = 18.897650000000000000
+          DataField = 'municipio_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."municipio_coleta"]')
+        end
+        object Memo26: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 661.417750000000000000
+          Top = 132.047310000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          DataField = 'uf_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."uf_coleta"]')
+        end
+        object Memo27: TfrxMemoView
+          AllowVectorExport = True
+          Left = 371.173470000000000000
+          Top = 161.504020000000000000
+          Width = 41.574830000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'CNPJ:')
+        end
+        object Memo28: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 425.086890000000000000
+          Top = 162.063080000000000000
+          Width = 120.944960000000000000
+          Height = 18.897650000000000000
+          DataField = 'cnpj_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."cnpj_coleta"]')
+        end
+        object Memo29: TfrxMemoView
+          AllowVectorExport = True
+          Left = 555.590910000000000000
+          Top = 161.504020000000000000
+          Width = 68.031540000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Inscri'#231#227'o:')
+        end
+        object Memo30: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 628.401980000000000000
+          Top = 162.063080000000000000
+          Width = 75.590600000000000000
+          Height = 18.897650000000000000
+          DataField = 'inscricao_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."inscricao_coleta"]')
+        end
+        object Memo31: TfrxMemoView
+          IndexTag = 1
+          AllowVectorExport = True
+          Left = 442.205010000000000000
+          Top = 77.574830000000000000
+          Width = 264.567100000000000000
+          Height = 18.897650000000000000
+          DataField = 'endereco_coleta'
+          DataSet = frxDBDataset1
+          DataSetName = 'frxDBDataset1'
+          Frame.Typ = []
+          Memo.UTF8W = (
+            '[frxDBDataset1."endereco_coleta"]')
+        end
+        object Memo32: TfrxMemoView
+          AllowVectorExport = True
+          Left = 628.181510000000000000
+          Top = 132.488250000000000000
+          Width = 26.456710000000000000
+          Height = 18.897650000000000000
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'UF:')
+        end
+        object Shape3: TfrxShapeView
+          AllowVectorExport = True
+          Left = 3.559060000000000000
+          Top = 207.858380000000000000
+          Width = 351.496062990000000000
+          Height = 41.574830000000000000
+          Frame.Typ = []
+        end
+        object numero: TfrxMemoView
+          AllowVectorExport = True
+          Left = 15.118120000000000000
+          Top = 217.976500000000000000
+          Width = 113.385900000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Numero:')
+          ParentFont = False
+        end
+        object serie: TfrxMemoView
+          AllowVectorExport = True
+          Left = 222.992270000000000000
+          Top = 217.976500000000000000
+          Width = 105.826840000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = []
+          Memo.UTF8W = (
+            'Serie:')
+          ParentFont = False
+        end
+        object via: TfrxMemoView
+          AllowVectorExport = True
+          Left = 170.078850000000000000
+          Top = 217.976500000000000000
+          Width = 34.015770000000000000
+          Height = 18.897650000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -16
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = []
+          HAlign = haCenter
+          Memo.UTF8W = (
+            '-')
+          ParentFont = False
+        end
+        object Memo1: TfrxMemoView
+          AllowVectorExport = True
+          Left = 3.779530000000000000
+          Top = 7.559060000000000000
+          Width = 710.551640000000000000
+          Height = 22.677180000000000000
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clBlack
+          Font.Height = -19
+          Font.Name = 'Arial'
+          Font.Style = []
+          Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+          Memo.UTF8W = (
+            
+              '                                              ORDEM DE COLETA DE' +
+              ' CARGA')
+          ParentFont = False
+        end
+      end
+      object Shape4: TfrxShapeView
+        AllowVectorExport = True
+        Left = 3.779530000000000000
+        Top = 710.551640000000000000
+        Width = 714.330942990000000000
+        Height = 60.472480000000000000
+        Frame.Typ = []
+      end
+      object Shape5: TfrxShapeView
+        AllowVectorExport = True
+        Left = 3.779530000000000000
+        Top = 797.480830000000000000
+        Width = 714.330942990000000000
+        Height = 60.472480000000000000
+        Frame.Typ = []
+      end
+      object Memo33: TfrxMemoView
+        AllowVectorExport = True
+        Left = 11.338590000000000000
+        Top = 713.110700000000000000
+        Width = 94.488250000000000000
+        Height = 18.897650000000000000
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clWhite
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        Memo.UTF8W = (
+          'Local/Data:')
+        ParentFont = False
+      end
+      object Memo_Local: TfrxMemoView
+        AllowVectorExport = True
+        Left = 7.559060000000000000
+        Top = 737.008350000000000000
+        Width = 706.772110000000000000
+        Height = 30.236240000000000000
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        ParentFont = False
+      end
+      object Shape6: TfrxShapeView
+        AllowVectorExport = True
+        Left = 3.023622050000000000
+        Top = 279.685220000000000000
+        Width = 714.331170000000000000
+        Height = 415.748300000000000000
+        Frame.Typ = []
+      end
+      object Line1: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244090000
+        Top = 309.921460000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line3: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.000000000000000000
+        Top = 347.716760000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line4: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244090000
+        Top = 366.614173230000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line5: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622050000000000
+        Top = 389.291590000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line6: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622050000000000
+        Top = 408.189240000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line7: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 427.086890000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line8: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 445.984540000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line9: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 464.882190000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line10: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 483.779840000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line11: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 502.677490000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line12: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 521.575140000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line13: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 540.472790000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line14: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 559.370440000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line15: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622050000000000
+        Top = 578.268090000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line16: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 597.165740000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line17: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 616.063390000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line18: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622047244094000
+        Top = 634.961040000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line19: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622050000000000
+        Top = 653.858690000000000000
+        Width = 714.330708660000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line20: TfrxLineView
+        AllowVectorExport = True
+        Left = 3.023622050000000000
+        Top = 672.756340000000000000
+        Width = 714.331170000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+      object Line21: TfrxLineView
+        AllowVectorExport = True
+        Left = 163.740260000000000000
+        Top = 309.700990000000000000
+        Height = 385.512060000000000000
+        Color = clBlack
+        Frame.Typ = [ftLeft]
+      end
+      object Line22: TfrxLineView
+        AllowVectorExport = True
+        Left = 521.575140000000000000
+        Top = 309.921460000000000000
+        Height = 385.512060000000000000
+        Color = clBlack
+        Frame.Typ = [ftLeft]
+      end
+      object Memo34: TfrxMemoView
+        AllowVectorExport = True
+        Left = 11.338590000000000000
+        Top = 318.480520000000000000
+        Width = 128.504020000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        Memo.UTF8W = (
+          'Quantidade/Volume')
+      end
+      object Memo35: TfrxMemoView
+        AllowVectorExport = True
+        Left = 211.653680000000000000
+        Top = 287.244280000000000000
+        Width = 291.023810000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        Memo.UTF8W = (
+          'DESCRI'#199#195'O DA CARGA A SER COLETADA')
+      end
+      object Memo36: TfrxMemoView
+        AllowVectorExport = True
+        Left = 234.330860000000000000
+        Top = 318.614173228346500000
+        Width = 222.992270000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        Memo.UTF8W = (
+          'Esp'#233'cie do Volume ou Mercadoria')
+      end
+      object Memo37: TfrxMemoView
+        AllowVectorExport = True
+        Left = 572.709030000000000000
+        Top = 318.614173230000000000
+        Width = 139.842610000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        Memo.UTF8W = (
+          'N'#186' / Data Doc. Fiscal')
+      end
+      object Quantidade1: TfrxMemoView
+        AllowVectorExport = True
+        Left = 8.118120000000000000
+        Top = 348.055350000000000000
+        Width = 139.842610000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        HAlign = haCenter
+        Memo.UTF8W = (
+          'Quantidade')
+      end
+      object especie1: TfrxMemoView
+        AllowVectorExport = True
+        Left = 170.078850000000000000
+        Top = 348.094488190000000000
+        Width = 321.260050000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        HAlign = haCenter
+        Memo.UTF8W = (
+          'Especie')
+      end
+      object documento1: TfrxMemoView
+        AllowVectorExport = True
+        Left = 529.134200000000000000
+        Top = 348.094488190000000000
+        Width = 185.196970000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        HAlign = haCenter
+        Memo.UTF8W = (
+          'Especie')
+      end
+      object Local: TfrxMemoView
+        AllowVectorExport = True
+        Left = 14.118120000000000000
+        Top = 742.567410000000000000
+        Width = 695.433520000000000000
+        Height = 18.897650000000000000
+        Frame.Typ = []
+        Memo.UTF8W = (
+          'Local/Data')
+      end
+      object Memo38: TfrxMemoView
+        AllowVectorExport = True
+        Left = 7.559060000000000000
+        Top = 802.260360000000000000
+        Width = 132.283550000000000000
+        Height = 18.897650000000000000
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clBlack
+        Font.Height = -13
+        Font.Name = 'Arial'
+        Font.Style = []
+        Frame.Color = clWhite
+        Frame.Typ = [ftLeft, ftRight, ftTop, ftBottom]
+        Memo.UTF8W = (
+          'Ass. do Recebedor:')
+        ParentFont = False
+      end
+      object Line23: TfrxLineView
+        AllowVectorExport = True
+        Left = 10.897650000000000000
+        Top = 839.835190000000000000
+        Width = 699.213050000000000000
+        Color = clBlack
+        Frame.Typ = []
+        Diagonal = True
+      end
+    end
+  end
+  object frxDBDataset1: TfrxDBDataset
+    UserName = 'frxDBDataset1'
+    CloseDataSource = False
+    DataSet = QTabela
+    BCDToCurrency = False
+    Left = 688
+    Top = 192
+  end
+  object QLayoutFastReport: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 552
+    Top = 275
+  end
+end

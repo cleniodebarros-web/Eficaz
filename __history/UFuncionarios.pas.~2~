@@ -1,0 +1,1280 @@
+unit UFuncionarios;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, rxToolEdit, Buttons, rxCurrEdit, DBCtrls,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient, IdHTTP, DBXJSON,
+  QRCtrls, QuickRpt;
+
+type
+  TFrmFuncionarios = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    Alfabeto: TTabSet;
+    StatusBar1: TStatusBar;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    DataEmpresa: TDataSource;
+    DataCusto: TDataSource;
+    DataCargo: TDataSource;
+    btnPesquisa: TBitBtn;
+    QTabela: TFDQuery;
+    IQuery: TFDQuery;
+    QCusto: TFDQuery;
+    QEmpresa: TFDQuery;
+    QCargo: TFDQuery;
+    PageControl2: TPageControl;
+    Dados_Cadastrais: TTabSheet;
+    TabSheet2: TTabSheet;
+    Label2: TLabel;
+    NOME: TEdit;
+    Label3: TLabel;
+    ENDERECO: TEdit;
+    Label11: TLabel;
+    BAIRRO: TEdit;
+    Label12: TLabel;
+    MUNICIPIO: TEdit;
+    Label14: TLabel;
+    CEP: TMaskEdit;
+    Label4: TLabel;
+    RG: TEdit;
+    Label6: TLabel;
+    CPF: TMaskEdit;
+    Label7: TLabel;
+    CTPS: TEdit;
+    Label10: TLabel;
+    NASCIMENTO: TDateEdit;
+    Label21: TLabel;
+    EMPRESA_ID: TCurrencyEdit;
+    Label22: TLabel;
+    C_CUSTO_ID: TCurrencyEdit;
+    Label23: TLabel;
+    CARGO_ID: TCurrencyEdit;
+    Label27: TLabel;
+    SALARIO: TRxCalcEdit;
+    btnCargo: TSpeedButton;
+    btnCentro_Custo: TSpeedButton;
+    btnEmpresa: TSpeedButton;
+    DBText1: TDBText;
+    DBText2: TDBText;
+    DBText3: TDBText;
+    Label26: TLabel;
+    DT_ADMISSAO: TDateEdit;
+    CONDICAO: TComboBox;
+    Label25: TLabel;
+    Label24: TLabel;
+    REGIME: TComboBox;
+    BtnOperador: TBitBtn;
+    SERIE: TEdit;
+    Label8: TLabel;
+    Label9: TLabel;
+    PIS: TEdit;
+    EMITENTE: TEdit;
+    Label5: TLabel;
+    Label15: TLabel;
+    TELEFONE: TMaskEdit;
+    ESTADO: TComboBox;
+    Label13: TLabel;
+    Label1: TLabel;
+    NUMERO: TEdit;
+    Label16: TLabel;
+    Senha: TEdit;
+    Label17: TLabel;
+    DESCONTO_MAX_ITEM: TRxCalcEdit;
+    DESCONTO_MAX_SUB_TOTAL: TLabel;
+    DESCONTO_MAX_SUBTOTAL: TRxCalcEdit;
+    Label18: TLabel;
+    Label19: TLabel;
+    DESCONTO_MAX_ITEM_PRAZO: TRxCalcEdit;
+    DESCONTO_MAX_SUBTOTAL_PRAZO: TRxCalcEdit;
+    Label20: TLabel;
+    Comissao: TRxCalcEdit;
+    Label28: TLabel;
+    Apelido: TEdit;
+    Tab_Salao: TTabSheet;
+    Posicao_Agenda: TCurrencyEdit;
+    Label29: TLabel;
+    QSearch: TFDQuery;
+    Label30: TLabel;
+    EMAIL: TEdit;
+    Tab_EficazMobile: TTabSheet;
+    email_eficaz_mobile: TEdit;
+    Label31: TLabel;
+    Label32: TLabel;
+    Label33: TLabel;
+    senha_eficaz_mobile: TEdit;
+    Label34: TLabel;
+    acesso_eficaz_mobile: TComboBox;
+    IdHTTP1: TIdHTTP;
+    QAcesso: TFDQuery;
+    btnImprime: TBitBtn;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure AlfabetoClick(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure NOMEKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure C_CUSTO_IDExit(Sender: TObject);
+    procedure CARGO_IDExit(Sender: TObject);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure btnCentro_CustoClick(Sender: TObject);
+    procedure btnCargoClick(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure NASCIMENTOEnter(Sender: TObject);
+    procedure BtnOperadorClick(Sender: TObject);
+    procedure CONDICAOChange(Sender: TObject);
+    procedure Atualiza_Eficaz_Mobile();
+    procedure btnImprimeClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+  end;
+
+var
+  FrmFuncionarios: TFrmFuncionarios;
+  Operacao,SenhaWeb_Ori: String;
+  ID: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UPesquisa,UOperadores,USeleciona_Funcionario;
+
+{$R *.dfm}
+
+procedure TFrmFuncionarios.Atualiza_Eficaz_Mobile();
+var
+  Json: string;
+  sResponse: string;
+  JsonEnviarApi: TStringStream;
+  Http: TIdHTTP;
+  chave_api, cnpj, nome, email, senha,
+  status_funcionario, liberado, json_resposta_api: string;
+  obj: TJSONObject; //Precisa da uses DBXJSON no DelphiXe5
+  visualizar_cadastro_produto, visualizar_cadastro_cliente,
+  visualizar_cadastro_fornecedor, visualizar_orcamento,
+  visualizar_recebimento_de_contas: Boolean;
+  funcionario_id_eficaz: Integer;
+begin
+  QAcesso.SQL.Clear;
+  QAcesso.SQL.Add('SELECT * FROM ACESSO WHERE FUNCIONARIO_ID = :FUNCIONARIO_ID');
+  QAcesso.ParamByName('FUNCIONARIO_ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+  QAcesso.Open();
+
+  chave_api := 'tAMWa4+9qWSFq-$w';
+  cnpj := FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString;
+  nome := QTabela.FieldByName('NOME').AsString;
+  email := QTabela.FieldByName('email_eficaz_mobile').AsString;
+  senha := QTabela.FieldByName('senha_eficaz_mobile').AsString;
+  status_funcionario := QTabela.FieldByName('STATUS').AsString;
+  liberado := acesso_eficaz_mobile.Text;
+  visualizar_cadastro_produto := Caso(Copy(QAcesso.FieldByName('OPCOES').AsString, 20, 1));
+  visualizar_cadastro_cliente := Caso(Copy(QAcesso.FieldByName('OPCOES').AsString, 23, 1));
+  visualizar_cadastro_fornecedor := Caso(Copy(QAcesso.FieldByName('OPCOES').AsString, 24, 1));
+  visualizar_orcamento := Caso(Copy(QAcesso.FieldByName('OPCOES').AsString, 42, 1));
+  visualizar_recebimento_de_contas := Caso(Copy(QAcesso.FieldByName('OPCOES').AsString, 33, 1));
+  funcionario_id_eficaz := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+  Json := '{"chave_api": "'+chave_api+'",' +
+    '"cnpj": "'+cnpj+'",' +
+    '"nome": "'+nome+'",' +
+    '"email": "'+email+'",' +
+    '"senha": "'+senha+'",' +
+    '"status_funcionario": "'+status_funcionario+'",' +
+    '"liberado": "'+liberado+'",' +
+    '"visualizar_cadastro_produto": "'+BoolToStr(visualizar_cadastro_produto)+'",' +
+    '"visualizar_cadastro_cliente": "'+BoolToStr(visualizar_cadastro_cliente)+'",' +
+    '"visualizar_cadastro_fornecedor": "'+BoolToStr(visualizar_cadastro_fornecedor)+'",' +
+    '"visualizar_orcamento": "'+BoolToStr(visualizar_orcamento)+'",' +
+    '"visualizar_recebimento_de_contas": "'+BoolToStr(visualizar_recebimento_de_contas)+'",' +
+    '"funcionario_id_eficaz": "'+IntToStr(funcionario_id_eficaz)+'"' +
+    '}';
+
+  JsonEnviarApi := TStringStream.Create(Json, TEncoding.UTF8);
+  memo1.lines.Text := JsonEnviarApi.DataString;
+
+  try
+    Http := TIdHTTP.Create(nil);
+    Http.Request.ContentType  := 'application/json';
+    Http.Request.CharSet      := 'utf-8';
+    Http.ConnectTimeout       := 3000;
+
+    Http.Response.ContentType := 'application/json';
+    Http.Response.CharSet     := 'UTF-8';
+
+    try
+      Http.Post('http://3.231.194.13:5000/atu_cadastra_usuario_nuvem', JsonEnviarApi);
+      //Http.Post('http://10.0.0.94:5000/atu_cadastra_usuario_nuvem', JsonEnviarApi);
+    except
+      on E:EIdHTTPProtocolException do
+        begin
+          obj := TJSONObject.ParseJSONValue(E.ErrorMessage) as TJSONObject;
+
+          if obj = nil then
+            //raise Exception.Create('Error parsing JSON')
+          else
+            Application.MessageBox(PChar('Eficaz Mobile: '#13#10 + obj.GetValue('msg').Value), PChar(Msg_Title), mb_IconStop);
+
+          obj.Free
+        end;
+      on E: Exception do
+        begin
+          Application.MessageBox(PChar('Eficaz Mobile: '#13#10 + E.Message), PChar(Msg_Title), mb_IconStop);
+        end;
+    end;
+
+  finally
+    JsonEnviarApi.Free;
+    Http.Free;
+  end;
+
+end;
+
+procedure TFrmFuncionarios.AlfabetoClick(Sender: TObject);
+begin
+  if Alfabeto.TabIndex <> 26 then
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (NOME LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (NOME LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ') AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end
+  else
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NOT NULL)'
+    else
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end;
+
+  CmdOrderBy := 'ORDER BY NOME';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  
+  QTabela.Open;
+end;
+
+procedure TFrmFuncionarios.BtnOperadorClick(Sender: TObject);
+begin
+Cadastra_Operador(Nome.Text);
+end;
+
+procedure TFrmFuncionarios.Botoes_Editing;
+begin
+  btnPrior.Enabled := False;
+  btnNext.Enabled := False;
+  btnInsert.Enabled := False;
+  btnEdit.Enabled := False;
+  btnDelete.Enabled := False;
+  btnSave.Enabled := True;
+  btnDiscard.Enabled := True;
+  btnRetorna.Enabled := False;
+  btnEmpresa.Enabled := True;
+  btnCentro_Custo.Enabled := True;
+  btnCargo.Enabled := True;
+  btnPesquisa.Enabled := False;
+  if condicao.Text = 'OPERADOR' then
+  BtnOperador.Enabled := True;
+end;
+
+procedure TFrmFuncionarios.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+    btnInsert.Enabled := True;
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled := True;
+    btnDelete.Enabled := True;
+  end
+  else
+  begin
+    btnEdit.Enabled := False;
+    btnDelete.Enabled := False;
+  end;
+  btnSave.Enabled := False;
+  btnDiscard.Enabled := False;
+  btnRetorna.Enabled := True;
+  btnEmpresa.Enabled := False;
+  btnCentro_Custo.Enabled := False;
+  btnCargo.Enabled := False;
+  btnPesquisa.Enabled := True;
+end;
+
+procedure TFrmFuncionarios.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA_ID.Text <> '') then
+  begin
+    QEmpresa.Close;
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Custo')) and (C_CUSTO_ID.Text <> '') then
+  begin
+    QCusto.Close;
+    QCusto.ParamByName('TABELA_ID').AsInteger := StrToInt(C_CUSTO_ID.Text);
+    QCusto.Prepare;
+    QCusto.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Cargo')) and (CARGO_ID.Text <> '') then
+  begin
+    QCargo.Close;
+    QCargo.ParamByName('TABELA_ID').AsInteger := StrToInt(CARGO_ID.Text);
+    QCargo.Prepare;
+    QCargo.Open;
+  end;
+end;
+
+procedure TFrmFuncionarios.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TMaskEdit then
+      TMaskEdit(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TRxCalcEdit(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmFuncionarios.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO FUNCIONARIOS(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO FUNCIONARIOS(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'INSERT INTO FUNCIONARIOS(' then
+        Sql := Sql + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TMaskEdit(Temp).Name
+      else
+        Par := Par + ', :' + TMaskEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'INSERT INTO FUNCIONARIOS(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO FUNCIONARIOS(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO FUNCIONARIOS(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxcalcEdit then
+    begin
+      if Sql = 'INSERT INTO FUNCIONARIOS(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TRxCalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxcalcEdit(Temp).Value;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  Habilitar(False);
+end;
+
+procedure TFrmFuncionarios.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE FUNCIONARIOS SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE FUNCIONARIOS SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'UPDATE FUNCIONARIOS SET ' then
+        Sql := Sql + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'UPDATE FUNCIONARIOS SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE FUNCIONARIOS SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE FUNCIONARIOS SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxcalcEdit then
+    begin
+      if Sql = 'UPDATE FUNCIONARIOS SET ' then
+        Sql := Sql + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name + ' = :' + TRxcalcEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (FUNCIONARIO_ID = :ID)';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxcalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  QTabela.Close;
+  QTabela.Open;
+  QTabela.Locate('FUNCIONARIO_ID', ID, [loCaseInsensitive]);
+  Habilitar(False);
+end;
+
+procedure TFrmFuncionarios.EMPRESA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Empresa');
+end;
+
+procedure TFrmFuncionarios.EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = EMPRESA_ID) then
+    btnEmpresaClick(Self);
+  if (Key = Vk_F7) and (Sender = C_CUSTO_ID) then
+    btnCentro_CustoClick(Self);
+  if (Key = Vk_F7) and (Sender = CARGO_ID) then
+    btnCargoClick(Self);
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmFuncionarios.Validacao: Boolean;
+begin
+  Result := False;
+
+  CPF.Color        := clWindow;
+  EMPRESA_ID.Color := clWindow;
+  C_CUSTO_ID.COlor := clWindow;
+  CARGO_ID.Color   := clWindow;
+  ESTADO.Color     := clWindow;
+  REGIME.Color     := clWindow;
+  CONDICAO.Color   := clWindow;
+  Posicao_Agenda.Color :=  ClWindow;
+
+
+  if not ChecaEstado(ESTADO.Text) then
+  begin
+    Application.MessageBox('Estado inválido', PChar(Msg_Title), mb_IconStop);
+    ESTADO.Color := clYellow;
+    ESTADO.SetFocus;
+    exit;
+  end;
+
+  if Alltrim(SemMascara(CPF.Text)) <> '' then
+  begin
+    if not ValidCpf(SemMascara(CPF.Text)) then
+    begin
+      Application.MessageBox('Dígito Verificador do CPF inválido', PChar(Msg_Title), mb_IconStop);
+      CPF.Color := clYellow;
+      CPF.SetFocus;
+      exit;
+    end;
+  end;
+
+  if QEmpresa.IsEmpty then
+  begin
+    Application.MessageBox('Empresa inexistente', PChar(Msg_Title), mb_IconStop);
+    EMPRESA_ID.Color := clYellow;
+    EMPRESA_ID.SetFocus;
+    exit;
+  end;
+
+  if QCusto.IsEmpty then
+  begin
+    Application.MessageBox('Centro de Custo inexistente', PChar(Msg_Title), mb_IconStop);
+    C_CUSTO_ID.Color := clYellow;
+    C_CUSTO_ID.SetFocus;
+    exit;
+  end;
+
+  if QCargo.IsEmpty then
+  begin
+    Application.MessageBox('Cargo inexistente', PChar(Msg_Title), mb_IconStop);
+    CARGO_ID.Color := clYellow;
+    CARGO_ID.SetFocus;
+    exit;
+  end;
+
+  if (REGIME.Text <> 'MENSAL') and (REGIME.Text <> 'QUINZENAL') and (REGIME.Text <> 'DIARISTA') and (REGIME.Text <> 'HORISTA') and (REGIME.Text <> '') then
+  begin
+    Application.MessageBox('Forma Trab. inválida', PChar(Msg_Title), mb_IconStop);
+    REGIME.Color := clYellow;
+    REGIME.SetFocus;
+    exit;
+  end;
+
+  if (CONDICAO.Text <> 'FUNCIONÁRIO') and (CONDICAO.Text <> 'PROPRIETÁRIO') and (CONDICAO.Text <> 'SEM CONTROLE') and (CONDICAO.Text <> 'OPERADOR')then
+  begin
+    Application.MessageBox('Tipo inválido', PChar(Msg_Title), mb_IconStop);
+    CONDICAO.Color := clYellow;
+    CONDICAO.SetFocus;
+    exit;
+  end;
+
+
+ { if FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Salão' Then
+  Begin
+
+    QSearch.Sql.Text := 'SELECT POSICAO_AGENDA FROM FUNCIONARIOS WHERE POSICAO_AGENDA = :COLUNA';
+    QSearch.ParamByName('COLUNA').Asinteger := StrToInt(Posicao_Agenda.Text);
+    QSearch.prepare;
+    QSearch.open;
+
+    if not QSearch.isempty Then
+    Begin
+    Application.MessageBox('Posição na Agenda ja configurada, favor efetuar alteração.', PChar(Msg_Title), mb_IconStop);
+    Posicao_Agenda.Color := clYellow;
+    Posicao_Agenda.SetFocus;
+    exit;
+    End;
+
+  End; }
+
+  if (email_eficaz_mobile.Text <> '') and (not ValidaEmail(PChar(email_eficaz_mobile.Text))) and (Pos(';',email_eficaz_mobile.Text) = 0) then
+  begin
+    Application.MessageBox('E-mail eficaz mobile Inválido', PChar(Msg_Title), mb_IconStop);
+    email_eficaz_mobile.Color := clYellow;
+
+    if email_eficaz_mobile.CanFocus then
+      email_eficaz_mobile.SetFocus;
+
+    exit;
+  end;
+
+  if (email_eficaz_mobile.Text <> '') and (not ValidaEmail(PChar(email_eficaz_mobile.Text))) and (Pos(';',email_eficaz_mobile.Text) = 0) then
+  begin
+    try
+      StrToInt(senha_eficaz_mobile.Text)
+    except on E: Exception do
+      begin
+      Application.MessageBox('Senha eficaz mobile deve possuir apenas números', PChar(Msg_Title), mb_IconStop);
+      exit;
+      end;
+    end;
+  end;
+
+  if ((Trim(senha_eficaz_mobile.Text) <> '') and (Trim(senha_eficaz_mobile.Text).Length < 4)) then
+  begin
+    Application.MessageBox('Senha eficaz mobile deve ter no mínimo 4 dígitos', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if ( (Trim(senha_eficaz_mobile.Text).Length > 0) and (Trim(email_eficaz_mobile.Text).Length = 0) ) then
+  begin
+    Application.MessageBox('Apenas a senha do Eficaz Mobile foi preenchida.', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if ( (Trim(senha_eficaz_mobile.Text).Length = 0) and (Trim(email_eficaz_mobile.Text).Length > 0) ) then
+  begin
+    Application.MessageBox('Apenas o email do Eficaz Mobile foi preenchida.', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if ( ((Trim(senha_eficaz_mobile.Text) <> '') or (Trim(email_eficaz_mobile.Text) <> '')) and (acesso_eficaz_mobile.Text = '') ) then
+  begin
+    Application.MessageBox('Esolha o acesso para o Eficaz Mobile.', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+
+
+  Result := True;
+end;
+
+procedure TFrmFuncionarios.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+
+  if Condicao.Text = 'OPERADOR' then
+  BtnOperador.Enabled := True
+  Else
+  BtnOperador.Enabled := False;
+
+end;
+
+procedure TFrmFuncionarios.NASCIMENTOEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmFuncionarios.NOMEKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmFuncionarios.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := '';
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TRxcalcEdit then
+        TRxCalcEdit(Temp).Value := 0;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := QTabela.FieldByName(TMaskEdit(Temp).Name).AsString;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := QTabela.FieldByName(TDateEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+    end;
+  end;
+  Senhaweb_Ori := Senha.Text;
+  DetailSearch('');
+end;
+
+procedure TFrmFuncionarios.btnCargoClick(Sender: TObject);
+begin
+  try
+    CARGO_ID.Value := GetConsulta('CARGOS', 0, 0, StrToInt(CARGO_ID.Text));
+  except
+    CARGO_ID.Value := GetConsulta('CARGOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmFuncionarios.btnCentro_CustoClick(Sender: TObject);
+begin
+  try
+    C_CUSTO_ID.Value := GetConsulta('CCUSTO', 0, 0, StrToInt(C_CUSTO_ID.Text));
+  except
+    C_CUSTO_ID.Value := GetConsulta('CCUSTO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmFuncionarios.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusao', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    TRY
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM FUNCIONARIOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(FUNCIONARIO_ID = :ID)');
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM OPERADORES');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(FUNCIONARIO_ID = :ID)');
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+    EXCEPT
+
+    END;
+
+    QTabela.Close;
+    QTabela.Open;
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QCusto.Close;
+    QCargo.Close;
+  end;
+end;
+
+procedure TFrmFuncionarios.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QCusto.Close;
+    QCargo.Close;
+  end;
+
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmFuncionarios.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+  Dados_Cadastrais.show;
+  Operacao := 'Alterando';
+  ID := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+  Botoes_Editing;
+  Habilitar(True);
+
+  Consulta.TabVisible := False;
+  
+  NOME.SetFocus;
+end;
+
+procedure TFrmFuncionarios.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA_ID.Text));
+  except
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmFuncionarios.btnImprimeClick(Sender: TObject);
+begin
+ Sel_Func(QTabela.Sql.Text);
+end;
+
+procedure TFrmFuncionarios.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  QEmpresa.Close;
+  QCusto.Close;
+  QCargo.Close;
+
+  ESTADO.Text := '  ';
+
+  Consulta.TabVisible := False;
+  
+  NOME.SetFocus;
+end;
+
+procedure TFrmFuncionarios.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+  Botoes_Normal;
+end;
+
+procedure TFrmFuncionarios.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+begin
+  Condicao := GetPesquisa('FUNCIONARIOS');
+
+  if Condicao <> '' then
+  begin
+    if FrmPrincipal.Config.FieldByName('VER_DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := Condicao
+    else
+      CmdSelectNull := Condicao + ' AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end;
+
+  CmdOrderBy := 'ORDER BY FUNCIONARIO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Open;
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmFuncionarios.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+  Botoes_Normal;
+end;
+
+procedure TFrmFuncionarios.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmFuncionarios.btnSaveClick(Sender: TObject);
+Var
+tp_status,Celular:string;
+begin
+  DetailSearch('');
+
+  if Validacao then
+  begin
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdSelectNull := 'WHERE (CPF = :CPF)';
+      CmdOrderBy    := 'ORDER BY FUNCIONARIO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.ParamByName('CPF').AsString := CPF.Text;
+
+      QTabela.Open;
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    if (senha.text <> '') or (senhaWeb_Ori <> '') Then
+    Begin
+
+     if QTabela.FieldByName('STATUS').AsString = 'A' Then
+     tp_status := '1'
+     Else
+     tp_status := '0';
+
+     if senha.text = '' Then
+     tp_status := '0';
+
+
+     atualizar_EficazWeb(FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString,QTabela.FieldByName('NOME').AsString,QTabela.FieldByName('TELEFONE').AsString,QTabela.FieldByName('FUNCIONARIO_ID').AsString,
+                         QTabela.FieldByName('SENHA').AsString,QTabela.FieldByName('EMAIL').AsString,tp_status);
+
+    End;
+
+    if (Trim(senha_eficaz_mobile.Text) <> '') then
+    begin
+      Atualiza_Eficaz_Mobile();
+    end;
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+    begin
+      QEmpresa.Close;
+      QCusto.Close;
+      QCargo.Close;
+    end;
+
+    Habilitar(False);
+    Botoes_Normal;
+    Operacao := '';
+    Consulta.TabVisible := True;
+  end;
+end;
+
+procedure TFrmFuncionarios.CARGO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Cargo');
+end;
+
+procedure TFrmFuncionarios.CONDICAOChange(Sender: TObject);
+begin
+if Condicao.Text = 'OPERADOR'  then
+   BtnOperador.Enabled := True
+Else
+   BtnOperador.Enabled := False;
+end;
+
+procedure TFrmFuncionarios.C_CUSTO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Custo');
+end;
+
+procedure TFrmFuncionarios.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmFuncionarios.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F3) and (QTabela.FieldByName('STATUS').AsString = 'A') then
+  begin
+    ID := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+    
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE FUNCIONARIOS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(FUNCIONARIO_ID = :FUNCIONARIO_ID)');
+    IQuery.ParamByName('STATUS').AsString := 'D';
+    IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+    QTabela.Close;
+    QTabela.Open;
+    QTabela.Locate('FUNCIONARIO_ID', ID, [loCaseInsensitive]);
+  end;
+  if (Key = Vk_F4) and (QTabela.FieldByName('STATUS').AsString = 'D') then
+  begin
+    ID := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE FUNCIONARIOS SET STATUS = :STATUS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(FUNCIONARIO_ID = :FUNCIONARIO_ID)');
+    IQuery.ParamByName('STATUS').AsString := 'A';
+    IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := QTabela.FieldByName('FUNCIONARIO_ID').AsInteger;
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+    QTabela.Close;
+    QTabela.Open;
+    QTabela.Locate('FUNCIONARIO_ID', ID, [loCaseInsensitive]);
+  end;
+end;
+
+procedure TFrmFuncionarios.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmFuncionarios.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  if FrmPrincipal.Config.FieldByName('MOSTRAR_CADASTROS').AsString = 'True' then
+  begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NOT NULL)'
+    else
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end
+  else
+  begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NULL)'
+    else
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end;
+
+   QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  
+  QTabela.Open;
+end;
+
+procedure TFrmFuncionarios.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmFuncionarios.FormCloseQuery(Sender: TObject;
+  var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmFuncionarios.FormCreate(Sender: TObject);
+begin
+  DBGrid1.Columns[0].Width := 64;
+  DBGrid1.Columns[1].Width := 280;
+  DBGrid1.Columns[2].Width := 100;
+  DBGrid1.Columns[3].Width := 95;
+  DBGrid1.Columns[4].Width := 95;
+  DBGrid1.Columns[5].Width := 37;
+
+  CmdSelect := QTabela.Sql.Text;
+
+  if FrmPrincipal.Config.FieldByName('MOSTRAR_CADASTROS').AsString = 'True' then
+  begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NOT NULL)'
+    else
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end
+  else
+  begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString = 'True' then
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NULL)'
+    else
+      CmdSelectNull := 'WHERE (FUNCIONARIO_ID IS NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end;
+
+  CmdOrderBy       := 'ORDER BY NOME';
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  QTabela.Open;
+  Consulta.Show;
+
+  if FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Salão' Then
+  Tab_Salao.tabVisible := True
+  Else
+  Tab_Salao.tabVisible := False;
+
+
+
+
+end;
+
+procedure TFrmFuncionarios.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+end;
+
+end.

@@ -1,0 +1,624 @@
+unit UConfig_Importa_XML;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons, ExtCtrls, ComCtrls;
+
+type
+  TFrmConfig_Importa_XML = class(TForm)
+    PageControl1: TPageControl;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    Panel1: TPanel;
+    btnRetorna: TBitBtn;
+    btnPesquisa: TBitBtn;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    TabSheet3: TTabSheet;
+    TabSheet4: TTabSheet;
+    TabSheet5: TTabSheet;
+    TabSheet6: TTabSheet;
+    TabSheet7: TTabSheet;
+    C00_Base_ICMS: TCheckBox;
+    C00_Aliquota_ICMS: TCheckBox;
+    C00_Valor_ICMS: TCheckBox;
+    C10_Base_ICMS: TCheckBox;
+    C10_Aliquota_ICMS: TCheckBox;
+    C10_Valor_ICMS: TCheckBox;
+    C10_Valor_Outros: TCheckBox;
+    C10_Base_ICMS_ST: TCheckBox;
+    C10_Valor_ST: TCheckBox;
+    C20_Base_ICMS: TCheckBox;
+    C20_Aliquota_ICMS: TCheckBox;
+    C20_Valor_ICMS: TCheckBox;
+    C20_Base_ICMS_ST: TCheckBox;
+    C20_Valor_ICMS_ST: TCheckBox;
+    C30_Base_ICMS: TCheckBox;
+    C30_Aliquota_ICMS: TCheckBox;
+    C30_Valor_ICMS: TCheckBox;
+    C30_Valor_Outros: TCheckBox;
+    C30_Base_ICMS_ST: TCheckBox;
+    C30_Valor_ICMS_ST: TCheckBox;
+    C40_Base_ICMS: TCheckBox;
+    C40_Aliquota_ICMS: TCheckBox;
+    C40_Valor_ICMS: TCheckBox;
+    C40_Valor_Isento: TCheckBox;
+    C40_Base_ICMS_ST: TCheckBox;
+    C40_Valor_ICMS_ST: TCheckBox;
+    C51_Base_ICMS: TCheckBox;
+    C51_Aliquota_ICMS: TCheckBox;
+    C51_Valor_ICMS: TCheckBox;
+    C51_Base_ICMS_ST: TCheckBox;
+    C51_Valor_ICMS_ST: TCheckBox;
+    C60_Base_ICMS: TCheckBox;
+    C60_Aliquota_ICMS: TCheckBox;
+    C60_Valor_ICMS: TCheckBox;
+    C60_Valor_Outros: TCheckBox;
+    C60_Base_ICMS_ST: TCheckBox;
+    C60_Valor_ICMS_ST: TCheckBox;
+    C70_Base_ICMS: TCheckBox;
+    C70_Aliquota_ICMS: TCheckBox;
+    C70_Valor_ICMS: TCheckBox;
+    C70_Valor_Outros: TCheckBox;
+    C70_Base_ICMS_ST: TCheckBox;
+    C70_Valor_ICMS_ST: TCheckBox;
+    C70_Vr_Reducao_BC: TCheckBox;
+    C90_Base_ICMS: TCheckBox;
+    C90_Aliquota_ICMS: TCheckBox;
+    C90_Valor_ICMS: TCheckBox;
+    C90_Valor_Outros: TCheckBox;
+    C90_Base_ICMS_ST: TCheckBox;
+    C90_Valor_ICMS_ST: TCheckBox;
+    C20_Vr_Reducao_BC: TCheckBox;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormShow(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  FrmConfig_Importa_XML: TFrmConfig_Importa_XML;
+
+implementation
+
+uses
+  UPrincipal;
+
+{$R *.dfm}
+
+procedure TFrmConfig_Importa_XML.btnPesquisaClick(Sender: TObject);
+begin
+  if C00_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '00 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '00 Base de Cálculo de ICMS', 'False');
+
+  if C00_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '00 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '00 Alíquota de ICMS', 'False');
+
+  if C00_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '00 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '00 Valor de ICMS', 'False');
+
+  if C10_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '10 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '10 Base de Cálculo de ICMS', 'False');
+
+  if C10_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '10 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '10 Alíquota de ICMS', 'False');
+
+  if C10_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '10 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '10 Valor de ICMS', 'False');
+
+  if C10_Valor_Outros.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '10 Valor Outros', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '10 Valor Outros', 'False');
+
+  if C10_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '10 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '10 Base de Cálculo de ICMS ST', 'False');
+
+  if C10_Valor_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '10 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '10 Valor de ICMS ST', 'False');
+
+  if C20_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '20 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '20 Base de Cálculo de ICMS', 'False');
+
+  if C20_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '20 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '20 Alíquota de ICMS', 'False');
+
+  if C20_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '20 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '20 Valor de ICMS', 'False');
+
+  if C20_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '20 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '20 Base de Cálculo de ICMS ST', 'False');
+
+  if C20_Valor_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '20 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '20 Valor de ICMS ST', 'False');
+
+  if C20_Vr_Reducao_BC.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '20 Valor Redução BC', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '20 Valor Redução BC', 'False');
+
+  if C30_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '30 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '30 Base de Cálculo de ICMS', 'False');
+
+  if C30_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '30 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '30 Alíquota de ICMS', 'False');
+
+  if C30_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '30 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '30 Valor de ICMS', 'False');
+
+  if C30_Valor_Outros.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '30 Valor Outros', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '30 Valor Outros', 'False');
+
+  if C30_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '30 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '30 Base de Cálculo de ICMS ST', 'False');
+
+  if C30_Valor_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '30 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '30 Valor de ICMS ST', 'False');
+
+  if C40_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '40 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '40 Base de Cálculo de ICMS', 'False');
+
+  if C40_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '40 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '40 Alíquota de ICMS', 'False');
+
+  if C40_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '40 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '40 Valor de ICMS', 'False');
+
+  if C40_Valor_Isento.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '40 Valor Isento', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '40 Valor Isento', 'False');
+
+  if C40_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '40 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '40 Base de Cálculo de ICMS ST', 'False');
+
+  if C40_Valor_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '40 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '40 Valor de ICMS ST', 'False');
+
+  if C51_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '51 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '51 Base de Cálculo de ICMS', 'False');
+
+  if C51_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '51 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '51 Alíquota de ICMS', 'False');
+
+  if C51_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '51 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '51 Valor de ICMS', 'False');
+
+  if C51_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '51 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '51 Base de Cálculo de ICMS ST', 'False');
+
+  if C51_Valor_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '51 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '51 Valor de ICMS ST', 'False');
+
+  if C60_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '60 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '60 Base de Cálculo de ICMS', 'False');
+
+  if C60_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '60 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '60 Alíquota de ICMS', 'False');
+
+  if C60_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '60 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '60 Valor de ICMS', 'False');
+
+  if C60_Valor_Outros.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '60 Valor Outros', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '60 Valor Outros', 'False');
+
+  if C60_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '60 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '60 Base de Cálculo de ICMS ST', 'False');
+
+  if C60_Valor_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '60 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '60 Valor de ICMS ST', 'False');
+
+  if C70_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '70 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '70 Base de Cálculo de ICMS', 'False');
+
+  if C70_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '70 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '70 Alíquota de ICMS', 'False');
+
+  if C70_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor de ICMS', 'False');
+
+  if C70_Valor_Outros.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor Outros', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor Outros', 'False');
+
+  if C70_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '70 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '70 Base de Cálculo de ICMS ST', 'False');
+
+  if C70_Valor_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor de ICMS ST', 'False');
+
+  if C70_Vr_Reducao_BC.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor Redução BC', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '70 Valor Redução BC', 'False');
+
+  if C90_Base_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '90 Base de Cálculo de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '90 Base de Cálculo de ICMS', 'False');
+
+  if C90_Aliquota_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '90 Alíquota de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '90 Alíquota de ICMS', 'False');
+
+  if C90_Valor_ICMS.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '90 Valor de ICMS', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '90 Valor de ICMS', 'False');
+
+  if C90_Valor_Outros.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '90 Valor Outros', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '90 Valor Outros', 'False');
+
+  if C90_Base_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '90 Base de Cálculo de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '90 Base de Cálculo de ICMS ST', 'False');
+
+  if C90_Valor_ICMS_ST.Checked then
+    GravaIni(Arq_Ini, 'Importação XML', '90 Valor de ICMS ST', 'True')
+  else
+    GravaIni(Arq_Ini, 'Importação XML', '90 Valor de ICMS ST', 'False');
+
+  Close;
+end;
+
+procedure TFrmConfig_Importa_XML.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmConfig_Importa_XML.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmConfig_Importa_XML.FormShow(Sender: TObject);
+begin
+  if LeIni(Arq_Ini, 'Importação XML', '00 Base de Cálculo de ICMS') = 'True' then
+    C00_Base_ICMS.Checked := True
+  else
+    C00_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '00 Alíquota de ICMS') = 'True' then
+    C00_Aliquota_ICMS.Checked := True
+  else
+    C00_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '00 Valor de ICMS') = 'True' then
+    C00_Valor_ICMS.Checked := True
+  else
+    C00_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '10 Base de Cálculo de ICMS') = 'True' then
+    C10_Base_ICMS.Checked := True
+  else
+    C10_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '10 Alíquota de ICMS') = 'True' then
+    C10_Aliquota_ICMS.Checked := True
+  else
+    C10_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '10 Valor de ICMS') = 'True' then
+    C10_Valor_ICMS.Checked := True
+  else
+    C10_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '10 Valor Outros') = 'True' then
+    C10_Valor_Outros.Checked := True
+  else
+    C10_Valor_Outros.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '10 Base de Cálculo de ICMS ST') = 'True' then
+    C10_Base_ICMS_ST.Checked := True
+  else
+    C10_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '10 Valor de ICMS ST') = 'True' then
+    C10_Valor_ST.Checked := True
+  else
+    C10_Valor_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '20 Base de Cálculo de ICMS') = 'True' then
+    C20_Base_ICMS.Checked := True
+  else
+    C20_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '20 Alíquota de ICMS') = 'True' then
+    C20_Aliquota_ICMS.Checked := True
+  else
+    C20_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '20 Valor de ICMS') = 'True' then
+    C20_Valor_ICMS.Checked := True
+  else
+    C20_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '20 Base de Cálculo de ICMS ST') = 'True' then
+    C20_Base_ICMS_ST.Checked := True
+  else
+    C20_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '20 Valor de ICMS ST') = 'True' then
+    C20_Valor_ICMS_ST.Checked := True
+  else
+    C20_Valor_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '20 Valor Redução BC') = 'True' then
+    C20_Vr_Reducao_BC.Checked := True
+  else
+    C20_Vr_Reducao_BC.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '30 Base de Cálculo de ICMS') = 'True' then
+    C30_Base_ICMS.Checked := True
+  else
+    C30_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '30 Alíquota de ICMS') = 'True' then
+    C30_Aliquota_ICMS.Checked := True
+  else
+    C30_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '30 Valor de ICMS') = 'True' then
+    C30_Valor_ICMS.Checked := True
+  else
+    C30_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '30 Valor Outros') = 'True' then
+    C30_Valor_Outros.Checked := True
+  else
+    C30_Valor_Outros.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '30 Base de Cálculo de ICMS ST') = 'True' then
+    C30_Base_ICMS_ST.Checked := True
+  else
+    C30_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '30 Valor de ICMS ST') = 'True' then
+    C30_Valor_ICMS_ST.Checked := True
+  else
+    C30_Valor_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '40 Base de Cálculo de ICMS') = 'True' then
+    C40_Base_ICMS.Checked := True
+  else
+    C40_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '40 Alíquota de ICMS') = 'True' then
+    C40_Aliquota_ICMS.Checked := True
+  else
+    C40_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '40 Valor de ICMS') = 'True' then
+    C40_Valor_ICMS.Checked := True
+  else
+    C40_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '40 Valor Isento') = 'True' then
+    C40_Valor_Isento.Checked := True
+  else
+    C40_Valor_Isento.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '40 Base de Cálculo de ICMS ST') = 'True' then
+    C40_Base_ICMS_ST.Checked := True
+  else
+    C40_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '40 Valor de ICMS ST') = 'True' then
+    C40_Valor_ICMS_ST.Checked := True
+  else
+    C40_Valor_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '51 Base de Cálculo de ICMS') = 'True' then
+    C51_Base_ICMS.Checked := True
+  else
+    C51_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '51 Alíquota de ICMS') = 'True' then
+    C51_Aliquota_ICMS.Checked := True
+  else
+    C51_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '51 Valor de ICMS') = 'True' then
+    C51_Valor_ICMS.Checked := True
+  else
+    C51_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '51 Base de Cálculo de ICMS ST') = 'True' then
+    C51_Base_ICMS_ST.Checked := True
+  else
+    C51_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '51 Valor de ICMS ST') = 'True' then
+    C51_Valor_ICMS_ST.Checked := True
+  else
+    C51_Valor_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '60 Base de Cálculo de ICMS') = 'True' then
+    C60_Base_ICMS.Checked := True
+  else
+    C60_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '60 Alíquota de ICMS') = 'True' then
+    C60_Aliquota_ICMS.Checked := True
+  else
+    C60_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '60 Valor de ICMS') = 'True' then
+    C60_Valor_ICMS.Checked := True
+  else
+    C60_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '60 Valor Outros') = 'True' then
+    C60_Valor_Outros.Checked := True
+  else
+    C60_Valor_Outros.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '60 Base de Cálculo de ICMS ST') = 'True' then
+    C60_Base_ICMS_ST.Checked := True
+  else
+    C60_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '60 Valor de ICMS ST') = 'True' then
+    C60_Valor_ICMS_ST.Checked := True
+  else
+    C60_Valor_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '70 Base de Cálculo de ICMS') = 'True' then
+    C70_Base_ICMS.Checked := True
+  else
+    C70_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '70 Alíquota de ICMS') = 'True' then
+    C70_Aliquota_ICMS.Checked := True
+  else
+    C70_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '70 Valor de ICMS') = 'True' then
+    C70_Valor_ICMS.Checked := True
+  else
+    C70_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '70 Valor Outros') = 'True' then
+    C70_Valor_Outros.Checked := True
+  else
+    C70_Valor_Outros.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '70 Base de Cálculo de ICMS ST') = 'True' then
+    C70_Base_ICMS_ST.Checked := True
+  else
+    C70_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '70 Valor de ICMS ST') = 'True' then
+    C70_Valor_ICMS_ST.Checked := True
+  else
+    C70_Valor_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '70 Valor Redução BC') = 'True' then
+    C70_Vr_Reducao_BC.Checked := True
+  else
+    C70_Vr_Reducao_BC.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '90 Base de Cálculo de ICMS') = 'True' then
+    C90_Base_ICMS.Checked := True
+  else
+    C90_Base_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '90 Alíquota de ICMS') = 'True' then
+    C90_Aliquota_ICMS.Checked := True
+  else
+    C90_Aliquota_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '90 Valor de ICMS') = 'True' then
+    C90_Valor_ICMS.Checked := True
+  else
+    C90_Valor_ICMS.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '90 Valor Outros') = 'True' then
+    C90_Valor_Outros.Checked := True
+  else
+    C90_Valor_Outros.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '90 Base de Cálculo de ICMS ST') = 'True' then
+    C90_Base_ICMS_ST.Checked := True
+  else
+    C90_Base_ICMS_ST.Checked := False;
+
+  if LeIni(Arq_Ini, 'Importação XML', '90 Valor de ICMS ST') = 'True' then
+    C90_Valor_ICMS_ST.Checked := True
+  else
+    C90_Valor_ICMS_ST.Checked := False;
+end;
+
+end.

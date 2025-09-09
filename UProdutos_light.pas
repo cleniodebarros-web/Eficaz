@@ -1,0 +1,8594 @@
+unit UProdutos_light;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, rxToolEdit, Buttons, rxCurrEdit, DBCtrls,
+  QRCtrls, QuickRpt, IBUpdateSQL, Menus, RDprint, IBStoredProc, ExtDlgs, jpeg,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option,
+  FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
+  FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.Client,
+  FireDAC.Comp.DataSet,BPLBOCXLib_TLB,Math;
+
+type
+  TFrmProdutos_Light = class(TForm)
+    Panel1: TPanel;
+    btnRetorna: TBitBtn;
+    btnPesquisa: TBitBtn;
+    btnImprime: TBitBtn;
+    btnComposicao: TBitBtn;
+    Rel_Composicao: TQuickRep;
+    PageHeaderBand1: TQRBand;
+    QRShape2: TQRShape;
+    QRShape4: TQRShape;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRLabel12: TQRLabel;
+    QRDBText9: TQRDBText;
+    QRLabel11: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRDBText10: TQRDBText;
+    QRSysData3: TQRSysData;
+    QRLabel14: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRShape5: TQRShape;
+    DetailBand1: TQRBand;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRBand3: TQRBand;
+    QRExpr2: TQRExpr;
+    btnComeca_Com: TSpeedButton;
+    Comeca_Com: TLabeledEdit;
+    btnParcial: TButton;
+    PopupMenu1: TPopupMenu;
+    AtualizarNCMProdutosSelecionados1: TMenuItem;
+    AtualizarNCMTodosdaTela1: TMenuItem;
+    QRDBText14: TQRDBText;
+    PopupMenu2: TPopupMenu;
+    MenuItem1: TMenuItem;
+    Label80: TLabel;
+    LegendaBox: TGroupBox;
+    Label86: TLabel;
+    Label87: TLabel;
+    Label88: TLabel;
+    OpenImage: TOpenPictureDialog;
+    RDprint1: TRDprint;
+    PageControl1: TPageControl;
+    Consulta: TTabSheet;
+    Alfabeto: TTabSet;
+    StatusBar1: TStatusBar;
+    DBGrid1: TDBGrid;
+    Manutencao: TTabSheet;
+    Label9: TLabel;
+    Label30: TLabel;
+    Label44: TLabel;
+    Label18: TLabel;
+    Label22: TLabel;
+    Label43: TLabel;
+    Label45: TLabel;
+    Label17: TLabel;
+    Label1: TLabel;
+    Label29: TLabel;
+    Label39: TLabel;
+    Label40: TLabel;
+    Label27: TLabel;
+    Label7: TLabel;
+    Label5: TLabel;
+    Label11: TLabel;
+    Label19: TLabel;
+    Empresa: TLabel;
+    DBText1: TDBText;
+    DBText2: TDBText;
+    DBText3: TDBText;
+    DBText4: TDBText;
+    DBText5: TDBText;
+    Bevel4: TBevel;
+    Bevel3: TBevel;
+    Bevel1: TBevel;
+    btnEmpresa: TSpeedButton;
+    btnGrupo: TSpeedButton;
+    btnSub_Tipo: TSpeedButton;
+    btnLocalizacao: TSpeedButton;
+    btnTributo: TSpeedButton;
+    Label4: TLabel;
+    Label6: TLabel;
+    Label8: TLabel;
+    Label16: TLabel;
+    Label49: TLabel;
+    btnFamilia: TSpeedButton;
+    DBText6: TDBText;
+    Label59: TLabel;
+    Label56: TLabel;
+    Label55: TLabel;
+    Label60: TLabel;
+    Label61: TLabel;
+    btnGenero: TSpeedButton;
+    Label64: TLabel;
+    btnNCM: TSpeedButton;
+    Label66: TLabel;
+    Label79: TLabel;
+    Label81: TLabel;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    DESCRICAO: TEdit;
+    COD_BARRA: TEdit;
+    CODRED: TEdit;
+    SUPERVISOR: TComboBox;
+    PROVQT: TComboBox;
+    GRUPO_ID: TCurrencyEdit;
+    SUBTIPO_ID: TCurrencyEdit;
+    LOCALIZACAO_ID: TCurrencyEdit;
+    TRIBUTO_ID: TCurrencyEdit;
+    QUANT_MINIMA: TCurrencyEdit;
+    QUANT_MAXIMA: TCurrencyEdit;
+    EMPRESA_ID: TCurrencyEdit;
+    COMISSAO: TRxCalcEdit;
+    MARGEM_LUCRO: TRxCalcEdit;
+    DESC_MAXIMO: TRxCalcEdit;
+    PRECO_VAREJO: TRxCalcEdit;
+    PRECO_ATACADO: TRxCalcEdit;
+    PRECO_PROMOCAO: TRxCalcEdit;
+    Produtos: TQuickRep;
+    QRBand1: TQRBand;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRShape1: TQRShape;
+    QRDBText3: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel10: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRLabel6: TQRLabel;
+    QRBand2: TQRBand;
+    QRDBText2: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText1: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText7: TQRDBText;
+    MOD_ICMS: TComboBox;
+    IPI: TRxCalcEdit;
+    MOD_IPI: TComboBox;
+    PageControl2: TPageControl;
+    TabSheet2: TTabSheet;
+    GroupBox1: TGroupBox;
+    Label10: TLabel;
+    Label25: TLabel;
+    Btn_embcp: TSpeedButton;
+    UNIDADE: TEdit;
+    EMBALAGEM: TCurrencyEdit;
+    GroupBox2: TGroupBox;
+    Label13: TLabel;
+    Label14: TLabel;
+    Label24: TLabel;
+    Label15: TLabel;
+    Btn_embvd: TSpeedButton;
+    UNIDADE_VENDA: TEdit;
+    FRACAO_VENDA: TCurrencyEdit;
+    PESO: TCurrencyEdit;
+    PESO_UNITARIO: TCurrencyEdit;
+    TabSheet3: TTabSheet;
+    Label3: TLabel;
+    Label37: TLabel;
+    Label41: TLabel;
+    Label32: TLabel;
+    Label28: TLabel;
+    Label38: TLabel;
+    PESAVEL: TComboBox;
+    ETIQUETA: TCurrencyEdit;
+    BALTECLA: TCurrencyEdit;
+    BALDPT: TCurrencyEdit;
+    BALTIPO: TCurrencyEdit;
+    VALIDADE: TCurrencyEdit;
+    TabSheet1: TTabSheet;
+    Label33: TLabel;
+    Label34: TLabel;
+    Label26: TLabel;
+    Label35: TLabel;
+    Label51: TLabel;
+    Label52: TLabel;
+    Label53: TLabel;
+    Label54: TLabel;
+    Label65: TLabel;
+    COD_ORIGINAL: TEdit;
+    MARCA: TEdit;
+    REFERENCIA: TEdit;
+    MODELO_POSICAO: TEdit;
+    COD_BARRA_AUX1: TEdit;
+    COD_BARRA_AUX2: TEdit;
+    COD_BARRA_AUX4: TEdit;
+    COD_BARRA_AUX3: TEdit;
+    APLICACAO: TEdit;
+    TabSheet4: TTabSheet;
+    Label20: TLabel;
+    Label21: TLabel;
+    Label23: TLabel;
+    Label31: TLabel;
+    Label46: TLabel;
+    Label47: TLabel;
+    Label48: TLabel;
+    Label50: TLabel;
+    DBText7: TDBText;
+    Label82: TLabel;
+    Label83: TLabel;
+    Label84: TLabel;
+    Label85: TLabel;
+    DBEdit1: TDBEdit;
+    DBEdit2: TDBEdit;
+    DBEdit3: TDBEdit;
+    DBEdit4: TDBEdit;
+    DBEdit5: TDBEdit;
+    DBEdit6: TDBEdit;
+    DBEdit7: TDBEdit;
+    DBEdit8: TDBEdit;
+    CUSTO_COMPRA: TRxCalcEdit;
+    VALOR_COMPRA: TRxCalcEdit;
+    CUSTOMEDIO: TRxCalcEdit;
+    VR_IPI: TRxCalcEdit;
+    VR_FRETE: TRxCalcEdit;
+    VR_ICMSST: TRxCalcEdit;
+    VR_DESPESAS: TRxCalcEdit;
+    TabSheet6: TTabSheet;
+    Label73: TLabel;
+    btnComp: TSpeedButton;
+    Grid_Producao: TDBGrid;
+    COMPOSICAO_ID: TCurrencyEdit;
+    StatusBar3: TStatusBar;
+    TabSheet7: TTabSheet;
+    Grid_Serie: TDBGrid;
+    StatusBar2: TStatusBar;
+    TabSheet11: TTabSheet;
+    Label74: TLabel;
+    Label75: TLabel;
+    Label76: TLabel;
+    Label77: TLabel;
+    Label78: TLabel;
+    COD_ANP: TCurrencyEdit;
+    CODIF: TEdit;
+    BC_CIDE: TRxCalcEdit;
+    ALIQ_CIDE: TRxCalcEdit;
+    CIDE: TRxCalcEdit;
+    Inventario: TTabSheet;
+    DBGrid2: TDBGrid;
+    BtnInventario: TBitBtn;
+    TabSheet5: TTabSheet;
+    Grid_Fabricante: TDBGrid;
+    StatusBar4: TStatusBar;
+    NCM: TEdit;
+    FAMILIA_ID: TCurrencyEdit;
+    DT_ATUALIZACAO: TDateEdit;
+    CSOSN: TEdit;
+    IAT: TEdit;
+    IPPT: TEdit;
+    TIPO_ITEM: TComboBox;
+    COD_GEN: TEdit;
+    CTRL_SERIE: TComboBox;
+    MOD_ICMS_ST: TComboBox;
+    PageControl3: TPageControl;
+    TabSheet8: TTabSheet;
+    Label2: TLabel;
+    Label36: TLabel;
+    Label12: TLabel;
+    Label72: TLabel;
+    REDUCAO_ICMS: TRxCalcEdit;
+    ALIQUOTA_ICMS: TRxCalcEdit;
+    MVA: TRxCalcEdit;
+    COD_CONT: TEdit;
+    TabSheet9: TTabSheet;
+    Label68: TLabel;
+    btnCst_Pis_Entr: TSpeedButton;
+    Label70: TLabel;
+    btnCst_Cofins_Entr: TSpeedButton;
+    Label67: TLabel;
+    Label69: TLabel;
+    CST_PIS_ENTR: TEdit;
+    CST_COFINS_ENTR: TEdit;
+    PIS_ENTR: TRxCalcEdit;
+    COFINS_ENTR: TRxCalcEdit;
+    TabSheet10: TTabSheet;
+    btnCst_Pis: TSpeedButton;
+    Label62: TLabel;
+    Label63: TLabel;
+    btnCst_Cofins: TSpeedButton;
+    Label58: TLabel;
+    Label57: TLabel;
+    Label71: TLabel;
+    btnNat_Rec: TSpeedButton;
+    CST_PIS: TEdit;
+    CST_COFINS: TEdit;
+    PIS: TRxCalcEdit;
+    COFINS: TRxCalcEdit;
+    NAT_REC: TEdit;
+    VINCULO: TCurrencyEdit;
+    Preco_Prazo: TRxCalcEdit;
+    cad_simples: TCheckBox;
+    btn_load_image: TButton;
+    Produto_id: TCurrencyEdit;
+    Qordem: TFDQuery;
+    QUnidade: TFDQuery;
+    Qunidade_Venda: TFDQuery;
+    QRel: TFDQuery;
+    QArq: TFDQuery;
+    QPedido1: TFDQuery;
+    QFornecedor: TFDQuery;
+    QPedidoVenda: TFDQuery;
+    QTabela: TFDQuery;
+    IQuery: TFDQuery;
+    QOrcamento: TFDQuery;
+    QPedido: TFDQuery;
+    QControlados: TFDQuery;
+    QProducao: TFDQuery;
+    QFuncionario: TFDQuery;
+    QFamilia: TFDQuery;
+    QFabricante: TFDQuery;
+    QReplicar_produto: TFDQuery;
+    QEmpresa: TFDQuery;
+    DataTabela: TDataSource;
+    DataControlados: TDataSource;
+    dataProducao: TDataSource;
+    DataFamilia: TDataSource;
+    DataFabricante: TDataSource;
+    DataEmpresa: TDataSource;
+    DataGrupo: TDataSource;
+    DataSubTipo: TDataSource;
+    DataLocalizacao: TDataSource;
+    USql_Serie: TFDUpdateSQL;
+    USql_Controlados: TFDUpdateSQL;
+    USql_Producao: TFDUpdateSQL;
+    USql_Fabricante: TFDUpdateSQL;
+    QGrupo: TFDQuery;
+    QSubTipo: TFDQuery;
+    QLocalizacao: TFDQuery;
+    QTributo: TFDQuery;
+    QSerie: TFDQuery;
+    DataTributo: TDataSource;
+    DataSerie: TDataSource;
+    DataFornecedor: TDataSource;
+    Frac_inv: TComboBox;
+    lbl1: TLabel;
+    Similar: TTabSheet;
+    stat1: TStatusBar;
+    Grid_Similar: TDBGrid;
+    QSimilar: TFDQuery;
+    DataSimilar: TDataSource;
+    USql_Similar: TFDUpdateSQL;
+    Label89: TLabel;
+    Cest: TEdit;
+    btnCest: TSpeedButton;
+    Shape1: TShape;
+    Foto: TImage;
+    Label91: TLabel;
+    DIF_ICMS: TRxCalcEdit;
+    BitBtn1: TBitBtn;
+    BitBtn2: TBitBtn;
+    BitBtn3: TBitBtn;
+    BitBtn4: TBitBtn;
+    Rel_Series: TQuickRep;
+    QRBand4: TQRBand;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRLabel18: TQRLabel;
+    QRDBText16: TQRDBText;
+    QRLabel19: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRSysData5: TQRSysData;
+    QRLabel21: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRShape8: TQRShape;
+    QRLabel20: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRDBText23: TQRDBText;
+    QRBand5: TQRBand;
+    QRDBText18: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRDBText22: TQRDBText;
+    AtualizarFamliadosprodutos1: TMenuItem;
+    AtualizarFamliaProdutosSelecionad1: TMenuItem;
+    N1: TMenuItem;
+    N2: TMenuItem;
+    AtualizarCESTProdutoSelecionado1: TMenuItem;
+    AtualizarCESTTodosdaTela1: TMenuItem;
+    Label92: TLabel;
+    FUNCIONARIO_ID: TCurrencyEdit;
+    DBText8: TDBText;
+    Label93: TLabel;
+    Qtd_Embalagem: TCurrencyEdit;
+    BtnReplicar: TButton;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure AlfabetoClick(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure GRUPO_IDExit(Sender: TObject);
+    procedure SUBTIPO_IDExit(Sender: TObject);
+    procedure LOCALIZACAO_IDExit(Sender: TObject);
+    procedure TRIBUTO_IDExit(Sender: TObject);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure btnGrupoClick(Sender: TObject);
+    procedure btnSub_TipoClick(Sender: TObject);
+    procedure btnLocalizacaoClick(Sender: TObject);
+    procedure btnTributoClick(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure btnImprimeClick(Sender: TObject);
+    procedure EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure PageControl2Enter(Sender: TObject);
+    procedure btnFamiliaClick(Sender: TObject);
+    procedure FAMILIA_IDExit(Sender: TObject);
+    procedure ibqryQControladosBeforeDelete(DataSet: TDataSet);
+    procedure ibqryQControladosBeforePost(DataSet: TDataSet);
+    procedure ibqryQControladosNewRecord(DataSet: TDataSet);
+    procedure Grid_LoteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Grid_LoteKeyPress(Sender: TObject; var Key: Char);
+    procedure FormShow(Sender: TObject);
+    procedure COD_BARRAExit(Sender: TObject);
+    procedure Grid_ProducaoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Grid_ProducaoKeyPress(Sender: TObject; var Key: Char);
+    procedure ibqryQProducaoAfterPost(DataSet: TDataSet);
+    procedure ibqryQProducaoBeforeDelete(DataSet: TDataSet);
+    procedure ibqryQProducaoBeforePost(DataSet: TDataSet);
+    procedure ibqryQProducaoNewRecord(DataSet: TDataSet);
+    procedure Grid_ProducaoColExit(Sender: TObject);
+    procedure btnComposicaoClick(Sender: TObject);
+    procedure ibqryQProducaoAfterDelete(DataSet: TDataSet);
+    procedure btnComeca_ComClick(Sender: TObject);
+    procedure Comeca_ComKeyPress(Sender: TObject; var Key: Char);
+    procedure Comeca_ComEnter(Sender: TObject);
+    procedure btnGeneroClick(Sender: TObject);
+    procedure btnCst_PisClick(Sender: TObject);
+    procedure btnCst_CofinsClick(Sender: TObject);
+    procedure btnParcialClick(Sender: TObject);
+    procedure CTRL_SERIEChange(Sender: TObject);
+    procedure Grid_SerieKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Grid_SerieKeyPress(Sender: TObject; var Key: Char);
+    procedure ibqryQSerieBeforeDelete(DataSet: TDataSet);
+    procedure ibqryQSerieBeforePost(DataSet: TDataSet);
+    procedure ibqryQSerieNewRecord(DataSet: TDataSet);
+    procedure btnNCMClick(Sender: TObject);
+    procedure ibqryQSerieBeforeEdit(DataSet: TDataSet);
+    procedure ibqryQControladosBeforeEdit(DataSet: TDataSet);
+    procedure ibqryQProducaoBeforeEdit(DataSet: TDataSet);
+    procedure btnCst_Pis_EntrClick(Sender: TObject);
+    procedure btnCst_Cofins_EntrClick(Sender: TObject);
+    procedure CST_PIS_ENTRChange(Sender: TObject);
+    procedure CST_COFINS_ENTRChange(Sender: TObject);
+    procedure CST_PISChange(Sender: TObject);
+    procedure CST_COFINSChange(Sender: TObject);
+    procedure AtualizarNCMProdutosSelecionados1Click(Sender: TObject);
+    procedure AtualizarNCMTodosdaTela1Click(Sender: TObject);
+    procedure APLICACAOMouseEnter(Sender: TObject);
+    procedure btnNat_RecClick(Sender: TObject);
+    procedure btnCompClick(Sender: TObject);
+    procedure COD_ORIGINALExit(Sender: TObject);
+    procedure REFERENCIAExit(Sender: TObject);
+    procedure MenuItem1Click(Sender: TObject);
+    procedure BtnInventarioClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure PRECO_VAREJOExit(Sender: TObject);
+    procedure Btn_embcpClick(Sender: TObject);
+    procedure Btn_embvdClick(Sender: TObject);
+    procedure cad_simplesClick(Sender: TObject);
+    procedure DBGrid1CellClick(Column: TColumn);
+    procedure UNIDADEExit(Sender: TObject);
+    procedure UNIDADE_VENDAExit(Sender: TObject);
+    procedure FormMouseEnter(Sender: TObject);
+    procedure TabSheet6Show(Sender: TObject);
+    procedure TabSheet7Show(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure ConsultaShow(Sender: TObject);
+    procedure DBGrid1KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure Grid_FabricanteKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Grid_FabricanteKeyPress(Sender: TObject; var Key: Char);
+    procedure Grid_FabricanteColExit(Sender: TObject);
+    procedure ibqryQFabricanteBeforeDelete(DataSet: TDataSet);
+    procedure ibqryQFabricanteBeforeEdit(DataSet: TDataSet);
+    procedure ibqryQFabricanteBeforePost(DataSet: TDataSet);
+    procedure ibqryQFabricanteNewRecord(DataSet: TDataSet);
+    procedure TabSheet5Show(Sender: TObject);
+    procedure btn_load_imageClick(Sender: TObject);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure PIS_ENTRExit(Sender: TObject);
+    procedure COFINS_ENTRExit(Sender: TObject);
+    procedure PISExit(Sender: TObject);
+    procedure COFINSExit(Sender: TObject);
+    procedure NAT_RECExit(Sender: TObject);
+    procedure pgqryQProducaoAfterDelete(DataSet: TDataSet);
+    procedure pgqryQProducaoAfterPost(DataSet: TDataSet);
+    procedure pgqryQProducaoBeforeDelete(DataSet: TDataSet);
+    procedure pgqryQProducaoBeforeEdit(DataSet: TDataSet);
+    procedure pgqryQProducaoBeforePost(DataSet: TDataSet);
+    procedure pgqryQSerieBeforeDelete(DataSet: TDataSet);
+    procedure pgqryQSerieBeforeEdit(DataSet: TDataSet);
+    procedure pgqryQFabricanteBeforeDelete(DataSet: TDataSet);
+    procedure pgqryQFabricanteBeforeEdit(DataSet: TDataSet);
+    procedure pgqryQFabricanteBeforePost(DataSet: TDataSet);
+    procedure pgqryQFabricanteNewRecord(DataSet: TDataSet);
+    procedure QSerieBeforeDelete(DataSet: TDataSet);
+    procedure QSerieBeforeEdit(DataSet: TDataSet);
+    procedure QFabricanteBeforeDelete(DataSet: TDataSet);
+    procedure QFabricanteBeforeEdit(DataSet: TDataSet);
+    procedure QFabricanteBeforePost(DataSet: TDataSet);
+    procedure QFabricanteNewRecord(DataSet: TDataSet);
+    procedure QProducaoAfterDelete(DataSet: TDataSet);
+    procedure QProducaoAfterPost(DataSet: TDataSet);
+    procedure QProducaoBeforeDelete(DataSet: TDataSet);
+    procedure QProducaoBeforeEdit(DataSet: TDataSet);
+    procedure QProducaoBeforePost(DataSet: TDataSet);
+    procedure QSimilarBeforeDelete(DataSet: TDataSet);
+    procedure QSimilarBeforeEdit(DataSet: TDataSet);
+    procedure QSimilarBeforePost(DataSet: TDataSet);
+    procedure SimilarShow(Sender: TObject);
+    procedure QSimilarNewRecord(DataSet: TDataSet);
+    procedure Grid_SimilarColExit(Sender: TObject);
+    procedure Grid_SimilarKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure Grid_SimilarKeyPress(Sender: TObject; var Key: Char);
+    procedure QProducaoNewRecord(DataSet: TDataSet);
+    procedure btnCestClick(Sender: TObject);
+    procedure QTabelaAfterOpen(DataSet: TDataSet);
+    procedure BitBtn1Click(Sender: TObject);
+    procedure BitBtn2Click(Sender: TObject);
+    procedure BitBtn3Click(Sender: TObject);
+    procedure BitBtn4Click(Sender: TObject);
+    procedure QSerieNewRecord(DataSet: TDataSet);
+    procedure AtualizarFamliadosprodutos1Click(Sender: TObject);
+    procedure AtualizarFamliaProdutosSelecionad1Click(Sender: TObject);
+    procedure AtualizarCESTProdutoSelecionado1Click(Sender: TObject);
+    procedure AtualizarCESTTodosdaTela1Click(Sender: TObject);
+    procedure BtnReplicarClick(Sender: TObject);
+   
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    procedure Legenda_produtos;
+    procedure Exibir_Detalhes;
+    function Validacao: Boolean;
+  end;
+
+var
+  FrmProdutos_Light: TFrmProdutos_Light;
+  Operacao: String;
+  ID, Pagina, linha: Integer;
+  Imagem: TFileStream;
+  Is_Upload : Boolean;
+  m_BPLBOcx :TBPLBOCX;
+  Pr_Varejo:Real;
+
+  //Variaveis Elgin L-42
+
+   m_hPort : Integer = INVALID_HANDLE_VALUE;            //handle of opened port
+
+  Const BPLB_OK                = 0;      //success
+  Const BPLB_COMERROR          = -1;     //communication error
+  Const BPLB_PARAERROR         = -2;     //parameter error
+  Const BPLB_FILEOPENERROR     = -3;     //open file error
+  Const BPLB_FILEREADERROR     = -4;     //read file error
+  Const BPLB_FILEWRITEERROR    = -5;     //write file error
+  Const BPLB_FILEERROR         = -6;     //font file is not eligible
+  Const BPLB_NUMBEROVER        = -7;     //receive data length is bigger of length of setting
+  Const BPLB_IMAGETYPEERROR    = -8;     //Image format is not bmp
+  Const BPLB_DRIVERERROR       = -9;     //driver error
+  Const BPLB_LOADDLLERROR      = -10;    //load dll file error
+  Const BPLB_LOADFUNCTIONERROR = -11;    //load function of dll file error
+  Const BPLB_READINIFILEERROR  = -12;    //read ini file error
+  Const BPLB_TIMEOUTERROR      = -13;    //timeout error
+
+  Const COM_PORT         = 0;
+  Const LPT_PORT         = 1;
+  Const NIBBLE_PORT      = 2;
+  Const USB_API_PORT     = 3;
+  Const USB_CLASS_PORT   = 4;
+  Const DRIVER_PORT      = 5;
+
+  //Fim Variaveis Elgin L-42
+
+  const TSCLib = 'TSCLib.dll';
+  procedure about();stdcall;far;external TSCLib;
+  procedure openport(PrinterName:AnsiString);stdcall;far;external TSCLib;
+
+  procedure downloadpcx(filename, image_name:AnsiString);stdcall;far;external TSCLib;
+  procedure setup(width, height, speed, density, sensor, vertical, offset:AnsiString);stdcall;far;external TSCLib;
+  procedure formfeed();stdcall;far;external TSCLib;
+  procedure nobackfeed();stdcall;far;external TSCLib;
+  procedure clearbuffer();stdcall;far;external TSCLib;
+  procedure printerfont(x, y, fonttype, rotation, xmul,	ymul, text:AnsiString);stdcall;far;external TSCLib;
+  procedure windowsfont(x, y,	fontheight, rotation,	fontstyle, fontunderline:integer; szFaceName, content:AnsiString);stdcall;far;external TSCLib;
+  procedure barcode(x, y,	barcodetype, height, readable,	rotation, narrow,	wide, code:AnsiString);stdcall;far;external TSCLib;
+  procedure sendcommand(printercommand:AnsiString);stdcall;far;external TSCLib;
+  procedure printlabel(labels, copy:AnsiString);stdcall;far;external TSCLib;
+  procedure closeport();stdcall;far;external TSCLib;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UPesquisa, UFicha_Financeira, UConsulta_CST, UEstoque_Parcial,
+  UConsulta_NCM, UConsulta_Contribuicao,UEtiquetas_novos,UDetalhes_Produto,UConsulta_CEST;
+
+{$R *.dfm}
+
+
+Procedure TFrmProdutos_Light.Legenda_produtos;
+var
+Pedido_Venda,Orcamento:real;
+Begin
+    Label80.Visible := False;
+
+    if FrmPrincipal.Config.FieldByName('CALC_EST_PED_VDA').AsString = 'True' then
+    Begin
+      QPedidoVenda.Sql.Clear;
+      QPedidoVenda.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_PEDIDOVDA');
+      QPedidoVenda.Sql.Add('FROM PEDITENS');
+      QPedidoVenda.Sql.Add('INNER JOIN PEDIDOS ON PEDIDOS.PEDIDO_ID = PEDITENS.PEDIDO_ID');
+      QPedidoVenda.Sql.Add('WHERE');
+      QPedidoVenda.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      QPedidoVenda.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+      QPedidoVenda.Sql.Add('AND (TP_PEDIDO = 1)');
+      QPedidoVenda.Sql.Add('AND ((PEDIDOS.STATUS <> :STATUS) AND (PEDIDOS.STATUS <> :STATUS1))');
+      QPedidoVenda.Sql.Add('GROUP BY PEDITENS.PRODUTO_ID');
+
+      QPedidoVenda.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QPedidoVenda.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QPedidoVenda.ParamByName('STATUS').AsString       := 'CANCELADO';
+      QPedidoVenda.ParamByName('STATUS1').AsString      := 'FATURADO';
+
+      QPedidoVenda.Prepare;
+      QPedidoVenda.Open;
+
+      Pedido_venda := QPedidoVenda.FieldByName('QTD_PEDIDOVDA').AsFloat;
+      Orcamento    := 0;
+    End
+    Else
+    Begin
+      QOrcamento.Sql.Clear;
+      QOrcamento.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_ORCAMENTO');
+      QOrcamento.Sql.Add('FROM ORCITENS');
+      QOrcamento.Sql.Add('INNER JOIN ORCAMENTOS');
+      QOrcamento.Sql.Add('ON (ORCITENS.ORCAMENTO_ID = ORCAMENTOS.ORCAMENTO_ID)');
+      QOrcamento.Sql.Add('WHERE');
+      QOrcamento.Sql.Add('(ORCITENS.PRODUTO_ID = :PRODUTO_ID)');
+      QOrcamento.Sql.Add('AND (ORCITENS.TP_PROD_SERV = :TP_PROD_SERV)');
+      QOrcamento.Sql.Add('AND (ORCAMENTOS.TRANSACAO_ID = 0 OR ORCAMENTOS.TRANSACAO_ID IS NULL)');
+      QOrcamento.Sql.Add('AND (ORCAMENTOS.DT_MOVIMENTO = :DT_MOVIMENTO)');
+
+      QOrcamento.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QOrcamento.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QOrcamento.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+      QOrcamento.Prepare;
+      QOrcamento.Open;
+      Pedido_venda := 0;
+      Orcamento    := QOrcamento.FieldByName('QTD_ORCAMENTO').AsFloat;;
+    End;
+
+      QOrdem.Sql.Clear;
+      QOrdem.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_ORDEM');
+      QOrdem.Sql.Add('FROM ORDEM_ITENS');
+      QOrdem.Sql.Add('INNER JOIN ORDEM_SERVICO');
+      QOrdem.Sql.Add('ON (ORDEM_ITENS.ORDEM_ID = ORDEM_SERVICO.ORDEM_ID)');
+      QOrdem.Sql.Add('WHERE');
+      QOrdem.Sql.Add('(ORDEM_ITENS.CODIGO_ITEM = :PRODUTO_ID)');
+      QOrdem.Sql.Add('AND (ORDEM_ITENS.TP_PROD_SERV = :TP_PROD_SERV)');
+      QOrdem.Sql.Add('AND (ORDEM_SERVICO.STATUS <> :FATURADO)');
+
+      QOrdem.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QOrdem.ParamByName('TP_PROD_SERV').AsString := 'P';
+    // QOrdem.ParamByName('ENTREGUE').AsString     := 'ENTREGUE';
+    // QOrdem.ParamByName('EXECUTADA').AsString    := 'EXECUTADA';
+      QOrdem.ParamByName('FATURADO').AsString     := 'FATURADO';
+
+
+
+      QOrdem.Prepare;
+      QOrdem.Open;
+
+
+      QPedido.Sql.Clear;
+      QPedido.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_PEDIDO, PEDIDOS.DT_ENTREGA');
+      QPedido.Sql.Add('FROM PEDITENS');
+      QPedido.Sql.Add('INNER JOIN PEDIDOS ON PEDIDOS.PEDIDO_ID = PEDITENS.PEDIDO_ID');
+      QPedido.Sql.Add('WHERE');
+      QPedido.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      QPedido.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+      QPedido.Sql.Add('AND (TP_PEDIDO = 0)');
+      QPedido.Sql.Add('AND (PEDITENS.IMPORTADO = :IMPORTADO)');
+      QPedido.Sql.Add('AND (PEDIDOS.STATUS <> :STATUS)');
+      QPedido.Sql.Add('GROUP BY PEDIDOS.DT_ENTREGA');
+      QPedido.Sql.Add('ORDER BY PEDIDOS.DT_ENTREGA');
+
+      QPedido.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QPedido.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QPedido.ParamByName('IMPORTADO').AsString    := 'N';
+      QPedido.ParamByName('STATUS').AsString       := 'CANCELADO';
+
+      QPedido.Prepare;
+      QPedido.Open;
+
+      QPedido1.Sql.Clear;
+      QPedido1.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_PEDIDO, PEDIDOS.DT_ENTREGA');
+      QPedido1.Sql.Add('FROM PEDITENS');
+      QPedido1.Sql.Add('INNER JOIN PEDIDOS ON PEDIDOS.PEDIDO_ID = PEDITENS.PEDIDO_ID');
+      QPedido1.Sql.Add('WHERE');
+      QPedido1.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      QPedido1.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+      QPedido1.Sql.Add('AND (TP_PEDIDO = 0)');
+      QPedido1.Sql.Add('AND (PEDITENS.IMPORTADO = :IMPORTADO)');
+      QPedido1.Sql.Add('AND (PEDIDOS.STATUS <> :STATUS)');
+      QPedido1.Sql.Add('GROUP BY PEDIDOS.DT_ENTREGA');
+      QPedido1.Sql.Add('ORDER BY PEDIDOS.DT_ENTREGA');
+
+      QPedido1.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QPedido1.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QPedido1.ParamByName('IMPORTADO').AsString    := 'N';
+      QPedido1.ParamByName('STATUS').AsString       := 'CANCELADO';
+
+
+      QPedido1.Prepare;
+      QPedido1.Open;
+
+
+
+
+    if (Orcamento > 0) OR (Pedido_Venda > 0) OR (QPedido.FieldByName('QTD_PEDIDO').AsFloat > 0) OR
+       (QOrdem.FieldByName('QTD_ORDEM').AsFloat > 0)then
+    begin
+
+      Label80.Visible := True;
+
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+      Begin
+        if FrmPrincipal.Config.FieldByName('CALC_EST_PED_VDA').AsString = 'True' then
+        Begin
+        Label80.Caption := 'Estoque Atual: ' + FormatFloat('#,##0.00', QTabela.FieldByName('QUANTIDADE_C').AsFloat) +
+                          ' - Pedido de Venda: ' + FormatFloat('#,##0.00', QPedidoVenda.FieldByName('QTD_PEDIDOVDA').AsFloat) +
+                          ' - Ordem de Serviço: ' + FormatFloat('#,##0.00', QOrdem.FieldByName('QTD_ORDEM').AsFloat) +
+                          ' = Est. Disponível: ' + FormatFloat('#,##0.00', (QTabela.FieldByName('QUANTIDADE_C').AsFloat - (QPedidoVenda.FieldByName('QTD_PEDIDOVDA').AsFloat + QOrdem.FieldByName('QTD_ORDEM').AsFloat)));
+       if QPedido.FieldByName('DT_ENTREGA').AsDateTime <> StrToDate('30/12/1899')  then
+       Label80.caption := Label80.Caption + #13 + '(Pedidos: ' + FormatFloat('#,##0.00', QPedido.FieldByName('QTD_PEDIDO').AsFloat) +  ' Previsão de entrega Pedido: ' + DateToStr(QPedido1.FieldByName('DT_ENTREGA').AsDateTime) + ')';
+        End
+        Else
+        Begin
+        Label80.Caption := 'Estoque Atual: ' + FormatFloat('#,##0.00', QTabela.FieldByName('QUANTIDADE_C').AsFloat) +
+                          ' - Orçamentos: ' + FormatFloat('#,##0.00', QOrcamento.FieldByName('QTD_ORCAMENTO').AsFloat)  +
+                          ' = Est. Disponível: ' + FormatFloat('#,##0.00', (QTabela.FieldByName('QUANTIDADE_C').AsFloat - QOrcamento.FieldByName('QTD_ORCAMENTO').AsFloat));
+       if QPedido.FieldByName('DT_ENTREGA').AsDateTime <> StrToDate('30/12/1899')  then
+       Label80.caption := Label80.Caption + #13+  '(Pedidos: ' + FormatFloat('#,##0.00', QPedido.FieldByName('QTD_PEDIDO').AsFloat) + '  Previsão de entrega Pedido: ' + DateToStr(QPedido1.FieldByName('DT_ENTREGA').AsDateTime) + ')';
+        End;
+      End
+        Else
+        Begin
+        if FrmPrincipal.Config.FieldByName('CALC_EST_PED_VDA').AsString = 'True' then
+        Begin
+        Label80.Caption := 'Estoque Atual: ' + FormatFloat('#,##0.00', QTabela.FieldByName('QUANTIDADE_G').AsFloat) +
+                          ' - Pedido de Venda: ' + FormatFloat('#,##0.00', QPedidoVenda.FieldByName('QTD_PEDIDOVDA').AsFloat) +
+                          ' - Ordem de Serviço: ' + FormatFloat('#,##0.00', QOrdem.FieldByName('QTD_ORDEM').AsFloat) +
+                          ' = Est. Disponível: ' + FormatFloat('#,##0.00', (QTabela.FieldByName('QUANTIDADE_G').AsFloat - (QPedidoVenda.FieldByName('QTD_PEDIDOVDA').AsFloat + QOrdem.FieldByName('QTD_ORDEM').AsFloat)));
+        if QPedido.FieldByName('DT_ENTREGA').AsDateTime <> StrToDate('30/12/1899') then
+        Label80.caption := Label80.Caption + #13+ '(Pedidos: ' + FormatFloat('#,##0.00', QPedido.FieldByName('QTD_PEDIDO').AsFloat) + '  Previsão de entrega Pedido: ' + DateToStr(QPedido1.FieldByName('DT_ENTREGA').AsDateTime) + ')';
+        End
+        Else
+        Begin
+        Label80.Caption := 'Estoque Atual: ' + FormatFloat('#,##0.00', QTabela.FieldByName('QUANTIDADE_G').AsFloat) +
+                          ' - Orçamentos: ' + FormatFloat('#,##0.00', QOrcamento.FieldByName('QTD_ORCAMENTO').AsFloat) +
+                          ' = Est. Disponível: ' + FormatFloat('#,##0.00', (QTabela.FieldByName('QUANTIDADE_G').AsFloat - QOrcamento.FieldByName('QTD_ORCAMENTO').AsFloat));
+        if QPedido.FieldByName('DT_ENTREGA').AsDateTime <> StrToDate('30/12/1899') then
+        Label80.caption := Label80.Caption + #13 + '(Pedidos: ' + FormatFloat('#,##0.00', QPedido.FieldByName('QTD_PEDIDO').AsFloat) + '  Previsão de entrega Pedido: ' + DateToStr(QPedido1.FieldByName('DT_ENTREGA').AsDateTime) + ')';
+        End;
+        End;
+    end;
+End;
+
+Procedure TFrmProdutos_Light.Exibir_Detalhes;
+Begin
+
+     Application.MessageBox(PChar('Dados adicionais do produto.' + #13 +
+                                         'Descrição: ' + (QTabela.FieldByName('DESCRICAO').AsString) + #13 +
+                                         'Código de Barras: ' + (QTabela.FieldByName('COD_BARRA').AsString) + #13 +
+                                         'Aplicação: ' + (QTabela.FieldByName('APLICACAO').AsString) + #13 +
+                                         'Modelo: ' + (QTabela.FieldByName('MODELO_POSICAO').AsString)+ #13 +
+                                         'Marca: ' + (QTabela.FieldByName('MARCA').AsString)), 'Eficaz', MB_IconInformation + MB_OK);
+
+
+
+End;
+
+procedure TFrmProdutos_Light.AlfabetoClick(Sender: TObject);
+begin
+
+  if Alfabeto.TabIndex <> 26 then
+    Begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+      CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39 + Chr(Alfabeto.TabIndex + 65) + '%' + #39 + ') AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end
+  else
+  begin
+    if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+      CmdSelectNull := 'WHERE (PRODUTO_ID IS NOT NULL)'
+    else
+      CmdSelectNull := 'WHERE (PRODUTO_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+  end;
+
+  CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+  if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+  CmdOrderBy    := 'ORDER BY DESCRICAO';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+end;
+
+procedure TFrmProdutos_Light.APLICACAOMouseEnter(Sender: TObject);
+begin
+  APLICACAO.Hint := QTabela.FieldByName('APLICACAO').AsString;
+end;
+
+procedure TFrmProdutos_Light.AtualizarCESTProdutoSelecionado1Click(Sender: TObject);
+var
+InputString:String;
+begin
+InputString := InputBox('Atualizar CEST', 'Código CEST:', '');
+
+  if (InputString <> '') and (Length(InputString) = 7) then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM CEST');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(CEST = :CEST)');
+
+    IQuery.ParamByName('CEST').AsString := InputString;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('CEST inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+      abort;
+    end;
+
+    DBGrid1.DataSource.DataSet.First;
+    while not DBGrid1.DataSource.DataSet.Eof do
+    begin
+      if (DBGrid1.SelectedRows.CurrentRowSelected = True) { and (DBGrid1.DataSource.DataSet.FieldByName('NCM').AsString = '')} then
+      begin
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE PRODUTOS SET CEST = :CEST, FUNCIONARIO_ID = :FUNCIONARIO_ID');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := DBGrid1.DataSource.DataSet.FieldByName('PRODUTO_ID').AsInteger;
+        IQuery.ParamByName('CEST').AsString := InputString;
+        IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+      end;
+
+      Application.ProcessMessages;
+      DBGrid1.DataSource.DataSet.Next;
+    end;
+  end
+  Else
+    Application.MessageBox('CEST inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+     abort;
+end;
+
+procedure TFrmProdutos_Light.AtualizarCESTTodosdaTela1Click(Sender: TObject);
+var
+InputString:String;
+begin
+  InputString := InputBox('Atualizar CEST', 'Código CEST:', '');
+
+  if (InputString <> '') and (Length(InputString) = 7) then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM CEST');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(CEST = :CEST)');
+
+    IQuery.ParamByName('CEST').AsString := InputString;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('CEST inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+      abort;
+    end;
+
+    QTabela.First;
+    while not QTabela.Eof do
+    begin
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE PRODUTOS SET CEST = :CEST,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        IQuery.ParamByName('CEST').AsString := InputString;
+        IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+
+
+      Application.ProcessMessages;
+      QTabela.Next;
+    end;
+  end
+  Else
+    Application.MessageBox('CEST inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+      abort;
+
+end;
+
+procedure TFrmProdutos_Light.AtualizarFamliadosprodutos1Click(Sender: TObject);
+var
+InputString : String;
+begin
+   InputString := InputBox('Atualizar Família', 'Família Código:', '');
+
+  if (InputString <> '') then
+  begin
+   try
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TABELAS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TIPO_TABELA = :TIPO_TABELA) AND (TABELA_ID = :TABELA_ID)');
+
+    IQuery.ParamByName('TABELA_ID').AsInteger := StrToInt(InputString);
+    IQuery.ParamByName('TIPO_TABELA').AsString := 'F';
+
+    IQuery.Prepare;
+    IQuery.Open;
+   Except
+   Application.MessageBox('Favor inserir um número inteiro válido.', PChar(Msg_Title), mb_IconStop);
+    abort;
+
+   end;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Código da Família inválido ou inexistente.', PChar(Msg_Title), mb_IconStop);
+      abort;
+    end;
+
+    DBGrid1.DataSource.DataSet.First;
+    while not DBGrid1.DataSource.DataSet.Eof do
+    begin
+      if (DBGrid1.SelectedRows.CurrentRowSelected = True) { and (DBGrid1.DataSource.DataSet.FieldByName('NCM').AsString = '')} then
+      begin
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE PRODUTOS SET FAMILIA_ID = :FAMILIA_ID,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := DBGrid1.DataSource.DataSet.FieldByName('PRODUTO_ID').AsInteger;
+        IQuery.ParamByName('FAMILIA_ID').AsInteger := StrToInt(InputString);
+        IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+      end;
+
+      Application.ProcessMessages;
+      DBGrid1.DataSource.DataSet.Next;
+    end;
+  end
+  Else
+    Application.MessageBox('Código da Família inválido ou inexistente.', PChar(Msg_Title), mb_IconStop);
+      abort;
+
+end;
+
+procedure TFrmProdutos_Light.AtualizarFamliaProdutosSelecionad1Click(Sender: TObject);
+var
+InputString : String;
+begin
+ InputString := InputBox('Atualizar Família', 'Família Código:', '');
+
+  if (InputString <> '') then
+  begin
+   try
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TABELAS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TIPO_TABELA = :TIPO_TABELA) AND (TABELA_ID = :TABELA_ID)');
+
+    IQuery.ParamByName('TABELA_ID').AsInteger := StrToInt(InputString);
+    IQuery.ParamByName('TIPO_TABELA').AsString := 'F';
+
+    IQuery.Prepare;
+    IQuery.Open;
+   Except
+   Application.MessageBox('Favor inserir um número inteiro válido.', PChar(Msg_Title), mb_IconStop);
+    abort;
+
+   end;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Código da Família inválido ou inexistente.', PChar(Msg_Title), mb_IconStop);
+      abort;
+    end;
+
+    QTabela.First;
+    while not QTabela.Eof do
+    begin
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE PRODUTOS SET FAMILIA_ID = :FAMILIA_ID, FUNCIONARIO_ID = :FUNCIONARIO_ID');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        IQuery.ParamByName('FAMILIA_ID').AsInteger := StrToInt(InputString);
+        IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+      Application.ProcessMessages;
+      QTabela.Next;
+    end;
+
+  end;
+end;
+
+procedure TFrmProdutos_Light.AtualizarNCMProdutosSelecionados1Click(Sender: TObject);
+var
+InputString: String;
+begin
+  InputString := InputBox('Atualizar NCM', 'NCM:', '');
+
+  if (InputString <> '') and (Length(InputString) = 8) then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TIPI');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(NCM = :NCM)');
+
+    IQuery.ParamByName('NCM').AsString := InputString;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('NCM inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+      abort;
+    end;
+
+    DBGrid1.DataSource.DataSet.First;
+    while not DBGrid1.DataSource.DataSet.Eof do
+    begin
+      if (DBGrid1.SelectedRows.CurrentRowSelected = True) { and (DBGrid1.DataSource.DataSet.FieldByName('NCM').AsString = '')} then
+      begin
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE PRODUTOS SET NCM = :NCM, FUNCIONARIO_ID = :FUNCIONARIO_ID');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := DBGrid1.DataSource.DataSet.FieldByName('PRODUTO_ID').AsInteger;
+        IQuery.ParamByName('NCM').AsString := InputString;
+        IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+      end;
+
+      Application.ProcessMessages;
+      DBGrid1.DataSource.DataSet.Next;
+    end;
+  end
+   Else
+    Application.MessageBox('NCM inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+      abort;
+end;
+
+procedure TFrmProdutos_Light.AtualizarNCMTodosdaTela1Click(Sender: TObject);
+var
+InputString: String;
+begin
+  InputString := InputBox('Atualizar NCM', 'NCM:', '');
+
+  if (InputString <> '') and (Length(InputString) = 8) then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TIPI');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(NCM = :NCM)');
+
+    IQuery.ParamByName('NCM').AsString := InputString;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('NCM inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+      abort;
+    end;
+
+    QTabela.First;
+    while not QTabela.Eof do
+    begin
+
+     // if QTabela.FieldByName('NCM').AsString = '' then
+      //begin
+       try
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE PRODUTOS SET NCM = :NCM, FUNCIONARIO_ID = :FUNCIONARIO_ID');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        IQuery.ParamByName('NCM').AsString := InputString;
+        IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+       except
+       on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro:' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+       end;
+      //end;
+
+      Application.ProcessMessages;
+      QTabela.Next;
+    end;
+  end
+  Else
+    Application.MessageBox('NCM inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+      abort;
+end;
+
+procedure TFrmProdutos_Light.BitBtn1Click(Sender: TObject);
+var
+Vr_Frete_Per:Real;
+begin
+Vr_Frete_Per:= RoundTo(((vr_frete.value * 100) / custo_compra.value), -2 );
+Application.MessageBox(Pchar('Valor do Frete em Porcentagem ao custo: ' + FloatToStrF(Vr_Frete_Per,FfNumber,15,2) + '%'),'Eficaz', MB_ICONINFORMATION + MB_OK);
+end;
+
+procedure TFrmProdutos_Light.BitBtn2Click(Sender: TObject);
+var
+Vr_icmsst_Per:Real;
+begin
+Vr_icmsst_Per:= RoundTo(((vr_icmsst.value * 100) / custo_compra.value), -2 );
+Application.MessageBox(Pchar('Valor do Icms-St em Porcentagem ao custo: ' + FloatToStrF(Vr_icmsst_Per,FfNumber,15,2) + '%'),'Eficaz', MB_ICONINFORMATION + MB_OK);
+end;
+
+
+procedure TFrmProdutos_Light.BitBtn3Click(Sender: TObject);
+var
+Vr_ipi_Per:Real;
+begin
+Vr_ipi_Per:= RoundTo(((vr_ipi.value * 100) / custo_compra.value), -2 );
+Application.MessageBox(Pchar('Valor do Icms-St em Porcentagem ao custo: ' + FloatToStrF(Vr_ipi_Per,FfNumber,15,2) + '%'),'Eficaz', MB_ICONINFORMATION + MB_OK);
+end;
+
+procedure TFrmProdutos_Light.BitBtn4Click(Sender: TObject);
+var
+Vr_despesas_Per:Real;
+begin
+Vr_despesas_Per:= RoundTo(((vr_despesas.value * 100) / custo_compra.value), -2 );
+Application.MessageBox(Pchar('Valor do Icms-St em Porcentagem ao custo: ' + FloatToStrF(Vr_despesas_Per,FfNumber,15,2) + '%'),'Eficaz', MB_ICONINFORMATION + MB_OK);
+end;
+
+procedure TFrmProdutos_Light.Botoes_Editing;
+begin
+  btnPrior.Enabled           := False;
+  btnNext.Enabled            := False;
+  btnInsert.Enabled          := False;
+  btnEdit.Enabled            := False;
+  btnDelete.Enabled          := False;
+  btnSave.Enabled            := True;
+  btnDiscard.Enabled         := True;
+  btnRetorna.Enabled         := False;
+  btnEmpresa.Enabled         := True;
+  btnComp.Enabled            := True;
+  btnGrupo.Enabled           := True;
+  btnSub_Tipo.Enabled        := True;
+  btnLocalizacao.Enabled     := True;
+  btnTributo.Enabled         := True;
+  btnGenero.Enabled          := True;
+  btnCst_Pis.Enabled         := True;
+  btnCst_Cofins.Enabled      := True;
+  btnCst_Pis_Entr.Enabled    := True;
+  btnCst_Cofins_Entr.Enabled := True;
+  btnPesquisa.Enabled        := False;
+  btnImprime.Enabled         := False;
+  btnFamilia.Enabled         := True;
+  btnComposicao.Enabled      := False;
+  btnComeca_Com.Enabled      := False;
+  Comeca_Com.Enabled         := False;
+  btnNCM.Enabled             := True;
+  btnParcial.Enabled         := False;
+  btnInventario.Enabled      := True;
+  btn_embvd.Enabled          := True;
+  btn_embcp.Enabled          := True;
+  btn_Load_image.Enabled     := True;
+  btnCest.Enabled            := True;
+  BtnReplicar.Enabled        := True;
+end;
+
+procedure TFrmProdutos_Light.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+    btnInsert.Enabled := True;
+
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled    := True;
+    btnDelete.Enabled  := True;
+    btnParcial.Enabled := True;
+  end
+  else
+  begin
+    btnEdit.Enabled    := False;
+    btnDelete.Enabled  := False;
+    btnParcial.Enabled := False;
+  end;
+
+  if not QProducao.IsEmpty then
+    btnComposicao.Enabled := True
+  else
+    btnComposicao.Enabled := False;
+
+  btnSave.Enabled            := False;
+  btnDiscard.Enabled         := False;
+  btnRetorna.Enabled         := True;
+  btnEmpresa.Enabled         := False;
+  btnComp.Enabled            := False;
+  btnGrupo.Enabled           := False;
+  btnSub_Tipo.Enabled        := False;
+  btnLocalizacao.Enabled     := False;
+  btnTributo.Enabled         := False;
+  btnGenero.Enabled          := False;
+  btnCst_Pis.Enabled         := False;
+  btnCst_Cofins.Enabled      := False;
+  btnCst_Pis_Entr.Enabled    := False;
+  btnCst_Cofins_Entr.Enabled := False;
+  btnPesquisa.Enabled        := True;
+  btnImprime.Enabled         := True;
+  btnFamilia.Enabled         := False;
+  btnComeca_Com.Enabled      := True;
+  Comeca_Com.Enabled         := True;
+  btnNCM.Enabled             := False;
+  btnInventario.Enabled      := False;
+  btn_embvd.Enabled          := False;
+  btn_embcp.Enabled          := False;
+  btn_Load_image.Enabled     := False;
+  btnCest.Enabled            := False;
+  BtnReplicar.Enabled        := False;
+end;
+
+procedure TFrmProdutos_Light.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA_ID.Text <> '') then
+  begin
+    QEmpresa.Close;
+
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Grupo')) and (GRUPO_ID.Text <> '') then
+  begin
+    QGrupo.Close;
+
+    QGrupo.ParamByName('TABELA_ID').AsInteger := StrToInt(GRUPO_ID.Text);
+
+    QGrupo.Prepare;
+    QGrupo.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Subtipo')) and (SUBTIPO_ID.Text <> '') then
+  begin
+    QSubtipo.Close;
+
+    QSubtipo.ParamByName('TABELA_ID').AsInteger := StrToInt(SUBTIPO_ID.Text);
+
+    QSubtipo.Prepare;
+    QSubtipo.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Localização')) and (LOCALIZACAO_ID.Text <> '') then
+  begin
+    QLocalizacao.Close;
+
+    QLocalizacao.ParamByName('TABELA_ID').AsInteger := StrToInt(LOCALIZACAO_ID.Text);
+
+    QLocalizacao.Prepare;
+    QLocalizacao.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Tributo')) and (TRIBUTO_ID.Text <> '') then
+  begin
+    QTributo.Close;
+
+    QTributo.ParamByName('TRIBUTO_ID').AsInteger := StrToInt(TRIBUTO_ID.Text);
+
+    QTributo.Prepare;
+    QTributo.Open;
+
+    if not QTributo.IsEmpty then
+      ALIQUOTA_ICMS.Value := QTributo.FieldByName('ALIQUOTA_ICMS').AsFloat;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Família')) and (FAMILIA_ID.Text <> '') then
+  begin
+    QFamilia.Close;
+
+    QFamilia.ParamByName('TABELA_ID').AsInteger := StrToInt(FAMILIA_ID.Text);
+
+    QFamilia.Prepare;
+    QFamilia.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Fornecedor')) and (DBEdit8.Text <> '') then
+  begin
+    QFornecedor.Close;
+
+    QFornecedor.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(DBEdit8.Text);
+
+    QFornecedor.Prepare;
+    QFornecedor.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Unidade')) and (Unidade.Text <> '') then
+  begin
+    QUnidade.Close;
+
+    QUnidade.ParamByName('DESCRICAO').AsString := Unidade.Text;
+
+    QUnidade.Prepare;
+    QUnidade.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Unidade Venda')) and (Unidade_Venda.Text <> '') then
+  begin
+    QUnidade_Venda.Close;
+
+    QUnidade_Venda.ParamByName('DESCRICAO').AsString := Unidade_Venda.Text;
+
+    QUnidade_Venda.Prepare;
+    QUnidade_Venda.Open;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+
+    if Temp is TCheckBox then
+      TCheckBox(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmProdutos_Light.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO PRODUTOS(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO PRODUTOS(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO PRODUTOS(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO PRODUTOS(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'INSERT INTO PRODUTOS(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TRxCalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'INSERT INTO PRODUTOS(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+   if Temp is TCheckBox then
+    begin
+      if Sql = 'INSERT INTO PRODUTOS(' then
+        Sql := Sql + TCheckBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TCheckBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCheckBox(Temp).Name
+      else
+        Par := Par + ', :' + TCheckBox(Temp).Name;
+    end;
+
+   if (FrmPrincipal.Config.FieldByName('EXIBE_FOTO').AsString = 'True') AND (Is_Upload = True) then
+    if Temp is TImage then
+    begin
+      if Sql = 'INSERT INTO PRODUTOS(' then
+        Sql := Sql + TImage(Temp).Name
+      else
+        Sql := Sql + ', ' + TImage(Temp).Name;
+
+      if Par = '' then
+        Par := Par + ':' + TImage(Temp).Name
+      else
+        Par := Par + ', :' + TImage(Temp).Name;
+    end;
+
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+   if (FrmPrincipal.Config.FieldByName('EXIBE_FOTO').AsString = 'True') AND (Is_Upload = True) then
+    if Temp is TImage then
+      IQuery.ParamByName('FOTO').LoadFromStream(Imagem, FTBlob);
+
+
+
+    if Temp is TCheckBox then
+      begin
+        if TCheckBox(Temp).Checked then
+          IQuery.ParamByName(TCheckBox(Temp).Name).AsInteger := 1
+        else
+          IQuery.ParamByName(TCheckBox(Temp).Name).AsInteger := 0;
+      end;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  Habilitar(False);
+end;
+
+procedure TFrmProdutos_Light.LOCALIZACAO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Localização');
+end;
+
+procedure TFrmProdutos_Light.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE PRODUTOS SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE PRODUTOS SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE PRODUTOS SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE PRODUTOS SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'UPDATE PRODUTOS SET ' then
+        Sql := Sql + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TDateEdit then
+    begin
+      if Sql = 'UPDATE PRODUTOS SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+
+   if (FrmPrincipal.Config.FieldByName('EXIBE_FOTO').AsString = 'True') AND (Is_Upload = True) then
+    if Temp is TImage then
+    begin
+      if Sql = 'UPDATE PRODUTOS SET ' then
+        Sql := Sql + TImage(Temp).Name + ' = :' + TImage(Temp).Name
+      else
+        Sql := Sql + ', ' + TImage(Temp).Name + ' = :' + TImage(Temp).Name;
+    end;
+
+
+    if Temp is TCheckBox then
+      begin
+        if Sql = 'UPDATE PRODUTOS SET ' then
+          Sql := Sql + TCheckBox(Temp).Name + ' = :' + TCheckBox(Temp).Name
+        else
+          Sql := Sql + ', ' + TCheckBox(Temp).Name + ' = :' + TCheckBox(Temp).Name;
+      end;
+
+    end;
+
+  Sql := Sql + ' WHERE (PRODUTO_ID = :ID)';
+
+ 
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if (FrmPrincipal.Config.FieldByName('EXIBE_FOTO').AsString = 'True') AND (Is_Upload = True) then
+    if Temp is TImage then
+      IQuery.ParamByName(TImage(Temp).Name).LoadFromStream(Imagem, FTBlob);
+
+
+    if Temp is TCheckBox then
+      begin
+        if TCheckBox(Temp).Checked then
+          IQuery.ParamByName(TCheckBox(Temp).Name).AsInteger := 1
+        else
+          IQuery.ParamByName(TCheckBox(Temp).Name).AsInteger := 0;
+      end;
+
+
+  end;
+
+
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+
+  QTabela.Locate('PRODUTO_ID', ID, [loCaseInsensitive]);
+  Habilitar(False);
+
+  Is_Upload := False;
+
+
+end;
+
+procedure TFrmProdutos_Light.EMPRESA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Empresa');
+end;
+
+procedure TFrmProdutos_Light.EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = EMPRESA_ID) then
+    btnEmpresaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = GRUPO_ID) then
+    btnGrupoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = SUBTIPO_ID) then
+    btnSub_TipoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = LOCALIZACAO_ID) then
+    btnLocalizacaoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = TRIBUTO_ID) then
+    btnTributoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = FAMILIA_ID) then
+    btnFamiliaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = COMPOSICAO_ID) then
+    btnCompClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmProdutos_Light.Validacao: Boolean;
+var
+Cst_Valido: Boolean;
+begin
+  Result := False;
+
+  DESCRICAO.Color       := clWindow;
+  EMPRESA_ID.Color      := clWindow;
+  GRUPO_ID.Color        := clWindow;
+  SUBTIPO_ID.Color      := clWindow;
+  LOCALIZACAO_ID.Color  := clWindow;
+  TRIBUTO_ID.Color      := clWindow;
+  COD_BARRA.Color       := clWindow;
+  SUPERVISOR.Color      := clWindow;
+  PROVQT.Color          := clWindow;
+  PESAVEL.Color         := clWindow;
+  UNIDADE_VENDA.Color   := clWindow;
+  UNIDADE.Color         := clWindow;
+  MOD_IPI.Color         := clWindow;
+  MOD_ICMS.Color        := clWindow;
+  MOD_ICMS_ST.Color     := clWindow;
+  FAMILIA_ID.Color      := clWindow;
+  COD_BARRA_AUX1.Color  := clWindow;
+  COD_BARRA_AUX2.Color  := clWindow;
+  COD_BARRA_AUX3.Color  := clWindow;
+  COD_BARRA_AUX4.Color  := clWindow;
+  IAT.Color             := clWindow;
+  IPPT.Color            := clWindow;
+  COD_ORIGINAL.Color    := clWindow;
+  REFERENCIA.Color      := clWIndow;
+  TIPO_ITEM.Color       := clWindow;
+  COD_GEN.Color         := clWindow;
+  CST_PIS.Color         := clWindow;
+  CST_COFINS.Color      := clWindow;
+  CST_PIS_ENTR.Color    := clWindow;
+  CST_COFINS_ENTR.Color := clWindow;
+  NCM.Color             := clWindow;
+  CTRL_SERIE.Color      := clWindow;
+  NCM.Color             := clWindow;
+
+  if DESCRICAO.Text = '' then
+  begin
+    Application.MessageBox('Descrição inválida', PChar(Msg_Title), mb_IconStop);
+
+    DESCRICAO.Color := clYellow;
+    DESCRICAO.SetFocus;
+
+    exit;
+  end;
+
+  if (NCM.Text <> '') and (FrmPrincipal.Config.FieldByName('SPED').AsString = 'True') and (not Cad_Simples.Checked) then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TIPI');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(NCM = :NCM)');
+
+    IQuery.ParamByName('NCM').AsString := NCM.Text;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('NCM inválido ou inexistente', PChar(Msg_Title), mb_IconStop);
+
+      NCM.Color := clYellow;
+      NCM.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if LeIni(ExtractFilePath(ParamStr(0)) + 'NFe.Ini', 'NFe', 'NFe') = 'True' then
+  begin
+    if (NCM.Text = '') or (length(NCM.Text) < 8) and (not Cad_Simples.Checked) then
+    begin
+      Application.MessageBox('NCM inválido', PChar(Msg_Title), mb_IconStop);
+
+      NCM.Color := clYellow;
+      NCM.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (UNIDADE_VENDA.Text = '') or (QUnidade_Venda.isEmpty)then
+  begin
+    Application.MessageBox('Unidade de Medida de venda inválida', PChar(Msg_Title), mb_IconStop);
+
+    UNIDADE_VENDA.Color := clYellow;
+
+    if UNIDADE_VENDA.CanFocus then
+      UNIDADE_VENDA.SetFocus;
+
+    exit;
+  end;
+  {
+  if (UNIDADE.Text = '') or (QUnidade.isEmpty) then
+  begin
+    Application.MessageBox('Unidade de Medida de compra inválida', PChar(Msg_Title), mb_IconStop);
+
+    UNIDADE.Color := clYellow;
+
+    if UNIDADE.CanFocus then
+      UNIDADE.SetFocus;
+
+    exit;
+
+  if (IAT.Text <> 'A') and (IAT.Text <> 'T') then
+  begin
+    Application.MessageBox('IAT inválido', PChar(Msg_Title), mb_IconStop);
+
+    IAT.Color := clYellow;
+
+    if IAT.CanFocus then
+      IAT.SetFocus;
+
+    exit;
+  end;
+
+  if (IPPT.Text <> 'P') and (IPPT.Text <> 'T') then
+  begin
+    Application.MessageBox('IPPT inválido', PChar(Msg_Title), mb_IconStop);
+
+    IPPT.Color := clYellow;
+
+    if IPPT.CanFocus then
+      IPPT.SetFocus;
+
+    exit;
+  end;
+  }
+  if (TIPO_ITEM.Text <> '00 - MERCADORIA PARA REVENDA') and (TIPO_ITEM.Text <> '01 - MATERIA PRIMA') and
+     (TIPO_ITEM.Text <> '02 - EMBALAGEM') and (TIPO_ITEM.Text <> '03 - PRODUTO EM PROCESSO') and
+     (TIPO_ITEM.Text <> '04 - PRODUTO ACABADO') and (TIPO_ITEM.Text <> '05 - SUBPRODUTO') and
+     (TIPO_ITEM.Text <> '06 - PRODUTO INTERMEDIARIO') and (TIPO_ITEM.Text <> '07 - MATERIAL DE USO E CONSUMO') and
+     (TIPO_ITEM.Text <> '08 - ATIVO IMOBILIZADO') and (TIPO_ITEM.Text <> '09 - SERVICOS') and
+     (TIPO_ITEM.Text <> '10 - OUTROS INSUMOS') and (TIPO_ITEM.Text <> '99 - OUTRAS') then
+  begin
+    Application.MessageBox('Tipo Item inválido', PChar(Msg_Title), mb_IconStop);
+
+    TIPO_ITEM.Color := clYellow;
+    TIPO_ITEM.SetFocus;
+
+    exit;
+  end;
+
+  if (CTRL_SERIE.Text <> 'SIM') and (CTRL_SERIE.Text <> 'NÃO') then
+  begin
+    Application.MessageBox('Ctrl. Nº Série inválido', PChar(Msg_Title), mb_IconStop);
+
+    CTRL_SERIE.Color := clYellow;
+    CTRL_SERIE.SetFocus;
+
+    exit;
+  end;
+
+  if (SUPERVISOR.Text <> 'SIM') and (SUPERVISOR.Text <> 'NÃO') then
+  begin
+    Application.MessageBox('Supervisor inválido', PChar(Msg_Title), mb_IconStop);
+
+    SUPERVISOR.Color := clYellow;
+    SUPERVISOR.SetFocus;
+
+    exit;
+  end;
+
+  if (PROVQT.Text <> 'SIM') and (PROVQT.Text <> 'NÃO') then
+  begin
+    Application.MessageBox('Multiplica inválido', PChar(Msg_Title), mb_IconStop);
+
+    PROVQT.Color := clYellow;
+    PROVQT.SetFocus;
+
+    exit;
+  end;
+
+  if (PESAVEL.Text <> 'SIM') and (PESAVEL.Text <> 'NÃO') then
+  begin
+    Application.MessageBox('Pesável inválido', PChar(Msg_Title), mb_IconStop);
+
+    PESAVEL.Color := clYellow;
+
+    if PESAVEL.CanFocus then
+      PESAVEL.SetFocus;
+
+    exit;
+  end;
+
+  if QEmpresa.IsEmpty then
+  begin
+    Application.MessageBox('Empresa inexistente', PChar(Msg_Title), mb_IconStop);
+
+    EMPRESA_ID.Color := clYellow;
+    EMPRESA_ID.SetFocus;
+
+    exit;
+  end;
+
+  if (QGrupo.IsEmpty) and (not Cad_Simples.Checked) then
+  begin
+    Application.MessageBox('Grupo de Estoque inexistente', PChar(Msg_Title), mb_IconStop);
+
+    GRUPO_ID.Color := clYellow;
+    GRUPO_ID.SetFocus;
+
+    exit;
+  end;
+
+  if (QSubtipo.IsEmpty)  and (not Cad_Simples.Checked)then
+  begin
+    Application.MessageBox('Sub-Tipo de Estoque inexistente', PChar(Msg_Title), mb_IconStop);
+
+    SUBTIPO_ID.Color := clYellow;
+    SUBTIPO_ID.SetFocus;
+
+    exit;
+  end;
+
+  if (QLocalizacao.IsEmpty) and (not Cad_Simples.Checked) then
+  begin
+    Application.MessageBox('Localização inxistente', PChar(Msg_Title), mb_IconStop);
+
+    LOCALIZACAO_ID.Color := clYellow;
+    LOCALIZACAO_ID.SetFocus;
+
+    exit;
+  end;
+
+  if (QTributo.IsEmpty) then
+  begin
+    Application.MessageBox('Código Tributo inexistente', PChar(Msg_Title), mb_IconStop);
+
+    TRIBUTO_ID.Color := clYellow;
+    TRIBUTO_ID.SetFocus;
+
+    exit;
+  end;
+
+  if (COD_GEN.Text <> '') and (FrmPrincipal.Config.FieldByName('SPED').AsString = 'True') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM GENERO_PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+    IQuery.ParamByName('CODIGO').AsString := COD_GEN.Text;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Cód. Gênero inexistente', PChar(Msg_Title), mb_IconStop);
+
+      COD_GEN.Color := clYellow;
+      COD_GEN.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if FrmPrincipal.Config.FieldByName('SPED').AsString = 'True' then
+  begin
+    //if CST_PIS_ENTR.Text <> '' then
+    //begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_PIS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_PIS_ENTR.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST PIS de Entrada inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_PIS_ENTR.Color := clYellow;
+
+        if CST_PIS_ENTR.CanFocus then
+          CST_PIS_ENTR.SetFocus;
+
+        exit;
+      end;
+
+      if ((Copy(NCM.Text, 1, 4) = '0201') or (Copy(NCM.Text, 1, 4) = '0202') or (Copy(NCM.Text, 1, 6) = '020620')) and ((CST_PIS_ENTR.Text < '60') or (CST_PIS_ENTR.Text > '66')) then
+        Application.MessageBox('Para NCM 0201 ou NMC 0202 ou NCM 020620 (Crédito Presumido Revenda), o CST deve ser de 60 a 66', PChar(Msg_Title), mb_IconStop)
+
+      else
+      begin
+        if ((CST_PIS_ENTR.Text >= '50') and (CST_PIS_ENTR.Text <= '66')) or ((CST_PIS_ENTR.Text >= '70') and (CST_PIS_ENTR.Text <= '75')) or (CST_PIS_ENTR.Text = '98') or (CST_PIS_ENTR.Text = '99') then
+          Cst_Valido := True
+        else
+          Cst_Valido := False;
+
+        if not Cst_Valido then
+          Application.MessageBox('CST de entrada/aquisição deve ser de 50 a 66, 70 a 75, 98 ou 99', PChar(Msg_Title), mb_IconStop);
+      end;
+    //end;
+
+   // if CST_PIS.Text <> '' then
+    //begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_PIS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_PIS.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST PIS de Saída inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_PIS.Color := clYellow;
+
+        if CST_PIS.CanFocus then
+          CST_PIS.SetFocus;
+
+        exit;
+      end;
+   // end;
+
+    if (PIS.Value > 0) and (CST_PIS.Text = '') and (not Cad_Simples.Checked) then
+    begin
+      Application.MessageBox('Se Alíquota PIS for maior do que 0 é obrigatório informar o CST PIS', PChar(Msg_Title), mb_IconStop);
+
+      CST_PIS.Color := clYellow;
+
+      if CST_PIS.CanFocus then
+        CST_PIS.SetFocus;
+
+      exit;
+    end;
+
+   // if CST_COFINS_ENTR.Text <> '' then
+   // begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_COFINS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_COFINS_ENTR.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST COFINS de Entrada inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_COFINS_ENTR.Color := clYellow;
+
+        if CST_COFINS_ENTR.CanFocus then
+          CST_COFINS_ENTR.SetFocus;
+
+        exit;
+      end;
+
+      if ((Copy(NCM.Text, 1, 4) = '0201') or (Copy(NCM.Text, 1, 4) = '0202') or (Copy(NCM.Text, 1, 6) = '020620')) and ((CST_COFINS_ENTR.Text < '60') or (CST_COFINS_ENTR.Text > '66')) then
+        Application.MessageBox('Para NCM 0201 ou NMC 0202 ou NCM 020620 (Crédito Presumido Revenda), o CST deve ser de 60 a 66', PChar(Msg_Title), mb_IconStop)
+      else
+      begin
+        if ((CST_COFINS_ENTR.Text >= '50') and (CST_COFINS_ENTR.Text <= '66')) or ((CST_COFINS_ENTR.Text >= '70') and (CST_COFINS_ENTR.Text <= '75')) or (CST_COFINS_ENTR.Text = '98') or (CST_COFINS_ENTR.Text = '99') then
+          Cst_Valido := True
+        else
+          Cst_Valido := False;
+
+        if not Cst_Valido then
+          Application.MessageBox('CST de entrada/aquisição deve ser de 50 a 66, 70 a 75, 98 ou 99', PChar(Msg_Title), mb_IconStop);
+      end;
+   // end;
+
+   // if CST_COFINS.Text <> '' then
+   // begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM CST_COFINS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(CODIGO = :CODIGO)');
+
+      IQuery.ParamByName('CODIGO').AsString := CST_COFINS.Text;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        Application.MessageBox('Cód. CST COFINS de Saída inexistente', PChar(Msg_Title), mb_IconStop);
+
+        CST_COFINS.Color := clYellow;
+
+        if CST_COFINS.CanFocus then
+          CST_COFINS.SetFocus;
+
+        exit;
+      end;
+    //end;
+
+    if (COFINS.Value > 0) and (CST_COFINS.Text = '') and (not Cad_Simples.Checked) then
+    begin
+      Application.MessageBox('Se Alíquota COFINS for maior do que 0 é obrigatório informar o CST COFINS', PChar(Msg_Title), mb_IconStop);
+
+      CST_COFINS.Color := clYellow;
+
+      if CST_COFINS.Canfocus then
+        CST_COFINS.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if CST_PIS.Text <> CST_COFINS.Text then
+  begin
+    Application.MessageBox('Cód. CST PIS de saída diferente de CST COFINS de saída', PChar(Msg_Title), mb_IconStop);
+
+    CST_PIS.Color := clYellow;
+
+    if CST_PIS.CanFocus then
+      CST_PIS.SetFocus;
+
+    exit;
+  end;
+
+  if CST_PIS_ENTR.Text <> CST_COFINS_ENTR.Text then
+  begin
+    Application.MessageBox('Cód. CST PIS de entrada diferente de CST COFINS de entrada', PChar(Msg_Title), mb_IconStop);
+
+    CST_PIS_ENTR.Color := clYellow;
+
+    if CST_PIS_ENTR.CanFocus then
+      CST_PIS_ENTR.SetFocus;
+
+    exit;
+  end;
+
+  if (FAMILIA_ID.Value > 0) and (QFamilia.IsEmpty) then
+  begin
+    Application.MessageBox('Família de Produto inexistente', PChar(Msg_Title), mb_IconStop);
+
+    FAMILIA_ID.Color := clYellow;
+    FAMILIA_ID.SetFocus;
+
+    exit;
+  end;
+
+  if (MOD_ICMS.Text <> '') and (MOD_ICMS.Text <> 'MVA') and (MOD_ICMS.Text <> 'PAUTA') and (MOD_ICMS.Text <> 'PR. TABELADO') and (MOD_ICMS.Text <> 'VALOR DA OPERAÇÃO') then
+  begin
+    Application.MessageBox('Mod. de Determinação da Base de Cálculo do ICMS inválido', PChar(Msg_Title), mb_IconStop);
+
+    MOD_ICMS.Color := clYellow;
+    MOD_ICMS.SetFocus;
+
+    exit;
+  end;
+
+  if (MOD_ICMS_ST.Text <> '') and (MOD_ICMS_ST.Text <> 'MVA') and (MOD_ICMS_ST.Text <> 'PAUTA') and (MOD_ICMS_ST.Text <> 'PR. TABELADO') and (MOD_ICMS_ST.Text <> 'LISTA POSITIVA') and (MOD_ICMS_ST.Text <> 'LISTA NEGATIVA') and (MOD_ICMS_ST.Text <> 'LISTA NEUTRA') then
+  begin
+    Application.MessageBox('Mod. de Determinação da Base de Cálculo do ICMS ST inválido', PChar(Msg_Title), mb_IconStop);
+
+    MOD_ICMS_ST.Color := clYellow;
+    MOD_ICMS_ST.SetFocus;
+
+    exit;
+  end;
+
+  if (IPI.Value > 0) and ((MOD_IPI.Text <> '50-SAÍDA TRIBUTADA') and (MOD_IPI.Text <> '51-SAÍDA TRIB. C/ ALÍQ. 0') and (MOD_IPI.Text <> '52-SAÍDA ISENTA') and (MOD_IPI.Text <> '53-SAÍDA N/ TRIBUTADA') and (MOD_IPI.Text <> '54-SAÍDA IMUNE') and (MOD_IPI.Text <> '55-SAÍDA C/ SUSPENSÃO') and (MOD_IPI.Text <> '99-OUTRAS SAÍDAS')) then
+  begin
+    Application.MessageBox('Mod. de Determinação do IPI inválido', PChar(Msg_Title), mb_IconStop);
+
+    MOD_IPI.Color := clYellow;
+    MOD_IPI.SetFocus;
+
+    exit;
+  end;
+
+  if (COD_BARRA.Text = '') and (not Cad_Simples.Checked) then
+  begin
+    Application.MessageBox('Código de Barras Inválido', PChar(Msg_Title), mb_IconStop);
+
+    COD_BARRA.Color := clYellow;
+    COD_BARRA.SetFocus;  
+    exit;
+  end;
+
+  if (COD_BARRA.Text <> '') And (FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True') then
+  begin
+    if not Digito(COD_BARRA.Text)  then
+    begin
+      if Application.MessageBox('Dígito verificador do Código de Barras inválido. Deseja alterar o dígito?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+      begin
+        if length(COD_BARRA.Text) = 13 then
+          COD_BARRA.Text := Copy(COD_BARRA.Text, 2, 12);
+
+        if length(COD_BARRA.Text) = 14 then
+          COD_BARRA.Text := Copy(COD_BARRA.Text, 2, 13);
+
+        COD_BARRA.Text := Dig(COD_BARRA.Text);
+
+        COD_BARRA.Text := StrZero(COD_BARRA.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+      end
+      else
+      begin
+        COD_BARRA.Color := clYellow;
+        COD_BARRA.SetFocus;
+
+        exit;
+      end;
+    end;
+  end;
+
+  if (COD_BARRA_AUX1.Text <> '') And (FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True') then
+  begin
+    if not Digito(COD_BARRA_AUX1.Text)  then
+    begin
+      Application.MessageBox('Dígito verificador do Código de Barras Auxiliar 1 inválido', PChar(Msg_Title), mb_IconStop);
+
+      COD_BARRA_AUX1.Color := clYellow;
+
+      if COD_BARRA_AUX1.CanFocus then
+        COD_BARRA_AUX1.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (COD_BARRA_AUX2.Text <> '') And (FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True') then
+  begin
+    if not Digito(COD_BARRA_AUX2.Text)  then
+    begin
+      Application.MessageBox('Dígito verificador do Código de Barras Auxiliar 2 inválido', PChar(Msg_Title), mb_IconStop);
+
+      COD_BARRA_AUX2.Color := clYellow;
+
+      if COD_BARRA_AUX2.CanFocus then
+        COD_BARRA_AUX2.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (COD_BARRA_AUX3.Text <> '') And (FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True') then
+  begin
+    if not Digito(COD_BARRA_AUX3.Text) then
+    begin
+      Application.MessageBox('Dígito verificador do Código de Barras Auxiliar 3 inválido', PChar(Msg_Title), mb_IconStop);
+
+      COD_BARRA_AUX3.Color := clYellow;
+
+      if COD_BARRA_AUX3.CanFocus then
+        COD_BARRA_AUX3.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (COD_BARRA_AUX4.Text <> '') And (FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True') then
+  begin
+    if not Digito(COD_BARRA_AUX4.Text)  then
+    begin
+      Application.MessageBox('Dígito verificador do Código de Barras Auxiliar 4 inválido', PChar(Msg_Title), mb_IconStop);
+
+      COD_BARRA_AUX4.Color := clYellow;
+
+      if COD_BARRA_AUX4.CanFocus then
+        COD_BARRA_AUX4.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (Operacao = 'Inserindo') and (COD_BARRA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_BARRA = :COD_BARRA)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_BARRA').AsString   := COD_BARRA.Text;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Já existe um produto com este Código de Barras cadastrado', PChar(Msg_Title), mb_IconStop);
+
+      COD_BARRA.Color := clYellow;
+      COD_BARRA.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (Operacao = 'Inserindo') and (COD_ORIGINAL.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_ORIGINAL = :COD_ORIGINAL)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_ORIGINAL').AsString := COD_ORIGINAL.Text;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger  := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Já existe um produto com este Código Original cadastrado', PChar(Msg_Title), mb_IconStop);
+
+      COD_ORIGINAL.Color := clYellow;
+
+      if COD_ORIGINAL.CanFocus then
+        COD_ORIGINAL.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (Operacao = 'Inserindo') and (REFERENCIA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(REFERENCIA = :REFERENCIA)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('REFERENCIA').AsString  := REFERENCIA.Text;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Já existe um produto com este Código de Referência cadastrado', PChar(Msg_Title), mb_IconStop);
+
+      REFERENCIA.Color := clYellow;
+
+      if REFERENCIA.CanFocus then
+        REFERENCIA.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (Operacao = 'Alterando') and (COD_BARRA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_BARRA = :COD_BARRA)');
+    IQuery.Sql.Add('AND (PRODUTO_ID <> :PRODUTO_ID)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_BARRA').AsString   := COD_BARRA.Text;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Já existe um produto com este Código de Barras', PChar(Msg_Title), mb_IconStop);
+
+      COD_BARRA.Color := clYellow;
+      COD_BARRA.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (Operacao = 'Alterando') and (COD_ORIGINAL.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_ORIGINAL = :COD_ORIGINAL)');
+    IQuery.Sql.Add('AND (PRODUTO_ID <> :PRODUTO_ID)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_ORIGINAL').AsString := COD_ORIGINAL.Text;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger  := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Já existe um produto com este Código Original', PChar(Msg_Title), mb_IconStop);
+
+      COD_ORIGINAL.Color := clYellow;
+
+      if COD_ORIGINAL.CanFocus then
+        COD_ORIGINAL.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (Operacao = 'Alterando') and (REFERENCIA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(REFERENCIA = :REFERENCIA)');
+    IQuery.Sql.Add('AND (PRODUTO_ID <> :PRODUTO_ID)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('REFERENCIA').AsString  := REFERENCIA.Text;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+    begin
+      Application.MessageBox('Já existe um produto com este Código de Referência', PChar(Msg_Title), mb_IconStop);
+
+      REFERENCIA.Color := clYellow;
+
+      if REFERENCIA.CanFocus then
+        REFERENCIA.SetFocus;
+
+      exit;
+    end;
+  end;
+
+  if (CUSTO_COMPRA.Value > 0) and (MARGEM_LUCRO.Value > 0) then
+  begin
+    if StrZero(PRECO_VAREJO.Text, 12, 2) <> StrZero(FloatToStr((CUSTO_COMPRA.Value + ((CUSTO_COMPRA.Value * MARGEM_LUCRO.Value) / 100))), 12, 2) then
+    begin
+      Application.MessageBox('Preço de venda diferente do Preço de custo + Margem de lucro', PChar(Msg_Title), mb_IconInformation);
+
+      if Application.MessageBox('Deseja remarcar automaticamente?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+        PRECO_VAREJO.Value := (CUSTO_COMPRA.Value + ((CUSTO_COMPRA.Value * MARGEM_LUCRO.Value) / 100));
+    end;
+  end;
+
+  if (CodRed.Text <> '') and (Length(CodRed.Text) <>  FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').Asinteger) then
+     Begin
+     Application.MessageBox('Tamanho Código incorreto, tamanho permitido (6)', PChar(Msg_Title), mb_IconStop);
+     Codred.Color := clYellow;
+
+      if CodRed.CanFocus then
+        CodRed.SetFocus;
+        Exit;
+     End;
+  Result := True;
+end;
+
+procedure TFrmProdutos_Light.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+  PageControl2.ActivePageIndex := 0;
+  LegendaBox.Visible := False;
+end;
+
+procedure TFrmProdutos_Light.MenuItem1Click(Sender: TObject);
+var
+F, MyFile: TextFile;
+InputString, LcLinha, D1, D2, D3, D4, B1, B2, B3, B4, P1, P2, P3, P4, ID1, ID2,ID3, Cod_Custo: String;
+C, W, X, Q, Tam_Custo, Linha, Etiquetas_Impressas: Integer;
+begin
+InputString := InputBox('Digite a quantidade de etiquetas', 'Quantidade:', '');
+if (InputString <> '') then
+Begin
+IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT PRODUTO_ID, DESCRICAO, '+ InputString + ' QUANTIDADE , PRODUTOS.COD_BARRA, PRODUTOS.PRECO_VAREJO, PRODUTOS.CUSTO_COMPRA, PRODUTOS.COD_ORIGINAL, PRODUTOS.APLICACAO ');
+    IQuery.Sql.Add('FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+    IQuery.Sql.Add('ORDER BY PRODUTOS.DESCRICAO');
+
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Application.CreateForm(TFrmEtiquetas_Novos, FrmEtiquetas_Novos);
+    try
+      if FrmEtiquetas_Novos.ShowModal = mrOK then
+      begin
+        if FrmEtiquetas_Novos.Impressora.Text = 'Argox' then
+        begin
+          if FrmEtiquetas_Novos.Modelo.Text = 'Gôndola Individual' then
+          begin
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              Rewrite(F);
+
+              try
+                LcLinha := Chr(2) + 'qA';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'c0000';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KI503';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'O0220';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'f220';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KW0797';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KI7' + chr(2);
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'V0';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'L';
+                WriteLn(F, lcLinha );
+                LcLinha := 'H12';
+                WriteLn(F, lcLinha );
+                LcLinha := 'PC';
+                WriteLn(F, lcLinha );
+                LcLinha := 'A2';
+                WriteLn(F, lcLinha );
+                LcLinha := 'D11';
+                WriteLn(F, lcLinha );
+                LcLinha := '141100000800110' + IQuery.FieldByName('DESCRICAO').AsString;
+                WriteLn(F, lcLinha );
+                LcLinha := '141100000600110' +  Copy(IQuery.FieldByName('DESCRICAO').AsString,21,20);
+                WriteLn(F, lcLinha );
+                LcLinha := '421100000140048' + '';
+                WriteLn(F, lcLinha );
+                LcLinha := '421100000140064' + '';
+                WriteLn(F, lcLinha );
+                LcLinha := '161100000100180R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                WriteLn(F, lcLinha );
+                LcLinha := '421100000140082 ';
+                WriteLn(F, lcLinha );
+                LcLinha := '1F2302300100010' + IQuery.FieldByName('COD_BARRA').AsString;
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(94) + '01';
+                WriteLn(F, lcLinha );
+                LcLinha := 'Q0001';
+                WriteLn(F, lcLinha );
+                LcLinha := 'E';
+                WriteLn(F, lcLinha );
+              finally
+                CloseFile(F);
+              end;
+
+              Sleep(2000);
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+          end;
+
+          if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+          begin
+            D1 := '';
+            D2 := '';
+            D3 := '';
+            B1 := '';
+            B2 := '';
+            B3 := '';
+            P1 := '';
+            P2 := '';
+            P3 := '';
+            Q := 0;
+
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                Inc(Q);
+
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 17);
+                  B1 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 17);
+                  B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 3 then
+                begin
+                  D3 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 17);
+                  B3 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  Rewrite(F);
+
+                  try
+                    LcLinha := Chr(2) + 'qA';
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'c0000';
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'KI503';
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'O0220';
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'f220';
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'KW0797';
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'KI7' + chr(2);
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'V0';
+                    WriteLn(F, lcLinha );
+                    LcLinha := Chr(2) + 'L';
+                    WriteLn(F, lcLinha );
+                    LcLinha := 'H12';
+                    WriteLn(F, lcLinha );
+                    LcLinha := 'PC';
+                    WriteLn(F, lcLinha );
+                    LcLinha := 'A2';
+                    WriteLn(F, lcLinha );
+                    LcLinha := 'D11';
+                    WriteLn(F, lcLinha );
+
+                    LcLinha := '121100000300010' + D1;
+                    WriteLn(F, lcLinha );
+                    LcLinha := '131100000100010R$ ' + P1;
+                    WriteLn(F, lcLinha );
+                    LcLinha := '1F2202000400010' + B1;
+                    WriteLn(F, lcLinha );
+
+                    LcLinha := '121100000300150' + D2;
+                    WriteLn(F, lcLinha );
+                    LcLinha := '131100000100150R$ ' + P2;
+                    WriteLn(F, lcLinha );
+                    LcLinha := '1F2202000400150' + B2;
+                    WriteLn(F, lcLinha );
+
+                    LcLinha := '121100000300290' + D3;
+                    WriteLn(F, lcLinha );
+                    LcLinha := '131100000100290R$ ' + P3;
+                    WriteLn(F, lcLinha );
+                    LcLinha := '1F2202000400290' + B3;
+                    WriteLn(F, lcLinha );
+
+                    LcLinha := Chr(94) + '01';
+                    WriteLn(F, lcLinha );
+                    LcLinha := 'Q0001';
+                    WriteLn(F, lcLinha );
+                    LcLinha := 'E';
+                    WriteLn(F, lcLinha );
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  D3 := '';
+                  B1 := '';
+                  B2 := '';
+                  B3 := '';
+                  P1 := '';
+                  P2 := '';
+                  P3 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if (Q <= 2) and ((D1 <> '') or (D2 <> '')) then
+            begin
+              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              Rewrite(F);
+
+              try
+                LcLinha := Chr(2) + 'qA';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'c0000';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KI503';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'O0220';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'f220';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KW0797';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'KI7' + chr(2);
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'V0';
+                WriteLn(F, lcLinha );
+                LcLinha := Chr(2) + 'L';
+                WriteLn(F, lcLinha );
+                LcLinha := 'H12';
+                WriteLn(F, lcLinha );
+                LcLinha := 'PC';
+                WriteLn(F, lcLinha );
+                LcLinha := 'A2';
+                WriteLn(F, lcLinha );
+                LcLinha := 'D11';
+                WriteLn(F, lcLinha );
+
+                LcLinha := '121100000300010' + D1;
+                WriteLn(F, lcLinha );
+                LcLinha := '131100000100010R$ ' + P1;
+                WriteLn(F, lcLinha );
+                LcLinha := '1F2202000400010' + B1;
+                WriteLn(F, lcLinha );
+
+                if D2 <> '' then
+                begin
+                  LcLinha := '121100000300150' + D2;
+                  WriteLn(F, lcLinha );
+                  LcLinha := '131100000100150R$ ' + P2;
+                  WriteLn(F, lcLinha );
+                  LcLinha := '1F2202000400150' + B2;
+                  WriteLn(F, lcLinha );
+                end;
+
+                LcLinha := Chr(94) + '01';
+                WriteLn(F, lcLinha );
+                LcLinha := 'Q0001';
+                WriteLn(F, lcLinha );
+                LcLinha := 'E';
+                WriteLn(F, lcLinha );
+              finally
+                CloseFile(F);
+              end;
+            end;
+          end;
+        end;
+
+        if FrmEtiquetas_Novos.Impressora.Text = 'Datamax (Gôndola)' then
+        begin
+          IQuery.First;
+          while not IQuery.Eof do
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Datamax') = 'COM1' then
+              AssignFile(MyFile, 'COM1')
+            else
+              AssignFile(MyFile, 'COM2');
+
+            Rewrite(MyFile);
+            try
+              Writeln(MyFile, #2 + 'L' + #13);
+              Writeln(MyFile, 'D11' + #13);
+              Writeln(MyFile, '1F6204000020010' + IQuery.FieldByName('COD_BARRA').AsString + #13);
+              Writeln(MyFile, '161104000600010' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+              Writeln(MyFile, '161104000020210' + 'R$  ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat) + #13);
+              Writeln(MyFile, 'Q' + StrZero(IQuery.FieldByName('QUANTIDADE').AsString, 4, 0));
+              Writeln(MyFile, 'E' + #13);
+            finally
+              CloseFile(MyFile);
+            end;
+
+            Sleep(2000);
+
+            Application.ProcessMessages;
+            IQuery.Next;
+          end;
+        end;
+
+        if FrmEtiquetas_Novos.Impressora.Text = 'Datamax (Produto)' then
+        begin
+          IQuery.First;
+          while not IQuery.Eof do
+          begin
+            if LeIni(Arq_Ini, 'Sistema', 'Datamax') = 'COM1' then
+              AssignFile(MyFile, 'COM1')
+            else
+              AssignFile(MyFile, 'COM2');
+
+            Rewrite(MyFile);
+            try
+              Writeln(MyFile, #2 + 'L' + #13);
+              Writeln(MyFile, 'D11' + #13);
+              Writeln(MyFile, '121101200600008' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+              Writeln(MyFile, '121101200600143' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+              Writeln(MyFile, '121101200600272' + Copy(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString, 1, 17) + #13);
+              Writeln(MyFile, '111101200520008' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+              Writeln(MyFile, '111101200520143' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+              Writeln(MyFile, '111101200520272' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20) + #13);
+              Writeln(MyFile, '1F6204000020008' + IQuery.FieldByName('COD_BARRA').AsString + #13);
+              Writeln(MyFile, '1F6204000020143' + IQuery.FieldByName('COD_BARRA').AsString + #13);
+              Writeln(MyFile, '1F6204000020272' + IQuery.FieldByName('COD_BARRA').AsString + #13);
+              Writeln(MyFile, 'Q' + StrZero(IQuery.FieldByName('QUANTIDADE').AsString, 4, 0) + #13);
+              Writeln(MyFile, 'E' + #13);
+            finally
+              CloseFile(MyFile);
+            end;
+
+            Sleep(2000);
+
+            Application.ProcessMessages;
+            IQuery.Next;
+          end;
+        end;
+
+        if FrmEtiquetas_Novos.Impressora.Text = 'Zebra' then
+        begin
+          if FrmEtiquetas_Novos.Modelo.Text = '1 Coluna' then
+          begin
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+                Rewrite(F);
+                try
+                  WriteLn(F, 'N');
+                  WriteLn(F, 'D11');
+                  WriteLn(F, 'A60,20,0,3,1,2,N,"' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24) + '"');
+                  WriteLn(F, 'A65,115,0,2,1,0,N,"' + IQuery.FieldByName('COD_BARRA').AsString + '"');
+
+                  if FrmEtiquetas_Novos.Preco.Checked then
+                    WriteLn(F, 'A260,100,0,3,1,2,N,"' + 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat) + '"');
+
+                  WriteLn(F, 'P1');
+                finally
+                  CloseFile(F);
+                end;
+
+                Sleep(2000);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+          end;
+
+          if FrmEtiquetas_Novos.Modelo.Text = '2 Colunas' then
+          begin
+            D1 := '';
+            D2 := '';
+            B1 := '';
+            B2 := '';
+            P1 := '';
+            P2 := '';
+            Q := 1;
+
+            IQuery.First;
+           if not Digito(IQuery.FieldByName('COD_BARRA').AsString) then
+           Application.MessageBox(PChar('O item ' + IQuery.FieldByName('DESCRICAO').AsString + ' não possui um Código de Barras válido!'), PChar(Msg_Title), mb_IconWarning)
+           Else
+           Begin
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B1 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+                  Rewrite(F);
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+                    WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  B1 := '';
+                  B2 := '';
+                  P1 := '';
+                  P2 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if Q < 2 then
+            begin
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+           End;
+          end;
+
+          if (FrmEtiquetas_Novos.Modelo.Text = '3 Colunas') or (FrmEtiquetas_Novos.Modelo.Text = '3 Colunas (S/Barra)') then
+          begin
+            D1 := '';
+            D2 := '';
+            D3 := '';
+            B1 := '';
+            B2 := '';
+            B3 := '';
+            P1 := '';
+            P2 := '';
+            P3 := '';
+            Q := 1;
+
+           IQuery.First;
+           if not Digito(IQuery.FieldByName('COD_BARRA').AsString) then
+           Application.MessageBox(PChar('O item ' + IQuery.FieldByName('DESCRICAO').AsString + ' não possui um Código de Barras válido!'), PChar(Msg_Title), mb_IconWarning)
+           Else
+           Begin
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B1 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 3 then
+                begin
+                  D3 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B3 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                 if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+                  Rewrite(F);
+
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+                    if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                      WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+                    WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+                    if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                      WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+                    WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+                    if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                      WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A605,2,1,2,2,1,N,"' + P3 + '"');
+
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  D3 := '';
+                  B1 := '';
+                  B2 := '';
+                  B3 := '';
+                  P1 := '';
+                  P2 := '';
+                  P3 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if (Q >= 2)  then
+            begin
+             if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+                if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+                if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+                if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A605,2,1,2,2,1,N,"' + P3 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+           End;
+          end;
+
+         if FrmEtiquetas_Novos.Modelo.Text = '4 Colunas' then
+         begin
+            D1 := '';
+            D2 := '';
+            D3 := '';
+            D4 := '';
+            B1 := '';
+            B2 := '';
+            B3 := '';
+            B4 := '';
+            P1 := '';
+            P2 := '';
+            P3 := '';
+            P4 := '';
+            Q := 1;
+
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B1 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B2 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 3 then
+                begin
+                  D3 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B3 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 4 then
+                begin
+                  D4 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B4 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P4 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  Rewrite(F);
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+                    WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+                    WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+                    WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+                    WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+                    WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+                    WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+                    WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+                    WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+                    WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  D3 := '';
+                  D4 := '';
+                  B1 := '';
+                  B2 := '';
+                  B3 := '';
+                  B4 := '';
+                  P1 := '';
+                  P2 := '';
+                  P3 := '';
+                  P4 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if Q < 4 then
+            begin
+              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+                WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+                WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+                WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+                WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+                WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+                WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+                WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+                WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+                WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+          end;
+
+          if FrmEtiquetas_Novos.Modelo.Text = 'Gôndola (2 Colunas)' then
+          begin
+            D1 := '';
+            D2 := '';
+            B1 := '';
+            B2 := '';
+            P1 := '';
+            P2 := '';
+            Q := 1;
+
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                  B1 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                  B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  Rewrite(F);
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+                    WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  B1 := '';
+                  B2 := '';
+                  P1 := '';
+                  P2 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if Q < 2 then
+            begin
+              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+          end;
+
+          if FrmEtiquetas_Novos.Modelo.Text = 'Gôndola Individual' then
+          begin
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                Rewrite(F);
+                try
+                  WriteLn(F, 'N');
+                  WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao') + ','  + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao') + ',0,3,2,2,N,"' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+                  WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao 1') + ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Descricao 1') + ',0,3,2,2,N,"' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+                  WriteLn(F, 'B'+ LeIni(Arq_Ini,'Zebra','Coluna Barras ')+ ',' + LeIni(Arq_Ini, 'Zebra', 'Linha Barras') + ',0,1,2,9,70,N,"' + IQuery.FieldByName('COD_BARRA').AsString + '"');
+                  WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Preco')+ ',' +LeIni(Arq_Ini, 'Zebra', 'Linha Preco') + ',0,5,2,2,N,"' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat) + '"');
+                  WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna R$') + ',' + LeIni(Arq_Ini, 'Zebra', 'Linha R$') + ',0,3,3,3,N,"R$"');
+                  WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'Zebra','Linha Descricao Barras') + ',0,1,2,2,R,"' + IQuery.FieldByName('COD_BARRA').AsString + '"');
+                  WriteLn(F, 'P1');
+                finally
+                  CloseFile(F);
+                end;
+
+                Sleep(2000);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+          end;
+        end;
+
+
+        if FrmEtiquetas_Novos.Impressora.Text = 'Elgin' then
+        begin
+          if FrmEtiquetas_Novos.Modelo.Text = '1 Coluna' then
+          begin
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+                Rewrite(F);
+                try
+                  WriteLn(F, 'N');
+                  WriteLn(F, 'D11');
+                  WriteLn(F, 'A60,20,0,3,1,2,N,"' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24) + '"');
+                  WriteLn(F, 'A65,115,0,2,1,0,N,"' + IQuery.FieldByName('COD_BARRA').AsString + '"');
+
+                  if FrmEtiquetas_Novos.Preco.Checked then
+                    WriteLn(F, 'A260,100,0,3,1,2,N,"' + 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat) + '"');
+
+                  WriteLn(F, 'P1');
+                finally
+                  CloseFile(F);
+                end;
+
+                Sleep(2000);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+          end;
+
+          if FrmEtiquetas_Novos.Modelo.Text = '2 Colunas' then
+          begin
+            D1 := '';
+            D2 := '';
+            B1 := '';
+            B2 := '';
+            P1 := '';
+            P2 := '';
+            Q := 1;
+
+            IQuery.First;
+           if not Digito(IQuery.FieldByName('COD_BARRA').AsString) then
+           Application.MessageBox(PChar('O item ' + IQuery.FieldByName('DESCRICAO').AsString + ' não possui um Código de Barras válido!'), PChar(Msg_Title), mb_IconWarning)
+           Else
+           Begin
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B1 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+                  Rewrite(F);
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+                    WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  B1 := '';
+                  B2 := '';
+                  P1 := '';
+                  P2 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if Q < 2 then
+            begin
+              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A130,5,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'B130,40,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A400,5,1,2,4,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,5,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'B430,40,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A710,5,1,2,4,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+           End;
+          end;
+
+          if (FrmEtiquetas_Novos.Modelo.Text = '3 Colunas') or (FrmEtiquetas_Novos.Modelo.Text = '3 Colunas (S/Barra)') then
+          begin
+            D1 := '';
+            D2 := '';
+            D3 := '';
+            B1 := '';
+            B2 := '';
+            B3 := '';
+            P1 := '';
+            P2 := '';
+            P3 := '';
+            Q := 1;
+
+           IQuery.First;
+           if not Digito(IQuery.FieldByName('COD_BARRA').AsString) then
+           Application.MessageBox(PChar('O item ' + IQuery.FieldByName('DESCRICAO').AsString + ' não possui um Código de Barras válido!'), PChar(Msg_Title), mb_IconWarning)
+           Else
+           Begin
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B1 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 3 then
+                begin
+                  D3 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B3 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                 if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+                  Rewrite(F);
+
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+                    if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                      WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+                    WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+                    if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                      WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+                    WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+                    if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                      WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A605,2,1,2,2,1,N,"' + P3 + '"');
+
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  D3 := '';
+                  B1 := '';
+                  B2 := '';
+                  B3 := '';
+                  P1 := '';
+                  P2 := '';
+                  P3 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if (Q >= 2)  then
+            begin
+             if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                else
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+
+              Rewrite(F);
+
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A45,2,0,1,1,2,N,"' + D1 + '"');
+
+                if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B35,50,0,E30,2,9,62,B,"' + B1 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A35,2,1,2,2,1,N,"' + P1 + '"');
+
+                WriteLn(F, 'A335,2,0,1,1,2,N,"' + D2 + '"');
+
+                if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B325,50,0,E30,2,9,62,B,"' + B2 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A325,2,1,2,2,1,N,"' + P2 + '"');
+
+                WriteLn(F, 'A615,2,0,1,1,2,N,"' + D3 + '"');
+
+                if FrmEtiquetas_Novos.Modelo.Text = '3 Colunas' then
+                  WriteLn(F, 'B605,50,0,E30,2,9,62,B,"' + B3 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A605,2,1,2,2,1,N,"' + P3 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+           End;
+          end;
+
+         if FrmEtiquetas_Novos.Modelo.Text = '4 Colunas' then
+         begin
+            D1 := '';
+            D2 := '';
+            D3 := '';
+            D4 := '';
+            B1 := '';
+            B2 := '';
+            B3 := '';
+            B4 := '';
+            P1 := '';
+            P2 := '';
+            P3 := '';
+            P4 := '';
+            Q := 1;
+
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B1 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B2 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 3 then
+                begin
+                  D3 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B3 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 4 then
+                begin
+                  D4 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 16);
+                  B4 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
+                  P4 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  Rewrite(F);
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+                    WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+                    WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+                    WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+                    WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+                    WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+                    WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+                    WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+                    WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+                    WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  D3 := '';
+                  D4 := '';
+                  B1 := '';
+                  B2 := '';
+                  B3 := '';
+                  B4 := '';
+                  P1 := '';
+                  P2 := '';
+                  P3 := '';
+                  P4 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if Q < 4 then
+            begin
+              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A35,4,0,1,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A35,33,0,1,1,2,N,"' + P1 + '"');
+                WriteLn(F, 'A35,69,0,1,1,2,N,"' + B1 + '"');
+
+                WriteLn(F, 'A235,4,0,1,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A235,33,0,1,1,2,N,"' + P2 + '"');
+                WriteLn(F, 'A235,69,0,1,1,2,N,"' + B2 + '"');
+
+                WriteLn(F, 'A435,4,0,1,1,2,N,"' + D3 + '"');
+                WriteLn(F, 'A435,33,0,1,1,2,N,"' + P3 + '"');
+                WriteLn(F, 'A435,69,0,1,1,2,N,"' + B3 + '"');
+
+                WriteLn(F, 'A635,4,0,1,1,2,N,"' + D4 + '"');
+                WriteLn(F, 'A635,33,0,1,1,2,N,"' + P4 + '"');
+                WriteLn(F, 'A635,69,0,1,1,2,N,"' + B4 + '"');
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+          end;
+
+          if FrmEtiquetas_Novos.Modelo.Text = 'Gôndola (2 Colunas)' then
+          begin
+            D1 := '';
+            D2 := '';
+            B1 := '';
+            B2 := '';
+            P1 := '';
+            P2 := '';
+            Q := 1;
+
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                  B1 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                end;
+
+                if Q = 2 then
+                begin
+                  D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                  B2 := IQuery.FieldByName('COD_BARRA').AsString;
+                  P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  Rewrite(F);
+                  try
+                    WriteLn(F, 'N');
+                    WriteLn(F, 'D11');
+                    WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+                    WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+                    if FrmEtiquetas_Novos.Preco.Checked then
+                      WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+                    WriteLn(F, 'P1');
+                  finally
+                    CloseFile(F);
+                  end;
+
+                  D1 := '';
+                  D2 := '';
+                  B1 := '';
+                  B2 := '';
+                  P1 := '';
+                  P2 := '';
+                  Q := 0;
+
+                  Sleep(2000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if Q < 2 then
+            begin
+              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              Rewrite(F);
+              try
+                WriteLn(F, 'N');
+                WriteLn(F, 'D11');
+                WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+
+                WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
+                WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+
+                if FrmEtiquetas_Novos.Preco.Checked then
+                  WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+
+                WriteLn(F, 'P1');
+              finally
+                CloseFile(F);
+              end;
+            end;
+          end;
+
+          if FrmEtiquetas_Novos.Modelo.Text = 'Gôndola Individual' then
+          begin
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                Rewrite(F);
+                try
+                  WriteLn(F, 'N');
+                  WriteLn(F, 'A140,15,0,3,2,2,N,"' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20) + '"');
+                  WriteLn(F, 'A140,60,0,3,2,2,N,"' + Copy(IQuery.FieldByName('DESCRICAO').AsString, 21, 20) + '"');
+                  WriteLn(F, 'B31,115,0,1,2,9,70,N,"' + IQuery.FieldByName('COD_BARRA').AsString + '"');
+                  WriteLn(F, 'A460,104,0,5,2,2,N,"' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat) + '"');
+                  WriteLn(F, 'A350,128,0,3,3,3,N,"R$"');
+                  WriteLn(F, 'A31,190,0,1,2,2,R,"' + IQuery.FieldByName('COD_BARRA').AsString + '"');
+                  WriteLn(F, 'P1');
+                finally
+                  CloseFile(F);
+                end;
+
+                Sleep(2000);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+          end;
+        end;
+
+        if  (FrmEtiquetas_Novos.Impressora.Text = 'Bematech LB-1000')  then
+        begin
+         if ( FrmEtiquetas_Novos.Modelo.Text = '3 Colunas') Then
+         Begin
+            D1  := '';
+            D2  := '';
+            D3  := '';
+            B1  := '';
+            B2  := '';
+            B3  := '';
+            P1  := '';
+            P2  := '';
+            P3  := '';
+            ID1 := '';
+            ID2 := '';
+            ID3 := '';
+            Q   := 1;
+
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+                if Q = 1 then
+                begin
+                  D1  := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B1  := IQuery.FieldByName('COD_BARRA').AsString;
+                  if FrmEtiquetas_Novos.Preco.Checked then
+                  P1  := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                  ID1 := StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 6, 0);
+                end;
+
+                if Q = 2 then
+                begin
+
+                  D2  := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B2  := IQuery.FieldByName('COD_BARRA').AsString;
+                  if FrmEtiquetas_Novos.Preco.Checked then
+                  P2  := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                  ID2 := StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 6, 0);
+                end;
+
+
+                if Q = 3 then
+                begin
+
+                  D3  := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 20);
+                  B3  := IQuery.FieldByName('COD_BARRA').AsString;
+                  if  FrmEtiquetas_Novos.Preco.Checked then
+                  P3  := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+                  ID3 := StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 6, 0);
+
+                  openport('Bematech LB-1000');
+
+
+                  clearbuffer;
+                  nobackfeed();
+                  setup(Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Largura Etiqueta')), Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Altura Etiqueta')), '3', '10', '0', '2', '0');
+
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Etiqueta')), 22, 180, 2, 0, '¼Ð·¢Åé', PChar(D1));
+                  barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Cód. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '¼Ð·¢Åé', PChar(B1));
+                  if FrmEtiquetas_Novos.Preco.Checked then
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')) - 230, 30, 26, 90, 2, 0, '¼Ð·¢Åé', PChar(P1));
+
+
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Etiqueta')), 22, 180, 2, 0, '¼Ð·¢Åé', PChar(D2));
+                  barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Cód. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B2);
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '¼Ð·¢Åé', PChar(B2));
+                  if FrmEtiquetas_Novos.Preco.Checked then
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')) - 230, 30, 26, 90, 2, 0, '¼Ð·¢Åé', PChar(P2));
+
+
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Etiqueta')), 22, 180, 2, 0, '¼Ð·¢Åé', PChar(D3));
+                  barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Cód. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B3);
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '¼Ð·¢Åé', PChar(B3));
+                  if FrmEtiquetas_Novos.Preco.Checked then
+                  windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')) - 230, 30, 26, 90, 2, 0, '¼Ð·¢Åé', PChar(P3));
+
+
+
+                  printlabel('1', '1');
+
+                  nobackfeed();
+                  clearbuffer;
+                  closeport;
+
+                  D1  := '';
+                  D2  := '';
+                  D3  := '';
+                  B1  := '';
+                  B2  := '';
+                  B3  := '';
+                  P1  := '';
+                  P2  := '';
+                  P3  := '';
+                  ID1 := '';
+                  ID2 := '';
+                  ID3 := '';
+                  Q  := 0;
+
+                  Sleep(1000);
+                end;
+
+                Inc(Q);
+              end;
+
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+
+            if (D1 <> '') or (D2 <> '') or (D3 <> '') then
+            begin
+
+
+               openport('Bematech LB-1000');
+
+              clearbuffer;
+              nobackfeed();
+              setup(Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Largura Etiqueta')), Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Altura Etiqueta')), '3', '10', '0', '2', '0');
+
+              if D1 <> '' then
+              begin
+
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Etiqueta')), 22, 180, 2, 0, '¼Ð·¢Åé', PChar(D1));
+                barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Cód. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '¼Ð·¢Åé', PChar(B1));
+                if FrmEtiquetas_Novos.Preco.Checked then
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Esquerda')) - 230, 35, 26, 90, 2, 0, '¼Ð·¢Åé', PChar(P1));
+              end;
+
+              if D2 <> '' then
+              begin
+
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Etiqueta')), 22, 180, 2, 0, '¼Ð·¢Åé', PChar(D1));
+                barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Cód. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '¼Ð·¢Åé', PChar(B1));
+                if FrmEtiquetas_Novos.Preco.Checked then
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Central')) - 230, 35, 26, 90, 2, 0, '¼Ð·¢Åé', PChar(P1));
+              end;
+
+              if D3 <> '' then
+              begin
+
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Etiqueta')), 22, 180, 2, 0, '¼Ð·¢Åé', PChar(D1));
+                barcode(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita'), LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Cód. Barra Etiqueta'), 'EAN13', '90', '0', '180', '2', '4', B1);
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Etiqueta')), 25, 180, 2, 0, '¼Ð·¢Åé', PChar(B1));
+                if FrmEtiquetas_Novos.Preco.Checked then
+                windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Direita')) - 230, 35, 26, 90, 2, 0, '¼Ð·¢Åé', PChar(P1));
+              end;
+
+              printlabel('1', '1');
+
+              nobackfeed();
+              clearbuffer;
+              closeport;
+
+            end;
+         End;
+
+          if FrmEtiquetas_Novos.Modelo.Text = 'Gôndola Individual' then
+          begin
+            IQuery.First;
+            while not IQuery.Eof do
+            begin
+              for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+              begin
+
+              D1  := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 30);
+              D2  := Copy(IQuery.FieldByName('DESCRICAO').AsString, 31, 30);
+              B1  := IQuery.FieldByName('COD_BARRA').AsString;
+              P1  := FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
+              ID1 := StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 6, 0);
+
+
+              openport('Bematech LB-1000');
+
+
+              clearbuffer;
+              nobackfeed();
+              setup(Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Largura Etiqueta Individual')), Pchar(LeIni(Arq_Ini, 'Bematech LB-1000', 'Altura Etiqueta Individual')), '3', '10', '0', '2', '0');
+
+
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Individual')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Individual')), 40, 180, 2, 0, '¼Ð·¢Åé', PChar(D1));
+
+              IF D2 <> '' then
+              windowsfont(StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Coluna Individual')), StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Descrição Individual')) - 30, 40, 180, 2, 0, '¼Ð·¢Åé', PChar(D2));
+
+              barcode('800', LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Cód. Barra Individual'), 'EAN13','80', '0', '180', '2', '1', B1);
+              windowsfont(800, StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Individual')), 25, 180, 2, 0, '¼Ð·¢Åé', PChar(B1));
+              windowsfont(400, 155, 140, 180, 2, 0, '¼Ð·¢Åé', PChar(P1));
+              windowsfont(500 + (Length(P1) * 5), 110, 60, 180, 2, 0, '¼Ð·¢Åé', 'R$');
+              windowsfont(700, StrToInt(LeIni(Arq_Ini, 'Bematech LB-1000', 'Linha Barra Individual')) - 28, 20, 180, 2, 0, '¼Ð·¢Åé', 'Eficaz Automação');
+
+              printlabel('1', '1');
+
+              nobackfeed();
+              clearbuffer;
+
+              closeport;
+              end;
+              Application.ProcessMessages;
+              IQuery.Next;
+            end;
+          end;
+        end;
+
+
+        if FrmEtiquetas_Novos.Impressora.Text = 'Matricial' then
+        begin
+          IQuery.First;
+          while not IQuery.Eof do
+          begin
+            for W := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
+            begin
+              D1 := D1 + Repl(IQuery.FieldByName('COD_BARRA').AsString, 21);
+              D2 := D2 + Repl(Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 17), 21);
+              D3 := D3 + Repl(FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat), 21);
+
+              Inc(C);
+
+              if C >= 5 then
+              begin
+                try
+                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  Rewrite(F);
+
+                  WriteLn(F, #27#15 + D1);
+                  WriteLn(F, D2);
+                  WriteLn(F, D3);
+                  WriteLn(F, #27#18);
+
+                  CloseFile(F);
+
+                  Sleep(500);
+                except
+                  CloseFile(F);
+                end;
+
+                C  := 0;
+                D1 := '';
+                D2 := '';
+                D3 := '';
+              end;
+            end;
+
+            Application.ProcessMessages;
+            IQuery.Next;
+          end;
+
+          if (C < 5) and (C > 0) then
+          begin
+            try
+              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              Rewrite(F);
+
+              WriteLn(F, #27#15 + D1);
+              WriteLn(F, D2);
+              WriteLn(F, D3);
+              WriteLn(F, #27#18);
+
+              CloseFile(F);
+
+              Sleep(500);
+            except
+              CloseFile(F);
+            end;
+          end;
+        end;
+      end;
+    finally
+      FrmEtiquetas_Novos.Release;
+    end;
+  end
+  Else
+  Abort;
+end;
+
+
+procedure TFrmProdutos_Light.NAT_RECExit(Sender: TObject);
+begin
+
+  if btnEdit.Enabled = False then
+  Begin
+
+    if (CST_PIS.Text = '04') or
+       (CST_PIS.Text = '03') or
+       (CST_PIS.Text = '06') or
+       (CST_PIS.Text = '07') or
+       (CST_PIS.Text = '08') or
+       (CST_PIS.Text = '09') then
+     begin
+        if NAT_REC.Text = '' then
+        Begin
+        Application.MessageBox(Pchar(' Informe a Natureza da Receita.'),'', mb_IconInformation);
+        NAT_REC.SetFocus;
+        End;
+
+     end;
+  End;
+end;
+
+procedure TFrmProdutos_Light.PageControl2Enter(Sender: TObject);
+begin
+  if Unidade.CanFocus then
+    UNIDADE.SetFocus;
+end;
+
+procedure TFrmProdutos_Light.PISExit(Sender: TObject);
+begin
+
+    if (CST_PIS.Text = '01') and (PIS.Value = 0) then
+    Begin
+      Application.MessageBox(Pchar(' Informe a Alíquota PIS'),'', mb_IconInformation);
+      PIS.SetFocus;
+    End
+    else
+      Begin
+       COFINS.Enabled := True;
+       COFINS.SetFocus;
+      End;
+
+
+
+end;
+
+procedure TFrmProdutos_Light.PIS_ENTRExit(Sender: TObject);
+begin
+
+  if(CST_PIS_ENTR.Text = '50') and (PIS_ENTR.Value = 0)then
+     Begin
+     Application.MessageBox(Pchar(' Informe o valor da Alíquota'),'', mb_IconInformation);
+     PIS_ENTR.SetFocus;
+     End;
+
+  if(CST_PIS_ENTR.Text = '50') and (PIS_ENTR.Value > 0)then
+    COFINS_ENTR.SetFocus;
+
+end;
+
+procedure TFrmProdutos_Light.PRECO_VAREJOExit(Sender: TObject);
+begin
+if Preco_prazo.Value = 0.010 then
+   Preco_prazo.Value := Preco_varejo.Value;
+end;
+
+procedure TFrmProdutos_Light.QFabricanteBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+
+end;
+
+procedure TFrmProdutos_Light.QFabricanteBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.QFabricanteBeforePost(DataSet: TDataSet);
+begin
+  if (QFabricante.FieldByName('COD_FABRICANTE').AsString = '') then
+  begin
+    Application.MessageBox('Código do Fabricante não pode ser vazio', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Fabricante.SelectedIndex := 3;
+
+    abort;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.QFabricanteNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+procedure TFrmProdutos_Light.QProducaoAfterDelete(DataSet: TDataSet);
+var
+Vr_Produto, Vr_Custo_Produto: Real;
+begin
+
+  if Application.MessageBox('Deseja remarcar automaticamente o preço do produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_TOTAL, SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.CUSTO_COMPRA) VR_CUSTO_TOTAL');
+    IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+    IQuery.Sql.Add('INNER JOIN PRODUTOS');
+    IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Vr_Produto := IQuery.FieldByName('VR_TOTAL').AsFloat;
+    Vr_Custo_Produto := IQuery.FieldByName('VR_CUSTO_TOTAL').AsFloat;
+
+    if Vr_Produto = 0 then
+      Vr_Produto := 0.01;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO =:PRECO_PRAZO, CUSTO_COMPRA = :CUSTO_COMPRA, DT_COMPRA = :DT_COMPRA , DT_PRECO = :DT_PRECO,FUNCIONARIO_ID = :FUNCIONARIO_ID ');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRECO_VAREJO').AsFloat  := Vr_Produto;
+    IQuery.ParamByName('PRECO_PRAZO').AsFloat   := Vr_Produto;
+    IQuery.ParamByName('CUSTO_COMPRA').AsFloat  := Vr_Custo_Produto;
+    IQuery.ParamByName('DT_COMPRA').AsDate      := Date;
+    IQuery.ParamByName('DT_PRECO').AsDate       := Date;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    PRECO_VAREJO.Value := Vr_Produto;
+    PRECO_PRAZO.VALUE  := Vr_Produto;
+    Custo_Compra.Value := Vr_Custo_Produto;
+  end;
+end;
+
+procedure TFrmProdutos_Light.QProducaoAfterPost(DataSet: TDataSet);
+var
+Vr_Produto , Vr_Custo_Produto: Real;
+
+begin
+
+  if Application.MessageBox('Deseja remarcar automaticamente o preço do produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_TOTAL , SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.CUSTO_COMPRA) VR_CUSTO_TOTAL');
+    IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+    IQuery.Sql.Add('INNER JOIN PRODUTOS');
+    IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Vr_Produto       := IQuery.FieldByName('VR_TOTAL').AsFloat;
+    Vr_Custo_Produto := IQuery.FieldByName('VR_CUSTO_TOTAL').AsFloat;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO =:PRECO_PRAZO, CUSTO_COMPRA = :CUSTO_COMPRA, DT_PRECO = :DT_PRECO, DT_COMPRA = :DT_COMPRA,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+    IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+    IQuery.ParamByName('PRECO_VAREJO').AsFloat  := Vr_Produto;
+    IQuery.ParamByName('PRECO_PRAZO').AsFloat   := Vr_Produto;
+    IQuery.ParamByName('CUSTO_COMPRA').AsFloat  := Vr_Custo_Produto;
+    IQuery.ParamByName('DT_COMPRA').AsDate      := Date;
+    IQuery.ParamByName('DT_PRECO').AsDate       := Date;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    PRECO_VAREJO.Value := Vr_Produto;
+    PRECO_PRAZO.Value  := Vr_Produto;
+    Custo_Compra.Value := Vr_Custo_Produto;
+
+  end;
+end;
+
+procedure TFrmProdutos_Light.QProducaoBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+
+end;
+
+procedure TFrmProdutos_Light.QProducaoBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.QProducaoBeforePost(DataSet: TDataSet);
+begin
+  if (QProducao.FieldByName('QUANTIDADE').AsFloat <= 0) or (QProducao.FieldByName('QUANTIDADE').AsFloat > 9999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Producao.SelectedIndex := 2;
+
+    abort;
+  end;
+
+  if QProducao.FieldByName('DESCRICAO').AsString = '' then
+  begin
+    Application.MessageBox('Cód. de Insumo inválido', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Producao.SelectedIndex := 0;
+
+    abort;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.QProducaoNewRecord(DataSet: TDataSet);
+begin
+ DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+procedure TFrmProdutos_Light.QSerieBeforeDelete(DataSet: TDataSet);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS_SERIE');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(NUM_SERIE = :NUM_SERIE)');
+  IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('NUM_SERIE').AsString   := QSerie.FieldByName('NUM_SERIE').AsString;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QSerie.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Número de Série relacionada a uma transação. Impossível continuar', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+
+end;
+
+procedure TFrmProdutos_Light.QSerieBeforeEdit(DataSet: TDataSet);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS_SERIE');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(NUM_SERIE = :NUM_SERIE)');
+  IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('NUM_SERIE').AsString   := QSerie.FieldByName('NUM_SERIE').AsString;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QSerie.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Número de Série relacionada a uma transação. Impossível continuar', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.QSerieNewRecord(DataSet: TDataSet);
+begin
+DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+procedure TFrmProdutos_Light.QSimilarBeforeDelete(DataSet: TDataSet);
+begin
+ if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmProdutos_Light.QSimilarBeforeEdit(DataSet: TDataSet);
+begin
+ if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.QSimilarBeforePost(DataSet: TDataSet);
+begin
+if QSimilar.FieldByName('DESCRICAO').AsString = '' then
+  begin
+    Application.MessageBox('Cód. de Similar inválido', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Producao.SelectedIndex := 0;
+
+    abort;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.QSimilarNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  DataSet['DATA']       := Date;
+end;
+
+procedure TFrmProdutos_Light.QTabelaAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QTabela.FieldByName('PRECO_VAREJO')).DisplayFormat  := '#,##0.00';
+TFloatField(QTabela.FieldByName('PRECO_PRAZO')).DisplayFormat   := '#,##0.00';
+TFloatField(QTabela.FieldByName('QUANTIDADE_C')).DisplayFormat  := '#,##0.00';
+TFloatField(QTabela.FieldByName('QUANTIDADE_G')).DisplayFormat  := '#,##0.00';
+TFloatField(QTabela.FieldByName('QUANT_MINIMA')).DisplayFormat  := '#,##0.00';
+TFloatField(QTabela.FieldByName('CUSTO_COMPRA')).DisplayFormat  := '#,##0.00';
+TFloatField(QTabela.FieldByName('MARGEM_LUCRO')).DisplayFormat  := '#,##0.00';
+
+end;
+
+procedure TFrmProdutos_Light.pgqryQFabricanteBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+
+end;
+
+procedure TFrmProdutos_Light.pgqryQFabricanteBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.pgqryQFabricanteBeforePost(DataSet: TDataSet);
+begin
+  if (QFabricante.FieldByName('COD_FABRICANTE').AsString = '') then
+  begin
+    Application.MessageBox('Código do Fabricante não pode ser vazio', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Fabricante.SelectedIndex := 3;
+
+    abort;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.pgqryQFabricanteNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+procedure TFrmProdutos_Light.pgqryQProducaoAfterDelete(DataSet: TDataSet);
+var
+Vr_Produto, Vr_Custo_Produto: Real;
+begin
+
+  if Application.MessageBox('Deseja remarcar automaticamente o preço do produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_TOTAL, SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.CUSTO_COMPRA) VR_CUSTO_TOTAL');
+    IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+    IQuery.Sql.Add('INNER JOIN PRODUTOS');
+    IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Vr_Produto := IQuery.FieldByName('VR_TOTAL').AsFloat;
+    Vr_Custo_Produto := IQuery.FieldByName('VR_CUSTO_TOTAL').AsFloat;
+
+    if Vr_Produto = 0 then
+      Vr_Produto := 0.01;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO =:PRECO_PRAZO, CUSTO_COMPRA = :CUSTO_COMPRA, DT_COMPRA = :DT_COMPRA , DT_PRECO = :DT_PRECO,FUNCIONARIO_ID = :FUNCIONARIO_ID ');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRECO_VAREJO').AsFloat  := Vr_Produto;
+    IQuery.ParamByName('PRECO_PRAZO').AsFloat   := Vr_Produto;
+    IQuery.ParamByName('CUSTO_COMPRA').AsFloat  := Vr_Custo_Produto;
+    IQuery.ParamByName('DT_COMPRA').AsDate      := Date;
+    IQuery.ParamByName('DT_PRECO').AsDate       := Date;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    PRECO_VAREJO.Value := Vr_Produto;
+    PRECO_PRAZO.VALUE  := Vr_Produto;
+    Custo_Compra.Value := Vr_Custo_Produto;
+  end;
+end;
+
+procedure TFrmProdutos_Light.pgqryQProducaoAfterPost(DataSet: TDataSet);
+var
+Vr_Produto , Vr_Custo_Produto: Real;
+
+begin
+
+  if Application.MessageBox('Deseja remarcar automaticamente o preço do produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_TOTAL , SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.CUSTO_COMPRA) VR_CUSTO_TOTAL');
+    IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+    IQuery.Sql.Add('INNER JOIN PRODUTOS');
+    IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Vr_Produto       := IQuery.FieldByName('VR_TOTAL').AsFloat;
+    Vr_Custo_Produto := IQuery.FieldByName('VR_CUSTO_TOTAL').AsFloat;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO =:PRECO_PRAZO, CUSTO_COMPRA = :CUSTO_COMPRA, DT_PRECO = :DT_PRECO, DT_COMPRA = :DT_COMPRA,FUNCIONARIO_ID=:FUNCIONARIO_ID');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRECO_VAREJO').AsFloat  := Vr_Produto;
+    IQuery.ParamByName('PRECO_PRAZO').AsFloat   := Vr_Produto;
+    IQuery.ParamByName('CUSTO_COMPRA').AsFloat  := Vr_Custo_Produto;
+    IQuery.ParamByName('DT_COMPRA').AsDate      := Date;
+    IQuery.ParamByName('DT_PRECO').AsDate       := Date;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    PRECO_VAREJO.Value := Vr_Produto;
+    PRECO_PRAZO.Value  := Vr_Produto;
+    Custo_Compra.Value := Vr_Custo_Produto;
+
+  end;
+end;
+
+procedure TFrmProdutos_Light.pgqryQProducaoBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmProdutos_Light.pgqryQProducaoBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.pgqryQProducaoBeforePost(DataSet: TDataSet);
+begin
+  if (QProducao.FieldByName('QUANTIDADE').AsFloat <= 0) or (QProducao.FieldByName('QUANTIDADE').AsFloat > 9999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Producao.SelectedIndex := 2;
+
+    abort;
+  end;
+
+  if QProducao.FieldByName('DESCRICAO').AsString = '' then
+  begin
+    Application.MessageBox('Cód. de Insumo inválido', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Producao.SelectedIndex := 0;
+
+    abort;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.pgqryQSerieBeforeDelete(DataSet: TDataSet);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS_SERIE');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(NUM_SERIE = :NUM_SERIE)');
+  IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('NUM_SERIE').AsString   := QSerie.FieldByName('NUM_SERIE').AsString;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QSerie.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Número de Série relacionada a uma transação. Impossível continuar', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+
+end;
+
+procedure TFrmProdutos_Light.pgqryQSerieBeforeEdit(DataSet: TDataSet);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS_SERIE');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(NUM_SERIE = :NUM_SERIE)');
+  IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('NUM_SERIE').AsString   := QSerie.FieldByName('NUM_SERIE').AsString;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QSerie.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Número de Série relacionada a uma transação. Impossível continuar', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.ibqryQControladosBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmProdutos_Light.ibqryQControladosBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQControladosBeforePost(DataSet: TDataSet);
+begin
+  if (QControlados.FieldByName('QUANTIDADE').AsFloat <= 0) or (QControlados.FieldByName('QUANTIDADE').AsFloat > 9999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+
+   // Grid_Lote.SelectedIndex := 3;
+
+    abort;
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQControladosNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+procedure TFrmProdutos_Light.ibqryQFabricanteBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmProdutos_Light.ibqryQFabricanteBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.ibqryQFabricanteBeforePost(DataSet: TDataSet);
+begin
+  if (QFabricante.FieldByName('COD_FABRICANTE').AsString = '') then
+  begin
+    Application.MessageBox('Código do Fabricante não pode ser vazio', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Fabricante.SelectedIndex := 3;
+
+    abort;
+  end;
+
+end;
+
+procedure TFrmProdutos_Light.ibqryQFabricanteNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+procedure TFrmProdutos_Light.ibqryQProducaoAfterDelete(DataSet: TDataSet);
+var
+Vr_Produto, Vr_Custo_Produto: Real;
+begin
+
+
+  if Application.MessageBox('Deseja remarcar automaticamente o preço do produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_TOTAL, SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.CUSTO_COMPRA) VR_CUSTO_TOTAL');
+    IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+    IQuery.Sql.Add('INNER JOIN PRODUTOS');
+    IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Vr_Produto := IQuery.FieldByName('VR_TOTAL').AsFloat;
+    Vr_Custo_Produto := IQuery.FieldByName('VR_CUSTO_TOTAL').AsFloat;
+
+    if Vr_Produto = 0 then
+      Vr_Produto := 0.01;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO =:PRECO_PRAZO, CUSTO_COMPRA = :CUSTO_COMPRA, DT_COMPRA = :DT_COMPRA , DT_PRECO = :DT_PRECO,FUNCIONARIO_ID = :FUNCIONARIO_ID ');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRECO_VAREJO').AsFloat  := Vr_Produto;
+    IQuery.ParamByName('PRECO_PRAZO').AsFloat   := Vr_Produto;
+    IQuery.ParamByName('CUSTO_COMPRA').AsFloat  := Vr_Custo_Produto;
+    IQuery.ParamByName('DT_COMPRA').AsDate      := Date;
+    IQuery.ParamByName('DT_PRECO').AsDate       := Date;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    PRECO_VAREJO.Value := Vr_Produto;
+    PRECO_PRAZO.VALUE  := Vr_Produto;
+    Custo_Compra.Value := Vr_Custo_Produto;
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQProducaoAfterPost(DataSet: TDataSet);
+var
+Vr_Produto , Vr_Custo_Produto: Real;
+
+begin
+
+
+  if Application.MessageBox('Deseja remarcar automaticamente o preço do produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_TOTAL , SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.CUSTO_COMPRA) VR_CUSTO_TOTAL');
+    IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+    IQuery.Sql.Add('INNER JOIN PRODUTOS');
+    IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Vr_Produto       := IQuery.FieldByName('VR_TOTAL').AsFloat;
+    Vr_Custo_Produto := IQuery.FieldByName('VR_CUSTO_TOTAL').AsFloat;
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO, PRECO_PRAZO =:PRECO_PRAZO, CUSTO_COMPRA = :CUSTO_COMPRA, DT_PRECO = :DT_PRECO, DT_COMPRA = :DT_COMPRA,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('PRECO_VAREJO').AsFloat  := Vr_Produto;
+    IQuery.ParamByName('PRECO_PRAZO').AsFloat   := Vr_Produto;
+    IQuery.ParamByName('CUSTO_COMPRA').AsFloat  := Vr_Custo_Produto;
+    IQuery.ParamByName('DT_COMPRA').AsDate      := Date;
+    IQuery.ParamByName('DT_PRECO').AsDate       := Date;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    PRECO_VAREJO.Value := Vr_Produto;
+    PRECO_PRAZO.Value  := Vr_Produto;
+    Custo_Compra.Value := Vr_Custo_Produto;
+
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQProducaoBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmProdutos_Light.ibqryQProducaoBeforeEdit(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQProducaoBeforePost(DataSet: TDataSet);
+begin
+  if (QProducao.FieldByName('QUANTIDADE').AsFloat <= 0) or (QProducao.FieldByName('QUANTIDADE').AsFloat > 9999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Producao.SelectedIndex := 2;
+
+    abort;
+  end;
+
+  if QProducao.FieldByName('DESCRICAO').AsString = '' then
+  begin
+    Application.MessageBox('Cód. de Insumo inválido', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Producao.SelectedIndex := 0;
+
+    abort;
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQProducaoNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+procedure TFrmProdutos_Light.ibqryQSerieBeforeDelete(DataSet: TDataSet);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS_SERIE');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(NUM_SERIE = :NUM_SERIE)');
+  IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('NUM_SERIE').AsString   := QSerie.FieldByName('NUM_SERIE').AsString;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QSerie.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Número de Série relacionada a uma transação. Impossível continuar', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmProdutos_Light.ibqryQSerieBeforeEdit(DataSet: TDataSet);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS_SERIE');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(NUM_SERIE = :NUM_SERIE)');
+  IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('NUM_SERIE').AsString   := QSerie.FieldByName('NUM_SERIE').AsString;
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QSerie.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Número de Série relacionada a uma transação. Impossível continuar', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQSerieBeforePost(DataSet: TDataSet);
+begin
+  if (QSerie.FieldByName('QUANTIDADE').AsFloat <= 0) or (QSerie.FieldByName('QUANTIDADE').AsFloat > 99999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+
+    Grid_Serie.SelectedIndex := 3;
+
+    abort;
+  end;
+end;
+
+procedure TFrmProdutos_Light.ibqryQSerieNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PRODUTO_ID'] := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+end;
+
+
+
+procedure TFrmProdutos_Light.REFERENCIAExit(Sender: TObject);
+begin
+  if (Operacao = 'Inserindo') and (REFERENCIA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(REFERENCIA = :REFERENCIA)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('REFERENCIA').AsString  := REFERENCIA.Text;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+      Application.MessageBox('Já existe um produto com este Código de Referência cadastrado', PChar(Msg_Title), mb_IconStop);
+  end;
+
+  if (Operacao = 'Alterando') and (REFERENCIA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(REFERENCIA = :REFERENCIA)');
+    IQuery.Sql.Add('AND (PRODUTO_ID <> :PRODUTO_ID)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('REFERENCIA').AsString  := REFERENCIA.Text;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+      Application.MessageBox('Já existe um produto com este Código de Referência', PChar(Msg_Title), mb_IconStop);
+  end;
+end;
+
+procedure TFrmProdutos_Light.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+Foto1: TStream;
+Imagem: TJpegImage;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := 0;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '  /  /    ';
+
+      if Temp is TCheckBox then
+        TCheckBox(Temp).Checked := False;
+
+      {QControlados.Close;
+
+      QControlados.ParamByName('PRODUTO_ID').AsInteger := 0;
+
+      QControlados.Prepare;
+      QControlados.Open;
+
+      QProducao.Close;
+
+      QProducao.ParamByName('PRODUTO_ID').AsInteger := 0;
+
+      QProducao.Prepare;
+      QProducao.Open;
+
+      QSerie.Close;
+
+      QSerie.ParamByName('PRODUTO_ID').AsInteger := 0;
+
+      QSerie.Prepare;
+      QSerie.Open; }
+
+      TabSheet7.TabVisible := False;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Date := QTabela.FieldByName(TDateEdit(Temp).Name).AsDateTime;
+
+     if Temp is TCheckBox then
+        Begin
+          if QTabela.FieldByName(TCheckBox(Temp).Name).AsInteger = 1 then
+          TCheckBox(Temp).Checked := True
+        Else
+          TCheckBox(Temp).Checked := False;
+        End;
+
+     if (Temp is TImage) AND (FrmPrincipal.Config.FieldByName('EXIBE_FOTO').AsString = 'True') then
+     Begin
+       Foto1 := QTabela.CreateBlobStream(QTabela.FieldByName('FOTO'), BMREAD);
+       Foto1.Position := 0;
+       Imagem := TJpegImage.Create;
+       Imagem.loadFromStream(Foto1);
+
+       if Length(QTabela.FieldByName('FOTO').AsWideString) <> 0 then
+       Begin
+       Foto.Visible := true;
+       Foto.Picture.Bitmap.Assign(Imagem);
+       End
+       else
+       Begin
+       Foto.Picture.Bitmap := NIL;
+       End;
+     End;
+
+
+     { QControlados.Close;
+
+      QControlados.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+      QControlados.Prepare;
+      QControlados.Open;}  
+
+
+      if QTabela.FieldByName('CTRL_SERIE').AsString = 'SIM' then
+        TabSheet7.TabVisible := True
+      else
+        TabSheet7.TabVisible := False;
+    end;
+  end;
+
+  if QTabela.IsEmpty then
+  begin
+   // Grid_Lote.Enabled        := False;
+    Grid_Producao.Enabled      := False;
+    Grid_Serie.Enabled         := False;
+    Grid_Fabricante.Enabled    := False;
+  end
+  else
+  begin
+    //Grid_Lote.Enabled        := True;
+    Grid_Producao.Enabled      := True;
+    Grid_Serie.Enabled         := True;
+    Grid_Fabricante.Enabled    := True;
+  end;
+
+  DetailSearch('');
+end;
+
+
+procedure TFrmProdutos_Light.SimilarShow(Sender: TObject);
+begin
+  QSimilar.Close;
+
+  QSimilar.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+  QSimilar.Prepare;
+  QSimilar.Open;
+
+end;
+
+procedure TFrmProdutos_Light.btnCompClick(Sender: TObject);
+begin
+  try
+    COMPOSICAO_ID.Value := GetConsulta('COMP_PRODUTO', 0, 0, StrToInt(COMPOSICAO_ID.Text));
+  except
+    COMPOSICAO_ID.Value := GetConsulta('COMP_PRODUTO', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnCst_Pis_EntrClick(Sender: TObject);
+begin
+  CST_PIS_ENTR.Text := GetConsulta_CST('CST_PIS', CST_PIS_ENTR.Text);
+end;
+
+procedure TFrmProdutos_Light.btnCst_Cofins_EntrClick(Sender: TObject);
+begin
+  CST_COFINS_ENTR.Text := GetConsulta_CST('CST_COFINS', CST_COFINS_ENTR.Text);
+end;
+
+procedure TFrmProdutos_Light.btnNat_RecClick(Sender: TObject);
+begin
+  if (CST_PIS.Text = '04') or (CST_PIS.Text = '05') or (CST_PIS.Text = '06') or (CST_PIS.Text = '07') or (CST_PIS.Text = '08') or (CST_PIS.Text = '09') then  
+    NAT_REC.Text := GetConsulta_Contribuicao('CONTR' + CST_PIS.Text, NAT_REC.Text);
+end;
+
+procedure TFrmProdutos_Light.btnNCMClick(Sender: TObject);
+begin
+  NCM.Text := Alltrim(GetConsulta_NCM(NCM.Text));
+
+  if length(NCM.Text) <> 8 then
+    NCM.Text := '';
+end;
+
+procedure TFrmProdutos_Light.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+    Legenda_produtos;
+
+    QProducao.Close;
+    QProducao.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QProducao.Prepare;
+    QProducao.Open;
+
+    QFabricante.Close;
+    QFabricante.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QFabricante.Prepare;
+    QFabricante.Open;
+
+    QSimilar.Close;
+    QSimilar.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QSimilar.Prepare;
+    QSimilar.Open;
+  end;
+  Botoes_Normal;
+end;
+
+procedure TFrmProdutos_Light.SUBTIPO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Subtipo');
+end;
+
+procedure TFrmProdutos_Light.TabSheet5Show(Sender: TObject);
+begin
+QFabricante.Close;
+
+  QFabricante.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+  QFabricante.Prepare;
+  QFabricante.Open;
+end;
+
+procedure TFrmProdutos_Light.TabSheet6Show(Sender: TObject);
+begin
+  QProducao.Close;
+
+  QProducao.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+  QProducao.Prepare;
+  QProducao.Open;
+
+end;
+
+procedure TFrmProdutos_Light.TabSheet7Show(Sender: TObject);
+begin
+  QSerie.Close;
+
+  QSerie.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+  QSerie.Prepare;
+  QSerie.Open;
+end;
+
+procedure TFrmProdutos_Light.TRIBUTO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Tributo');
+end;
+
+procedure TFrmProdutos_Light.UNIDADEExit(Sender: TObject);
+begin
+DetailSearch('Unidade');
+end;
+
+procedure TFrmProdutos_Light.UNIDADE_VENDAExit(Sender: TObject);
+begin
+DetailSearch('Unidade Venda');
+end;
+
+procedure TFrmProdutos_Light.btnCestClick(Sender: TObject);
+begin
+  Cest.Text := Alltrim(GetConsulta_Cest(Cest.Text));
+
+  if length(Cest.Text) <> 7 then
+    Cest.Text := '';
+
+end;
+
+procedure TFrmProdutos_Light.btnComeca_ComClick(Sender: TObject);
+begin
+  Begin
+  if Comeca_Com.Text <> '' then
+  begin
+
+    Comeca_Com.Text := AnsiUpperCase(Comeca_Com.Text);
+
+   if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+      CmdSelectNull := 'WHERE (DESCRICAO ilike ' + #39  + Comeca_Com.Text + '%' + #39 + ')'
+    else
+      CmdSelectNull := 'WHERE (DESCRICAO ilike ' + #39  + Comeca_Com.Text +  '%' + #39 + ') AND (STATUS = ' + #39 + 'A' + #39 + ')';
+
+    CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+      CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+    CmdOrderBy := 'ORDER BY DESCRICAO';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.Prepare;
+    QTabela.Open;
+  end;
+  End;
+
+end;
+procedure TFrmProdutos_Light.btnComposicaoClick(Sender: TObject);
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT PRODUCAO_ITENS.*, PRODUTOS.PRECO_VAREJO, (PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_SOMA_TOT');
+  IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+  IQuery.Sql.Add('INNER JOIN PRODUTOS');
+  IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+    Rel_Composicao.PreviewModal
+  else
+    Application.MessageBox('Não há dados para impressão', PChar(Msg_Title), mb_IconStop);
+end;
+
+procedure TFrmProdutos_Light.btnCst_CofinsClick(Sender: TObject);
+begin
+  CST_COFINS.Text := GetConsulta_CST('CST_COFINS', CST_COFINS.Text);
+end;
+
+procedure TFrmProdutos_Light.btnCst_PisClick(Sender: TObject);
+begin
+  CST_PIS.Text := GetConsulta_CST('CST_PIS', CST_PIS.Text);
+end;
+
+procedure TFrmProdutos_Light.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM TRANSITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID OR PRODUTO_ID = :VINCULO)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  IQuery.ParamByName('VINCULO').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'P';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Produto com lançamento. Impossível excluir', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM ORCITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'P';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Produto com lançamento. Impossível excluir', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM PEDITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'P';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+  begin
+    Application.MessageBox('Produto com lançamento. Impossível excluir', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTO_ID = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+    QTabela.Prepare;
+    QTabela.Open;
+
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QGrupo.Close;
+    QSubtipo.Close;
+    QLocalizacao.Close;
+    QTributo.Close;
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QGrupo.Close;
+    QSubtipo.Close;
+    QLocalizacao.Close;
+    QTributo.Close;
+  end;
+
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmProdutos_Light.btnEditClick(Sender: TObject);
+var
+Tem_Movimento: Boolean;
+begin
+  Tem_Movimento := False;
+  Pr_Varejo     := PRECO_VAREJO.Value;
+
+  if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT PRODUTO_ID FROM TRANSITENS');
+  //IQuery.Sql.Add('INNER JOIN TRANSACOES ON TRANSACOES.TRANSACAO_ID =  TRANSITENS.TRANSACAO_ID');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+  IQuery.Sql.Add('AND (DATA >= :DT_TRANS)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'P';
+  IQuery.ParamByName('DT_TRANS').AsDateTime   := FrmPrincipal.Config.FieldByName('DT_ALTERACAO').AsDateTime;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+    Tem_Movimento := True;
+
+ { IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT PRODUTO_ID FROM ORCITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'P';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+    Tem_Movimento := True;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT PRODUTO_ID FROM PEDITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  IQuery.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+
+  IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  IQuery.ParamByName('TP_PROD_SERV').AsString := 'P';
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if not IQuery.IsEmpty then
+    Tem_Movimento := True;    }
+
+  if Tem_Movimento then
+  begin
+    COD_BARRA.ReadOnly     := True;
+    TRIBUTO_ID.ReadOnly    := True;
+    ALIQUOTA_ICMS.ReadOnly := True;
+  end
+  else
+  begin
+    COD_BARRA.ReadOnly     := False;
+    TRIBUTO_ID.ReadOnly    := False;
+    ALIQUOTA_ICMS.ReadOnly := False;
+  end;
+
+  EMPRESA_ID.ReadOnly := True;
+  Operacao            := 'Alterando';
+  ID                  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+  if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    LOCALIZACAO_ID.ReadOnly := True;
+
+  Botoes_Editing;
+  Habilitar(True);
+
+  if QSerie.IsEmpty then
+    CTRL_SERIE.Enabled := True
+  else
+    CTRL_SERIE.Enabled := False;
+  
+ // Grid_Lote.Enabled        := False;
+  Grid_Producao.Enabled      := False;
+  Grid_Serie.Enabled         := False;
+  Grid_Fabricante.Enabled    := False;
+
+  Consulta.TabVisible := False;
+
+  DESCRICAO.SetFocus;
+
+
+  if (CST_PIS_ENTR.Text = '70') or
+     (CST_PIS_ENTR.Text = '73') or
+     (CST_PIS_ENTR.Text = '75') or
+     (CST_PIS_ENTR.Text = '98') then
+     Begin
+       PIS_ENTR.Value := 0;
+       PIS_ENTR.Enabled := False;
+       COFINS_ENTR.Value := 0;
+       COFINS_ENTR.Enabled := False;
+     End;
+
+
+  if (CST_PIS.Text = '04') or
+     (CST_PIS.Text = '03') or
+     (CST_PIS.Text = '06') or
+     (CST_PIS.Text = '07') or
+     (CST_PIS.Text = '08') or
+     (CST_PIS.Text = '09') then
+     Begin
+       PIS.Value    := 0;
+       PIS.Enabled  := False;
+       COFINS.Value := 0;
+       COFINS.Enabled := False;
+     End;
+
+
+
+
+end;
+
+procedure TFrmProdutos_Light.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA_ID.Text));
+  except
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnFamiliaClick(Sender: TObject);
+begin
+  try
+    FAMILIA_ID.Value := GetConsulta('FAMÍLIA', 0, 0, StrToInt(FAMILIA_ID.Text));
+  except
+    FAMILIA_ID.Value := GetConsulta('FAMÍLIA', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnGeneroClick(Sender: TObject);
+begin
+  COD_GEN.Text := GetConsulta_CST('GENEROS', COD_GEN.Text);
+end;
+
+procedure TFrmProdutos_Light.btnGrupoClick(Sender: TObject);
+begin
+  try
+    GRUPO_ID.Value := GetConsulta('GRUPOS', 0, 0, StrToInt(GRUPO_ID.Text));
+  except
+    GRUPO_ID.Value := GetConsulta('GRUPOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnImprimeClick(Sender: TObject);
+var
+ID: Integer;
+InputString:string;
+begin
+  if Application.MessageBox('Deseja usar a seleção atual?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Text := QTabela.Sql.Text;
+  end
+  else
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(EMPRESA_ID = :EMPRESA_ID)');
+    IQuery.Sql.Add('AND (STATUS = :STATUS)');
+    IQuery.Sql.Add('ORDER BY ALIQUOTA_ICMS, DESCRICAO');
+
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    IQuery.ParamByName('STATUS').AsString      := 'A';
+  end;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+ InputString := InputBox('Modelo', 'Modelo 1 ou 2?', '1');
+
+  if StrToInt(InputString) = 1 then
+  begin
+     if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        QRDBText4.DataField := 'QUANTIDADE_C'
+     else
+        QRDBText4.DataField := 'QUANTIDADE_G';
+
+    Produtos.PreviewModal;
+  end
+
+  Else if StrToInt(InputString) = 2 then
+  begin
+
+          RDprint1.TamanhoQteColunas:= 100;
+          RDprint1.OpcoesPreview.Preview     := True;
+          RDprint1.MostrarProgresso          := True;
+          RDprint1.Acentuacao                := SemAcento;
+          RDprint1.TamanhoQteLinhas          := 1;
+          RDprint1.Abrir;
+
+              if linha >= 65 then
+              begin
+                RDprint1.novapagina;
+                Pagina := Pagina + 1;
+              end;
+
+              Pagina:= 1;
+
+          while not IQuery.Eof do
+          Begin
+           RDprint1.ImpF(linha, 01, IQuery.FieldByName('PRODUTO_ID').AsString,[]);
+           RDprint1.ImpF(linha, 07, Copy(IQuery.FieldByName('DESCRICAO').AsString, 1,42),[]);
+           RDprint1.ImpVal(linha, 52,',###,##0.00',IQuery.FieldByName('CUSTO_COMPRA').AsFloat,[]);
+           RDprint1.ImpVal(linha, 63,',###,##0.00',IQuery.FieldByName('ALIQUOTA_ICMS').AsFloat,[]);
+
+            if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+               RDprint1.ImpVal(linha, 76,',###,##0.00',IQuery.FieldByName('QUANTIDADE_C').AsFloat,[])
+            else
+               RDprint1.ImpVal(linha, 76,',###,##0.00',IQuery.FieldByName('QUANTIDADE_G').AsFloat,[]);
+
+
+           RDprint1.ImpVal(linha, 90,',###,##0.00',IQuery.FieldByName('PRECO_VAREJO').AsFloat,[]);
+
+              if linha >= 64 then
+              begin
+                RDprint1.novapagina;
+                Pagina := Pagina + 1;
+              end;
+
+           Inc(linha);
+           IQuery.Next;
+          End;
+
+          Application.ProcessMessages;
+          RDprint1.TamanhoQteLinhas:= 66;
+          RDprint1.Fechar;
+  end
+  Else
+  Begin
+   Application.MessageBox('Favor inserir modelo 1 ou 2 para emissão do relatório.', PChar(Msg_Title), mb_IconStop);
+    exit;
+  End;
+end;
+
+procedure TFrmProdutos_Light.RDprint1NewPage(Sender: TObject; Pagina: Integer);
+begin 
+    RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+    RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 80, 'Sistema de Automação de empresas Eficaz', []);
+    RDprint1.Imp(02, 01, 'Data/Hora: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+    RDprint1.impDir(02, 60, 100, 'Página: ' + IntToStr(Pagina), []);
+    RDprint1.impF(03, 27, '*** RELATÓRIO DE PRODUTOS PARA CONFERÊNCIA ***',[negrito]);
+    RDprint1.LinhaH(04,01,100,0,false);
+    RDprint1.Imp(05, 01, 'Id');
+    RDprint1.Imp(05, 07, 'Descrição');
+    RDprint1.Imp(05, 54, 'Pr. Custo');
+    RDprint1.Imp(05, 68, '% ICMS');
+    RDprint1.Imp(05, 80, 'Estoque');
+    RDprint1.Imp(05, 90, 'Preço Venda');
+    RDprint1.LinhaH(06,01,100,0,false);
+    linha := 07;
+end;
+
+
+
+
+
+procedure TFrmProdutos_Light.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Foto.Picture.Bitmap := NIL;
+
+  EMPRESA_ID.ReadOnly := False;
+  Operacao            := 'Inserindo';
+
+  COD_BARRA.ReadOnly     := False;
+  TRIBUTO_ID.ReadOnly    := False;
+  ALIQUOTA_ICMS.ReadOnly := False;
+  Label80.Visible        := False;
+
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  //Grid_Lote.Enabled        := False;
+  Grid_Producao.Enabled      := False;
+  Grid_Serie.Enabled         := False;
+  Grid_Fabricante.Enabled    := False;
+
+  QEmpresa.Close;
+  QGrupo.Close;
+  QSubtipo.Close;
+  QLocalizacao.Close;
+  QTributo.Close;
+
+  EMPRESA_ID.Value  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  SUPERVISOR.Text   := 'NÃO';
+  CTRL_SERIE.Text   := 'NÃO';
+  PROVQT.Text       := 'NÃO';
+  PESAVEL.Text      := 'NÃO';
+  Frac_inv.Text     := 'NÃO';
+  IAT.Text          := 'A';
+  IPPT.Text         := 'T';
+  MOD_ICMS.Text     := 'MVA';
+  TIPO_ITEM.Text    := '00 - MERCADORIA PARA REVENDA';
+  PIS.Value         := FrmPrincipal.QEmpresa.FieldByName('PIS').AsFloat;
+  PIS_ENTR.Value    := FrmPrincipal.QEmpresa.FieldByName('PIS').AsFloat;
+  COFINS.Value      := FrmPrincipal.QEmpresa.FieldByName('COFINS').AsFloat;
+  COFINS_ENTR.Value := FrmPrincipal.QEmpresa.FieldByName('COFINS').AsFloat;
+  DT_Atualizacao.Date    := Date;
+  Empresa_id.value := 1;
+  Grupo_id.Value   := 1;
+  SubTipo_id.Value := 1;
+  Localizacao_id.Value := 1;
+
+  if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+  begin
+    LOCALIZACAO_ID.Text     := LeIni(Arq_Ini, 'Sistema', 'Localização');
+    LOCALIZACAO_ID.ReadOnly := True;
+  end;
+
+  Consulta.TabVisible := False;
+  
+  DESCRICAO.SetFocus;
+
+end;
+
+procedure TFrmProdutos_Light.BtnInventarioClick(Sender: TObject);
+var
+InputString:string;
+Id_Trans: Integer;
+Vl_Trans: Real;
+begin
+if Application.MessageBox('Atenção deseja realmente alterar a quantidade deste produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+ begin
+
+ QFuncionario.Sql.Clear;
+ QFuncionario.Sql.Add('SELECT DISTINCT ACESSO.FUNCIONARIO_ID, FUNCIONARIOS.NOME');
+ QFuncionario.Sql.Add('FROM ACESSO');
+ QFuncionario.Sql.Add('INNER JOIN FUNCIONARIOS');
+ QFuncionario.Sql.Add('ON (ACESSO.FUNCIONARIO_ID = FUNCIONARIOS.FUNCIONARIO_ID)');
+ QFuncionario.Sql.Add('WHERE ACESSO.FUNCIONARIO_ID = :FUNCIONARIO_ID');
+ QFuncionario.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+ QFuncionario.Prepare;
+ QFuncionario.Open;
+
+
+  InputString := InputBox(PChar(Msg_Title), 'Quantidade a ser lançada para o produto' , '');
+
+  if InputString = '' then
+  Exit;
+
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT * FROM INVENTARIO_PRODUTOS');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(DT_INVENTARIO = :DT_INVENTARIO)');
+  QRel.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+  QRel.ParamByName('PRODUTO_ID').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+  QRel.ParamByName('DT_INVENTARIO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+  QRel.Prepare;
+  QRel.Open;
+
+  if not QRel.IsEmpty then
+  begin
+    if Application.MessageBox('Produto já lançado para um inventário nesta data. Deseja exluir o produto e lança-lo novamente?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+    begin
+      QRel.Sql.Clear;
+      QRel.Sql.Add('DELETE FROM INVENTARIO_PRODUTOS');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(DT_INVENTARIO = :DT_INVENTARIO)');
+      QRel.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+      QRel.ParamByName('PRODUTO_ID').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QRel.ParamByName('DT_INVENTARIO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+      QRel.Prepare;
+      QRel.ExecSql;
+
+
+    end;
+  end;
+
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT * FROM INVENTARIO_PRODUTOS');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(ST_INVENTARIO <> :ST_INVENTARIO)');
+
+  QRel.ParamByName('ST_INVENTARIO').AsString := 'F';
+
+  QRel.Prepare;
+  QRel.Open;
+
+  if not QRel.IsEmpty then
+    Application.MessageBox('Existe um inventário não finalizado', PChar(Msg_Title), mb_IconStop)
+  else
+  begin
+    try
+      QRel.Sql.Clear;
+      QRel.Sql.Add('INSERT INTO INVENTARIO_PRODUTOS(PRODUTO_ID, DT_INVENTARIO, EMPRESA_ID, GRUPO_ID, SUBTIPO_ID, LOCALIZACAO_ID, FORNECEDOR_ID, DESCRICAO, ' +
+                   'UNIDADE, COD_BARRA, TRIBUTO_ID, ALIQUOTA_ICMS, VALOR_COMPRA, CUSTOMEDIO, CUSTO_COMPRA, PRECO_VAREJO, ' +
+                   'QUANTIDADE_C, QUANTIDADE_G, STATUS, ST_INVENTARIO, QUANTIDADE_A)');
+      QRel.Sql.Add('SELECT PRODUTO_ID, :DT_INVENTARIO, EMPRESA_ID, GRUPO_ID, SUBTIPO_ID, LOCALIZACAO_ID, FORNECEDOR_ID, SUBSTRING(DESCRICAO FROM 1 FOR 40) DESCRICAO, UNIDADE_VENDA, COD_BARRA, ' +
+                   'TRIBUTO_ID, ALIQUOTA_ICMS, VALOR_COMPRA, CUSTOMEDIO, CUSTO_COMPRA, PRECO_VAREJO, QUANTIDADE_C, QUANTIDADE_G, STATUS, :ST_INVENTARIO, :QUANTIDADE_A');
+      QRel.Sql.Add('FROM PRODUTOS');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(EMPRESA_ID = :EMPRESA_ID)');
+      QRel.Sql.Add('AND (STATUS = :STATUS)');
+      QRel.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+      begin
+        QRel.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+        QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+      end;
+
+      QRel.ParamByName('EMPRESA_ID').AsInteger     := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+      QRel.ParamByName('STATUS').AsString          := 'A';
+      QRel.ParamByName('DT_INVENTARIO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QRel.ParamByName('ST_INVENTARIO').AsString   := 'A';
+      QRel.ParamByName('PRODUTO_ID').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QRel.ParamByName('QUANTIDADE_A').AsFloat   := StrToFloat(Inputstring);
+
+      QRel.Prepare;
+      QRel.ExecSql;
+
+
+
+      Application.MessageBox('Produto lançado para Inventário  com sucesso', PChar(Msg_Title), mb_IconInformation);
+    except
+      Application.MessageBox('Ocorreu um erro. Não foi possível criar o inventário', PChar(Msg_Title), mb_IconInformation);
+    end;
+  end;
+
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT * FROM INVENTARIO_PRODUTOS');
+  QRel.Sql.Add('WHERE');
+
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+    QRel.Sql.Add('(QUANTIDADE_A > QUANTIDADE_C)')
+  else
+    QRel.Sql.Add('(QUANTIDADE_A > QUANTIDADE_G)');
+
+  QRel.Sql.Add('AND (QUANTIDADE_A IS NOT NULL)');
+  QRel.Sql.Add('AND (ST_INVENTARIO = :ST_INVENTARIO)');
+
+  QRel.ParamByName('ST_INVENTARIO').AsString := 'A';
+
+  QRel.Prepare;
+  QRel.Open;
+
+  if not QRel.IsEmpty then
+  begin
+    IQuery.SQL.Clear;
+    IQuery.SQL.Add('SELECT NEXTVAL(:GEN_TRANSACOES) ID');
+    IQuery.ParamByName('GEN_TRANSACOES').AsString :=  'GEN_TRANSACOES';
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Id_Trans := IQuery.FieldByName('ID').AsInteger;
+
+
+
+    Vl_Trans := 0;
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO TRANSACOES( ' +
+                 'TRANSACAO_ID, DT_TRANS,   DT_MOVIMENTO, CONDUTA, ' +
+                 'DEPTO,        EMPRESA_ID, CONTA_ID,     C_CUSTO_ID, ' +
+                 'VALOR,        TPCTB,      AUTORIZ_ID,   HISTORICO, ' +
+                 'CONTAAUX_ID) VALUES(' +
+                 ':TRANSACAO_ID, :DT_TRANS,   :DT_MOVIMENTO, :CONDUTA, :DEPTO,      :EMPRESA_ID, ' +
+                 ':CONTA_ID,     :C_CUSTO_ID, :VALOR,        :TPCTB,   :AUTORIZ_ID, :HISTORICO, ' +
+                 ':CONTAAUX_ID)');
+
+    QArq.ParamByName('TRANSACAO_ID').AsInteger  := Id_Trans;
+    QArq.ParamByName('DT_TRANS').AsDateTime     := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QArq.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QArq.ParamByName('CONDUTA').AsString        := '18';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QArq.ParamByName('CONTA_ID').AsInteger      := FrmPrincipal.Config.FieldByName('CONTA_ESTOQUE').AsInteger;
+    QArq.ParamByName('C_CUSTO_ID').AsInteger    := 1;
+    QArq.ParamByName('VALOR').AsFloat           := 0;
+    QArq.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QArq.ParamByName('AUTORIZ_ID').AsInteger    := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+    QArq.ParamByName('HISTORICO').AsString      := 'AUDITORIA ESTOQUE - INVENTARIO: ' + QFuncionario.FieldByName('NOME').AsString ;
+    QArq.ParamByName('CONTAAUX_ID').AsInteger   := FrmPrincipal.Config.FieldByName('CONTA_CONSUMO').AsInteger;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    QRel.First;
+    while not QRel.Eof do
+    begin
+      QArq.Sql.Clear;
+      QArq.Sql.Add('INSERT INTO TRANSITENS( ' +
+                   'TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, DESCRICAO, ' +
+                   'TRIBUTO_ID,   CFOP ,QUANTIDADE, VR_UNITARIO,  VR_TOTAL) VALUES(' +
+                   ':TRANSACAO_ID, :PRODUTO_ID, :TP_PROD_SERV, :DESCRICAO, ' +
+                   ':TRIBUTO_ID,   :CFOP, :QUANTIDADE, :VR_UNITARIO,  :VR_TOTAL)');
+
+      QArq.ParamByName('TRANSACAO_ID').AsInteger := Id_Trans;
+      QArq.ParamByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
+      QArq.ParamByName('TP_PROD_SERV').AsString  := 'P';
+      QArq.ParamByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
+
+      if QRel.FieldByName('TRIBUTO_ID').AsInteger > 0 then
+        QArq.ParamByName('TRIBUTO_ID').AsInteger := QRel.FieldByName('TRIBUTO_ID').AsInteger
+      else
+        QArq.ParamByName('TRIBUTO_ID').AsInteger := 1;
+
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        QArq.ParamByName('QUANTIDADE').AsFloat   := (QRel.FieldByName('QUANTIDADE_A').AsFloat - QRel.FieldByName('QUANTIDADE_C').AsFloat)
+      else
+        QArq.ParamByName('QUANTIDADE').AsFloat   := (QRel.FieldByName('QUANTIDADE_A').AsFloat - QRel.FieldByName('QUANTIDADE_G').AsFloat);
+
+        QArq.ParamByName('CFOP').AsString          :='5556';
+        QArq.ParamByName('VR_UNITARIO').AsFloat    := QRel.FieldByName('CUSTOMEDIO').AsFloat;
+
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        QArq.ParamByName('VR_TOTAL').AsFloat     := ((QRel.FieldByName('QUANTIDADE_A').AsFloat - QRel.FieldByName('QUANTIDADE_C').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat)
+      else
+        QArq.ParamByName('VR_TOTAL').AsFloat     := ((QRel.FieldByName('QUANTIDADE_A').AsFloat - QRel.FieldByName('QUANTIDADE_G').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat);
+
+      QArq.Prepare;
+      QArq.ExecSql;
+
+
+
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        Vl_Trans := Vl_Trans + ((QRel.FieldByName('QUANTIDADE_A').AsFloat - QRel.FieldByName('QUANTIDADE_C').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat)
+      else
+        Vl_Trans := Vl_Trans + ((QRel.FieldByName('QUANTIDADE_A').AsFloat - QRel.FieldByName('QUANTIDADE_G').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat);
+
+      Application.ProcessMessages;
+      QRel.Next;
+    end;
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('UPDATE TRANSACOES SET VALOR = :VALOR');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+    QArq.ParamByName('VALOR').AsFloat          := Vl_Trans;
+    QArq.ParamByName('TRANSACAO_ID').AsInteger := Id_Trans;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+  end;
+
+  QRel.Sql.Clear;
+  QRel.Sql.Add('SELECT * FROM INVENTARIO_PRODUTOS');
+  QRel.Sql.Add('WHERE');
+
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+    QRel.Sql.Add('(QUANTIDADE_A < QUANTIDADE_C)')
+  else
+    QRel.Sql.Add('(QUANTIDADE_A < QUANTIDADE_G)');
+
+  QRel.Sql.Add('AND (QUANTIDADE_A IS NOT NULL)');
+  QRel.Sql.Add('AND (ST_INVENTARIO = :ST_INVENTARIO)');
+
+  QRel.ParamByName('ST_INVENTARIO').AsString := 'A';
+
+  QRel.Prepare;
+  QRel.Open;
+
+  if not QRel.IsEmpty then
+  begin
+    IQuery.SQL.Clear;
+    IQuery.SQL.Add('SELECT NEXTVAL(:GEN_TRANSACOES) ID');
+    IQuery.ParamByName('GEN_TRANSACOES').AsString :=  'GEN_TRANSACOES';
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    Id_Trans := IQuery.FieldByName('ID').AsInteger;
+
+    Vl_Trans := 0;
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('INSERT INTO TRANSACOES( ' +
+                 'TRANSACAO_ID, DT_TRANS,   DT_MOVIMENTO, CONDUTA, ' +
+                 'DEPTO,        EMPRESA_ID, CONTA_ID,     C_CUSTO_ID, ' +
+                 'VALOR,        TPCTB,      AUTORIZ_ID,   HISTORICO, ' +
+                 'CONTAAUX_ID) VALUES(' +
+                 ':TRANSACAO_ID, :DT_TRANS,   :DT_MOVIMENTO, :CONDUTA, :DEPTO,      :EMPRESA_ID, ' +
+                 ':CONTA_ID,     :C_CUSTO_ID, :VALOR,        :TPCTB,   :AUTORIZ_ID, :HISTORICO, ' +
+                 ':CONTAAUX_ID)');
+
+    QArq.ParamByName('TRANSACAO_ID').AsInteger  := Id_Trans;
+    QArq.ParamByName('DT_TRANS').AsDateTime     := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QArq.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QArq.ParamByName('CONDUTA').AsString        := '17';
+    QArq.ParamByName('DEPTO').AsString          := '07';
+    QArq.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QArq.ParamByName('CONTA_ID').AsInteger      := FrmPrincipal.Config.FieldByName('CONTA_ESTOQUE').AsInteger;
+    QArq.ParamByName('C_CUSTO_ID').AsInteger    := 1;
+    QArq.ParamByName('VALOR').AsFloat           := 0;
+    QArq.ParamByName('TPCTB').AsString          := FrmData.QAcesso.FieldByName('TPCTB').AsString;
+    QArq.ParamByName('AUTORIZ_ID').AsInteger    := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+    QArq.ParamByName('HISTORICO').AsString      := 'AUDITORIA ESTOQUE - INVENTARIO: ' + QFuncionario.FieldByName('NOME').AsString ;
+    QArq.ParamByName('CONTAAUX_ID').AsInteger   := FrmPrincipal.Config.FieldByName('CONTA_CONSUMO').AsInteger;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+
+    QRel.First;
+    while not QRel.Eof do
+    begin
+      QArq.Sql.Clear;
+      QArq.Sql.Add('INSERT INTO TRANSITENS( ' +
+                   'TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, DESCRICAO, ' +
+                   'TRIBUTO_ID, CFOP,   QUANTIDADE, VR_UNITARIO,  VR_TOTAL) VALUES(' +
+                   ':TRANSACAO_ID, :PRODUTO_ID, :TP_PROD_SERV, :DESCRICAO, ' +
+                   ':TRIBUTO_ID,   :CFOP, :QUANTIDADE, :VR_UNITARIO,  :VR_TOTAL)');
+
+      QArq.ParamByName('TRANSACAO_ID').AsInteger := Id_Trans;
+      QArq.ParamByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
+      QArq.ParamByName('TP_PROD_SERV').AsString  := 'P';
+      QArq.ParamByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
+
+      if QRel.FieldByName('TRIBUTO_ID').AsInteger > 0 then
+        QArq.ParamByName('TRIBUTO_ID').AsInteger := QRel.FieldByName('TRIBUTO_ID').AsInteger
+      else
+        QArq.ParamByName('TRIBUTO_ID').AsInteger := 1;
+
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        QArq.ParamByName('QUANTIDADE').AsFloat   := (QRel.FieldByName('QUANTIDADE_C').AsFloat - QRel.FieldByName('QUANTIDADE_A').AsFloat)
+      else
+        QArq.ParamByName('QUANTIDADE').AsFloat   := (QRel.FieldByName('QUANTIDADE_G').AsFloat - QRel.FieldByName('QUANTIDADE_A').AsFloat);
+
+
+        QArq.ParamByName('CFOP').AsString          := '1556';
+        QArq.ParamByName('VR_UNITARIO').AsFloat    := QRel.FieldByName('CUSTOMEDIO').AsFloat;
+
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        QArq.ParamByName('VR_TOTAL').AsFloat     := ((QRel.FieldByName('QUANTIDADE_C').AsFloat - QRel.FieldByName('QUANTIDADE_A').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat)
+      else
+        QArq.ParamByName('VR_TOTAL').AsFloat     := ((QRel.FieldByName('QUANTIDADE_G').AsFloat - QRel.FieldByName('QUANTIDADE_A').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat);
+
+      QArq.Prepare;
+      QArq.ExecSql;
+
+
+
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+        Vl_Trans := Vl_Trans + ((QRel.FieldByName('QUANTIDADE_C').AsFloat - QRel.FieldByName('QUANTIDADE_A').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat)
+      else
+        Vl_Trans := Vl_Trans + ((QRel.FieldByName('QUANTIDADE_G').AsFloat - QRel.FieldByName('QUANTIDADE_A').AsFloat) * QRel.FieldByName('CUSTOMEDIO').AsFloat);
+
+      Application.ProcessMessages;
+      QRel.Next;
+    end;
+
+    QArq.Sql.Clear;
+    QArq.Sql.Add('UPDATE TRANSACOES SET VALOR = :VALOR');
+    QArq.Sql.Add('WHERE');
+    QArq.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+    QArq.ParamByName('VALOR').AsFloat          := Vl_Trans;
+    QArq.ParamByName('TRANSACAO_ID').AsInteger := Id_Trans;
+
+    QArq.Prepare;
+    QArq.ExecSql;
+
+
+  end;
+
+  QArq.Sql.Clear;
+  QArq.Sql.Add('UPDATE INVENTARIO_PRODUTOS SET ST_INVENTARIO = :ST');
+  QArq.Sql.Add('WHERE');
+  QArq.Sql.Add('(ST_INVENTARIO = :TP)');
+
+  QArq.Params[0].AsString   := 'F';
+  QArq.Params[1].AsString   := 'A';
+
+  QArq.Prepare;
+  QArq.ExecSql;
+
+
+
+  Application.MessageBox('Inventario por produto finalizado com sucesso', PChar(Msg_Title), mb_IconInformation);
+
+
+ end;
+
+ end;
+
+procedure TFrmProdutos_Light.btnLocalizacaoClick(Sender: TObject);
+begin
+  try
+    LOCALIZACAO_ID.Value := GetConsulta('LOCAIS', 0, 0, StrToInt(LOCALIZACAO_ID.Text));
+  except
+    LOCALIZACAO_ID.Value := GetConsulta('LOCAIS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+Begin
+
+Condicao := GetPesquisa('PRODUTOS');
+
+if Condicao <> '' then
+begin
+  if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+    CmdSelectNull := Condicao
+  else
+    CmdSelectNull := Condicao + ' AND (STATUS = ' + #39 + 'A' + #39 + ')';
+end;
+
+CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+  CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+CmdOrderBy := 'ORDER BY PRODUTO_ID';
+
+QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+QTabela.Prepare;
+QTabela.Open;
+
+Set_Campos(False);
+Botoes_Normal;
+End;
+
+
+procedure TFrmProdutos_Light.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+    Legenda_produtos;
+
+    QProducao.Close;
+    QProducao.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QProducao.Prepare;
+    QProducao.Open;
+
+    QFabricante.Close;
+    QFabricante.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QFabricante.Prepare;
+    QFabricante.Open;
+
+    QSimilar.Close;
+    QSimilar.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QSimilar.Prepare;
+    QSimilar.Open;
+
+
+  end;
+
+  Botoes_Normal;
+end;
+
+procedure TFrmProdutos_Light.BtnReplicarClick(Sender: TObject);
+Var
+Rep,Proximo_Codigo:String;
+
+begin
+  if Application.MessageBox(Pchar('Deseja duplicar registro do produto: ' + #13 + QTabela.FieldByName('DESCRICAO').AsString), PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  Begin
+    try
+
+    Rep:= 'REPLICADO(' + QTabela.FieldByName('DESCRICAO').asString + ')' ;
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT NEXTVAL(:GEN_PRODUTOS)');
+      IQuery.ParamByName('GEN_PRODUTOS').AsString := 'GEN_PRODUTOS';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      ID:= IQuery.Fields[0].AsInteger;
+
+    QReplicar_Produto.Sql.Clear;
+    QReplicar_Produto.Sql.Add('INSERT INTO PRODUTOS(PRODUTO_ID , '+
+                              'EMPRESA_ID,      TIPO,            TIPO_ITEM, ' +
+                              'DESCRICAO, UNIDADE, ' +
+                              'UNIDADE_VENDA, PESAVEL,' +
+                              'IAT,             IPPT,            CSOSN, ' +
+                              'NCM,             CODRED,          SUPERVISOR, ' +
+                              'CTRL_SERIE,      PROVQT,          EMBALAGEM, ' +
+                              'FRACAO_VENDA,    PESO,            PESO_UNITARIO, ' +
+                              'BALDPT,          ETIQUETA, ' +
+                              'BALTIPO,         BALTECLA,        VALIDADE, ' +
+                              'MARCA,           MODELO_POSICAO, ' +
+                              'REFERENCIA,      APLICACAO,       ' +
+                              'GRUPO_ID,        SUBTIPO_ID,      FAMILIA_ID, ' +
+                              'LOCALIZACAO_ID,  FORNECEDOR_ID,   TRIBUTO_ID, ' +
+                              'COMPOSICAO_ID,   COD_GEN,         MOD_ICMS, ' +
+                              'MOD_ICMS_ST,     ALIQUOTA_ICMS,   PIS, ' +
+                              'CST_PIS,         PIS_ENTR,        CST_PIS_ENTR, ' +
+                              'COFINS,          CST_COFINS,      COFINS_ENTR, ' +
+                              'CST_COFINS_ENTR, NAT_REC, ' +
+                              'COD_CONT,        REDUCAO_ICMS,    IPI, ' +
+                              'CST_IPI,         MOD_IPI,         MVA, ' +
+                              'COMISSAO,        MARGEM_LUCRO,    DESC_MAXIMO, ' +
+                              'PMZ,             PRECO_SUGESTAO,  PRECO_VAREJO, PRECO_PRAZO, ' +
+                              'PRECO_ATACADO,   PRECO_PROMOCAO,  DT_ATUALIZACAO, ' +
+                              'PROMO_INICIAL,   PROMO_FINAL,     QUANT_MINIMA, ' +
+                              'QUANT_MAXIMA,    QUANTIDADE_C,    QUANTIDADE_G, ' +
+                              'QUANTIDADE_A,    ESTOQUE_INICIAL, EST_TRABALHO, ' +
+                              'EST_SEGURANCA,   DEMANDA_MAX,     PONTO_PEDIDO, ' +
+                              'PAR_FATURAMENTO, VENDA_MEDIA_PON, VENDA_MEDIA_SEM, ' +
+                              'DESV_PAD_SEM,    VINCULO,         MEDIA_CONSUMO, ' +
+                              'MD5,             SPED,            STATUS)');
+    QReplicar_Produto.Sql.Add('SELECT :PRODUTO_ID, ' +
+                              ':EMPRESA_ID,     TIPO,            TIPO_ITEM, ' +
+                              ':DESCRICAO , UNIDADE, ' +
+                              'UNIDADE_VENDA,   :PESAVEL,        ' +
+                              'IAT,             IPPT,            CSOSN, ' +
+                              'NCM,             :CODRED,          SUPERVISOR, ' +
+                              'CTRL_SERIE,      PROVQT,          EMBALAGEM, ' +
+                              'FRACAO_VENDA,    PESO,            PESO_UNITARIO, ' +
+                              'BALDPT,          ETIQUETA, ' +
+                              'BALTIPO,         BALTECLA,        VALIDADE, ' +
+                              'MARCA,           MODELO_POSICAO, ' +
+                              'REFERENCIA,      APLICACAO,        ' +
+                              'GRUPO_ID,        SUBTIPO_ID,      FAMILIA_ID, ' +
+                              'LOCALIZACAO_ID,  FORNECEDOR_ID,   TRIBUTO_ID, ' +
+                              'COMPOSICAO_ID,   COD_GEN,         MOD_ICMS, ' +
+                              'MOD_ICMS_ST,     ALIQUOTA_ICMS,   PIS, ' +
+                              'CST_PIS,         PIS_ENTR,        CST_PIS_ENTR, ' +
+                              'COFINS,          CST_COFINS,      COFINS_ENTR, ' +
+                              'CST_COFINS_ENTR, NAT_REC, ' +
+                              'COD_CONT,        REDUCAO_ICMS,    IPI, ' +
+                              'CST_IPI,         MOD_IPI,         MVA, ' +
+                              'COMISSAO,        MARGEM_LUCRO,    DESC_MAXIMO, ' +
+                              'PMZ,             PRECO_SUGESTAO,  PRECO_VAREJO, PRECO_PRAZO, ' +
+                              'PRECO_ATACADO,   PRECO_PROMOCAO,  DT_ATUALIZACAO, ' +
+                              'PROMO_INICIAL,   PROMO_FINAL,     0, ' +
+                              '0,    0,               0, ' +
+                              '0,               0, 0, ' +
+                              '0,   0,     PONTO_PEDIDO, ' +
+                              'PAR_FATURAMENTO, VENDA_MEDIA_PON, VENDA_MEDIA_SEM, ' +
+                              'DESV_PAD_SEM,    VINCULO,         MEDIA_CONSUMO, ' +
+                              'MD5,             SPED,            STATUS');
+
+    QReplicar_Produto.Sql.Add('FROM PRODUTOS');
+    QReplicar_Produto.Sql.Add('WHERE');
+    QReplicar_Produto.Sql.Add('(PRODUTO_ID = :PRODUTO_ID_ORI)');
+
+    QReplicar_Produto.ParamByName('PRODUTO_ID').AsInteger := ID;
+    QReplicar_Produto.ParamByName('EMPRESA_ID').AsInteger := QTabela.FieldByName('EMPRESA_ID').AsInteger;
+    QReplicar_Produto.ParamByName('PRODUTO_ID_ORI').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    QReplicar_Produto.ParamByName('DESCRICAO').AsString   := Rep;
+    QReplicar_Produto.ParamByName('PESAVEL').AsString     := 'NÃO';
+    QReplicar_Produto.ParamByName('CODRED').AsString      := '';
+
+    QReplicar_Produto.Prepare;
+    QReplicar_Produto.ExecSql;
+
+
+    except
+      on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro:' + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+    end;
+
+
+
+
+    CmdSelectNull := 'WHERE (PRODUTO_ID = :PRODUTO_ID)';
+    CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = :EMPRESA_ID)';
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+      CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+    CmdOrderBy := 'ORDER BY PRODUTO_ID';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('EMPRESA_ID').AsInteger  := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QTabela.ParamByName('PRODUTO_ID').AsInteger  := ID;
+
+    QTabela.Prepare;
+    QTabela.Open;
+
+    QTabela.Last;
+
+    Set_Campos(False);
+
+   // BtnEdit.OnClick(self);
+
+
+    if COD_BARRA.Text = '' then
+    begin
+
+
+      Proximo_Codigo := IntToStr(ID);
+
+      VINCULO.Text    := Proximo_Codigo;
+      REFERENCIA.Text := Proximo_Codigo;
+
+      if FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True' then
+      COD_BARRA.Text  := StrZero(Dig(Proximo_Codigo), FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0)
+      Else
+      Begin
+      COD_BARRA.Text  := StrZero(Proximo_Codigo, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+      End;
+    end;
+
+
+  End;
+
+end;
+
+procedure TFrmProdutos_Light.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmProdutos_Light.btnSaveClick(Sender: TObject);
+var
+Proximo_Codigo: String;
+Vr_Produto: Real;
+begin
+
+  DetailSearch('');
+
+  NCM.Text := StrZero(NCM.Text, 8, 0);
+
+  if Cad_simples.Checked then
+    Application.MessageBox('Cadastro simplificado marcado, esse produto não poderá ser movimentado para compra ou venda!', PChar(Msg_Title), mb_IconStop);
+
+
+
+  if Operacao = 'Inserindo' then
+  begin
+    if COD_BARRA.Text = '' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT LAST_VALUE + 1 FROM GEN_PRODUTOS');
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      Proximo_Codigo := IntToStr(IQuery.Fields[0].AsInteger);
+
+      VINCULO.Text    := Proximo_Codigo;
+      if FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True' then
+      COD_BARRA.Text  := StrZero(Dig(Proximo_Codigo), FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0)
+      Else
+      Begin
+      COD_BARRA.Text  := StrZero(Proximo_Codigo, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+      REFERENCIA.Text := Proximo_Codigo;
+      End;
+    end;
+  end;
+
+  if Validacao then
+  begin
+    Funcionario_id.value := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+    if (IPI.Value = 0) and (MOD_IPI.Text <> '') then
+      MOD_IPI.Text := '';
+
+    DT_ATUALIZACAO.Date := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+    if CODRED.Text <> '' then
+      CODRED.Text := StrZero(CODRED.Text, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger, 0);
+
+    if Operacao = 'Inserindo' then
+    begin
+    Insert;
+
+
+      Begin
+      CmdSelectNull := 'WHERE (DESCRICAO = :DESCRICAO)';
+      CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = :EMPRESA_ID)';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY PRODUTO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+      QTabela.ParamByName('DESCRICAO').AsString   := DESCRICAO.Text;
+
+      QTabela.Prepare;
+      QTabela.Open;
+
+      QTabela.Last;
+      End;
+
+       if  LeIni(Arq_Ini, 'Sistema', 'Replicar Produtos Filiais') = 'True'  then
+       Begin
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('SELECT * FROM EMPRESAS');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(EMPRESA_ID <> :EMPRESA_ID)');
+
+          IQuery.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+          IQuery.Prepare;
+          IQuery.Open;
+
+          IQuery.First;
+          while not IQuery.Eof do
+          begin
+            QReplicar_Produto.Sql.Clear;
+            QReplicar_Produto.Sql.Add('INSERT INTO PRODUTOS(' +
+                                      'EMPRESA_ID,      TIPO,            TIPO_ITEM, ' +
+                                      'DESCRICAO,       FANTASIA,        UNIDADE, ' +
+                                      'UNIDADE_VENDA,   COD_BARRA,       COD_BARRA_AUX1, ' +
+                                      'COD_BARRA_AUX2,  COD_BARRA_AUX3,  COD_BARRA_AUX4, ' +
+                                      'IAT,             IPPT,            CSOSN, ' +
+                                      'NCM,             CODRED,          SUPERVISOR, ' +
+                                      'CTRL_SERIE,      PROVQT,          EMBALAGEM, ' +
+                                      'FRACAO_VENDA,    PESO,            PESO_UNITARIO, ' +
+                                      'PESAVEL,         BALDPT,          ETIQUETA, ' +
+                                      'BALTIPO,         BALTECLA,        VALIDADE, ' +
+                                      'COD_ORIGINAL,    MARCA,           MODELO_POSICAO, ' +
+                                      'REFERENCIA,      APLICACAO,       DT_COMPRA, ' +
+                                      'DT_ENTRADA,      DT_PRECO,        DT_MOVIMENTO, ' +
+                                      'GRUPO_ID,        SUBTIPO_ID,      FAMILIA_ID, ' +
+                                      'LOCALIZACAO_ID,  FORNECEDOR_ID,   TRIBUTO_ID, ' +
+                                      'COMPOSICAO_ID,   COD_GEN,         MOD_ICMS, ' +
+                                      'MOD_ICMS_ST,     ALIQUOTA_ICMS,   PIS, ' +
+                                      'CST_PIS,         PIS_ENTR,        CST_PIS_ENTR, ' +
+                                      'COFINS,          CST_COFINS,      COFINS_ENTR, ' +
+                                      'CST_COFINS_ENTR, NAT_REC, ' +
+                                      'COD_CONT,        REDUCAO_ICMS,    IPI, ' +
+                                      'CST_IPI,         MOD_IPI,         MVA, ' +
+                                      'COMISSAO,        MARGEM_LUCRO,    DESC_MAXIMO, ' +
+                                      'ULT_QUANTIDADE,  CUSTO_COMPRA,    VALOR_COMPRA, ' +
+                                      'CUSTOMEDIO,      DESPESAS,        DIF_ICMS, ' +
+                                      'PMZ,             PRECO_SUGESTAO,  PRECO_VAREJO, ' +
+                                      'PRECO_ATACADO,   PRECO_PROMOCAO,  DT_ATUALIZACAO, ' +
+                                      'PROMO_INICIAL,   PROMO_FINAL,     QUANT_MINIMA, ' +
+                                      'QUANT_MAXIMA,    QUANTIDADE_C,    QUANTIDADE_G, ' +
+                                      'QUANTIDADE_A,    ESTOQUE_INICIAL, EST_TRABALHO, ' +
+                                      'EST_SEGURANCA,   DEMANDA_MAX,     PONTO_PEDIDO, ' +
+                                      'PAR_FATURAMENTO, VENDA_MEDIA_PON, VENDA_MEDIA_SEM, ' +
+                                      'DESV_PAD_SEM,    VINCULO,         MEDIA_CONSUMO, ' +
+                                      'MD5,             SPED,            STATUS)');
+            QReplicar_Produto.Sql.Add('SELECT ' +
+                                      ':EMPRESA_ID,     TIPO,            TIPO_ITEM, ' +
+                                      'DESCRICAO,       FANTASIA,        UNIDADE, ' +
+                                      'UNIDADE_VENDA,   COD_BARRA,       COD_BARRA_AUX1, ' +
+                                      'COD_BARRA_AUX2,  COD_BARRA_AUX3,  COD_BARRA_AUX4, ' +
+                                      'IAT,             IPPT,            CSOSN, ' +
+                                      'NCM,             CODRED,          SUPERVISOR, ' +
+                                      'CTRL_SERIE,      PROVQT,          EMBALAGEM, ' +
+                                      'FRACAO_VENDA,    PESO,            PESO_UNITARIO, ' +
+                                      'PESAVEL,         BALDPT,          ETIQUETA, ' +
+                                      'BALTIPO,         BALTECLA,        VALIDADE, ' +
+                                      'COD_ORIGINAL,    MARCA,           MODELO_POSICAO, ' +
+                                      'REFERENCIA,      APLICACAO,       DT_COMPRA, ' +
+                                      'DT_ENTRADA,      DT_PRECO,        DT_MOVIMENTO, ' +
+                                      'GRUPO_ID,        SUBTIPO_ID,      FAMILIA_ID, ' +
+                                      'LOCALIZACAO_ID,  FORNECEDOR_ID,   TRIBUTO_ID, ' +
+                                      'COMPOSICAO_ID,   COD_GEN,         MOD_ICMS, ' +
+                                      'MOD_ICMS_ST,     ALIQUOTA_ICMS,   PIS, ' +
+                                      'CST_PIS,         PIS_ENTR,        CST_PIS_ENTR, ' +
+                                      'COFINS,          CST_COFINS,      COFINS_ENTR, ' +
+                                      'CST_COFINS_ENTR, NAT_REC, ' +
+                                      'COD_CONT,        REDUCAO_ICMS,    IPI, ' +
+                                      'CST_IPI,         MOD_IPI,         MVA, ' +
+                                      'COMISSAO,        MARGEM_LUCRO,    DESC_MAXIMO, ' +
+                                      'ULT_QUANTIDADE,  CUSTO_COMPRA,    VALOR_COMPRA, ' +
+                                      'CUSTOMEDIO,      DESPESAS,        DIF_ICMS, ' +
+                                      'PMZ,             PRECO_SUGESTAO,  PRECO_VAREJO, ' +
+                                      'PRECO_ATACADO,   PRECO_PROMOCAO,  DT_ATUALIZACAO, ' +
+                                      'PROMO_INICIAL,   PROMO_FINAL,     QUANT_MINIMA, ' +
+                                      'QUANT_MAXIMA,    0,               0, ' +
+                                      '0,               ESTOQUE_INICIAL, EST_TRABALHO, ' +
+                                      'EST_SEGURANCA,   DEMANDA_MAX,     PONTO_PEDIDO, ' +
+                                      'PAR_FATURAMENTO, VENDA_MEDIA_PON, VENDA_MEDIA_SEM, ' +
+                                      'DESV_PAD_SEM,    VINCULO,         MEDIA_CONSUMO, ' +
+                                      'MD5,             SPED,            STATUS');
+            QReplicar_Produto.Sql.Add('FROM PRODUTOS');
+            QReplicar_Produto.Sql.Add('WHERE');
+            QReplicar_Produto.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+            QReplicar_Produto.ParamByName('EMPRESA_ID').AsInteger := IQuery.FieldByName('EMPRESA_ID').AsInteger;
+            QReplicar_Produto.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+            QReplicar_Produto.Prepare;
+            QReplicar_Produto.ExecSql;
+
+
+
+            Application.ProcessMessages;
+            IQuery.Next;
+          end;
+       end;
+    end
+    else
+    begin
+      Edit;
+      if FloatToStr(Pr_Varejo) <> FloatToStr(PRECO_VAREJO.Value) then
+      Begin
+
+      IQuery.SQL.Clear;
+      IQuery.SQL.Add('UPDATE PRODUTOS SET FUNCIONARIO_ID = :FUNCIONARIO_ID, DT_PRECO = :DT_PRECO WHERE PRODUTO_ID = :PRODUTO_ID');
+      IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+      IQuery.ParamByName('PRODUTO_ID').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      IQuery.ParamByName('DT_PRECO').AsDateTime      := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+      IQuery.Prepare;
+      IQuery.ExecSQL;
+
+      End;
+
+
+      if LeIni(Arq_Ini, 'Sistema', 'Replicar Produtos Filiais') = 'True' Then
+      Begin
+        QReplicar_Produto.Sql.Clear;
+        QReplicar_Produto.Sql.Add('UPDATE PRODUTOS SET ' +
+                                  'DESCRICAO        = :DESCRICAO,      FANTASIA       = :FANTASIA,        UNIDADE        = :UNIDADE, ' +
+                                  'UNIDADE_VENDA    = :UNIDADE_VENDA,  COD_BARRA      = :COD_BARRA,       COD_BARRA_AUX1 = :COD_BARRA_AUX1, ' +
+                                  'COD_BARRA_AUX2   = :COD_BARRA_AUX2, COD_BARRA_AUX3 = :COD_BARRA_AUX3,  COD_BARRA_AUX4 = :COD_BARRA_AUX4, ' +
+                                  'PRECO_VAREJO     = :PRECO_VAREJO,   PRECO_ATACADO  = :PRECO_ATACADO,   PRECO_PROMOCAO = :PRECO_PROMOCAO, FUNCIONARIO_ID = :FUNCIONARIO_ID');
+
+        QReplicar_Produto.Sql.Add('WHERE');
+        QReplicar_Produto.Sql.Add('(PRODUTO_ID <> :PRODUTO_ID)');
+        QReplicar_Produto.Sql.Add('AND (VINCULO = :VINCULO)');
+        QReplicar_Produto.Sql.Add('AND (EMPRESA_ID <> :EMPRESA_ID)');
+
+        QReplicar_Produto.ParamByName('EMPRESA_ID').AsInteger    := StrToInt(EMPRESA_ID.Text);
+        QReplicar_Produto.ParamByName('DESCRICAO').AsString      := DESCRICAO.Text;
+        QReplicar_Produto.ParamByName('FANTASIA').AsString       := '';
+        QReplicar_Produto.ParamByName('UNIDADE').AsString        := UNIDADE.Text;
+        QReplicar_Produto.ParamByName('UNIDADE_VENDA').AsString  := UNIDADE_VENDA.Text;
+        QReplicar_Produto.ParamByName('COD_BARRA').AsString      := COD_BARRA.Text;
+        QReplicar_Produto.ParamByName('COD_BARRA_AUX1').AsString := COD_BARRA_AUX1.Text;
+        QReplicar_Produto.ParamByName('COD_BARRA_AUX2').AsString := COD_BARRA_AUX2.Text;
+        QReplicar_Produto.ParamByName('COD_BARRA_AUX3').AsString := COD_BARRA_AUX3.Text;
+        QReplicar_Produto.ParamByName('COD_BARRA_AUX4').AsString := COD_BARRA_AUX4.Text;
+        QReplicar_Produto.ParamByName('PRECO_VAREJO').AsFloat    := PRECO_VAREJO.Value;
+        QReplicar_Produto.ParamByName('PRECO_ATACADO').AsFloat   := PRECO_ATACADO.Value;
+        QReplicar_Produto.ParamByName('PRECO_PROMOCAO').AsFloat  := PRECO_PROMOCAO.Value;
+        QReplicar_Produto.ParamByName('PRODUTO_ID').AsInteger    := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        QReplicar_Produto.ParamByName('VINCULO').AsInteger       := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        QReplicar_Produto.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        QReplicar_Produto.Prepare;
+        QReplicar_Produto.ExecSql;
+
+
+      End;
+    end;
+
+    if StrToInt(COMPOSICAO_ID.Text) > 0 then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('DELETE FROM PRODUCAO_ITENS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+      IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('INSERT INTO PRODUCAO_ITENS(PRODUTO_ID, INSUMO_ID, DESCRICAO, QUANTIDADE)');
+      IQuery.Sql.Add('SELECT :PRODUTO_ID, INSUMO_ID, DESCRICAO, QUANTIDADE');
+      IQuery.Sql.Add('FROM COMP_PRODUTO');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(COMPOSICAO_ID = :COMPOSICAO_ID)');
+
+      IQuery.ParamByName('PRODUTO_ID').AsInteger    := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      IQuery.ParamByName('COMPOSICAO_ID').AsInteger := StrToInt(COMPOSICAO_ID.Text);
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+
+      if Application.MessageBox('Deseja remarcar automaticamente o preço do produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+      begin
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('SELECT SUM(PRODUCAO_ITENS.QUANTIDADE * PRODUTOS.PRECO_VAREJO) VR_TOTAL');
+        IQuery.Sql.Add('FROM PRODUCAO_ITENS');
+        IQuery.Sql.Add('INNER JOIN PRODUTOS');
+        IQuery.Sql.Add('ON (PRODUCAO_ITENS.INSUMO_ID = PRODUTOS.PRODUTO_ID)');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUCAO_ITENS.PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.Open;
+
+        Vr_Produto := IQuery.FieldByName('VR_TOTAL').AsFloat;
+
+        if Vr_Produto = 0 then
+          Vr_Produto := 0.01;
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE PRODUTOS SET PRECO_VAREJO = :PRECO_VAREJO,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRECO_VAREJO').AsFloat     := Vr_Produto;
+        IQuery.ParamByName('PRODUTO_ID').AsInteger     := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+        IQuery.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+
+
+        PRECO_VAREJO.Value := Vr_Produto;
+      end;
+    end;
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+    begin
+      QEmpresa.Close;
+      QGrupo.Close;
+      QSubtipo.Close;
+      QLocalizacao.Close;
+      QTributo.Close;
+    end;
+
+    Habilitar(False);
+    Botoes_Normal;
+
+    Operacao := '';
+    Consulta.TabVisible := True;
+
+   // if (not QTabela.IsEmpty) and (LeIni(Arq_Ini, 'Sistema', 'Carga Automática de Produtos') = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CARGA').AsString = 'SIM') then
+   //   Carga_PDV_Off_Line(QTabela.FieldByName('PRODUTO_ID').AsInteger, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnSub_TipoClick(Sender: TObject);
+begin
+  try
+    SUBTIPO_ID.Value := GetConsulta('SUBTIPOS', 0, 0, StrToInt(SUBTIPO_ID.Text));
+  except
+    SUBTIPO_ID.Value := GetConsulta('SUBTIPOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.btnTributoClick(Sender: TObject);
+begin
+  try
+    TRIBUTO_ID.Value := GetConsulta('TRIBUTOS', 0, 0, StrToInt(TRIBUTO_ID.Text));
+  except
+    TRIBUTO_ID.Value := GetConsulta('TRIBUTOS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmProdutos_Light.Btn_embcpClick(Sender: TObject);
+begin
+  UNIDADE.Text := GetConsulta_CST('EMBALAGEM', UNIDADE.Text);
+end;
+
+procedure TFrmProdutos_Light.Btn_embvdClick(Sender: TObject);
+begin
+  UNIDADE_VENDA.Text := GetConsulta_CST('EMBALAGEM', UNIDADE_VENDA.Text);
+end;
+
+procedure TFrmProdutos_Light.btn_load_imageClick(Sender: TObject);
+var
+CaminhoFoto : String;
+begin
+
+  if OpenImage.Execute then
+
+  Begin
+   Imagem := TFileStream.Create(OpenImage.FileName, fmShareDenyWrite );
+   CaminhoFoto := OpenImage.FileName;
+
+   if (ExtractFileExt(CaminhoFoto) = '.jpg') OR ((ExtractFileExt(CaminhoFoto) = '.JPG')) then
+   Begin
+     Foto.Picture.LoadFromFile(CaminhoFoto);
+     Foto.Visible := true;
+     Is_Upload := True;
+   End
+   Else
+   Application.MessageBox('Formato de Arquivo Inválido. Utilize somente imagens JPG !', PChar(Msg_Title), mb_IconInformation);
+  End;
+end;
+
+
+
+procedure TFrmProdutos_Light.cad_simplesClick(Sender: TObject);
+begin
+if CAD_SIMPLES.Checked then
+   Begin
+   NCM.Enabled            := False;
+   Grupo_id.Enabled       := False;
+   Subtipo_id.Enabled     := False;
+   Localizacao_id.Enabled := False;
+   Tributo_id.Enabled     := False;
+   Tributo_id.Text        := '6';
+   End
+   Else
+   Begin
+   NCM.Enabled            := True;
+   Grupo_id.Enabled       := True;
+   Subtipo_id.Enabled     := True;
+   Localizacao_id.Enabled := True;
+   Tributo_id.Enabled     := True;
+   Tributo_id.Text        := '0';
+   End;
+
+
+
+end;
+
+procedure TFrmProdutos_Light.btnParcialClick(Sender: TObject);
+var
+Orcamento,Pedido_venda:real;
+begin
+    if FrmPrincipal.Config.FieldByName('CALC_EST_PED_VDA').AsString = 'True' then
+    Begin
+      QPedidoVenda.Sql.Clear;
+      QPedidoVenda.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_PEDIDOVDA ');
+      QPedidoVenda.Sql.Add('FROM PEDITENS');
+      QPedidoVenda.Sql.Add('INNER JOIN PEDIDOS ON PEDIDOS.PEDIDO_ID = PEDITENS.PEDIDO_ID');
+      QPedidoVenda.Sql.Add('WHERE');
+      QPedidoVenda.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      QPedidoVenda.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+      QPedidoVenda.Sql.Add('AND (TP_PEDIDO = 1)');
+      QPedidoVenda.Sql.Add('AND ((PEDIDOS.STATUS <> :STATUS) AND (PEDIDOS.STATUS <> :STATUS1))');
+      QPedidoVenda.Sql.Add('GROUP BY PEDITENS.PRODUTO_ID');
+
+      QPedidoVenda.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QPedidoVenda.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QPedidoVenda.ParamByName('STATUS').AsString       := 'CANCELADO';
+      QPedidoVenda.ParamByName('STATUS1').AsString      := 'FATURADO';
+
+      QPedidoVenda.Prepare;
+      QPedidoVenda.Open;
+
+      Pedido_venda := QPedidoVenda.FieldByName('QTD_PEDIDOVDA').AsFloat;
+      Orcamento    := 0;
+    End
+    Else
+    Begin
+      QOrcamento.Sql.Clear;
+      QOrcamento.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_ORCAMENTO');
+      QOrcamento.Sql.Add('FROM ORCITENS');
+      QOrcamento.Sql.Add('INNER JOIN ORCAMENTOS');
+      QOrcamento.Sql.Add('ON (ORCITENS.ORCAMENTO_ID = ORCAMENTOS.ORCAMENTO_ID)');
+      QOrcamento.Sql.Add('WHERE');
+      QOrcamento.Sql.Add('(ORCITENS.PRODUTO_ID = :PRODUTO_ID)');
+      QOrcamento.Sql.Add('AND (ORCITENS.TP_PROD_SERV = :TP_PROD_SERV)');
+      QOrcamento.Sql.Add('AND (ORCAMENTOS.TRANSACAO_ID = 0 OR ORCAMENTOS.TRANSACAO_ID IS NULL)');
+      QOrcamento.Sql.Add('AND (ORCAMENTOS.DT_MOVIMENTO = :DT_MOVIMENTO)');
+
+      QOrcamento.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QOrcamento.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QOrcamento.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+
+      QOrcamento.Prepare;
+      QOrcamento.Open;
+      Pedido_venda := 0;
+      Orcamento    := QOrcamento.FieldByName('QTD_ORCAMENTO').AsFloat;;
+    End;
+
+      QOrdem.Sql.Clear;
+      QOrdem.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_ORDEM');
+      QOrdem.Sql.Add('FROM ORDEM_ITENS');
+      QOrdem.Sql.Add('INNER JOIN ORDEM_SERVICO');
+      QOrdem.Sql.Add('ON (ORDEM_ITENS.ORDEM_ID = ORDEM_SERVICO.ORDEM_ID)');
+      QOrdem.Sql.Add('WHERE');
+      QOrdem.Sql.Add('(ORDEM_ITENS.CODIGO_ITEM = :PRODUTO_ID)');
+      QOrdem.Sql.Add('AND (ORDEM_ITENS.TP_PROD_SERV = :TP_PROD_SERV)');
+      QOrdem.Sql.Add('AND (ORDEM_SERVICO.STATUS <> :EXECUTADA)');
+
+      QOrdem.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QOrdem.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QOrdem.ParamByName('EXECUTADA').AsString    := 'FATURADO';
+
+
+      QOrdem.Prepare;
+      QOrdem.Open;
+
+
+      QPedido.Sql.Clear;
+      QPedido.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_PEDIDO');
+      QPedido.Sql.Add('FROM PEDITENS');
+      QPedido.Sql.Add('INNER JOIN PEDIDOS ON PEDIDOS.PEDIDO_ID = PEDITENS.PEDIDO_ID');
+      QPedido.Sql.Add('WHERE');
+      QPedido.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      QPedido.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+      QPedido.Sql.Add('AND (TP_PEDIDO = 0)');
+      QPedido.Sql.Add('AND (PEDITENS.IMPORTADO = :IMPORTADO)');
+      QPedido.Sql.Add('AND (PEDIDOS.STATUS <> :STATUS)');
+      QPedido.Sql.Add('GROUP BY PEDITENS.PRODUTO_ID');
+
+      QPedido.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QPedido.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QPedido.ParamByName('IMPORTADO').AsString    := 'N';
+      QPedido.ParamByName('STATUS').AsString       := 'CANCELADO';
+
+
+      QPedido.Prepare;
+      QPedido.Open;
+
+      QPedido1.Sql.Clear;
+      QPedido1.Sql.Add('SELECT (CASE WHEN SUM(QUANTIDADE) IS NULL THEN 0 ELSE SUM(QUANTIDADE) END) QTD_PEDIDO, PEDIDOS.DT_ENTREGA');
+      QPedido1.Sql.Add('FROM PEDITENS');
+      QPedido1.Sql.Add('INNER JOIN PEDIDOS ON PEDIDOS.PEDIDO_ID = PEDITENS.PEDIDO_ID');
+      QPedido1.Sql.Add('WHERE');
+      QPedido1.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      QPedido1.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+      QPedido1.Sql.Add('AND (TP_PEDIDO = 0)');
+      QPedido1.Sql.Add('AND (PEDITENS.IMPORTADO = :IMPORTADO)');
+      QPedido1.Sql.Add('AND (PEDIDOS.STATUS <> :STATUS)');
+      QPedido1.Sql.Add('GROUP BY PEDIDOS.DT_ENTREGA');
+      QPedido1.Sql.Add('ORDER BY PEDIDOS.DT_ENTREGA');
+
+      QPedido1.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      QPedido1.ParamByName('TP_PROD_SERV').AsString := 'P';
+      QPedido1.ParamByName('IMPORTADO').AsString    := 'N';
+      QPedido1.ParamByName('STATUS').AsString       := 'CANCELADO';
+
+
+      QPedido1.Prepare;
+      QPedido1.Open;
+
+
+
+  if (Orcamento > 0) OR (Pedido_Venda > 0) OR (QPedido.FieldByName('QTD_PEDIDO').AsFloat > 0) OR
+     (QOrdem.FieldByName('QTD_ORDEM').AsFloat > 0)then
+  begin
+    Application.CreateForm(TFrmEstoque_Parcial, FrmEstoque_Parcial);
+    try
+      if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then
+      begin
+        FrmEstoque_Parcial.Estoque.Value    := QTabela.FieldByName('QUANTIDADE_C').AsFloat;
+        FrmEstoque_Parcial.Pedidos.Value    := QPedido.FieldByName('QTD_PEDIDO').AsFloat;
+        FrmEstoque_Parcial.DT_PEDIDO.Date   := QPedido1.FieldByName('DT_ENTREGA').AsDateTime;
+        if FrmPrincipal.Config.FieldByName('CALC_EST_PED_VDA').AsString = 'True' then
+        Begin
+        FrmEstoque_Parcial.Label66.Caption    := 'Pedido de Venda';
+        FrmEstoque_Parcial.Orcamentos.Value   := Pedido_Venda;
+        FrmEstoque_Parcial.Parcial.Value      := (QTabela.FieldByName('QUANTIDADE_C').AsFloat - Pedido_venda);
+        End
+        Else
+        Begin
+        FrmEstoque_Parcial.Label66.Caption    := 'Orçamento';
+        FrmEstoque_Parcial.Orcamentos.Value   := Orcamento;
+        FrmEstoque_Parcial.Parcial.Value      := (QTabela.FieldByName('QUANTIDADE_C').AsFloat - Orcamento);
+        End;
+      end
+      else
+      begin
+        FrmEstoque_Parcial.Estoque.Value    := QTabela.FieldByName('QUANTIDADE_G').AsFloat;
+        FrmEstoque_Parcial.Pedidos.Value    := QPedido.FieldByName('QTD_PEDIDO').AsFloat;
+        FrmEstoque_Parcial.DT_PEDIDO.Date   := QPedido1.FieldByName('DT_ENTREGA').AsDateTime;
+        if FrmPrincipal.Config.FieldByName('CALC_EST_PED_VDA').AsString = 'True' then
+        Begin
+        FrmEstoque_Parcial.Label66.Caption    := 'Pedido de Venda';
+        FrmEstoque_Parcial.Orcamentos.Value   := Pedido_Venda;
+        FrmEstoque_Parcial.Parcial.Value      := (QTabela.FieldByName('QUANTIDADE_G').AsFloat - Pedido_venda);
+        End
+        Else
+        Begin
+        FrmEstoque_Parcial.Label66.Caption    := 'Orçamento';
+        FrmEstoque_Parcial.Orcamentos.Value   := Orcamento;
+        FrmEstoque_Parcial.Parcial.Value      := (QTabela.FieldByName('QUANTIDADE_G').AsFloat - Orcamento);
+        End;
+      end;
+
+      FrmEstoque_Parcial.ShowModal;
+    finally
+      FrmEstoque_Parcial.Release;
+    end;
+  end;
+end;
+
+procedure TFrmProdutos_Light.COD_BARRAExit(Sender: TObject);
+begin
+  if ((Operacao = 'Inserindo') or (Operacao = 'Alterando')) and (COD_BARRA.Text <> '') then
+    COD_BARRA.Text := StrZero(COD_BARRA.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+
+  if (Operacao = 'Inserindo') and (COD_BARRA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_BARRA = :COD_BARRA)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_BARRA').AsString   := COD_BARRA.Text;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+      Application.MessageBox('Já existe um produto com este Código de Barras cadastrado', PChar(Msg_Title), mb_IconStop);
+  end;
+
+  if (Operacao = 'Alterando') and (COD_BARRA.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_BARRA = :COD_BARRA)');
+    IQuery.Sql.Add('AND (PRODUTO_ID <> :PRODUTO_ID)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_BARRA').AsString   := COD_BARRA.Text;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+      Application.MessageBox('Já existe um produto com este Código de Barras', PChar(Msg_Title), mb_IconStop);
+  end;
+end;
+
+procedure TFrmProdutos_Light.COD_ORIGINALExit(Sender: TObject);
+begin
+  if (Operacao = 'Inserindo') and (COD_ORIGINAL.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_ORIGINAL = :COD_ORIGINAL)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_ORIGINAL').AsString := COD_ORIGINAL.Text;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger  := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+      Application.MessageBox('Já existe um produto com este Código Original cadastrado', PChar(Msg_Title), mb_IconStop);
+  end;
+
+  if (Operacao = 'Alterando') and (COD_ORIGINAL.Text <> '') then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(COD_ORIGINAL = :COD_ORIGINAL)');
+    IQuery.Sql.Add('AND (PRODUTO_ID <> :PRODUTO_ID)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('COD_ORIGINAL').AsString := COD_ORIGINAL.Text;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger  := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger  := StrToInt(EMPRESA_ID.Text);
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+      Application.MessageBox('Já existe um produto com este Código Original', PChar(Msg_Title), mb_IconStop);
+  end;
+end;
+
+procedure TFrmProdutos_Light.COFINSExit(Sender: TObject);
+begin
+
+    if COFINS.Value = 0 then
+    Begin
+      Application.MessageBox(Pchar(' Informe a Aliquota COFINS'),'', mb_IconInformation);
+      COFINS.SetFocus;
+    End;
+
+end;
+
+procedure TFrmProdutos_Light.COFINS_ENTRExit(Sender: TObject);
+begin
+   if(CST_PIS_ENTR.Text = '50') and (COFINS_ENTR.Value = 0)then
+     Begin
+     Application.MessageBox(Pchar(' Informe o valor da Alíquota COFINS'),'', mb_IconInformation);
+     COFINS_ENTR.SetFocus;
+     End;
+end;
+
+procedure TFrmProdutos_Light.Comeca_ComEnter(Sender: TObject);
+begin
+  Comeca_Com.Text := '';
+end;
+
+procedure TFrmProdutos_Light.Comeca_ComKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    btnComeca_ComClick(Sender);
+end;
+
+procedure TFrmProdutos_Light.ConsultaShow(Sender: TObject);
+begin
+  if LeIni(Arq_Ini, 'Sistema', 'Legenda Estoque Mínimo') = 'True' then
+  LegendaBox.Visible := True
+  Else
+  LegendaBox.Visible := False;
+
+
+end;
+
+procedure TFrmProdutos_Light.CST_COFINSChange(Sender: TObject);
+begin
+  CST_PIS.Text := CST_COFINS.Text; 
+end;
+
+procedure TFrmProdutos_Light.CST_COFINS_ENTRChange(Sender: TObject);
+begin
+  CST_PIS_ENTR.Text := CST_COFINS_ENTR.Text;
+end;
+
+procedure TFrmProdutos_Light.CST_PISChange(Sender: TObject);
+begin
+  CST_COFINS.Text := CST_PIS.Text;
+
+  if btnEdit.Enabled = False then
+  Begin
+
+  if CST_PIS.Text = '01' then
+  Begin
+    NAT_REC.Text       := '';
+    NAT_REC.Enabled    := False;
+    btnNat_Rec.Enabled := False;
+    Label71.Enabled    := False;
+    PIS.Enabled := True;
+    PIS.SetFocus;
+  End;
+
+    if CST_PIS.Text = '49' then
+    begin
+      PIS.Value   := 0;
+      PIS.Enabled := False;
+      COFINS.Value := 0;
+      COFINS.Enabled := False;
+      NAT_REC.Text := '';
+      NAT_REC.Enabled := False;
+    end;
+
+
+
+  if (CST_PIS.Text = '04') or
+     (CST_PIS.Text = '05') or
+     (CST_PIS.Text = '06') or
+     (CST_PIS.Text = '07') or
+     (CST_PIS.Text = '08') or
+     (CST_PIS.Text = '09') then
+     Begin
+       NAT_REC.Enabled    := True;
+       PIS.Value          := 0;
+       PIS.Enabled        := False;
+       COFINS.Value       := 0;
+       COFINS.Enabled     := False;
+       btnNat_Rec.Enabled := True;
+       Label71.Enabled    := True;
+       NAT_REC.SetFocus;
+     End;
+
+    if (CST_PIS.Text = '50') or
+       (CST_PIS.Text = '70') or
+       (CST_PIS.Text = '73') or
+       (CST_PIS.Text = '75') or
+       (CST_PIS.Text = '98') then
+     Begin
+      CST_PIS.Enabled := True;
+      MessageDlg( CST_PIS.Text + ' não é permitido para esta operação.', mtError, [mbOK], 0);
+      CST_PIS.Text := '';
+      PIS.Value := 0;
+      NAT_REC.Text := '';
+      COFINS.Value := 0;
+      CST_PIS.SetFocus;
+     End;
+
+  End;
+
+end;
+
+procedure TFrmProdutos_Light.CST_PIS_ENTRChange(Sender: TObject);
+begin
+  CST_COFINS_ENTR.Text := CST_PIS_ENTR.Text;
+
+  if btnEdit.Enabled = False then
+  begin
+    if CST_COFINS_ENTR.Text = '50' then
+  Begin
+    PIS_ENTR.Enabled    := True;
+    COFINS_ENTR.Enabled := True;
+    PIS_ENTR.SetFocus;
+  End;
+
+  if (CST_COFINS_ENTR.Text = '70') OR
+     (CST_COFINS_ENTR.Text = '73') OR
+     (CST_COFINS_ENTR.Text = '75') OR
+     (CST_COFINS_ENTR.Text = '98') then
+   Begin
+      PIS_ENTR.Text := '0';
+      COFINS_ENTR.Text := '0';
+      PIS_ENTR.Enabled := False;
+      COFINS_ENTR.Enabled := False;
+   End;
+
+   if
+       (CST_PIS_ENTR.Text = '01') or
+       (CST_PIS_ENTR.Text = '04') or
+       (CST_PIS_ENTR.Text = '05') or
+       (CST_PIS_ENTR.Text = '06') or
+       (CST_PIS_ENTR.Text = '07') or
+       (CST_PIS_ENTR.Text = '08') or
+       (CST_PIS_ENTR.Text = '49') or
+       (CST_PIS_ENTR.Text = '09') then
+   Begin
+      CST_PIS_ENTR.Enabled := True;
+      MessageDlg( CST_PIS_ENTR.Text + ' não é permitido para esta operação.', mtError, [mbOK], 0);
+      CST_PIS_ENTR.Text := '';
+      PIS_ENTR.Value := 0;
+      COFINS_ENTR.Value := 0;
+      CST_PIS_ENTR.SetFocus;
+   End;
+
+
+  end;
+
+end;
+
+
+
+procedure TFrmProdutos_Light.CTRL_SERIEChange(Sender: TObject);
+begin
+  if CTRL_SERIE.Text = 'SIM' then
+    TabSheet7.TabVisible := True
+  else
+    TabSheet7.TabVisible := False;
+
+
+end;
+
+procedure TFrmProdutos_Light.DBGrid1CellClick(Column: TColumn);
+begin
+Legenda_produtos;
+end;
+
+procedure TFrmProdutos_Light.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmProdutos_Light.DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+  DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+  OldBkMode: Integer;
+begin
+ if LeIni(Arq_Ini, 'Sistema', 'Legenda Estoque Mínimo') = 'True' then
+ Begin
+  if QTabela.FieldByName('QUANT_MINIMA').AsFloat >  QTabela.FieldByName('QUANTIDADE_C').AsFloat then
+    TDBGrid(Sender).Canvas.Font.Color := clRed
+
+  else if  QTabela.FieldByName('QUANT_MINIMA').AsFloat =  QTabela.FieldByName('QUANTIDADE_C').AsFloat then
+    TDBGrid(Sender).Canvas.Font.Color := clGreen;
+ End;
+
+ { Else if QTabela.FieldByName('QUANT_MINIMA').AsFloat >  QTabela.FieldByName('QUANTIDADE_C').AsFloat then
+    TDBGrid(Sender).Canvas.Font.Color := clBlue;
+
+  if gdSelected in State then
+  begin
+    with (Sender as TDBGrid).Canvas do
+    begin
+      Brush.Color :=  clInfoBk;
+
+      FillRect(Rect);
+
+      Brush.Color := clInfoBk;
+      OldBkMode   := SetBkMode(Handle, TRANSPARENT);
+
+      SetBkMode(Handle, OldBkMode);
+
+      Font.Style := [fsBold];
+    end;
+  end;}
+  TDBGrid(Sender).DefaultDrawDataCell(Rect, TDBGrid(Sender).Columns[DataCol].Field, State);
+
+
+end;
+
+procedure TFrmProdutos_Light.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+InputString: String;
+Codigo_Valido: Boolean;
+begin
+  Legenda_produtos;
+  
+  if (Key = Vk_F3) and (QTabela.FieldByName('STATUS').AsString = 'A') then
+  begin
+
+     if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'SIM' then
+     begin
+         if Application.MessageBox('Deseja realmente desativar o produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+        begin
+          ID := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('UPDATE PRODUTOS SET STATUS = :STATUS, DT_ATUALIZACAO = :DT_ATUALIZACAO,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+          IQuery.ParamByName('STATUS').AsString           := 'D';
+          IQuery.ParamByName('DT_ATUALIZACAO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          IQuery.ParamByName('PRODUTO_ID').AsInteger      := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+          IQuery.ParamByName('FUNCIONARIO_ID').AsInteger  := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+          IQuery.Prepare;
+          IQuery.ExecSql;
+
+
+
+          QTabela.Close;
+
+          QTabela.Prepare;
+          QTabela.Open;
+
+          QTabela.Locate('PRODUTO_ID', ID, [loCaseInsensitive]);
+        end;
+     end;
+
+
+
+  end;
+
+  if (Key = Vk_F4) and (QTabela.FieldByName('STATUS').AsString = 'D') then
+  begin
+
+     if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'SIM' then
+     begin
+        if Application.MessageBox('Deseja realmente reativar o produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+        begin
+          ID := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('UPDATE PRODUTOS SET STATUS = :STATUS, DT_ATUALIZACAO = :DT_ATUALIZACAO,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+          IQuery.ParamByName('STATUS').AsString           := 'A';
+          IQuery.ParamByName('DT_ATUALIZACAO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          IQuery.ParamByName('PRODUTO_ID').AsInteger      := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+          IQuery.ParamByName('FUNCIONARIO_ID').AsInteger  := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+          IQuery.Prepare;
+          IQuery.ExecSql;
+
+
+
+          QTabela.Close;
+
+          QTabela.Prepare;
+          QTabela.Open;
+
+          QTabela.Locate('PRODUTO_ID', ID, [loCaseInsensitive]);
+        end;
+     end;
+
+
+
+  end;
+
+  if Key = VK_F5 then
+  begin
+  Begin
+    InputString := InputBox('Localizar', 'Todos os Cód. de Barras:', '');
+
+    if InputString <> '' then
+    begin
+      Codigo_Valido := False;
+
+
+      try
+        if Digito(InputString) then
+          Codigo_Valido := True;
+      except
+        Codigo_Valido := False;
+      end;
+
+      if Codigo_Valido then
+      begin
+
+       if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE ((COD_BARRA LIKE :COD_BARRA) OR (COD_BARRA_AUX1 LIKE :COD_BARRA) OR (COD_BARRA_AUX2 LIKE :COD_BARRA) OR (COD_BARRA_AUX3 LIKE :COD_BARRA) OR (COD_BARRA_AUX4 LIKE :COD_BARRA) OR (COD_ORIGINAL LIKE :COD_ORIGINAL) OR ' +
+                           ' (REFERENCIA LIKE :REFERENCIA))'
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA OR COD_BARRA_AUX1 LIKE :COD_BARRA OR COD_BARRA_AUX2 LIKE :COD_BARRA OR COD_BARRA_AUX3 LIKE :COD_BARRA OR COD_BARRA_AUX4 LIKE :COD_BARRA OR COD_ORIGINAL LIKE :COD_ORIGINAL OR REFERENCIA LIKE :REFERENCIA) ' +
+                          'AND (STATUS = :STATUS)';
+      end
+      else
+      begin
+
+       if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1 OR COD_BARRA_AUX1 LIKE :COD_BARRA1 OR COD_BARRA_AUX2 LIKE :COD_BARRA1 OR COD_BARRA_AUX3 LIKE :COD_BARRA1 OR COD_BARRA_AUX4 LIKE :COD_BARRA1 OR COD_ORIGINAL LIKE :COD_ORIGINAL OR REFERENCIA LIKE :REFERENCIA)'
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1 OR COD_BARRA_AUX1 LIKE :COD_BARRA1 OR COD_BARRA_AUX2 LIKE :COD_BARRA1 OR COD_BARRA_AUX3 LIKE :COD_BARRA1 OR COD_BARRA_AUX4 LIKE :COD_BARRA1 OR COD_ORIGINAL LIKE :COD_ORIGINAL OR REFERENCIA LIKE :REFERENCIA) ' +
+                           'AND (STATUS = :STATUS)';
+      end;
+
+      CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY COD_BARRA';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      if Codigo_Valido then
+        QTabela.ParamByName('COD_BARRA').AsString := StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0)
+      else
+      Begin
+        QTabela.ParamByName('COD_BARRA1').AsString :=  '%' + InputString + '%';//  StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0); // Copy(InputString, 1, 11);
+      End;
+
+      QTabela.ParamByName('COD_ORIGINAL').AsString := '%' + Copy(InputString, 1, 18) + '%';
+      QTabela.ParamByName('REFERENCIA').AsString   := '%' + Copy(InputString, 1, 11) + '%';
+
+      if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'False' Then
+        QTabela.ParamByName('STATUS').AsString := 'A';
+
+      QTabela.Prepare;
+      QTabela.Open;
+      end;
+    end;
+  end;
+
+  if Key = VK_F9 then
+  begin
+  Begin
+    InputString := InputBox('Localizar', 'Cód. de Barras:', '');
+
+    if InputString <> '' then
+    begin
+      Codigo_Valido := False;
+
+      try
+        if Digito(InputString) then
+          Codigo_Valido := True;
+      except
+        Codigo_Valido := False;
+      end;
+
+
+
+      if Codigo_Valido then
+      begin
+        if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA) '
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA) AND (STATUS = :STATUS)';
+      end
+      else
+      begin
+        if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1 )'
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1)' +
+                           'AND (STATUS = :STATUS)';
+      end;
+
+      CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY COD_BARRA';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      if Codigo_Valido then
+        QTabela.ParamByName('COD_BARRA').AsString := StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0)
+      else
+      Begin
+        QTabela.ParamByName('COD_BARRA1').AsString :=  StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0); // Copy(InputString, 1, 11);
+      End;
+
+
+      if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'False' Then
+        QTabela.ParamByName('STATUS').AsString := 'A';
+
+      QTabela.Prepare;
+      QTabela.Open;
+      end;
+    end;
+  end;
+
+
+ if Key = VK_F8 then
+ begin
+
+  Begin
+    InputString := InputBox('Localizar', 'Código do Produto:', '');
+    if InputString <> '' then
+    Begin
+     InputString := UpperCase(InputString);
+      begin
+        if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE (PRODUTO_ID = :PRODUTO_ID )'
+        else
+          CmdSelectNull := 'WHERE (PRODUTO_ID = :PRODUTO_ID ) ' +
+                           'AND (STATUS = :STATUS)';
+
+       CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY PRODUTO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+
+      QTabela.ParamByName('PRODUTO_ID').AsInteger := StrToInt(InputString);
+
+
+       if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'False' Then
+        QTabela.ParamByName('STATUS').AsString := 'A';
+
+      QTabela.Prepare;
+      QTabela.Open;
+      end;
+    End;
+  End;
+ end;
+
+  if Key = VK_F6 then
+    Ficha_Produto(QTabela.FieldByName('PRODUTO_ID').AsInteger);
+
+  if Key = VK_F7 then
+  begin
+
+    InputString := InputBox('Localizar', 'Descrição:', '');
+
+
+    if InputString <> '' then
+    begin
+      InputString := UpperCase(InputString);
+
+      if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+        CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39  +  '%' + InputString + '%' + #39 + ')'
+      else
+        CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39  + '%' + InputString + '%'  + #39 + ') AND (STATUS = ' + #39 + 'A' + #39 + ')';
+
+      CmdSelectNull := CmdSelectNull + 'AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY DESCRICAO';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.Prepare;
+      QTabela.Open;
+    end;
+
+  end;
+end;
+
+
+procedure TFrmProdutos_Light.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  Manutencao.Show;
+
+  if Key = #32 then
+  Exibir_detalhes;
+
+end;
+
+procedure TFrmProdutos_Light.DBGrid1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+InputString: String;
+Codigo_Valido: Boolean;
+begin
+  Legenda_produtos;
+  if (Key = Vk_F3) and (QTabela.FieldByName('STATUS').AsString = 'A') then
+  begin
+
+     if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'SIM' then
+     begin
+        if Application.MessageBox('Deseja realmente desativar o produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+        begin
+          ID := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('UPDATE PRODUTOS SET STATUS = :STATUS, DT_ATUALIZACAO = :DT_ATUALIZACAO,FUNCIONARIO_ID =:FUNCIONARIO_ID');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+          IQuery.ParamByName('STATUS').AsString           := 'D';
+          IQuery.ParamByName('DT_ATUALIZACAO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          IQuery.ParamByName('PRODUTO_ID').AsInteger      := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+          IQuery.ParamByName('FUNCIONARIO_ID').AsInteger  := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+          IQuery.Prepare;
+          IQuery.ExecSql;
+
+
+
+          QTabela.Close;
+
+          QTabela.Prepare;
+          QTabela.Open;
+
+          QTabela.Locate('PRODUTO_ID', ID, [loCaseInsensitive]);
+        end;
+     end;
+
+
+  end;
+
+  if (Key = Vk_F4) and (QTabela.FieldByName('STATUS').AsString = 'D') then
+  begin
+
+     if FrmData.QAcesso.FieldByName('ALT_PRODUTOS').AsString = 'SIM' then
+     begin
+         if Application.MessageBox('Deseja realmente reativar o produto?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+        begin
+          ID := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+
+
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('UPDATE PRODUTOS SET STATUS = :STATUS, DT_ATUALIZACAO = :DT_ATUALIZACAO,FUNCIONARIO_ID = :FUNCIONARIO_ID');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+          IQuery.ParamByName('STATUS').AsString           := 'A';
+          IQuery.ParamByName('DT_ATUALIZACAO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+          IQuery.ParamByName('PRODUTO_ID').AsInteger      := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+          IQuery.ParamByName('FUNCIONARIO_ID').AsInteger  := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+
+          IQuery.Prepare;
+          IQuery.ExecSql;
+
+
+
+          QTabela.Close;
+
+          QTabela.Prepare;
+          QTabela.Open;
+
+          QTabela.Locate('PRODUTO_ID', ID, [loCaseInsensitive]);
+        end;
+     end;
+
+
+  end;
+
+  if Key = VK_F5 then
+  begin
+  Begin
+    InputString := InputBox('Localizar', 'Todos os Cód. de Barras:', '');
+
+    if InputString <> '' then
+    begin
+
+      Codigo_Valido := False;
+
+      try
+        if Digito(InputString) then
+          Codigo_Valido := True;
+      except
+        Codigo_Valido := False;
+      end;
+
+      if Codigo_Valido then
+      begin
+        if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE ((COD_BARRA LIKE :COD_BARRA) OR (COD_BARRA_AUX1 LIKE :COD_BARRA) OR (COD_BARRA_AUX2 LIKE :COD_BARRA) OR (COD_BARRA_AUX3 LIKE :COD_BARRA) OR (COD_BARRA_AUX4 LIKE :COD_BARRA) OR (COD_ORIGINAL LIKE :COD_ORIGINAL) OR ' +
+                           ' (REFERENCIA LIKE :REFERENCIA))'
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA OR COD_BARRA_AUX1 LIKE :COD_BARRA OR COD_BARRA_AUX2 LIKE :COD_BARRA OR COD_BARRA_AUX3 LIKE :COD_BARRA OR COD_BARRA_AUX4 LIKE :COD_BARRA OR COD_ORIGINAL LIKE :COD_ORIGINAL OR REFERENCIA LIKE :REFERENCIA) ' +
+                          'AND (STATUS = :STATUS)';
+      end
+      else
+      begin
+       if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1 OR COD_BARRA_AUX1 LIKE :COD_BARRA OR COD_BARRA_AUX2 LIKE :COD_BARRA OR COD_BARRA_AUX3 LIKE :COD_BARRA OR COD_BARRA_AUX4 LIKE :COD_BARRA OR COD_ORIGINAL LIKE :COD_ORIGINAL OR REFERENCIA LIKE :REFERENCIA)'
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1 OR COD_BARRA_AUX1 LIKE :COD_BARRA OR COD_BARRA_AUX2 LIKE :COD_BARRA OR COD_BARRA_AUX3 LIKE :COD_BARRA OR COD_BARRA_AUX4 LIKE :COD_BARRA OR COD_ORIGINAL LIKE :COD_ORIGINAL OR REFERENCIA LIKE :REFERENCIA) ' +
+                           'AND (STATUS = :STATUS)';
+      end;
+
+      CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY COD_BARRA';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      if Codigo_Valido then
+        QTabela.ParamByName('COD_BARRA').AsString := StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0)
+      else
+      Begin
+        QTabela.ParamByName('COD_BARRA1').AsString :=  StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0); // Copy(InputString, 1, 11);
+      End;
+
+      QTabela.ParamByName('COD_ORIGINAL').AsString := '%' + Copy(InputString, 1, 18) + '%';
+      QTabela.ParamByName('REFERENCIA').AsString   := '%' + Copy(InputString, 1, 11) + '%';
+
+      if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'False' Then
+        QTabela.ParamByName('STATUS').AsString := 'A';
+
+      QTabela.Prepare;
+      QTabela.Open;
+    end;
+  end;
+  end;
+
+  if Key = VK_F9 then
+  begin
+  Begin
+    InputString := InputBox('Localizar', 'Cód. de Barras:', '');
+
+    if InputString <> '' then
+    begin
+      Codigo_Valido := False;
+
+      try
+        if Digito(InputString) then
+          Codigo_Valido := True;
+      except
+        Codigo_Valido := False;
+      end;
+
+
+
+      if Codigo_Valido then
+      begin
+        if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA) '
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA) AND (STATUS = :STATUS)';
+      end
+      else
+      begin
+        if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1 )'
+        else
+          CmdSelectNull := 'WHERE (COD_BARRA LIKE :COD_BARRA1)' +
+                           'AND (STATUS = :STATUS)';
+      end;
+
+      CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY COD_BARRA';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      if Codigo_Valido then
+        QTabela.ParamByName('COD_BARRA').AsString := StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0)
+      else
+      Begin
+        QTabela.ParamByName('COD_BARRA1').AsString := StrZero(InputString,FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger,0); // Copy(InputString, 1, 11);
+      End;
+      showmessage(QTabela.Sql.Text);
+
+
+      if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'False' Then
+        QTabela.ParamByName('STATUS').AsString := 'A';
+
+      QTabela.Prepare;
+      QTabela.Open;
+    end;
+  end;
+  end;
+
+
+  if Key = VK_F8 then
+  begin
+    Begin
+      InputString := InputBox('Localizar', 'Código do Produto:', '');
+      if InputString <> '' then
+        begin
+          if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+            CmdSelectNull := 'WHERE (PRODUTO_ID = :PRODUTO_ID )'
+          else
+            CmdSelectNull := 'WHERE (PRODUTO_ID = :PRODUTO_ID ) ' +
+                             'AND (STATUS = :STATUS)';
+
+         CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+        if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+          CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+        CmdOrderBy := 'ORDER BY PRODUTO_ID';
+
+        QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+
+        QTabela.ParamByName('PRODUTO_ID').AsInteger := StrToInt(InputString);
+
+
+        if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'False' Then
+          QTabela.ParamByName('STATUS').AsString := 'A';
+
+        QTabela.Prepare;
+        QTabela.Open;
+        end;
+
+    end;
+
+  if Key = VK_F6 then
+    Ficha_Produto(QTabela.FieldByName('PRODUTO_ID').AsInteger);
+
+  if Key = VK_F7 then
+   Begin
+    InputString := InputBox('Localizar', 'Descrição:', '');
+
+    if InputString <> '' then
+    begin
+     InputString :=  UpperCase(InputString);
+
+     if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' Then
+        CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39  + '%' + InputString + '%'  + #39 + ')'
+      else
+        CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39  + '%' + InputString + '%' + #39 + ') AND (STATUS = ' + #39 + 'A' + #39 + ')';
+
+      CmdSelectNull := CmdSelectNull + 'AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+      CmdOrderBy := 'ORDER BY DESCRICAO';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.Prepare;
+      QTabela.Open;
+    end;
+   End;
+  end;
+end;
+
+procedure TFrmProdutos_Light.DBGrid1TitleClick(Column: TColumn);
+begin
+
+   CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+   QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+   QTabela.Prepare;
+   QTabela.Open;
+
+
+end;
+
+procedure TFrmProdutos_Light.DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = COD_GEN) then
+    btnGeneroClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_PIS) then
+    btnCst_PisClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_PIS_ENTR) then
+    btnCst_Pis_EntrClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_COFINS) then
+    btnCst_CofinsClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CST_COFINS_ENTR) then
+    btnCst_Cofins_EntrClick(Self);
+
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if (Key = Vk_F7) and (Sender = NCM) then
+    btnNCMClick(Self);
+
+  if (Key = Vk_F7) and (Sender = NAT_REC) then
+    btnNat_RecClick(Self);
+
+  if (Key = Vk_F7) and (Sender = UNIDADE_VENDA) then
+    btn_embvdClick(Self);
+
+  if (Key = Vk_F7) and (Sender = UNIDADE) then
+    btn_embcpClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CEST) then
+    btnCESTClick(Self);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmProdutos_Light.FAMILIA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Família');
+end;
+
+procedure TFrmProdutos_Light.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  if LeIni(Arq_Ini, 'Sistema', 'Exibir Detalhe Produto') = 'True' then
+  FrmDetalhes_Produto.Close;
+
+  Action := caFree;
+end;
+
+procedure TFrmProdutos_Light.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmProdutos_Light.FormCreate(Sender: TObject);
+begin
+  DBGrid1.Columns[0].Width  := 59;
+  DBGrid1.Columns[1].Width  := 89;
+  DBGrid1.Columns[2].Width  := 53;
+  DBGrid1.Columns[3].Width  := 260;
+  DBGrid1.Columns[4].Width  := 53;
+  DBGrid1.Columns[5].Width  := 75;
+  DBGrid1.Columns[6].Width  := 75;
+  DBGrid1.Columns[7].Width  := 75;
+  DBGrid1.Columns[8].Width  := 43;
+  DBGrid1.Columns[9].Width  := 60;
+  DBGrid1.Columns[10].Width  := 60;
+  DBGrid1.Columns[11].Width := 60;
+  DBGrid1.Columns[12].Width := 34;
+
+
+  //Grid_Lote.Columns[0].Width := 213;
+  //Grid_Lote.Columns[1].Width := 80;
+  //Grid_Lote.Columns[2].Width := 80;
+  //Grid_Lote.Columns[3].Width := 85;
+
+  Grid_Producao.Columns[0].Width := 75;
+  Grid_Producao.Columns[1].Width := 299;
+  Grid_Producao.Columns[2].Width := 85;
+
+  Grid_Serie.Columns[0].Width := 223;
+  Grid_Serie.Columns[1].Width := 70;
+  Grid_Serie.Columns[2].Width := 80;
+  Grid_Serie.Columns[3].Width := 85;
+
+
+  if FrmData.QAcesso.FieldByName('TPCTB').AsString = '3' then
+  begin
+    DBGrid1.Columns[6].FieldName     := 'QUANTIDADE_C';
+    DBGrid1.Columns[7].FieldName     := 'QUANTIDADE_G';
+    DBGrid1.Columns[6].Title.Caption := 'Quantidade';
+    DBGrid1.Columns[7].Title.Caption := 'Ped. Compra';
+  end
+  else
+  begin
+    DBGrid1.Columns[6].FieldName     := 'PRECO_PRAZO';
+    DBGrid1.Columns[7].FieldName     := 'QUANTIDADE_C';
+    DBGrid1.Columns[6].Title.Caption := 'Pr. Prazo';
+    DBGrid1.Columns[7].Title.Caption := 'Quantidade';
+  end;
+
+  if FrmPrincipal.Config.FieldByName('EXIBE_FOTO').AsString = 'False' then
+  Begin
+    Foto.Visible   := False;
+    Shape1.Visible := False;
+    btn_load_image.Visible := False;
+    DBText5.Width := 250;
+  End
+  else
+  Begin
+    Foto.Visible := True;
+    Shape1.Visible := True;
+    btn_load_image.Visible := True;
+  End;
+
+  if UpperCase(DecryptMsg(FrmPrincipal.Config.FieldByName('VERSAO').AsString, 65)) = 'LIGHT' then
+  begin
+
+    DBGrid1.Columns[2].Visible := False;
+    DBGrid1.Columns[6].Visible := False;
+    DBGrid1.Columns[7].Visible := False;
+    DBGrid1.Columns[9].Visible := False;
+    DBGrid1.Columns[10].Visible := False;
+    DBGrid1.Columns[11].Visible := False;
+
+    TabSheet3.TabVisible  := False;
+    TabSheet4.TabVisible  := False;
+    TabSheet1.TabVisible  := False;
+    TabSheet6.TabVisible  := False;
+    TabSheet7.TabVisible  := False;
+    TabSheet11.TabVisible := False;
+    TabSheet5.TabVisible  := False;
+    Similar.TabVisible    := False;
+    Inventario.TabVisible := False;
+
+  end;
+
+
+  Begin
+  CmdSelect := QTabela.Sql.Text;
+
+    if FrmPrincipal.Config.FieldByName('MOSTRAR_CADASTROS').AsString = 'True' then
+    begin
+      if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString  = 'True' then
+          CmdSelectNull := 'WHERE (PRODUTO_ID IS NOT NULL)'
+      else
+          CmdSelectNull := 'WHERE (PRODUTO_ID IS NOT NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')'
+    end
+    else
+    begin
+       if FrmData.QAcesso.FieldByName('DESATIVADOS').AsString = 'True' then
+          CmdSelectNull := 'WHERE (PRODUTO_ID IS NULL)'
+       else
+          CmdSelectNull := 'WHERE (PRODUTO_ID IS NULL) AND (STATUS = ' + #39 + 'A' + #39 + ')';
+    end;
+
+   CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
+
+  if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+  CmdSelectNull := CmdSelectNull + ' AND (LOCALIZACAO_ID = ' + LeIni(Arq_Ini, 'Sistema', 'Localização') + ')';
+
+  CmdOrderBy := 'ORDER BY DESCRICAO';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  if FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Combustíveis' then
+    TabSheet11.TabVisible := True
+  else
+    TabSheet11.TabVisible := False;
+
+  if FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'SoftBeer' then
+  Begin
+  label18.Caption  := 'Pr.Varejo/P.MD';
+  label79.Caption  := 'Pr.Prazo/P.PQ';
+  PRECO_PRAZO.Name := 'PRECO_SUGERIDO';
+  Label17.Caption  := 'Pr.Atacado/P.GD';
+  End;
+
+  if FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro' then
+  Label15.Caption := 'Tamanho';
+
+  if LeIni(Arq_Ini, 'Sistema', 'Legenda Estoque Mínimo') = 'True' then
+  LegendaBox.Visible := True
+  Else
+  LegendaBox.Visible := False;
+
+  Consulta.Show;
+
+  PageControl2.ActivePage := TabSheet2;
+
+ //  if (LeIni(Arq_Ini, 'Sistema', 'Exibir Detalhe Produto') = 'True') Then
+ // FrmDetalhes_Produto.Show;
+
+  End;
+
+end;
+
+procedure TFrmProdutos_Light.FormMouseEnter(Sender: TObject);
+begin
+//FrmPrincipal.Gadget.Width := 1;
+end;
+
+procedure TFrmProdutos_Light.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+
+end;
+
+procedure TFrmProdutos_Light.Grid_FabricanteColExit(Sender: TObject);
+begin
+  if QFabricante.State in [dsInsert, dsEdit] then
+  begin
+    if Grid_Fabricante.SelectedField.FieldName = 'fornecedor_id' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM FORNECEDORES');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(FORNECEDOR_ID = :FORNECEDOR_ID)');
+      IQuery.Sql.Add('AND (STATUS = :STATUS)');
+
+      IQuery.ParamByName('FORNECEDOR_ID').AsInteger  := QFabricante.FieldByName('FORNECEDOR_ID').AsInteger;
+      IQuery.ParamByName('STATUS').AsString          := 'A';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        QFabricante.FieldByName('NOME').AsString := '';
+
+        Application.MessageBox('Fornecedor/Fabricante não localizado', PChar(Msg_Title), mb_IconStop);
+        Grid_Producao.SelectedIndex := 0;
+      end
+      else
+        QFabricante.FieldByName('NOME').AsString := IQuery.FieldByName('NOME').AsString;
+        End;
+    end;
+end;
+
+procedure TFrmProdutos_Light.Grid_FabricanteKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F4) and (QFabricante.State = dsBrowse) and (not QFabricante.IsEmpty) then
+    QFabricante.Delete;
+
+  if (Key = Vk_F7)  and (Grid_Fabricante.SelectedField.FieldName = 'fornecedor_id') and (QFabricante.State in [dsInsert, dsEdit]) then
+    QFabricante.FieldByName('FORNECEDOR_ID').AsInteger := GetConsulta('FORNECEDORES', StrToInt(EMPRESA_ID.Text), 0, QFabricante.FieldByName('FORNECEDOR_ID').AsInteger);
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QFabricante.State in [dsInsert, dsEdit]) then
+    Key := 0;
+
+end;
+
+procedure TFrmProdutos_Light.Grid_FabricanteKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmProdutos_Light.Grid_LoteKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F4) and (QControlados.State = dsBrowse) and (not QControlados.IsEmpty) then
+    QControlados.Delete;
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QControlados.State in [dsInsert, dsEdit]) then
+    Key := 0;
+end;
+
+procedure TFrmProdutos_Light.Grid_LoteKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmProdutos_Light.Grid_ProducaoColExit(Sender: TObject);
+begin
+  if QProducao.State in [dsInsert, dsEdit] then
+  begin
+    if Grid_Producao.SelectedField.FieldName = 'insumo_id' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+      IQuery.Sql.Add('AND (STATUS = :STATUS)');
+
+      IQuery.ParamByName('PRODUTO_ID').AsInteger := QProducao.FieldByName('INSUMO_ID').AsInteger;
+      IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+      IQuery.ParamByName('STATUS').AsString      := 'A';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        QProducao.FieldByName('DESCRICAO').AsString := '';
+
+        Application.MessageBox('Insumo inexistente', PChar(Msg_Title), mb_IconStop);
+        Grid_Producao.SelectedIndex := 0;
+      end
+      else
+        Begin
+        if QProducao.FieldByName('INSUMO_ID').AsInteger = QTabela.FieldByName('PRODUTO_ID').AsInteger then
+        Application.MessageBox('Código do Insumo é o mesmo do produto principal favor verificar.', PChar(Msg_Title), mb_IconStop)
+        Else
+        QProducao.FieldByName('DESCRICAO').AsString := IQuery.FieldByName('DESCRICAO').AsString;
+        End;
+    end;
+  end;
+end;
+
+procedure TFrmProdutos_Light.Grid_ProducaoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F4) and (QProducao.State = dsBrowse) and (not QProducao.IsEmpty) then
+    QProducao.Delete;
+
+  if (Key = Vk_F7) and (Grid_Producao.SelectedField.FieldName = 'insumo_id') and (QProducao.State in [dsInsert, dsEdit]) then
+    QProducao.FieldByName('INSUMO_ID').AsInteger := GetConsulta('ESTOQUE', StrToInt(EMPRESA_ID.Text), 0, QProducao.FieldByName('INSUMO_ID').AsInteger);
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QProducao.State in [dsInsert, dsEdit]) then
+    Key := 0;
+end;
+
+procedure TFrmProdutos_Light.Grid_ProducaoKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmProdutos_Light.Grid_SerieKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+InputString: String;
+begin
+  if (Key = Vk_F4) and (QSerie.State = dsBrowse) and (not QSerie.IsEmpty) then
+    QSerie.Delete;
+
+  if (Key = Vk_F7) and (QSerie.State = dsBrowse) and (not QSerie.IsEmpty) then
+  begin
+    InputString := InputBox('Localizar', 'Num. de Série:', '');
+
+    if InputString <> '' then
+      QSerie.Locate('NUM_SERIE', InputString, [loCaseInsensitive]);
+  end;
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+  if (Key = Vk_F10) and (QSerie.State = dsBrowse) and (not QSerie.IsEmpty) then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT PRODUTOS.PRODUTO_ID, PRODUTOS.DESCRICAO, TRANSITENS_SERIE.NUM_SERIE, TRANSACOES.TRANSACAO_ID, TRANSACOES.DT_TRANS, TRANSACOES.HISTORICO, CASE');
+    IQuery.Sql.Add('WHEN TRANSACOES.CONDUTA = :COND_CPR THEN TRANSACOES.NUM_DOC END ENTRADA, CASE');
+    IQuery.Sql.Add('WHEN TRANSACOES.CONDUTA = :COND_VDA THEN TRANSACOES.NUM_DOC END SAIDA');
+    IQuery.Sql.Add('FROM PRODUTOS');
+    IQuery.Sql.Add('INNER JOIN TRANSITENS_SERIE');
+    IQuery.Sql.Add('ON (PRODUTOS.PRODUTO_ID = TRANSITENS_SERIE.PRODUTO_ID)');
+    IQuery.Sql.Add('INNER JOIN TRANSACOES');
+    IQuery.Sql.Add('ON (TRANSITENS_SERIE.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PRODUTOS.PRODUTO_ID = :PRODUTO_ID)');
+    IQuery.Sql.Add('AND (TRANSITENS_SERIE.NUM_SERIE = :SERIE)');
+    IQuery.Sql.Add('ORDER BY TRANSITENS_SERIE.NUM_SERIE, TRANSACOES.TRANSACAO_ID, TRANSACOES.DT_TRANS');
+
+    IQuery.ParamByName('COND_CPR').AsString    := '02';
+    IQuery.ParamByName('COND_VDA').AsString    := '01';
+    IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+    IQuery.ParamByName('SERIE').AsString       := QSerie.FieldByName('NUM_SERIE').AsString;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+      Rel_Series.PreviewModal;
+  end;
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QSerie.State in [dsInsert, dsEdit]) then
+    Key := 0;
+end;
+
+procedure TFrmProdutos_Light.Grid_SerieKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmProdutos_Light.Grid_SimilarColExit(Sender: TObject);
+begin
+if QSimilar.State in [dsInsert, dsEdit] then
+  begin
+    if Grid_SIMILAR.SelectedField.FieldName = 'similar_id' then
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM SIMILAR_PRODUTOS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      IQuery.Sql.Add('AND (SIMILAR_ID = :SIMILAR_ID)');
+
+
+      IQuery.ParamByName('PRODUTO_ID').AsInteger := QTabela.FieldByName('PRODUTO_ID').AsInteger;
+      IQuery.ParamByName('SIMILAR_ID').AsInteger := QSimilar.FieldByName('SIMILAR_ID').AsInteger;
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if NOT IQuery.IsEmpty then
+       begin
+        Application.MessageBox('Produto similar já lançado', PChar(Msg_Title), mb_IconStop);
+        Grid_Producao.SelectedIndex := 0;
+        Abort;
+       end;
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+      IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+      IQuery.Sql.Add('AND (STATUS = :STATUS)');
+
+      IQuery.ParamByName('PRODUTO_ID').AsInteger := QSimilar.FieldByName('SIMILAR_ID').AsInteger;
+      IQuery.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+      IQuery.ParamByName('STATUS').AsString      := 'A';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      if IQuery.IsEmpty then
+      begin
+        QSimilar.FieldByName('DESCRICAO').AsString := '';
+
+        Application.MessageBox('Similar inexistente', PChar(Msg_Title), mb_IconStop);
+        Grid_Producao.SelectedIndex := 0;
+      end
+      else
+        Begin
+          if QSimilar.FieldByName('SIMILAR_ID').AsInteger = QTabela.FieldByName('PRODUTO_ID').AsInteger then
+          Application.MessageBox('Código do Similar é o mesmo do produto principal favor verificar.', PChar(Msg_Title), mb_IconStop)
+          Else
+          Begin
+
+          QSimilar.FieldByName('DESCRICAO').AsString := IQuery.FieldByName('DESCRICAO').AsString;
+          QSimilar.FieldByName('MODELO').AsString    := IQuery.FieldByName('MODELO_POSICAO').AsString;
+          QSimilar.FieldByName('MARCA').AsString     := IQuery.FieldByName('MARCA').AsString;
+          QSimilar.FieldByName('QUANTIDADE').AsFloat := IQuery.FieldByName('QUANTIDADE_C').AsFloat;
+          End;
+        End;
+    end;
+  end;
+end;
+
+procedure TFrmProdutos_Light.Grid_SimilarKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+if (Key = Vk_F4) and (QSimilar.State = dsBrowse) and (not QSimilar.IsEmpty) then
+    QSimilar.Delete;
+
+  if (Key = Vk_F7) and (Grid_Similar.SelectedField.FieldName = 'similar_id') and (QSimilar.State in [dsInsert, dsEdit]) then
+    QSimilar.FieldByName('similar_id').AsInteger := GetConsulta('ESTOQUE', StrToInt(EMPRESA_ID.Text), 0, QSimilar.FieldByName('similar_id').AsInteger);
+
+  if Key = VK_F9 then
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QSimilar.State in [dsInsert, dsEdit]) then
+    Key := 0;
+
+end;
+
+procedure TFrmProdutos_Light.Grid_SimilarKeyPress(Sender: TObject; var Key: Char);
+begin
+if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmProdutos_Light.GRUPO_IDExit(Sender: TObject);
+begin
+  DetailSearch('Grupo');
+end;
+
+end.
+
+
+
+
+

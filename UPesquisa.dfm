@@ -1,0 +1,274 @@
+object FrmPesquisa: TFrmPesquisa
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsSingle
+  Caption = 'Pesquisa'
+  ClientHeight = 273
+  ClientWidth = 538
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  OldCreateOrder = False
+  Position = poScreenCenter
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 226
+    Top = 9
+    Width = 81
+    Height = 13
+    Caption = 'Crit'#233'rio de Busca'
+  end
+  object Label2: TLabel
+    Left = 6
+    Top = 9
+    Width = 94
+    Height = 13
+    Caption = 'Campos Dispon'#237'veis'
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 232
+    Width = 538
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 2
+    object btnConfirma: TButton
+      Left = 379
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&OK'
+      Font.Charset = ANSI_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -11
+      Font.Name = 'Tahoma'
+      Font.Style = []
+      ParentFont = False
+      TabOrder = 0
+      OnClick = btnConfirmaClick
+    end
+    object btnRetorna: TBitBtn
+      Left = 459
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Retorna'
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+        F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+        000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+        337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+        45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+        3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+        F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+        000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+        337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+        4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+        7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+        333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+        0000}
+      ModalResult = 2
+      NumGlyphs = 2
+      TabOrder = 1
+    end
+  end
+  object GroupBox2: TGroupBox
+    Left = 226
+    Top = 32
+    Width = 306
+    Height = 153
+    Caption = 'GroupBox2'
+    TabOrder = 1
+    object Condicao: TComboBox
+      Left = 6
+      Top = 24
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      DropDownCount = 12
+      TabOrder = 0
+      OnChange = CondicaoChange
+      OnKeyDown = CondicaoKeyDown
+      Items.Strings = (
+        #233' igual a'
+        #233' diferente de'
+        #233' maior do que'
+        #233' maior ou igual a'
+        #233' menor do que'
+        #233' menor ou igual a'
+        'come'#231'a com'
+        'n'#227'o come'#231'a com'
+        'termina com'
+        'n'#227'o termina com'
+        'cont'#233'm'
+        'n'#227'o cont'#233'm')
+    end
+    object Txt_Sql: TMaskEdit
+      Left = 163
+      Top = 24
+      Width = 137
+      Height = 21
+      TabOrder = 2
+      Text = ''
+      OnChange = CondicaoChange
+      OnKeyDown = Txt_SqlKeyDown
+    end
+    object Dt: TDateEdit
+      Left = 163
+      Top = 24
+      Width = 89
+      Height = 21
+      DialogTitle = 'Selecione uma Data'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      NumGlyphs = 2
+      ParentFont = False
+      StartOfWeek = Sun
+      TabOrder = 1
+      OnChange = DtChange
+      OnEnter = DtEnter
+      OnKeyDown = DtKeyDown
+    end
+    object CheckBox1: TCheckBox
+      Left = 104
+      Top = 68
+      Width = 41
+      Height = 17
+      Caption = '&e'
+      Checked = True
+      State = cbChecked
+      TabOrder = 3
+      OnClick = CheckBox1Click
+      OnKeyDown = DtKeyDown
+    end
+    object CheckBox2: TCheckBox
+      Left = 176
+      Top = 68
+      Width = 41
+      Height = 17
+      Caption = '&ou'
+      TabOrder = 4
+      OnClick = CheckBox2Click
+      OnKeyDown = DtKeyDown
+    end
+    object Condicao2: TComboBox
+      Left = 6
+      Top = 120
+      Width = 145
+      Height = 21
+      Style = csDropDownList
+      DropDownCount = 12
+      TabOrder = 5
+      OnChange = CondicaoChange
+      OnKeyDown = CondicaoKeyDown
+      Items.Strings = (
+        #233' igual a'
+        #233' diferente de'
+        #233' maior do que'
+        #233' maior ou igual a'
+        #233' menor do que'
+        #233' menor ou igual a'
+        'come'#231'a com'
+        'n'#227'o come'#231'a com'
+        'termina com'
+        'n'#227'o termina com'
+        'cont'#233'm'
+        'n'#227'o cont'#233'm')
+    end
+    object Txt_Sql2: TMaskEdit
+      Left = 163
+      Top = 120
+      Width = 137
+      Height = 21
+      TabOrder = 7
+      Text = ''
+      OnKeyDown = Txt_Sql2KeyDown
+    end
+    object Dt2: TDateEdit
+      Left = 163
+      Top = 120
+      Width = 89
+      Height = 21
+      DialogTitle = 'Selecione uma Data'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clBlack
+      Font.Height = -11
+      Font.Name = 'MS Sans Serif'
+      Font.Style = []
+      NumGlyphs = 2
+      ParentFont = False
+      StartOfWeek = Sun
+      TabOrder = 6
+      OnChange = Dt2Change
+      OnEnter = DtEnter
+      OnKeyDown = DtKeyDown
+    end
+  end
+  object DBGrid1: TDBGrid
+    Left = 8
+    Top = 28
+    Width = 204
+    Height = 153
+    Color = clInfoBk
+    Ctl3D = True
+    DataSource = DataTabela
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    Options = [dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+    ParentCtl3D = False
+    ParentFont = False
+    ParentShowHint = False
+    ReadOnly = True
+    ShowHint = True
+    TabOrder = 0
+    TitleFont.Charset = ANSI_CHARSET
+    TitleFont.Color = clWindowText
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnCellClick = DBGrid1CellClick
+    OnDblClick = DBGrid1DblClick
+    OnKeyDown = DBGrid1KeyUp
+    OnKeyPress = DBGrid1KeyPress
+    OnKeyUp = DBGrid1KeyUp
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'DESCRICAO'
+        Title.Caption = 'Nome do Campo'
+        Width = 184
+        Visible = True
+      end>
+  end
+  object DataTabela: TDataSource
+    AutoEdit = False
+    DataSet = QTabela
+    Left = 64
+    Top = 216
+  end
+  object QTabela: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 112
+    Top = 216
+  end
+end
