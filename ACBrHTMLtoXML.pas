@@ -3,7 +3,7 @@ unit ACBrHTMLtoXML;
 
 interface
 
-uses Forms, SysUtils, Math, pcnNFeW, pcnAuxiliar, pcnConversao,pcnConversaoNfe, ACBrUtil,ACBrNFe.Classes ,
+uses Forms, SysUtils, Math, pcnAuxiliar, pcnConversao,pcnConversaoNfe, ACBrUtil,ACBrNFe.Classes ,pcnnfew,
   Classes, Dialogs;
 
 function GerarXML(Arquivo : AnsiString) : String;

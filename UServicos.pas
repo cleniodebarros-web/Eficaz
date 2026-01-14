@@ -8,7 +8,8 @@ uses
   DB, IBCustomDataSet, IBQuery, Mask, Buttons, rxToolEdit,
   rxCurrEdit, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
-  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.DBCtrls;
 
 type
   TFrmServicos = class(TForm)
@@ -88,6 +89,25 @@ type
     nat_rec: TEdit;
     Label10: TLabel;
     DESC_MAXIMO: TCurrencyEdit;
+    TabSheet1: TTabSheet;
+    Label106: TLabel;
+    Label107: TLabel;
+    Label109: TLabel;
+    Aliquota_Ibs_Uf: TRxCalcEdit;
+    cst_cbs_ibs: TCurrencyEdit;
+    Tributo_id_cbs_ibs: TCurrencyEdit;
+    Label108: TLabel;
+    Label110: TLabel;
+    Aliquota_Ibs_Munic: TRxCalcEdit;
+    ClassTributaria: TEdit;
+    Label104: TLabel;
+    Label105: TLabel;
+    REDUCAO_CBS_IBS: TRxCalcEdit;
+    ALIQUOTA_CBS: TRxCalcEdit;
+    btntributonovo: TSpeedButton;
+    DBText9: TDBText;
+    QCbsIbs: TFDQuery;
+    DataCbsIbs: TDataSource;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -123,6 +143,8 @@ type
     procedure CST_COFINSExit(Sender: TObject);
     procedure QTabelaAfterOpen(DataSet: TDataSet);
     procedure AlfabetoClick(Sender: TObject);
+    procedure Tributo_id_cbs_ibsExit(Sender: TObject);
+    procedure btntributonovoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -147,7 +169,7 @@ var
 implementation
 
 uses
-  UPrincipal, UData, UConsulta_NCM, UConsulta_CST, UConsulta_Contribuicao;
+  UPrincipal, UData, UConsulta_NCM, UConsulta_CST, UConsulta_Contribuicao,UConsulta;
 
 {$R *.dfm}
 
@@ -772,6 +794,37 @@ begin
 
     end;
   end;
+
+
+    QCbsIbs.Close;
+
+    QCbsIbs.ParamByName('COD_CLASSTRIB_ID').AsInteger := StrToInt(TRIBUTO_ID_CBS_IBS.Text);
+
+    QCbsIbs.Prepare;
+    QCbsIbs.Open;
+
+end;
+
+procedure TFrmServicos.Tributo_id_cbs_ibsExit(Sender: TObject);
+begin
+    QCbsIbs.Close;
+
+    QCbsIbs.ParamByName('COD_CLASSTRIB_ID').AsInteger := StrToInt(TRIBUTO_ID_CBS_IBS.Text);
+
+    QCbsIbs.Prepare;
+    QCbsIbs.Open;
+
+    if not QCbsIbs.IsEmpty then
+    Begin
+      //ALIQUOTA_ICMS.Value       := QCbsIbs.FieldByName('ALIQUOTA_ICMS').AsFloat;
+      cst_cbs_ibs.text          := IntToStr(QCbsIbs.FieldByName('cst_cbs_ibs').AsInteger);
+      classTributaria.Text      := (QCbsIbs.FieldByName('ClasseTrib').AsString);
+      Aliquota_cbs.value        := QCbsIbs.FieldByName('aliq_cbs').AsFloat;
+      Aliquota_ibs_uf.value     := QCbsIbs.FieldByName('aliq_ibsuf').AsFloat;
+      Aliquota_ibs_munic.value  := QCbsIbs.FieldByName('aliq_ibsmunic').AsFloat;
+      Reducao_cbs_ibs.value     := QCbsIbs.FieldByName('preducao').AsFloat;
+
+    End;
 end;
 
 procedure TFrmServicos.btnCst_CofinsClick(Sender: TObject);
@@ -998,6 +1051,16 @@ begin
     Operacao := '';
     Consulta.TabVisible := True;
   end;
+end;
+
+procedure TFrmServicos.btntributonovoClick(Sender: TObject);
+begin
+  try
+    TRIBUTO_ID_CBS_IBS.Value := GetConsulta('CLASSE_TRIBUTARIA', 0, 0, StrToInt(TRIBUTO_ID_CBS_IBS.Text));
+  except
+    TRIBUTO_ID_CBS_IBS.Value := GetConsulta('CLASSE_TRIBUTARIA', 0, 0, 0);
+  end;
+
 end;
 
 procedure TFrmServicos.CST_COFINSExit(Sender: TObject);

@@ -327,7 +327,7 @@ object FrmRel_Fechamento_Caixa: TFrmRel_Fechamento_Caixa
     Top = 168
     Width = 232
     Height = 17
-    Caption = 'Incluir Recebimentos nos totais do relat'#243'rio'
+    Caption = 'Incluir Recebimentos detalhados'
     TabOrder = 10
   end
   object chk_finalizadora: TCheckBox

@@ -1,0 +1,545 @@
+unit UDownload;
+
+interface
+
+uses
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, Buttons, ComCtrls,
+  ACBrBase, ACBrDownload, ACBrDownloadClass, httpsend, blcksock, ExtCtrls, Windows,
+  IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
+  IdExplicitTLSClientServerBase,System.Zip ,IdFTP, FireDAC.Stan.Intf,
+  FireDAC.Comp.Script;
+
+type
+  TFrmDownload = class(TForm)
+    bDownload: TBitBtn;
+    bStop: TBitBtn;
+    cbxBufferSize: TComboBox;
+    edURL: TComboBox;
+    edFile: TEdit;
+    Label1: TLabel;
+    lConnectionInfo: TLabel;
+    lFile: TLabel;
+    ProgressBar1: TProgressBar;
+    Label2: TLabel;
+    edtProt: TComboBox;
+    GroupBox1: TGroupBox;
+    Label3: TLabel;
+    edtHost: TEdit;
+    Label4: TLabel;
+    edtPort: TEdit;
+    Label5: TLabel;
+    edtUser: TEdit;
+    Label6: TLabel;
+    edtPass: TEdit;
+    GroupBox2: TGroupBox;
+    Label7: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    edtProxyHost: TEdit;
+    edtProxyPort: TEdit;
+    edtProxyUser: TEdit;
+    edtProxyPass: TEdit;
+    fACBrDownload: TACBrDownload;
+    CheckBox1: TCheckBox;
+    btnRetorna: TBitBtn;
+    Bevel1: TBevel;
+    edArq: TEdit;
+    IdFTP1: TIdFTP;
+    Label11: TLabel;
+    procedure bStopClick(Sender: TObject);
+    procedure bDownloadClick(Sender: TObject);
+    procedure bPauseClick(Sender: TObject);
+    procedure cbxBufferSizeChange(Sender: TObject);
+    procedure edtProtChange(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure HookMonitor(Sender: TObject; const BytesToDownload,
+      BytesDownloaded: Integer; const AverageSpeed: Double; const Hour, Min,
+      Sec: Word);
+    procedure HookStatus(Sender: TObject; Reason: THookSocketReason;
+      const BytesToDownload, BytesDownloaded: Integer);
+    procedure fACBrDownloadAfterDownload(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure IdFTP1Work(ASender: TObject; AWorkMode: TWorkMode;
+      AWorkCount: Int64);
+    procedure IdFTP1WorkBegin(ASender: TObject; AWorkMode: TWorkMode;
+      AWorkCountMax: Int64);
+    procedure IdFTP1AfterGet(ASender: TObject; AStream: TStream);
+  private
+    { private declarations }
+  public
+    { public declarations }
+  end;
+
+var
+  FrmDownload: TFrmDownload;
+
+implementation
+
+uses
+  UPrincipal, UAguarde;
+
+{$R *.dfm}
+
+{ TForm1 }
+
+procedure TFrmDownload.bDownloadClick(Sender: TObject);
+var
+  ZipFile: TZipFile;
+begin
+
+  IdFTP1.Disconnect();
+
+  IdFTP1.Host     := 'ftp.eficazcotacoes.com.br';//DecryptMsg(LeIni(Arq_Ini, 'Atualização', 'Host'),3);
+  IdFTP1.Port     :=  21;//StrToInt(LeIni(Arq_Ini, 'Atualização', 'Porta'));
+  IdFTP1.Username := 'eficazcotacoes3';//DecryptMsg(LeIni(Arq_Ini, 'Atualização', 'Usuario'),3);
+  IdFTP1.Password := 'Efic@z_%%4695$$'; //DecryptMsg(LeIni(Arq_Ini, 'Atualização', 'Senha'),3);
+  IdFTP1.Passive  := True;
+
+  //IdFTP1. RecvBufferSize := 8192;
+  try
+
+  IdFTP1.Connect;
+
+  if LeIni(Arq_Ini, 'Atualização', 'Diretorio') <> '' Then
+  IdFTP1.ChangeDir(LeIni(Arq_Ini, 'Atualização', 'Diretorio'));
+
+  except
+  on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro ao conectar:' + #13 + 'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+  end;
+
+  try
+   if Tipo_Atualizacao = 0 then
+   Begin
+   DeleteFile(Pchar(edFile.Text));
+   DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Eficaz.exe'));
+   End
+   Else if Tipo_Atualizacao = 1 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Schemas.zip'));
+    RemoveDirectory(Pchar(ExtractFilePath(ParamStr(0)) + '/Schemas'));
+   end
+   Else if Tipo_Atualizacao = 2 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Orcamento.zip'));
+   end
+   Else if Tipo_Atualizacao = 3 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/EficazBackup.zip'));
+   end
+   Else if Tipo_Atualizacao = 4 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/EficazRegistros.zip'));
+   end
+   Else if Tipo_Atualizacao = 5 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/EficazSync.zip'));
+   end
+   Else if Tipo_Atualizacao = 6 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/EficazStreaming.zip'));
+   end
+   Else if Tipo_Atualizacao = 7 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Relatorios.zip'));
+   end
+   Else if Tipo_Atualizacao = 8 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Servidor.zip'));
+   end;
+
+  except
+
+  end;
+
+
+  if Tipo_Atualizacao = 0 then
+  Begin
+
+  IdFTP1.Get('Eficaz.zip', LeIni(Arq_Ini, 'Atualização', 'Download'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download'),ExtractFilePath(ParamStr(0)) + '/Atualizar' );
+  End
+  Else if Tipo_Atualizacao = 1 then
+  begin
+  IdFTP1.Get('Schemas.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  end
+  Else if Tipo_Atualizacao = 2 then
+  begin
+  IdFTP1.Get('Orcamento.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Pedido'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Pedido'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  end
+  Else if Tipo_Atualizacao = 3 then
+  begin
+  IdFTP1.Get('EficazBackup.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Backup'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Backup'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  end
+  Else if Tipo_Atualizacao = 4 then
+  begin
+  IdFTP1.Get('EficazRegistros.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Registros'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Registros'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  end
+  Else if Tipo_Atualizacao = 5 then
+  begin
+  IdFTP1.Get('EficazSync.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Sync'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Sync'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  end
+
+  Else if Tipo_Atualizacao = 6 then
+  begin
+  IdFTP1.Get('EficazStreaming.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Stream'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Stream'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  end
+
+  Else if Tipo_Atualizacao = 7 then
+  begin
+  if LeIni(Arq_Ini, 'Atualização', 'Download_Relatorios') = '' then
+    GravaIni(Arq_Ini, 'Atualização', 'Download_Relatorios', ExtractFilePath(ParamStr(0)) + 'atualizar\Relatorios.zip');
+
+  IdFTP1.Get('Relatorios.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Relatorios'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Relatorios'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  with FrmPrincipal do
+  begin
+    IQuery.SQL.Clear;
+    IQuery.SQL.LoadFromFile('Relatorios.txt');
+    IQuery.ExecSQL;
+  end;
+
+  end
+
+  Else if Tipo_Atualizacao = 8 then
+  begin
+  if LeIni(Arq_Ini, 'Atualização', 'Download_Banco_Servidor') = '' then
+    GravaIni(Arq_Ini, 'Atualização', 'Download_Banco_Servidor', ExtractFilePath(ParamStr(0)) + 'atualizar\Servidor.zip');
+
+  IdFTP1.Get('Servidor.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Banco_Servidor'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Banco_Servidor'),ExtractFilePath(ParamStr(0)) + '/' );
+
+  with FrmPrincipal do
+  begin
+    IQuery.SQL.Clear;
+    IQuery.SQL.LoadFromFile('Servidor.txt');
+    IQuery.ExecSQL;
+  end;
+
+  end;
+
+
+  Application.MessageBox('Download concluído com sucesso', PChar(Msg_Title), mb_IconInformation);
+
+  if Tipo_Atualizacao = 0 then
+  Begin
+  FrmPrincipal.timer1.Interval := 100;
+  FrmPrincipal.Timer1.Enabled  := True;
+  End;
+
+  Close;
+
+
+end;
+
+procedure TFrmDownload.bPauseClick(Sender: TObject);
+begin
+  fACBrDownload.DownloadStatus := stPause;
+end;
+
+procedure TFrmDownload.cbxBufferSizeChange(Sender: TObject);
+begin
+  fACBrDownload.SizeRecvBuffer := StrToInt(cbxBufferSize.Text);
+end;
+
+procedure TFrmDownload.edtProtChange(Sender: TObject);
+begin
+  if edtProt.Text = 'HTTP' then
+    fACBrDownload.Protocolo := protHTTP
+  else if edtProt.Text = 'FTP' then
+    fACBrDownload.Protocolo := protFTP;
+
+  GroupBox1.Enabled := edtProt.Text = 'FTP';
+end;
+
+procedure TFrmDownload.fACBrDownloadAfterDownload(Sender: TObject);
+begin
+  {if fACBrDownload.DownloadStatus = stDownload then
+  begin
+    ZipMaster1.TempDir      := ExtractFilePath(ParamStr(0));
+    ZipMaster1.SFXPath      := ExtractFilePath(ParamStr(0)) + 'ZipSFX.bin';
+    ZipMaster1.DLLDirectory := ExtractFilePath(ParamStr(0));
+    ZipMaster1.ZipFileName  := LeIni(Arq_Ini, 'Atualização', 'Download');
+    ZipMaster1.ExtrBaseDir  := LeIni(Arq_Ini, 'Atualização', 'Download');
+
+
+    ZipMaster1.FSpecArgs.Clear;
+
+    ZipMaster1.FSpecArgs.Add('*.*');
+
+    ZipMaster1.Extract;
+
+    if ZipMaster1.SuccessCnt >= 1 then
+      Application.MessageBox('Download concluído com sucesso', PChar(Msg_Title), mb_IconInformation)
+    else
+      Application.MessageBox('Erro ao efetuar o download', PChar(Msg_Title), mb_IconInformation);
+
+    if CheckBox1.Checked then
+      Self.Close;
+  end;}
+end;
+
+procedure TFrmDownload.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmDownload.FormCreate(Sender: TObject);
+begin
+  edtProt.OnChange(Sender);
+end;
+
+procedure TFrmDownload.FormShow(Sender: TObject);
+begin
+  edFile.Text := LeIni(Arq_Ini, 'Atualização', 'Download');
+end;
+
+procedure TFrmDownload.bStopClick(Sender: TObject);
+begin
+  fACBrDownload.DownloadStatus := stStop;
+
+  IdFTP1.Abort;
+  IdFTP1.Disconnect();
+  bDownload.Enabled := True;
+  bStop.Enabled     := False;
+end;
+
+procedure TFrmDownload.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmDownload.HookMonitor(Sender: TObject; const BytesToDownload: Integer;
+     const BytesDownloaded: Integer; const AverageSpeed: Double;
+     const Hour: Word; const Min: Word; const Sec: Word);
+var
+sConnectionInfo: String;
+begin
+  ProgressBar1.Position := BytesDownloaded;
+
+  sConnectionInfo := sConnectionInfo + '  -  ' +
+                     Format('%.2d:%.2d:%.2d', [Sec div 3600, (Sec div 60) mod 60, Sec mod 60]);
+
+  sConnectionInfo := FormatFloat('0.00 KB/s'  , AverageSpeed) + sConnectionInfo;
+  sConnectionInfo := FormatFloat('###,###,##0', BytesDownloaded / 1024) + ' / ' +
+                     FormatFloat('###,###,##0', BytesToDownload / 1024) +' KB  -  ' + sConnectionInfo;
+
+  lConnectionInfo.Caption := sConnectionInfo;
+end;
+
+procedure TFrmDownload.HookStatus(Sender: TObject; Reason: THookSocketReason;
+  const BytesToDownload, BytesDownloaded: Integer);
+begin
+  {
+  case Reason of
+    HR_Connect :
+    begin
+      ProgressBar1.Position := 0;
+      bDownload.Enabled     := False;
+      bPause.Enabled        := True;
+      bStop.Enabled         := True;
+    end;
+    HR_ReadCount :
+    begin
+      ProgressBar1.Max      := BytesToDownload;
+      ProgressBar1.Position := BytesDownloaded;
+    end;
+    HR_SocketClose :
+    begin
+      case fACBrDownload.DownloadStatus of
+        stStop :
+        begin
+          ProgressBar1.Position   := 0;
+          lConnectionInfo.Caption := 'Download Encerrado...';
+        end;
+
+        stPause :
+        lConnectionInfo.Caption := 'Download Pausado...';
+
+        stDownload :
+      end;
+
+      bDownload.Enabled := True;
+      bPause.Enabled    := False;
+      bStop.Enabled     := False;
+    end;
+  end;
+  }
+end;
+
+procedure TFrmDownload.IdFTP1AfterGet(ASender: TObject; AStream: TStream);
+
+begin
+
+   { ZipMaster1.TempDir      := ExtractFilePath(ParamStr(0));
+    ZipMaster1.SFXPath      := ExtractFilePath(ParamStr(0)) + 'ZipSFX.bin';
+    ZipMaster1.DLLDirectory := ExtractFilePath(ParamStr(0));
+    ZipMaster1.ZipFileName  := LeIni(Arq_Ini, 'Atualização', 'Download');
+    ZipMaster1.ExtrBaseDir  := LeIni(Arq_Ini, 'Atualização', 'Download');
+
+
+    ZipMaster1.FSpecArgs.Clear;
+
+    ZipMaster1.FSpecArgs.Add('*.*');
+
+    ZipMaster1.Extract;
+
+    if ZipMaster1.SuccessCnt >= 1 then
+      Application.MessageBox('Download concluído com sucesso', PChar(Msg_Title), mb_IconInformation)
+    else
+      Application.MessageBox('Erro ao efetuar o download', PChar(Msg_Title), mb_IconInformation);
+    }
+
+
+
+end;
+
+procedure TFrmDownload.IdFTP1Work(ASender: TObject; AWorkMode: TWorkMode;
+  AWorkCount: Int64);
+  Var
+  Transferido : Integer;
+begin
+ Progressbar1.Position := AWorkCount;
+ Transferido := AWorkCount div 1024;
+
+ if Tipo_Atualizacao = 0 Then
+ Label11.Caption := 'Transferido Eficaz.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 1 Then
+ Label11.Caption := 'Transferido Schemas.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 2 Then
+ Label11.Caption := 'Transferido Orcamento.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 3 Then
+ Label11.Caption := 'Transferido EficazBackup.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 4 Then
+ Label11.Caption := 'Transferido EficazRegistros.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 5 Then
+ Label11.Caption := 'Transferido EficazSync.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 6 Then
+ Label11.Caption := 'Transferido EficazStreaming.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 7 Then
+ Label11.Caption := 'Transferido Relatorios.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 8 Then
+ Label11.Caption := 'Transferido Servidor.zip: ' + IntToStr(Transferido) + '/kb.';
+
+
+ Application.ProcessMessages;
+end;
+
+procedure TFrmDownload.IdFTP1WorkBegin(ASender: TObject; AWorkMode: TWorkMode;
+  AWorkCountMax: Int64);
+begin
+Progressbar1.Position := 0;
+
+if Tipo_Atualizacao = 0 Then
+Progressbar1.Max := 15000
+Else if Tipo_Atualizacao = 1 Then
+Progressbar1.Max := 5000
+Else if Tipo_Atualizacao = 2 Then
+Progressbar1.Max := 15000
+Else if Tipo_Atualizacao = 3 Then
+Progressbar1.Max := 15000
+Else if Tipo_Atualizacao = 4 Then
+Progressbar1.Max := 15000
+Else if Tipo_Atualizacao = 5 Then
+Progressbar1.Max := 15000
+Else if Tipo_Atualizacao = 6 Then
+Progressbar1.Max := 15000;
+
+bDownload.Enabled     := False;
+bStop.Enabled         := True;
+//Application.ProcessMessages;
+
+end;
+
+end.
+

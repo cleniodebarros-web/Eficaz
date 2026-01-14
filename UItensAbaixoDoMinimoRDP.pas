@@ -98,6 +98,42 @@ type
     QRDBText9: TQRDBText;
     QRLabel26: TQRLabel;
     QRDBText10: TQRDBText;
+    QuickRep1: TQuickRep;
+    QRBand5: TQRBand;
+    QRSysData3: TQRSysData;
+    QRLabel31: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRShape4: TQRShape;
+    QRLabel34: TQRLabel;
+    QRDBText11: TQRDBText;
+    QRLabel35: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRLabel38: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRShape6: TQRShape;
+    QRLabel43: TQRLabel;
+    QRLabel44: TQRLabel;
+    QRLabel45: TQRLabel;
+    QRBand6: TQRBand;
+    QRDBText12: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRDBText18: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRDBText22: TQRDBText;
+    QRLabel46: TQRLabel;
+    QRDBText23: TQRDBText;
+    QRLabel47: TQRLabel;
     procedure btnRetornaClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -246,6 +282,7 @@ begin
 
   QRLabel21.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
   QRLabel13.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
+  QRLabel37.Caption := 'Período: ' + Dtmen.Text + ' a ' + Dtmai.Text;
 
   if QRel.IsEmpty then
     Application.MessageBox('Não há dados para serem impressos', PChar(Msg_Title), mb_IconInformation)
@@ -267,16 +304,19 @@ begin
         CliDataSet_rel_itens_abaixo_min.FieldByName('QUANT_MINIMA').AsString  := formatfloat('#0.00', QRel.FieldByName('QUANT_MINIMA').AsFloat);
         CliDataSet_rel_itens_abaixo_min.FieldByName('CUSTO_COMPRA').AsString  := formatfloat('#0.00', QRel.FieldByName('CUSTO_COMPRA').AsFloat);
         CliDataSet_rel_itens_abaixo_min.FieldByName('FORNECEDOR').AsInteger   := QRel.FieldByName('FORNECEDOR_ID').AsInteger;
-        if Chk_UltimaVenda.Checked then
-          begin
-            CliDataSet_rel_itens_abaixo_min.FieldByName('DT_COMPRA').AsString := QRel.FieldByName('DT_MOVIMENTO').AsString;
-            QRLabel5.Caption := 'Últ.Vda.';
-          end
-        else
-          begin
-            CliDataSet_rel_itens_abaixo_min.FieldByName('DT_COMPRA').AsString := QRel.FieldByName('DT_COMPRA').AsString;
-            QRLabel5.Caption := 'Últ.Cpr.';
-          end;
+        CliDataSet_rel_itens_abaixo_min.FieldByName('DT_COMPRA').AsString     := QRel.FieldByName('DT_COMPRA').AsString;
+        CliDataSet_rel_itens_abaixo_min.FieldByName('DT_MOVIMENTO').AsString  := QRel.FieldByName('DT_MOVIMENTO').AsString;
+
+        //if Chk_UltimaVenda.Checked then
+        //begin
+        //  CliDataSet_rel_itens_abaixo_min.FieldByName('DT_COMPRA').AsString := QRel.FieldByName('DT_MOVIMENTO').AsString;
+        //  QRLabel5.Caption := 'Últ.Vda.';
+        //end
+        //else
+        //begin
+        //  CliDataSet_rel_itens_abaixo_min.FieldByName('DT_COMPRA').AsString := QRel.FieldByName('DT_COMPRA').AsString;
+        //  QRLabel5.Caption := 'Últ.Cpr.';
+        //end;
 
        if chk_sugestao.Checked Then
        Begin
@@ -462,40 +502,51 @@ begin
       end;
 
       if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo') = '0' then
-        QRLabel20.Caption := 'Grupo: TODOS'
+      begin
+        QRLabel20.Caption := 'Grupo: TODOS';
+        QRLabel28.Caption := 'Grupo: TODOS';
+        QRLabel43.Caption := 'Grupo: TODOS';
+      end
       else
+      begin
         QRLabel20.Caption := 'Grupo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')), '7');
+        QRLabel28.Caption := 'Grupo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')), '7');
+        QRLabel43.Caption := 'Grupo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')), '7');
+      end;
 
       if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
-        QRLabel6.Caption := 'Sub-Tipo: TODOS'
+      begin
+        QRLabel6.Caption := 'Sub-Tipo: TODOS';
+        QRLabel29.Caption := 'Sub-Tipo: TODOS';
+        QRLabel44.Caption := 'Sub-Tipo: TODOS';
+      end
       else
+      begin
         QRLabel6.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
-
-      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
-        QRLabel28.Caption := 'Sub-Tipo: TODOS'
-      else
-        QRLabel28.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
-
-      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo') = '0' then
-        QRLabel29.Caption := 'Sub-Tipo: TODOS'
-      else
         QRLabel29.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
-
+        QRLabel44.Caption := 'Sub-Tipo: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')), '5');
+      end;
 
       if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização') = '0' then
-        QRLabel22.Caption := 'Localização: TODAS'
+      begin
+        QRLabel22.Caption := 'Localização: TODAS';
+        QRLabel30.Caption := 'Localização: TODAS';
+        QRLabel45.Caption := 'Localização: TODAS';
+      end
       else
+      begin
         QRLabel22.Caption := 'Localização: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')), '8');
-
-      if LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização') = '0' then
-        QRLabel30.Caption := 'Localização: TODAS'
-      else
         QRLabel30.Caption := 'Localização: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')), '8');
+        QRLabel45.Caption := 'Localização: ' + Search_Tabela(StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')), '8');
+      end;
 
-      if chk_sugestao.Checked Then
-      rel_estoque_minimo.PreviewModal
-      Else
-      rel_estoque_minimo_semsugstao.PreviewModal
+
+      //if chk_sugestao.Checked Then
+      //  rel_estoque_minimo.PreviewModal
+      //Else
+      //  rel_estoque_minimo_semsugstao.PreviewModal;
+
+      QuickRep1.PreviewModal;
     end;
 
   btnExecuta.Enabled := True;
@@ -1078,6 +1129,7 @@ begin
   CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('CUSTO_COMPRA', ftString, 10, False);
   CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('SUG_COMPRA', ftString, 10, False);
   CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('DT_COMPRA', ftString, 10, False);
+  CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('DT_MOVIMENTO', ftString, 10, False);
   CliDataSet_rel_itens_abaixo_min.FieldDefs.Add('FORNECEDOR', ftInteger,0, False);
   CliDataSet_rel_itens_abaixo_min.CreateDataSet;
 

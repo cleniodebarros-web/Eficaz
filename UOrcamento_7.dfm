@@ -28,7 +28,7 @@ object FrmOrcamento_7: TFrmOrcamento_7
     Top = 0
     Width = 744
     Height = 582
-    ActivePage = Manutencao
+    ActivePage = Consulta
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -5012,6 +5012,7 @@ object FrmOrcamento_7: TFrmOrcamento_7
         ParentFont = False
         TabOrder = 19
         Text = ''
+        OnKeyDown = DT_ORCAMENTOKeyDown
       end
       object Setor: TComboBox
         Left = 630
@@ -5104,6 +5105,7 @@ object FrmOrcamento_7: TFrmOrcamento_7
         MaxLength = 120
         ParentFont = False
         TabOrder = 11
+        OnKeyDown = DT_ORCAMENTOKeyDown
       end
       object CNPJ: TMaskEdit
         Left = 467
@@ -5120,6 +5122,7 @@ object FrmOrcamento_7: TFrmOrcamento_7
         ParentFont = False
         TabOrder = 9
         Text = ''
+        OnKeyDown = DT_ORCAMENTOKeyDown
       end
       object INSCRICAO: TEdit
         Left = 85
@@ -5136,9 +5139,10 @@ object FrmOrcamento_7: TFrmOrcamento_7
         MaxLength = 15
         ParentFont = False
         TabOrder = 10
+        OnKeyDown = DT_ORCAMENTOKeyDown
       end
       object TIPO_CLIENTE: TComboBox
-        Left = 85
+        Left = 86
         Top = 139
         Width = 151
         Height = 21
@@ -5154,6 +5158,7 @@ object FrmOrcamento_7: TFrmOrcamento_7
         ParentFont = False
         TabOrder = 8
         OnChange = TIPO_CLIENTEChange
+        OnKeyDown = DT_ORCAMENTOKeyDown
         Items.Strings = (
           'PESSOA F'#205'SICA'
           'PESSOA JUR'#205'DICA')

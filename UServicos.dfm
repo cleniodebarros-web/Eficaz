@@ -27,7 +27,7 @@ object FrmServicos: TFrmServicos
     Top = 0
     Width = 791
     Height = 325
-    ActivePage = Manutencao
+    ActivePage = Consulta
     Align = alClient
     TabOrder = 0
     object Consulta: TTabSheet
@@ -599,6 +599,10 @@ object FrmServicos: TFrmServicos
         object TabSheet9: TTabSheet
           Caption = 'Pis/Cofins (Entrada)'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label68: TLabel
             Left = 6
             Top = 9
@@ -755,6 +759,10 @@ object FrmServicos: TFrmServicos
         object TabSheet10: TTabSheet
           Caption = 'Pis/Cofins (Sa'#237'da)'
           ImageIndex = 2
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object btnCst_Pis: TSpeedButton
             Left = 111
             Top = 16
@@ -944,6 +952,207 @@ object FrmServicos: TFrmServicos
             OnKeyDown = DESCRICAOKeyDown
           end
         end
+        object TabSheet1: TTabSheet
+          Caption = 'CBS/IBS'
+          ImageIndex = 3
+          object Label106: TLabel
+            Left = 11
+            Top = 10
+            Width = 76
+            Height = 13
+            Caption = 'C'#243'd.  CBS/IBS'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label107: TLabel
+            Left = 11
+            Top = 43
+            Width = 57
+            Height = 13
+            Caption = 'Cst-Cbs/Ibs'
+          end
+          object Label109: TLabel
+            Left = 8
+            Top = 74
+            Width = 57
+            Height = 13
+            Caption = 'Al'#237'q. Ibs Uf.'
+          end
+          object Label108: TLabel
+            Left = 231
+            Top = 43
+            Width = 102
+            Height = 13
+            Caption = 'C'#243'd Classe Tribut'#225'ria'
+          end
+          object Label110: TLabel
+            Left = 253
+            Top = 74
+            Width = 73
+            Height = 13
+            Caption = 'Al'#237'q. Ibs Munic.'
+          end
+          object Label104: TLabel
+            Left = 498
+            Top = 43
+            Width = 42
+            Height = 13
+            Caption = 'Al'#237'q. Cbs'
+          end
+          object Label105: TLabel
+            Left = 498
+            Top = 74
+            Width = 56
+            Height = 13
+            Caption = '% Redu'#231#227'o'
+          end
+          object btntributonovo: TSpeedButton
+            Left = 166
+            Top = 3
+            Width = 64
+            Height = 21
+            Cursor = crHandPoint
+            Caption = '(F7)'
+            Flat = True
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Glyph.Data = {
+              06020000424D0602000000000000760000002800000028000000140000000100
+              0400000000009001000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+              FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+              FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+              333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+              333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+              777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+              FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+              FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+              333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+              88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+              F777333333333088FFF003333333333337333337733333333333088FFF033333
+              333333337F33337333333333333308FFF09333333333333378F3373333333333
+              333330FF0933333333333333378F733333333333333333003333333333333333
+              33773333333333333333}
+            NumGlyphs = 2
+            ParentFont = False
+            OnClick = btntributonovoClick
+          end
+          object DBText9: TDBText
+            Left = 236
+            Top = 10
+            Width = 218
+            Height = 13
+            DataField = 'descricao'
+            DataSource = DataCbsIbs
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Aliquota_Ibs_Uf: TRxCalcEdit
+            Left = 72
+            Top = 68
+            Width = 61
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 3
+            ZeroEmpty = False
+          end
+          object cst_cbs_ibs: TCurrencyEdit
+            Left = 75
+            Top = 40
+            Width = 38
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 1
+            ZeroEmpty = False
+          end
+          object Tributo_id_cbs_ibs: TCurrencyEdit
+            Left = 96
+            Top = 7
+            Width = 47
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 0
+            ZeroEmpty = False
+            OnExit = Tributo_id_cbs_ibsExit
+          end
+          object Aliquota_Ibs_Munic: TRxCalcEdit
+            Left = 333
+            Top = 68
+            Width = 61
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 4
+            ZeroEmpty = False
+          end
+          object ClassTributaria: TEdit
+            Left = 338
+            Top = 40
+            Width = 54
+            Height = 21
+            Enabled = False
+            MaxLength = 6
+            TabOrder = 2
+            OnKeyDown = DESCRICAOKeyDown
+          end
+          object REDUCAO_CBS_IBS: TRxCalcEdit
+            Left = 562
+            Top = 68
+            Width = 58
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 6
+            ZeroEmpty = False
+          end
+          object ALIQUOTA_CBS: TRxCalcEdit
+            Left = 559
+            Top = 40
+            Width = 61
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 5
+            ZeroEmpty = False
+          end
+        end
       end
       object COD_INTERNO: TCurrencyEdit
         Left = 73
@@ -1033,5 +1242,29 @@ object FrmServicos: TFrmServicos
       'SELECT * FROM SERVICOS')
     Left = 8
     Top = 314
+  end
+  object QCbsIbs: TFDQuery
+    MasterFields = 'object QEmpresa: TFDQuery'
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      'SELECT * FROM COD_CLASSTRIB'
+      'WHERE'
+      'COD_CLASSTRIB_ID = :COD_CLASSTRIB_ID ')
+    Left = 627
+    Top = 222
+    ParamData = <
+      item
+        Name = 'COD_CLASSTRIB_ID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
+  end
+  object DataCbsIbs: TDataSource
+    DataSet = QCbsIbs
+    Left = 539
+    Top = 220
   end
 end

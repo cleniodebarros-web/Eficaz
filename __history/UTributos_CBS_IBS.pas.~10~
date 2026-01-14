@@ -1,0 +1,642 @@
+unit UTributos_CBS_IBS;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, rxToolEdit,
+  rxCurrEdit, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmTributos_CBS_IBS = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;
+    Manutencao: TTabSheet;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    DESCRICAO: TEdit;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    Label3: TLabel;
+    Label4: TLabel;
+    QTributos_cbs_ibs: TFDQuery;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    Label8: TLabel;
+    PREDCBS: TCurrencyEdit;
+    Label9: TLabel;
+    cod_classtrib_id: TCurrencyEdit;
+    btnTributo_cbs_ibs: TSpeedButton;
+    Label1: TLabel;
+    Label2: TLabel;
+    PREDIBS: TCurrencyEdit;
+    Label5: TLabel;
+    nome_classtrib: TEdit;
+    Classtrib: TEdit;
+    Label6: TLabel;
+    aliquota_cbs: TCurrencyEdit;
+    cst_ibs_cbs: TCurrencyEdit;
+    Label7: TLabel;
+    Label10: TLabel;
+    aliquota_ibs_uf: TCurrencyEdit;
+    aliquota_ibs_munic: TCurrencyEdit;
+    Label11: TLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ALIQUOTA_ICMSKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure FormShow(Sender: TObject);
+    procedure CFOPExit(Sender: TObject);
+    procedure btnTributo_cbs_ibsClick(Sender: TObject);
+    procedure cod_classtrib_idExit(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+    procedure DetailSearch(Tabela: String);
+  end;
+
+var
+  FrmTributos_CBS_IBS: TFrmTributos_CBS_IBS;
+  Operacao: String;
+  ID: Integer;
+
+implementation
+
+uses
+  UPrincipal, UData,UConsulta;
+
+{$R *.dfm}
+
+procedure TFrmTributos_CBS_IBS.DetailSearch(Tabela: String);
+begin
+
+ if ((Tabela = '') or (Tabela = 'Tributos Ibs Cbs')) and (cod_classtrib_id.Text <> '') then
+  begin
+    QTributos_cbs_ibs.Close;
+
+    QTributos_cbs_ibs.ParamByName('COD_CLASSTRIB_id').AsInteger := StrToInt(cod_classtrib_id.Text);
+
+    QTributos_cbs_ibs.Prepare;
+    QTributos_cbs_ibs.Open;
+
+     SHOWMESSAGE(QTributos_cbs_ibs.FieldByName('Nome_cClassTrib').AsString);
+
+    if not QTributos_cbs_ibs.IsEmpty then
+    Begin
+
+      //ALIQUOTA_ICMS.Value   := QCbsIbs.FieldByName('ALIQUOTA_ICMS').AsFloat;
+      cst_ibs_cbs.Text        := QTributos_cbs_ibs.FieldByName('CST-IBS/CBS').AsString;
+      ClassTrib.Text          := QTributos_cbs_ibs.FieldByName('cClassTrib').AsString;
+      nome_ClassTrib.Text     := QTributos_cbs_ibs.FieldByName('Nome_cClassTrib').AsString;
+      Descricao.Text          := QTributos_cbs_ibs.FieldByName('Descricao CST-IBS/CBS').AsString;
+
+    End;
+  end;
+
+
+end;
+
+procedure TFrmTributos_CBS_IBS.ALIQUOTA_ICMSKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+    if (Key = Vk_F7) and (Sender = COD_CLASSTRIB_ID) then
+    btnTributo_cbs_ibsClick(Self);
+end;
+
+procedure TFrmTributos_CBS_IBS.Botoes_Editing;
+begin
+  btnPrior.Enabled := False;
+  btnNext.Enabled := False;
+  btnInsert.Enabled := False;
+  btnEdit.Enabled := False;
+  btnDelete.Enabled := False;
+  btnSave.Enabled := True;
+  btnDiscard.Enabled := True;
+  btnRetorna.Enabled := False;
+  btntributo_cbs_ibs.Enabled := True;
+end;
+
+procedure TFrmTributos_CBS_IBS.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+  btnInsert.Enabled := True;
+  if not QTabela.IsEmpty then
+  begin
+    btnEdit.Enabled := True;
+    btnDelete.Enabled := True;
+    btntributo_cbs_ibs.Enabled := True;
+  end
+  else
+  begin
+    btnEdit.Enabled := False;
+    btnDelete.Enabled := False;
+    btntributo_cbs_ibs.Enabled := False
+  end;
+  btnSave.Enabled := False;
+  btnDiscard.Enabled := False;
+  btnRetorna.Enabled := True;
+  btntributo_cbs_ibs.Enabled := False
+end;
+
+procedure TFrmTributos_CBS_IBS.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+  end;
+end;
+
+procedure TFrmTributos_CBS_IBS.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO TRIBUTOS_CBS_IBS(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO TRIBUTOS_CBS_IBS(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO TRIBUTOS_CBS_IBS(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO TRIBUTOS_CBS_IBS(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := Copy(TComboBox(Temp).Text,1,40);
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  Habilitar(False);
+end;
+
+procedure TFrmTributos_CBS_IBS.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE TRIBUTOS_CBS_IBS SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE TRIBUTOS_CBS_IBS SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE TRIBUTOS_CBS_IBS SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE TRIBUTOS_CBS_IBS SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (TRIBUTO_CBS_IBS_ID = :ID)';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := Copy(TComboBox(Temp).Text,1,40);
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('TRIBUTO_CBS_IBS_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+  QTabela.Close;
+  QTabela.Open;
+  QTabela.Locate('TRIBUTO_CBS_IBS_ID', ID, [loCaseInsensitive]);
+  Habilitar(False);
+end;
+
+function TFrmTributos_CBS_IBS.Validacao: Boolean;
+begin
+  Result := False;
+
+  DESCRICAO.Color     := clWindow;
+  classtrib.Color     := clWindow;
+  cst_ibs_cbs.Color   := clWindow;
+
+
+
+
+  if DESCRICAO.Text = '' then
+  begin
+    Application.MessageBox('Informe a Descrição', PChar(Msg_Title), mb_IconStop);
+    DESCRICAO.Color := clYellow;
+    DESCRICAO.SetFocus;
+    exit;
+  end;
+
+  if classtrib.Text = '' then
+  begin
+    Application.MessageBox('Informe a Classe Tributária', PChar(Msg_Title), mb_IconStop);
+    classtrib.Color := clYellow;
+    classtrib.SetFocus;
+    exit;
+  end;
+
+  if cst_ibs_cbs.Text = '' then
+  begin
+    Application.MessageBox('Informe o CST', PChar(Msg_Title), mb_IconStop);
+    cst_ibs_cbs.Color := clYellow;
+    cst_ibs_cbs.SetFocus;
+    exit;
+  end;
+
+  Result := True;
+end;
+
+procedure TFrmTributos_CBS_IBS.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmTributos_CBS_IBS.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+    end;
+  end;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM TRIBUTOS_CBS_IBS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TRIBUTO_CBS_IBS_ID = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('TRIBUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+    QTabela.Close;
+    QTabela.Open;
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Alterando';
+  ID := QTabela.FieldByName('TRIBUTO_CBS_IBS_ID').AsInteger;
+  Botoes_Editing;
+  Habilitar(True);
+
+  Consulta.TabVisible := False;
+
+  DESCRICAO.SetFocus;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    exit;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+
+  Consulta.TabVisible := False;
+
+  Cod_ClassTrib_id.SetFocus;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnNextClick(Sender: TObject);
+begin
+  if not QTabela.Eof then
+  begin
+    QTabela.Next;
+    Set_Campos(False);
+  end;
+  Botoes_Normal;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnPriorClick(Sender: TObject);
+begin
+  if not QTabela.Bof then
+  begin
+    QTabela.Prior;
+    Set_Campos(False);
+  end;
+  Botoes_Normal;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnSaveClick(Sender: TObject);
+begin
+  DetailSearch('');
+
+  if Validacao then
+  begin
+    if Operacao = 'Inserindo' then
+    begin
+      Insert;
+
+      CmdSelectNull := 'WHERE (TRIBUTO_CBS_IBS_ID IS NOT NULL)';
+      CmdOrderBy    := 'ORDER BY TRIBUTO_CBS_IBS_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.Open;
+      QTabela.Last;
+    end
+    else
+      Edit;
+
+    Set_Campos(False);
+    Habilitar(False);
+    Botoes_Normal;
+    Operacao := '';
+    Consulta.TabVisible := True;
+  end;
+end;
+
+procedure TFrmTributos_CBS_IBS.btnTributo_cbs_ibsClick(Sender: TObject);
+begin
+try
+    cod_classtrib_id.Value := GetConsulta('CLASSE_TRIBUTARIA', 0, 0, StrToInt(cod_classtrib_id.Text));
+  except
+    cod_classtrib_id.Value := GetConsulta('CLASSE_TRIBUTARIA', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmTributos_CBS_IBS.CFOPExit(Sender: TObject);
+begin
+  DetailSearch('CFOP');
+end;
+
+procedure TFrmTributos_CBS_IBS.cod_classtrib_idExit(Sender: TObject);
+begin
+ DetailSearch('Tributos Ibs Cbs');
+end;
+
+procedure TFrmTributos_CBS_IBS.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmTributos_CBS_IBS.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmTributos_CBS_IBS.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  QTabela.Open;
+end;
+
+procedure TFrmTributos_CBS_IBS.DESCRICAOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmTributos_CBS_IBS.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmTributos_CBS_IBS.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+end;
+
+procedure TFrmTributos_CBS_IBS.FormCreate(Sender: TObject);
+begin
+  DBGrid1.Columns[0].Width := 68;
+  DBGrid1.Columns[1].Width := 460;
+  DBGrid1.Columns[2].Width := 55;
+  DBGrid1.Columns[3].Width := 70;
+
+
+  CmdSelect     := QTabela.Sql.Text;
+  CmdSelectNull := 'WHERE (TRIBUTO_CBS_IBS_ID IS NOT NULL)';
+  CmdOrderBy    := 'ORDER BY nome_classtrib';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  QTabela.Open;
+  Consulta.Show;
+end;
+
+procedure TFrmTributos_CBS_IBS.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+end;
+
+end.

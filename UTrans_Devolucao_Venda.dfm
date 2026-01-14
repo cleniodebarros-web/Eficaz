@@ -4,7 +4,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = ' Devolu'#231#227'o de Sa'#237'da'
-  ClientHeight = 639
+  ClientHeight = 657
   ClientWidth = 847
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -27,8 +27,8 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
     Left = 0
     Top = 0
     Width = 847
-    Height = 569
-    ActivePage = Manutencao
+    Height = 587
+    ActivePage = Consulta
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -39,15 +39,11 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
     TabOrder = 0
     object Consulta: TTabSheet
       Caption = '&Consulta'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
         Width = 839
-        Height = 520
+        Height = 538
         Align = alClient
         Color = clInfoBk
         DataSource = DataTabela
@@ -125,7 +121,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
       end
       object Dias: TTabSet
         Left = 0
-        Top = 520
+        Top = 538
         Width = 839
         Height = 21
         Align = alBottom
@@ -184,10 +180,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
       ImageIndex = 1
       ParentFont = False
       OnShow = ManutencaoShow
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
+      ExplicitLeft = 1
       object DBText1: TDBText
         Left = 703
         Top = 87
@@ -958,78 +951,36 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
       end
       object Panel3: TPanel
         Left = 0
-        Top = 465
+        Top = 468
         Width = 839
-        Height = 76
+        Height = 91
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 25
-        object Label13: TLabel
-          Left = 6
-          Top = 3
-          Width = 65
-          Height = 13
-          Caption = 'B. C'#225'lc. ICMS'
-        end
-        object Label14: TLabel
-          Left = 6
-          Top = 29
-          Width = 57
-          Height = 13
-          Caption = 'Vr. ICMS ST'
-        end
-        object Label17: TLabel
-          Left = 227
-          Top = 3
-          Width = 42
-          Height = 13
-          Caption = 'Vr. ICMS'
-        end
-        object Label19: TLabel
-          Left = 227
-          Top = 29
-          Width = 31
-          Height = 13
-          Caption = 'Vr. IPI'
-        end
-        object Label20: TLabel
-          Left = 442
-          Top = 3
-          Width = 80
-          Height = 13
-          Caption = 'B. C'#225'lc. ICMS ST'
-        end
         object Label21: TLabel
-          Left = 694
-          Top = 3
+          Left = 693
+          Top = 22
           Width = 43
           Height = 13
           Caption = 'Vr. Prod.'
         end
         object Label22: TLabel
-          Left = 694
-          Top = 55
+          Left = 693
+          Top = 74
           Width = 40
           Height = 13
           Caption = 'Valor NF'
         end
         object Label24: TLabel
-          Left = 694
-          Top = 29
+          Left = 693
+          Top = 48
           Width = 44
           Height = 13
           Caption = 'Vr. Desc.'
         end
-        object Label25: TLabel
-          Left = 442
-          Top = 29
-          Width = 65
-          Height = 13
-          Caption = 'Vr. Acr'#233'scimo'
-        end
         object VALOR_PRODUTOS: TRxCalcEdit
-          Left = 741
-          Top = 0
+          Left = 740
+          Top = 18
           Width = 95
           Height = 21
           Margins.Left = 4
@@ -1038,13 +989,13 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
           Enabled = False
           NumGlyphs = 2
           ReadOnly = True
-          TabOrder = 3
+          TabOrder = 0
           ZeroEmpty = False
           OnKeyDown = EMPRESA_IDKeyDown
         end
-        object BASE_ICMS_NORMAL: TRxCalcEdit
-          Left = 75
-          Top = 0
+        object VALOR: TRxCalcEdit
+          Left = 740
+          Top = 67
           Width = 95
           Height = 21
           Margins.Left = 4
@@ -1052,13 +1003,14 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
           DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
           Enabled = False
           NumGlyphs = 2
-          TabOrder = 0
+          ReadOnly = True
+          TabOrder = 2
           ZeroEmpty = False
           OnKeyDown = EMPRESA_IDKeyDown
         end
-        object VR_ICMS_NORMAL: TRxCalcEdit
-          Left = 284
-          Top = 0
+        object VR_DESCONTO: TRxCalcEdit
+          Left = 740
+          Top = 43
           Width = 95
           Height = 21
           Margins.Left = 4
@@ -1071,94 +1023,242 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
           ZeroEmpty = False
           OnKeyDown = EMPRESA_IDKeyDown
         end
-        object BASE_ICMS_ST: TRxCalcEdit
-          Left = 530
+        object PageControl2: TPageControl
+          Left = 9
           Top = 0
-          Width = 95
-          Height = 21
-          Margins.Left = 4
-          Margins.Top = 1
-          DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
-          Enabled = False
-          NumGlyphs = 2
-          TabOrder = 2
-          ZeroEmpty = False
-          OnKeyDown = EMPRESA_IDKeyDown
-        end
-        object VR_ICMS_ST: TRxCalcEdit
-          Left = 75
-          Top = 24
-          Width = 95
-          Height = 21
-          Margins.Left = 4
-          Margins.Top = 1
-          DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
-          Enabled = False
-          MaxValue = 99999.000000000000000000
-          NumGlyphs = 2
-          TabOrder = 4
-          ZeroEmpty = False
-          OnKeyDown = EMPRESA_IDKeyDown
-        end
-        object VR_IPI: TRxCalcEdit
-          Left = 284
-          Top = 24
-          Width = 95
-          Height = 21
-          Margins.Left = 4
-          Margins.Top = 1
-          DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
-          Enabled = False
-          MaxValue = 99999.000000000000000000
-          NumGlyphs = 2
-          TabOrder = 5
-          ZeroEmpty = False
-          OnKeyDown = EMPRESA_IDKeyDown
-        end
-        object VALOR: TRxCalcEdit
-          Left = 741
-          Top = 48
-          Width = 95
-          Height = 21
-          Margins.Left = 4
-          Margins.Top = 1
-          DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
-          Enabled = False
-          NumGlyphs = 2
-          ReadOnly = True
-          TabOrder = 8
-          ZeroEmpty = False
-          OnKeyDown = EMPRESA_IDKeyDown
-        end
-        object VR_DESCONTO: TRxCalcEdit
-          Left = 741
-          Top = 24
-          Width = 95
-          Height = 21
-          Margins.Left = 4
-          Margins.Top = 1
-          DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
-          Enabled = False
-          MaxValue = 99999.000000000000000000
-          NumGlyphs = 2
-          TabOrder = 7
-          ZeroEmpty = False
-          OnKeyDown = EMPRESA_IDKeyDown
-        end
-        object VR_ACRESCIMO: TRxCalcEdit
-          Left = 530
-          Top = 24
-          Width = 95
-          Height = 21
-          Margins.Left = 4
-          Margins.Top = 1
-          DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
-          Enabled = False
-          MaxValue = 99999.000000000000000000
-          NumGlyphs = 2
-          TabOrder = 6
-          ZeroEmpty = False
-          OnKeyDown = EMPRESA_IDKeyDown
+          Width = 648
+          Height = 90
+          ActivePage = TabSheet2
+          TabOrder = 3
+          object TabSheet2: TTabSheet
+            Caption = 'Icms/Icms-St'
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object Label13: TLabel
+              Left = 8
+              Top = 11
+              Width = 65
+              Height = 13
+              Caption = 'B. C'#225'lc. ICMS'
+            end
+            object Label14: TLabel
+              Left = 8
+              Top = 37
+              Width = 57
+              Height = 13
+              Caption = 'Vr. ICMS ST'
+            end
+            object Label17: TLabel
+              Left = 229
+              Top = 11
+              Width = 42
+              Height = 13
+              Caption = 'Vr. ICMS'
+            end
+            object Label19: TLabel
+              Left = 229
+              Top = 37
+              Width = 31
+              Height = 13
+              Caption = 'Vr. IPI'
+            end
+            object Label20: TLabel
+              Left = 444
+              Top = 11
+              Width = 80
+              Height = 13
+              Caption = 'B. C'#225'lc. ICMS ST'
+            end
+            object Label25: TLabel
+              Left = 444
+              Top = 37
+              Width = 65
+              Height = 13
+              Caption = 'Vr. Acr'#233'scimo'
+            end
+            object VR_ICMS_ST: TRxCalcEdit
+              Left = 77
+              Top = 32
+              Width = 95
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              MaxValue = 99999.000000000000000000
+              NumGlyphs = 2
+              TabOrder = 0
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object BASE_ICMS_NORMAL: TRxCalcEdit
+              Left = 77
+              Top = 8
+              Width = 95
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 1
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object VR_IPI: TRxCalcEdit
+              Left = 286
+              Top = 32
+              Width = 95
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              MaxValue = 99999.000000000000000000
+              NumGlyphs = 2
+              TabOrder = 2
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object VR_ICMS_NORMAL: TRxCalcEdit
+              Left = 286
+              Top = 8
+              Width = 95
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              MaxValue = 99999.000000000000000000
+              NumGlyphs = 2
+              TabOrder = 3
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object VR_ACRESCIMO: TRxCalcEdit
+              Left = 532
+              Top = 32
+              Width = 95
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              MaxValue = 99999.000000000000000000
+              NumGlyphs = 2
+              TabOrder = 4
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object BASE_ICMS_ST: TRxCalcEdit
+              Left = 532
+              Top = 8
+              Width = 95
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 5
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+          end
+          object TabSheet3: TTabSheet
+            Caption = 'IS/CBS/IBS'
+            ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
+            object Label48: TLabel
+              Left = 12
+              Top = 11
+              Width = 77
+              Height = 13
+              Caption = 'B. C'#225'lc. Cbs/Ibs'
+            end
+            object Label49: TLabel
+              Left = 261
+              Top = 38
+              Width = 62
+              Height = 13
+              Caption = 'Vr. Ibs Munic'
+            end
+            object Label50: TLabel
+              Left = 12
+              Top = 38
+              Width = 50
+              Height = 13
+              Caption = 'Vr. Ibs Uf.'
+            end
+            object Label51: TLabel
+              Left = 264
+              Top = 11
+              Width = 35
+              Height = 13
+              Caption = 'Vr. Cbs'
+            end
+            object vr_ibs: TRxCalcEdit
+              Left = 96
+              Top = 35
+              Width = 106
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 0
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object vr_ibsmunic: TRxCalcEdit
+              Left = 331
+              Top = 38
+              Width = 106
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 1
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object Vr_bccbsibs: TRxCalcEdit
+              Left = 96
+              Top = 10
+              Width = 106
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 2
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object vr_cbs: TRxCalcEdit
+              Left = 331
+              Top = 10
+              Width = 106
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 3
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+          end
         end
       end
       object StatusBar1: TStatusBar
@@ -1193,7 +1293,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
         UseSystemFont = False
       end
       object Grid_Itens: TDBGrid
-        Left = 3
+        Left = 4
         Top = 304
         Width = 832
         Height = 137
@@ -1319,6 +1419,46 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
             Title.Caption = 'Seq.'
             Width = 24
             Visible = True
+          end
+          item
+            Expanded = False
+            FieldName = 'aliq_cbs'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'aliq_ibsmunic'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'aliq_ibsuf'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'vr_base_cbsibs'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'vr_cbs'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'vr_ibsuf'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'cst_cbsibs'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'cod_classtrib'
+            Visible = False
           end>
       end
       object SERIE: TEdit
@@ -1364,7 +1504,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
       end
       object SAIDA_ID: TCurrencyEdit
         Left = 586
-        Top = 161
+        Top = 162
         Width = 47
         Height = 21
         Margins.Left = 4
@@ -1531,10 +1671,6 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
         TabOrder = 18
         object Obs: TTabSheet
           Caption = 'Obs. Lan'#231'amentos Fiscais'
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Observacao: TMemo
             Left = 3
             Top = 1
@@ -1552,10 +1688,6 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
         object Icms_simpels: TTabSheet
           Caption = 'Icms Simpels Nacional'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object lbl1: TLabel
             Left = 13
             Top = 10
@@ -1610,10 +1742,6 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
           Font.Style = []
           ImageIndex = 2
           ParentFont = False
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label16: TLabel
             Left = 500
             Top = 18
@@ -1735,7 +1863,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
   end
   object Panel1: TPanel
     Left = 0
-    Top = 569
+    Top = 587
     Width = 847
     Height = 70
     Align = alBottom
@@ -1983,7 +2111,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
   end
   object btnEstorna: TBitBtn
     Left = 524
-    Top = 605
+    Top = 623
     Width = 75
     Height = 25
     Caption = 'Estornar'
@@ -1992,7 +2120,7 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
   end
   object btnRelatorio: TBitBtn
     Left = 443
-    Top = 605
+    Top = 623
     Width = 75
     Height = 25
     Caption = 'Rela&t'#243'rio'
@@ -3647,7 +3775,9 @@ object FrmTrans_Devolucao_Venda: TFrmTrans_Devolucao_Venda
     ParamData = <
       item
         Name = 'TRANSACAO_ID'
+        DataType = ftInteger
         ParamType = ptInput
+        Value = Null
       end>
   end
   object QCliente: TFDQuery

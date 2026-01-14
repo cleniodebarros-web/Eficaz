@@ -5,7 +5,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
   BorderStyle = bsSingle
   Caption = 'Pedido de Venda'
   ClientHeight = 650
-  ClientWidth = 870
+  ClientWidth = 863
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -33,7 +33,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 870
+    Width = 863
     Height = 610
     ActivePage = Manutencao
     Align = alClient
@@ -50,7 +50,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
-        Width = 862
+        Width = 855
         Height = 561
         Align = alClient
         Color = clInfoBk
@@ -136,7 +136,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
       object Dias: TTabSet
         Left = 0
         Top = 561
-        Width = 862
+        Width = 855
         Height = 21
         Align = alBottom
         AutoScroll = False
@@ -628,7 +628,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 862
+        Width = 855
         Height = 41
         Align = alTop
         BevelOuter = bvNone
@@ -1393,8 +1393,8 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         OnKeyDown = DT_PEDIDOKeyDown
       end
       object Pedido: TQuickRep
-        Left = 881
-        Top = -57
+        Left = 857
+        Top = 0
         Width = 794
         Height = 1123
         Margins.Left = 2
@@ -5020,36 +5020,6 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
             Shape = qrsHorLine
             VertAdjust = 0
           end
-          object QRExpr1: TQRExpr
-            Left = 626
-            Top = 5
-            Width = 73
-            Height = 15
-            Size.Values = (
-              39.687500000000000000
-              1656.291666666667000000
-              13.229166666666670000
-              193.145833333333300000)
-            XLColumn = 0
-            Alignment = taRightJustify
-            AlignToBand = False
-            AutoSize = False
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Courier New'
-            Font.Style = []
-            Color = clWhite
-            Master = Pedido
-            ParentFont = False
-            ResetAfterPrint = False
-            Transparent = False
-            Expression = 'Sum(QTabela.Valor_Produtos)'
-            Mask = '#,##0.00'
-            ExportAs = exptText
-            WrapStyle = BreakOnSpaces
-            FontSize = 8
-          end
           object QRLabel4: TQRLabel
             Left = 480
             Top = 22
@@ -5321,6 +5291,37 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
             WrapStyle = BreakOnSpaces
             FontSize = 8
           end
+          object QRDBText24: TQRDBText
+            Left = 625
+            Top = 5
+            Width = 73
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1653.645833333333000000
+              13.229166666666670000
+              193.145833333333300000)
+            XLColumn = 0
+            Alignment = taRightJustify
+            AlignToBand = False
+            AutoSize = False
+            Color = clWhite
+            DataSet = QTabela
+            DataField = 'valor_produtos'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            Mask = '#,##0.00'
+            ParentFont = False
+            Transparent = False
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FullJustify = False
+            MaxBreakChars = 0
+            FontSize = 8
+          end
         end
         object QMsg_Adicional: TQRMemo
           Left = 51
@@ -5409,7 +5410,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
   object Panel1: TPanel
     Left = 0
     Top = 610
-    Width = 870
+    Width = 863
     Height = 40
     Align = alBottom
     BevelOuter = bvNone

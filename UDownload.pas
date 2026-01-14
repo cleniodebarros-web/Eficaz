@@ -7,7 +7,10 @@ uses
   ACBrBase, ACBrDownload, ACBrDownloadClass, httpsend, blcksock, ExtCtrls, Windows,
   IdBaseComponent, IdComponent, IdTCPConnection, IdTCPClient,
   IdExplicitTLSClientServerBase,System.Zip ,IdFTP, FireDAC.Stan.Intf,
-  FireDAC.Comp.Script;
+  FireDAC.Comp.Script, FireDAC.Stan.Option, FireDAC.Stan.Error, FireDAC.UI.Intf,
+  FireDAC.Phys.Intf, FireDAC.Stan.Def, FireDAC.Stan.Pool, FireDAC.Stan.Async,
+  FireDAC.Phys, FireDAC.Stan.Param, FireDAC.DatS, FireDAC.DApt.Intf,
+  FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
 type
   TFrmDownload = class(TForm)
@@ -47,6 +50,11 @@ type
     edArq: TEdit;
     IdFTP1: TIdFTP;
     Label11: TLabel;
+    VerificaPdvs: TFDConnection;
+    QPdv: TFDQuery;
+    QImpressoras: TFDQuery;
+    IdTCPClient1: TIdTCPClient;
+    LabelPdv: TLabel;
     procedure bStopClick(Sender: TObject);
     procedure bDownloadClick(Sender: TObject);
     procedure bPauseClick(Sender: TObject);
@@ -116,8 +124,13 @@ begin
   try
    if Tipo_Atualizacao = 0 then
    Begin
+
    DeleteFile(Pchar(edFile.Text));
    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Eficaz.exe'));
+
+   DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Schemas.zip'));
+   RemoveDirectory(Pchar(ExtractFilePath(ParamStr(0)) + '/Schemas'));
+
    End
    Else if Tipo_Atualizacao = 1 then
    begin
@@ -151,6 +164,10 @@ begin
    Else if Tipo_Atualizacao = 8 then
    begin
     DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Servidor.zip'));
+   end
+   Else if Tipo_Atualizacao = 9 then
+   begin
+    DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/PdvOffline.zip'));
    end;
 
   except
@@ -162,6 +179,8 @@ begin
   Begin
 
   IdFTP1.Get('Eficaz.zip', LeIni(Arq_Ini, 'Atualização', 'Download'), true, True);
+  Tipo_Atualizacao := 1;
+  IdFTP1.Get('Schemas.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'), true, True);
 
   IdFTP1.Disconnect();
 
@@ -171,6 +190,8 @@ begin
   ZipFile := TZipFile.Create;
 
   Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download'),ExtractFilePath(ParamStr(0)) + '/Atualizar' );
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'),ExtractFilePath(ParamStr(0)) + '/' );
+
   End
   Else if Tipo_Atualizacao = 1 then
   begin
@@ -305,6 +326,89 @@ begin
     IQuery.SQL.LoadFromFile('Servidor.txt');
     IQuery.ExecSQL;
   end;
+
+  end
+
+  Else if Tipo_Atualizacao = 9 then
+  begin
+  QImpressoras.Open;
+  if QImpressoras.IsEmpty then
+  begin
+    Application.MessageBox('Os PDVs são online. Só é necessário atualizar o servidor.', PChar(Msg_Title), mb_IconInformation);
+    Close;
+  end;
+
+  if LeIni(Arq_Ini, 'Atualização', 'Download_PDV_Offline') = '' then
+    GravaIni(Arq_Ini, 'Atualização', 'Download_PDV_Offline', ExtractFilePath(ParamStr(0)) + 'atualizar\PdvOffline.zip');
+
+  IdFTP1.Get('PdvOffline.zip', LeIni(Arq_Ini, 'Atualização', 'Download_PDV_Offline'), true, True);
+
+  IdFTP1.Disconnect();
+
+  bDownload.Enabled     := TRUE;
+  bStop.Enabled         := False;
+
+  ZipFile := TZipFile.Create;
+
+  Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_PDV_Offline'),ExtractFilePath(ParamStr(0)) + '/' );
+
+
+  QImpressoras.First;
+  LabelPdv.Visible := True;
+  while not QImpressoras.Eof do
+  begin
+    LabelPdv.Caption := 'Atualizando PDV nº ' + QImpressoras.FieldByName('NUM_ECF').AsString;
+    Application.ProcessMessages;
+    if (QImpressoras.FieldByName('IP').AsString = '127.0.0.1') or (QImpressoras.FieldByName('IP').AsString = 'localhost') then
+    begin
+
+      QImpressoras.Next;
+      Continue;
+
+    end;
+
+    try
+      if IdTCPClient1.Connected Then
+        IdTCPClient1.Disconnect;
+
+      IdTCPClient1.Host := QImpressoras.FieldByName('IP').AsString;
+      IdTCPClient1.Port := StrToInt(QImpressoras.FieldByName('PORTA').AsString);
+      IdTCPClient1.ConnectTimeout := 1000;
+      IdTCPClient1.Connect;
+
+      if IdTCPClient1.Connected Then
+      Begin
+        VerificaPdvs.Connected := False;
+        VerificaPdvs.Params.Clear;
+        VerificaPdvs.Params.Add('Database= ' +  QImpressoras.FieldByName('BANCO').AsString);
+        VerificaPdvs.Params.Add('User_Name= ' + QImpressoras.FieldByName('USUARIO').AsString);
+        VerificaPdvs.Params.Add('Password= ' + QImpressoras.FieldByName('SENHA').AsString);
+        VerificaPdvs.Params.Add('Server= ' +  QImpressoras.FieldByName('IP').AsString);
+        VerificaPdvs.Params.Add('Port=' + QImpressoras.FieldByName('PORTA').AsString);
+        VerificaPdvs.Params.Add('MonitorBy=Remote');
+        VerificaPdvs.Params.Add('DriverID=PG');
+        VerificaPdvs.Params.Add('LoginTimeout=500');
+        VerificaPdvs.Connected :=True;
+
+        IF VerificaPdvs.Connected Then
+        begin
+          QPdv.Connection := VerificaPdvs;
+          QPdv.SQL.Clear;
+          QPdv.SQL.LoadFromFile('PdvOffline.txt');
+          QPdv.ExecSQL;
+        end;
+      End;
+
+    except
+      on e:Exception do
+      begin
+        Application.MessageBox(PChar('Erro ao conectar:' + #13 + 'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+      end;
+    end;
+
+    QImpressoras.Next;
+  end;
+  LabelPdv.Visible := False;
 
   end;
 
@@ -509,7 +613,9 @@ begin
  else if Tipo_Atualizacao = 7 Then
  Label11.Caption := 'Transferido Relatorios.zip: ' + IntToStr(Transferido) + '/kb.'
  else if Tipo_Atualizacao = 8 Then
- Label11.Caption := 'Transferido Servidor.zip: ' + IntToStr(Transferido) + '/kb.';
+ Label11.Caption := 'Transferido Servidor.zip: ' + IntToStr(Transferido) + '/kb.'
+ else if Tipo_Atualizacao = 9 Then
+ Label11.Caption := 'Transferido PdvOffline.zip: ' + IntToStr(Transferido) + '/kb.';
 
 
  Application.ProcessMessages;

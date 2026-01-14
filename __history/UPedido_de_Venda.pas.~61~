@@ -1,0 +1,3977 @@
+unit UPedido_de_Venda;
+                                                                      
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
+  DB, IBCustomDataSet, IBQuery, Mask, Buttons, DBCtrls, rxCurrEdit, rxToolEdit,
+  IBUpdateSQL, Math, QRCtrls, QuickRpt, RDprint, FireDAC.Stan.Intf,
+  FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
+  FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
+  FireDAC.Comp.Client, FireDAC.Comp.DataSet, Vcl.Imaging.jpeg, QRPDFFilt,
+  Vcl.Menus;
+
+type
+  TFrmPedido_de_venda = class(TForm)
+    PageControl1: TPageControl;
+    Panel1: TPanel;
+    Consulta: TTabSheet;                                                      
+    Manutencao: TTabSheet;
+    DBGrid1: TDBGrid;
+    DataTabela: TDataSource;
+    btnRetorna: TBitBtn;
+    Panel2: TPanel;
+    btnPrior: TBitBtn;
+    btnNext: TBitBtn;
+    btnInsert: TBitBtn;
+    btnEdit: TBitBtn;
+    btnDelete: TBitBtn;
+    btnSave: TBitBtn;
+    btnDiscard: TBitBtn;
+    DT_PEDIDO: TDateEdit;
+    EMPRESA_ID: TCurrencyEdit;
+    CLIENTE_ID: TCurrencyEdit;
+    DataEmpresa: TDataSource;
+    DBText1: TDBText;
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label15: TLabel;
+    Label16: TLabel;
+    DT_MOVIMENTO: TDateEdit;
+    Panel3: TPanel;
+    Label21: TLabel;
+    StatusBar1: TStatusBar;
+    btnEmpresa: TSpeedButton;
+    btnFornecedor: TSpeedButton;
+    VALOR_PRODUTOS: TRxCalcEdit;
+    DataSub_Detail: TDataSource;
+    Label22: TLabel;
+    VALOR: TRxCalcEdit;
+    VR_FRETE: TRxCalcEdit;
+    Label23: TLabel;
+    Label24: TLabel;
+    VR_DESCONTO: TRxCalcEdit;
+    Label25: TLabel;
+    VR_ACRESCIMO: TRxCalcEdit;
+    COND_PAGTO: TComboBox;
+    btnParcelas: TSpeedButton;
+    Dias: TTabSet;
+    AUTORIZ_ID: TCurrencyEdit;
+    Label4: TLabel;
+    NOME: TEdit;
+    Label5: TLabel;
+    ENDERECO: TEdit;
+    Label7: TLabel;
+    BAIRRO: TEdit;
+    Label9: TLabel;
+    MUNICIPIO: TEdit;
+    Label8: TLabel;
+    ESTADO: TComboBox;
+    Label10: TLabel;
+    CEP: TMaskEdit;
+    btnPesquisa: TBitBtn;
+    btnPedido: TBitBtn;
+    Pedido: TQuickRep;
+    QRBand1: TQRBand;
+    QRShape1: TQRShape;
+    QRLabel6: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText14: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRLabel10: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRShape2: TQRShape;
+    QRLabel18: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel15: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRLabel2: TQRLabel;
+    QRDBText2: TQRDBText;
+    DetailBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRBand2: TQRBand;
+    QRLabel19: TQRLabel;
+    QRDBText8: TQRDBText;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRDBText23: TQRDBText;
+    QRShape5: TQRShape;
+    QRLabel4: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel29: TQRLabel;          
+    QRLabel1: TQRLabel;
+    QRDBText10: TQRDBText;
+    Label6: TLabel;
+    DT_ENTREGA: TDateEdit;
+    Label11: TLabel;
+    Label12: TLabel;
+    DT_STATUS: TDateEdit;
+    Label17: TLabel;
+    Status: TComboBox;
+    Label18: TLabel;
+    Cancelamento: TEdit;
+    Itens: TDBGrid;
+    Solicitante: TEdit;
+    RDprint1: TRDprint;
+    CheckBox1: TCheckBox;
+    Label30: TLabel;
+    Funcionario_id: TCurrencyEdit;
+    btnFuncionario: TSpeedButton;
+    DBText3: TDBText;
+    DataFuncionario: TDataSource;
+    TP_PEDIDO: TCurrencyEdit;
+    btnLog: TButton;
+    FINALIZADORA_ID: TDBLookupComboBox;
+    DataFinalizadora: TDataSource;
+    Label32: TLabel;
+    DBText4: TDBText;
+    NUMERO: TEdit;
+    QVencimento: TFDQuery;
+    QRel: TFDQuery;
+    QLimite: TFDQuery;
+    QFinalizadora: TFDQuery;
+    QFuncionario: TFDQuery;
+    QUpdate: TFDQuery;
+    QTributo: TFDQuery;
+    QProduto: TFDQuery;
+    QCliente: TFDQuery;
+    QSub_Detail: TFDQuery;
+    QEmpresa: TFDQuery;
+    IQuery: TFDQuery;
+    QTabela: TFDQuery;
+    USql_PedItens: TFDUpdateSQL;
+    QRLabel5: TQRLabel;
+    QRDBText11: TQRDBText;
+    QServico: TFDQuery;
+    Label14: TLabel;
+    MT_2: TRxCalcEdit;
+    Label19: TLabel;
+    Label20: TLabel;
+    Vr_Desconto_p: TRxCalcEdit;
+    Chk_Desc_p: TCheckBox;
+    QRLabel7: TQRLabel;
+    QRDBText16: TQRDBText;
+    Pedido_empty: TQuickRep;
+    QRBand3: TQRBand;
+    QRShape4: TQRShape;
+    QRLabel8: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRLabel22: TQRLabel;
+    QRShape6: TQRShape;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRShape7: TQRShape;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRSysData3: TQRSysData;
+    QRLabel32: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel33: TQRLabel;
+    QRDBText22: TQRDBText;
+    QRLabel34: TQRLabel;
+    QRDBText25: TQRDBText;
+    QRLabel35: TQRLabel;
+    QRLabel36: TQRLabel;
+    QrCliente: TQRLabel;
+    QREndereco: TQRLabel;
+    QRCidade: TQRLabel;
+    QRBairro: TQRLabel;
+    QRCep: TQRLabel;
+    QRBand4: TQRBand;
+    QRDBText26: TQRDBText;
+    QRDBText27: TQRDBText;
+    QRDBText28: TQRDBText;
+    QRDBText29: TQRDBText;
+    QRDBText30: TQRDBText;
+    QRDBText31: TQRDBText;
+    QRDBText32: TQRDBText;
+    QRBand5: TQRBand;
+    QRLabel37: TQRLabel;
+    QRDBText33: TQRDBText;
+    QRLabel38: TQRLabel;
+    QRLabel39: TQRLabel;
+    QRDBText34: TQRDBText;
+    QRDBText35: TQRDBText;
+    QRShape8: TQRShape;
+    QRExpr2: TQRExpr;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRLabel43: TQRLabel;
+    QRDBText36: TQRDBText;
+    QRDBText17: TQRDBText;
+    QRDBText18: TQRDBText;
+    Reduzido: TQuickRep;
+    QRBand6: TQRBand;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRDBText37: TQRDBText;
+    QRDBText38: TQRDBText;
+    QRDBText39: TQRDBText;
+    QRBand8: TQRBand;
+    QRLabel59: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRLabel60: TQRLabel;
+    QRShape13: TQRShape;
+    QRDBText40: TQRDBText;
+    QRLabel61: TQRLabel;
+    QRLabel62: TQRLabel;
+    QRShape14: TQRShape;
+    QRLabel63: TQRLabel;
+    QRLabel64: TQRLabel;
+    QRLabel65: TQRLabel;
+    QRLabel66: TQRLabel;
+    QRLabel67: TQRLabel;
+    QRShape15: TQRShape;
+    QRDBText41: TQRDBText;
+    QRLabel44: TQRLabel;
+    QRLabel45: TQRLabel;
+    QRBand9: TQRBand;
+    QRDBText42: TQRDBText;
+    QRShape16: TQRShape;
+    QRLabel68: TQRLabel;
+    QRDBText43: TQRDBText;
+    QRLabel69: TQRLabel;
+    QRLabel70: TQRLabel;
+    QRLabel71: TQRLabel;
+    QrLogo: TQRImage;
+    QRCompositeReport1: TQRCompositeReport;
+    reduzido1: TQuickRep;
+    QRBand7: TQRBand;
+    QRDBText44: TQRDBText;
+    QRDBText45: TQRDBText;
+    QRDBText46: TQRDBText;
+    QRDBText47: TQRDBText;
+    QRDBText48: TQRDBText;
+    QRDBText49: TQRDBText;
+    QRBand10: TQRBand;
+    QRLabel46: TQRLabel;
+    QRSysData5: TQRSysData;
+    QRLabel47: TQRLabel;
+    QRShape9: TQRShape;
+    QRLabel49: TQRLabel;
+    QRShape10: TQRShape;
+    QRLabel50: TQRLabel;
+    QRLabel51: TQRLabel;
+    QRLabel52: TQRLabel;
+    QRLabel53: TQRLabel;
+    QRLabel54: TQRLabel;
+    QRShape11: TQRShape;
+    QRDBText51: TQRDBText;
+    QRLabel55: TQRLabel;
+    QRLabel56: TQRLabel;
+    QRBand11: TQRBand;
+    QRDBText52: TQRDBText;
+    QRShape12: TQRShape;
+    QRLabel57: TQRLabel;
+    QRDBText53: TQRDBText;
+    QRLabel58: TQRLabel;
+    QRLabel72: TQRLabel;
+    QRLabel73: TQRLabel;
+    QMsg_Adicional: TQRMemo;
+    QRLabel74: TQRLabel;
+    QRLabel75: TQRLabel;
+    QRLabel76: TQRLabel;
+    QRDBText54: TQRDBText;
+    QRDBText55: TQRDBText;
+    QRDBText56: TQRDBText;
+    QRLabel77: TQRLabel;
+    QRLabel78: TQRLabel;
+    QRDBText57: TQRDBText;
+    QRDBText58: TQRDBText;
+    QRShape17: TQRShape;
+    QRDBText50: TQRDBText;
+    QRLabel48: TQRLabel;
+    QRLabel79: TQRLabel;
+    QRDBText59: TQRDBText;
+    QRDBText60: TQRDBText;
+    QRDBText61: TQRDBText;
+    QRLabel80: TQRLabel;
+    QRLabel81: TQRLabel;
+    QRDBText62: TQRDBText;
+    QRDBText63: TQRDBText;
+    QRShape18: TQRShape;
+    PageControl2: TPageControl;
+    TabSheet1: TTabSheet;
+    TabSheet2: TTabSheet;
+    Observacao_nfe: TMemo;
+    Observacao: TMemo;
+    Label26: TLabel;
+    CONTA_ID: TCurrencyEdit;
+    btnConta: TSpeedButton;
+    DBText2: TDBText;
+    Qconta: TFDQuery;
+    DataConta: TDataSource;
+    QRLabel82: TQRLabel;
+    QRDBText64: TQRDBText;
+    QRLabel83: TQRLabel;
+    QRDBText65: TQRDBText;
+    QRLabel84: TQRLabel;
+    QRMemo4: TQRMemo;
+    QRLabel85: TQRLabel;
+    QRDBText66: TQRDBText;
+    QRLabel87: TQRLabel;
+    QRDBText68: TQRDBText;
+    QRLabel88: TQRLabel;
+    QRDBText69: TQRDBText;
+    QRLabel89: TQRLabel;
+    QRDBText70: TQRDBText;
+    QRLabel90: TQRLabel;
+    QRDBText71: TQRDBText;
+    QRLabel91: TQRLabel;
+    QRDBText72: TQRDBText;
+    QRLabel92: TQRLabel;
+    QRLabel93: TQRLabel;
+    QRLabel94: TQRLabel;
+    QSelect: TFDQuery;
+    QRLabel95: TQRLabel;
+    QRDBText73: TQRDBText;
+    QRLabel96: TQRLabel;
+    Label35: TLabel;
+    BtnOrcamento: TSpeedButton;
+    QOrcamento: TFDQuery;
+    orcamento_id: TCurrencyEdit;
+    QRDBText67: TQRDBText;
+    Dados_Nf: TEdit;
+    QSearch: TFDQuery;
+    QRLabel86: TQRLabel;
+    QRDBText74: TQRDBText;
+    QRExpr3: TQRExpr;
+    QRPDFFilter1: TQRPDFFilter;
+    QControle_Registro: TFDQuery;
+    PopupMenu2: TPopupMenu;
+    e1: TMenuItem;
+    QOpera: TFDQuery;
+    QRDBText24: TQRDBText;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure btnEditClick(Sender: TObject);
+    procedure btnDiscardClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
+    procedure ManutencaoShow(Sender: TObject);
+    procedure btnPriorClick(Sender: TObject);
+    procedure btnNextClick(Sender: TObject);
+    procedure btnDeleteClick(Sender: TObject);
+    procedure DBGrid1TitleClick(Column: TColumn);
+    procedure DBGrid1DblClick(Sender: TObject);
+    procedure DBGrid1KeyPress(Sender: TObject; var Key: Char);
+    procedure EMPRESA_IDExit(Sender: TObject);
+    procedure CLIENTE_IDExit(Sender: TObject);
+    procedure EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnEmpresaClick(Sender: TObject);
+    procedure btnFornecedorClick(Sender: TObject);
+    procedure QSub_DetailNewRecord(DataSet: TDataSet);
+    procedure ItensKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure ItensKeyPress(Sender: TObject; var Key: Char);
+    procedure QSub_DetailBeforePost(DataSet: TDataSet);
+    procedure ItensColEnter(Sender: TObject);
+    procedure ItensColExit(Sender: TObject);
+    procedure ItensEnter(Sender: TObject);
+    procedure ItensExit(Sender: TObject);
+    procedure QSub_DetailBeforeDelete(DataSet: TDataSet);
+    procedure DiasClick(Sender: TObject);
+    procedure btnParcelasClick(Sender: TObject);
+    procedure btnPesquisaClick(Sender: TObject);
+    procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+    procedure ConsultaShow(Sender: TObject);
+    procedure DT_PEDIDOKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnPedidoClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure QSub_DetailBeforeEdit(DataSet: TDataSet);
+    procedure DT_PEDIDOEnter(Sender: TObject);
+    procedure QSub_DetailBeforeInsert(DataSet: TDataSet);
+    procedure StatusChange(Sender: TObject);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure RDprint1BeforeNewPage(Sender: TObject; Pagina: Integer);
+    procedure btnFuncionarioClick(Sender: TObject);
+    procedure Funcionario_idExit(Sender: TObject);
+    procedure btnLogClick(Sender: TObject);
+    procedure COND_PAGTOChange(Sender: TObject);
+    procedure DBGrid1DrawColumnCell(Sender: TObject; const Rect: TRect;
+      DataCol: Integer; Column: TColumn; State: TGridDrawState);
+    procedure QSub_DetailAfterOpen(DataSet: TDataSet);
+    procedure QTabelaAfterOpen(DataSet: TDataSet);
+    procedure VR_DESCONTOExit(Sender: TObject);
+    procedure Vr_Desconto_pExit(Sender: TObject);
+    procedure PedidoBeforePrint(Sender: TCustomQuickRep;
+      var PrintReport: Boolean);
+    procedure QRCompositeReport1AddReports(Sender: TObject);
+    procedure ReduzidoEndPage(Sender: TCustomQuickRep);
+    procedure reduzido1EndPage(Sender: TCustomQuickRep);
+    procedure CONTA_IDExit(Sender: TObject);
+    procedure btnContaClick(Sender: TObject);
+    procedure BtnOrcamentoClick(Sender: TObject);
+    procedure orcamento_idExit(Sender: TObject);
+    procedure orcamento_idKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure QSub_DetailAfterDelete(DataSet: TDataSet);
+    procedure E1Click(Sender: TObject);
+  private
+    procedure ServicoSearch;
+    { Private declarations }
+  public
+    { Public declarations }
+    CmdSelect: String;
+    CmdOrderBy: String;
+    CmdSelectNull: String;
+    procedure Botoes_Disable;
+    procedure Botoes_Editing;
+    procedure Botoes_Normal;
+    procedure DetailSearch(Tabela: String);
+    procedure Habilitar(Status: Boolean);
+    procedure Insert;
+    procedure Set_Campos(Vazio: Boolean);
+    procedure Edit;
+    function Validacao: Boolean;
+    procedure ProdutoSearch;
+    procedure TributoSearch;
+    Procedure Calculo_Rodape;
+    procedure controle_registro(tabela:STRING;chave_id,TP:Integer);
+    function VerificaRegistro(chave_id:integer;tabela:string): Boolean;
+  end;
+
+var
+  FrmPedido_de_venda: TFrmPedido_de_venda;
+  Operacao: String;
+  ID,Pagina,Linha,Linha2,linha3,id_orcamento: Integer;
+  Desc_por:Real;
+  Qtd:Double;
+
+implementation
+
+uses
+  UPrincipal, UData, UConsulta, UParcelas, UPesquisa,UGerente,UControle_Series;
+
+{$R *.dfm}
+
+function TFrmPedido_de_venda.VerificaRegistro(chave_id:integer;tabela:string): Boolean;
+Begin
+ Result := False;
+
+  QControle_Registro.Sql.Clear;
+  QControle_Registro.Sql.Text := 'SELECT * FROM CONTROLE_REGISTRO ' +
+                                 'LEFT JOIN FUNCIONARIOS ON FUNCIONARIOS.FUNCIONARIO_ID = CONTROLE_REGISTRO.USUARIO_ID ' +
+                                 'WHERE TABELA = :TABELA AND CHAVE_ID = :CHAVE_ID AND CONTROLE_REGISTRO.EMPRESA_ID = :EMPRESA_ID';
+
+  QControle_Registro.ParamByName('TABELA').AsString      := tabela;
+  QControle_Registro.ParamByName('CHAVE_ID').AsInteger   := chave_id;
+  QControle_Registro.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QControle_Registro.Prepare;
+  QControle_Registro.Open;
+
+  if (not QControle_Registro.IsEmpty) Then
+  Begin
+  Application.MessageBox(PChar('Orçamento: ' + IntToStr(chave_id) + #13 +'Aberto por: ' + QControle_Registro.FieldByName('NOME').AsString + #13 + 'Favor aguardar liberação do registro.'), PChar(Msg_Title), MB_ICONINFORMATION);
+  Result := False;
+  End
+  Else
+  Result := True;
+
+
+
+End;
+
+procedure  TFrmPedido_de_venda.controle_registro(tabela:STRING;chave_id,TP:Integer);
+Begin
+ // SHOWMESSAGE(INTTOSTR(TP));
+ // SHOWMESSAGE(INTTOSTR(chave_id));
+ // SHOWMESSAGE(tabela);
+
+  IF TP  = 0 Then
+  Begin
+  QControle_Registro.Sql.Clear;
+  QControle_Registro.Sql.Text := 'SELECT * FROM CONTROLE_REGISTRO ' +
+                                 'LEFT JOIN FUNCIONARIOS ON FUNCIONARIOS.FUNCIONARIO_ID = CONTROLE_REGISTRO.USUARIO_ID ' +
+                                 'WHERE TABELA = :TABELA AND CHAVE_ID = :CHAVE_ID AND CONTROLE_REGISTRO.EMPRESA_ID = :EMPRESA_ID';
+
+  QControle_Registro.ParamByName('TABELA').AsString      := tabela;
+  QControle_Registro.ParamByName('CHAVE_ID').AsInteger   := chave_id;
+  QControle_Registro.ParamByName('EMPRESA_ID').AsInteger :=  FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QControle_Registro.Prepare;
+  QControle_Registro.Open;
+
+
+
+    if (not QControle_Registro.IsEmpty) AND (QControle_Registro.FieldByName('CONEXAO_ID').AsInteger  <> id_conexao_banco)    then
+    Begin
+      Itens.Enabled        := False;
+      btnEdit.Enabled      := False;
+      btnDelete.Enabled    := False;
+      btnOrcamento.Enabled := False;
+      btnLog.Enabled       := False;
+      CheckBox1.Enabled    := False;
+      BtnOrcamento.Enabled := False;
+      Application.MessageBox(PChar('Pedido: ' + IntToStr(chave_id) + #13 +'Aberto por: ' + QControle_Registro.FieldByName('NOME').AsString + #13 + 'Favor aguardar liberação do registro.'), PChar(Msg_Title), MB_ICONINFORMATION);
+
+    End
+    Else
+    Begin
+
+     if QControle_Registro.IsEmpty Then
+     Begin
+
+     QUpdate.Sql.Clear;
+     QUpdate.Sql.Text := 'INSERT INTO CONTROLE_REGISTRO(CHAVE_ID,TABELA,DT_CHAVE,HR_CHAVE,USUARIO_ID,CONEXAO_ID,EMPRESA_ID) ' +
+                         'VALUES(:CHAVE_ID,''PEDIDO VENDA'',:DT_CHAVE,:HR_CHAVE,:USUARIO_ID,:CONEXAO_ID,:EMPRESA_ID)';
+     QUpdate.ParamByName('CHAVE_ID').AsInteger := chave_id;
+     QUpdate.ParamByName('DT_CHAVE').AsDate := Date;
+     QUpdate.ParamByName('HR_CHAVE').AsTime := time;
+     QUpdate.ParamByName('USUARIO_ID').AsInteger :=  FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+     QUpdate.ParamByName('CONEXAO_ID').AsInteger :=  id_conexao_banco;
+     QUpdate.ParamByName('EMPRESA_ID').AsInteger :=  FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+     QUpdate.Prepare;
+     QUpdate.ExecSQL;
+
+     End;
+
+    End;
+  End
+  Else
+  Begin
+
+   QUpdate.Sql.Clear;
+   QUpdate.Sql.Text := 'DELETE FROM CONTROLE_REGISTRO WHERE CONEXAO_ID = :CONEXAO_ID ' +
+                       'AND TABELA = ''PEDIDO VENDA'' ';
+   //QUpdate.ParamByName('CHAVE_ID').AsInteger   := chave_id;
+   //QUpdate.ParamByName('USUARIO_ID').AsInteger := QTabela.FieldByName('VENDEDOR_ID').AsInteger;
+   QUpdate.ParamByName('CONEXAO_ID').AsInteger := id_conexao_banco;
+   QUpdate.Prepare;
+   QUpdate.ExecSQL;
+
+  End;
+
+
+
+End;
+
+
+procedure TFrmPedido_de_venda.Calculo_Rodape;
+var
+soma_rateio,Ult_Valor ,Per_Rateio: Real;
+Ult_Produto :Integer;
+
+begin
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT SUM((VR_UNITARIO * QUANTIDADE)) VR_TOTAL');
+  IQuery.Sql.Add('FROM PEDITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PEDIDO_ID = :PEDIDO_ID)');
+
+  IQuery.ParamByName('PEDIDO_ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  Soma_Rateio := 0;
+
+  if VR_DESCONTO.Value > 0 then
+  begin
+    Per_Rateio := RoundTo(((VR_DESCONTO.Value * 100) / IQuery.FieldByName('VR_TOTAL').AsFloat), -4);
+
+    QSub_Detail.First;
+    while not QSub_Detail.Eof do
+    begin
+      QUpdate.Sql.Clear;
+      QUpdate.Sql.Add('UPDATE PEDITENS SET DESC_RODAPE = :DESC_RODAPE');
+      QUpdate.Sql.Add('WHERE');
+      QUpdate.Sql.Add('(PEDIDO_ID = :PEDIDO_ID)');
+      QUpdate.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+      QUpdate.ParamByName('DESC_RODAPE').AsFloat    := RoundTo((((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat) * Per_Rateio) / 100), -2);
+      QUpdate.ParamByName('PEDIDO_ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+      QUpdate.ParamByName('PRODUTO_ID').AsInteger   := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+      QUpdate.Prepare;
+      QUpdate.ExecSql;
+
+
+
+      Soma_Rateio := Soma_Rateio + RoundTo((((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat) * Per_Rateio) / 100), -2);
+      Ult_Valor   := RoundTo((((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat) * Per_Rateio) / 100), -2);
+      Ult_Produto := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+      Application.ProcessMessages;
+      QSub_Detail.Next;
+    end;
+  end
+  else
+  begin
+    QUpdate.Sql.Clear;
+    QUpdate.Sql.Add('UPDATE PEDITENS SET DESC_RODAPE = 0');
+    QUpdate.Sql.Add('WHERE');
+    QUpdate.Sql.Add('(PEDIDO_ID = :PEDIDO_ID)');
+
+    QUpdate.ParamByName('PEDIDO_ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+    QUpdate.Prepare;
+    QUpdate.ExecSql;
+
+
+  end;
+
+  if (Soma_Rateio > 0) and (VR_DESCONTO.Value <> Soma_Rateio) then
+  begin
+    QUpdate.Sql.Clear;
+    QUpdate.Sql.Add('UPDATE PEDITENS SET DESC_RODAPE = :DESC_RODAPE');
+    QUpdate.Sql.Add('WHERE');
+    QUpdate.Sql.Add('(PEDIDO_ID = :PEDIDO_ID)');
+    QUpdate.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+    QUpdate.ParamByName('DESC_RODAPE').AsFloat    := (VR_DESCONTO.Value - (Soma_Rateio - Ult_Valor));
+    QUpdate.ParamByName('PEDIDO_ID').AsInteger    := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+    QUpdate.ParamByName('PRODUTO_ID').AsInteger   := Ult_Produto;
+
+    QUpdate.Prepare;
+    QUpdate.ExecSql;
+
+
+  end;
+
+  Soma_Rateio := 0;
+
+End;
+
+procedure TFrmPedido_de_venda.CLIENTE_IDExit(Sender: TObject);
+begin
+  DetailSearch('Cliente');
+end;
+
+procedure TFrmPedido_de_venda.COND_PAGTOChange(Sender: TObject);
+begin
+if (Operacao = 'Alterando') or (Operacao = 'Inserindo') then
+  begin
+    if (COND_PAGTO.Text = 'A VISTA') OR (COND_PAGTO.Text = 'PIX') then
+    begin
+      Finalizadora_id.KeyValue := 1;
+      Finalizadora_id.Enabled := False;
+
+    end;
+    if COND_PAGTO.Text = 'A PRAZO' then
+    begin
+      Finalizadora_id.Enabled := False;
+      Finalizadora_id.KeyValue := 2;
+      DetailSearch('');
+    end;
+
+    if Cond_pagto.Text = 'CARTAO' then
+       Finalizadora_id.Enabled := True;
+  end;
+
+  if COND_PAGTO.Text = 'A PRAZO' then
+  begin
+    if QCliente.IsEmpty then
+    begin
+      Application.MessageBox('Cliente inexistente', PChar(Msg_Title), mb_IconSTop);
+      CLIENTE_ID.Color := clYellow;
+      CLIENTE_ID.SetFocus;
+      exit;
+    end
+    else
+    begin
+      if QCliente.FieldByName('BLOQUEADO').AsString = 'SIM' then
+      begin
+       // Application.MessageBox('Cliente bloqueado', PChar(Msg_Title), mb_IconSTop);
+       // CLIENTE_ID.Color := clYellow;
+       // CLIENTE_ID.SetFocus;
+       // exit;
+       Label19.Visible := True;
+       Label19.Font.Color := ClRed;
+       Label19.Caption := 'Cliente Bloqueado.';
+      end;
+
+      if QCliente.FieldByName('LIMITE').AsFloat > 0 then
+      begin
+        QLimite.Close;
+        QLimite.ParamByName('CLIENTE_ID').AsInteger     := StrToInt(CLIENTE_ID.Text);
+        QLimite.ParamByName('DT_VENCIMENTO').AsDateTime := StrToDate('31/12/2026');
+        QLimite.Prepare;
+        QLimite.Open;
+
+        if (QLimite.FieldByName('DEBITO').AsFloat + VALOR.Value) > QCliente.FieldByName('LIMITE').AsFloat then
+        begin
+         Label19.Visible := True;
+         Label19.Font.Color := ClRed;
+         Label19.Caption := 'Cliente sem limite.';
+         // Application.MessageBox('Valor acima do limite do cliente', PChar(Msg_Title), mb_IconStop);
+         // VALOR.Color := clYellow;
+         // VALOR.SetFocus;
+         // exit;
+        end;
+      end;
+    end;
+
+    if FrmPrincipal.Config.FieldByName('CARENCIA').AsInteger > 0 then
+    Begin
+      QVencimento.Close;
+      QVencimento.ParamByName('CLIENTE_ID').AsInteger     := StrToInt(CLIENTE_ID.Text);
+      QVencimento.ParamByName('DT_VENCIMENTO').AsDateTime := Date - FrmPrincipal.Config.FieldByName('CARENCIA').AsInteger;
+      QVencimento.Prepare;
+      QVencimento.Open;
+
+      if not QVencimento.IsEmpty then
+      Begin
+
+       Label19.Visible := True;
+       Label19.Font.Color := ClRed;
+       Label19.Caption := 'Cliente possui débitos vencidos.';
+       //Application.MessageBox('Cliente Possui Débitos vencidos e não quitados favor verificar.', PChar(Msg_Title), mb_IconStop);
+       //CLIENTE_ID.Color := clYellow;
+       //CLIENTE_ID.SetFocus;
+       //exit;
+      End;
+    End;
+  end;
+
+
+
+
+end;
+
+procedure TFrmPedido_de_venda.Funcionario_idExit(Sender: TObject);
+begin
+DetailSearch('Funcionario');
+end;
+
+procedure TFrmPedido_de_venda.Botoes_Disable;
+begin
+  btnPrior.Enabled      := False;
+  btnNext.Enabled       := False;
+  btnInsert.Enabled     := False;
+  btnEdit.Enabled       := False;
+  btnDelete.Enabled     := False;
+  btnSave.Enabled       := False;
+  btnDiscard.Enabled    := False;
+  btnRetorna.Enabled    := False;
+  btnEmpresa.Enabled    := False;
+  btnFornecedor.Enabled := False;
+  btnParcelas.Enabled   := False;
+  btnPesquisa.Enabled   := False;
+  btnPedido.Enabled     := False;
+  btnFuncionario.Enabled := False;
+  btnConta.Enabled      := False;
+end;
+
+procedure TFrmPedido_de_venda.Botoes_Editing;
+begin
+  btnPrior.Enabled       := False;
+  btnNext.Enabled        := False;
+  btnInsert.Enabled      := False;
+  btnEdit.Enabled        := False;
+  btnDelete.Enabled      := False;
+  btnSave.Enabled        := True;
+  btnDiscard.Enabled     := True;
+  btnRetorna.Enabled     := False;
+  btnEmpresa.Enabled     := True;
+  btnFornecedor.Enabled  := True;
+  btnParcelas.Enabled    := False;
+  btnPesquisa.Enabled    := False;
+  btnPedido.Enabled      := False;
+  btnFuncionario.Enabled := True;
+  btnConta.Enabled       := True;
+end;
+
+procedure TFrmPedido_de_venda.Botoes_Normal;
+begin
+  if not QTabela.Bof then
+    btnPrior.Enabled := True
+  else
+    btnPrior.Enabled := False;
+
+  if not QTabela.Eof then
+    btnNext.Enabled := True
+  else
+    btnNext.Enabled := False;
+
+  btnInsert.Enabled := True;
+
+  if (not QTabela.IsEmpty) and (not QFuncionario.IsEmpty) then
+  begin
+    btnEdit.Enabled   := True;
+    btnDelete.Enabled := True;
+    btnPedido.Enabled := True;
+    btnlog.Enabled    := True;
+  end
+  else
+  begin
+    btnEdit.Enabled   := False;
+    btnDelete.Enabled := False;
+    btnPedido.Enabled := False;
+    btnlog.Enabled    := False;
+  end;
+
+  if QTabela.FieldByName('COND_PAGTO').AsString = 'A PRAZO' then
+    btnParcelas.Enabled := True
+  else
+    btnParcelas.Enabled := False;
+
+  btnSave.Enabled        := False;
+  btnDiscard.Enabled     := False;
+  btnRetorna.Enabled     := True;
+  btnEmpresa.Enabled     := False;
+  btnFornecedor.Enabled  := False;
+  btnPesquisa.Enabled    := True;
+  btnFuncionario.Enabled := False;
+  btnConta.Enabled       := True;
+end;
+
+procedure TFrmPedido_de_venda.DetailSearch(Tabela: String);
+begin
+  if ((Tabela = '') or (Tabela = 'Empresa')) and (EMPRESA_ID.Text <> '') then
+  begin
+    QEmpresa.Close;
+    QEmpresa.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+    QEmpresa.Prepare;
+    QEmpresa.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Funcionario')) and (FUNCIONARIO_ID.Text <> '') then
+  begin
+    QFuncionario.Close;
+    QFuncionario.ParamByName('FUNCIONARIO_ID').AsInteger := StrToInt(FUNCIONARIO_ID.Text);
+    QFuncionario.Prepare;
+    QFuncionario.Open;
+  end;
+
+  if ((Tabela = '') or (Tabela = 'Conta')) and (CONTA_ID.Text <> '') then
+  begin
+    QConta.Close;
+    QConta.ParamByName('TABELA_ID').AsInteger := StrToInt(CONTA_ID.Text);
+    QConta.Prepare;
+    QConta.Open;
+  end;
+
+
+  if ((Tabela = '') or (Tabela = 'Cliente')) and (Cliente_ID.Text <> '') then
+  begin
+    QCliente.Close;
+    QCliente.ParamByName('CLIENTE_ID').AsInteger := StrToInt(Cliente_ID.Text);
+    QCliente.Prepare;
+    QCliente.Open;
+
+    if not QCliente.IsEmpty then
+    begin
+      NOME.Text      := Copy(QCliente.FieldByName('NOME').AsString,1,50);
+      ENDERECO.Text  := Copy(QCliente.FieldByName('ENDERECO').AsString,1,40);
+      Numero.Text    := QCliente.FieldByName('NUMERO').AsString;
+      BAIRRO.Text    := Copy(QCliente.FieldByName('BAIRRO').AsString,1,20);
+      MUNICIPIO.Text := QCliente.FieldByName('MUNICIPIO').AsString;
+      ESTADO.Text    := QCliente.FieldByName('ESTADO').AsString;
+      CEP.Text       := QCliente.FieldByName('CEP').AsString;
+
+    end;
+  end;
+
+  if (Tabela = 'Orçamento') and (orcamento_ID.value > 0 ) then
+  begin
+    QOrcamento.Close;
+    QOrcamento.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(ORCAMENTO_ID.Text);
+    QOrcamento.ParamByName('STATUS').AsString        := 'NORMAL';
+    QOrcamento.Prepare;
+    QOrcamento.Open;
+  end;
+
+
+end;
+
+procedure TFrmPedido_de_venda.DiasClick(Sender: TObject);
+begin
+  if Dias.TabIndex <> (Dias.Tabs.Count - 1) then
+  begin
+    CmdSelectNull := 'WHERE (PEDIDO_ID IS NOT NULL) AND (TP_PEDIDO = 1) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID)';
+    CmdOrderBy    := 'ORDER BY PEDIDO_ID';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := StrToDate(StrZero(IntToStr(Dias.TabIndex + 1), 2, 0) + '/' + Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 7));
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end
+  else
+  begin
+    CmdSelectNull := 'WHERE (PEDIDO_ID IS NOT NULL) AND (TP_PEDIDO = 1) AND (DT_MOVIMENTO <= :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID)';
+    CmdOrderBy    := 'ORDER BY PEDIDO_ID';
+
+    QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+    QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+
+  QTabela.Open;
+  QTabela.Last;
+
+
+  Botoes_Normal;
+end;
+
+procedure TFrmPedido_de_venda.DT_PEDIDOEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmPedido_de_venda.DT_PEDIDOKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmPedido_de_venda.Habilitar(Status: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+Desconto_Item : real;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      TEdit(Temp).Enabled := Status;
+
+    if Temp is TMaskEdit then
+      TMaskEdit(Temp).Enabled := Status;
+
+    if Temp is TDateEdit then
+      TDateEdit(Temp).Enabled := Status;
+
+    if Temp is TComboBox then
+      TComboBox(Temp).Enabled := Status;
+
+    if Temp is TCurrencyEdit then
+      TCurrencyEdit(Temp).Enabled := Status;
+
+    if Temp is TRxCalcEdit then
+      TRxcalcEdit(Temp).Enabled := Status;
+
+    if Temp is TMemo then
+      TMemo(Temp).Enabled := Status;
+
+    if Temp is TDBLookupComboBox then
+      TDBLookupComboBox(Temp).Enabled := Status;
+  end;
+
+    QSub_Detail.First;
+    Desconto_Item := 0;
+
+    While not QSub_Detail.Eof do
+    Begin
+
+      if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > 0 Then
+      Desconto_Item := Desconto_Item + QSub_Detail.FieldByName('VR_DESCONTO').AsFloat;
+
+    QSub_Detail.Next;
+    End;
+
+    if Desconto_item > 0 Then
+    Begin
+        Vr_Desconto.Enabled   := False;
+        Vr_Desconto_p.ENABLED := False;
+        Vr_Desconto.Value     := 0;
+        Vr_Desconto_p.Value   := 0;
+    End
+    Else
+    Begin
+        Vr_Desconto.Enabled   := Status;
+        Vr_Desconto_p.ENABLED := Status;
+       // Vr_Desconto.Value     := 0;
+       // Vr_Desconto_p.Value   := 0;
+    End;
+end;
+
+procedure TFrmPedido_de_venda.Insert;
+var
+I: Integer;
+Temp: TComponent;
+Sql, Par: String;
+begin
+  Sql := 'INSERT INTO PEDIDOS(';
+  Par := '';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TEdit(Temp).Name
+      else
+        Par := Par + ', :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TMaskEdit(Temp).Name
+      else
+        Par := Par + ', :' + TMaskEdit(Temp).Name;
+    end;
+
+    if (Temp is TDateEdit) AND (TDateEdit(Temp).Text <> '  /  /    ')  then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TDateEdit(Temp).Name
+      else
+        Par := Par + ', :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TCurrencyEdit(Temp).Name
+      else
+        Par := Par + ', :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TRxcalcEdit(Temp).Name
+      else
+        Par := Par + ', :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TMemo then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TMemo(Temp).Name
+      else
+        Sql := Sql + ', ' + TMemo(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TMemo(Temp).Name
+      else
+        Par := Par + ', :' + TMemo(Temp).Name;
+    end;
+
+  if Temp is TDBLookupComboBox then
+    begin
+      if Sql = 'INSERT INTO PEDIDOS(' then
+        Sql := Sql + TDBLookupComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TDBLookupComboBox(Temp).Name;
+      if Par = '' then
+        Par := Par + ':' + TDBLookupComboBox(Temp).Name
+      else
+        Par := Par + ', :' + TDBLookupComboBox(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ') VALUES(' + Par + ')';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+
+    if Temp is TMemo then
+      IQuery.ParamByName(TMemo(Temp).Name).AsByteStr := TMemo(Temp).Text;
+
+    if Temp is TDBLookupComboBox then
+      IQuery.ParamByName(TDBLookupComboBox(Temp).Name).AsInteger := QFinalizadora.FieldByName('FINALIZADORA_ID').AsInteger;
+  end;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+  Habilitar(False);
+end;
+
+procedure TFrmPedido_de_venda.E1Click(Sender: TObject);
+begin
+
+Application.MessageBox(Pchar('Observação do pedido: ' + QTABELA.FieldByName('pedido_id').AsString + #13 +  'Valor: ' +  FloatToStrf(QTABELA.FieldByName('valor').AsFloat,ffNumber,15,2)
++ #13 +'Obs: ' +  QTABELA.FieldByName('OBSERVACAO').AsString),'Eficaz', MB_ICONINFORMATION + MB_OK);
+
+
+end;
+
+procedure TFrmPedido_de_venda.Edit;
+var
+I: Integer;
+Temp: TComponent;
+Sql: String;
+begin
+  Sql := 'UPDATE PEDIDOS SET ';
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TEdit(Temp).Name + ' = :' + TEdit(Temp).Name;
+    end;
+
+    if Temp is TMaskEdit then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TMaskEdit(Temp).Name + ' = :' + TMaskEdit(Temp).Name;
+    end;
+
+    if (Temp is TDateEdit) AND (TDateEdit(Temp).Text <> '  /  /    ')  then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TDateEdit(Temp).Name + ' = :' + TDateEdit(Temp).Name;
+    end;
+
+    if Temp is TComboBox then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TComboBox(Temp).Name + ' = :' + TComboBox(Temp).Name;
+    end;
+
+    if Temp is TCurrencyEdit then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TCurrencyEdit(Temp).Name + ' = :' + TCurrencyEdit(Temp).Name;
+    end;
+
+    if Temp is TRxCalcEdit then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name
+      else
+        Sql := Sql + ', ' + TRxCalcEdit(Temp).Name + ' = :' + TRxCalcEdit(Temp).Name;
+    end;
+
+    if Temp is TMemo then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TMemo(Temp).Name + ' = :' + TMemo(Temp).Name
+      else
+        Sql := Sql + ', ' + TMemo(Temp).Name + ' = :' + TMemo(Temp).Name;
+    end;
+
+  if Temp is TDBLookupComboBox then
+    begin
+      if Sql = 'UPDATE PEDIDOS SET ' then
+        Sql := Sql + TDBLookupComboBox(Temp).Name + ' = :' + TDBLookupComboBox(Temp).Name
+      else
+        Sql := Sql + ', ' + TDBLookupComboBox(Temp).Name + ' = :' + TDBLookupComboBox(Temp).Name;
+    end;
+  end;
+
+  Sql := Sql + ' WHERE (PEDIDO_ID = :ID)';
+
+  
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add(Sql);
+
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Temp is TEdit then
+      IQuery.ParamByName(TEdit(Temp).Name).AsString := TEdit(Temp).Text;
+
+    if Temp is TMaskEdit then
+      IQuery.ParamByName(TMaskEdit(Temp).Name).AsString := TMaskEdit(Temp).Text;
+
+    if Temp is TDateEdit then
+      IQuery.ParamByName(TDateEdit(Temp).Name).AsDateTime := TDateEdit(Temp).Date;
+
+    if Temp is TComboBox then
+      IQuery.ParamByName(TComboBox(Temp).Name).AsString := TComboBox(Temp).Text;
+
+    if Temp is TCurrencyEdit then
+      IQuery.ParamByName(TCurrencyEdit(Temp).Name).AsFloat := TCurrencyEdit(Temp).Value;
+
+    if Temp is TRxCalcEdit then
+      IQuery.ParamByName(TRxCalcEdit(Temp).Name).AsFloat := TRxCalcEdit(Temp).Value;
+
+    if Temp is TMemo then
+      IQuery.ParamByName(TMemo(Temp).Name).AsByteStr := TMemo(Temp).Text;
+
+    if Temp is TDBLookupComboBox then
+      IQuery.ParamByName(TDBLookupComboBox(Temp).Name).AsInteger := QFinalizadora.FieldByName('FINALIZADORA_ID').AsInteger;  
+
+  end;
+
+  IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.ExecSql;
+
+
+
+  QTabela.Close;
+  QTabela.Open;
+  QTabela.Locate('PEDIDO_ID', ID, [loCaseInsensitive]);
+  Habilitar(False);
+end;
+
+procedure TFrmPedido_de_venda.PedidoBeforePrint(Sender: TCustomQuickRep;
+  var PrintReport: Boolean);
+begin
+  //if FileExists(FrmPrincipal.QEmpresa.FieldByName('LOGO_EMPRESA').AsString ) then
+  //QrLogo.Picture.LoadFromFile(FrmPrincipal.QEmpresa.FieldByName('LOGO_EMPRESA').AsString);
+  FrmPrincipal.QEmpresa.Refresh;
+  if FrmPrincipal.QEmpresa.CreateBlobStream(FrmPrincipal.QEmpresa.FieldByName('LOGO_STREAM'),bmRead).Size > 0 then
+    QrLogo.Picture.Graphic.LoadFromStream(FrmPrincipal.QEmpresa.CreateBlobStream(FrmPrincipal.QEmpresa.FieldByName('LOGO_STREAM'),bmRead));
+
+end;
+
+procedure TFrmPedido_de_venda.ProdutoSearch;
+begin
+  QProduto.Close;
+
+  QProduto.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+  QProduto.ParamByName('EMPRESA_ID').AsInteger := StrToInt(EMPRESA_ID.Text);
+
+  QProduto.Prepare;
+  QProduto.Open;
+end;
+
+procedure TFrmPedido_de_venda.ServicoSearch;
+begin
+  QServico.Close;
+  QServico.ParamByName('SERVICO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+  QServico.Prepare;
+  QServico.Open;
+end;
+
+procedure TFrmPedido_de_venda.TributoSearch;
+begin
+  QTributo.Close;
+  QTributo.ParamByName('TRIBUTO_ID').AsInteger := QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger;
+  QTributo.Prepare;
+  QTributo.Open;
+end;
+
+procedure TFrmPedido_de_venda.EMPRESA_IDExit(Sender: TObject);
+begin
+  DetailSearch('Empresa');
+end;
+
+procedure TFrmPedido_de_venda.EMPRESA_IDKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = EMPRESA_ID) then
+    btnEmpresaClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Cliente_ID) then
+    btnFornecedorClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Funcionario_ID) then
+    btnFuncionarioClick(Self);
+
+  if (Key = Vk_F7) and (Sender = Conta_ID) then
+    btnContaClick(Self);
+
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+function TFrmPedido_de_venda.Validacao: Boolean;
+begin
+  Result := False;
+
+  Cliente_ID.Color    := clWindow;
+  EMPRESA_ID.Color    := clWindow;
+  COND_PAGTO.Color    := clWindow;
+  ESTADO.Color        := clWindow;
+  Conta_ID.Color      := clWindow;
+
+   {
+  
+  if QCliente.IsEmpty then
+  begin
+      Application.MessageBox('Cliente inexistente', PChar(Msg_Title), mb_IconStop);
+      CLIENTE_ID.Color := clYellow;
+      CLIENTE_ID.SetFocus;
+      exit;
+  end;
+  }
+
+  if QEmpresa.IsEmpty then
+  begin
+    Application.MessageBox('Empresa inexistente', PChar(Msg_Title), mb_IconStop);
+    EMPRESA_ID.Color := clYellow;
+    EMPRESA_ID.SetFocus;
+    exit;
+  end;
+
+  if (COND_PAGTO.Text <> 'A VISTA') and (COND_PAGTO.Text <> 'A PRAZO') and (COND_PAGTO.Text <> 'CARTAO') and (COND_PAGTO.Text <> 'PIX') and (COND_PAGTO.Text <> 'CHEQUE') then
+  begin
+    Application.MessageBox('Cond. de Pagto. inválida', PChar(Msg_Title), mb_IconStop);
+    COND_PAGTO.Color := clYellow;
+    COND_PAGTO.SetFocus;
+    exit;
+  end;
+
+  if not ChecaEstado(ESTADO.Text) then
+  begin
+    Application.MessageBox('Estado inválido', PChar(Msg_Title), mb_IconStop);
+    ESTADO.Color := clYellow;
+    ESTADO.SetFocus;
+    exit;
+  end;
+
+   if (QFuncionario.IsEmpty) and (StrToInt(orcamento_id.text) = 0) then
+  begin
+    Application.MessageBox('Vendedor inexistente', PChar(Msg_Title), mb_IconStop);
+    Funcionario_ID.Color := clYellow;
+    Funcionario_ID.SetFocus;
+    exit;
+  end;
+
+  if Status.Text = 'CANCELADO' then
+  begin
+    if Cancelamento.Text = '' then
+    begin
+      Application.MessageBox('Favor preencher o motivo do Cancelamento!', PChar(Msg_Title), mb_IconSTop);
+      Cancelamento.Color := clYellow;
+      Cancelamento.SetFocus;
+      exit;
+    end;
+  end;
+
+  if Status.Text = 'FAT.TERCEIRO' then
+  begin
+    if Dados_Nf.Text = '' then
+    begin
+      Application.MessageBox('Favor preencher os dados do Faturamento Nota Fiscal!', PChar(Msg_Title), mb_IconSTop);
+      Dados_Nf.Color := clYellow;
+      Dados_Nf.SetFocus;
+      exit;
+    end;
+  end;
+  if FrmPrincipal.Config.FieldByName('DESC_MAXIMO').AsFloat > 0 then
+  begin
+    if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > ((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * FrmPrincipal.Config.FieldByName('DESC_MAXIMO').AsFloat) / 100) then
+    begin
+      Application.MessageBox('Vr. Desconto maior do que o valor permitido', PChar(Msg_Title), mb_IconStop);
+      VR_DESCONTO.Color := clYellow;
+      VR_DESCONTO.SetFocus;
+      abort;
+    end;
+  end;
+
+
+    if (Status.Text = 'FATURADO')  then
+    Begin
+        if FrmGerente = Nil then
+        begin
+          Application.CreateForm(TFrmGerente, FrmGerente);
+          try
+            if FrmGerente.ShowModal = mrOK then
+            begin
+              if FrmGerente.QOperador.FieldByName('STATUS_OS').AsString <> 'True' then
+              begin
+               Application.MessageBox('Operador sem permissão para alterar status O.S.', 'Ordem de Serviço', MB_IconStop + MB_OK);
+               Status.Text := 'NORMAL';
+               //dt_fechamento.Text := '  /  /    ';
+               //H_fechamento.Text  := '  :  ';
+               Status.SetFocus;
+               Exit;
+              end;
+            Result := True;
+            end
+            else
+              Begin
+               Status.Text := 'NORMAL';
+               //dt_fechamento.Text := '  /  /    ';
+               //H_fechamento.Text  := '  :  ';
+               Status.SetFocus;
+               Exit;
+              End;
+          finally
+
+          end;
+        end
+        else
+        begin
+          if FrmGerente.ShowModal = mrOK then
+          begin
+            if FrmGerente.QOperador.FieldByName('STATUS_OS').AsString <> 'True' then
+            begin
+               Application.MessageBox('Operador sem permissão para alterar status O.S.', 'Ordem de Serviço', MB_IconStop + MB_OK);
+               Status.Text := 'NORMAL';
+              //dt_fechamento.Text := '  /  /    ';
+              //H_fechamento.Text  := '  :  ';
+               Status.SetFocus;
+               Exit;
+            end;
+          Result := True;
+          end
+          else
+           Begin
+            Status.Text := 'NORMAL';
+            //dt_fechamento.Text := '  /  /    ';
+            //H_fechamento.Text  := '  :  ';
+            Status.SetFocus;
+            Exit;
+           End;
+        end;
+    End;
+
+
+  if (FrmPrincipal.Config.FieldByName('DESC_ORC_USU').AsString = 'True') or (FrmPrincipal.Config.FieldByName('DESCONTOS_PRODUTOS').AsString = 'True')then
+  Begin
+  Desc_por := 0;
+    if Vr_Desconto.Value > 0 then
+       Desc_Por := RoundTo(((Vr_Desconto.Value * 100) / (Valor_Produtos.Value)), -2)
+    else
+       Desc_Por  := 0;
+
+        IQuery.SQL.Clear;
+        IQuery.SQL.Add('SELECT * FROM OPERADORES WHERE NOME LIKE :NOME');
+        IQuery.ParamByName('NOME').AsString :=  COPY(QFuncionario.FieldByName('NOME').AsString,1,19) + '%';
+        IQuery.Prepare;
+        IQuery.Open;
+   { if (IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat = 0) and (Vr_Desconto.Value > 0) then
+    begin
+        Application.MessageBox(Pchar('Vr. Desconto máximo permitido para ' +  IQuery.FieldByName('NOME').AsString + ' ' + ': '+ IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsString +'%') , PChar(Msg_Title), mb_IconStop);
+        VR_DESCONTO.Color := clYellow;
+        VR_DESCONTO.SetFocus;
+        abort;
+    end; }
+
+      if IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat >= 0 then
+      begin
+        if Vr_Desconto.Value > (((Valor_produtos.Value) * IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat) / 100) then
+        begin
+          Application.MessageBox(Pchar('Vr. Desconto máximo permitido para ' +  IQuery.FieldByName('NOME').AsString + ' ' + ': '+ IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsString +'%') , PChar(Msg_Title), mb_IconStop);
+
+          if FrmGerente = Nil then
+          begin
+            Application.CreateForm(TFrmGerente, FrmGerente);
+            try
+              if FrmGerente.ShowModal = mrOK then
+               begin
+                if Desc_Por > FrmGerente.QOperador.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat then
+                begin
+                 Application.MessageBox('Desconto acima do máximo permitido', 'Pedido de Venda', MB_IconStop + MB_OK);
+                 VR_DESCONTO.Color := clYellow;
+                 VR_DESCONTO.SetFocus;
+                 Exit;
+                end;
+                Result := True;
+              end
+              else
+                VR_DESCONTO.Color := clYellow;
+                VR_DESCONTO.SetFocus;
+                Exit;
+            finally
+
+            end;
+          end
+          else
+          begin
+            if FrmGerente.ShowModal = mrOK then
+            begin
+              if Desc_Por > FrmGerente.QOperador.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat then
+              begin
+                Application.MessageBox('Desconto acima do máximo permitido', 'Orçamento', MB_IconStop + MB_OK);
+                VR_DESCONTO.Color := clYellow;
+                VR_DESCONTO.SetFocus;
+                Exit;
+              end;
+              Result :=  True;
+            end
+            else
+              VR_DESCONTO.Color := clYellow;
+              VR_DESCONTO.SetFocus;
+              Exit;
+          end;
+        end;
+      end;
+  End;
+
+  if (Conta_ID.Value > 0) and (QConta.IsEmpty) and (Status.Text = 'FATURADO')   then
+  begin
+    Application.MessageBox('Conta Estoque inexistente', PChar(Msg_Title), mb_IconStop);
+    Conta_ID.Color := clYellow;
+    Conta_ID.SetFocus;
+    exit;
+  end;
+
+
+
+
+  Result := True;
+end;
+
+procedure TFrmPedido_de_venda.VR_DESCONTOExit(Sender: TObject);
+begin
+ if Vr_Desconto.Value > 0 Then
+ Begin
+ Vr_Desconto_P.Value   :=  0;
+ Vr_Desconto_P.Enabled := False;
+ Vr_Desconto_P.Value   :=  (Vr_Desconto.Value / Valor_produtos.Value   ) * 100;
+ End
+ Else
+ Begin
+ Vr_Desconto_P.Value   :=  0;
+ Vr_Desconto_P.Enabled := True;
+ End;
+
+end;
+
+procedure TFrmPedido_de_venda.Vr_Desconto_pExit(Sender: TObject);
+begin
+ if Vr_Desconto_P.Value > 0 Then
+ Begin
+ Vr_Desconto.Value   :=  0;
+ Vr_Desconto.Enabled := False;
+ Vr_Desconto.Value   :=   (Vr_Desconto_P.Value / 100) * Valor_produtos.Value;
+ End
+ Else
+ Begin
+ Vr_Desconto.Value   :=  0;
+ Vr_Desconto.Enabled := True;
+ End;
+
+end;
+
+procedure TFrmPedido_de_venda.ManutencaoShow(Sender: TObject);
+begin
+  Set_Campos(False);
+  Botoes_Normal;
+  QFinalizadora.Open;
+  Finalizadora_id.KeyValue := QTabela.FieldByName('FINALIZADORA_ID').AsInteger;
+  id_orcamento := QTabela.FieldByName('PEDIDO_ID').AsInteger ;
+
+  if Status.Text = 'CANCELADO' then
+  Begin
+  Label18.Visible := True;
+  Cancelamento.Visible := True;
+  End
+  Else
+  Begin
+  Label18.Visible := False;
+  Cancelamento.Visible := False;
+  End;
+  CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,0);
+
+end;
+
+procedure TFrmPedido_de_venda.orcamento_idExit(Sender: TObject);
+begin
+Detailsearch('Orçamento');
+
+  if orcamento_id.value > 0 Then
+  Begin
+    if QOrcamento.IsEmpty then
+    Begin
+    Application.MessageBox('Informar Orçamento válido e não faturado!', PChar(Msg_Title), mb_IconSTop);
+    Orcamento_ID.Color := clYellow;
+    Orcamento_ID.SetFocus;
+    exit;
+    End;
+
+    if QOrcamento.FieldByName('CLIENTE_ID').AsInteger = 0 Then
+    Begin
+    Application.MessageBox('Orçamento não possui cliente cadastrado favor efetuar o cadastro.', PChar(Msg_Title), mb_IconSTop);
+    Orcamento_ID.Color := clYellow;
+    Orcamento_ID.SetFocus;
+    exit;
+    End;
+
+    if QOrcamento.FieldByName('PEDIDO_ID').AsInteger > 0 Then
+    Begin
+
+    Application.MessageBox(PChar('Orçamento já importado no pedido: ' + QOrcamento.FieldByName('PEDIDO_ID').AsString +#13 + 'Favor Verificar.'), PChar(Msg_Title), mb_IconSTop);
+    Orcamento_ID.Color := clYellow;
+    Orcamento_ID.SetFocus;
+    exit;
+
+    End;
+
+    if not VerificaRegistro(StrToInt(orcamento_id.Text),'ORCAMENTO')  Then
+    Begin
+    Application.MessageBox('Orçamento em uso favor verificar.', PChar(Msg_Title), mb_IconSTop);
+    Orcamento_ID.Color := clYellow;
+    Orcamento_ID.SetFocus;
+    exit;
+
+    End;
+
+  End;
+
+end;
+
+procedure TFrmPedido_de_venda.orcamento_idKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = ORCAMENTO_ID) then
+    btnOrcamentoClick(Self);
+end;
+
+procedure TFrmPedido_de_venda.QRCompositeReport1AddReports(Sender: TObject);
+begin
+
+  with QRCompositeReport1 do
+  begin
+  reports.Add(reduzido);
+  reports.Add(reduzido1);
+  end;
+
+end;
+
+procedure TFrmPedido_de_venda.QSub_DetailAfterDelete(DataSet: TDataSet);
+var
+S:Integer;
+begin
+  S := 1;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM PEDITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(PEDIDO_ID = :PEDIDO_ID)');
+  IQuery.Sql.Add('ORDER BY SEQUENCIA');
+
+  IQuery.ParamByName('PEDIDO_ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+  IQuery.First;
+
+  while not IQuery.Eof do
+  begin
+
+  QUpdate.SQL.Clear;
+  QUpdate.SQL.Add('UPDATE PEDITENS SET SEQUENCIA = :SEQUENCIA WHERE PRODUTO_ID = :PRODUTO_ID AND PEDIDO_ID = :PEDIDO_ID');
+  QUpdate.ParamByName('SEQUENCIA').AsInteger    := S;
+  QUpdate.ParamByName('PRODUTO_ID').AsInteger   := IQuery.FieldByName('PRODUTO_ID').AsInteger;
+  QUpdate.ParamByName('PEDIDO_ID').AsInteger    := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+  QUpdate.Prepare;
+  QUpdate.ExecSQL;
+
+  S := S + 1;
+
+  IQuery.Next;
+
+  end;
+end;
+
+procedure TFrmPedido_de_venda.QSub_DetailAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QSub_Detail.FieldByName('VR_DESCONTO')).DisplayFormat := '#,##0.00';
+TFloatField(QSub_Detail.FieldByName('MT_2')).DisplayFormat         := '#,##0.00';
+TFloatField(QSub_Detail.FieldByName('PESO_UNITARIO')).DisplayFormat := '#,##0.00';
+TFloatField(QSub_Detail.FieldByName('VR_TOTAL')).DisplayFormat    := '#,##0.00';
+TFloatField(QSub_Detail.FieldByName('QUANTIDADE')).DisplayFormat  := '#,##0.00';
+TFloatField(QSub_Detail.FieldByName('VR_UNITARIO')).DisplayFormat := '#,##0.00';
+end;
+
+procedure TFrmPedido_de_venda.QSub_DetailBeforeDelete(DataSet: TDataSet);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if (QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if QTabela.FieldByName('TRANSACAO_ID').AsInteger > 0 then
+  begin
+    Application.MessageBox(PChar('Pedido fechado na transação ' + QTabela.FieldByName('TRANSACAO_ID').AsString), PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
+    abort;
+end;
+
+procedure TFrmPedido_de_venda.QSub_DetailBeforeEdit(DataSet: TDataSet);
+begin
+
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if (QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if QTabela.FieldByName('TRANSACAO_ID').AsInteger > 0 then
+  begin
+    Application.MessageBox(PChar('Pedido fechado na transação ' + QTabela.FieldByName('TRANSACAO_ID').AsString), PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+Qtd := QSub_Detail.FieldByName('QUANTIDADE').AsFloat;
+end;
+
+procedure TFrmPedido_de_venda.QSub_DetailBeforeInsert(DataSet: TDataSet);
+begin
+  if (QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if QTabela.FieldByName('TRANSACAO_ID').AsInteger > 0 then
+  begin
+    Application.MessageBox(PChar('Pedido fechado na transação ' + QTabela.FieldByName('TRANSACAO_ID').AsString), PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+Qtd := 0;
+end;
+
+procedure TFrmPedido_de_venda.QSub_DetailBeforePost(DataSet: TDataSet);
+var
+Cst: String;
+begin
+
+  ProdutoSearch;
+  ServicoSearch;
+  TributoSearch;
+
+
+  if QSub_Detail.FieldByName('TP_PROD_SERV').AsString = 'P' then
+  begin
+      if QProduto.IsEmpty then
+      begin
+        Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+        Itens.SelectedIndex := 0;
+        abort;
+      end;
+  end;
+
+  if QSub_Detail.FieldByName('TP_PROD_SERV').AsString = 'S' then
+  begin
+      if QServico.IsEmpty then
+      begin
+        Application.MessageBox('Servico inexistente', PChar(Msg_Title), mb_IconStop);
+        Itens.SelectedIndex := 0;
+        abort;
+      end;
+  end;
+
+
+  if (LeIni(Arq_Ini, 'Sistema', 'Permitir Estoque Negativo') = 'False') then
+  begin
+    if QSub_Detail.FieldByName('QUANTIDADE').AsFloat > (QProduto.FieldByName('QUANTIDADE_C').AsFloat + Qtd) then
+    begin
+      Application.MessageBox('Produto com estoque insuficiente', PChar(Msg_Title), MB_IconStop);
+      abort;
+    end;
+  end;
+
+
+  if (QSub_Detail.FieldByName('QUANTIDADE').AsFloat <= 0) or (QSub_Detail.FieldByName('QUANTIDADE').AsFloat > 99999) then
+  begin
+    Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 6;
+    abort;
+  end;
+
+  if QSub_Detail.FieldByName('VR_UNITARIO').AsFloat <= 0 then
+  begin
+    Application.MessageBox('Vr. Unitário inválido', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 8;
+    abort;
+  end;
+
+  if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat < 0 then
+  begin
+    Application.MessageBox('Vr. Desconto inválido', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 9;
+    abort;
+  end;
+
+  if QSub_Detail.FieldByName('VR_TOTAL').AsFloat <= 0 then
+  begin
+    Application.MessageBox('Vr. Total inválido', PChar(Msg_Title), mb_IconStop);
+    Itens.SelectedIndex := 10;
+    abort;
+  end;
+
+   IF (FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro') and (QProduto.FieldByName('UNIDADE_VENDA').AsString = 'M2')  Then
+   Begin
+    if Roundto(QSub_Detail.FieldByName('VR_TOTAL').AsFloat,-2) <> RoundTo(((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('MT_2').AsFloat) - (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat * QSub_Detail.FieldByName('MT_2').AsFloat )), -2) then
+    begin
+
+      Application.MessageBox('Vr. Total inválido', PChar(Msg_Title), mb_IconStop);
+      Itens.SelectedIndex := 4;
+      abort;
+    end;
+   End
+   Else
+   if Roundto(QSub_Detail.FieldByName('VR_TOTAL').AsFloat,-2) <> RoundTo(((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat) - (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat )), -2) then
+    begin
+
+      Application.MessageBox('Vr. Total inválido', PChar(Msg_Title), mb_IconStop);
+      Itens.SelectedIndex := 4;
+      abort;
+    end;
+
+  if QSub_Detail.State = dsInsert then
+  begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT SEQUENCIA FROM PEDITENS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PEDIDO_ID = :PEDIDO_ID)');
+    IQuery.Sql.Add('ORDER BY SEQUENCIA');
+
+    IQuery.ParamByName('PEDIDO_ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    IQuery.Last;
+
+    QSub_Detail.FieldByName('SEQUENCIA').AsInteger := (IQuery.FieldByName('SEQUENCIA').AsInteger + 1);
+  end;
+
+
+  IF (FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro') and (QProduto.FieldByName('UNIDADE_VENDA').AsString = 'M2') Then
+  QSub_Detail.FieldByName('VR_UNITARIO').AsFloat := RoundTo(((QSub_Detail.FieldByName('VR_TOTAL').AsFloat + (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat * QSub_Detail.FieldByName('MT_2').AsFloat)) / QSub_Detail.FieldByName('MT_2').AsFloat), -2)
+  Else
+  QSub_Detail.FieldByName('VR_UNITARIO').AsFloat := RoundTo(((QSub_Detail.FieldByName('VR_TOTAL').AsFloat + (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat)) / QSub_Detail.FieldByName('QUANTIDADE').AsFloat), -2)
+
+end;
+
+
+procedure TFrmPedido_de_venda.QSub_DetailNewRecord(DataSet: TDataSet);
+begin
+  DataSet['PEDIDO_ID']      := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+  DataSet['CONTA_ID']       := QTabela.FieldByName('CONTA_ID').AsInteger;
+  DataSet['TP_PROD_SERV']   := 'P';
+  DataSet['MVA']            := 0;
+  DataSet['BASE_CALC_ICMS'] := 0;
+  DataSet['ALIQUOTA_ICMS']  := 0;
+  DataSet['VR_IPI']         := 0;
+  DataSet['QUANTIDADE']     := 0;
+  DataSet['VR_UNITARIO']    := 0;
+  DataSet['VR_DESCONTO']    := 0;
+  DataSet['VR_TOTAL']       := 0;
+
+end;
+
+procedure TFrmPedido_de_venda.QTabelaAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QTabela.FieldByName('VALOR')).DisplayFormat  := '#,##0.00';
+end;
+
+procedure TFrmPedido_de_venda.RDprint1BeforeNewPage(Sender: TObject; Pagina: Integer);
+begin
+  if linha <= 62  then
+  Begin
+  RDprint1.Imp(63, 01, '================================================================================');
+  RDprint1.Imp(64, 01, 'Eficaz Automação e Sistemas Ltda');
+  RDprint1.ImpDir(64, 33, 80, 'http://www.eficazautomacao.com.br', []);
+  RDprint1.Imp(66,01,' ');
+  End;
+
+end;
+
+procedure TFrmPedido_de_venda.RDprint1NewPage(Sender: TObject; Pagina: Integer);
+begin
+  RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+ // RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 80, 'Eficaz Automação e Sistemas Ltda - ME', []);
+  RDprint1.Imp(02, 01, Copy(FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString,1,30));
+  RDprint1.Imp(02, 30, 'Nº:' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString);
+  RDprint1.Imp(02, 37, Copy (FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString,1,15));
+  RDprint1.Imp(02, 55, Copy(FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString,1,30));
+  RDprint1.Imp(03, 01, 'CEP:' + FrmPrincipal.QEmpresa.FieldByName('CEP').AsString);
+  RDprint1.Imp(04, 01, 'Cnpj.:' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString);
+  RDprint1.Imp(04, 30, 'I.E.: ' + FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString);
+  RDprint1.Imp(04, 55, 'Fone: ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString);
+  RDprint1.Imp(05, 01, 'Data: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+  RDprint1.impDir(06, 80, 80, 'Página: ' + IntToStr(Pagina), []);
+  RDprint1.Imp(06, 25, '*** PEDIDO DE VENDA ***');
+  RDprint1.Imp(07, 01, '--------------------------------------------------------------------------------');
+  linha := 08;
+
+end;
+
+procedure TFrmPedido_de_venda.reduzido1EndPage(Sender: TCustomQuickRep);
+begin
+
+Reduzido1.NewPage;
+
+end;
+
+procedure TFrmPedido_de_venda.ReduzidoEndPage(Sender: TCustomQuickRep);
+begin
+Reduzido.NewPage;
+end;
+
+procedure TFrmPedido_de_venda.Set_Campos(Vazio: Boolean);
+var
+I: Integer;
+Temp: TComponent;
+begin
+  for I := 0 to (ComponentCount - 1) do
+  begin
+    Temp := Components[I];
+
+    if Vazio then
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := '';
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := '';
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := '';
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := '';
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := 0;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := 0;
+
+      if Temp is TMemo then
+        TMemo(Temp).Text := '';
+
+      QSub_Detail.Close;
+
+      QSub_Detail.ParamByName('PEDIDO_ID').AsInteger := 0;
+
+      QSub_Detail.Prepare;
+      QSub_Detail.Open;
+    end
+    else
+    begin
+      if Temp is TEdit then
+        TEdit(Temp).Text := QTabela.FieldByName(TEdit(Temp).Name).AsString;
+
+      if Temp is TMaskEdit then
+        TMaskEdit(Temp).Text := QTabela.FieldByName(TMaskEdit(Temp).Name).AsString;
+
+      if Temp is TDateEdit then
+        TDateEdit(Temp).Text := QTabela.FieldByName(TDateEdit(Temp).Name).AsString;
+
+      if Temp is TComboBox then
+        TComboBox(Temp).Text := QTabela.FieldByName(TComboBox(Temp).Name).AsString;
+
+      if Temp is TCurrencyEdit then
+        TCurrencyEdit(Temp).Value := QTabela.FieldByName(TCurrencyEdit(Temp).Name).AsFloat;
+
+      if Temp is TRxCalcEdit then
+        TRxCalcEdit(Temp).Value := QTabela.FieldByName(TRxCalcEdit(Temp).Name).AsFloat;
+
+      if Temp is TMemo then
+        TMemo(Temp).Text := QTabela.FieldByName(TMemo(Temp).Name).AsString;
+
+    end;
+  end;
+  //ShowMessage(' ' + DT_STATUS.Text + ' ');
+  if DT_STATUS.Text = '  /  /    ' then
+    DT_STATUS.Text := DateToStr(Date);
+
+  QSub_Detail.Close;
+  QSub_Detail.ParamByName('PEDIDO_ID').AsInteger  := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+  QSub_Detail.Prepare;
+  QSub_Detail.Open;
+
+  if QTabela.IsEmpty then
+    Itens.Enabled := False
+  else
+    Itens.Enabled := True;
+
+
+
+   If (Status.Text = 'FATURADO') OR (Status.Text = 'FAT.TERCEIRO')   Then
+    Begin
+
+      IQuery.SQL.Clear;
+      IQuery.Sql.Add('SELECT NUM_DOC FROM TRANSACOES WHERE TRANSACAO_ID = :TRANSACAO_ID ');
+      IQuery.ParamByName('TRANSACAO_ID').Asinteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+      IQuery.Prepare;
+      IQuery.Open;
+
+      Dados_Nf.Visible  := True;
+      Dt_Status.Visible := True;
+
+      if Dados_Nf.Text = '' Then
+      Dados_Nf.Text    := 'Nf: '+IQuery.FieldByname('NUM_DOC').AsString
+
+
+
+
+    End
+   Else
+   Begin
+    Dados_Nf.Visible  := False;
+    Dt_Status.Visible := False;
+   End;
+
+  DetailSearch('');
+
+end;
+
+procedure TFrmPedido_de_venda.BtnOrcamentoClick(Sender: TObject);
+begin
+  try
+    orcamento_id.Value := GetConsulta('ORÇAMENTO', StrToInt(EMPRESA_ID.Text), 0, StrToInt(orcamento_ID.Text));
+  except
+    orcamento_id.Value := GetConsulta('ORÇAMENTO', StrToInt(EMPRESA_ID.Text), 0, 0);
+  end;
+
+end;
+
+procedure TFrmPedido_de_venda.StatusChange(Sender: TObject);
+begin
+
+   if Status.Text = 'CANCELADO' then
+   Begin
+     DT_STATUS.Date       := Date;
+     Label18.Visible      := True;
+     Cancelamento.Visible := True;
+   End
+   else if (Status.Text = 'FAT.TERCEIRO') OR (Status.Text = 'FAT.INTERNO')  then
+   Begin
+   DT_STATUS.Date   := Date;
+   Dados_Nf.enabled  := True;
+   DT_STATUS.Visible := True;
+   Dados_Nf.Visible  := True;
+   End
+   Else
+   begin
+   Label18.Visible      := False;
+   Cancelamento.Visible := False;
+   DT_STATUS.Visible    := False;
+   Dados_Nf.Visible     := False;
+
+   end;
+
+end;
+
+procedure TFrmPedido_de_venda.btnFuncionarioClick(Sender: TObject);
+begin
+  try
+    FUNCIONARIO_ID.Value := GetConsulta('PESSOAL', 0, 0, StrToInt(FUNCIONARIO_ID.Text));
+  except
+    FUNCIONARIO_ID.Value := GetConsulta('PESSOAL', 0, 0, 0);
+  end;
+
+end;
+
+procedure TFrmPedido_de_venda.btnContaClick(Sender: TObject);
+begin
+  try
+    CONTA_ID.Value := GetConsulta('PLANO', 0, 0, StrToInt(CONTA_ID.Text));
+  except
+    CONTA_ID.Value := GetConsulta('PLANO', 0, 0, 0);
+  end;
+
+end;
+
+procedure TFrmPedido_de_venda.btnDeleteClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('EXCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para exclusão', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if (QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if QTabela.FieldByName('TRANSACAO_ID').AsInteger > 0 then
+  begin
+    Application.MessageBox(PChar('Pedido faturado na transação ' + QTabela.FieldByName('TRANSACAO_ID').AsString), PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE ORCAMENTOS SET STATUS = :STATUS , PEDIDO_ID = 0');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+    IQuery.ParamByName('ORCAMENTO_ID').AsInteger := STrToInt(orcamento_id.text);
+    IQuery.ParamByName('STATUS').AsString   := 'NORMAL';
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('DELETE FROM PEDIDOS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(PEDIDO_ID = :ID)');
+
+    IQuery.ParamByName('ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+    QTabela.Close;
+    QTabela.Open;
+    Set_Campos(False);
+    Botoes_Normal;
+  end;
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QCliente.Close;
+  end;
+end;
+
+procedure TFrmPedido_de_venda.btnDiscardClick(Sender: TObject);
+begin
+  Botoes_Normal;
+  Set_Campos(False);
+
+  if QTabela.IsEmpty then
+  begin
+    QEmpresa.Close;
+    QCliente.Close;
+  end;
+
+  Habilitar(False);
+  Operacao := '';
+  Consulta.TabVisible := True;
+end;
+
+procedure TFrmPedido_de_venda.btnEditClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if (QTabela.FieldByName('DT_MOVIMENTO').AsDateTime < FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime) then
+  begin
+    Application.MessageBox('Movimento já encerrado', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  if QTabela.FieldByName('TRANSACAO_ID').AsInteger > 0 then
+  begin
+    Application.MessageBox(PChar('Pedido fechado na transação ' + QTabela.FieldByName('TRANSACAO_ID').AsString), PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  Operacao := 'Alterando';
+
+  ID := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+  Botoes_Editing;
+  Habilitar(True);
+  Itens.Enabled := False;
+
+  Consulta.TabVisible := False;
+  DT_PEDIDO.SetFocus;
+end;
+
+procedure TFrmPedido_de_venda.btnEmpresaClick(Sender: TObject);
+begin
+  try
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, StrToInt(EMPRESA_ID.Text));
+  except
+    EMPRESA_ID.Value := GetConsulta('EMPRESAS', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmPedido_de_venda.btnFornecedorClick(Sender: TObject);
+begin
+  try
+    CLIENTE_ID.Value := GetConsulta('CLIENTES', 0, 0, StrToInt(CLIENTE_ID.Text));
+  except
+    CLIENTE_ID.Value := GetConsulta('CLIENTES', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmPedido_de_venda.btnInsertClick(Sender: TObject);
+begin
+  if FrmData.QAcesso.FieldByName('INCLUSAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para inclusão', PChar(Msg_Title), mb_IconStop);
+    abort;
+  end;
+
+  Operacao := 'Inserindo';
+  Botoes_Editing;
+  Set_Campos(True);
+  Habilitar(True);
+  Itens.Enabled := False;
+
+  QEmpresa.Close;
+  QCliente.Close;
+
+
+  ESTADO.Text          := FrmPrincipal.QEmpresa.FieldByName('ESTADO').AsString;
+  DT_PEDIDO.Date       := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.Date    := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_Status.Date       := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_Entrega.Date      := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  COND_PAGTO.Text      := 'A VISTA';
+  EMPRESA_ID.Value     := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  AUTORIZ_ID.Value     := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+  Status.Text          := 'NORMAL';
+  Label18.Visible      := False;
+  Cancelamento.Visible := False;
+  Consulta.TabVisible  := False;
+  TP_PEDIDO.Value      := 1;
+  DT_PEDIDO.SetFocus;
+  Finalizadora_id.KeyValue := 1;
+
+  if LeIni(Arq_Ini, 'Sistema', 'Vendedor Padrão') <> '' then
+  Funcionario_id.Value    := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Vendedor Padrão'));
+
+  QSub_Detail.Close;
+
+  QSub_Detail.ParamByName('PEDIDO_ID').AsInteger := 0;
+
+  QSub_Detail.Prepare;
+  QSub_Detail.Open;
+
+
+end;
+
+procedure TFrmPedido_de_venda.btnLogClick(Sender: TObject);
+var
+F1: TextFile;
+begin
+
+  Set_Campos(False);
+  Botoes_Normal;
+
+  if QTabela.FieldByName('TRANSACAO_ID').AsInteger > 0  then
+     Begin
+     Application.MessageBox('Pedido de Venda já Importado!', PChar(Msg_Title), mb_IconInformation);
+     Exit;
+     End;
+
+  if not QSub_Detail.Active then
+  begin
+    QSub_Detail.Close;
+
+    QSub_Detail.ParamByName('PEDIDO_ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+
+    QSub_Detail.Prepare;
+    QSub_Detail.Open;
+  end;
+
+  if LeIni(Arq_Ini, 'Sistema', 'Path Orçamento') <> '' then
+  begin
+    try
+      AssignFile(F1, LeIni(Arq_Ini, 'Sistema', 'Path Orçamento') + 'PDV' + StrZero(QTabela.FieldByName('PEDIDO_ID').AsString, 6, 0) + '.Txt');
+      Rewrite(F1);
+
+      QSub_Detail.First;
+      while not QSub_Detail.Eof do
+      begin
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('SELECT * FROM PRODUTOS');
+        IQuery.Sql.Add('WHERE');
+        IQuery.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+
+        IQuery.ParamByName('PRODUTO_ID').AsInteger := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+        IQuery.Prepare;
+        IQuery.Open;
+
+        WriteLn(F1, '1' + ForcaComprimento(IQuery.FieldByName('COD_BARRA').AsString, 14, ' ') +
+                    StrZero(QSub_Detail.FieldByName('QUANTIDADE').AsString, 12, 3) +
+                    StrZero(QSub_Detail.FieldByName('VR_UNITARIO').AsString, 12, 2) +
+                    StrZero(QSub_Detail.FieldByName('VR_DESCONTO').AsString, 12, 2));
+
+
+        Application.ProcessMessages;
+        QSub_Detail.Next;
+
+      end;
+
+      QSub_Detail.First;
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('SELECT * FROM TRANSPARCELAS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(TRANSACAO_ID = :PEDIDO_ID)');
+      IQuery.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+      IQuery.Sql.Add('ORDER BY TRANSACAO_ID, PARCELA_ID');
+
+      IQuery.ParamByName('PEDIDO_ID').AsInteger  := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+      IQuery.ParamByName('TIPO_TRANSACAO').AsString := 'V';
+
+      IQuery.Prepare;
+      IQuery.Open;
+
+      IQuery.First;
+      while not IQuery.Eof do
+      begin
+        WriteLn(F1, '2' + StrZero(Copy(IQuery.FieldByName('PARCELA_ID').AsString, 4, 2), 2, 0) + StrZero(Copy(IQuery.FieldByName('PARCELA_ID').AsString, 1, 2), 2, 0) +
+                    Copy(IQuery.FieldByName('DT_VENCIMENTO').AsString, 1, 2) +
+                    Copy(IQuery.FieldByName('DT_VENCIMENTO').AsString, 4, 2) +
+                    Copy(IQuery.FieldByName('DT_VENCIMENTO').AsString, 7, 4) +
+                    StrZero(IQuery.FieldByName('VALOR').AsString, 12, 2) +
+                    StrZero(IQuery.FieldByName('BANCO_ID').AsString, 2, 0) +
+                    StrZero(FloatToStr(Cliente_ID.Value), 5, 0));
+
+        Application.ProcessMessages;
+        IQuery.Next;
+      end;
+
+      if QTabela.FieldByName('VR_ACRESCIMO').AsFloat > 0 then
+        WriteLn(F1, '301' + 'A' + StrZero(QTabela.FieldByName('VR_ACRESCIMO').AsString, 12, 2) +
+                    StrZero(QTabela.FieldByName('FUNCIONARIO_ID').AsString, 5, 0) +
+                    StrZero(QTabela.FieldByName('CLIENTE_ID').AsString, 5, 0) +
+                    StrZero(IntToStr(QFinalizadora.FieldByName('FINALIZADORA_ID').AsInteger), 2, 0))
+      else
+        WriteLn(F1, '301' + 'D' + StrZero(QTabela.FieldByName('VR_DESCONTO').AsString, 12, 2) +
+                    StrZero(QTabela.FieldByName('FUNCIONARIO_ID').AsString, 5, 0) +
+                    StrZero(QTabela.FieldByName('CLIENTE_ID').AsString, 5, 0) +
+                    StrZero(IntToStr(QFinalizadora.FieldByName('FINALIZADORA_ID').AsInteger), 2, 0));
+
+      Application.MessageBox(PChar('Log ' + StrZero(QTabela.FieldByName('PEDIDO_ID').AsString, 6, 0) + ' criado com sucesso'), PChar(Msg_Title), mb_IconInformation);
+    finally
+      CloseFile(F1);
+    end;
+  end;
+end;
+
+procedure TFrmPedido_de_venda.btnNextClick(Sender: TObject);
+begin
+
+  if not QTabela.Eof then
+  begin
+    CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,1);
+    QTabela.Next;
+    Set_Campos(False);
+     ManutencaoShow(manutencao);
+  end;
+
+  Botoes_Normal;
+
+  if not QTabela.Eof then
+  CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,0);
+end;
+
+procedure TFrmPedido_de_venda.btnParcelasClick(Sender: TObject);
+begin
+  if QTabela.FieldByName('VALOR').AsFloat > 0 then
+    Divisao_Parcelas(QTabela.FieldByName('PEDIDO_ID').AsInteger, 'V','', True, QTabela.FieldByName('DT_PEDIDO').AsDateTime, QTabela.FieldByName('VALOR').AsFloat);
+end;
+
+procedure TFrmPedido_de_venda.btnPedidoClick(Sender: TObject);
+var
+PACOTE : STRING;
+
+begin
+  {
+  QSub_Detail.Close;
+  QSub_Detail.ParamByName('PEDIDO_ID').AsInteger  := id_orcamento;
+  QSub_Detail.Prepare;
+  QSub_Detail.Open;
+
+    Valor_Produtos.Value   := 0 ;
+    VALOR.Value            := 0 ;
+    valor_produtos.enabled := true;
+    valor.Enabled          := true;
+
+    QSub_Detail.First;
+    While not QSub_Detail.eof do
+    Begin
+
+     Valor_Produtos.Value := Valor_Produtos.Value + QSub_Detail.FieldByName('VR_TOTAL').AsFloat;
+
+     QSub_Detail.Next;
+
+    End;
+
+
+  VALOR.Value := VALOR_PRODUTOS.Value +  VR_ACRESCIMO.Value - VR_DESCONTO.Value;
+
+  edit;
+
+  }
+
+  //  if COND_PAGTO.Text <> 'A PRAZO' then
+
+
+ if (LeIni(Arq_Ini, 'Sistema', 'Largura Papel') > '0') and (LeIni(Arq_Ini, 'Sistema', 'Altura Papel') > '0')
+      and (LeIni(Arq_Ini, 'Sistema', 'Imp. Orçamento') = 'Normal Reduzido')then
+   begin
+      QRLabel60.Caption  := FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+      QRLabel47.Caption  := FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+      Reduzido.Page.Width  := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Largura Papel'));
+      Reduzido.Page.Length := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Altura Papel'));
+      Reduzido1.Page.Width  := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Largura Papel'));
+      Reduzido1.Page.Length := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Altura Papel'));
+      QRLabel59.Caption    := '*** PEDIDO DE VENDA NÚM. ' + StrZero(QTabela.FieldByName('PEDIDO_ID').AsString, 6, 0) + ' ***';
+      QRLabel46.Caption    := '*** PEDIDO DE VENDA NÚM. ' + StrZero(QTabela.FieldByName('PEDIDO_ID').AsString, 6, 0) + ' ***';
+
+      Reduzido.Prepare;
+      Reduzido.PreviewModal;
+
+   end
+   else
+ if (LeIni(Arq_Ini, 'Sistema', 'Largura Papel') > '0') and (LeIni(Arq_Ini, 'Sistema', 'Altura Papel') > '0')
+      and (LeIni(Arq_Ini, 'Sistema', 'Imp. Orçamento') = 'Normal Reduzido 2 Vias')then
+
+    Begin
+
+      QRLabel60.Caption  := FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+      QRLabel47.Caption  := FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString + ' - ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+      Reduzido.Page.Width  := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Largura Papel'));
+      Reduzido.Page.Length := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Altura Papel'));
+      Reduzido1.Page.Width  := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Largura Papel'));
+      Reduzido1.Page.Length := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Altura Papel'));
+      QRLabel59.Caption    := '*** PEDIDO DE VENDA NÚM. ' + StrZero(QTabela.FieldByName('PEDIDO_ID').AsString, 6, 0) + ' ***';
+      QRLabel46.Caption    := '*** PEDIDO DE VENDA NÚM. ' + StrZero(QTabela.FieldByName('PEDIDO_ID').AsString, 6, 0) + ' ***';
+
+      //Reduzido1.Prepare;
+     // Reduzido1.PreviewModal;
+
+       //QRCompositeReport1.Reports.Add(Reduzido1);
+       //QRCompositeReport1.Reports.Add(Reduzido);
+
+      // showmessage('preparando..');
+      // QRCompositeReport1.Prepare;                          Normal Reduzido 2 Vias
+
+       QRCompositeReport1.Preview;
+    End
+ Else
+
+ if LeIni(Arq_Ini, 'Sistema', 'Imp. Orçamento') = 'RDPrint' then
+  Begin
+
+        RDprint1.Impressora := Epson;
+        RDprint1.FonteTamanhoPadrao := S10cpp;
+
+      if CheckBox1.Checked = True then
+      Begin
+        RDprint1.Impressora         := HP;
+        RDprint1.FonteTamanhoPadrao := S10cpp;
+        RDprint1.Acentuacao         :=Transliterate;
+      End;
+
+      RDprint1.OpcoesPreview.Preview     := True;
+      RDprint1.MostrarProgresso          := True;
+      RDprint1.Acentuacao                := SemAcento;
+      RDprint1.TamanhoQteLinhas          := 1;
+      RDprint1.Abrir;
+
+    if linha > 66  then
+    Begin
+    RDprint1.Novapagina;
+    Pagina := Pagina + 1;
+    End;
+    Pagina  := 1;
+
+    RDprint1.Imp(linha, 01, 'Num. Pedido.:');
+    RDprint1.Imp(linha, 17, QTabela.FieldByName('PEDIDO_ID').AsString);
+    RDprint1.Imp(linha, 31, 'Cond.Pgt:');
+    RDprint1.Imp(linha, 44, QTabela.FieldByName('COND_PAGTO').AsString);
+    RDprint1.Imp(linha, 61, 'Data:');
+    RDprint1.Imp(linha, 68, QTabela.FieldByName('DT_PEDIDO').AsString);
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Cliente:');
+    RDprint1.Imp(linha, 11, Copy(QTabela.FieldByName('NOME').AsString, 1, 40));
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Ins./Rg.:');
+    RDprint1.Imp(linha, 11, QCliente.FieldByName('INSCRICAO').AsString);
+    RDprint1.Imp(linha, 31, 'Cnpj/Cpf:');
+    RDprint1.Imp(linha, 41, QCliente.FieldByName('CNPJ').AsString);
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Endereço:');
+    RDprint1.Imp(linha, 11, Copy(QTabela.FieldByName('ENDERECO').AsString, 1, 31));
+    RDprint1.Imp(linha, 46, 'Nº.:');
+    RDprint1.Imp(linha, 50, QCliente.FieldByName('NUMERO').AsString);
+    RDprint1.Imp(linha, 55, 'Bairro:');
+    RDprint1.Imp(linha, 62, Copy (QTabela.FieldByName('BAIRRO').AsString,1,15));
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Cidade:');
+    RDprint1.Imp(linha, 11, Copy(QTabela.FieldByName('MUNICIPIO').AsString, 1, 31));
+    RDprint1.Imp(linha, 31, 'CEP:');
+    RDprint1.Imp(linha, 36, QTabela.FieldByName('CEP').AsString);
+    RDprint1.Imp(linha, 46, 'Telefone:');
+    RDprint1.Imp(linha, 56, QCliente.FieldByName('DDD').AsString);
+    RDprint1.Imp(linha, 60, QCliente.FieldByName('TELEFONE_1').AsString);
+    inc(linha);
+    RDprint1.Imp(linha, 01,'Celular/WhatsApp:' + QCliente.FieldByName('TELEFONE_2').AsString + ' /' + QCliente.FieldByName('FAX').AsString);
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Funci.:');
+    RDprint1.Imp(linha, 11, QFuncionario.FieldByName('NOME').AsString);
+    RDprint1.Imp(linha, 46, 'Solic.:');
+    RDprint1.Imp(linha, 55, QTabela.FieldByName('SOLICITANTE').AsString);
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Status:');
+    RDprint1.Imp(linha, 11, QTabela.FieldByName('STATUS').AsString);
+    RDprint1.Imp(linha, 21, QTabela.FieldByName('CANCELAMENTO').AsString);
+    RDprint1.Imp(linha, 31, 'E-mail:');
+    RDprint1.Imp(linha, 38, QCliente.FieldByName('EMAIL').AsString);
+
+    IF FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro' Then
+    Begin
+    inc(linha);
+    RDprint1.Imp(linha, 01, '--------------------------------------------------------------------------------');
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Cód.  Descrição                    Qtd.   Tam.  Mt2    Pr.Un.  Desc.   Pr. Total');
+    inc(linha);
+    RDprint1.Imp(linha, 01, '--------------------------------------------------------------------------------');
+    inc(linha);
+    End
+    Else
+    Begin
+    inc(linha);
+    RDprint1.Imp(linha, 01, '--------------------------------------------------------------------------------');
+    inc(linha);
+    RDprint1.Imp(linha, 01, 'Cód.  Descrição                              Qtd.    Prç.       Desc.  Pr. Total');
+    inc(linha);
+    RDprint1.Imp(linha, 01, '--------------------------------------------------------------------------------');
+    inc(linha);
+
+    End;
+
+    while not QSub_Detail.Eof do
+    Begin
+    ProdutoSearch;
+    RDprint1.Imp(linha,01,QSub_Detail.FieldByName('PRODUTO_ID').AsString);
+
+
+    IF FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro' Then
+    Begin
+    RDprint1.Imp(linha,6,Copy(QSub_Detail.FieldByName('DESCRICAO').AsString ,1,25));
+    RDprint1.ImpVal(linha,32,'##0.00',QSub_Detail.FieldByName('QUANTIDADE').AsFloat,[]);
+    //RDprint1.Imp(linha,43,QSub_Detail.FieldByName('PESO_UNITARIO').AsString);
+    //RDprint1.Imp(linha,49,QSub_Detail.FieldByName('MT_2').AsString);
+    RDprint1.ImpVal(linha,43,'#0.00',QSub_Detail.FieldByName('PESO_UNITARIO').AsFloat,[]);
+    RDprint1.ImpVal(linha,49,'#0.00',QSub_Detail.FieldByName('MT_2').AsFloat,[]);
+
+    RDprint1.ImpVal(linha,54,'#,##0.00',QSub_Detail.FieldByName('VR_UNITARIO').AsFloat,[]);
+    RDprint1.ImpVal(linha,60,'#,##0.00',QSub_Detail.FieldByName('VR_DESCONTO').AsFloat,[]);
+    RDprint1.ImpVal(linha,69,'#,###,##0.00',QSub_Detail.FieldByName('VR_TOTAL').AsFloat,[]);
+    End
+    Else
+    Begin
+    RDprint1.Imp(linha,6,Copy(QSub_Detail.FieldByName('DESCRICAO').AsString ,1,45));
+    RDprint1.Imp(linha,46,QSub_Detail.FieldByName('QUANTIDADE').AsString);
+    RDprint1.ImpVal(linha,46,'#,###,##0.00',QSub_Detail.FieldByName('VR_UNITARIO').AsFloat,[]);
+    RDprint1.ImpVal(linha,58,'###,##0.00',QSub_Detail.FieldByName('VR_DESCONTO').AsFloat,[]);
+    RDprint1.ImpVal(linha,69,'#,###,##0.00',QSub_Detail.FieldByName('VR_TOTAL').AsFloat,[]);
+    End;
+
+    inc(linha);
+    QSub_Detail.Next;
+    End;
+    RDprint1.Imp(linha,70,'___________');
+    inc(linha);
+    RDprint1.Imp(linha,45,'Total dos Produtos');
+    RDprint1.ImpVal(linha,68,'##,###,##0.00',QTabela.FieldByName('VALOR_PRODUTOS').AsFloat,[]);
+    inc(linha);
+
+    IF FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro' Then
+    Begin
+    RDprint1.Imp(linha,45,'Total M2');
+    RDprint1.ImpVal(linha,68,'##,###,##0.00',QTabela.FieldByName('MT_2').AsFloat,[]);
+    inc(linha);
+    End;
+
+    RDprint1.Imp(linha,45,'Vr. Frete');
+    RDprint1.ImpVal(linha,68,'##,###,##0.00',QTabela.FieldByName('VR_FRETE').AsFloat,[]);
+    inc(linha);
+    RDprint1.Imp(linha,45,'Acrescimo');
+    RDprint1.ImpVal(linha,68,'##,###,##0.00',QTabela.FieldByName('VR_ACRESCIMO').AsFloat,[]);
+    inc(linha);
+    RDprint1.Imp(linha,45,'Desconto');
+    RDprint1.ImpVal(linha,68,'##,###,##0.00',QTabela.FieldByName('VR_DESCONTO').AsFloat,[]);
+    inc(linha);
+
+    if Chk_Desc_P.Checked Then
+    Begin
+    RDprint1.Imp(linha,45,'Desconto(%)');
+    RDprint1.ImpVal(linha,68,'#,###,##0.000',QTabela.FieldByName('VR_DESCONTO_p').AsFloat,[]);
+    inc(linha);
+    End;
+
+    RDprint1.Imp(linha,45,'Total');
+    RDprint1.ImpVal(linha,68,'##,###,##0.00',QTabela.FieldByName('VALOR').AsFloat,[]);
+    inc(linha);
+    RDprint1.Imp(linha,01,'--------------------------------------------------------------------------------');
+    inc(linha);
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('SELECT * FROM TRANSPARCELAS');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    IQuery.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO) ORDER BY DT_VENCIMENTO');
+
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger  := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+    IQuery.ParamByName('TIPO_TRANSACAO').AsString := 'V';
+
+    IQuery.Prepare;
+    IQuery.Open;
+
+    if not IQuery.IsEmpty then
+    begin
+    RDprint1.Imp(linha,45,'Parcelamento:');
+    inc(linha);
+    RDprint1.Imp(linha,45,'-------------');
+    inc(linha);
+    RDprint1.Imp(linha,45,'Vencimento:');
+    IQuery.First;
+
+    while not IQuery.Eof do
+
+      begin
+       inc(linha);
+       RDprint1.Imp(linha,45,IQuery.FieldByName('DT_VENCIMENTO').AsString);
+       RDprint1.Imp(linha,65,'-');
+       RDprint1.ImpVal(linha,68,'##,###,##0.00',IQuery.FieldByName('VALOR').AsFloat,[]);
+       IQuery.Next;
+       end;
+
+     end;
+
+    linha2 := linha;
+    linha3 := linha;
+
+     IF FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro' Then
+    Begin
+    RDprint1.Imp(linha2 ,01, 'Pacotes para Envio:');
+
+     QSub_Detail.First;
+     while not QSub_Detail.Eof do
+     Begin
+      ProdutoSearch;
+      if (QProduto.FieldByName('UNIDADE_VENDA').AsString = 'M2') and (Copy(QProduto.FieldByName('DESCRICAO').AsString,1,5)<> 'VIDRO')  Then
+      Begin
+       inc(linha2);
+       PACOTE := 'P' + StrZero(IntToStr(Trunc(QSub_Detail.FieldByName('QUANTIDADE').AsFloat/QProduto.FieldByName('VOLUME').AsFloat)),2,0);
+       PACOTE := PACOTE + '-U'+ IntToStr(Trunc(QSub_Detail.FieldByName('QUANTIDADE').AsFloat - (QProduto.FieldByName('VOLUME').AsFloat * (Trunc(QSub_Detail.FieldByName('QUANTIDADE').AsFloat/QProduto.FieldByName('VOLUME').AsFloat)))));
+
+       RDprint1.Imp(linha2,1,Copy(QSub_Detail.FieldByName('DESCRICAO').AsString ,1,40) + ' >> ' + PACOTE);
+       RDprint1.Imp(linha2,50,' Tamanho >> ' + FloatToStrF (QSub_Detail.FieldByName('PESO_UNITARIO').AsFloat,ffNumber,15,2 ));
+
+      End;
+     QSub_Detail.Next;
+     End;
+     linha2 := linha2 + 1;
+    End;
+
+    RDprint1.Imp(linha2 ,01, 'Observação:');
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,1,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,41,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,81,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,121,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,161,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,201,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,241,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,281,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,321,40));
+    inc(linha2);
+    RDprint1.Imp(linha2,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,361,40));
+
+    Linha2 :=  (linha2 + 5) ;
+    RDprint1.Imp(linha2,01,'Vendedor:________________________' );
+    RDprint1.Imp(linha2,45,'Cliente:__________________________' );
+    inc(linha2);
+    RDprint1.Imp(linha2,10,QFuncionario.FieldByName('NOME').AsString);
+    RDprint1.Imp(linha2,53,Copy(QTabela.FieldByName('NOME').AsString,1,25));
+    
+    if Copy(QTabela.FieldByName('NOME').AsString,26,25) <> '' then
+    Begin
+    inc(linha2);
+    RDprint1.Imp(linha2,53,Copy(QTabela.FieldByName('NOME').AsString,26,25));
+    End;
+
+    Application.ProcessMessages;
+
+    RDprint1.TamanhoQteLinhas          := 66;
+    RDprint1.Fechar;
+
+  End
+ Else
+ if not QCliente.isempty then
+ Begin
+
+       QRLabel92.Caption   := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' +
+                            FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                            FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - CEP ' +
+                            FrmPrincipal.QEmpresa.FieldByName('CEP').AsString;
+      QRLabel93.Caption   := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - I. E. ' +
+                            FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString;
+
+      QRLabel94.Caption   :='Fone/Celular: ' +
+                            FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString + '/' + FrmPrincipal.QEmpresa.FieldByName('CELULAR').AsString ;
+
+
+    if LeIni(Arq_Ini, 'Sistema', 'Mensagem Orçamento') <> '' Then
+    Begin
+      QMsg_Adicional.Enabled := True;
+      QMsg_Adicional.Lines.Clear;
+      QMsg_Adicional.Lines.Add(LeIni(Arq_Ini, 'Sistema', 'Mensagem Orçamento'));
+      QMsg_Adicional.Lines.Add(LeIni(Arq_Ini, 'Sistema', 'Mensagem Orçamento 1'));
+      QMsg_Adicional.Lines.Add(LeIni(Arq_Ini, 'Sistema', 'Mensagem Orçamento 2'));
+      QMsg_Adicional.Lines.Add(LeIni(Arq_Ini, 'Sistema', 'Mensagem Orçamento 3'));
+    End
+    Else
+    QMsg_Adicional.Enabled := False;
+
+    if COND_PAGTO.Text = 'A PRAZO' then
+    Begin
+      QSelect.Sql.Clear;
+      QSelect.Sql.Add('SELECT * FROM TRANSPARCELAS');
+      QSelect.Sql.Add('WHERE');
+      QSelect.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+      QSelect.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      QSelect.ParamByName('TRANSACAO_ID').AsInteger  := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+      QSelect.ParamByName('TIPO_TRANSACAO').AsString := 'V';
+
+      QSelect.Prepare;
+      QSelect.Open;
+
+      if QSelect.RecordCount > 12 Then
+      QrMemo4.Font.Size := 7
+      Else
+      QrMemo4.Font.Size := 8;
+
+      if not QSelect.IsEmpty then
+      begin
+        QRMemo4.Lines.Clear;
+        QRMemo4.Lines.Add('Parcelamento');
+        QRMemo4.Lines.Add('============');
+
+        QSelect.First;
+        while not QSelect.Eof do
+        begin
+          QRMemo4.Lines.Add('Venc.: ' + QSelect.FieldByName('DT_VENCIMENTO').AsString + ' - ' + FormatFloat('#,##0.00', QSelect.FieldByName('VALOR').AsFloat));
+
+          Application.ProcessMessages;
+          QSelect.Next;
+        end;
+      end;
+    End
+    Else
+    QRMemo4.Lines.Clear;
+
+    Pedido.PreviewModal;
+ End
+ else
+ begin
+   QrCliente.Caption  := NOME.Text;
+   QREndereco.Caption := ENDERECO.Text;
+   QRCidade.Caption   := MUNICIPIO.text;
+   QRBairro.Caption   := BAIRRO.Text;
+   QRCep.Caption      := CEP.Text;
+
+   Pedido_empty.PreviewModal;
+ end;
+
+
+
+end;
+
+procedure TFrmPedido_de_venda.btnPesquisaClick(Sender: TObject);
+var
+Condicao: String;
+begin
+  Condicao := GetPesquisa('PEDIDO_VENDA');
+
+  if Condicao <> '' then
+  begin
+    CmdSelectNull := Condicao + ' AND (TP_PEDIDO = 1) AND (EMPRESA_ID = :EMPRESA_ID)';
+    QTabela.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  end;
+
+  CmdOrderBy := 'ORDER BY PEDIDO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.Prepare;
+  QTabela.Open;
+
+  Set_Campos(False);
+  Botoes_Normal;
+end;
+
+procedure TFrmPedido_de_venda.btnPriorClick(Sender: TObject);
+begin
+
+  if not QTabela.Bof then
+  begin
+    CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,1);
+    QTabela.Prior;
+    Set_Campos(False);
+    ManutencaoShow(manutencao);
+  end;
+
+  Botoes_Normal;
+
+  if not QTabela.Bof then
+  CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,0);
+end;
+
+procedure TFrmPedido_de_venda.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmPedido_de_venda.btnSaveClick(Sender: TObject);
+begin
+  DetailSearch('');
+
+  if Validacao then
+  begin
+
+    VALOR.Value := VALOR_PRODUTOS.Value + VR_FRETE.Value + VR_ACRESCIMO.Value - VR_DESCONTO.Value;
+
+    if Operacao = 'Inserindo' then
+    begin
+      if orcamento_id.value > 0 Then
+      Begin
+          if not QOrcamento.IsEmpty then
+          Begin
+            Itens.Visible := True;
+
+            if QOrcamento.FieldByName('CLIENTE_ID').AsInteger > 0 Then
+            Begin
+            if Application.MessageBox('Usar o mesmo Cliente para quem foi feita o Orçamento?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+            Cliente_id.Value := QOrcamento.FieldByName('CLIENTE_ID').AsInteger;
+
+            Funcionario_id.Value  := QOrcamento.FieldByName('VENDEDOR_ID').AsInteger;
+            Vr_Desconto.Value     := QOrcamento.FieldByName('VR_DESCONTO').AsFloat;
+            Vr_Acrescimo.Value    := QOrcamento.FieldByName('VR_ACRESCIMO').AsFloat;
+            Observacao.Lines.Text := QOrcamento.FieldByName('OBSERVACAO').AsString;
+            COND_PAGTO.Text       := QOrcamento.FieldByName('COND_PAGTO').AsString;
+
+             if cond_pagto.Text <> '' Then
+             Begin
+
+              if COND_PAGTO.Text = 'A VISTA' then
+              begin
+                Finalizadora_id.KeyValue := 1;
+                Finalizadora_id.Enabled := False;
+
+              end;
+
+              if COND_PAGTO.Text = 'A PRAZO' then
+              begin
+                Finalizadora_id.Enabled := False;
+                Finalizadora_id.KeyValue := 2;
+                DetailSearch('');
+              end;
+              if Cond_pagto.Text = 'CARTAO' then
+                 Finalizadora_id.Enabled := True;
+
+             End;
+
+            End;
+
+          End
+          Else
+          Begin
+          Orcamento_ID.Color := clYellow;
+          Orcamento_ID.SetFocus;
+          exit;
+          End;
+      End;
+
+      Insert;
+
+
+
+      CmdSelectNull := 'WHERE (PEDIDO_ID IS NOT NULL) AND (TP_PEDIDO = 1)  AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID)';
+      CmdOrderBy    := 'ORDER BY PEDIDO_ID';
+
+      QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+      QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+      QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+      QTabela.Open;
+      QTabela.Last;
+      CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,0);
+
+      if (orcamento_id.value > 0) and (Operacao = 'Inserindo') Then
+      Begin
+
+        if COND_PAGTO.Text = 'A PRAZO' then
+        begin
+
+          QSearch.Sql.Clear;
+          QSearch.Sql.Add('SELECT * FROM TRANSPARCELAS WHERE TRANSACAO_ID = :ORCAMENTO_ID AND TIPO_TRANSACAO = ''O'' ');
+          QSearch.ParamByName('ORCAMENTO_ID').AsInteger := STrToInt(orcamento_id.text);
+          QSearch.Prepare;
+          QSearch.Open;
+
+           QSearch.First;
+           while not QSearch.eof do
+           Begin
+            try
+            QUpdate.Sql.Clear;
+            QUpdate.Sql.Add('INSERT INTO TRANSPARCELAS( ' +
+                            'TRANSACAO_ID,   PARCELA_ID,   TIPO_TRANSACAO,   DT_VENCIMENTO, ' +
+                            'VALOR,          DUPLICATA, ESPECIE) VALUES(' +
+                            ':TRANSACAO_ID,  :PARCELA_ID,  :TIPO_TRANSACAO,  :DT_VENCIMENTO, ' +
+                            ':VALOR,         :DUPLICATA, :ESPECIE)');
+
+            QUpdate.ParamByName('TRANSACAO_ID').AsInteger   := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+            QUpdate.ParamByName('PARCELA_ID').AsString      := QSearch.FieldByName('PARCELA_ID').AsString;
+            QUpdate.ParamByName('TIPO_TRANSACAO').AsString  := 'V';
+            QUpdate.ParamByName('DT_VENCIMENTO').AsDateTime := QSearch.FieldByName('DT_VENCIMENTO').AsDateTime;
+            QUpdate.ParamByName('VALOR').AsFloat            := QSearch.FieldByName('VALOR').AsFloat;
+            QUpdate.ParamByName('DUPLICATA').AsString       := '';
+            QUpdate.ParamByName('ESPECIE').AsString         := '';
+
+            QUpdate.Prepare;
+            QUpdate.ExecSql;
+
+            except
+
+                   on e:Exception do
+              begin
+                Application.MessageBox(PChar('Erro:' + #13 +
+                  'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+              end;
+
+
+            end;
+
+
+
+            QSearch.Next;
+
+           End;
+
+        end;
+      End;
+
+
+    end
+    else
+      Edit;
+
+      if (not (QOrcamento.IsEmpty)) and  (Operacao = 'Inserindo') then
+      Begin
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT ORCITENS.*, PRODUTOS.COD_BARRA, TRIBUTOS.CFOP,ORCAMENTOS.CLIENTE_ID,ORCAMENTOS.OBSERVACAO,ORCAMENTOS.COND_PAGTO,ORCAMENTOS.VR_DESCONTO VALOR_DESCONTO,ORCAMENTOS.VR_ACRESCIMO');
+        QRel.Sql.Add('FROM ORCITENS');
+        QRel.Sql.Add('INNER JOIN ORCAMENTOS');
+        QRel.Sql.Add('ON (ORCITENS.ORCAMENTO_ID = ORCAMENTOS.ORCAMENTO_ID)');
+        QRel.Sql.Add('INNER JOIN PRODUTOS');
+        QRel.Sql.Add('ON (ORCITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+        QRel.Sql.Add('INNER JOIN TRIBUTOS');
+        QRel.Sql.Add('ON (PRODUTOS.TRIBUTO_ID = TRIBUTOS.TRIBUTO_ID)');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(ORCITENS.ORCAMENTO_ID = :ORCAMENTO_ID)');
+        QRel.Sql.Add('AND (ORCAMENTOS.EMPRESA_ID = :EMPRESA_ID)');
+
+        QRel.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(orcamento_id.Text);
+        QRel.ParamByName('EMPRESA_ID').AsInteger   := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          QSub_Detail.Append;
+
+          try
+
+            QSub_Detail.FieldByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
+            QSub_Detail.FieldByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
+            QSub_Detail.FieldByName('CFOP').AsString          := QRel.FieldByName('CFOP').AsString;
+            QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger   := QRel.FieldByName('TRIBUTO_ID').AsInteger;
+            QSub_Detail.FieldByName('CST').AsString           := QRel.FieldByName('CST').AsString;
+            QSub_Detail.FieldByName('MVA').AsFloat            := QRel.FieldByName('MVA').AsFloat;
+            QSub_Detail.FieldByName('BASE_CALC_ICMS').AsFloat := QRel.FieldByName('BASE_CALC_ICMS').AsFloat;
+            QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat  := QRel.FieldByName('ALIQUOTA_ICMS').AsFloat;
+            QSub_Detail.FieldByName('VR_IPI').AsFloat         := QRel.FieldByName('VR_IPI').AsFloat;
+            QSub_Detail.FieldByName('QUANTIDADE').AsFloat     := QRel.FieldByName('QUANTIDADE').AsFloat;
+            QSub_Detail.FieldByName('VR_UNITARIO').AsFloat    := QRel.FieldByName('VR_UNITARIO').AsFloat;
+            QSub_Detail.FieldByName('VR_DESCONTO').AsFloat    := QRel.FieldByName('VR_DESCONTO').AsFloat;
+            QSub_Detail.FieldByName('VR_TOTAL').AsFloat       := QRel.FieldByName('VR_TOTAL').AsFloat;
+
+            IQuery.Sql.Clear;
+            IQuery.Sql.Add('SELECT UNIDADE_VENDA FROM PRODUTOS WHERE PRODUTO_ID = :PRODUTO_ID');
+            IQuery.ParamByName('PRODUTO_ID').AsInteger := QRel.FieldByName('PRODUTO_ID').AsInteger;
+            IQuery.Prepare;
+            IQuery.Open;
+
+            QSub_Detail.FieldByName('UNIDADE').AsString        := IQuery.FieldByName('UNIDADE_VENDA').AsString;
+
+
+            QSub_Detail.Post;
+          except
+            QSub_Detail.Cancel;
+          end;
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+
+        IQuery.Sql.Clear;
+        IQuery.Sql.Add('UPDATE ORCAMENTOS SET  PEDIDO_ID = :PEDIDO_ID  WHERE ORCAMENTO_ID = :ORCAMENTO_ID ');
+        IQuery.ParamByName('PEDIDO_ID').AsInteger     := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+        IQuery.ParamByName('ORCAMENTO_ID').AsInteger  := StrToInt(orcamento_id.Text);
+        //IQuery.ParamByName('DT_STATUS').AsDateTime   := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+        IQuery.Prepare;
+        IQuery.ExecSql;
+
+        Detailsearch('Orçamento');
+
+
+
+
+
+      End;
+
+
+
+    Set_Campos(False);
+
+    if QTabela.IsEmpty then
+    begin
+      QEmpresa.Close;
+      QCliente.Close;
+    end;
+
+    Habilitar(False);
+    Botoes_Normal;
+
+    if COND_PAGTO.Text = 'A PRAZO' then
+      btnParcelasClick(Self)
+    else
+    begin
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('DELETE FROM TRANSPARCELAS');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+      IQuery.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      IQuery.ParamByName('TRANSACAO_ID').AsInteger  := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+      IQuery.ParamByName('TIPO_TRANSACAO').AsString := 'V';
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+    end;
+
+
+    Consulta.TabVisible := True;
+    {
+    if (not QOrcamento.IsEmpty)  then
+    Begin
+    Botoes_disable;
+    Consulta.TabVisible := False;
+    itens.Enabled := True;
+    itens.SetFocus;
+    //keybd_event(Ord('a'), 0, KEYEVENTF_UNICODE, 0)
+
+    End;
+    }
+    if (not QOrcamento.IsEmpty)  and (VALOR_PRODUTOS.Value = 0)  then
+    Begin
+    Botoes_disable;
+    Consulta.TabVisible := False;
+    itens.Enabled := True;
+    itens.SetFocus;
+
+     Perform(Wm_NextDlgCtl, 0, 0);
+
+      Valor.Value := 0 ;
+
+      QSub_Detail.First;
+      While not QSub_Detail.eof do
+      Begin
+
+       Valor.Value := Valor.Value + QSub_Detail.FieldByName('VR_TOTAL').AsFloat;
+
+       QSub_Detail.Next;
+
+      End;
+
+    //keybd_event(Ord('F9'), 0, KEYEVENTF_UNICODE, 0)
+    End;
+
+    Operacao := '';
+
+    Calculo_rodape;
+
+
+
+  end;
+
+
+
+end;
+
+procedure TFrmPedido_de_venda.ConsultaShow(Sender: TObject);
+begin
+  Botoes_Normal;
+
+  QSearch.Sql.Clear;
+  QSearch.Sql.Text := 'SELECT * FROM CONTROLE_REGISTRO WHERE CONEXAO_ID = :CONEXAO_ID AND CHAVE_ID = :CHAVE_ID ' +
+                      'AND TABELA = ''PEDIDO VENDA'' ';
+  QSearch.ParamByName('CONEXAO_ID').AsInteger := id_conexao_banco;
+  QSearch.ParamByName('CHAVE_ID').AsInteger   := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+  QSearch.Prepare;
+  QSearch.Open;
+
+  if not QSearch.IsEmpty Then
+  CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,1);
+end;
+
+procedure TFrmPedido_de_venda.CONTA_IDExit(Sender: TObject);
+begin
+   DetailSearch('Conta');
+end;
+
+procedure TFrmPedido_de_venda.DBGrid1DblClick(Sender: TObject);
+begin
+  Manutencao.Show;
+end;
+
+procedure TFrmPedido_de_venda.DBGrid1DrawColumnCell(Sender: TObject;
+  const Rect: TRect; DataCol: Integer; Column: TColumn; State: TGridDrawState);
+var
+OldBkMode: Integer;
+begin
+ if (QTabela.FieldByName('STATUS').AsString = 'FATURADO') or  (QTabela.FieldByName('STATUS').AsString = 'FAT.TERCEIRO') OR (QTabela.FieldByName('STATUS').AsString = 'FAT.INTERNO') then
+    TDBGrid(Sender).Canvas.Font.Color := clGreen
+
+  else if  QTabela.FieldByName('STATUS').AsString = 'CANCELADO' then
+    TDBGrid(Sender).Canvas.Font.Color := clRed
+  Else
+    TDBGrid(Sender).Canvas.Font.Color := clBlue;
+
+  if gdSelected in State then
+  begin
+    with (Sender as TDBGrid).Canvas do
+    begin
+      Brush.Color := clInfoBk;
+
+      FillRect(Rect);
+
+      Brush.Color := clInfoBk;
+      OldBkMode   := SetBkMode(Handle, TRANSPARENT);
+
+      SetBkMode(Handle, OldBkMode);
+
+      Font.Style := [fsBold];
+    end;
+  end;
+  TDBGrid(Sender).DefaultDrawDataCell(Rect, TDBGrid(Sender).Columns[DataCol].Field, State);
+end;
+
+procedure TFrmPedido_de_venda.DBGrid1KeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+    Manutencao.Show;
+end;
+
+procedure TFrmPedido_de_venda.DBGrid1TitleClick(Column: TColumn);
+begin
+  CmdOrderBy := 'ORDER BY ' + Column.FieldName;
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+  QTabela.Open;
+end;
+
+procedure TFrmPedido_de_venda.ItensColEnter(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    ProdutoSearch;
+    TributoSearch;
+
+    if (Itens.SelectedField.FieldName = 'tributo_id') and (QProduto.IsEmpty) then
+      Itens.SelectedIndex := 0;
+
+    if (Itens.SelectedField.FieldName = 'cst') and (QTributo.IsEmpty) then
+      Itens.SelectedIndex := 2;
+
+    if (Itens.SelectedField.FieldName = 'unidade') and (QSub_Detail.FieldByName('QUANTIDADE').AsFloat = 0) then
+      Itens.SelectedIndex := 4;
+
+    if (Itens.SelectedField.FieldName = 'vr_desconto') and (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat = 0) then
+      Itens.SelectedIndex := 8;
+  end;
+end;
+
+procedure TFrmPedido_de_venda.ItensColExit(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+
+    if Itens.SelectedField.FieldName = 'produto_id' then
+    begin
+      if QSub_Detail.FieldByName('TP_PROD_SERV').AsString = 'P' then
+      begin
+        ProdutoSearch;
+
+        if QProduto.IsEmpty then
+        begin
+          QSub_Detail.FieldByName('DESCRICAO').AsString    := '';
+          QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := 0;
+          QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := 0;
+          QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := 0;
+          QSub_Detail.FieldByName('UNIDADE').AsString      := '';
+
+          Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+
+          Itens.SelectedIndex := 1;
+        end
+        else
+        begin
+          QSub_Detail.FieldByName('DESCRICAO').AsString    := QProduto.FieldByName('DESCRICAO').AsString;
+          QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
+          QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+          QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := QProduto.FieldByName('PRECO_VAREJO').AsFloat;
+          QSub_Detail.FieldByName('UNIDADE').AsString      := QProduto.FieldByName('UNIDADE_VENDA').AsString;
+          QSub_Detail.FieldByName('CFOP').AsString         := Copy(FormatDateTime('HH:MM:SS.ZZZ', Now), 10, 3);
+
+          if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QProduto.FieldByName('PROMO_INICIAL').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QProduto.FieldByName('PROMO_FINAL').AsDateTime) then
+            QSub_Detail.FieldByName('VR_UNITARIO').AsFloat := RoundTo(QProduto.FieldByName('PRECO_PROMOCAO').AsFloat, -2);
+
+
+          if QProduto.FieldByName('CTRL_SERIE').AsString = 'SIM' then
+            Edita_Series(QTabela.FieldByName('PEDIDO_ID').AsInteger, QSub_Detail.FieldByName('PRODUTO_ID').AsInteger, -1, 0);
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('SELECT SUM(QUANTIDADE) QUANTIDADE ');
+          IQuery.Sql.Add('FROM PEDITENS_SERIE');
+          IQuery.Sql.Add('WHERE');
+          IQuery.Sql.Add('(PEDIDO_ID = :PEDIDO_ID)');
+          IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+          IQuery.ParamByName('PEDIDO_ID').AsInteger := QTabela.FieldByName('PEDIDO_ID').AsInteger;
+          IQuery.ParamByName('PRODUTO_ID').AsInteger   := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+          IQuery.Prepare;
+          IQuery.Open;
+
+          QSub_Detail.FieldByName('QUANTIDADE').AsFloat := IQuery.FieldByName('QUANTIDADE').AsFloat;
+
+        end;
+      end;
+
+      if QSub_Detail.FieldByName('TP_PROD_SERV').AsString = 'S' then
+      begin
+        ServicoSearch;
+
+        if QServico.IsEmpty then
+        begin
+          QSub_Detail.FieldByName('DESCRICAO').AsString    := '';
+          QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := 0;
+          QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := 0;
+          QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := 0;
+          QSub_Detail.FieldByName('UNIDADE').AsString      := '';
+
+          Application.MessageBox('Serviço inexistente', PChar(Msg_Title), mb_IconStop);
+
+          Itens.SelectedIndex := 1;
+        end
+        else
+        begin
+          QSub_Detail.FieldByName('DESCRICAO').AsString    := QServico.FieldByName('DESCRICAO').AsString;
+          QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := 1;
+          QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := QServico.FieldByName('ISS').AsFloat;
+          QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := QServico.FieldByName('PRECO').AsFloat;
+          QSub_Detail.FieldByName('UNIDADE').AsString      := QProduto.FieldByName('UNIDADE_VENDA').AsString;
+        end;
+      end;
+
+    end;
+
+
+   { if Itens.SelectedField.FieldName = 'produto_id' then
+    begin
+      ProdutoSearch;
+
+      if QProduto.IsEmpty then
+      begin
+        QSub_Detail.FieldByName('DESCRICAO').AsString    := '';
+        QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := 0;
+        QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := 0;
+        QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := 0;
+        QSub_Detail.FieldByName('UNIDADE').AsString      := '';
+
+        Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+        Itens.SelectedIndex := 0;
+      end
+      else
+      begin
+        QSub_Detail.FieldByName('DESCRICAO').AsString    := QProduto.FieldByName('DESCRICAO').AsString;
+        QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
+        QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+        QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := QProduto.FieldByName('PRECO_VAREJO').AsFloat;
+        QSub_Detail.FieldByName('UNIDADE').AsString      := QProduto.FieldByName('UNIDADE').AsString;
+
+      end;
+    end;  }
+
+
+
+
+
+
+    if Itens.SelectedField.FieldName = 'tributo_id' then
+    begin
+      TributoSearch;
+
+      if QTributo.IsEmpty then
+      begin
+        QSub_Detail.FieldByName('CST').AsString := '';
+        Application.MessageBox('Tributo inexistente', PChar(Msg_Title), mb_IconStop);
+        Itens.SelectedIndex := 2;
+      end
+      else
+        QSub_Detail.FieldByName('CST').AsString := Copy(QTributo.FieldByName('ORIGEM').AsString, 1, 1) + Copy(QTributo.FieldByName('TRIBUTACAO').AsString, 1, 2);
+    end;
+
+    if (Itens.SelectedField.FieldName = 'peso_unitario') or (Itens.SelectedField.FieldName = 'vr_unitario') or (Itens.SelectedField.FieldName = 'quantidade') or (Itens.SelectedField.FieldName = 'vr_desconto') then
+    begin
+       ProdutoSearch;
+
+      if Itens.SelectedField.FieldName = 'vr_unitario' then
+      begin
+
+         QOpera.Close;
+         QOpera.Params[0].AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+         QOpera.Prepare;
+         QOpera.Open;
+
+
+         if (QOpera.FieldByName('DESLIGAR').AsString <> 'True') and (QOpera.FieldByName('SAIDA_VENDA').AsString <> 'True') then
+         Begin
+
+           if QSub_Detail.FieldByName('VR_UNITARIO').AsFloat < QProduto.FieldByName('PRECO_VAREJO').AsFloat Then
+           Begin
+            Application.MessageBox('Valor unitário inferior ao preço do produto', PChar(Msg_Title), mb_IconStop);
+            QSub_Detail.FieldByName('VR_UNITARIO').AsFloat := QProduto.FieldByName('PRECO_VAREJO').AsFloat;
+            Itens.SelectedIndex := 8;
+            abort;
+           End;
+
+         End;
+
+      end;
+
+
+      if Itens.SelectedField.FieldName = 'quantidade' then
+      begin
+
+        If QSub_Detail.FieldByName('QUANTIDADE').AsFloat = 0 Then
+        Begin
+          Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+          Itens.SelectedIndex := 2;
+          abort;
+        End;
+
+        IF ( FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro') and (QProduto.FieldByName('UNIDADE').AsString = 'M2')  Then
+        QSub_Detail.FieldByName('PESO_UNITARIO').AsFloat :=  QProduto.FieldByName('PESO_UNITARIO').AsFloat;
+
+        if (QProduto.FieldbyName('EMBALAGEM').AsFloat > 0) and (FrmPrincipal.Config.FieldByName('UNID_EMB_PEDIDOS').AsString = 'True') then
+          QSub_Detail.FieldByName('QUANTIDADE').AsFloat := (QSub_Detail.FieldByName('QUANTIDADE').AsFloat * QProduto.FieldByName('EMBALAGEM').AsFloat);
+      end;
+
+        if (Itens.SelectedField.FieldName = 'peso_unitario') and (QProduto.FieldByName('UNIDADE_VENDA').AsString = 'M2')  Then
+        Begin
+        QSub_Detail.FieldByName('MT_2').AsFloat          := ((QSub_Detail.FieldByName('QUANTIDADE').AsFloat * QSub_Detail.FieldByName('PESO_UNITARIO').AsFloat) * 0.2);
+
+         IF  COPY (QProduto.FieldByName('DESCRICAO').AsString,1,5) = 'VIDRO' tHEN
+        QSub_Detail.FieldByName('MT_2').AsFloat          := (QSub_Detail.FieldByName('QUANTIDADE').AsFloat * QSub_Detail.FieldByName('PESO_UNITARIO').AsFloat);
+
+        End;
+
+
+        IF (FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro') and (QProduto.FieldByName('UNIDADE_VENDA').AsString = 'M2')  Then
+        QSub_Detail.FieldByName('VR_TOTAL').AsFloat := (QSub_Detail.FieldByName('MT_2').AsFloat * (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat  - QSub_Detail.FieldByName('VR_DESCONTO').AsFloat))
+        Else
+        QSub_Detail.FieldByName('VR_TOTAL').AsFloat := (QSub_Detail.FieldByName('QUANTIDADE').AsFloat * (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat - QSub_Detail.FieldByName('VR_DESCONTO').AsFloat));
+
+    end;
+
+    if Itens.SelectedField.FieldName = 'vr_desconto' then
+    Begin
+       if (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat) >= (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat ) then
+        begin
+            Application.MessageBox('Desconto inválido', PChar(Msg_Title), mb_IconStop);
+            Itens.SelectedIndex := 5;
+            abort;
+        end;
+
+        if FrmPrincipal.Config.FieldByName('DESC_MAXIMO').AsFloat > 0 then
+        begin
+          if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > ((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * FrmPrincipal.Config.FieldByName('DESC_MAXIMO').AsFloat) / 100) then
+          begin
+            Application.MessageBox('Vr. Desconto maior do que o valor permitido', PChar(Msg_Title), mb_IconStop);
+            Itens.SelectedIndex := 5;
+            abort;
+          end;
+        end;
+
+      if (FrmPrincipal.Config.FieldByName('DESC_ORC_USU').AsString = 'True') and (FrmPrincipal.Config.FieldByName('DESCONTOS_PRODUTOS').AsString <> 'True') then
+      Begin
+      Desc_por := 0;
+
+        if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > 0 then
+           Desc_Por := RoundTo(((QSub_Detail.FieldByName('VR_DESCONTO').AsFloat * 100) / (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat)), -2)
+        else
+           Desc_Por  := 0;
+
+            IQuery.SQL.Clear;
+            IQuery.SQL.Add('SELECT * FROM OPERADORES WHERE NOME LIKE :NOME');
+            IQuery.ParamByName('NOME').AsString := Copy(QFuncionario.FieldByName('NOME').AsString,1,20) ;
+            IQuery.Prepare;
+            IQuery.Open;
+
+        if (IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat = 0) and (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > 0) then
+        begin
+            Application.MessageBox(Pchar('Vr. Desconto máximo permitido para ' +  IQuery.FieldByName('NOME').AsString + ' ' + ': '+ IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsString +'%') , PChar(Msg_Title), mb_IconStop);
+            Itens.SelectedIndex := 5;
+            abort;
+        end;
+
+          if IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat > 0 then
+          begin
+            if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > (((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat) * IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat) / 100) then
+            begin
+              Application.MessageBox(Pchar('Vr. Desconto máximo permitido para ' +  IQuery.FieldByName('NOME').AsString + ' ' + ': '+ IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsString +'%') , PChar(Msg_Title), mb_IconStop);
+
+              if FrmGerente = Nil then
+              begin
+                Application.CreateForm(TFrmGerente, FrmGerente);
+                try
+                  if FrmGerente.ShowModal = mrOK then
+                  begin
+                    if Desc_Por > FrmGerente.QOperador.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat then
+                    begin
+                      Application.MessageBox('Desconto acima do máximo permitido', 'Orçamento', MB_IconStop + MB_OK);
+                     Itens.SelectedIndex := 5;
+                     abort;
+                    end;
+                  Itens.SelectedIndex := 6;
+                  end
+                  else
+                    Itens.SelectedIndex := 5;
+                    abort;
+                finally
+
+                end;
+              end
+              else
+              begin
+                if FrmGerente.ShowModal = mrOK then
+                begin
+                  if Desc_Por > FrmGerente.QOperador.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat then
+                  begin
+                    Application.MessageBox('Desconto acima do máximo permitido', 'Orçamento', MB_IconStop + MB_OK);
+                    Itens.SelectedIndex := 5;
+                    abort;
+                  end;
+                Itens.SelectedIndex := 6;
+                end
+                else
+                  Itens.SelectedIndex := 5;
+                  abort;
+              end;
+            end;
+          end;
+      End;
+
+      // descontos produtos
+      if FrmPrincipal.Config.FieldByName('DESCONTOS_PRODUTOS').AsString = 'True'  then
+      Begin
+      ProdutoSearch;
+      Desc_por := 0;
+
+        if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > 0 then
+           Desc_Por := RoundTo(((QSub_Detail.FieldByName('VR_DESCONTO').AsFloat * 100) / (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat )), -2)
+        else
+           Desc_Por  := 0;
+
+            IQuery.SQL.Clear;
+            IQuery.SQL.Add('SELECT * FROM OPERADORES WHERE NOME LIKE :NOME');
+            IQuery.ParamByName('NOME').AsString := Copy(QFuncionario.FieldByName('NOME').AsString,1,20) ;
+            IQuery.Prepare;
+            IQuery.Open;
+         {
+        if (IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsFloat = 0) and (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > 0) then
+        begin
+            Application.MessageBox(Pchar('Vr. Desconto máximo permitido para ' +  IQuery.FieldByName('NOME').AsString + ' ' + ': '+ IQuery.FieldByName('DESCONTO_MAX_SUBTOTAL').AsString +'%') , PChar(Msg_Title), mb_IconStop);
+            Itens.SelectedIndex := 5;
+            abort;
+        end;
+        }
+          if QProduto.FieldbyName('DESC_MAXIMO').AsFloat > 0 then
+          begin
+
+           // SHOWMESSAGE('DESCONTO..');
+           // SHOWMESSAGE(FloatToStr((((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat * QSub_Detail.FieldByName('QUANTIDADE').AsFloat) * QProduto.FieldbyName('DESC_MAXIMO').AsFloat) / 100)));
+
+            if QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > (((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat ) * QProduto.FieldbyName('DESC_MAXIMO').AsFloat) / 100) then
+            begin
+              Application.MessageBox(Pchar('Vr. Desconto máximo permitido para o produto:' + #13 +  QProduto.FieldByName('DESCRICAO').AsString + ' ' + ': '+ QProduto.FieldbyName('DESC_MAXIMO').AsString +'%/R$' + FloatToStr((((QSub_Detail.FieldByName('VR_UNITARIO').AsFloat) * QProduto.FieldbyName('DESC_MAXIMO').AsFloat) / 100)) ) , PChar(Msg_Title), mb_IconStop);
+
+              if FrmGerente = Nil then
+              begin
+                Application.CreateForm(TFrmGerente, FrmGerente);
+                try
+                  if FrmGerente.ShowModal = mrOK then
+                  begin
+                    if Desc_Por > FrmGerente.QOperador.FieldByName('DESCONTO_MAX_ITEM').AsFloat then
+                    begin
+                      Application.MessageBox('Desconto acima do máximo permitido', 'Orçamento', MB_IconStop + MB_OK);
+                     Itens.SelectedIndex := 9;
+                     abort;
+                    end;
+                  QSub_Detail.FieldByName('VR_TOTAL').AsFloat := (QSub_Detail.FieldByName('QUANTIDADE').AsFloat * (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat - QSub_Detail.FieldByName('VR_DESCONTO').AsFloat));
+                  Itens.SelectedIndex := 10;
+                  end
+                  else
+                    Itens.SelectedIndex := 9;
+                    abort;
+                finally
+
+                end;
+              end
+              else
+              begin
+                if FrmGerente.ShowModal = mrOK then
+                begin
+                  if Desc_Por > FrmGerente.QOperador.FieldByName('DESCONTO_MAX_ITEM').AsFloat then
+                  begin
+                    Application.MessageBox('Desconto acima do máximo permitido', 'Orçamento', MB_IconStop + MB_OK);
+                    Itens.SelectedIndex := 5;
+                    abort;
+                  end;
+                QSub_Detail.FieldByName('VR_TOTAL').AsFloat := (QSub_Detail.FieldByName('QUANTIDADE').AsFloat * (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat - QSub_Detail.FieldByName('VR_DESCONTO').AsFloat));
+                Itens.SelectedIndex := 10;
+                end
+                else
+                  Itens.SelectedIndex := 9;
+                  abort;
+              end;
+            end;
+
+            QSub_Detail.FieldByName('VR_TOTAL').AsFloat := (QSub_Detail.FieldByName('QUANTIDADE').AsFloat * (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat - QSub_Detail.FieldByName('VR_DESCONTO').AsFloat));
+            Itens.SelectedIndex := 10;
+          end;
+      End;
+
+    End;
+
+  end;
+end;
+
+procedure TFrmPedido_de_venda.ItensEnter(Sender: TObject);
+begin
+  Botoes_Disable;
+  Consulta.TabVisible := False;
+end;
+
+procedure TFrmPedido_de_venda.ItensExit(Sender: TObject);
+begin
+  if QSub_Detail.State in [dsInsert, dsEdit] then
+  begin
+    QSub_Detail.Cancel;
+
+  end;
+
+  if FrmData.QAcesso.FieldByName('ALTERACAO').AsString = 'NÃO' then
+  begin
+    Application.MessageBox('Usuário sem permissão para alteração', PChar(Msg_Title), mb_IconStop);
+    Botoes_Normal;
+    Consulta.TabVisible := True;
+    abort;
+  end;
+
+  btnEditClick(Self);
+
+  VALOR_PRODUTOS.Value := 0;
+  MT_2.Value           := 0;
+  QSub_Detail.First;
+  while not QSub_Detail.Eof do
+  begin
+    VALOR_PRODUTOS.Value := VALOR_PRODUTOS.Value + QSub_Detail.FieldByName('VR_TOTAL').AsFloat;
+
+    if (FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro') Then
+    MT_2.Value := MT_2.Value + QSub_Detail.FieldByName('MT_2').AsFloat;
+
+    Application.ProcessMessages;
+    QSub_Detail.Next;
+  end;
+
+
+
+
+end;
+
+procedure TFrmPedido_de_venda.ItensKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+var
+Orcamento: Integer;
+Desconto_Item : Real;
+begin
+  if (Key = Vk_F4) and (QSub_Detail.State = dsBrowse) and (not QSub_Detail.IsEmpty) then
+    QSub_Detail.Delete;
+
+ if Key = Vk_F5 then
+  begin
+    Orcamento := GetConsulta('ORÇAMENTO', 0, 0, 0);
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT ORCITENS.*, PRODUTOS.COD_BARRA, TRIBUTOS.CFOP,ORCAMENTOS.CLIENTE_ID,ORCAMENTOS.OBSERVACAO,ORCAMENTOS.COND_PAGTO,ORCAMENTOS.VR_DESCONTO VALOR_DESCONTO,ORCAMENTOS.VR_ACRESCIMO');
+    QRel.Sql.Add('FROM ORCITENS');
+    QRel.Sql.Add('INNER JOIN ORCAMENTOS');
+    QRel.Sql.Add('ON (ORCITENS.ORCAMENTO_ID = ORCAMENTOS.ORCAMENTO_ID)');
+    QRel.Sql.Add('INNER JOIN PRODUTOS');
+    QRel.Sql.Add('ON (ORCITENS.PRODUTO_ID = PRODUTOS.PRODUTO_ID)');
+    QRel.Sql.Add('INNER JOIN TRIBUTOS');
+    QRel.Sql.Add('ON (PRODUTOS.TRIBUTO_ID = TRIBUTOS.TRIBUTO_ID)');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(ORCITENS.ORCAMENTO_ID = :ORCAMENTO_ID)');
+    QRel.Sql.Add('AND (ORCAMENTOS.EMPRESA_ID = :EMPRESA_ID)');
+
+    QRel.ParamByName('ORCAMENTO_ID').AsInteger := Orcamento;
+    QRel.ParamByName('EMPRESA_ID').AsInteger   := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QRel.First;
+    while not QRel.Eof do
+    begin
+      QSub_Detail.Append;
+
+      try
+        QSub_Detail.FieldByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
+        QSub_Detail.FieldByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
+        QSub_Detail.FieldByName('CFOP').AsString          := QRel.FieldByName('CFOP').AsString;
+        QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger   := QRel.FieldByName('TRIBUTO_ID').AsInteger;
+        QSub_Detail.FieldByName('CST').AsString           := QRel.FieldByName('CST').AsString;
+        QSub_Detail.FieldByName('MVA').AsFloat            := QRel.FieldByName('MVA').AsFloat;
+        QSub_Detail.FieldByName('BASE_CALC_ICMS').AsFloat := QRel.FieldByName('BASE_CALC_ICMS').AsFloat;
+        QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat  := QRel.FieldByName('ALIQUOTA_ICMS').AsFloat;
+        QSub_Detail.FieldByName('VR_IPI').AsFloat         := QRel.FieldByName('VR_IPI').AsFloat;
+        QSub_Detail.FieldByName('QUANTIDADE').AsFloat     := QRel.FieldByName('QUANTIDADE').AsFloat;
+        QSub_Detail.FieldByName('VR_UNITARIO').AsFloat    := QRel.FieldByName('VR_UNITARIO').AsFloat;
+        QSub_Detail.FieldByName('VR_DESCONTO').AsFloat    := QRel.FieldByName('VR_DESCONTO').AsFloat;
+        QSub_Detail.FieldByName('VR_TOTAL').AsFloat       := QRel.FieldByName('VR_TOTAL').AsFloat;
+
+        QSub_Detail.Post;
+      except
+        QSub_Detail.Cancel;
+      end;
+
+      Application.ProcessMessages;
+      QRel.Next;
+    end;
+
+     if Application.MessageBox('Usar o mesmo Cliente para quem foi feita o Orçamento?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+      Begin
+      Cliente_ID.Value  := QRel.FieldByName('CLIENTE_ID').AsInteger;
+      Cliente_idExit(Cliente_id);
+      End;
+
+    Cond_pagto.Text   := QRel.FieldByName('COND_PAGTO').AsString;
+    Observacao.Text   := QRel.FieldByName('OBSERVACAO').AsString;
+    Vr_Desconto.Text  := FloatToStr(QRel.FieldByName('VALOR_DESCONTO').AsFloat);
+    Vr_Acrescimo.Text := FloatToStr(QRel.FieldByName('VR_ACRESCIMO').AsFloat);
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE ORCAMENTOS SET TRANSACAO_ID = :TRANSACAO_ID');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+    IQuery.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+    IQuery.ParamByName('ORCAMENTO_ID').AsInteger := Orcamento;
+    IQuery.ParamByName('EMPRESA_ID').AsInteger   := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+    Orcamento_id.Value :=  Orcamento;
+
+  End;
+
+
+  if (Key = Vk_F7) and ((Itens.SelectedField.FieldName = 'produto_id') or (Itens.SelectedField.FieldName = 'tributo_id')) and (QSub_Detail.State in [dsInsert, dsEdit]) then
+  begin
+
+     if QSub_Detail.FieldByName('tp_prod_serv').AsString = 'P' then
+     begin
+       if Itens.SelectedField.FieldName = 'produto_id' then
+          QSub_Detail.FieldByName('PRODUTO_ID').AsInteger := GetConsulta('ESTOQUE', StrToInt(EMPRESA_ID.Text), 0, QSub_Detail.FieldByName('PRODUTO_ID').AsInteger);
+
+       if Itens.SelectedField.FieldName = 'tributo_id' then
+          QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger := GetConsulta('TRIBUTOS', 0, 0, QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger);
+
+     end;
+
+     if QSub_Detail.FieldByName('tp_prod_serv').AsString = 'S' then
+     begin
+      if Itens.SelectedField.FieldName = 'produto_id' then
+         QSub_Detail.FieldByName('PRODUTO_ID').AsInteger := GetConsulta('SERVIÇOS', 0, 0, QSub_Detail.FieldByName('PRODUTO_ID').AsInteger);
+     end;
+
+  end;
+
+
+  if Key = VK_F9 then
+  Begin
+
+
+    Perform(Wm_NextDlgCtl, 0, 0);
+
+    Valor.Value := 0 ;
+
+    QSub_Detail.First;
+    While not QSub_Detail.eof do
+    Begin
+
+     Valor.Value := Valor.Value + QSub_Detail.FieldByName('VR_TOTAL').AsFloat;
+
+     QSub_Detail.Next;
+
+    End;
+
+
+  End;
+
+  if ((Key = Vk_Up) or (Key = Vk_Down)) and (QSub_Detail.State in [dsInsert, dsEdit]) then
+    Key := 0;
+end;
+
+procedure TFrmPedido_de_venda.ItensKeyPress(Sender: TObject;
+  var Key: Char);
+begin
+  if Key = #46 then
+    Key := #44;
+
+  if Key = #13 then
+    Keybd_Event(VK_TAB, 0, 0, 0);
+
+  Key := AnsiUpperCase(Key)[1];
+end;
+
+procedure TFrmPedido_de_venda.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmPedido_de_venda.FormCloseQuery(Sender: TObject; var CanClose: Boolean);
+begin
+  if (Operacao = 'Inserindo') or (Operacao = 'Alterando') or (QSub_Detail.State in [dsInsert, dsEdit]) then
+  begin
+    Application.MessageBox('É melhor salvar as alterações antes de continuar', PChar(Msg_Title), mb_IconStop);
+    CanClose := False;
+  end;
+
+  CONTROLE_REGISTRO('PEDIDO VENDA',QTabela.FieldByName('PEDIDO_ID').AsInteger,1);
+end;
+
+procedure TFrmPedido_de_venda.FormCreate(Sender: TObject);
+var
+X, Ult_Dia: Integer;
+begin
+
+  DBGrid1.Columns[0].Width := 45;
+  DBGrid1.Columns[1].Width := 75;
+  DBGrid1.Columns[2].Width := 75;
+  DBGrid1.Columns[3].Width := 253;
+  DBGrid1.Columns[4].Width := 180;
+  DBGrid1.Columns[5].Width := 80;
+  DBGrid1.Columns[6].Width := 65;
+  DBGrid1.Columns[7].Width := 60;
+
+  Ult_Dia := StrToInt(Copy(DateToStr(Ult_Dia_Mes(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime)), 1, 2));
+  Dias.Tabs.Clear;
+
+  for X := 1 to Ult_Dia do
+    Dias.Tabs.Add(IntToStr(X));
+
+  Dias.Tabs.Add('Todos');
+
+  DT_MOVIMENTO.MinDate := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  DT_MOVIMENTO.MaxDate := StrToDate('31/12/2026');
+
+  Itens.Columns[0].Width   := 25;
+  Itens.Columns[1].Width   := 45;
+  Itens.Columns[2].Width   := 320;
+  Itens.Columns[3].Width   := 35;
+  Itens.Columns[4].Width   := 60;
+  Itens.Columns[5].Width   := 60;
+  Itens.Columns[6].Width   := 60;
+  Itens.Columns[7].Width   := 43;
+  Itens.Columns[8].Width   := 70;
+  Itens.Columns[9].Width   := 75;
+  Itens.Columns[10].Width  := 70;
+
+  CmdSelect     := QTabela.Sql.Text;
+  CmdSelectNull := 'WHERE (PEDIDO_ID IS NOT NULL) AND (TP_PEDIDO = 1) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (EMPRESA_ID = :EMPRESA_ID)';
+  CmdOrderBy    := 'ORDER BY PEDIDO_ID';
+
+  QTabela.Sql.Text := CmdSelect + #13 + CmdSelectNull + #13 + CmdOrderBy;
+
+  QTabela.ParamByName('DT_MOVIMENTO').AsDateTime := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+  QTabela.ParamByName('EMPRESA_ID').AsInteger    := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QTabela.Open;
+  Botoes_Normal;
+  Consulta.Show;
+  QFinalizadora.Open;
+  Detailsearch('');
+
+  if Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 63, 1) = 'S' then
+  Itens.Columns[8].ReadOnly := False;
+
+  If FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Forro' Then
+  Begin
+  Label14.Visible          := True;
+  Mt_2.Visible             := True;
+  Itens.Columns[5].Visible := True;
+  Itens.Columns[6].Visible := True;
+  End
+  Else
+  Begin
+  Label14.Visible          := False;
+  Mt_2.Visible             := False;
+  Itens.Columns[5].Visible := False;
+  Itens.Columns[6].Visible := False;
+  End;
+
+  if FrmPrincipal.Config.FieldByName('DESCONTOS_PRODUTOS').AsString = 'True'  Then
+  Begin
+  Itens.Columns[8].ReadOnly := False;
+  Itens.Columns[9].ReadOnly := False;
+  End;
+
+
+end;
+
+procedure TFrmPedido_de_venda.FormShow(Sender: TObject);
+begin
+  DBGrid1.SetFocus;
+
+
+
+end;
+
+end.

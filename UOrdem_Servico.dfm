@@ -11957,8 +11957,8 @@ object FrmOrdem_Servico: TFrmOrdem_Servico
     end
   end
   object Ordem: TQuickRep
-    Left = 815
-    Top = 50
+    Left = 767
+    Top = 39
     Width = 794
     Height = 1123
     BeforePrint = OrdemBeforePrint
@@ -15621,19 +15621,19 @@ object FrmOrdem_Servico: TFrmOrdem_Servico
       object QRDBText63: TQRDBText
         Left = 77
         Top = 122
-        Width = 85
+        Width = 29
         Height = 15
         Size.Values = (
           39.687500000000000000
           203.729166666666700000
           322.791666666666700000
-          224.895833333333300000)
+          76.729166666666670000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QTabela
-        DataField = 'nome_cliente'
+        DataSet = QCliente
+        DataField = 'NOME'
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -16655,13 +16655,14 @@ object FrmOrdem_Servico: TFrmOrdem_Servico
       'SWEDA=BOBINA'
       'BEMATECH=BOBINA')
     MostrarProgresso = True
-    TamanhoQteLinhas = 32
+    TamanhoQteLinhas = 66
     TamanhoQteColunas = 80
     TamanhoQteLPP = Seis
     NumerodeCopias = 1
     FonteTamanhoPadrao = S10cpp
     FonteEstiloPadrao = []
     Orientacao = poPortrait
+    OnNewPage = RDprint1NewPage
     OnBeforeNewPage = RDprint1BeforeNewPage
     Left = 440
     Top = 126

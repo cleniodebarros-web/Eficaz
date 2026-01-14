@@ -1060,6 +1060,7 @@ type
     QOrc7: TFDQuery;
     Avisos: TMenuItem;
     OrcVencimentos: TMenuItem;
+    PdvOffline: TMenuItem;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure EmpresasClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -1463,6 +1464,7 @@ type
     procedure Timer3Timer(Sender: TObject);
     procedure OrcVencimentosClick(Sender: TObject);
     procedure AvisosClick(Sender: TObject);
+    procedure PdvOfflineClick(Sender: TObject);
 
 
   private
@@ -1867,7 +1869,10 @@ begin
     Width     := 30;
     Height    := 21;
     TabOrder  := 0;
-    Text      := '1';
+    if aValor = '' then
+    Text      := '1'
+    else
+    Text      := aValor;
   end;
 
   with vValor1 do
@@ -3938,7 +3943,6 @@ begin
             Dias := '5'
           Else
             dias :=  DecryptMsg(FrmPrincipal.Config.FieldByName('DIAS_OFFLINE').AsString,33);
-
           Writeln(Logs, 'DIAS_OFFLINE = '+dias);
 
           if  (DATE - StrToDate(DecryptMsg(FrmPrincipal.Config.FieldByName('DT_CONEXAO').AsString,33))) >= StrToInt(dias) Then
@@ -5382,7 +5386,7 @@ begin
     ListarArquivos(ExtractFilePath(ParamStr(0)),True);
     FrmAcesso.ProgressBar1.Visible    := True;
     FrmAcesso.Label1.Visible          := True;
-
+    FrmAcesso.ProgressBar1.Max := FrmPrincipal.ComponentCount -1;
 
     for I := 0 to (FrmPrincipal.ComponentCount - 1) do
     begin
@@ -5415,7 +5419,8 @@ begin
 
         if not QRel.IsEmpty then
           TMenuItem(Temp).Visible := QRel.FieldByName('STATUS').AsBoolean;
-
+          FrmAcesso.ProgressBar1.Position := I;
+         {
          if I >= 300 then
          Begin
          Inc(X);
@@ -5432,7 +5437,7 @@ begin
          if Y = 20 then
          Y := 0;
          End;
-
+         }
          Application.ProcessMessages;
 
       end;
@@ -5913,9 +5918,9 @@ begin
 
   //Dt_Eficaz := EncryptMsg(Copy(DateTimeToStr(SystemTimeToDateTime(lpSystemTime)),1,10),39);
 
-  Versao := '7.1.3.6';
+  Versao := '7.1.4.0';
   // Dt_Eficaz := EncryptMsg('16/04/2021',39);
-  Dt_Eficaz := EncryptMsg('20/08/2025',39);
+  Dt_Eficaz := EncryptMsg('28/12/2025',39);
   //Dt_Eficaz := EncryptMsg('20/11/2023',39);
 
  try
@@ -6293,6 +6298,8 @@ begin
         try
          DeleteFile(LeIni(Arq_Ini, 'Atualização', 'Download'));
          DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Eficaz.exe'));
+         DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Schemas.zip'));
+         RemoveDirectory(Pchar(ExtractFilePath(ParamStr(0)) + '/Schemas'));
         except
 
         end;
@@ -6309,6 +6316,8 @@ begin
 
 
         IdFTP1.Get('Eficaz.zip', LeIni(Arq_Ini, 'Atualização', 'Download'), true, True);
+        Tipo_Atualizacao := 1;
+        IdFTP1.Get('Schemas.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'), true, True);
 
 
         IdFTP1.Disconnect();
@@ -6316,6 +6325,7 @@ begin
         ZipFile := TZipFile.Create;
 
         Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download'),ExtractFilePath(ParamStr(0)) + '/Atualizar' );
+        Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'),ExtractFilePath(ParamStr(0)) + '/' );
 
         FrmAguarde.Label1.Caption := 'Download concluído com sucesso!';
 
@@ -7538,8 +7548,9 @@ begin
 
     //Configurações NFE
 
-    ACBrNFe1.Configuracoes.Arquivos.PathSalvar     := ExtractFilePath(ParamStr(0)) + 'NFe\';
+    ACBrNFe1.Configuracoes.Arquivos.PathSalvar     := ExtractFilePath(ParamStr(0)) + 'DFe\';
     ACBrNFe1.Configuracoes.Arquivos.PathNfe        := ExtractFilePath(ParamStr(0)) + 'NFe\';
+    ACBrNFe1.Configuracoes.Arquivos.PathEvento     := ExtractFilePath(ParamStr(0)) + 'NFe\';
     ACBrNFe1.Configuracoes.Arquivos.PathSchemas    := ExtractFilePath(ParamStr(0)) + 'Schemas\Nfe';
     ACBrNFe1.Configuracoes.Arquivos.PathInu        := ExtractFilePath(ParamStr(0)) + 'Inu\';
     ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload    := ExtractFilePath(ParamStr(0)) + 'Logs\';
@@ -12055,6 +12066,17 @@ begin
     Cascade;
 end;
 
+procedure TFrmPrincipal.PdvOfflineClick(Sender: TObject);
+begin
+  Tipo_Atualizacao := 9;
+
+  if not ThereIs('Atualização de Banco de Dados') then
+    TFrmDownload.Create(Application);
+
+  if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
+    Cascade;
+end;
+
 procedure TFrmPrincipal.PedidoClick(Sender: TObject);
 begin
   if not ThereIs('Trans. de Estoque - Pedido') then
@@ -13700,7 +13722,7 @@ begin
           with ACBrMDFe1.WebServices.EnvEvento do
           begin
 
-           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) then
+           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 101) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) then
            begin
 
             QRel.Sql.Clear;
@@ -13829,7 +13851,7 @@ begin
              EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo ]);
            end;
 
-           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) then
+           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 101) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) then
            begin
 
              try
@@ -14082,7 +14104,7 @@ begin
              EventoRetorno.retEvento.Items[0].RetInfEvento.xMotivo ]);
            end;
 
-           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) then
+           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 101) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) then
            begin
 
 
@@ -14391,7 +14413,7 @@ begin
           with ACBrNFe1.WebServices.EnvEvento do
           begin
 
-           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 151) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 128) Then
+           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 101) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 151) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 128) Then
            begin
              FrmPrincipal.ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
              FrmPrincipal.ACBrNFe1.Consultar;
@@ -14414,7 +14436,7 @@ begin
            end;
            }
 
-           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 151) then
+           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 101) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 151) then
            begin
 
               if (QCancelamento.FieldByName('TIPO_IMP').AsInteger = 1) or (QCancelamento.FieldByName('TIPO_IMP').AsInteger = 0)  then
@@ -14833,7 +14855,7 @@ begin
         with ACBrNFe1.WebServices.EnvEvento do
         begin
 
-           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 151) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 128) Then
+           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 101) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 151) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 128) Then
            begin
              FrmPrincipal.ACBrNFe1.NotasFiscais.LoadFromFile(OpenDialog1.FileName);
              FrmPrincipal.ACBrNFe1.Consultar;
@@ -14855,7 +14877,7 @@ begin
            }
            //ShowMessage(IntToStr(EventoRetorno.retEvento.Items[0].RetInfEvento.cStat));
 
-           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) then
+           if (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 101) or (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 135) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 136) OR (EventoRetorno.retEvento.Items[0].RetInfEvento.cStat = 573) then
            begin
               if QCancelamento.FieldByName('TIPO_IMP').AsInteger = 1 then
               Begin
@@ -18983,6 +19005,7 @@ begin
 
     ACBrNFe1.Configuracoes.Arquivos.PathSalvar     := ExtractFilePath(ParamStr(0)) + 'NFe\';
     ACBrNFe1.Configuracoes.Arquivos.PathNfe        := ExtractFilePath(ParamStr(0)) + 'NFe\';
+    ACBrNFe1.Configuracoes.Arquivos.PathEvento     := ExtractFilePath(ParamStr(0)) + 'NFe\';
     ACBrNFe1.Configuracoes.Arquivos.PathSchemas    := ExtractFilePath(ParamStr(0)) + 'Schemas\Nfe';
     ACBrNFe1.Configuracoes.Arquivos.PathInu        := ExtractFilePath(ParamStr(0)) + 'Inu\';
     ACBrNFe1.Configuracoes.Arquivos.DownloadDFe.PathDownload    := ExtractFilePath(ParamStr(0)) + 'Logs\';

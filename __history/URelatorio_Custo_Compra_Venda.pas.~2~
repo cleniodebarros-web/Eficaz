@@ -1,0 +1,467 @@
+unit URelatorio_Custo_Compra_Venda;
+
+interface
+
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Mask, ExtCtrls, rxCurrEdit, rxToolEdit, DBTables, DB,
+  IBCustomDataSet, IBQuery, QRCtrls, QuickRpt, Buttons, DBCtrls, RDprint,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+
+type
+  TFrmRelatorio_Custo_Compra_Venda = class(TForm)
+    Label1: TLabel;
+    Bevel1: TBevel;
+    Dtmen: TDateEdit;
+    Dtmai: TDateEdit;
+    Resumo: TQuickRep;
+    ColumnHeaderBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRSysData1: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRLabel1: TQRLabel;
+    QRShape1: TQRShape;
+    QRShape3: TQRShape;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    DetailBand1: TQRBand;
+    QRGroup1: TQRGroup;
+    QRDBText1: TQRDBText;
+    QRBand1: TQRBand;
+    QRShape2: TQRShape;
+    QRExpr1: TQRExpr;
+    QRLabel10: TQRLabel;
+    QRLabel9: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel2: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel5: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText8: TQRDBText;
+    QRShape4: TQRShape;
+    QRExpr2: TQRExpr;
+    QRShape5: TQRShape;
+    QRExpr3: TQRExpr;
+    btnExecuta: TBitBtn;
+    btnRetorna: TBitBtn;
+    Resumo1: TQuickRep;
+    QRBand2: TQRBand;
+    QRDBText10: TQRDBText;
+    QRSysData3: TQRSysData;
+    QRLabel6: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRShape6: TQRShape;
+    QRShape7: TQRShape;
+    QRLabel11: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel12: TQRLabel;
+    QRLabel13: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRLabel15: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRBand3: TQRBand;
+    QRDBText11: TQRDBText;
+    QRDBText12: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRDBText14: TQRDBText;
+    QRDBText15: TQRDBText;
+    QRDBText16: TQRDBText;
+    QRGroup2: TQRGroup;
+    QRDBText18: TQRDBText;
+    QRBand4: TQRBand;
+    QRShape8: TQRShape;
+    QRExpr4: TQRExpr;
+    QRShape9: TQRShape;
+    QRExpr5: TQRExpr;
+    QRShape10: TQRShape;
+    QRExpr6: TQRExpr;
+    QRLabel18: TQRLabel;
+    QRLabel19: TQRLabel;
+    Detalhe_conta: TQuickRep;
+    QRBand7: TQRBand;
+    QRDBText21: TQRDBText;
+    QRSysData7: TQRSysData;
+    QRLabel27: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRShape14: TQRShape;
+    QRShape15: TQRShape;
+    QRLabel29: TQRLabel;
+    QRSysData8: TQRSysData;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRBand8: TQRBand;
+    QRDBText22: TQRDBText;
+    QRDBText23: TQRDBText;
+    QRDBText24: TQRDBText;
+    QRDBText25: TQRDBText;
+    QRDBText26: TQRDBText;
+    QRGroup3: TQRGroup;
+    QRDBText28: TQRDBText;
+    QRBand9: TQRBand;
+    QRShape16: TQRShape;
+    QRExpr11: TQRExpr;
+    QRShape18: TQRShape;
+    QRExpr13: TQRExpr;
+    Resumo_Sintetico: TQuickRep;
+    QRBand5: TQRBand;
+    QRDBText9: TQRDBText;
+    QRSysData5: TQRSysData;
+    QRLabel20: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRShape11: TQRShape;
+    QRShape12: TQRShape;
+    QRLabel22: TQRLabel;
+    QRSysData6: TQRSysData;
+    QRLabel23: TQRLabel;
+    QRLabel24: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel26: TQRLabel;
+    QRBand6: TQRBand;
+    QRDBText17: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRExpr7: TQRExpr;
+    SummaryBand1: TQRBand;
+    QRShape13: TQRShape;
+    QRExpr8: TQRExpr;
+    QRExpr9: TQRExpr;
+    QRExpr10: TQRExpr;
+    Resumo2: TQuickRep;
+    QRBand10: TQRBand;
+    QRDBText27: TQRDBText;
+    QRSysData9: TQRSysData;
+    QRLabel35: TQRLabel;
+    QRLabel37: TQRLabel;
+    QRShape17: TQRShape;
+    QRShape19: TQRShape;
+    QRLabel38: TQRLabel;
+    QRSysData10: TQRSysData;
+    QRLabel39: TQRLabel;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRLabel43: TQRLabel;
+    QRLabel44: TQRLabel;
+    QRLabel45: TQRLabel;
+    QRBand11: TQRBand;
+    QRDBText29: TQRDBText;
+    QRDBText30: TQRDBText;
+    QRDBText31: TQRDBText;
+    QRDBText32: TQRDBText;
+    QRDBText33: TQRDBText;
+    QRDBText34: TQRDBText;
+    QRGroup4: TQRGroup;
+    QRDBText35: TQRDBText;
+    QRBand12: TQRBand;
+    QRShape20: TQRShape;
+    QRExpr12: TQRExpr;
+    QRShape21: TQRShape;
+    QRExpr14: TQRExpr;
+    QRShape22: TQRShape;
+    QRExpr15: TQRExpr;
+    QRLabel46: TQRLabel;
+    QRDBText36: TQRDBText;
+    CheckBox1: TCheckBox;
+    RDprint1: TRDprint;
+    Label2: TLabel;
+    Produto: TCurrencyEdit;
+    btnProduto: TSpeedButton;
+    DBText1: TDBText;
+    DataProduto: TDataSource;
+    Cbx_filtro: TComboBox;
+    Label3: TLabel;
+    QRel: TFDQuery;
+    QProduto: TFDQuery;
+    procedure btnRetornaClick(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure FormCreate(Sender: TObject);
+    procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnExecutaClick(Sender: TObject);
+    procedure DtmenEnter(Sender: TObject);
+    procedure ProdutoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure btnProdutoClick(Sender: TObject);
+
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+
+  end;
+
+var
+  FrmRelatorio_Custo_Compra_Venda: TFrmRelatorio_Custo_Compra_Venda;
+  Pagina, linha, C1, C2, C3, C4, C5, C6, C7, C8, C9 : Integer;
+  Conduta, Descricao : String;
+  Total_Custo,Total_Custo_m,Total_venda,Soma_Acrescimo, Soma_Desconto, Soma_Credito, Soma_Debito, Soma_Valor, Saldo,  Total_Credito, Total_Debito, Total_Saldo, Total_Compra, Total_Venda : Real;
+
+implementation
+
+uses
+  Uprincipal, UData, UConsulta;
+
+{$R *.dfm}
+
+
+
+
+procedure TFrmRelatorio_Custo_Compra_Venda.btnExecutaClick(Sender: TObject);
+begin
+  try
+    btnExecuta.Enabled := False;
+    btnRetorna.Enabled := False;
+
+
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT PRODUTOS.PRODUTO_ID, PRODUTOS.ULT_QUANTIDADE, PRODUTOS.QUANTIDADE_C, PRODUTOS.DESCRICAO, PRODUTOS.DT_COMPRA, DT_MOVIMENTO AS DT_VENDA,');
+    QRel.SQL.Add('PRODUTOS.CUSTO_COMPRA, PRODUTOS.CUSTOMEDIO, PRECO_VAREJO AS PRECO_VENDA FROM PRODUTOS');
+    QRel.SQL.Add('WHERE');
+
+    if Produto.Value > 0 then
+       QRel.SQL.Add('PRODUTOS.PRODUTO_ID=:PRODUTO_ID AND');
+
+    if Cbx_filtro.Text = 'DATA DA COMPRA' then
+       QRel.SQL.Add('DT_COMPRA BETWEEN :DT_ENTRADA AND :DT_SAIDA');
+
+    if Cbx_filtro.Text = 'DATA DA VENDA' then
+       QRel.SQL.Add('DT_MOVIMENTO BETWEEN :DT_ENTRADA AND :DT_SAIDA');
+
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+      begin
+        QRel.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+        QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor')) > 0 then
+      begin
+        QRel.Sql.Add('AND (FORNECEDOR_ID = :FORNECEDOR_ID)');
+        QRel.ParamByName('FORNECEDOR_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Fornecedor'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo')) > 0 then
+      begin
+        QRel.Sql.Add('AND (GRUPO_ID = :GRUPO_ID)');
+        QRel.ParamByName('GRUPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Grupo'));
+      end;
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo')) > 0 then
+      begin
+        QRel.Sql.Add('AND (SUBTIPO_ID = :SUBTIPO_ID)');
+        QRel.ParamByName('SUBTIPO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'SubTipo'));
+      end;
+
+
+        if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização')) > 0 then
+        begin
+          QRel.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+          QRel.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Localização'));
+        end;
+
+
+      if StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial')) > 0 then
+      begin
+        QRel.Sql.Add('AND (PRODUTO_ID BETWEEN :PRODUTO_INICIAL AND :PRODUTO_FINAL)');
+        QRel.ParamByName('PRODUTO_INICIAL').AsInteger := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Inicial'));
+        QRel.ParamByName('PRODUTO_FINAL').AsInteger   := StrToInt(LeIni(Arq_Ini, 'Parâmetros Estoque', 'Produto Final'));
+      end;
+
+      QRel.SQL.Add('ORDER BY PRODUTOS.DESCRICAO');
+
+
+    if Produto.Value > 0 then
+       QRel.ParamByName('PRODUTO_ID').AsInteger  := StrToInt(Produto.Text);
+
+       QRel.ParamByName('DT_ENTRADA').AsDateTime := Dtmen.Date;
+       QRel.ParamByName('DT_SAIDA').AsDateTime   := Dtmai.Date;
+
+       QRel.Prepare;
+       QRel.Open;
+
+    QRel.First;
+    if QRel.IsEmpty then
+        Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
+    else
+      begin
+        if CheckBox1.Checked = True then
+         Begin
+          RDprint1.Impressora := HP;
+          RDprint1.FonteTamanhoPadrao := S10cpp;
+         End;
+
+         RDprint1.TamanhoQteColunas := 150;
+         RDprint1.OpcoesPreview.Preview     := True;
+         RDprint1.MostrarProgresso          := True;
+         RDprint1.Acentuacao                := SemAcento;
+         RDprint1.TamanhoQteLinhas          := 1;
+         RDprint1.Abrir;
+
+           if linha > 66 then
+           begin
+             RDprint1.novapagina;
+             Pagina := Pagina + 1;
+           end;
+
+           while not QRel.Eof do
+           begin
+              RDprint1.impD(linha, C1+5, QRel.FieldByName('PRODUTO_ID').AsString,[]);
+              RDprint1.impF(linha, C2, Copy(QRel.FieldByName('DESCRICAO').AsString, 1, 40),[]);
+              RDprint1.imp(linha, C3, DateToStr(QRel.FieldByName('DT_COMPRA').AsDateTime));
+              RDprint1.imp(linha, C4, DateToStr(QRel.FieldByName('DT_VENDA').AsDateTime));
+              RDprint1.ImpVal(linha,C5,'###,###,##0.00', QRel.FieldByName('CUSTO_COMPRA').AsFloat,[]);
+              RDprint1.ImpVal(linha,C6,'###,###,##0.00', QRel.FieldByName('CUSTOMEDIO').AsFloat,[]);
+              RDprint1.ImpVal(linha,C7-4,'###,###,##0.00', QRel.FieldByName('PRECO_VENDA').AsFloat,[]);
+              RDprint1.ImpVal(linha,C8+4,'###,###,##0.00', QRel.FieldByName('ULT_QUANTIDADE').AsFloat,[]);
+              RDprint1.ImpVal(linha,C9,'###,###,##0.00', QRel.FieldByName('QUANTIDADE_C').AsFloat,[]);
+
+
+
+           if linha > 64 then
+           begin
+             RDprint1.novapagina;
+             Pagina := Pagina + 1;
+           end;
+
+           Total_custo :=  QRel.FieldByName('CUSTO_COMPRA').AsFloat + Total_custo;
+           Total_custo_M :=  QRel.FieldByName('CUSTOMEDIO').AsFloat + Total_custo_M;
+
+
+
+            Inc(linha);
+            QRel.Next;
+           end;
+
+           Inc(linha);
+           RDprint1.LinhaH(linha,01,150,0,false);
+           Inc(linha);
+           RDprint1.impC(01,01 , 'Total:',[negrito]);
+           RDprint1.ImpVal(linha,C5,'###,###,##0.00', TOTAL_CUSTO,[]);
+           RDprint1.ImpVal(linha,C6,'###,###,##0.00', TOTAL_CUSTO_M,[]);
+           RDprint1.ImpVal(linha,C7-4,'###,###,##0.00', TOTAL_VENDA,[]);
+
+
+
+
+
+
+
+
+        Application.ProcessMessages;
+        RDprint1.TamanhoQteLinhas:= 66;
+        RDprint1.Fechar;
+      end;
+
+  finally
+    btnExecuta.Enabled := True;
+    btnRetorna.Enabled := True;
+  end;   
+
+
+end;
+
+
+procedure TFrmRelatorio_Custo_Compra_Venda.RDprint1NewPage(Sender: TObject;
+  Pagina: Integer);
+begin
+
+    C1 := 01;
+    C2 := 08;
+    C3 := 50;
+    C4 := 65;
+    C5 := 75;
+    C6 := 90;
+    C7 := 110;
+    C8 := 120;
+    C9 := 136;
+
+    RDprint1.Imp(01, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+    RDprint1.ImpDir(01, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 150, 'Sistema de Automação de empresas Eficaz', []);
+    RDprint1.Imp(02, 01, 'Data/Hora: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+    RDprint1.impDir(02, 80, 150, 'Página: ' + IntToStr(Pagina), []);
+    RDprint1.impC(03, 70, '*** RELATÓRIO DE CUSTO COMPRA/VENDA ***',[negrito]);
+    RDprint1.imp(04, 01, 'Período:'+ datetoStr(dtmen.date) + ' à ' + datetoStr(dtmai.date));
+    RDprint1.LinhaH(05,01,150,0,false);
+    RDprint1.imp(06, C1+3, 'Id');
+    RDprint1.imp(06, C2, 'Produto');
+    RDprint1.imp(06, C3, 'Data Compra');
+    RDprint1.imp(06, C4, 'Data Venda');
+    RDprint1.imp(06, C5+2, 'Custo Compra');
+    RDprint1.imp(06, C6+3, 'Custo Médio');
+    RDprint1.imp(06, C7, 'Pç. Varejo');
+    RDprint1.imp(06, C8+3, 'Qtd. Ult. Compra');
+    RDprint1.imp(06, C9+6, 'Qtd Est');
+    RDprint1.LinhaH(07,01,150,0,false);
+
+    linha:= 08;
+
+end;
+
+
+
+procedure TFrmRelatorio_Custo_Compra_Venda.btnProdutoClick(Sender: TObject);
+begin
+try
+    Produto.Value := GetConsulta('ESTOQUE', 0, 0, StrToInt(Produto.Text));
+  except
+    Produto.Value := GetConsulta('ESTOQUE', 0, 0, 0);
+  end;
+end;
+
+procedure TFrmRelatorio_Custo_Compra_Venda.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmRelatorio_Custo_Compra_Venda.ProdutoKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_F7) and (Sender = Produto) then
+    btnProdutoClick(Self);
+
+  if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmRelatorio_Custo_Compra_Venda.DtmenEnter(Sender: TObject);
+begin
+  Keybd_Event(VK_LEFT, 0, 0, 0);
+end;
+
+procedure TFrmRelatorio_Custo_Compra_Venda.DtmenKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+   // Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmRelatorio_Custo_Compra_Venda.FormClose(Sender: TObject; var Action: TCloseAction);
+begin
+  Action := caFree;
+end;
+
+procedure TFrmRelatorio_Custo_Compra_Venda.FormCreate(Sender: TObject);
+begin
+  Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
+  Dtmai.Date := Ult_Dia_Mes(date);
+  Cbx_filtro.ItemIndex := 0;
+end;
+
+
+
+end.

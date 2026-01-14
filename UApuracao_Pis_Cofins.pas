@@ -812,7 +812,7 @@ begin
 
     if Tipo_Rel.Text = 'Analítico' then
     begin
-      if (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '4 - REGIME NORMAL - LUCRO REAL') OR (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL') then
+      if (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '4 - REGIME NORMAL - LUCRO REAL') OR (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL') or (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '5 - SIMPLES NACIONAL - SUBLIMITE') then
       begin
         QRel.Sql.Clear;
         QRel.Sql.Add('SELECT PRODUTO_ID, DESCRICAO, PIS, COFINS, SUM(VR_CREDITO) VR_CREDITO, SUM(VR_DEBITO) VR_DEBITO FROM');

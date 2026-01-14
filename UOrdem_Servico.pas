@@ -724,6 +724,7 @@ type
     procedure btnempresarateioClick(Sender: TObject);
     procedure Empresa_id_rateioExit(Sender: TObject);
     procedure QRCompositeReport1AddReports(Sender: TObject);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
   private
     { Private declarations }
   public
@@ -749,7 +750,7 @@ type
 var
   FrmOrdem_Servico: TFrmOrdem_Servico;
   Operacao: String;
-  ID, ID_TRANSACAO: Integer;
+  ID, ID_TRANSACAO, linha: Integer;
   Desc_por:Real;
 const
 
@@ -2441,6 +2442,11 @@ begin
   RDprint1.Imp(66,01,' ');
 end;
 
+procedure TFrmOrdem_Servico.RDprint1NewPage(Sender: TObject; Pagina: Integer);
+begin
+  linha := 3;
+end;
+
 procedure TFrmOrdem_Servico.Set_Campos(Vazio: Boolean);
 var
 I: Integer;
@@ -2868,7 +2874,7 @@ end;
 
 procedure TFrmOrdem_Servico.btnOrdemClick(Sender: TObject);
 var
-linha,pagina : integer;
+pagina : integer;
 begin
   Set_Campos(False);
 
@@ -2885,7 +2891,7 @@ begin
     RDprint1.OpcoesPreview.Preview     := True;
     RDprint1.MostrarProgresso          := True;
     RDprint1.Acentuacao                := SemAcento;
-    RDprint1.TamanhoQteLinhas          := 1;
+    RDprint1.TamanhoQteLinhas          := 61;
     RDprint1.FonteTamanhoPadrao        := S10cpp;
     RDprint1.Abrir;
     Pagina := Pagina + 1;
@@ -3011,6 +3017,11 @@ begin
     RDprint1.ImpVal(linha,68,'###,##0.00',QSub_Detail.FieldByName('VR_TOTAL').AsFloat,[]);
     inc(linha);
     QSub_Detail.Next;
+      if linha > RDprint1.TamanhoQteLinhas  then
+      Begin
+        RDprint1.Novapagina;
+        Pagina := Pagina + 1;
+      End;
     End;
     RDprint1.Imp(linha,70,'__________');
     inc(linha);

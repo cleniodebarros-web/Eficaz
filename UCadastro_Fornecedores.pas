@@ -703,12 +703,12 @@ begin
 
         if ConsisteInscricaoEstadual(Alltrim(SemMascara(INSCRICAO.Text)), ESTADO.Text) = 1 then
         begin
-          Application.MessageBox('Inscrição Estadual inválida', PChar(Msg_Title), mb_IconStop);
+          //Application.MessageBox('Inscrição Estadual inválida', PChar(Msg_Title), mb_IconStop);
 
-          INSCRICAO.Color := clYellow;
-          INSCRICAO.SetFocus;
+          //INSCRICAO.Color := clYellow;
+          //INSCRICAO.SetFocus;
 
-          exit;
+          //exit;
         end;
       finally
         FreeLibrary(LibHandle);

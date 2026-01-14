@@ -4,8 +4,8 @@ object FrmRel_Conferencia_Tributaria_Vendas: TFrmRel_Conferencia_Tributaria_Vend
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Rel. de Confer'#234'ncia Tribut'#225'ria Vendas'
-  ClientHeight = 261
-  ClientWidth = 354
+  ClientHeight = 263
+  ClientWidth = 362
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

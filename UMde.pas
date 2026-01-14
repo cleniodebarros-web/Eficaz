@@ -214,6 +214,10 @@ type
     DataProduto: TDataSource;
     chk_Terceiros: TCheckBox;
     cnpj_cpf_terceiros: TEdit;
+    CNPJ_Banco: TEdit;
+    Label50: TLabel;
+    Label51: TLabel;
+    VrContrato: TRxCalcEdit;
     procedure DT_SAIDAKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure CNPJ_TRANSPORTADORKeyDown(Sender: TObject; var Key: Word;
@@ -2165,7 +2169,27 @@ begin
      rodo.RNTRC := RNTRC.Text;
      rodo.infANTT.RNTRC := RNTRC.Text;
      End;
+     //testar isso aqui
 
+     if VrContrato.Value > 0 then
+     begin
+       with rodo.infANTT.infPag.New do
+       begin
+         xNome := NOME_TRANSPORTADOR.Text;
+         CNPJCPF := CNPJ_TRANSPORTADOR.Text;
+         with Comp.Add do
+         begin
+           tpComp := tcOutros;
+           vComp := VrContrato.Value;
+           xComp := 'Frete';
+         end;
+         vContrato := VrContrato.Value;
+         indPag := ipVista;
+         //infBanc.codBanco := '000';
+         //infBanc.codAgencia := '000';
+         infBanc.CNPJIPEF := CNPJ_Banco.Text;
+       end;
+     end;
    {
     with  rodo.infANTT.infCIOT.Add  do
     begin

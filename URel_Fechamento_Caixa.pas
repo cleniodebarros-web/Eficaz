@@ -672,10 +672,10 @@ begin
   if (Caixa_Banco.Value > 0) or (chk_caixas_separados.Checked) then
   QFechamento.ParamByName('CAIXA_ID').AsInteger    := QBanco.FieldByName('BANCO_ID').AsInteger;
 
-  if chk_recebimento.checked then
-    QFechamento.ParamByName('CONDUTA').AsString      := '07'
-  else
-    QFechamento.ParamByName('CONDUTA').AsString      := 'AA'; //se não marcado, forçando pra que não puxe nenhum recebimento
+  //if chk_recebimento.checked then
+    QFechamento.ParamByName('CONDUTA').AsString      := '07';
+  //else
+  //  QFechamento.ParamByName('CONDUTA').AsString      := 'AA'; //se não marcado, forçando pra que não puxe nenhum recebimento
   QFechamento.ParamByName('LEGENDA').AsString      := 'Cancelado%';
   QFechamento.ParamByName('FISCAL').AsString       := 'S';
   if FrmData.QAcesso.FieldByName('TPCTB').AsString = '3' then
@@ -968,8 +968,6 @@ begin
     if (Caixa_Banco.Value > 0) or (chk_caixas_separados.Checked) then
     QFechamento.SQL.Add('AND BANCO_ID = :BANCO_ID');
 
-    //QRel.SQL.Add('GROUP BY FINALIZADORAS.LEGENDA ORDER BY FINALIZADORAS.LEGENDA');
-
     QFechamento.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
     QFechamento.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
 
@@ -1011,7 +1009,41 @@ begin
 
     Writeln(MyFile, ' ');
     Writeln(MyFile,'Total Recebimentos: ' + FormatFloat('#,##0.00', VLR));
-  End;
+  End
+  else
+  begin
+    QFechamento.SQL.Clear;
+    QFechamento.SQL.Add('SELECT SUM(VALOR) VLR');
+    QFechamento.SQL.Add('FROM TRANSACOES');
+    QFechamento.SQL.Add('INNER JOIN FINALIZADORAS ON FINALIZADORAS.FINALIZADORA_ID = TRANSACOES.FINALIZADORA_ID');
+    QFechamento.SQL.Add('WHERE DT_ENT_SAI BETWEEN :DT_INICIAL AND :DT_FINAL AND CONDUTA = :CONDUTA');
+
+    if (Caixa_Banco.Value > 0) or (chk_caixas_separados.Checked) then
+    QFechamento.SQL.Add('AND BANCO_ID = :BANCO_ID');
+
+    QFechamento.ParamByName('DT_INICIAL').AsDateTime := Dtmen.Date;
+    QFechamento.ParamByName('DT_FINAL').AsDateTime   := Dtmai.Date;
+
+    if (Caixa_Banco.Value > 0) or (chk_caixas_separados.Checked) then
+    QFechamento.ParamByName('BANCO_ID').AsInteger    := QBanco.FieldByName('BANCO_ID').AsInteger;
+
+    IF chk_finalizadora.Checked Then
+    Begin
+      QFechamento.Sql.Add('AND (TRANSACOES.FINALIZADORA_ID = :FINALIZADORA_ID)');
+      QFechamento.ParamByName('FINALIZADORA_ID').AsInteger := QFinalizadora.FieldByName('FINALIZADORA_ID').AsInteger;
+    End;
+
+    QFechamento.ParamByName('CONDUTA').AsString      := '07';
+
+    QFechamento.Prepare;
+    QFechamento.Open();
+
+
+    if NOT QFechamento.IsEmpty Then
+    Begin
+      Writeln(MyFile,'Total Recebimentos: ' + FormatFloat('#,##0.00', QFechamento.FieldByName('VLR').AsFloat));
+    end;
+  end;
 
   if (not chk_finalizadora.Checked) or (QFinalizadora.FieldByName('TIPO_TRANSACAO').AsInteger = 1) then
   begin

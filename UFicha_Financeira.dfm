@@ -5,7 +5,7 @@ object FrmFicha_Financeira: TFrmFicha_Financeira
   BorderStyle = bsSingle
   Caption = 'Ficha Financeira'
   ClientHeight = 521
-  ClientWidth = 625
+  ClientWidth = 978
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -239,7 +239,7 @@ object FrmFicha_Financeira: TFrmFicha_Financeira
   object Panel1: TPanel
     Left = 0
     Top = 480
-    Width = 625
+    Width = 978
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
@@ -275,7 +275,7 @@ object FrmFicha_Financeira: TFrmFicha_Financeira
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 625
+    Width = 978
     Height = 41
     Align = alTop
     BevelOuter = bvNone
@@ -380,9 +380,9 @@ object FrmFicha_Financeira: TFrmFicha_Financeira
     end
   end
   object Graf: TChart
-    Left = 182
+    Left = 264
     Top = 241
-    Width = 438
+    Width = 706
     Height = 237
     BackWall.Brush.Style = bsClear
     BackWall.Color = clBtnFace
@@ -461,9 +461,9 @@ object FrmFicha_Financeira: TFrmFicha_Financeira
   object Ent_Sai: TStringGrid
     Left = 6
     Top = 41
-    Width = 614
+    Width = 963
     Height = 194
-    ColCount = 7
+    ColCount = 11
     DefaultColWidth = 86
     RowCount = 7
     Font.Charset = ANSI_CHARSET
@@ -474,6 +474,7 @@ object FrmFicha_Financeira: TFrmFicha_Financeira
     Options = [goFixedVertLine, goFixedHorzLine, goVertLine, goHorzLine, goRangeSelect, goRowSelect]
     ParentFont = False
     TabOrder = 3
+    OnDrawCell = Ent_SaiDrawCell
   end
   object DataProduto: TDataSource
     DataSet = QProduto

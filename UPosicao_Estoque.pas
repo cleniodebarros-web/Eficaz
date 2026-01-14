@@ -348,7 +348,7 @@ begin
   IQuery.Sql.Clear;
   IQuery.Sql.Add('SELECT DISTINCT DT_MOVIMENTO');
   IQuery.Sql.Add('FROM POSICAO_PRODUTOS');
-  IQuery.Sql.Add('ORDER BY DT_MOVIMENTO');
+  IQuery.Sql.Add('ORDER BY DT_MOVIMENTO DESC');
   IQuery.Prepare;
   IQuery.Open;
 

@@ -727,7 +727,7 @@ begin
       IQuery.ExecSql;
 
 
-
+      {
       if (QRel.FieldByName('PIS_ENTR').AsFloat = 0) and (QRel.FieldByName('TP_PROD_SERV').AsString = 'P') then
       begin
         IQuery.Sql.Clear;
@@ -744,7 +744,7 @@ begin
 
 
       end;
-
+      }
       Application.ProcessMessages;
       QRel.Next;
     end;

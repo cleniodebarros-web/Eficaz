@@ -4,7 +4,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
   BorderStyle = bsSingle
   Caption = 'Compra'
   ClientHeight = 627
-  ClientWidth = 1009
+  ClientWidth = 1002
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -25,9 +25,9 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1009
+    Width = 1002
     Height = 586
-    ActivePage = TabSheet4
+    ActivePage = Consulta
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -36,15 +36,15 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1002
+    ExplicitWidth = 1012
     object Consulta: TTabSheet
       Caption = '&Consulta'
       OnShow = ConsultaShow
-      ExplicitWidth = 994
+      ExplicitWidth = 1004
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
-        Width = 1001
+        Width = 994
         Height = 537
         Align = alClient
         Color = clInfoBk
@@ -128,7 +128,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       object Dias: TTabSet
         Left = 0
         Top = 537
-        Width = 1001
+        Width = 994
         Height = 21
         Align = alBottom
         AutoScroll = False
@@ -174,7 +174,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           'Todos')
         TabIndex = 0
         OnClick = DiasClick
-        ExplicitWidth = 994
+        ExplicitWidth = 1004
       end
     end
     object Manutencao: TTabSheet
@@ -187,7 +187,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       ImageIndex = 1
       ParentFont = False
       OnShow = ManutencaoShow
-      ExplicitWidth = 994
+      ExplicitWidth = 1004
       object DBText1: TDBText
         Left = 203
         Top = 109
@@ -2322,12 +2322,12 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 1001
+        Width = 994
         Height = 41
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 6
-        ExplicitWidth = 994
+        ExplicitWidth = 1244
         object btnPrior: TBitBtn
           Left = 6
           Top = 6
@@ -2610,8 +2610,8 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           OnKeyDown = EMPRESA_IDKeyDown
         end
         object PageControl2: TPageControl
-          Left = 4
-          Top = -3
+          Left = 1
+          Top = 0
           Width = 761
           Height = 115
           ActivePage = TabSheet1
@@ -3058,6 +3058,94 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
                 end>
             end
           end
+          object TabSheet5: TTabSheet
+            Caption = 'IS/CBS/IBS'
+            ImageIndex = 4
+            object Label48: TLabel
+              Left = 14
+              Top = 8
+              Width = 77
+              Height = 13
+              Caption = 'B. C'#225'lc. Cbs/Ibs'
+            end
+            object Label49: TLabel
+              Left = 14
+              Top = 34
+              Width = 62
+              Height = 13
+              Caption = 'Vr. Ibs Munic'
+            end
+            object Label50: TLabel
+              Left = 14
+              Top = 62
+              Width = 50
+              Height = 13
+              Caption = 'Vr. Ibs Uf.'
+            end
+            object Label51: TLabel
+              Left = 266
+              Top = 8
+              Width = 35
+              Height = 13
+              Caption = 'Vr. Cbs'
+            end
+            object vr_ibs: TRxCalcEdit
+              Left = 104
+              Top = 59
+              Width = 148
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 0
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object vr_ibsmunic: TRxCalcEdit
+              Left = 104
+              Top = 31
+              Width = 148
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 1
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object Vr_bccbsibs: TRxCalcEdit
+              Left = 104
+              Top = 6
+              Width = 148
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 2
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+            object vr_cbs: TRxCalcEdit
+              Left = 351
+              Top = 5
+              Width = 148
+              Height = 21
+              Margins.Left = 4
+              Margins.Top = 1
+              DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+              Enabled = False
+              NumGlyphs = 2
+              TabOrder = 3
+              ZeroEmpty = False
+              OnKeyDown = EMPRESA_IDKeyDown
+            end
+          end
           object TabSheet3: TTabSheet
             Caption = 'D'#233'bito/Cr'#233'dito Cont'#225'bil'
             ImageIndex = 3
@@ -3259,7 +3347,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       end
       object Grid_Itens: TDBGrid
         Left = 3
-        Top = 271
+        Top = 274
         Width = 974
         Height = 137
         DataSource = DataSub_Detail
@@ -3458,6 +3546,51 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           item
             Expanded = False
             FieldName = 'cod_barra'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'VR_BASE_CBSIBS'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_CBS'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_IBSMUNIC'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'VR_CBS'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_IBSUF'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'VR_IBSUF'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'VR_IBSMUNIC'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'COD_CLASSTRIB'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'CST_CBSIBS'
             Visible = False
           end>
       end
@@ -4006,11 +4139,11 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       ImageIndex = 2
       ParentFont = False
       OnShow = TabSheet4Show
-      ExplicitWidth = 994
+      ExplicitWidth = 1244
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 1001
+        Width = 994
         Height = 121
         Align = alTop
         Font.Charset = DEFAULT_CHARSET
@@ -4020,7 +4153,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 994
+        ExplicitWidth = 1244
         object Label39: TLabel
           Left = 5
           Top = 54
@@ -4061,6 +4194,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          Visible = False
         end
         object LMAX_NSU: TLabel
           Left = 224
@@ -4074,6 +4208,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           Font.Name = 'Tahoma'
           Font.Style = [fsBold]
           ParentFont = False
+          Visible = False
         end
         object btnExecuta: TBitBtn
           Left = 231
@@ -4242,11 +4377,11 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       object Panel5: TPanel
         Left = 0
         Top = 517
-        Width = 1001
+        Width = 994
         Height = 41
         Align = alBottom
         TabOrder = 1
-        ExplicitWidth = 994
+        ExplicitWidth = 1244
         object BitBtn1: TBitBtn
           Left = 861
           Top = 8
@@ -4280,7 +4415,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       object Panel6: TPanel
         Left = 0
         Top = 121
-        Width = 1001
+        Width = 994
         Height = 396
         Align = alClient
         Font.Charset = DEFAULT_CHARSET
@@ -4290,11 +4425,11 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         Font.Style = []
         ParentFont = False
         TabOrder = 2
-        ExplicitWidth = 994
+        ExplicitWidth = 1244
         object Grid_Dfe: TDBGrid
           Left = 1
           Top = 1
-          Width = 999
+          Width = 992
           Height = 394
           Align = alClient
           DataSource = DataDistribuicao
@@ -4357,12 +4492,12 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
   object Panel1: TPanel
     Left = 0
     Top = 586
-    Width = 1009
+    Width = 1002
     Height = 41
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 1002
+    ExplicitWidth = 1012
     object DBText7: TDBText
       Left = 6
       Top = 12
@@ -4670,7 +4805,7 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
   end
   object Relatorio: TQuickRep
     Left = 1063
-    Top = 30
+    Top = 1000
     Width = 794
     Height = 1123
     DataSet = QSub_Detail
@@ -6637,8 +6772,8 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
     end
   end
   object Relatorio2: TQuickRep
-    Left = 1099
-    Top = 21
+    Left = 1044
+    Top = 1000
     Width = 794
     Height = 1123
     DataSet = QSub_Detail
@@ -8067,13 +8202,13 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         FontSize = 8
       end
       object QRDBText51: TQRDBText
-        Left = 500
+        Left = 494
         Top = 1
         Width = 64
         Height = 15
         Size.Values = (
           39.687500000000000000
-          1322.916666666667000000
+          1307.041666666667000000
           2.645833333333333000
           169.333333333333300000)
         XLColumn = 0
@@ -8097,14 +8232,14 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         FontSize = 8
       end
       object QRDBText52: TQRDBText
-        Left = 551
-        Top = -1
+        Left = 569
+        Top = 1
         Width = 60
         Height = 15
         Size.Values = (
           39.687500000000000000
-          1457.854166666667000000
-          -2.645833333333333000
+          1505.479166666667000000
+          2.645833333333333000
           158.750000000000000000)
         XLColumn = 0
         Alignment = taRightJustify
@@ -9114,6 +9249,8 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
     Connection = FrmData.DbF_Eficaz
     FetchOptions.AssignedValues = [evAutoFetchAll]
     FetchOptions.AutoFetchAll = afTruncate
+    UpdateOptions.AssignedValues = [uvUpdateMode]
+    UpdateOptions.UpdateMode = upWhereChanged
     SQL.Strings = (
       '')
     Left = 648
@@ -9180,8 +9317,8 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       ''
       'SELECT * FROM TABELAS WHERE TIPO_TABELA = '#39'L'#39
       'ORDER BY DESCRICAO')
-    Left = 40
-    Top = 304
+    Left = 48
+    Top = 360
   end
   object DataLocEstoque: TDataSource
     DataSet = QLoc_Estoque

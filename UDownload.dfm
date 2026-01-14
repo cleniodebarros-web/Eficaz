@@ -4,7 +4,7 @@ object FrmDownload: TFrmDownload
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Atualiza'#231#227'o de Vers'#227'o'
-  ClientHeight = 109
+  ClientHeight = 116
   ClientWidth = 447
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -21,7 +21,7 @@ object FrmDownload: TFrmDownload
   OnShow = FormShow
   DesignSize = (
     447
-    109)
+    116)
   PixelsPerInch = 96
   TextHeight = 13
   object lConnectionInfo: TLabel
@@ -46,7 +46,7 @@ object FrmDownload: TFrmDownload
   end
   object Label1: TLabel
     Left = -76
-    Top = 85
+    Top = 92
     Width = 49
     Height = 13
     Anchors = [akRight, akBottom]
@@ -80,6 +80,13 @@ object FrmDownload: TFrmDownload
     Height = 13
     Color = clBtnFace
     ParentColor = False
+  end
+  object LabelPdv: TLabel
+    Left = 160
+    Top = 88
+    Width = 3
+    Height = 13
+    Visible = False
   end
   object edURL: TComboBox
     Left = 24
@@ -157,7 +164,7 @@ object FrmDownload: TFrmDownload
   end
   object cbxBufferSize: TComboBox
     Left = 242
-    Top = 84
+    Top = 91
     Width = 100
     Height = 21
     Style = csDropDownList
@@ -434,5 +441,42 @@ object FrmDownload: TFrmDownload
     ProxySettings.Port = 0
     Left = 72
     Top = 56
+  end
+  object VerificaPdvs: TFDConnection
+    Left = 20
+    Top = 416
+  end
+  object QPdv: TFDQuery
+    Connection = VerificaPdvs
+    FetchOptions.AssignedValues = [evItems, evRecsMax, evRowsetSize, evCache, evCursorKind, evAutoFetchAll]
+    FetchOptions.CursorKind = ckDefault
+    FetchOptions.RowsetSize = 1000
+    FetchOptions.AutoFetchAll = afDisable
+    Left = 88
+    Top = 416
+  end
+  object QImpressoras: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      'SELECT * FROM licenca_if'
+      'WHERE serial LIKE '#39'VR%'#39
+      'AND length(banco) > 0'
+      'AND length(ip) > 0'
+      'AND length(senha) > 0'
+      'AND length(usuario) > 0'
+      'AND length(porta) > 0'
+      'ORDER BY num_ecf')
+    Left = 152
+    Top = 416
+  end
+  object IdTCPClient1: TIdTCPClient
+    ConnectTimeout = 0
+    IPVersion = Id_IPv4
+    Port = 0
+    ReadTimeout = -1
+    Left = 235
+    Top = 424
   end
 end

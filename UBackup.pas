@@ -230,6 +230,8 @@ begin
          else
          ShellExecute(Handle,'open', PChar(ExtractFilePath(ParamStr(0)) + 'DllsPg\pg_dump.exe'), PChar(stringc), nil, SW_HIDE);
 
+
+
          Sleep(3000);
          while X > 0 do
          Begin
@@ -248,6 +250,9 @@ begin
            End;
            Application.ProcessMessages;
          End;
+
+         Memo1.Text := stringc;
+
        End;
      End
      else

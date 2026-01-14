@@ -4,8 +4,8 @@ object FrmRelatorio_Custo_Compra_Venda: TFrmRelatorio_Custo_Compra_Venda
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Relat'#243'rio de Custo Compra/Venda'
-  ClientHeight = 148
-  ClientWidth = 342
+  ClientHeight = 147
+  ClientWidth = 365
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText

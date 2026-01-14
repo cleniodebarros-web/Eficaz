@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,EncdDecd,ACBrDFeUtil,ACBrUtil,
-  Vcl.ComCtrls, pcnConversao;
+  Vcl.ComCtrls, pcnConversao,ACBrDFe.Conversao;
 
 type
   TFrmNFe = class(TForm)
@@ -1217,6 +1217,13 @@ begin
         Ide.dSaiEnt  := StrToDateTime(QTransacao.FieldByName('DT_ENT_SAI').AsString + TimeToSTr(StrToTime(hr_saida.Text))) ;
         //Ide.hSaiEnt  := StrToTime(hr_saida.Text);
 
+        // Reforma Tributária
+
+       // if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+        //Ide.dPrevEntrega := Date + 10;
+
+
+
 
         if (QTransacao.FieldByName('CONDUTA').AsString = '01') or (QTransacao.FieldByName('CONDUTA').AsString = '20') then
           Ide.tpNF := tnSaida
@@ -1233,10 +1240,10 @@ begin
         if (QParceiro.FieldByName('COD_PAIS').AsString) <> '01058' then
           Ide.idDest := doExterior;
 
-          if (Insc_Dest = 'ISENTO')      then
+          if (Insc_Dest = 'ISENTO ')      then
           Ide.indFinal := cfConsumidorFinal
           Else
-          Ide.indFinal :=cfNao;
+          Ide.indFinal := cfNao;
 
           if (chk_consumidorfinal.Checked) then
           Ide.indFinal := cfConsumidorFinal;
@@ -1247,6 +1254,34 @@ begin
 //        Ide.tpEmis
 //        Ide.cDV
 //        Ide.tpAmb
+
+
+          // Reforma Tributária
+
+         if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+          begin
+            Ide.cMunFGIBS := FrmPrincipal.QEmpresa.FieldByName('IBGE').AsInteger;
+
+            Ide.tpNFDebito := tdNenhum;
+            Ide.tpNFCredito := tcNenhum;
+
+            {Ide.gCompraGov.tpEnteGov := tcgEstados;
+            Ide.gCompraGov.pRedutor := 5;
+            Ide.gCompraGov.tpOperGov := togFornecimento;
+
+        //    Informado para abater as parcelas de antecipação de pagamento, conforme Art. 10. § 4º
+        //    refNFe: Referência uma NF-e (modelo 55) emitida anteriormente, referente a pagamento antecipado
+
+            with Ide.gPagAntecipado.New do
+              refNFe := '12345678901234567890123456789012345678901234';
+
+            with Ide.gPagAntecipado.New do
+              refNFe := '12345678901234567890123456789012345678904567';
+            }
+          end;
+
+
+
 
 
         if FINALIDADE_EMISSAO.Text = '1-NFE NORMAL' then
@@ -1340,7 +1375,8 @@ begin
             cUF    := StrToInt(Copy(Alltrim(QParceiro.FieldByName('IBGE').AsString),1,2));
             AAMM   := FormatDateTime('yymm', QOrigem.FieldByName('DT_TRANS').AsDateTime); // Copy(QTransacao.FieldByName('DT_TRANS').AsString,9,2) +  Copy(QTransacao.FieldByName('DT_TRANS').AsString,4,2);
 
-            if (QParceiro.FieldByName('TIPO_CLIENTE').AsString = 'PESSOA JURÍDICA') Then
+            if   ((QParceiro.FindField('TIPO_CLIENTE') <> nil) and (QParceiro.FieldByName('TIPO_CLIENTE').AsString = 'PESSOA JURÍDICA'))
+              or ((QParceiro.FindField('TIPO_FORNECEDOR') <> nil) and (QParceiro.FieldByName('TIPO_FORNECEDOR').AsString = 'PESSOA JURÍDICA')) Then
             CNPJ   := QParceiro.FieldByName('CNPJ').AsString;
 
             nNF    := StrToInt(QNotas.FieldByName('NUM_DOC').AsString);
@@ -1484,11 +1520,12 @@ begin
         Emit.IM                := FrmPrincipal.QEmpresa.FieldByName('INSCR_MUNICIPAL').AsString;
         Emit.CNAE              := SemMascara(FrmPrincipal.QEmpresa.FieldByName('COD_ATIVIDADE').AsString);
 
-        if FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL' then
+        if (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL') then
           Emit.CRT := crtSimplesNacional
-        else if FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '2 - SIMPLES NACIONAL - EXC. REC. BRUTA' then
+        else if (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '2 - SIMPLES NACIONAL - EXC. REC. BRUTA')  then
           Emit.CRT := crtSimplesExcessoReceita
-
+        else if  (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '5 - SIMPLES NACIONAL - SUBLIMITE') then
+         Emit.CRT := crtSimplesExcessoReceita
         else
           Emit.CRT := crtRegimeNormal;
 
@@ -1541,8 +1578,9 @@ begin
 
          if (Insc_Dest = 'ISENTO')   then
          Begin
-         Dest.indIEDest :=  inIsento;//inIsento;
+         Dest.indIEDest :=  inNaoContribuinte; //inIsento;
          Dest.IE        := '';
+         chk_consumidorfinal.Checked := True;
          End
          else  if (Insc_Dest = '')   then
          begin
@@ -1650,6 +1688,14 @@ begin
             Prod.uCom     := QProdutos.FieldByName('UNIDADE_VENDA').AsString;
             Prod.qCom     := QItens.FieldByName('QUANTIDADE').AsFloat;
 
+
+            // Reforma Tributária
+
+            if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+            Prod.tpCredPresIBSZFM := tcpNenhum;
+
+
+
            { IQuery.Sql.Clear;
             IQuery.Sql.Add('SELECT CAST(SUM((VR_UNITARIO - VR_DESCONTO) * QUANTIDADE) AS NUMERIC(15,2)) TOTAL, SUM(VR_TOTAL) VR_TOTAL FROM TRANSITENS');
             IQuery.Sql.Add('WHERE TRANSACAO_ID = :TRANSACAO_ID AND PRODUTO_ID = :PRODUTO_ID ');
@@ -1714,6 +1760,26 @@ begin
             Prod.uTrib    := QProdutos.FieldByName('UNIDADE_VENDA').AsString;
 
             Prod.qTrib    := QItens.FieldByName('QUANTIDADE').AsFloat;
+
+
+            // Reforma Tributária
+
+            if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+            begin
+
+              // Indicador de fornecimento de bem móvel usado
+              Prod.indBemMovelUsado := tieNenhum;
+
+              // Valor total do Item, correspondente à sua participação no total da nota.
+              // A soma dos itens deverá corresponder ao total da nota.
+              vItem := QItens.FieldByName('VR_TOTAL').AsFloat;
+              // Referenciamento de item de outro Documento Fiscal Eletrônico - DF-e
+              DFeReferenciado.chaveAcesso := '';
+              DFeReferenciado.nItem := 1;
+
+            end;
+
+
 
            //  if QTransacao.FieldByName('SUB_SERIE').AsString = 'C' then
            //  Prod.vUnTrib  :=  QItens.FieldByName('QUANTIDADE').AsFloat
@@ -2067,23 +2133,23 @@ begin
             begin
               with ICMS do
               begin
-                if QProdutos.FieldByName('ORIGEM').AsString = '0-NACIONAL' then
+                if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '0' then
                   orig := oeNacional
-                else if QProdutos.FieldByName('ORIGEM').AsString = '1-ESTRANGEIRA-IMPORTAÇÃO DIRETA' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '1' then
                   orig := oeEstrangeiraImportacaoDireta
-                else if QProdutos.FieldByName('ORIGEM').AsString = '2-ESTRANGEIRA-ADQUIRIDA NO MERCADO INTER' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '2' then
                   orig := oeEstrangeiraAdquiridaBrasil
-                else if QProdutos.FieldByName('ORIGEM').AsString = '3-NACIONAL- MERCADORIA OU BEM  COM CONT.' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '3' then
                   orig  := oeNacionalConteudoImportacaoSuperior40
-                else if QProdutos.FieldByName('ORIGEM').AsString = '4-NACIONAL-DECRETO 288/67 E LEIS 8248/91' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '4' then
                   orig  := oeNacionalProcessosBasicos
-                else if QProdutos.FieldByName('ORIGEM').AsString = '5-NACIONAL-CONTEUDO IMPORTÇÃO INFERIOR O' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '5' then
                   orig  := oeNacionalConteudoImportacaoInferiorIgual40
-                else if QProdutos.FieldByName('ORIGEM').AsString = '6-ESTRANGEIRA-IMP. DIRETA SEM SIMILAR NA' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '6' then
                   orig  := oeEstrangeiraImportacaoDiretaSemSimilar
-                else if QProdutos.FieldByName('ORIGEM').AsString = '7-ESTRANGEIRA-ADQ. MERCAD. INTERNO SEM S' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '7' then
                   orig  := oeEstrangeiraAdquiridaBrasilSemSimilar
-                else if QProdutos.FieldByName('ORIGEM').AsString = '8-NACIONAL-CONTEUDO IMPORTÇÃO SUPERIOR A' then
+                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '8' then
                   orig  := oeNacionalConteudoImportacaoSuperior70;
 
                if FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL' then
@@ -3070,6 +3136,238 @@ begin
                 End;
               //End;
 
+
+
+
+
+              // Reforma Tributária
+
+
+              if (FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1)  then
+              begin
+                {
+                //  Informações do tributo: Imposto Seletivo
+                ISel.CSTIS := cstis000;
+                ISel.cClassTribIS := '000001';
+
+                ISel.vBCIS := 100;
+                ISel.pIS := 5;
+                ISel.pISEspec := 5;
+                ISel.uTrib := 'UNIDAD';
+                ISel.qTrib := 10;
+                ISel.vIS := 100;
+                 }
+
+               //   Utilize os CST (cst000, cst200, cst220 e cst510) e os cClassTrib
+               //   correspondentes para gerar o grupo IBSCBS
+               //   Utilize o CST cst620 e os cClassTrib correspondentes para gerar o grupo
+               //   IBSCBSMono
+
+
+                //  Informações do tributo: IBS / CBS
+                IF  (QProdutos.FieldByName('ALIQUOTA_IBS_UF').AsFloat > 0) Then
+                begin
+
+                  if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 0 Then
+                  IBSCBS.CST :=  cst000
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 10 Then
+                  IBSCBS.CST :=  cst010
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 11 Then
+                  IBSCBS.CST :=  cst011
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 200 Then
+                  IBSCBS.CST :=  cst200
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 221 Then
+                  IBSCBS.CST :=  cst221
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 222 Then
+                  IBSCBS.CST :=  cst222
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 400 Then
+                  IBSCBS.CST :=  cst400
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 410 Then
+                  IBSCBS.CST :=  cst410
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 510 Then
+                  IBSCBS.CST :=  cst510
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 515 Then
+                  IBSCBS.CST :=  cst515
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 550 Then
+                  IBSCBS.CST :=  cst550
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 620 Then
+                  IBSCBS.CST :=  cst620
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 800 Then
+                  IBSCBS.CST :=  cst800
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 810 Then
+                  IBSCBS.CST :=  cst810
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 811 Then
+                  IBSCBS.CST :=  cst811
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 820 Then
+                  IBSCBS.CST :=  cst820
+                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 830 Then
+                  IBSCBS.CST :=  cst830
+                  Else
+                  IBSCBS.CST :=  cst000;
+
+
+                  IBSCBS.cClassTrib := QProdutos.FieldByName('CLASSTRIBUTARIA').AsString;
+                  //IBSCBS.indDoacao := tieNenhum;
+
+
+
+                  IBSCBS.gIBSCBS.vBC := QItens.FieldByName('VR_BASE_CBSIBS').AsFloat;
+
+                  IBSCBS.gIBSCBS.gIBSUF.pIBSUF := QProdutos.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+                  IBSCBS.gIBSCBS.gIBSUF.vIBSUF := QItens.FieldByName('VR_IBSUF').AsFloat;
+
+                  IBSCBS.gIBSCBS.gIBSUF.gDif.pDif := 0;
+                  IBSCBS.gIBSCBS.gIBSUF.gDif.vDif := 0;
+
+                  IBSCBS.gIBSCBS.gIBSUF.gDevTrib.vDevTrib := 0;
+
+                    if (QProdutos.FieldByName('ALIQUOTA_IBS_UF').AsFloat > 0)  Then
+                    begin
+                      IF (QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0) Then
+                      Begin
+                      IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                      IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0.04;
+                      End
+                      Else
+                      Begin
+                      IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := 0;
+                      IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0;
+                      End;
+
+                    end
+                    Else
+                    Begin
+                    IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := 0;
+                    IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0;
+                    End;
+
+                  IBSCBS.gIBSCBS.gIBSMun.pIBSMun := 0;//QProdutos.FieldByName('ALIQUOTA_IBS_MUNIC').AsFloat;
+                  IBSCBS.gIBSCBS.gIBSMun.vIBSMun := 0;//QItens.FieldByName('Vr_IBSMUNIC').AsFloat;
+
+                  //IBSCBS.gIBSCBS.gIBSMun.gDif.pDif := 0;
+                  //IBSCBS.gIBSCBS.gIBSMun.gDif.vDif := 0;
+
+                  //IBSCBS.gIBSCBS.gIBSMun.gDevTrib.vDevTrib := 0;
+
+                  IBSCBS.gIBSCBS.gIBSMun.gRed.pRedAliq := QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                  IBSCBS.gIBSCBS.gIBSMun.gRed.pAliqEfet := 0;
+
+
+                  // vIBS = vIBSUF + vIBSMun
+                  IBSCBS.gIBSCBS.vIBS :=  QItens.FieldByName('Vr_IBSUF').AsFloat + QItens.FieldByName('Vr_IBSMUNIC').AsFloat ;
+
+                  IBSCBS.gIBSCBS.gCBS.pCBS :=  QProdutos.FieldByName('ALIQUOTA_CBS').AsFloat;
+                  IBSCBS.gIBSCBS.gCBS.vCBS :=  QItens.FieldByName('VR_CBS').AsFloat;
+
+                  IBSCBS.gIBSCBS.gCBS.gDif.pDif := 0;
+                  IBSCBS.gIBSCBS.gCBS.gDif.vDif := 0;
+
+                  IBSCBS.gIBSCBS.gCBS.gDevTrib.vDevTrib := 0;
+
+                  if (QProdutos.FieldByName('ALIQUOTA_CBS').AsFloat > 0) Then
+                  Begin
+
+                   if (QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0)  Then
+                   begin
+                   IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq := QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                   IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0.36;
+                   end
+                   Else
+                   Begin
+                   IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq := 0;
+                   IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0;
+                   End;
+
+                  End
+                  Else
+                  Begin
+                  IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq :=0;
+                  IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0;
+                  End;
+
+                  {
+
+
+                  IBSCBS.gIBSCBS.gTribRegular.CSTReg := cst000;
+                  IBSCBS.gIBSCBS.gTribRegular.cClassTribReg := '000001';
+                  IBSCBS.gIBSCBS.gTribRegular.pAliqEfetRegIBSUF := 5;
+                  IBSCBS.gIBSCBS.gTribRegular.vTribRegIBSUF := 50;
+                  IBSCBS.gIBSCBS.gTribRegular.pAliqEfetRegIBSMun := 5;
+                  IBSCBS.gIBSCBS.gTribRegular.vTribRegIBSMun := 50;
+                  IBSCBS.gIBSCBS.gTribRegular.pAliqEfetRegCBS := 5;
+                  IBSCBS.gIBSCBS.gTribRegular.vTribRegCBS := 50;
+
+                  // Tipo Tributação Compra Governamental
+                  IBSCBS.gIBSCBS.gTribCompraGov.pAliqIBSUF := 5;
+                  IBSCBS.gIBSCBS.gTribCompraGov.vTribIBSUF := 50;
+                  IBSCBS.gIBSCBS.gTribCompraGov.pAliqIBSMun := 5;
+                  IBSCBS.gIBSCBS.gTribCompraGov.vTribIBSMun := 50;
+                  IBSCBS.gIBSCBS.gTribCompraGov.pAliqCBS := 5;
+                  IBSCBS.gIBSCBS.gTribCompraGov.vTribCBS := 50;
+
+                  //  Informações do tributo: IBS / CBS em operações com imposto monofásico
+                  IBSCBS.gIBSCBSMono.gMonoPadrao.qBCMono := 1;
+                  IBSCBS.gIBSCBSMono.gMonoPadrao.adRemIBS := 5;
+                  IBSCBS.gIBSCBSMono.gMonoPadrao.adRemCBS := 5;
+                  IBSCBS.gIBSCBSMono.gMonoPadrao.vIBSMono := 100;
+                  IBSCBS.gIBSCBSMono.gMonoPadrao.vCBSMono := 100;
+
+                  IBSCBS.gIBSCBSMono.gMonoReten.qBCMonoReten := 1;
+                  IBSCBS.gIBSCBSMono.gMonoReten.adRemIBSReten := 5;
+                  IBSCBS.gIBSCBSMono.gMonoReten.vIBSMonoReten := 100;
+                  IBSCBS.gIBSCBSMono.gMonoReten.vCBSMonoReten := 100;
+
+                  IBSCBS.gIBSCBSMono.gMonoRet.qBCMonoRet := 1;
+                  IBSCBS.gIBSCBSMono.gMonoRet.adRemIBSRet := 5;
+                  IBSCBS.gIBSCBSMono.gMonoRet.vIBSMonoRet := 100;
+                  IBSCBS.gIBSCBSMono.gMonoRet.vCBSMonoRet := 100;
+
+                  IBSCBS.gIBSCBSMono.gMonoDif.pDifIBS := 5;
+                  IBSCBS.gIBSCBSMono.gMonoDif.vIBSMonoDif := 100;
+                  IBSCBS.gIBSCBSMono.gMonoDif.pDifCBS := 5;
+                  IBSCBS.gIBSCBSMono.gMonoDif.vCBSMonoDif := 100;
+
+                  IBSCBS.gIBSCBSMono.vTotIBSMonoItem := 100;
+                  IBSCBS.gIBSCBSMono.vTotCBSMonoItem := 100;
+
+                  //  Informações da Transferencia de Crédito
+                  IBSCBS.gTransfCred.vIBS := 100;
+                  IBSCBS.gTransfCred.vCBS := 100;
+
+                  //  Informações Ajuste de Competência
+                  IBSCBS.gAjusteCompet.competApur := Date;
+                  IBSCBS.gAjusteCompet.vIBS := 100;
+                  IBSCBS.gAjusteCompet.vCBS := 100;
+
+                  //  Informações Estorno de Crédito
+                  IBSCBS.gEstornoCred.vIBSEstCred := 100;
+                  IBSCBS.gEstornoCred.vCBSEstCred := 100;
+                  }
+                  //  Informações do Crédito Presumido Operacional
+
+                  IBSCBS.gCredPresOper.cCredPres := cpNenhum;
+                  IBSCBS.gCredPresOper.vBCCredPres := QItens.FieldByName('VR_TOTAL').AsFloat;
+                  IBSCBS.gCredPresOper.gIBSCredPres.pCredPres := 5;
+                  IBSCBS.gCredPresOper.gIBSCredPres.vCredPres := QItens.FieldByName('VR_TOTAL').AsFloat;
+                  IBSCBS.gCredPresOper.gIBSCredPres.vCredPresCondSus := 0;
+                  IBSCBS.gCredPresOper.gCBSCredPres.pCredPres := 5;
+                  IBSCBS.gCredPresOper.gCBSCredPres.vCredPres := QItens.FieldByName('VR_TOTAL').AsFloat;
+                  IBSCBS.gCredPresOper.gCBSCredPres.vCredPresCondSus := 0;
+
+                  //  Informações do Crédito Presumido IBS ZFM
+                  // tcpNenhum, tcpSemCredito, tcpBensConsumoFinal, tcpBensCapital,
+                  // tcpBensIntermediarios, tcpBensInformaticaOutros
+
+                  IBSCBS.gCredPresIBSZFM.competApur        := Date;
+                  IBSCBS.gCredPresIBSZFM.tpCredPresIBSZFM  := tcpNenhum;
+                  IBSCBS.gCredPresIBSZFM.vCredPresIBSZFM   := 0; //QItens.FieldByName('VR_TOTAL').AsFloat;
+
+                End
+              end;
+
+
+
+
                 // NOVO CAMPO PARA TOTALIZACAO DOS TRIBUTOS
 
 
@@ -3282,6 +3580,50 @@ begin
                FloatToStr(Vr_trib_acum_est) + 'Estadual' + ' Fonte: IBPT/FECOMERCIO ('+ FrmPrincipal.QEmpresa.FieldByname('ESTADO').AsString +') Xe67Eq' + #13 + #10 + InfAdic.infCpl;
         End;
 
+
+         // Reforma Tributária
+
+          if (FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1)  and (QTransacao.FieldByName('Vr_BCCBSIBS').AsFloat > 0 )then
+          begin
+            //Total.ISTot.vIS := 100;
+
+            Total.IBSCBSTot.vBCIBSCBS := QTransacao.FieldByName('Vr_BCCBSIBS').AsFloat;
+
+            Total.IBSCBSTot.gIBS.vIBS := QTransacao.FieldByName('Vr_IBS').AsFloat;
+            Total.IBSCBSTot.gIBS.vCredPres := 0;
+            Total.IBSCBSTot.gIBS.vCredPresCondSus := 0;
+
+            Total.IBSCBSTot.gIBS.gIBSUFTot.vDif := 0;
+            Total.IBSCBSTot.gIBS.gIBSUFTot.vDevTrib := 0;
+            Total.IBSCBSTot.gIBS.gIBSUFTot.vIBSUF := QTransacao.FieldByName('Vr_IBS').AsFloat;
+
+           // Total.IBSCBSTot.gIBS.gIBSMunTot.vDif := 0;
+           // Total.IBSCBSTot.gIBS.gIBSMunTot.vDevTrib := 0;
+           // Total.IBSCBSTot.gIBS.gIBSMunTot.vIBSMun := QTransacao.FieldByName('Vr_IBSMUNIC').AsFloat;
+
+            Total.IBSCBSTot.gCBS.vDif := 0;
+            Total.IBSCBSTot.gCBS.vDevTrib := 0;
+            Total.IBSCBSTot.gCBS.vCBS := QTransacao.FieldByName('Vr_CBS').AsFloat;
+            Total.IBSCBSTot.gCBS.vCredPres := 0;
+            Total.IBSCBSTot.gCBS.vCredPresCondSus := 0;
+             {
+            Total.IBSCBSTot.gMono.vIBSMono := 0;
+            Total.IBSCBSTot.gMono.vCBSMono := 0;
+            Total.IBSCBSTot.gMono.vIBSMonoReten := 0;
+            Total.IBSCBSTot.gMono.vCBSMonoReten := 0;
+            Total.IBSCBSTot.gMono.vIBSMonoRet := 0;
+            Total.IBSCBSTot.gMono.vCBSMonoRet := 0;
+
+            Total.IBSCBSTot.gEstornoCred.vIBSEstCred := 0;
+            Total.IBSCBSTot.gEstornoCred.vCBSEstCred := 0;
+            }
+            // Valor total da NF-e com IBS / CBS / IS
+            Total.vNFTot := QTransacao.FieldByName('VALOR').AsFloat;
+          end;
+
+
+
+
       end;
 
       if not Chk_VisualizarDanfe.Checked then
@@ -3355,6 +3697,7 @@ begin
           Begin
             EnviarEmailNfce(FrmPrincipal.config.FieldByName('EMAIL_NFCE').AsString);
           End;
+
 
 
           if Application.MessageBox('Deseja enviar email do DANFE para o destinatário?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
@@ -4303,6 +4646,18 @@ begin
   INSTRUCOES_2.Lines.Add('Nfe Ref.: ' + QTransacao.FieldByName('CHAVE_NFE_REF').AsString);
   end;
 
+
+  if QTransacao.FieldByName('PEDIDO_ID').AsInteger > 0  then
+  begin
+    INSTRUCOES_2.Lines.Clear;
+    if QTransacao.FieldByName('TIPO_IMP').AsInteger = 1 then
+      INSTRUCOES_2.Lines.Add(#13 + 'Número do Pedido: ' +  QTransacao.FieldByName('PEDIDO_ID').AsString)
+    else if QTransacao.FieldByName('TIPO_IMP').AsInteger = 2  Then
+      INSTRUCOES_2.Lines.Add(#13 + 'Número da Ordem de Serviço: ' +  QTransacao.FieldByName('PEDIDO_ID').AsString);
+  end;
+
+
+
   QNotas.Close;
   QNotas.ParamByName('TRANSACAO_ID').AsInteger := ID;
   QNotas.Prepare;
@@ -4398,6 +4753,7 @@ begin
   finally
     FrmPasswordDlg.Release;
   end;
+
 
 end;
 

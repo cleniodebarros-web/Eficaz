@@ -6,7 +6,7 @@ uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, ImgList, ComCtrls, ToolWin, StdCtrls, Grids, DBGrids, Tabs, ExtCtrls,
   DB, IBCustomDataSet, IBQuery, Mask, Buttons, DBCtrls, rxCurrEdit, rxToolEdit,
-  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param, pcnConversao,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client;
 
@@ -152,6 +152,7 @@ type
     DT_MOVIMENTO: TDateEdit;
     Label40: TLabel;
     DT_SPED: TDateEdit;
+    btnChaveNfe: TSpeedButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -204,6 +205,7 @@ type
     procedure Btn_ChequeClick(Sender: TObject);
     procedure QTabelaAfterOpen(DataSet: TDataSet);
     procedure NUM_DOCKeyPress(Sender: TObject; var Key: Char);
+    procedure btnChaveNfeClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -219,6 +221,7 @@ type
     procedure Set_Campos(Vazio: Boolean);
     procedure Edit;
     function Validacao: Boolean;
+    function CFOP_Conv(CFOP,CFOP_NF: String): String;
   end;
 
 var
@@ -230,7 +233,7 @@ var
 implementation
 
 uses
-  UPrincipal, UData, UConsulta, UParcelas, UPesquisa, UConsulta_CFOP, UConsulta_CST;
+  UPrincipal, UData, UConsulta, UParcelas, UPesquisa, UConsulta_CFOP, UConsulta_CST, UCadastro_Fornecedores;
 
 {$R *.dfm}
 
@@ -303,6 +306,7 @@ begin
   btnCst_Icms.Enabled     := True;
   btnCst_Pis.Enabled      := True;
   btnCst_Cofins.Enabled   := True;
+  btnChaveNfe.Enabled     := True;
 end;
 
 procedure TFrmTrans_Debito.Botoes_Normal;
@@ -352,6 +356,7 @@ begin
   btnCst_Icms.Enabled     := False;
   btnCst_Pis.Enabled      := False;
   btnCst_Cofins.Enabled   := False;
+  btnChaveNfe.Enabled     := False;
 end;
 
 procedure TFrmTrans_Debito.DetailSearch(Tabela: String);
@@ -1244,12 +1249,12 @@ begin
 
   //Modelo da nota não pode ser 55, 99, 01, 04 ou 1B
   if LISTA_MODELO_NOTAS.IndexOf(MODELO.Text) <> -1 then
-      begin
-      Application.MessageBox('Modelo inválido, notas que possem itens devem ser lançadas em Compras.', PChar(Msg_Title), mb_IconSTop);
-      MODELO.Color := clYellow;
-      MODELO.SetFocus;
-      exit;
-    end;
+  begin
+    Application.MessageBox('Modelo inválido, notas que possem itens devem ser lançadas em Compras.', PChar(Msg_Title), mb_IconSTop);
+    MODELO.Color := clYellow;
+    MODELO.SetFocus;
+    exit;
+  end;
 
 
 
@@ -1356,6 +1361,156 @@ end;
 procedure TFrmTrans_Debito.btnCFOPClick(Sender: TObject);
 begin
   CFOP.Text := GetConsulta_CFOP(CFOP.Text);
+end;
+
+procedure TFrmTrans_Debito.btnChaveNfeClick(Sender: TObject);
+var
+N:Integer;
+Cnpj_Destino,Empresa_destino, Fornecedor:string;
+begin
+    FrmPrincipal.OpenDialog1.Title      := 'Selecione o CTE';
+    FrmPrincipal.OpenDialog1.DefaultExt := '*.XML';
+    FrmPrincipal.OpenDialog1.Filter     := 'Arquivos XML (*.XML)|*.XML|Arquivos NFE (*-nfe.XML)|*-nfe.XML|Todos os Arquivos (*.*)|*.*';
+
+  // retirado 30/05/17 a pedidor Sr. Regivaldo
+  // FrmPrincipal.OpenDialog1.InitialDir := ExtractFilePath(ParamStr(0)) + 'NFe\';
+
+    if FrmPrincipal.OpenDialog1.Execute then
+    begin
+      FrmPrincipal.ACBrCTe1.Conhecimentos.Clear;
+      FrmPrincipal.ACBrCTe1.Conhecimentos.LoadFromFile(FrmPrincipal.OpenDialog1.FileName);
+
+      for N := 0 to (FrmPrincipal.ACBrCTe1.Conhecimentos.Count - 1) do
+      begin
+        with FrmPrincipal.ACBrCTe1.Conhecimentos.Items[N].CTe do
+        begin
+          Cnpj_Destino    := Copy(Dest.CNPJCPF,1,2) + '.' + Copy(Dest.CNPJCPF,3,3) + '.' + Copy(Dest.CNPJCPF,6,3) + '/' + Copy(Dest.CNPJCPF,9,4) + '-' + Copy(Dest.CNPJCPF,13,3);
+          Empresa_destino := Dest.xNome;
+
+          if FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString <> Cnpj_Destino then
+          Application.MessageBox(PChar('Destinatario do Xml não corresponde a empresa atual.' +#13 + 'Nome Destinatario Xml: ' + Empresa_destino + #13 + 'Cnpj Destinatario Xml: ' + Cnpj_Destino  + #13+ 'Favor verificar!') , PChar(Msg_Title), mb_IconInformation);
+
+          //ShowMessage(InfNFe.ID);
+          //ShowMessage(Copy(InfNFe.ID,1,44));
+
+          if Copy(infCTe.ID,1,3) = 'CTe' then
+            Chave_Nfe.Text  := Copy(infCTe.ID,4,44)
+          else
+            Chave_Nfe.Text  := Copy(infCTe.ID,1,44);
+
+          IQuery.SQL.Clear;
+          IQuery.SQL.Add('SELECT * FROM TRANSACOES');
+          IQuery.SQL.Add('WHERE CHAVE_NFE = :CHAVE_NFE');
+          IQuery.SQL.Add('AND CONDUTA = :CONDUTA');
+          IQuery.SQL.Add('AND DEPTO = :DEPTO');
+          IQuery.ParamByName('CHAVE_NFE').AsString := Chave_Nfe.Text;
+          IQuery.ParamByName('CONDUTA').AsString := '02';
+          IQuery.ParamByName('DEPTO').AsString := '02';
+          IQuery.Prepare;
+          IQuery.Open;
+          if not IQuery.IsEmpty then
+          begin
+            Application.MessageBox(PChar('Este CTE já está lançado na transação de número ' + IQuery.FieldByName('TRANSACAO_ID').AsString + ', lançado em ' + IQuery.FieldByName('DT_MOVIMENTO').AsString), PChar(Msg_Title), mb_IconStop);
+            btnDiscardClick(Self);
+            exit;
+          end;
+
+          Num_DOC.Text    := StrZero(IntToStr(iDE.cCt),9,0);
+          Serie.Text      := StrZero(IntToStr(Ide.serie),3,0);
+          Modelo.Text     := IntToStr(Ide.modelo);
+          Cfop.Text       := CFOP_Conv(IntToStr(ide.CFOP),'');
+          Fornecedor      := Copy(Emit.CNPJ,1,2) + '.' + Copy(Emit.CNPJ,3,3) + '.' + Copy(Emit.CNPJ,6,3) + '/' + Copy(Emit.CNPJ,9,4) + '-' + Copy(Emit.CNPJ,13,3);
+          Dt_trans.Date   := Ide.dhEmi;
+          Valor.Value     := vPrest.vTPrest;
+          if (CSTICMSToStr(imp.ICMS.ICMS00.CST) = '00') and (imp.ICMS.ICMS00.pICMS <> 0) then
+          begin
+            CST_ICMS.Text          := '000';
+            BASE_ICMS_NORMAL.Value := imp.ICMS.ICMS00.vBC;
+            ALIQUOTA_ICMS.Value    := imp.ICMS.ICMS00.pICMS;
+            VR_ICMS_NORMAL.Value   := imp.ICMS.ICMS00.vICMS;
+          end
+          else if (CSTICMSToStr(imp.ICMS.ICMS20.CST) <> '00') then
+          begin
+            CST_ICMS.Text          := '020';
+            BASE_ICMS_NORMAL.Value := imp.ICMS.ICMS20.vBC;
+            ALIQUOTA_ICMS.Value    := imp.ICMS.ICMS20.pICMS;
+            VR_ICMS_NORMAL.Value   := imp.ICMS.ICMS20.vICMS;
+          end
+          else if (CSTICMSToStr(imp.ICMS.ICMS45.CST) <> '00') then
+          begin
+            CST_ICMS.Text          := '040';
+          end
+          else if (CSTICMSToStr(imp.ICMS.ICMS60.CST) <> '00') then
+          begin
+            CST_ICMS.Text          := '060';
+          end
+          else if (CSTICMSToStr(imp.ICMS.ICMS90.CST) <> '00') then
+          begin
+            CST_ICMS.Text          := '090';
+            BASE_ICMS_NORMAL.Value := imp.ICMS.ICMS90.vBC;
+            ALIQUOTA_ICMS.Value    := imp.ICMS.ICMS90.pICMS;
+            VR_ICMS_NORMAL.Value   := imp.ICMS.ICMS90.vICMS;
+          end;
+
+
+          IQuery.Sql.Clear;
+          IQuery.Sql.Add('SELECT FORNECEDOR_ID FROM FORNECEDORES WHERE (CNPJ = :CNPJ) or (CNPJ = :CPF)');
+          IQuery.ParamByName('CNPJ').AsString  := Fornecedor;
+          IQuery.ParamByName('CPF').AsString   := Copy(Emit.CNPJ,1,3) + '.' + Copy(Emit.CNPJ,4,3) + '.' + Copy(Emit.CNPJ,7,3) + '-' + Copy(Emit.CNPJ,10,2);
+
+
+
+          IQuery.Prepare;
+          IQuery.Open;
+
+          If IQuery.IsEmpty then
+          begin
+          Application.MessageBox(PChar('Fornecedor Cnpj: ' + Fornecedor  +  '. Não localizado!')  , PChar(Msg_Title), mb_IconInformation);
+
+          Cadastro_Fornecedor(Copy(Emit.xNome,1,50),Copy(Emit.xFant,1,30),Fornecedor,Emit.EnderEmit.xLgr,Emit.EnderEmit.nro,
+                              Copy(Emit.EnderEmit.xCpl,1,20),InttoStr(Emit.EnderEmit.cMun),Emit.EnderEmit.xMun,Copy(Emit.EnderEmit.xBairro,1,20),
+                              Copy(IntToStr(Emit.EnderEmit.CEP),1,5) + Copy(IntToStr(Emit.EnderEmit.CEP),6,3) ,Emit.EnderEmit.UF,'1058',Copy(Emit.EnderEmit.fone,1,2),
+                              Copy(Emit.EnderEmit.fone,3,9),Emit.IE);
+
+            Fornecedor_id.Value := FrmCadastro_Fornecedores.QTabela.FieldByName('FORNECEDOR_ID').AsInteger;
+            Fornecedor_id.OnExit(Fornecedor_id);
+            Empresa_id.SetFocus;
+          end
+          Else
+          Begin
+          Fornecedor_id.Value := IQuery.FieldByName('FORNECEDOR_ID').AsInteger;
+          Fornecedor_id.OnExit(Fornecedor_id);
+          Empresa_id.SetFocus;
+          End;
+
+          Cond_Pagto.Text := 'A VISTA';
+
+        end;
+      end;
+    end;
+
+end;
+
+function TFrmTrans_Debito.CFOP_Conv(CFOP,CFOP_NF: String): String;
+begin
+  Result := CFOP;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT * FROM CFOP');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(COD_CFOP = :COD_CFOP)');
+
+  IQuery.ParamByName('COD_CFOP').AsString := CFOP;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  if (not IQuery.IsEmpty) and (IQuery.FieldByName('CFOP_CONV').AsString <> '')  then
+
+    Result := IQuery.FieldByName('CFOP_CONV').AsString
+  else
+    Result := CFOP_NF;
+
 end;
 
 procedure TFrmTrans_Debito.btnContaClick(Sender: TObject);

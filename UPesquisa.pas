@@ -138,17 +138,17 @@ begin
   else if (Condicao.Text = 'é menor ou igual a') and (Txt_Sql.Text <> '') then
     ChavePesquisa := 'WHERE (' + QTabela.FieldByName('CAMPO').AsString + ' <= ' + #39 + Txt_Sql.Text + #39 + ')'
   else if (Condicao.Text = 'começa com') and (Txt_Sql.Text <> '') then
-    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39 + Txt_Sql.Text + '%' + #39
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) ILIKE ' + #39 + Txt_Sql.Text + '%' + #39
   else if (Condicao.Text = 'não começa com') and (Txt_Sql.Text <> '') then
-    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + Txt_Sql.Text + '%' + #39
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT ILIKE ' + #39 + Txt_Sql.Text + '%' + #39
   else if (Condicao.Text = 'termina com') and (Txt_Sql.Text <> '') then
-    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39 + '%' + Txt_Sql.Text + #39
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) ILIKE ' + #39 + '%' + Txt_Sql.Text + #39
   else if (Condicao.Text = 'não termina com') and (Txt_Sql.Text <> '') then
-    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%' + Txt_Sql.Text + #39
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT ILIKE ' + #39 + '%' + Txt_Sql.Text + #39
   else if (Condicao.Text = 'contém') and (Txt_Sql.Text <> '') then
-    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100))  LIKE ' + #39 + '%'  + Txt_Sql.Text + '%'  + #39
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100))  ILIKE ' + #39 + '%'  + Txt_Sql.Text + '%'  + #39
   else if (Condicao.Text = 'não contém') and (Txt_Sql.Text <> '') then
-    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%'+ Txt_Sql.Text + '%' + #39;
+    ChavePesquisa := 'WHERE CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT ILIKE ' + #39 + '%'+ Txt_Sql.Text + '%' + #39;
 
   if (Condicao2.Text = 'é igual a') and (Txt_Sql2.Text <> '') then
     ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' = ' + #39 + Txt_Sql2.Text + #39 + ')'
@@ -163,17 +163,17 @@ begin
   else if (Condicao2.Text = 'é menor ou igual a') and (Txt_Sql2.Text <> '') then
     ChavePesquisa := ChavePesquisa + AndOr + '(' + QTabela.FieldByName('CAMPO').AsString + ' <= ' + #39 + Txt_Sql2.Text + #39 + ')'
   else if (Condicao2.Text = 'começa com') and (Txt_Sql2.Text <> '') then
-    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39 + Txt_Sql2.Text + '%' + #39
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) ILIKE ' + #39 + Txt_Sql2.Text + '%' + #39
   else if (Condicao2.Text = 'não começa com') and (Txt_Sql2.Text <> '') then
-    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + Txt_Sql2.Text + '%' + #39
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT ILIKE ' + #39 + Txt_Sql2.Text + '%' + #39
   else if (Condicao2.Text = 'termina com') and (Txt_Sql2.Text <> '') then
-    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE ' + #39  + Txt_Sql2.Text + '%' +  #39
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) ILIKE ' + #39  + Txt_Sql2.Text + '%' +  #39
   else if (Condicao2.Text = 'não termina com') and (Txt_Sql2.Text <> '') then
-    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%' + Txt_Sql2.Text + #39
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT ILIKE ' + #39 + '%' + Txt_Sql2.Text + #39
   else if (Condicao2.Text = 'contém') and (Txt_Sql2.Text <> '') then
-    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) LIKE '  + #39 + '%'  + Txt_Sql2.Text + '%'  + #39
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) ILIKE '  + #39 + '%'  + Txt_Sql2.Text + '%'  + #39
   else if (Condicao2.Text = 'não contém') and (Txt_Sql2.Text <> '') then
-    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT LIKE ' + #39 + '%'+ Txt_Sql2.Text + '%' + #39;
+    ChavePesquisa := ChavePesquisa + AndOr + 'CAST(' + QTabela.FieldByName('CAMPO').AsString + ' AS VARCHAR(100)) NOT ILIKE ' + #39 + '%'+ Txt_Sql2.Text + '%' + #39;
 
 //  if QTabela.FieldByName('ORDEM').AsString <> '' then
 //    ChavePesquisa := ChavePesquisa + ' ORDER BY ' + QTabela.FieldByName('ORDEM').AsString;

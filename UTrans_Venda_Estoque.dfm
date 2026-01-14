@@ -56,18 +56,13 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1337
     object Consulta: TTabSheet
       Caption = '&Consulta'
       OnShow = ConsultaShow
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 985
-      ExplicitHeight = 0
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
-        Width = 1329
+        Width = 998
         Height = 540
         Align = alClient
         Color = clInfoBk
@@ -174,7 +169,7 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
       object Dias: TTabSet
         Left = 0
         Top = 540
-        Width = 1329
+        Width = 998
         Height = 21
         Align = alBottom
         AutoScroll = False
@@ -220,14 +215,12 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
           'Todos')
         TabIndex = 0
         OnClick = DiasClick
-        ExplicitWidth = 985
       end
     end
     object Manutencao: TTabSheet
       Caption = '&Manuten'#231#227'o'
       ImageIndex = 1
       OnShow = ManutencaoShow
-      ExplicitWidth = 1329
       object DBText1: TDBText
         Left = 202
         Top = 87
@@ -2478,7 +2471,6 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 1329
         object btnPrior: TBitBtn
           Left = 6
           Top = 6
@@ -2741,7 +2733,6 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
         Align = alBottom
         BevelOuter = bvNone
         TabOrder = 40
-        ExplicitWidth = 1329
         object Label21: TLabel
           Left = 785
           Top = 8
@@ -3013,6 +3004,46 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
           item
             Expanded = False
             FieldName = 'vr_custo'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_CBS'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_IBSUF'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_IBSMUNIC'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'VR_CBS'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'VR_IBSUF'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'CST_CBSIBS'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'COD_CLASSTRIB'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'vr_base_cbsibs'
             Visible = False
           end>
       end
@@ -3522,7 +3553,7 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
           end
           object DESCONTO_ESPECIAL: TRxCalcEdit
             Left = 79
-            Top = 59
+            Top = 60
             Width = 148
             Height = 21
             Margins.Left = 4
@@ -3564,7 +3595,7 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
           end
           object VR_IPI: TRxCalcEdit
             Left = 334
-            Top = 59
+            Top = 60
             Width = 148
             Height = 21
             Margins.Left = 4
@@ -3607,7 +3638,7 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
           end
           object VR_FRETE: TRxCalcEdit
             Left = 608
-            Top = 59
+            Top = 60
             Width = 148
             Height = 21
             Margins.Left = 4
@@ -3649,13 +3680,97 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
             OnKeyDown = EMPRESA_IDKeyDown
           end
         end
+        object TabSheet3: TTabSheet
+          Caption = 'IS/CBS/IBS'
+          ImageIndex = 2
+          object Label48: TLabel
+            Left = 14
+            Top = 8
+            Width = 77
+            Height = 13
+            Caption = 'B. C'#225'lc. Cbs/Ibs'
+          end
+          object Label49: TLabel
+            Left = 14
+            Top = 34
+            Width = 62
+            Height = 13
+            Caption = 'Vr. Ibs Munic'
+          end
+          object Label50: TLabel
+            Left = 14
+            Top = 62
+            Width = 50
+            Height = 13
+            Caption = 'Vr. Ibs Uf.'
+          end
+          object Label51: TLabel
+            Left = 266
+            Top = 8
+            Width = 35
+            Height = 13
+            Caption = 'Vr. Cbs'
+          end
+          object vr_ibs: TRxCalcEdit
+            Left = 104
+            Top = 59
+            Width = 148
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+            Enabled = False
+            NumGlyphs = 2
+            TabOrder = 3
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object vr_ibsmunic: TRxCalcEdit
+            Left = 104
+            Top = 31
+            Width = 148
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+            Enabled = False
+            NumGlyphs = 2
+            TabOrder = 2
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object Vr_bccbsibs: TRxCalcEdit
+            Left = 104
+            Top = 6
+            Width = 148
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+            Enabled = False
+            NumGlyphs = 2
+            TabOrder = 0
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object vr_cbs: TRxCalcEdit
+            Left = 351
+            Top = 5
+            Width = 148
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+            Enabled = False
+            NumGlyphs = 2
+            TabOrder = 1
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+        end
         object TabSheet2: TTabSheet
           Caption = 'D'#233'bito/Cr'#233'dito Cont'#225'bil'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label42: TLabel
             Left = 11
             Top = 15
@@ -3930,10 +4045,10 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
         OnKeyDown = DT_TRANSKeyDown
       end
       object Ncm_Cest_text: TRichEdit
-        Left = 645
+        Left = 646
         Top = 305
         Width = 337
-        Height = 254
+        Height = 253
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -4037,7 +4152,6 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 1337
     object btnRetorna: TBitBtn
       Left = 895
       Top = 36
@@ -8124,6 +8238,7 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
     ParamData = <
       item
         Name = 'TRANSACAO_ID'
+        DataType = ftInteger
         ParamType = ptInput
         Value = Null
       end>
@@ -8598,8 +8713,8 @@ object FrmTrans_Venda_Estoque: TFrmTrans_Venda_Estoque
       '(TABELA_ID = :TABELA_ID)'
       'AND (TIPO_TABELA = '#39'2'#39')'
       'AND (STATUS = '#39'A'#39')')
-    Left = 216
-    Top = 424
+    Left = 208
+    Top = 360
     ParamData = <
       item
         Name = 'TABELA_ID'

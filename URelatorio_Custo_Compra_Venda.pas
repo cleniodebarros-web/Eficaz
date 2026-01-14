@@ -206,8 +206,8 @@ var
   FrmRelatorio_Custo_Compra_Venda: TFrmRelatorio_Custo_Compra_Venda;
   Pagina, linha, C1, C2, C3, C4, C5, C6, C7, C8, C9 : Integer;
   Conduta, Descricao : String;
-  Soma_Acrescimo, Soma_Desconto, Soma_Credito, Soma_Debito, Soma_Valor, Saldo,  Total_Credito, Total_Debito, Total_Saldo, Total_Compra, Total_Venda : Real;
-
+  Total_Custo,Total_Custo_m,Total_venda,Soma_Acrescimo, Soma_Desconto, Soma_Credito, Soma_Debito, Soma_Valor, Saldo,  Total_Credito, Total_Debito, Total_Saldo: Real;
+  Total_Compra : Real;
 implementation
 
 uses
@@ -315,6 +315,11 @@ begin
              Pagina := Pagina + 1;
            end;
 
+           Total_custo := 0;
+           Total_custo_M :=  0;
+           Total_VENDA :=  0;
+
+
            while not QRel.Eof do
            begin
               RDprint1.impD(linha, C1+5, QRel.FieldByName('PRODUTO_ID').AsString,[]);
@@ -326,15 +331,39 @@ begin
               RDprint1.ImpVal(linha,C7-4,'###,###,##0.00', QRel.FieldByName('PRECO_VENDA').AsFloat,[]);
               RDprint1.ImpVal(linha,C8+4,'###,###,##0.00', QRel.FieldByName('ULT_QUANTIDADE').AsFloat,[]);
               RDprint1.ImpVal(linha,C9,'###,###,##0.00', QRel.FieldByName('QUANTIDADE_C').AsFloat,[]);
+
+
+
            if linha > 64 then
            begin
              RDprint1.novapagina;
              Pagina := Pagina + 1;
            end;
 
+           Total_custo :=  QRel.FieldByName('CUSTO_COMPRA').AsFloat + Total_custo;
+           Total_custo_M :=  QRel.FieldByName('CUSTOMEDIO').AsFloat + Total_custo_M;
+           Total_VENDA :=  QRel.FieldByName('PRECO_VENDA').AsFloat + Total_VENDA;
+
+
+
             Inc(linha);
             QRel.Next;
            end;
+
+           {
+           Inc(linha);
+           RDprint1.LinhaH(linha,01,150,0,false);
+           Inc(linha);
+           RDprint1.impC(linha,02 , 'T O T A L >>>>>>>>',[negrito]);
+           RDprint1.ImpVal(linha,C5,'###,###,##0.00', TOTAL_CUSTO,[]);
+           RDprint1.ImpVal(linha,C6,'###,###,##0.00', TOTAL_CUSTO_M,[]);
+           RDprint1.ImpVal(linha,C7-4,'###,###,##0.00', TOTAL_VENDA,[]);
+
+
+           }
+
+
+
 
 
         Application.ProcessMessages;

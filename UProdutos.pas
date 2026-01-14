@@ -498,6 +498,28 @@ type
     vr_compra_manual: TCheckBox;
     lbl_dtVrCompraNota: TLabel;
     lbl_VrCompraNota: TLabel;
+    TabSheet17: TTabSheet;
+    Label104: TLabel;
+    ALIQUOTA_CBS: TRxCalcEdit;
+    Label105: TLabel;
+    REDUCAO_CBS_IBS: TRxCalcEdit;
+    Label106: TLabel;
+    Tributo_id_cbs_ibs: TCurrencyEdit;
+    btntributonovo: TSpeedButton;
+    DBText9: TDBText;
+    Label107: TLabel;
+    Label108: TLabel;
+    ClassTributaria: TEdit;
+    QCbsIbs: TFDQuery;
+    DataCbsIbs: TDataSource;
+    Label109: TLabel;
+    Aliquota_Ibs_Uf: TRxCalcEdit;
+    Label110: TLabel;
+    Aliquota_Ibs_Munic: TRxCalcEdit;
+    cst_cbs_ibs: TCurrencyEdit;
+    MARGEM_LUCRO_ATACADO: TRxCalcEdit;
+    Label111: TLabel;
+    BtnLucroAtacado: TBitBtn;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -697,6 +719,10 @@ type
     procedure AtualizarTributaoTodosdaTela1Click(Sender: TObject);
     procedure btnAbrirNotaClick(Sender: TObject);
     procedure AtualizaCustos;
+    procedure btntributonovoClick(Sender: TObject);
+    procedure Tributo_id_cbs_ibsExit(Sender: TObject);
+    procedure BtnLucroAtacadoClick(Sender: TObject);
+    procedure TabSheet4Show(Sender: TObject);
    
   private
     { Private declarations }
@@ -1706,6 +1732,19 @@ Vr_despesas_Per:= RoundTo(((vr_despesas.value * 100) / custo_compra.value), -2 )
 Application.MessageBox(Pchar('Valor do Icms-St em Porcentagem ao custo: ' + FloatToStrF(Vr_despesas_Per,FfNumber,15,2) + '%'),'Eficaz', MB_ICONINFORMATION + MB_OK);
 end;
 
+procedure TFrmProdutos.BtnLucroAtacadoClick(Sender: TObject);
+var
+Vr_lucro:Real;
+begin
+  Vr_lucro:= RoundTo((((PRECO_ATACADO.Value -  CUSTO_COMPRA.value) / custo_compra.value) * 100), -2 );
+  Application.MessageBox(Pchar('Margem de lucro atacado aplicada: ' + FloatToStrF(Vr_lucro,FfNumber,15,2) + '%'),'Eficaz', MB_ICONINFORMATION + MB_OK);
+
+
+  if RoundTo(Vr_lucro, -2) <> RoundTo(MARGEM_LUCRO_ATACADO.Value,-2) then
+    if Application.MessageBox(Pchar('Deseja Alterar a margem de Lucro atual: ' +  FloatToStrF(MARGEM_LUCRO_ATACADO.Value,FfNumber,15,2) + '%' + #13 + 'Por: ' + FloatToStrF(Vr_lucro,FfNumber,15,2) + '%') , PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+      MARGEM_LUCRO_ATACADO.Value := Vr_lucro;
+end;
+
 procedure TFrmProdutos.BtnLucroClick(Sender: TObject);
 var
 Vr_lucro:Real;
@@ -1756,8 +1795,10 @@ begin
   btnCest.Enabled            := True;
   BtnReplicar.Enabled        := True;
   BtnLucro.Enabled           := True;
+  BtnLucroAtacado.Enabled    := True;
   BtnTransferencia.Enabled   := True;
   btnunidtrib.Enabled        := True;
+  btntributonovo.enabled     := True;
 
   if FrmPrincipal.Config.FieldByName('ALTERAR_PRECO_CUSTO').AsString = 'True' then
   BtnCalcularCustoCompra.Enabled     := True;
@@ -1825,11 +1866,13 @@ begin
   btnCest.Enabled            := False;
   BtnReplicar.Enabled        := False;
   BtnLucro.Enabled           := False;
+  BtnLucroAtacado.Enabled    := False;
   BtnTransferencia.Enabled   := False;
   btnunidtrib.Enabled        := False;
   BtnCalcularCustoCompra.Enabled     := False;
   BtnAbrirNota.Enabled       := False;
   btnconsultabarra.Enabled   := False;
+   btntributonovo.enabled     := False;
 end;
 
 procedure TFrmProdutos.btnAbrirNotaClick(Sender: TObject);
@@ -1944,6 +1987,31 @@ begin
     End;
   end;
 
+  if ((Tabela = '') or (Tabela = 'Tributo Cbs Ibs')) and (TRIBUTO_ID.Text <> '') then
+  begin
+    QCbsIbs.Close;
+
+    QCbsIbs.ParamByName('COD_CLASSTRIB_ID').AsInteger := StrToInt(TRIBUTO_ID_CBS_IBS.Text);
+
+    QCbsIbs.Prepare;
+    QCbsIbs.Open;
+
+    if not QCbsIbs.IsEmpty then
+    Begin
+      //ALIQUOTA_ICMS.Value       := QCbsIbs.FieldByName('ALIQUOTA_ICMS').AsFloat;
+      cst_cbs_ibs.text          := IntToStr(QCbsIbs.FieldByName('cst_cbs_ibs').AsInteger);
+      classTributaria.Text      := (QCbsIbs.FieldByName('ClasseTrib').AsString);
+      Aliquota_cbs.value        := QCbsIbs.FieldByName('aliq_cbs').AsFloat;
+      Aliquota_ibs_uf.value     := QCbsIbs.FieldByName('aliq_ibsuf').AsFloat;
+      Aliquota_ibs_munic.value  := QCbsIbs.FieldByName('aliq_ibsmunic').AsFloat;
+      Reducao_cbs_ibs.value     := QCbsIbs.FieldByName('preducao').AsFloat;
+
+    End;
+  end;
+
+
+
+
   if ((Tabela = '') or (Tabela = 'Família')) and (FAMILIA_ID.Text <> '') then
   begin
     QFamilia.Close;
@@ -1954,7 +2022,7 @@ begin
     QFamilia.Open;
   end;
 
-  if (Tabela = '') or (Tabela = 'Fornecedor') then
+  if Tabela = 'Fornecedor' then
   begin
     QFornecedor.Close;
     QUltimaNota.Close;
@@ -2388,6 +2456,9 @@ begin
   if (Key = Vk_F7) and (Sender = COMPOSICAO_ID) then
     btnCompClick(Self);
 
+   if (Key = Vk_F7) and (Sender = TRIBUTO_ID_CBS_IBS) then
+    btnTributoNovoClick(Self);
+
   if Key = Vk_Return then
     Perform(Wm_NextDlgctl, 0, 0);
 end;
@@ -2689,7 +2760,7 @@ begin
    Exit;
   end;
 
-  if FrmPrincipal.Config.FieldByName('SPED').AsString = 'True' then
+  if (FrmPrincipal.Config.FieldByName('SPED').AsString = 'True') and (FrmPrincipal.QEmpresa.FieldByName('CRT').AsString <> '1 - SIMPLES NACIONAL') then
   begin
     //if CST_PIS_ENTR.Text <> '' then
     //begin
@@ -3206,10 +3277,21 @@ begin
   begin
     if StrZero(PRECO_VAREJO.Text, 12, 2) <> StrZero(FloatToStr(RoundTo(CUSTO_COMPRA.Value + ((CUSTO_COMPRA.Value * MARGEM_LUCRO.Value) / 100),-2)), 12, 2) then
     begin
-      Application.MessageBox('Preço de venda diferente do Preço de custo + Margem de lucro', PChar(Msg_Title), mb_IconInformation);
+      Application.MessageBox('Preço de venda VAREJO diferente do Preço de custo + Margem de lucro VAREJO', PChar(Msg_Title), mb_IconInformation);
 
       if Application.MessageBox('Deseja remarcar automaticamente?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
         PRECO_VAREJO.Value := roundto(CUSTO_COMPRA.Value + ((CUSTO_COMPRA.Value * MARGEM_LUCRO.Value) / 100), -2);
+    end;
+  end;
+
+  if (CUSTO_COMPRA.Value > 0) and (MARGEM_LUCRO_ATACADO.Value > 0) then
+  begin
+    if StrZero(PRECO_ATACADO.Text, 12, 2) <> StrZero(FloatToStr(RoundTo(CUSTO_COMPRA.Value + ((CUSTO_COMPRA.Value * MARGEM_LUCRO_ATACADO.Value) / 100),-2)), 12, 2) then
+    begin
+      Application.MessageBox('Preço de venda ATACADO diferente do Preço de custo + Margem de lucro ATACADO', PChar(Msg_Title), mb_IconInformation);
+
+      if Application.MessageBox('Deseja remarcar automaticamente?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+        PRECO_ATACADO.Value := roundto(CUSTO_COMPRA.Value + ((CUSTO_COMPRA.Value * MARGEM_LUCRO_ATACADO.Value) / 100), -2);
     end;
   end;
 
@@ -6692,6 +6774,7 @@ TFloatField(QTabela.FieldByName('QUANTIDADE_G')).DisplayFormat  := '#,##0.000';
 TFloatField(QTabela.FieldByName('QUANT_MINIMA')).DisplayFormat  := '#,##0.00';
 TFloatField(QTabela.FieldByName('CUSTO_COMPRA')).DisplayFormat  := '#,##0.00';
 TFloatField(QTabela.FieldByName('MARGEM_LUCRO')).DisplayFormat  := '#,##0.00';
+TFloatField(QTabela.FieldByName('MARGEM_LUCRO_ATACADO')).DisplayFormat  := '#,##0.00';
 
 end;
 
@@ -7285,7 +7368,7 @@ I: Integer;
 Temp: TComponent;
 Foto1: TStream;
 Imagem: TJpegImage;
-Exibir_Lucro:Real;
+Exibir_Lucro, Exibir_Lucro_Atacado:Real;
 begin
   for I := 0 to (ComponentCount - 1) do
   begin
@@ -7422,13 +7505,17 @@ begin
   Begin
    Exibir_Lucro:= RoundTo((((PRECO_VAREJO.Value -  CUSTO_COMPRA.value) / custo_compra.value) * 100), -2 );
    BtnLucro.Caption:=  FloatToStrF(Exibir_Lucro,FfNumber,15,2) + '%';
-   BtnLucro.Refresh;
+
+   Exibir_Lucro_Atacado:= RoundTo((((PRECO_ATACADO.Value -  CUSTO_COMPRA.value) / custo_compra.value) * 100), -2 );
+   BtnLucroAtacado.Caption:=  FloatToStrF(Exibir_Lucro_Atacado,FfNumber,15,2) + '%';
   End
   Else
   Begin
    BtnLucro.Caption:='Sem custo informado.';
-   BtnLucro.Refresh;
+   BtnLucroAtacado.Caption:='Sem custo informado.';
   End;
+  BtnLucro.Refresh;
+  BtnLucroAtacado.Refresh;
 
   DetailSearch('');
 
@@ -7524,6 +7611,9 @@ begin
 
   end;
   Botoes_Normal;
+
+  if TabSheet4.Visible then
+    TabSheet4Show(Self);
 end;
 
 procedure TFrmProdutos.SUBTIPO_IDExit(Sender: TObject);
@@ -7571,6 +7661,30 @@ begin
 
 end;
 
+procedure TFrmProdutos.TabSheet4Show(Sender: TObject);
+var
+  UltimaNotaMsg: TBitBtn;
+begin
+  UltimaNotaMsg := TBitBtn.Create(Self);
+  UltimaNotaMsg.Parent := TabSheet4;
+  UltimaNotaMsg.Left := 5;
+  UltimaNotaMsg.Top := 112;
+  UltimaNotaMsg.Caption := 'Buscando a última compra. Aguarde.';
+  UltimaNotaMsg.Width := 483;
+  UltimaNotaMsg.Height := 37;
+  UltimaNotaMsg.Font.Charset := DEFAULT_CHARSET;
+  UltimaNotaMsg.Font.Color := clRed;
+  UltimaNotaMsg.Font.Height := -19;
+  UltimaNotaMsg.Font.Name := 'Tahoma';
+  UltimaNotaMsg.Font.Style := [fsBold];
+  UltimaNotaMsg.ParentFont := False;
+  Application.ProcessMessages;
+
+  DetailSearch('Fornecedor');
+
+  UltimaNotaMsg.Free;
+end;
+
 procedure TFrmProdutos.AtualizaCustos;
 var
   dt_trans, dt_ent_sai: TDate;
@@ -7601,7 +7715,7 @@ begin
     Exit;
 
   QSearch.Sql.Clear;
-  QSearch.Sql.Add('SELECT DT_TRANS, DT_ENT_SAI, TRANSACOES.FORNECEDOR_ID, TRANSITENS.VR_UNITARIO VALOR_COMPRA ');
+  QSearch.Sql.Add('SELECT DT_TRANS, DT_ENT_SAI, TRANSACOES.FORNECEDOR_ID, TRANSITENS.VR_UNITARIO VALOR_COMPRA, (TRANSITENS.DESC_RODAPE / TRANSITENS.QUANTIDADE) DESC_RODAPE ');
   //QSearch.Sql.Add(',(TRANSITENS.VR_UNITARIO + (TRANSITENS.VALOR_ICMS_ST + TRANSITENS.VR_FRETE + TRANSITENS.VR_IPI + TRANSITENS.VR_ACRESCIMO - TRANSITENS.VR_DESCONTO)/TRANSITENS.QUANTIDADE) CUSTO_COMPRA');
   QSearch.Sql.Add('FROM TRANSITENS');
   QSearch.Sql.Add('INNER JOIN TRANSACOES ON TRANSACOES.TRANSACAO_ID = TRANSITENS.TRANSACAO_ID');
@@ -7618,13 +7732,15 @@ begin
   QSearch.Open;
 
   //ShowMessage(BoolToStr(not QSearch.IsEmpty) + ' ababa ' + FloatToStr(QSearch.FieldByName('VALOR_COMPRA').AsFloat));
+  //ShowMessage(BoolToStr(not QSearch.IsEmpty) + ' ababa ' + FloatToStr(QSearch.FieldByName('DESC_RODAPE').AsFloat));
+
   if (not QSearch.IsEmpty) and (QSearch.FieldByName('VALOR_COMPRA').AsFloat > 0.01) then
   begin
 
     dt_trans      := QSearch.FieldByName('DT_TRANS').AsDateTime;
     dt_ent_sai    := QSearch.FieldByName('DT_ENT_SAI').AsDateTime;
     vr_compra     := QSearch.FieldByName('VALOR_COMPRA').AsFloat;
-    csto_compra   := QSearch.FieldByName('VALOR_COMPRA').AsFloat + Vr_IcmsSt.Value + Vr_Frete.value +Vr_Ipi.Value + Vr_Despesas.Value + Dif_Icms.Value ;
+    csto_compra   := (QSearch.FieldByName('VALOR_COMPRA').AsFloat - QSearch.FieldByName('DESC_RODAPE').AsFloat) + Vr_IcmsSt.Value + Vr_Frete.value +Vr_Ipi.Value + Vr_Despesas.Value + Dif_Icms.Value ;
     fornecedor_id := QSearch.FieldByName('FORNECEDOR_ID').AsInteger;
 
    if QTabela.FieldByName('VR_COMPRA_MANUAL').AsInteger = 0 Then
@@ -7765,6 +7881,11 @@ end;
 procedure TFrmProdutos.TRIBUTO_IDExit(Sender: TObject);
 begin
   DetailSearch('Tributo');
+end;
+
+procedure TFrmProdutos.Tributo_id_cbs_ibsExit(Sender: TObject);
+begin
+DetailSearch('Tributo Cbs Ibs');
 end;
 
 procedure TFrmProdutos.UNIDADEExit(Sender: TObject);
@@ -8994,8 +9115,10 @@ begin
     End;
 
   end;
-
   Botoes_Normal;
+
+  if TabSheet4.Visible then
+    TabSheet4Show(Self);
 end;
 
 procedure TFrmProdutos.BtnReplicarClick(Sender: TObject);
@@ -9050,7 +9173,10 @@ begin
                               'EST_SEGURANCA,   DEMANDA_MAX,     PONTO_PEDIDO, ' +
                               'PAR_FATURAMENTO, VENDA_MEDIA_PON, VENDA_MEDIA_SEM, ' +
                               'DESV_PAD_SEM,    VINCULO,         MEDIA_CONSUMO, ' +
-                              'MD5,             SPED,            STATUS, CEST)');
+                              'MD5,             SPED,            STATUS, ' +
+                              'CEST,            MARGEM_LUCRO_ATACADO, ALIQUOTA_CBS,' +
+                              'REDUCAO_CBS_IBS, ALIQUOTA_IBS_UF, ALIQUOTA_IBS_MUNIC,' +
+                              'TRIBUTO_ID_CBS_IBS, CST_CBS_IBS,CLASSTRIBUTARIA)');
     QReplicar_Produto.Sql.Add('SELECT :PRODUTO_ID, ' +
                               ':EMPRESA_ID,     TIPO,            TIPO_ITEM, ' +
                               ':DESCRICAO , UNIDADE, ' +
@@ -9081,7 +9207,10 @@ begin
                               '0,   0,     PONTO_PEDIDO, ' +
                               'PAR_FATURAMENTO, VENDA_MEDIA_PON, VENDA_MEDIA_SEM, ' +
                               'DESV_PAD_SEM,    VINCULO,         MEDIA_CONSUMO, ' +
-                              'MD5,             SPED,            STATUS,CEST');
+                              'MD5,             SPED,            STATUS, ' +
+                              'CEST,            MARGEM_LUCRO_ATACADO, ALIQUOTA_CBS,' +
+                              'REDUCAO_CBS_IBS, ALIQUOTA_IBS_UF, ALIQUOTA_IBS_MUNIC,' +
+                              'TRIBUTO_ID_CBS_IBS, CST_CBS_IBS,CLASSTRIBUTARIA');
 
     QReplicar_Produto.Sql.Add('FROM PRODUTOS');
     QReplicar_Produto.Sql.Add('WHERE');
@@ -9612,6 +9741,16 @@ begin
   except
     TRIBUTO_ID.Value := GetConsulta('TRIBUTOS', 0, 0, 0);
   end;
+end;
+
+procedure TFrmProdutos.btntributonovoClick(Sender: TObject);
+begin
+try
+    TRIBUTO_ID_CBS_IBS.Value := GetConsulta('CLASSE_TRIBUTARIA', 0, 0, StrToInt(TRIBUTO_ID_CBS_IBS.Text));
+  except
+    TRIBUTO_ID_CBS_IBS.Value := GetConsulta('CLASSE_TRIBUTARIA', 0, 0, 0);
+  end;
+
 end;
 
 procedure TFrmProdutos.btnunidtribClick(Sender: TObject);
@@ -10922,6 +11061,8 @@ begin
   lb_margem.visible    := Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 56, 1));
   margem_lucro.visible := Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 56, 1));
   btnlucro.visible     := Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 56, 1));
+  margem_lucro_atacado.visible := Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 56, 1));
+  btnlucroatacado.visible      := Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 56, 1));
   DBGrid1.Columns[10].Visible := Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 56, 1));
 
   DBGrid1.Columns[0].Width  := 59;

@@ -405,14 +405,10 @@ object FrmCTe: TFrmCTe
     Top = 53
     Width = 500
     Height = 222
-    ActivePage = TabSheet1
+    ActivePage = Tab_Remetente
     TabOrder = 8
     object Tab_Remetente: TTabSheet
       Caption = 'Remetente'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label36: TLabel
         Left = 2
         Top = 7
@@ -715,10 +711,6 @@ object FrmCTe: TFrmCTe
     object TabSheet2: TTabSheet
       Caption = 'Transporte'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label12: TLabel
         Left = 1
         Top = 6
@@ -1164,10 +1156,6 @@ object FrmCTe: TFrmCTe
     object TabSheet3: TTabSheet
       Caption = 'Expedidor'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label15: TLabel
         Left = 1
         Top = 5
@@ -1484,10 +1472,6 @@ object FrmCTe: TFrmCTe
     object TabSheet4: TTabSheet
       Caption = 'Recebedor'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label31: TLabel
         Left = 1
         Top = 7
@@ -2078,7 +2062,7 @@ object FrmCTe: TFrmCTe
     Top = 448
     Width = 497
     Height = 139
-    ActivePage = TabSheet5
+    ActivePage = Nota_Fiscal
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
     Font.Height = -11
@@ -2088,10 +2072,6 @@ object FrmCTe: TFrmCTe
     TabOrder = 17
     object Nota_Fiscal: TTabSheet
       Caption = 'Notas Fiscais'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Grid_Notas: TDBGrid
         Left = -3
         Top = 1
@@ -2386,10 +2366,6 @@ object FrmCTe: TFrmCTe
     object TabSheet6: TTabSheet
       Caption = 'Municipio Destino'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Label60: TLabel
         Left = 12
         Top = 42
@@ -4877,5 +4853,23 @@ object FrmCTe: TFrmCTe
       '')
     Left = 552
     Top = 275
+  end
+  object QServico: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM SERVICOS'
+      'WHERE'
+      '(SERVICO_ID = :SERVICO_ID)'
+      'AND (STATUS = '#39'A'#39')')
+    Left = 416
+    Top = 40
+    ParamData = <
+      item
+        Name = 'SERVICO_ID'
+        ParamType = ptInput
+      end>
   end
 end

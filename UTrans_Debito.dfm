@@ -32,6 +32,10 @@ object FrmTrans_Debito: TFrmTrans_Debito
     TabOrder = 0
     object Consulta: TTabSheet
       Caption = '&Consulta'
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
@@ -197,6 +201,10 @@ object FrmTrans_Debito: TFrmTrans_Debito
       Caption = '&Manuten'#231#227'o'
       ImageIndex = 1
       OnShow = ManutencaoShow
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Label2: TLabel
         Left = 6
         Top = 61
@@ -219,7 +227,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object Label3: TLabel
         Left = 556
-        Top = 87
+        Top = 113
         Width = 64
         Height = 13
         Caption = 'Fornecedor'
@@ -244,7 +252,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
         ParentFont = False
       end
       object Label5: TLabel
-        Left = 586
+        Left = 656
         Top = 61
         Width = 65
         Height = 13
@@ -259,7 +267,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object Label18: TLabel
         Left = 800
-        Top = 139
+        Top = 165
         Width = 37
         Height = 13
         Caption = 'Balan'#231'o'
@@ -288,7 +296,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object DBText2: TDBText
         Left = 743
-        Top = 87
+        Top = 113
         Width = 233
         Height = 13
         DataField = 'NOME'
@@ -343,7 +351,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object Label1: TLabel
         Left = 556
-        Top = 113
+        Top = 139
         Width = 62
         Height = 13
         Caption = 'C. de Custo'
@@ -356,7 +364,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object DBText5: TDBText
         Left = 743
-        Top = 113
+        Top = 139
         Width = 233
         Height = 13
         DataField = 'DESCRICAO'
@@ -370,7 +378,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object Label13: TLabel
         Left = 556
-        Top = 139
+        Top = 165
         Width = 52
         Height = 13
         Caption = 'N'#186' Cheque'
@@ -412,7 +420,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object btnFornecedor: TSpeedButton
         Left = 674
-        Top = 83
+        Top = 109
         Width = 64
         Height = 21
         Cursor = crHandPoint
@@ -517,7 +525,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object btnCentro_Custo: TSpeedButton
         Left = 673
-        Top = 110
+        Top = 136
         Width = 64
         Height = 21
         Cursor = crHandPoint
@@ -559,7 +567,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object btnParcelas: TSpeedButton
         Left = 747
-        Top = 188
+        Top = 189
         Width = 23
         Height = 20
         Caption = '...'
@@ -629,8 +637,8 @@ object FrmTrans_Debito: TFrmTrans_Debito
         ParentFont = False
       end
       object Label10: TLabel
-        Left = 800
-        Top = 61
+        Left = 556
+        Top = 87
         Width = 40
         Height = 13
         Caption = 'C.F.O.P.'
@@ -642,8 +650,8 @@ object FrmTrans_Debito: TFrmTrans_Debito
         ParentFont = False
       end
       object btnCFOP: TSpeedButton
-        Left = 912
-        Top = 58
+        Left = 689
+        Top = 84
         Width = 64
         Height = 21
         Cursor = crHandPoint
@@ -747,7 +755,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object Btn_Cheque: TSpeedButton
         Left = 720
-        Top = 136
+        Top = 162
         Width = 64
         Height = 21
         Cursor = crHandPoint
@@ -800,6 +808,18 @@ object FrmTrans_Debito: TFrmTrans_Debito
         Width = 46
         Height = 13
         Caption = 'Dt. Sped.'
+      end
+      object btnChaveNfe: TSpeedButton
+        Left = 592
+        Top = 59
+        Width = 58
+        Height = 20
+        Hint = 'Importar Arquivo Xml'
+        Caption = 'XML CTE'
+        Enabled = False
+        ParentShowHint = False
+        ShowHint = True
+        OnClick = btnChaveNfeClick
       end
       object Panel2: TPanel
         Left = 0
@@ -870,7 +890,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
           OnClick = btnSaveClick
         end
         object btnDiscard: TBitBtn
-          Left = 885
+          Left = 884
           Top = 6
           Width = 95
           Height = 25
@@ -882,7 +902,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object BALANCO: TComboBox
         Left = 848
-        Top = 136
+        Top = 162
         Width = 128
         Height = 21
         CharCase = ecUpperCase
@@ -921,7 +941,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object FORNECEDOR_ID: TCurrencyEdit
         Left = 624
-        Top = 84
+        Top = 110
         Width = 47
         Height = 21
         Margins.Left = 4
@@ -962,9 +982,9 @@ object FrmTrans_Debito: TFrmTrans_Debito
         OnKeyDown = DT_TRANSKeyDown
       end
       object NUM_DOC: TEdit
-        Left = 654
+        Left = 724
         Top = 58
-        Width = 60
+        Width = 85
         Height = 21
         Enabled = False
         MaxLength = 9
@@ -1023,7 +1043,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object C_CUSTO_ID: TCurrencyEdit
         Left = 624
-        Top = 110
+        Top = 136
         Width = 47
         Height = 21
         Margins.Left = 4
@@ -1039,7 +1059,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object NUM_CHEQUE: TEdit
         Left = 624
-        Top = 136
+        Top = 162
         Width = 90
         Height = 21
         Enabled = False
@@ -1079,7 +1099,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
       end
       object COND_PAGTO: TComboBox
         Left = 620
-        Top = 187
+        Top = 188
         Width = 121
         Height = 21
         CharCase = ecUpperCase
@@ -1118,7 +1138,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
         OnKeyDown = EMPRESA_IDKeyDown
       end
       object SERIE: TEdit
-        Left = 718
+        Left = 815
         Top = 58
         Width = 34
         Height = 21
@@ -1128,7 +1148,7 @@ object FrmTrans_Debito: TFrmTrans_Debito
         OnKeyDown = DT_TRANSKeyDown
       end
       object MODELO: TEdit
-        Left = 758
+        Left = 855
         Top = 58
         Width = 34
         Height = 21
@@ -1140,8 +1160,8 @@ object FrmTrans_Debito: TFrmTrans_Debito
         OnKeyDown = DT_TRANSKeyDown
       end
       object CFOP: TEdit
-        Left = 848
-        Top = 58
+        Left = 625
+        Top = 84
         Width = 61
         Height = 21
         Enabled = False
@@ -1161,6 +1181,10 @@ object FrmTrans_Debito: TFrmTrans_Debito
         TabOrder = 22
         object TabSheet1: TTabSheet
           Caption = 'Fiscal'
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label15: TLabel
             Left = 318
             Top = 9
@@ -1610,6 +1634,10 @@ object FrmTrans_Debito: TFrmTrans_Debito
         object TabSheet2: TTabSheet
           Caption = 'Imobilizado'
           ImageIndex = 1
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label20: TLabel
             Left = 6
             Top = 9

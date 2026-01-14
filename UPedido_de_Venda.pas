@@ -111,7 +111,6 @@ type
     QRLabel26: TQRLabel;
     QRDBText23: TQRDBText;
     QRShape5: TQRShape;
-    QRExpr1: TQRExpr;
     QRLabel4: TQRLabel;
     QRLabel28: TQRLabel;
     QRLabel29: TQRLabel;          
@@ -362,6 +361,7 @@ type
     PopupMenu2: TPopupMenu;
     e1: TMenuItem;
     QOpera: TFDQuery;
+    QRDBText24: TQRDBText;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -2189,7 +2189,7 @@ begin
     IQuery.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
 
     IQuery.ParamByName('ORCAMENTO_ID').AsInteger := STrToInt(orcamento_id.text);
-    IQuery.ParamByName('STATUS').AsString   := 'NORMAL';
+    IQuery.ParamByName('STATUS').AsString        := 'NORMAL';
 
     IQuery.Prepare;
     IQuery.ExecSql;
@@ -3089,6 +3089,7 @@ begin
           QSub_Detail.Append;
 
           try
+
             QSub_Detail.FieldByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
             QSub_Detail.FieldByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
             QSub_Detail.FieldByName('CFOP').AsString          := QRel.FieldByName('CFOP').AsString;
@@ -3423,9 +3424,6 @@ begin
 
       end;
     end;  }
-
-
-
 
 
 
@@ -3968,6 +3966,8 @@ end;
 procedure TFrmPedido_de_venda.FormShow(Sender: TObject);
 begin
   DBGrid1.SetFocus;
+
+
 
 
 

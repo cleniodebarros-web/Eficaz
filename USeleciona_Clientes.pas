@@ -322,7 +322,7 @@ begin
         QRel.Sql.Add('ORDER BY CLIENTES.CLIENTE_ID');
 
 
-     QRel.SQL.SaveToFile('C:\consulta_sql.sql');   
+     //QRel.SQL.SaveToFile('C:\consulta_sql.sql');
 
     end
     else

@@ -3415,7 +3415,7 @@ begin
         IQuery.Sql.Add('DELETE FROM TRANSPARCELAS');
         IQuery.Sql.Add('WHERE');
         IQuery.Sql.Add('(TRANSACAO_ID = :ORCAMENTO_ID)');
-        IQuery.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+        IQuery.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO) AND (VALOR > 0)');
 
         IQuery.ParamByName('ORCAMENTO_ID').AsInteger  := QTabela.FieldByName('ORCAMENTO_ID').AsInteger;
         IQuery.ParamByName('TIPO_TRANSACAO').AsString := 'O';
@@ -3431,13 +3431,14 @@ begin
       End
     else
     begin
+
       IQuery.Sql.Clear;
       IQuery.Sql.Add('DELETE FROM TRANSPARCELAS');
       IQuery.Sql.Add('WHERE');
       IQuery.Sql.Add('(TRANSACAO_ID = :ORCAMENTO_ID)');
-      IQuery.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+      IQuery.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO) AND (VALOR > 0)');
 
-      IQuery.ParamByName('ORCAMENTO_ID').AsInteger  := QTabela.FieldByName('ORCAMENTO_ID').AsInteger;
+      IQuery.ParamByName('ORCAMENTO_ID').AsInteger  :=  QTabela.FieldByName('ORCAMENTO_ID').AsInteger;
       IQuery.ParamByName('TIPO_TRANSACAO').AsString := 'O';
 
       IQuery.Prepare;

@@ -1,0 +1,141 @@
+object FrmData: TFrmData
+  OldCreateOrder = False
+  OnCreate = DataModuleCreate
+  Height = 276
+  Width = 372
+  object DbF_Eficaz: TFDConnection
+    Params.Strings = (
+      'Database=Eficaz_Arilmaq'
+      'User_Name=postgres'
+      'Password=eficaz1478'
+      'Server=10.0.0.42'
+      'DriverID=PG')
+    FetchOptions.AssignedValues = [evMode, evRowsetSize, evAutoClose, evAutoFetchAll]
+    FetchOptions.RowsetSize = 100
+    FetchOptions.AutoClose = False
+    ResourceOptions.AssignedValues = [rvCmdExecMode, rvAutoReconnect, rvSilentMode]
+    ResourceOptions.AutoReconnect = True
+    UpdateOptions.AssignedValues = [uvRefreshMode]
+    LoginPrompt = False
+    AfterConnect = DbF_EficazAfterConnect
+    BeforeConnect = DbF_EficazBeforeConnect
+    Left = 96
+    Top = 16
+  end
+  object QAcesso: TFDQuery
+    Connection = DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      'SELECT * FROM ACESSO'
+      'INNER JOIN FUNCIONARIOS ON FUNCIONARIOS.FUNCIONARIO_ID = '
+      'ACESSO.FUNCIONARIO_ID'
+      'WHERE'
+      '(ACESSO.FUNCIONARIO_ID = :FUNCIONARIO_ID)'
+      'AND (ACESSO.SENHA = :SENHA)')
+    Left = 96
+    Top = 208
+    ParamData = <
+      item
+        Name = 'FUNCIONARIO_ID'
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'SENHA'
+        ParamType = ptInput
+      end>
+  end
+  object Qusuarios: TFDQuery
+    Connection = DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      'SELECT DISTINCT ACESSO.FUNCIONARIO_ID, FUNCIONARIOS.NOME'
+      'FROM ACESSO'
+      'INNER JOIN FUNCIONARIOS'
+      'ON (ACESSO.FUNCIONARIO_ID = FUNCIONARIOS.FUNCIONARIO_ID)'
+      'ORDER BY FUNCIONARIOS.NOME')
+    Left = 168
+    Top = 208
+  end
+  object FDPhysPgDriverLink1: TFDPhysPgDriverLink
+    VendorLib = 'C:\Eficaz7\DllsPg\libpq.dll'
+    Left = 296
+    Top = 24
+  end
+  object FDMoniRemoteClientLink1: TFDMoniRemoteClientLink
+    Host = '10.0.0.48'
+    Left = 296
+    Top = 89
+  end
+  object FDGUIxWaitCursor1: TFDGUIxWaitCursor
+    Provider = 'Forms'
+    Left = 296
+    Top = 144
+  end
+  object FDMoniFlatFileClientLink1: TFDMoniFlatFileClientLink
+    FileName = 'C:\Temp\trace1.txt'
+    FileAppend = True
+    Left = 288
+    Top = 200
+  end
+  object QRegistro: TFDQuery
+    Connection = DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      'ALTER ROLE POSTGRES WITH ENCRYPTED PASSWORD :SENHA')
+    Left = 32
+    Top = 152
+    ParamData = <
+      item
+        Name = 'SENHA'
+        ParamType = ptInput
+      end>
+  end
+  object IdTCPClient1: TIdTCPClient
+    ConnectTimeout = 0
+    IPVersion = Id_IPv4
+    Port = 0
+    ReadTimeout = -1
+    Left = 26
+    Top = 28
+  end
+  object DBF_Nuvem: TFDConnection
+    Params.Strings = (
+      'Database=Eficaz_Braz_Atual'
+      'User_Name=postgres'
+      'Password=eficaz1478'
+      'Server=10.0.0.84'
+      'Port=5433'
+      'DriverID=PG')
+    FetchOptions.AssignedValues = [evMode, evRowsetSize, evAutoClose, evAutoFetchAll]
+    FetchOptions.RowsetSize = 100
+    FetchOptions.AutoClose = False
+    ResourceOptions.AssignedValues = [rvCmdExecMode, rvAutoReconnect, rvSilentMode]
+    ResourceOptions.AutoReconnect = True
+    UpdateOptions.AssignedValues = [uvRefreshMode]
+    LoginPrompt = False
+    Left = 168
+    Top = 16
+  end
+  object DBF_NuvemUp: TFDConnection
+    Params.Strings = (
+      'Database=Eficaz_Braz_Atual'
+      'User_Name=postgres'
+      'Password=eficaz1478'
+      'Server=10.0.0.84'
+      'Port=5433'
+      'DriverID=PG')
+    FetchOptions.AssignedValues = [evMode, evRowsetSize, evAutoClose, evAutoFetchAll]
+    FetchOptions.RowsetSize = 100
+    FetchOptions.AutoClose = False
+    ResourceOptions.AssignedValues = [rvCmdExecMode, rvAutoReconnect, rvSilentMode]
+    ResourceOptions.AutoReconnect = True
+    UpdateOptions.AssignedValues = [uvRefreshMode]
+    LoginPrompt = False
+    Left = 168
+    Top = 88
+  end
+end

@@ -5,7 +5,7 @@ object FrmProdutos: TFrmProdutos
   BorderStyle = bsSingle
   Caption = 'Produtos'
   ClientHeight = 662
-  ClientWidth = 1059
+  ClientWidth = 1062
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -40,7 +40,7 @@ object FrmProdutos: TFrmProdutos
   object Panel1: TPanel
     Left = 0
     Top = 595
-    Width = 1059
+    Width = 1062
     Height = 67
     Align = alBottom
     BevelOuter = bvNone
@@ -243,9 +243,9 @@ object FrmProdutos: TFrmProdutos
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 1059
+    Width = 1062
     Height = 576
-    ActivePage = Manutencao
+    ActivePage = Consulta
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -257,14 +257,10 @@ object FrmProdutos: TFrmProdutos
     object Consulta: TTabSheet
       Caption = '&Consulta'
       OnShow = ConsultaShow
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object Alfabeto: TTabSet
         Left = 0
         Top = 527
-        Width = 1051
+        Width = 1054
         Height = 21
         Align = alBottom
         AutoScroll = False
@@ -308,7 +304,7 @@ object FrmProdutos: TFrmProdutos
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
-        Width = 1051
+        Width = 1054
         Height = 527
         Align = alClient
         Color = clInfoBk
@@ -523,8 +519,8 @@ object FrmProdutos: TFrmProdutos
         Caption = '% M. Lucro'
       end
       object Label40: TLabel
-        Left = 814
-        Top = 497
+        Left = 568
+        Top = 526
         Width = 59
         Height = 13
         Caption = '% Comiss'#227'o'
@@ -1191,8 +1187,8 @@ object FrmProdutos: TFrmProdutos
         ParentFont = False
       end
       object Label44: TLabel
-        Left = 785
-        Top = 470
+        Left = 351
+        Top = 526
         Width = 90
         Height = 13
         Caption = 'Bloquear Desconto'
@@ -1237,10 +1233,17 @@ object FrmProdutos: TFrmProdutos
         Font.Style = []
         ParentFont = False
       end
+      object Label111: TLabel
+        Left = 777
+        Top = 471
+        Width = 98
+        Height = 13
+        Caption = '% M. Lucro Atacado'
+      end
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 1051
+        Width = 1054
         Height = 41
         Align = alTop
         BevelOuter = bvNone
@@ -1484,8 +1487,8 @@ object FrmProdutos: TFrmProdutos
         OnKeyDown = EMPRESA_IDKeyDown
       end
       object COMISSAO: TRxCalcEdit
-        Left = 882
-        Top = 494
+        Left = 636
+        Top = 523
         Width = 92
         Height = 21
         Margins.Left = 4
@@ -1615,7 +1618,7 @@ object FrmProdutos: TFrmProdutos
       end
       object IPI: TRxCalcEdit
         Left = 636
-        Top = 442
+        Top = 444
         Width = 92
         Height = 21
         Margins.Left = 4
@@ -1659,7 +1662,7 @@ object FrmProdutos: TFrmProdutos
         Top = 255
         Width = 501
         Height = 179
-        ActivePage = TabSheet14
+        ActivePage = TabSheet7
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -1671,10 +1674,6 @@ object FrmProdutos: TFrmProdutos
         object TabSheet2: TTabSheet
           Caption = 'Embalagem'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label93: TLabel
             Left = 12
             Top = 126
@@ -1954,10 +1953,6 @@ object FrmProdutos: TFrmProdutos
         object TabSheet3: TTabSheet
           Caption = 'Balan'#231'a'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label3: TLabel
             Left = 6
             Top = 35
@@ -2128,10 +2123,6 @@ object FrmProdutos: TFrmProdutos
           Font.Name = 'Tahoma'
           Font.Style = []
           ParentFont = False
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label33: TLabel
             Left = 6
             Top = 9
@@ -2302,10 +2293,6 @@ object FrmProdutos: TFrmProdutos
           ImageIndex = 9
           ParentFont = False
           OnShow = SimilarShow
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object stat1: TStatusBar
             Left = 0
             Top = 132
@@ -2407,10 +2394,7 @@ object FrmProdutos: TFrmProdutos
           Font.Style = []
           ImageIndex = 3
           ParentFont = False
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
+          OnShow = TabSheet4Show
           object Label31: TLabel
             Left = 350
             Top = 9
@@ -2581,7 +2565,13 @@ object FrmProdutos: TFrmProdutos
             Margins.Top = 1
             DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
             Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
             NumGlyphs = 2
+            ParentFont = False
             TabOrder = 4
             ZeroEmpty = False
             OnKeyDown = EMPRESA_IDKeyDown
@@ -2671,6 +2661,12 @@ object FrmProdutos: TFrmProdutos
             Height = 21
             Caption = 'Calcular '#250'ltimo Custo de Compra'
             Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            ParentFont = False
             TabOrder = 13
             OnClick = BtnCalcularCustoCompraClick
           end
@@ -2728,10 +2724,6 @@ object FrmProdutos: TFrmProdutos
               Font.Name = 'Tahoma'
               Font.Style = []
               ParentFont = False
-              ExplicitLeft = 0
-              ExplicitTop = 0
-              ExplicitWidth = 0
-              ExplicitHeight = 0
               object Label20: TLabel
                 Left = 0
                 Top = 5
@@ -2828,10 +2820,6 @@ object FrmProdutos: TFrmProdutos
               Font.Style = []
               ImageIndex = 1
               ParentFont = False
-              ExplicitLeft = 0
-              ExplicitTop = 0
-              ExplicitWidth = 0
-              ExplicitHeight = 0
               object Label21: TLabel
                 Left = 2
                 Top = 24
@@ -2937,10 +2925,6 @@ object FrmProdutos: TFrmProdutos
           Caption = 'Produ'#231#227'o'
           ImageIndex = 5
           OnShow = TabSheet6Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label73: TLabel
             Left = 6
             Top = 9
@@ -3077,10 +3061,6 @@ object FrmProdutos: TFrmProdutos
           Caption = 'Num. S'#233'rie'
           ImageIndex = 6
           OnShow = TabSheet7Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Grid_Serie: TDBGrid
             Left = 0
             Top = 0
@@ -3151,10 +3131,6 @@ object FrmProdutos: TFrmProdutos
         object TabSheet11: TTabSheet
           Caption = 'Combust'#237'vel'
           ImageIndex = 7
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label74: TLabel
             Left = 6
             Top = 9
@@ -3270,10 +3246,6 @@ object FrmProdutos: TFrmProdutos
         object Inventario: TTabSheet
           Caption = 'Corre'#231#227'o do Estoque'
           ImageIndex = 8
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object DBGrid2: TDBGrid
             Left = 191
             Top = 4
@@ -3321,10 +3293,6 @@ object FrmProdutos: TFrmProdutos
           Caption = 'Fabricante'
           ImageIndex = 8
           OnShow = TabSheet5Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Grid_Fabricante: TDBGrid
             Left = 0
             Top = 0
@@ -3393,10 +3361,6 @@ object FrmProdutos: TFrmProdutos
           ImageIndex = 10
           TabVisible = False
           OnShow = TabSheet12Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label94: TLabel
             Left = 302
             Top = 127
@@ -3501,10 +3465,6 @@ object FrmProdutos: TFrmProdutos
           ImageIndex = 11
           ParentFont = False
           OnShow = TabSheet13Show
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label98: TLabel
             Left = 18
             Top = 6
@@ -3709,10 +3669,6 @@ object FrmProdutos: TFrmProdutos
         object TabConsultaBarra: TTabSheet
           Caption = 'Consulta C'#243'digo de Barras'
           ImageIndex = 12
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object MemoBarra: TsMemo
             Left = 0
             Top = 0
@@ -3881,8 +3837,8 @@ object FrmProdutos: TFrmProdutos
       end
       object PageControl3: TPageControl
         Left = 525
-        Top = 321
-        Width = 457
+        Top = 322
+        Width = 461
         Height = 116
         ActivePage = TabSheet8
         TabOrder = 24
@@ -3976,10 +3932,6 @@ object FrmProdutos: TFrmProdutos
         object TabSheet9: TTabSheet
           Caption = 'Pis/Cofins (Entrada)'
           ImageIndex = 1
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object Label68: TLabel
             Left = 6
             Top = 9
@@ -4138,10 +4090,6 @@ object FrmProdutos: TFrmProdutos
         object TabSheet10: TTabSheet
           Caption = 'Pis/Cofins (Sa'#237'da)'
           ImageIndex = 2
-          ExplicitLeft = 0
-          ExplicitTop = 0
-          ExplicitWidth = 0
-          ExplicitHeight = 0
           object btnCst_Pis: TSpeedButton
             Left = 111
             Top = 6
@@ -4349,6 +4297,214 @@ object FrmProdutos: TFrmProdutos
             OnChange = CST_COFINSChange
             OnExit = NAT_RECExit
             OnKeyDown = DESCRICAOKeyDown
+          end
+        end
+        object TabSheet17: TTabSheet
+          Caption = 'CBS/IBS'
+          ImageIndex = 3
+          object Label104: TLabel
+            Left = 315
+            Top = 35
+            Width = 42
+            Height = 13
+            Caption = 'Al'#237'q. Cbs'
+          end
+          object Label105: TLabel
+            Left = 315
+            Top = 66
+            Width = 56
+            Height = 13
+            Caption = '% Redu'#231#227'o'
+          end
+          object Label106: TLabel
+            Left = 11
+            Top = 8
+            Width = 76
+            Height = 13
+            Caption = 'C'#243'd.  CBS/IBS'
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object btntributonovo: TSpeedButton
+            Left = 161
+            Top = 5
+            Width = 64
+            Height = 21
+            Cursor = crHandPoint
+            Caption = '(F7)'
+            Flat = True
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Glyph.Data = {
+              06020000424D0602000000000000760000002800000028000000140000000100
+              0400000000009001000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+              FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+              FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+              333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+              333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+              777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+              FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+              FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+              333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+              88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+              F777333333333088FFF003333333333337333337733333333333088FFF033333
+              333333337F33337333333333333308FFF09333333333333378F3373333333333
+              333330FF0933333333333333378F733333333333333333003333333333333333
+              33773333333333333333}
+            NumGlyphs = 2
+            ParentFont = False
+            OnClick = btntributonovoClick
+          end
+          object DBText9: TDBText
+            Left = 231
+            Top = 8
+            Width = 218
+            Height = 13
+            DataField = 'descricao'
+            DataSource = DataCbsIbs
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label107: TLabel
+            Left = 11
+            Top = 35
+            Width = 57
+            Height = 13
+            Caption = 'Cst-Cbs/Ibs'
+          end
+          object Label108: TLabel
+            Left = 119
+            Top = 35
+            Width = 102
+            Height = 13
+            Caption = 'C'#243'd Classe Tribut'#225'ria'
+          end
+          object Label109: TLabel
+            Left = 11
+            Top = 66
+            Width = 57
+            Height = 13
+            Caption = 'Al'#237'q. Ibs Uf.'
+          end
+          object Label110: TLabel
+            Left = 142
+            Top = 66
+            Width = 73
+            Height = 13
+            Caption = 'Al'#237'q. Ibs Munic.'
+          end
+          object ALIQUOTA_CBS: TRxCalcEdit
+            Left = 376
+            Top = 32
+            Width = 61
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 3
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object REDUCAO_CBS_IBS: TRxCalcEdit
+            Left = 379
+            Top = 60
+            Width = 58
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 6
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object Tributo_id_cbs_ibs: TCurrencyEdit
+            Left = 94
+            Top = 6
+            Width = 47
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 0
+            ZeroEmpty = False
+            OnExit = Tributo_id_cbs_ibsExit
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object ClassTributaria: TEdit
+            Left = 227
+            Top = 32
+            Width = 54
+            Height = 21
+            Enabled = False
+            MaxLength = 6
+            TabOrder = 2
+            OnKeyDown = DESCRICAOKeyDown
+          end
+          object Aliquota_Ibs_Uf: TRxCalcEdit
+            Left = 72
+            Top = 60
+            Width = 61
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 4
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object Aliquota_Ibs_Munic: TRxCalcEdit
+            Left = 227
+            Top = 60
+            Width = 61
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DisplayFormat = '0.00;-0.00'
+            Enabled = False
+            MaxValue = 100.000000000000000000
+            NumGlyphs = 2
+            TabOrder = 5
+            ZeroEmpty = False
+            OnKeyDown = EMPRESA_IDKeyDown
+          end
+          object cst_cbs_ibs: TCurrencyEdit
+            Left = 72
+            Top = 31
+            Width = 38
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 0
+            DisplayFormat = '0;-0'
+            Enabled = False
+            TabOrder = 1
+            ZeroEmpty = False
+            OnExit = Tributo_id_cbs_ibsExit
+            OnKeyDown = EMPRESA_IDKeyDown
           end
         end
       end
@@ -5091,8 +5247,8 @@ object FrmProdutos: TFrmProdutos
         end
       end
       object BtnReplicar: TButton
-        Left = 215
-        Top = 520
+        Left = 205
+        Top = 516
         Width = 138
         Height = 27
         Caption = 'Replicar Registro'
@@ -5117,8 +5273,8 @@ object FrmProdutos: TFrmProdutos
         OnKeyDown = EMPRESA_IDKeyDown
       end
       object SUPERVISOR: TComboBox
-        Left = 899
-        Top = 468
+        Left = 465
+        Top = 524
         Width = 75
         Height = 21
         CharCase = ecUpperCase
@@ -5245,10 +5401,36 @@ object FrmProdutos: TFrmProdutos
         Margins.Top = 1
         DecimalPlaces = 0
         DisplayFormat = '0;-0'
+        Enabled = False
         TabOrder = 49
         ZeroEmpty = False
         OnExit = FAMILIA_IDExit
         OnKeyDown = EMPRESA_IDKeyDown
+      end
+      object MARGEM_LUCRO_ATACADO: TRxCalcEdit
+        Left = 882
+        Top = 467
+        Width = 92
+        Height = 21
+        Margins.Left = 4
+        Margins.Top = 1
+        DisplayFormat = '0.00;-0.00'
+        Enabled = False
+        MaxValue = 9999.990000000000000000
+        NumGlyphs = 2
+        TabOrder = 50
+        ZeroEmpty = False
+        OnKeyDown = EMPRESA_IDKeyDown
+      end
+      object BtnLucroAtacado: TBitBtn
+        Left = 882
+        Top = 494
+        Width = 92
+        Height = 21
+        Caption = '% M. Lucro'
+        Enabled = False
+        TabOrder = 51
+        OnClick = BtnLucroAtacadoClick
       end
     end
   end
@@ -5945,7 +6127,7 @@ object FrmProdutos: TFrmProdutos
   object StatusBar1: TStatusBar
     Left = 0
     Top = 576
-    Width = 1059
+    Width = 1062
     Height = 19
     Panels = <
       item
@@ -6670,8 +6852,8 @@ object FrmProdutos: TFrmProdutos
   object PopupMenu2: TPopupMenu
     BiDiMode = bdLeftToRight
     ParentBiDiMode = False
-    Left = 776
-    Top = 240
+    Left = 456
+    Top = 472
     object MenuItem1: TMenuItem
       Caption = 'Imprimir Etiquetas'
       OnClick = MenuItem1Click
@@ -7312,8 +7494,8 @@ object FrmProdutos: TFrmProdutos
         'MILAR_ID'
       'WHERE'
       '(SIMILAR_PRODUTOS.PRODUTO_ID = :PRODUTO_ID)')
-    Left = 240
-    Top = 550
+    Left = 296
+    Top = 478
     ParamData = <
       item
         Name = 'PRODUTO_ID'
@@ -7367,8 +7549,8 @@ object FrmProdutos: TFrmProdutos
       'where'
       '  SIMILAR_ID = :SIMILAR_ID and'
       '  PRODUTO_ID = :PRODUTO_ID')
-    Left = 524
-    Top = 196
+    Left = 492
+    Top = 476
   end
   object Qlocalizacao_Estoque: TFDQuery
     AfterOpen = Qlocalizacao_EstoqueAfterOpen
@@ -7593,5 +7775,33 @@ object FrmProdutos: TFrmProdutos
         ParamType = ptInput
         Value = Null
       end>
+  end
+  object QCbsIbs: TFDQuery
+    BeforeEdit = QSimilarBeforeEdit
+    BeforePost = QSimilarBeforePost
+    BeforeDelete = QSimilarBeforeDelete
+    OnNewRecord = QSimilarNewRecord
+    MasterFields = 'object QEmpresa: TFDQuery'
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afDisable
+    SQL.Strings = (
+      'SELECT * FROM COD_CLASSTRIB'
+      'WHERE'
+      'COD_CLASSTRIB_ID = :COD_CLASSTRIB_ID ')
+    Left = 848
+    Top = 294
+    ParamData = <
+      item
+        Name = 'COD_CLASSTRIB_ID'
+        DataType = ftInteger
+        ParamType = ptInput
+        Value = Null
+      end>
+  end
+  object DataCbsIbs: TDataSource
+    DataSet = QCbsIbs
+    Left = 924
+    Top = 292
   end
 end

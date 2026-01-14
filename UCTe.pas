@@ -10,7 +10,7 @@ uses
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
   FireDAC.Comp.Client, FireDAC.Comp.DataSet, QRCtrls, QuickRpt, qrpctrls,
-  frxClass, frxDBSet;
+  frxClass, frxDBSet,ACBrDFe.Conversao;
 
 type
   TFrmCTe = class(TForm)
@@ -277,6 +277,7 @@ type
     btnIBGEOutros: TSpeedButton;
     Label77: TLabel;
     CEP_OUTROS: TMaskEdit;
+    QServico: TFDQuery;
     procedure DT_SAIDAKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure CNPJ_TRANSPORTADORKeyDown(Sender: TObject; var Key: Word;
@@ -2458,6 +2459,246 @@ begin
           Imp.ICMS.SituTrib     := cstICMSSN;
           Imp.ICMS.ICMSSN.indSN := 1;
           End;
+
+          // Reforma Tributária
+
+
+              if (FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1)  then
+              begin
+                    QServico.Close;
+                    QServico.ParamByName('SERVICO_ID').AsInteger := IQuery.FieldByName('PRODUTO_ID').AsInteger;
+                    QServico.Prepare;
+                    QServico.Open;
+
+                if not QServico.IsEmpty   Then
+                Begin
+                  with imp do
+                  Begin
+
+
+                      {
+                      //  Informações do tributo: Imposto Seletivo
+                      ISel.CSTIS := cstis000;
+                      ISel.cClassTribIS := '000001';
+
+                      ISel.vBCIS := 100;
+                      ISel.pIS := 5;
+                      ISel.pISEspec := 5;
+                      ISel.uTrib := 'UNIDAD';
+                      ISel.qTrib := 10;
+                      ISel.vIS := 100;
+                       }
+
+                     //   Utilize os CST (cst000, cst200, cst220 e cst510) e os cClassTrib
+                     //   correspondentes para gerar o grupo IBSCBS
+                     //   Utilize o CST cst620 e os cClassTrib correspondentes para gerar o grupo
+                     //   IBSCBSMono
+
+
+                      //  Informações do tributo: IBS / CBS
+                    IF  (QServico.FieldByName('ALIQUOTA_IBS_UF').AsFloat > 0) Then
+                    begin
+
+                      if QServico.FieldByName('CST_CBS_IBS').AsInteger = 0 Then
+                      IBSCBS.CST :=  cst000
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 10 Then
+                      IBSCBS.CST :=  cst010
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 11 Then
+                      IBSCBS.CST :=  cst011
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 200 Then
+                      IBSCBS.CST :=  cst200
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 221 Then
+                      IBSCBS.CST :=  cst221
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 222 Then
+                      IBSCBS.CST :=  cst222
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 400 Then
+                      IBSCBS.CST :=  cst400
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 410 Then
+                      IBSCBS.CST :=  cst410
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 510 Then
+                      IBSCBS.CST :=  cst510
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 515 Then
+                      IBSCBS.CST :=  cst515
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 550 Then
+                      IBSCBS.CST :=  cst550
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 620 Then
+                      IBSCBS.CST :=  cst620
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 800 Then
+                      IBSCBS.CST :=  cst800
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 810 Then
+                      IBSCBS.CST :=  cst810
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 811 Then
+                      IBSCBS.CST :=  cst811
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 820 Then
+                      IBSCBS.CST :=  cst820
+                      Else   if QServico.FieldByName('CST_CBS_IBS').AsInteger = 830 Then
+                      IBSCBS.CST :=  cst830
+                      Else
+                      IBSCBS.CST :=  cst000;
+
+
+                      IBSCBS.cClassTrib := QServico.FieldByName('CLASSTRIBUTARIA').AsString;
+                      //IBSCBS.indDoacao := tieNenhum;
+
+
+                      vTotDFe               := IQuery.FieldByName('VR_BASE_CBSIBS').AsFloat ;
+                      IBSCBS.gIBSCBS.vBC    := IQuery.FieldByName('VR_BASE_CBSIBS').AsFloat ;
+
+                      IBSCBS.gIBSCBS.gIBSUF.pIBS := QServico.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+                      IBSCBS.gIBSCBS.gIBSUF.vIBS := IQuery.FieldByName('VR_IBSUF').AsFloat;
+
+                      IBSCBS.gIBSCBS.gIBSUF.gDif.pDif := 0;
+                      IBSCBS.gIBSCBS.gIBSUF.gDif.vDif := 0;
+
+                      IBSCBS.gIBSCBS.gIBSUF.gDevTrib.vDevTrib := 0;
+
+                        if (QServico.FieldByName('ALIQUOTA_IBS_UF').AsFloat > 0)  Then
+                        begin
+                          IF (QServico.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0) Then
+                          Begin
+                          IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := QServico.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                          IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0.04;
+                          End
+                          Else
+                          Begin
+                          IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := 0;
+                          IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0;
+                          End;
+
+                        end
+                        Else
+                        Begin
+                        IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := 0;
+                        IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0;
+                        End;
+
+                      IBSCBS.gIBSCBS.gIBSMun.pIBS := 0;//QProdutos.FieldByName('ALIQUOTA_IBS_MUNIC').AsFloat;
+                      IBSCBS.gIBSCBS.gIBSMun.vIBS := 0;//QItens.FieldByName('Vr_IBSMUNIC').AsFloat;
+
+                      //IBSCBS.gIBSCBS.gIBSMun.gDif.pDif := 0;
+                      //IBSCBS.gIBSCBS.gIBSMun.gDif.vDif := 0;
+
+                      //IBSCBS.gIBSCBS.gIBSMun.gDevTrib.vDevTrib := 0;
+
+                      IBSCBS.gIBSCBS.gIBSMun.gRed.pRedAliq := QServico.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                      IBSCBS.gIBSCBS.gIBSMun.gRed.pAliqEfet := 0;
+
+
+                      // vIBS = vIBSUF + IQuery
+                      IBSCBS.gIBSCBS.vIBS :=  IQuery.FieldByName('Vr_IBSUF').AsFloat + IQuery.FieldByName('Vr_IBSMUNIC').AsFloat ;
+
+                      IBSCBS.gIBSCBS.gCBS.pCBS :=  QServico.FieldByName('ALIQUOTA_CBS').AsFloat;
+                      IBSCBS.gIBSCBS.gCBS.vCBS :=  IQuery.FieldByName('VR_CBS').AsFloat;
+
+                      IBSCBS.gIBSCBS.gCBS.gDif.pDif := 0;
+                      IBSCBS.gIBSCBS.gCBS.gDif.vDif := 0;
+
+                      IBSCBS.gIBSCBS.gCBS.gDevTrib.vDevTrib := 0;
+
+                      if (QServico.FieldByName('ALIQUOTA_CBS').AsFloat > 0) Then
+                      Begin
+
+                       if (QServico.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0)  Then
+                       begin
+                       IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq := QServico.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                       IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0.36;
+                       end
+                       Else
+                       Begin
+                       IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq := 0;
+                       IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0;
+                       End;
+
+                      End
+                      Else
+                      Begin
+                      IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq :=0;
+                      IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0;
+                      End;
+
+                      {
+
+
+                      IBSCBS.gIBSCBS.gTribRegular.CSTReg := cst000;
+                      IBSCBS.gIBSCBS.gTribRegular.cClassTribReg := '000001';
+                      IBSCBS.gIBSCBS.gTribRegular.pAliqEfetRegIBSUF := 5;
+                      IBSCBS.gIBSCBS.gTribRegular.vTribRegIBSUF := 50;
+                      IBSCBS.gIBSCBS.gTribRegular.pAliqEfetRegIBSMun := 5;
+                      IBSCBS.gIBSCBS.gTribRegular.vTribRegIBSMun := 50;
+                      IBSCBS.gIBSCBS.gTribRegular.pAliqEfetRegCBS := 5;
+                      IBSCBS.gIBSCBS.gTribRegular.vTribRegCBS := 50;
+
+                      // Tipo Tributação Compra Governamental
+                      IBSCBS.gIBSCBS.gTribCompraGov.pAliqIBSUF := 5;
+                      IBSCBS.gIBSCBS.gTribCompraGov.vTribIBSUF := 50;
+                      IBSCBS.gIBSCBS.gTribCompraGov.pAliqIBSMun := 5;
+                      IBSCBS.gIBSCBS.gTribCompraGov.vTribIBSMun := 50;
+                      IBSCBS.gIBSCBS.gTribCompraGov.pAliqCBS := 5;
+                      IBSCBS.gIBSCBS.gTribCompraGov.vTribCBS := 50;
+
+                      //  Informações do tributo: IBS / CBS em operações com imposto monofásico
+                      IBSCBS.gIBSCBSMono.gMonoPadrao.qBCMono := 1;
+                      IBSCBS.gIBSCBSMono.gMonoPadrao.adRemIBS := 5;
+                      IBSCBS.gIBSCBSMono.gMonoPadrao.adRemCBS := 5;
+                      IBSCBS.gIBSCBSMono.gMonoPadrao.vIBSMono := 100;
+                      IBSCBS.gIBSCBSMono.gMonoPadrao.vCBSMono := 100;
+
+                      IBSCBS.gIBSCBSMono.gMonoReten.qBCMonoReten := 1;
+                      IBSCBS.gIBSCBSMono.gMonoReten.adRemIBSReten := 5;
+                      IBSCBS.gIBSCBSMono.gMonoReten.vIBSMonoReten := 100;
+                      IBSCBS.gIBSCBSMono.gMonoReten.vCBSMonoReten := 100;
+
+                      IBSCBS.gIBSCBSMono.gMonoRet.qBCMonoRet := 1;
+                      IBSCBS.gIBSCBSMono.gMonoRet.adRemIBSRet := 5;
+                      IBSCBS.gIBSCBSMono.gMonoRet.vIBSMonoRet := 100;
+                      IBSCBS.gIBSCBSMono.gMonoRet.vCBSMonoRet := 100;
+
+                      IBSCBS.gIBSCBSMono.gMonoDif.pDifIBS := 5;
+                      IBSCBS.gIBSCBSMono.gMonoDif.vIBSMonoDif := 100;
+                      IBSCBS.gIBSCBSMono.gMonoDif.pDifCBS := 5;
+                      IBSCBS.gIBSCBSMono.gMonoDif.vCBSMonoDif := 100;
+
+                      IBSCBS.gIBSCBSMono.vTotIBSMonoItem := 100;
+                      IBSCBS.gIBSCBSMono.vTotCBSMonoItem := 100;
+
+                      //  Informações da Transferencia de Crédito
+                      IBSCBS.gTransfCred.vIBS := 100;
+                      IBSCBS.gTransfCred.vCBS := 100;
+
+                      //  Informações Ajuste de Competência
+                      IBSCBS.gAjusteCompet.competApur := Date;
+                      IBSCBS.gAjusteCompet.vIBS := 100;
+                      IBSCBS.gAjusteCompet.vCBS := 100;
+
+                      //  Informações Estorno de Crédito
+                      IBSCBS.gEstornoCred.vIBSEstCred := 100;
+                      IBSCBS.gEstornoCred.vCBSEstCred := 100;
+
+                      //  Informações do Crédito Presumido Operacional
+
+                      IBSCBS.gCredPresOper.cCredPres := cpNenhum;
+                      IBSCBS.gCredPresOper.vBCCredPres := QItens.FieldByName('VR_TOTAL').AsFloat;
+                      IBSCBS.gCredPresOper.gIBSCredPres.pCredPres := 5;
+                      IBSCBS.gCredPresOper.gIBSCredPres.vCredPres := QItens.FieldByName('VR_TOTAL').AsFloat;
+                      IBSCBS.gCredPresOper.gIBSCredPres.vCredPresCondSus := 0;
+                      IBSCBS.gCredPresOper.gCBSCredPres.pCredPres := 5;
+                      IBSCBS.gCredPresOper.gCBSCredPres.vCredPres := QItens.FieldByName('VR_TOTAL').AsFloat;
+                      IBSCBS.gCredPresOper.gCBSCredPres.vCredPresCondSus := 0;
+
+                      //  Informações do Crédito Presumido IBS ZFM
+                      // tcpNenhum, tcpSemCredito, tcpBensConsumoFinal, tcpBensCapital,
+                      // tcpBensIntermediarios, tcpBensInformaticaOutros
+
+                      IBSCBS.gCredPresIBSZFM.competApur        := Date;
+                      IBSCBS.gCredPresIBSZFM.tpCredPresIBSZFM  := tcpNenhum;
+                      IBSCBS.gCredPresIBSZFM.vCredPresIBSZFM   := 0; //QItens.FieldByName('VR_TOTAL').AsFloat;
+                      }
+
+
+                    End;
+                  End;
+                End;
+              end;
 
           IQuery.Next;
 

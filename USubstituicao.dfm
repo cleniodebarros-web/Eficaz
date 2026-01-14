@@ -108,7 +108,7 @@ object FrmSubstituicao: TFrmSubstituicao
     Top = 8
     Width = 791
     Height = 475
-    ActivePage = TabSheet5
+    ActivePage = TabSheet3
     TabOrder = 2
     object TabSheet3: TTabSheet
       Caption = 'Substitui'#231#227'o Tribut'#225'ria'
@@ -947,6 +947,10 @@ object FrmSubstituicao: TFrmSubstituicao
           object TabSheet2: TTabSheet
             Caption = 'FCP-ST'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object Label31: TLabel
               Left = 5
               Top = 6
@@ -1367,6 +1371,10 @@ object FrmSubstituicao: TFrmSubstituicao
     object TabSheet4: TTabSheet
       Caption = 'Inconsist'#234'ncias'
       ImageIndex = 1
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object Panel5: TPanel
         Left = 0
         Top = 0
@@ -1942,8 +1950,8 @@ object FrmSubstituicao: TFrmSubstituicao
     UpdateOptions.AssignedValues = [uvCheckRequired]
     UpdateOptions.CheckRequired = False
     StoreDefs = True
-    Left = 204
-    Top = 456
+    Left = 444
+    Top = 424
     object Table_InconsistenciasProduto_id: TIntegerField
       DisplayLabel = 'Produto'
       DisplayWidth = 9
@@ -1972,14 +1980,14 @@ object FrmSubstituicao: TFrmSubstituicao
   object Data_Inconsistencias: TDataSource
     AutoEdit = False
     DataSet = Table_Inconsistencias
-    Left = 273
-    Top = 464
+    Left = 281
+    Top = 424
   end
   object ImageList1: TImageList
-    Left = 324
-    Top = 472
+    Left = 356
+    Top = 424
     Bitmap = {
-      494C010105000C008C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010105000C00940010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000002000000001002000000000000020
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000A08

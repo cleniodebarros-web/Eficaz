@@ -4,7 +4,11 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, Buttons, ExtCtrls, Mask, rxToolEdit, rxCurrEdit, pcnConversao;
+  Dialogs, StdCtrls, Buttons, ExtCtrls, Mask, rxToolEdit, rxCurrEdit, pcnConversao,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, Data.DB, FireDAC.Comp.DataSet,
+  FireDAC.Comp.Client;
 
 type
   TFrmCarta_Correcao = class(TForm)
@@ -49,29 +53,41 @@ uses
 
 procedure TFrmCarta_Correcao.btnChaveNfeClick(Sender: TObject);
 begin
-    FrmPrincipal.OpenDialog1.Title      := 'Selecione a NFE';
-    FrmPrincipal.OpenDialog1.DefaultExt := '*-nfe.XML';
-    FrmPrincipal.OpenDialog1.Filter     := 'Arquivos NFE (*-nfe.XML)|*-nfe.XML|Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
-    FrmPrincipal.OpenDialog1.InitialDir := FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe;
+  FrmPrincipal.OpenDialog1.Title      := 'Selecione a NFE';
+  FrmPrincipal.OpenDialog1.DefaultExt := '*-nfe.XML';
+  FrmPrincipal.OpenDialog1.Filter     := 'Arquivos NFE (*-nfe.XML)|*-nfe.XML|Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
+  FrmPrincipal.OpenDialog1.InitialDir := FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe;
 
-    if FrmPrincipal.OpenDialog1.Execute then
-    Begin
+  if FrmPrincipal.OpenDialog1.Execute then
+  Begin
 
-     if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorCNPJ) and (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorMes)   then
-     CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +2 , 44)
+    if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorCNPJ) and (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorMes)   then
+      CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +2 , 44)
 
-     Else if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorCNPJ) then
-     CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +2 , 44)
+    Else if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorCNPJ) then
+      CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +2 , 44)
 
-     Else if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorMes) then
-     CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +2 , 44)
+    Else if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorMes) then
+      CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +2 , 44)
 
-     Else
-     CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +1, 44);
+    Else
+      CHAVE.Text := COPY(FrmPrincipal.OpenDialog1.FileName,length(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe) +1, 44);
 
+    FrmPrincipal.ACBrNFe1.Configuracoes.WebServices.Visualizar := False;
+    try
+      FrmPrincipal.ACBrNFe1.NotasFiscais.Clear;
+      FrmPrincipal.ACBrNFe1.Consultar(CHAVE.Text);
+    except
 
-    Seq_evento.Text := '1';
-    End;
+    end;
+    try
+      Seq_evento.Text := IntToStr(FrmPrincipal.ACBrNFe1.WebServices.Consulta.procEventoNFe.Items[0].RetEventoNFe.retEvento.Items[0].RetInfEvento.nSeqEvento + 1);
+    except
+      Seq_evento.Text := '1';
+    end;
+    FrmPrincipal.ACBrNFe1.Configuracoes.WebServices.Visualizar := True;
+
+  End;
 end;
 
 procedure TFrmCarta_Correcao.btnExecutaClick(Sender: TObject);
@@ -138,13 +154,18 @@ begin
     FrmPrincipal.OpenDialog1.Filter     := 'Arquivos XML (*procEventoNFe.XML)|*procEventoNFe.XML|Todos os Arquivos (*.*)|*.*';
     FrmPrincipal.OpenDialog1.InitialDir := FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathEvento(teCCe);
 
-    if FrmPrincipal.OpenDialog1.Execute then
-    begin
-      FrmPrincipal.ACBrNFe1.EventoNFe.Evento.Clear;
-      FrmPrincipal.ACBrNFe1.EventoNFe.LerXML(FrmPrincipal.OpenDialog1.FileName) ;
-      // ExtractFilePath(ParamStr(0)) + 'NFe\' + CHAVE.Text + '-procEventoNFe.xml'
-      FrmPrincipal.ACBrNFe1.ImprimirEvento;
-    end;
+    FrmPrincipal.ACBrNFe1.EventoNFe.Evento.Clear;
+
+    if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorCNPJ) and (Not FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorMes) Then
+    FrmPrincipal.ACBrNFe1.EventoNFe.LerXML(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.PathNfe + SemMascara(FrmPrincipal.QEmpresa.FieldbyName('CNPJ').AsString) +  '\110110' + Chave.Text + StrZero(Seq_evento.Text,2,0) + '-procEventoNFe.xml')
+    Else if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorMes) and (Not FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorCNPJ) Then
+    FrmPrincipal.ACBrNFe1.EventoNFe.LerXML(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.PathNfe  + Copy(DateToStr(date),7,4) + Copy(DateToStr(date),4,2) + '\110110' + Chave.Text + StrZero(Seq_evento.Text,2,0) + '-procEventoNFe.xml')
+    Else if (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorCNPJ) and (FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.SepararPorMes) Then
+    FrmPrincipal.ACBrNFe1.EventoNFe.LerXML(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.PathNfe + SemMascara(FrmPrincipal.QEmpresa.FieldbyName('CNPJ').AsString) + '\' + Copy(DateToStr(date),7,4) + Copy(DateToStr(date),4,2) + '\110110' + Chave.Text + StrZero(Seq_evento.Text,2,0) + '-procEventoNFe.xml')
+    Else
+    FrmPrincipal.ACBrNFe1.EventoNFe.LerXML(FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.PathNfe + '110110' + Chave.Text + StrZero(Seq_evento.Text,2,0) + '-procEventoNFe.xml');
+
+    FrmPrincipal.ACBrNFe1.ImprimirEvento;
   finally
     //FrmPrincipal.ACBrNFe1.DANFE := FrmPrincipal.ACBrNFeDANFERL1;
 

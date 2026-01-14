@@ -56,6 +56,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure FormKeyPress(Sender: TObject; var Key: Char);
+    procedure Ent_SaiDrawCell(Sender: TObject; ACol, ARow: Integer; Rect: TRect;
+      State: TGridDrawState);
   private
     { Private declarations }
   public
@@ -101,7 +103,7 @@ procedure TFrmFicha_Financeira.Display;
 var
 X, AA, BB, I, J, DIA: Integer;
 MES: array[1..6] of String;
-S1, S2, S3, S4, CP: array[1..6] of Real;
+S1, S2, S3, S4, C1, C2, C3, C4, CP: array[1..6] of Real;
 Sugestao: Real;
 begin
   try
@@ -143,8 +145,12 @@ begin
     Ent_Sai.Cells[2, 0] := 'Vd. 2ª Sem.';
     Ent_Sai.Cells[3, 0] := 'Vd. 3ª Sem.';
     Ent_Sai.Cells[4, 0] := 'Vd. 4ª Sem.';
-    Ent_Sai.Cells[5, 0] := 'Vd. Total';
-    Ent_Sai.Cells[6, 0] := 'Compras';
+    Ent_Sai.Cells[5, 0] := 'Cpr 1ª Sem.';
+    Ent_Sai.Cells[6, 0] := 'Cpr 2ª Sem.';
+    Ent_Sai.Cells[7, 0] := 'Cpr 3ª Sem.';
+    Ent_Sai.Cells[8, 0] := 'Cpr 4ª Sem.';
+    Ent_Sai.Cells[9, 0] := 'Vd. Total';
+    Ent_Sai.Cells[10, 0] := 'Compras';
 
     AA := StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 2));
     BB := StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 7, 4));
@@ -157,6 +163,10 @@ begin
       S2[X]               := 0;
       S3[X]               := 0;
       S4[X]               := 0;
+      C1[X]               := 0;
+      C2[X]               := 0;
+      C3[X]               := 0;
+      C4[X]               := 0;
       CP[X]               := 0;
       AA                  := AA - 1;
 
@@ -187,7 +197,17 @@ begin
         end;
 
         if QRel.FieldByName('CONDUTA').AsString = '02' then
+        begin
           CP[1] := CP[1] + QRel.FieldByName('QUANTIDADE').AsFloat;
+          if DIA <= 7 then
+            C1[1] := C1[1] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 7) and (DIA <= 14) then
+            C2[1] := C2[1] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 14) and (DIA <= 21) then
+            C3[1] := C3[1] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if DIA > 21 then
+            C4[1] := C4[1] + QRel.FieldByName('QUANTIDADE').AsFloat;
+        end;
       end;
 
       if Copy(QRel.FieldByName('DT_TRANS').AsString, 4, 7) = MES[2] then
@@ -199,12 +219,23 @@ begin
           else if (DIA > 7) and (DIA <= 14) then
             S2[2] := S2[2] + QRel.FieldByName('QUANTIDADE').AsFloat
           else if (DIA > 14) and (DIA <= 21) then
-             S3[2] := S3[2] + QRel.FieldByName('QUANTIDADE').AsFloat
+            S3[2] := S3[2] + QRel.FieldByName('QUANTIDADE').AsFloat
           else if DIA > 21 then
             S4[2] := S4[2] + QRel.FieldByName('QUANTIDADE').AsFloat;
         end;
+
         if QRel.FieldByName('CONDUTA').AsString = '02' then
+        begin
           CP[2] := CP[2] + QRel.FieldByName('QUANTIDADE').AsFloat;
+          if DIA <= 7 then
+            C1[2] := C1[2] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 7) and (DIA <= 14) then
+            C2[2] := C2[2] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 14) and (DIA <= 21) then
+            C3[2] := C3[2] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if DIA > 21 then
+            C4[2] := C4[2] + QRel.FieldByName('QUANTIDADE').AsFloat;
+        end;
       end;
 
       if Copy(QRel.FieldByName('DT_TRANS').AsString, 4, 7) = MES[3] then
@@ -222,7 +253,17 @@ begin
         end;
 
         if QRel.FieldByName('CONDUTA').AsString = '02' then
+        begin
           CP[3] := CP[3] + QRel.FieldByName('QUANTIDADE').AsFloat;
+          if DIA <= 7 then
+            C1[3] := C1[3] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 7) and (DIA <= 14) then
+            C2[3] := C2[3] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 14) and (DIA <= 21) then
+            C3[3] := C3[3] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if DIA > 21 then
+            C4[3] := C4[3] + QRel.FieldByName('QUANTIDADE').AsFloat;
+        end;
       end;
 
       if Copy(QRel.FieldByName('DT_TRANS').AsString, 4, 7) = MES[4] then
@@ -240,7 +281,17 @@ begin
         end;
 
         if QRel.FieldByName('CONDUTA').AsString = '02' then
+        begin
           CP[4] := CP[4] + QRel.FieldByName('QUANTIDADE').AsFloat;
+          if DIA <= 7 then
+            C1[4] := C1[4] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 7) and (DIA <= 14) then
+            C2[4] := C2[4] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 14) and (DIA <= 21) then
+            C3[4] := C3[4] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if DIA > 21 then
+            C4[4] := C4[4] + QRel.FieldByName('QUANTIDADE').AsFloat;
+        end;
       end;
 
       if Copy(QRel.FieldByName('DT_TRANS').AsString, 4, 7) = MES[5] then
@@ -258,7 +309,17 @@ begin
         end;
 
         if QRel.FieldByName('CONDUTA').AsString = '02' then
+        begin
           CP[5] := CP[5] + QRel.FieldByName('QUANTIDADE').AsFloat;
+          if DIA <= 7 then
+            C1[5] := C1[5] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 7) and (DIA <= 14) then
+            C2[5] := C2[5] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 14) and (DIA <= 21) then
+            C3[5] := C3[5] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if DIA > 21 then
+            C4[5] := C4[5] + QRel.FieldByName('QUANTIDADE').AsFloat;
+        end;
       end;
 
       if Copy(QRel.FieldByName('DT_TRANS').AsString, 4, 7) = MES[6] then
@@ -276,12 +337,23 @@ begin
         end;
 
         if QRel.FieldByName('CONDUTA').AsString = '02' then
+        begin
           CP[6] := CP[6] + QRel.FieldByName('QUANTIDADE').AsFloat;
+          if DIA <= 7 then
+            C1[6] := C1[6] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 7) and (DIA <= 14) then
+            C2[6] := C2[6] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if (DIA > 14) and (DIA <= 21) then
+            C3[6] := C3[6] + QRel.FieldByName('QUANTIDADE').AsFloat
+          else if DIA > 21 then
+            C4[6] := C4[6] + QRel.FieldByName('QUANTIDADE').AsFloat;
+        end;
       end;
 
       Application.ProcessMessages;
       QRel.Next;
     end;
+
 
     Ent_Sai.Cells[1, 1] := FormatFloat('0.00', S1[1]);
     Ent_Sai.Cells[1, 2] := FormatFloat('0.00', S1[2]);
@@ -289,36 +361,69 @@ begin
     Ent_Sai.Cells[1, 4] := FormatFloat('0.00', S1[4]);
     Ent_Sai.Cells[1, 5] := FormatFloat('0.00', S1[5]);
     Ent_Sai.Cells[1, 6] := FormatFloat('0.00', S1[6]);
+
     Ent_Sai.Cells[2, 1] := FormatFloat('0.00', S2[1]);
     Ent_Sai.Cells[2, 2] := FormatFloat('0.00', S2[2]);
     Ent_Sai.Cells[2, 3] := FormatFloat('0.00', S2[3]);
     Ent_Sai.Cells[2, 4] := FormatFloat('0.00', S2[4]);
     Ent_Sai.Cells[2, 5] := FormatFloat('0.00', S2[5]);
     Ent_Sai.Cells[2, 6] := FormatFloat('0.00', S2[6]);
+
     Ent_Sai.Cells[3, 1] := FormatFloat('0.00', S3[1]);
     Ent_Sai.Cells[3, 2] := FormatFloat('0.00', S3[2]);
     Ent_Sai.Cells[3, 3] := FormatFloat('0.00', S3[3]);
     Ent_Sai.Cells[3, 4] := FormatFloat('0.00', S3[4]);
     Ent_Sai.Cells[3, 5] := FormatFloat('0.00', S3[5]);
     Ent_Sai.Cells[3, 6] := FormatFloat('0.00', S3[6]);
+
     Ent_Sai.Cells[4, 1] := FormatFloat('0.00', S4[1]);
     Ent_Sai.Cells[4, 2] := FormatFloat('0.00', S4[2]);
     Ent_Sai.Cells[4, 3] := FormatFloat('0.00', S4[3]);
     Ent_Sai.Cells[4, 4] := FormatFloat('0.00', S4[4]);
     Ent_Sai.Cells[4, 5] := FormatFloat('0.00', S4[5]);
     Ent_Sai.Cells[4, 6] := FormatFloat('0.00', S4[6]);
-    Ent_Sai.Cells[5, 1] := FormatFloat('0.00', S1[1] + S2[1] + S3[1] + S4[1]);
-    Ent_Sai.Cells[5, 2] := FormatFloat('0.00', S1[2] + S2[2] + S3[2] + S4[2]);
-    Ent_Sai.Cells[5, 3] := FormatFloat('0.00', S1[3] + S2[3] + S3[3] + S4[3]);
-    Ent_Sai.Cells[5, 4] := FormatFloat('0.00', S1[4] + S2[4] + S3[4] + S4[4]);
-    Ent_Sai.Cells[5, 5] := FormatFloat('0.00', S1[5] + S2[5] + S3[5] + S4[5]);
-    Ent_Sai.Cells[5, 6] := FormatFloat('0.00', S1[6] + S2[6] + S3[6] + S4[6]);
-    Ent_Sai.Cells[6, 1] := FormatFloat('0.00', CP[1]);
-    Ent_Sai.Cells[6, 2] := FormatFloat('0.00', CP[2]);
-    Ent_Sai.Cells[6, 3] := FormatFloat('0.00', CP[3]);
-    Ent_Sai.Cells[6, 4] := FormatFloat('0.00', CP[4]);
-    Ent_Sai.Cells[6, 5] := FormatFloat('0.00', CP[5]);
-    Ent_Sai.Cells[6, 6] := FormatFloat('0.00', CP[6]);
+
+    Ent_Sai.Cells[5, 1] := FormatFloat('0.00', C1[1]);
+    Ent_Sai.Cells[5, 2] := FormatFloat('0.00', C1[2]);
+    Ent_Sai.Cells[5, 3] := FormatFloat('0.00', C1[3]);
+    Ent_Sai.Cells[5, 4] := FormatFloat('0.00', C1[4]);
+    Ent_Sai.Cells[5, 5] := FormatFloat('0.00', C1[5]);
+    Ent_Sai.Cells[5, 6] := FormatFloat('0.00', C1[6]);
+
+    Ent_Sai.Cells[6, 1] := FormatFloat('0.00', C2[1]);
+    Ent_Sai.Cells[6, 2] := FormatFloat('0.00', C2[2]);
+    Ent_Sai.Cells[6, 3] := FormatFloat('0.00', C2[3]);
+    Ent_Sai.Cells[6, 4] := FormatFloat('0.00', C2[4]);
+    Ent_Sai.Cells[6, 5] := FormatFloat('0.00', C2[5]);
+    Ent_Sai.Cells[6, 6] := FormatFloat('0.00', C2[6]);
+
+    Ent_Sai.Cells[7, 1] := FormatFloat('0.00', C3[1]);
+    Ent_Sai.Cells[7, 2] := FormatFloat('0.00', C3[2]);
+    Ent_Sai.Cells[7, 3] := FormatFloat('0.00', C3[3]);
+    Ent_Sai.Cells[7, 4] := FormatFloat('0.00', C3[4]);
+    Ent_Sai.Cells[7, 5] := FormatFloat('0.00', C3[5]);
+    Ent_Sai.Cells[7, 6] := FormatFloat('0.00', C3[6]);
+
+    Ent_Sai.Cells[8, 1] := FormatFloat('0.00', C4[1]);
+    Ent_Sai.Cells[8, 2] := FormatFloat('0.00', C4[2]);
+    Ent_Sai.Cells[8, 3] := FormatFloat('0.00', C4[3]);
+    Ent_Sai.Cells[8, 4] := FormatFloat('0.00', C4[4]);
+    Ent_Sai.Cells[8, 5] := FormatFloat('0.00', C4[5]);
+    Ent_Sai.Cells[8, 6] := FormatFloat('0.00', C4[6]);
+
+    Ent_Sai.Cells[9, 1] := FormatFloat('0.00', S1[1] + S2[1] + S3[1] + S4[1]);
+    Ent_Sai.Cells[9, 2] := FormatFloat('0.00', S1[2] + S2[2] + S3[2] + S4[2]);
+    Ent_Sai.Cells[9, 3] := FormatFloat('0.00', S1[3] + S2[3] + S3[3] + S4[3]);
+    Ent_Sai.Cells[9, 4] := FormatFloat('0.00', S1[4] + S2[4] + S3[4] + S4[4]);
+    Ent_Sai.Cells[9, 5] := FormatFloat('0.00', S1[5] + S2[5] + S3[5] + S4[5]);
+    Ent_Sai.Cells[9, 6] := FormatFloat('0.00', S1[6] + S2[6] + S3[6] + S4[6]);
+
+    Ent_Sai.Cells[10, 1] := FormatFloat('0.00', CP[1]);
+    Ent_Sai.Cells[10, 2] := FormatFloat('0.00', CP[2]);
+    Ent_Sai.Cells[10, 3] := FormatFloat('0.00', CP[3]);
+    Ent_Sai.Cells[10, 4] := FormatFloat('0.00', CP[4]);
+    Ent_Sai.Cells[10, 5] := FormatFloat('0.00', CP[5]);
+    Ent_Sai.Cells[10, 6] := FormatFloat('0.00', CP[6]);
 
     for I := 1 to 4 do
     begin
@@ -327,7 +432,7 @@ begin
       for J := 1 to 6 do
         Graf.Series[I-1].Add(StrToInt(Copy(Ent_Sai.Cells[I, J], 1, length(Ent_Sai.Cells[I, J]) - 3)),
         '', Graf.Series[I-1].SeriesColor);
-        
+
 
     end;
 
@@ -358,6 +463,38 @@ begin
     btnExecuta.Enabled := True;
     btnRetorna.Enabled := True;
   end;
+end;
+
+procedure TFrmFicha_Financeira.Ent_SaiDrawCell(Sender: TObject; ACol,
+  ARow: Integer; Rect: TRect; State: TGridDrawState);
+var RectForText: TRect;
+begin
+  if ACol in [1,2,3,4,9] then
+    with TStringGrid(Sender) do
+    begin
+      Canvas.Brush.Color := clWebLightGreen;
+      Canvas.FillRect(Rect);
+      if Ent_Sai.Cells[ACol,ARow] = '0,00' then
+        Canvas.Font.Color := clGray
+      else
+        Canvas.Font.Color := clBlack;
+      RectForText := Rect;
+      InflateRect(RectForText, -2, -2);
+      Canvas.TextOut(Rect.Left+2,Rect.Top+2,Cells[ACol, ARow]);
+    end;
+  if ACol in [5,6,7,8,10] then
+    with TStringGrid(Sender) do
+    begin
+      Canvas.Brush.Color := clWebLightCoral;
+      Canvas.FillRect(Rect);
+      if Ent_Sai.Cells[ACol,ARow] = '0,00' then
+        Canvas.Font.Color := clGray
+      else
+        Canvas.Font.Color := clBlack;
+      RectForText := Rect;
+      InflateRect(RectForText, -2, -2);
+      Canvas.TextOut(Rect.Left+2,Rect.Top+2,Cells[ACol, ARow]);
+    end;
 end;
 
 procedure TFrmFicha_Financeira.btnExecutaClick(Sender: TObject);

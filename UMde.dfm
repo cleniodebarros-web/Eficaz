@@ -1018,6 +1018,12 @@ object FrmMde: TFrmMde
         Width = 732
         Height = 151
         ActivePage = TabSheet1
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
         TabOrder = 32
         object TabSheet1: TTabSheet
           Caption = 'Ve'#237'culo'
@@ -1333,7 +1339,7 @@ object FrmMde: TFrmMde
             OnKeyDown = CNPJ_TRANSPORTADORKeyDown
           end
           object Valor_carga: TRxCalcEdit
-            Left = 600
+            Left = 602
             Top = 102
             Width = 100
             Height = 21
@@ -1947,8 +1953,42 @@ object FrmMde: TFrmMde
           end
         end
         object TabSheet4: TTabSheet
-          Caption = 'Lista de N'#250'meros da Averba'#231#227'o'
+          Caption = 
+            'Lista de N'#250'meros da Averba'#231#227'o e Informa'#231#245'es de Pagamento do Fret' +
+            'e'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -11
+          Font.Name = 'Tahoma'
+          Font.Style = []
           ImageIndex = 3
+          ParentFont = False
+          object Label50: TLabel
+            Left = 358
+            Top = 39
+            Width = 81
+            Height = 13
+            Caption = 'CNPJ do Banco'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label51: TLabel
+            Left = 358
+            Top = 9
+            Width = 79
+            Height = 13
+            Caption = 'Valor do Frete'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
           object Grid_averbacao: TDBGrid
             Left = 3
             Top = 3
@@ -2000,6 +2040,43 @@ object FrmMde: TFrmMde
                 Width = 163
               end>
           end
+          object CNPJ_Banco: TEdit
+            Left = 446
+            Top = 36
+            Width = 153
+            Height = 21
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            MaxLength = 14
+            ParentFont = False
+            TabOrder = 2
+            OnKeyDown = DT_SAIDAKeyDown
+          end
+          object VrContrato: TRxCalcEdit
+            Left = 446
+            Top = 6
+            Width = 100
+            Height = 21
+            Margins.Left = 4
+            Margins.Top = 1
+            DecimalPlaces = 3
+            DisplayFormat = '0.000;-0.000'
+            Enabled = False
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = []
+            NumGlyphs = 2
+            ParentFont = False
+            TabOrder = 3
+            ZeroEmpty = False
+            OnKeyDown = CNPJ_TRANSPORTADORKeyDown
+          end
         end
       end
       object ListBox3: TListBox
@@ -2034,7 +2111,7 @@ object FrmMde: TFrmMde
         Top = 215
         Width = 367
         Height = 89
-        ActivePage = TabSheet6
+        ActivePage = TabSheet7
         TabOrder = 36
         object TabSheet7: TTabSheet
           Caption = 'Produto Predominante'
@@ -3437,8 +3514,8 @@ object FrmMde: TFrmMde
     SQL.Strings = (
       'SELECT *  FROM COMPL_MDEFISCAL_AVERBACAO WHERE'
       'MDEFISCAL_ID = :MDEFISCAL_ID')
-    Left = 424
-    Top = 384
+    Left = 432
+    Top = 536
     ParamData = <
       item
         Name = 'MDEFISCAL_ID'
@@ -3449,8 +3526,8 @@ object FrmMde: TFrmMde
   end
   object DataAverbacao: TDataSource
     DataSet = QAverbacao
-    Left = 496
-    Top = 404
+    Left = 504
+    Top = 556
   end
   object QProduto: TFDQuery
     Connection = FrmData.DbF_Eficaz

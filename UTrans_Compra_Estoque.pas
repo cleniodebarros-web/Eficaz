@@ -11,7 +11,7 @@ uses
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.Client, FireDAC.Comp.DataSet,Shellapi,
   sMaskEdit, sCustomComboEdit, sToolEdit, Xml.xmldom, Xml.XMLIntf,
-  Xml.Win.msxmldom, Xml.XMLDoc, sEdit, sMemo;
+  Xml.Win.msxmldom, Xml.XMLDoc, sEdit, sMemo,ACBrDFe.Conversao;
 
 type
   TFrmTrans_Compra_Estoque = class(TForm)
@@ -445,6 +445,15 @@ type
     QRDBText57: TQRDBText;
     QRLabel63: TQRLabel;
     QRDBText58: TQRDBText;
+    TabSheet5: TTabSheet;
+    Label48: TLabel;
+    Label49: TLabel;
+    Label50: TLabel;
+    vr_ibs: TRxCalcEdit;
+    vr_ibsmunic: TRxCalcEdit;
+    Vr_bccbsibs: TRxCalcEdit;
+    Label51: TLabel;
+    vr_cbs: TRxCalcEdit;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -1183,7 +1192,10 @@ begin
          if FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString <> Cnpj_Destino then
          Application.MessageBox(PChar('Destinatario do Xml não corresmponde a empresa atual.' +#13 + 'Nome Destinatario Xml: ' + Empresa_destino + #13 + 'Cnpj Destinatario Xml: ' + Cnpj_Destino  + #13+ 'Favor verificar!') , PChar(Msg_Title), mb_IconInformation);
 
-        Chave_Nfe.Text  := Copy(InfNFe.ID,1,44);
+        if Copy(InfNFe.ID,1,3) = 'NFe' then
+          Chave_Nfe.Text  := Copy(InfNFe.ID,4,44)
+        else
+          Chave_Nfe.Text  := Copy(InfNFe.ID,1,44);
         Num_DOC.Text    := StrZero(IntToStr(iDE.nNF),9,0);
         Serie.Text      := StrZero(IntToStr(Ide.serie),2,0);
         Modelo.Text     := IntToStr(Ide.modelo);
@@ -1263,6 +1275,8 @@ begin
   Else
   Begin
 
+    FrmPrincipal.ACBrNFe1.Configuracoes.WebServices.Visualizar := False;
+
     IQuery.Sql.Clear;
     IQuery.Sql.Add('SELECT TRANSACAO_ID,CHAVE_NFE FROM TRANSACOES WHERE (CONDUTA  = ''02'') AND (DEPTO = ''07'')');
     IQuery.Sql.Add('AND DT_ENT_SAI BETWEEN :DT_INI AND :DT_FIM');
@@ -1322,7 +1336,7 @@ begin
        'nProt: '+nProt;
 
     end;
-    ShowMessage(lMsg);
+   // ShowMessage(lMsg);
 
   //MemoResp.Lines.Text   := FrmPrincipal.ACBrNFe1.WebServices.EnvEvento.RetWS;
   //memoRespWS.Lines.Text := FrmPrincipal.ACBrNFe1.WebServices.EnvEvento.RetornoWS;
@@ -1569,25 +1583,174 @@ begin
    repeat
      inc(k);
      TP_XML := 0;
-     try
+     //try
 
          QNsu.Close;
          QNsu.ParamByName('EMPRESA_ID').AsInteger := FrmPrincipal.QEmpresa.FieldByName('EMPRESA_ID').AsInteger;
          QNsu.Prepare;
          QNsu.Open;
 
+       try
+
+         if FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU <> '' then
+          sUltimoNSU := FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU;
 
          if (QNsu.IsEmpty) or (Chk_UltNsu.Checked) Then
-         FrmPrincipal.ACBrNFe1.DistribuicaoDFePorUltNSU(StrToInt(Copy(FrmPrincipal.qEmpresa.FieldByName('IBGE').AsString,1,2)), CNPJ, '0')
+         FrmPrincipal.ACBrNFe1.DistribuicaoDFePorUltNSU(StrToInt(Copy(FrmPrincipal.qEmpresa.FieldByName('IBGE').AsString,1,2)), CNPJ, '0' )
          Else
-         FrmPrincipal.ACBrNFe1.DistribuicaoDFePorUltNSU(StrToInt(Copy(FrmPrincipal.qEmpresa.FieldByName('IBGE').AsString,1,2)), CNPJ, QNsu.FieldByName('ULT_NSU').AsString)
+         Begin
+         if sUltimoNSU <> '' then
+         FrmPrincipal.ACBrNFe1.DistribuicaoDFePorUltNSU(StrToInt(Copy(FrmPrincipal.qEmpresa.FieldByName('IBGE').AsString,1,2)), CNPJ, sUltimoNSU)
+         Else
+         FrmPrincipal.ACBrNFe1.DistribuicaoDFePorUltNSU(StrToInt(Copy(FrmPrincipal.qEmpresa.FieldByName('IBGE').AsString,1,2)), CNPJ, QNsu.FieldByName('ULT_NSU').AsString);
+         End;
+
+       Except
+
+       end;
+
+         //FrmPrincipal.ACBrNFe1.DistribuicaoDfe(StrToInt(Copy(FrmPrincipal.qEmpresa.FieldByName('IBGE').AsString,1,2)), CNPJ, '0','0')
+
+
+         with FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt do
+        begin
+
+          if ( ( cStat = 137 ) or
+               ( cStat = 656 ) or
+               ( ultNSU = maxNSU ) ) then
+          begin
+            // 656-Consumo indevido
+            if cStat = 656 then
+            begin
+              memoConsultaDFe.Lines.Add('---------------------------------------------------------------------------');
+
+              memoConsultaDFe.Lines.Add('Atenção...: Consumo indevido.');
+
+              if QNsu.FieldByName('ULT_NSU').AsString <> ultNSU then
+                memoConsultaDFe.Lines.Add('ultNSU utilizado nesta consulta [' + QNsu.FieldByName('ULT_NSU').AsString + '] é diferente ' +
+                                    'do ultNSU consultado na Sefaz [' + ultNSU + '].');
+
+                QInsert.sql.clear;
+                QInsert.sql.add('INSERT INTO distribuicaonotas(ult_nsu, nsu, numero, serie, chave_nfe, nome, inscricao, tipo_nfe, dt_emissao, valor, impresso, cnpj, arquivo_xml, dt_consulta, funcionario_id,entrada_id,empresa_id) ');
+                QInsert.sql.add('VALUES(:ult_nsu,:nsu, :numero, :serie, :chave_nfe, :nome, :inscricao, :tipo_nfe, :dt_emissao, :valor, :impresso, :cnpj, :arquivo_xml, :dt_consulta, :funcionario_id,:entrada_id,:empresa_id)');
+
+                QInsert.ParamByName('ULT_NSU').AsString         := FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU ;
+                QInsert.ParamByName('NSU').AsString             := '0';
+                QInsert.ParamByName('NUMERO').AsString          := '0';
+                QInsert.ParamByName('cnpj').AsString            := '0';
+                QInsert.ParamByName('serie').AsString           := '0';
+                QInsert.ParamByName('chave_nfe').AsString       := '0';
+                QInsert.ParamByName('NOME').AsString            := '0';
+                QInsert.ParamByName('inscricao').AsString       := '0';
+                QInsert.ParamByName('tipo_nfe').AsString        := '0';
+                QInsert.ParamByName('dt_emissao').AsDate        := date;
+                QInsert.ParamByName('valor').AsCurrency         := 0;
+                QInsert.ParamByName('impresso').AsString        := ' ';
+                QInsert.ParamByName('cnpj').AsString            := '0';
+                QInsert.ParamByName('dt_consulta').AsDateTime   := DATE() + TIME;
+                QInsert.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+                QInsert.ParamByName('ARQUIVO_XML').AsByteStr    := '';//FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].XML;
+                QInsert.ParamByName('ENTRADA_ID').AsInteger     := 0;
+                QInsert.ParamByName('EMPRESA_ID').AsInteger     := FrmPrincipal.QEmpresa.FieldByName('EMPRESA_ID').AsInteger;
+
+
+                QInsert.prepare;
+                QInsert.ExecSQL;
+
+
+              bTemMais    := FAlse;
+            end
+            // 137-Nenhum documento localizado
+            else if cStat = 137 then
+              memoConsultaDFe.Lines.Add('Atenção...: Não existem mais registros disponíveis.')
+            // ultNSU = maxNSU - Documentos Localizados, mas é o último lote
+            else
+              memoConsultaDFe.Lines.Add('Atenção...: Este é o último lote de registros disponíveis para distribuição.');
+
+            memoConsultaDFe.Lines.Add('Atenção...: Aguarde 1 hora para a próxima consulta.');
+            memoConsultaDFe.Lines.Add(' ');
+
+            bTemMais    := FAlse;
+
+          end;
+
+
+        end;
 
 
 
-      except on E: Exception do
+      {
+      //except on E: Exception do
        begin
-            // showmessage('erro ao consultar stat: ' + IntToStr(FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat) + #13 + 'Erro: '+  e.Message);
 
+
+         with FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt do
+        begin
+
+          if ( ( cStat = 137 ) or
+               ( cStat = 656 ) or
+               ( ultNSU = maxNSU ) ) then
+          begin
+            // 656-Consumo indevido
+            if cStat = 656 then
+            begin
+              memoConsultaDFe.Lines.Add('---------------------------------------------------------------------------');
+
+              memoConsultaDFe.Lines.Add('Atenção...: Consumo indevido.');
+
+              if QNsu.FieldByName('ULT_NSU').AsString <> ultNSU then
+                memoConsultaDFe.Lines.Add('ultNSU utilizado nesta consulta [' + QNsu.FieldByName('ULT_NSU').AsString + '] é diferente ' +
+                                    'do ultNSU consultado na Sefaz [' + ultNSU + '].');
+
+                QInsert.sql.clear;
+                QInsert.sql.add('INSERT INTO distribuicaonotas(ult_nsu, nsu, numero, serie, chave_nfe, nome, inscricao, tipo_nfe, dt_emissao, valor, impresso, cnpj, arquivo_xml, dt_consulta, funcionario_id,entrada_id,empresa_id) ');
+                QInsert.sql.add('VALUES(:ult_nsu,:nsu, :numero, :serie, :chave_nfe, :nome, :inscricao, :tipo_nfe, :dt_emissao, :valor, :impresso, :cnpj, :arquivo_xml, :dt_consulta, :funcionario_id,:entrada_id,:empresa_id)');
+
+                QInsert.ParamByName('ULT_NSU').AsString         := FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU ;
+                QInsert.ParamByName('NSU').AsString             := '0';
+                QInsert.ParamByName('NUMERO').AsString          := '0';
+                QInsert.ParamByName('cnpj').AsString            := '0';
+                QInsert.ParamByName('serie').AsString           := '0';
+                QInsert.ParamByName('chave_nfe').AsString       := '0';
+                QInsert.ParamByName('NOME').AsString            := '0';
+                QInsert.ParamByName('inscricao').AsString       := '0';
+                QInsert.ParamByName('tipo_nfe').AsString        := '0';
+                QInsert.ParamByName('dt_emissao').AsDate        := date;
+                QInsert.ParamByName('valor').AsCurrency         := 0;
+                QInsert.ParamByName('impresso').AsString        := ' ';
+                QInsert.ParamByName('cnpj').AsString            := '0';
+                QInsert.ParamByName('dt_consulta').AsDateTime   := DATE() + TIME;
+                QInsert.ParamByName('FUNCIONARIO_ID').AsInteger := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+                QInsert.ParamByName('ARQUIVO_XML').AsByteStr    := '';//FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.docZip.Items[i].XML;
+                QInsert.ParamByName('ENTRADA_ID').AsInteger     := 0;
+                QInsert.ParamByName('EMPRESA_ID').AsInteger     := FrmPrincipal.QEmpresa.FieldByName('EMPRESA_ID').AsInteger;
+
+
+                QInsert.prepare;
+                QInsert.ExecSQL;
+
+
+              bTemMais    := FAlse;
+            end
+            // 137-Nenhum documento localizado
+            else if cStat = 137 then
+              memoConsultaDFe.Lines.Add('Atenção...: Não existem mais registros disponíveis.')
+            // ultNSU = maxNSU - Documentos Localizados, mas é o último lote
+            else
+              memoConsultaDFe.Lines.Add('Atenção...: Este é o último lote de registros disponíveis para distribuição.');
+
+            memoConsultaDFe.Lines.Add('Atenção...: Aguarde 1 hora para a próxima consulta.');
+            memoConsultaDFe.Lines.Add(' ');
+            bTemMais    := FAlse;
+
+            exit;
+          end;
+
+
+        end;
+
+            // showmessage('erro ao consultar stat: ' + IntToStr(FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat) + #13 + 'Erro: '+  e.Message);
+           {
              if FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat = 656 then
              Begin
                 //showmessage (FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU);
@@ -1627,11 +1790,11 @@ begin
                       'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
                   end;
 
-                  }
+
                 end;
-             End;
+             End; }
 
-
+           {
           if not Documementos_Encontrados Then
           Begin
           memoConsultaDFe.Lines.Add('---------------------------------------------------------------------------');
@@ -1661,9 +1824,9 @@ begin
           lblAtualizar.visible := False;
           exit;
 
-
-       end;
-     end;
+          }
+       //end;
+    // end; }
 
      lMax_nsu.Caption :='Máximo Nsu: ' + FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.maxNSU;
 
@@ -1673,14 +1836,14 @@ begin
      sMotivo := FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.xMotivo;
 
 
-     //showmessage('localizei stat: ' + IntToStr(FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat));
+    // showmessage('localizei stat: ' + IntToStr(FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat));
 
-     if FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat = 137 then
-       Begin
-        bTemMais    := False;
 
-       End
-     else bTemMais := True;
+       if FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat = 137 then
+        bTemMais    := FAlse;
+
+       if FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat = 138 then
+        bTemMais := True;
 
      sUltimoNSU := FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.ultNSU ;
 
@@ -1891,7 +2054,7 @@ begin
                          memoConsultaDFe.Lines.Add('---------------------------------------------------------------------------');
                          memoConsultaDFe.Lines.Add(' =>  Efetuando a manifestação do documento encontrado.');
                          memoConsultaDFe.Lines.Add(' =>  Documento Confirmado Favor aguardar liberação.');
-                         memoConsultaDFe.Lines.Add(' =>  Chave: ' + sChave  + 'Data Emissão: ' + SEmissao                                                      );
+                         memoConsultaDFe.Lines.Add(' =>  Chave: ' + sChave  + '  Data Emissão: ' + SEmissao                                                      );
                          memoConsultaDFe.Lines.Add('---------------------------------------------------------------------------');
 
                       end;
@@ -2009,12 +2172,13 @@ begin
        end
      else
      begin // Nenhum Documento Localizado para o Destinatário
-
+        {
         if FrmPrincipal.ACBrNFe1.WebServices.DistribuicaoDFe.retDistDFeInt.cStat = 137 then
          begin
             memoConsultaDFe.Lines.Add(' Nenhum Documento Localizado para o Destinatário');
             memoConsultaDFe.Lines.Add(' Utilizar o número que esta no campo: Último NSU');
             memoConsultaDFe.Lines.Add(' Para uma nova pesquisa (' + sUltimoNSU + ').');
+             memoConsultaDFe.Lines.Add(' xMotivo: ' + sMotivo);
             memoConsultaDFe.Lines.Add(' ');
          end
         else
@@ -2024,6 +2188,7 @@ begin
             memoConsultaDFe.Lines.Add(' xMotivo: ' + sMotivo);
             memoConsultaDFe.Lines.Add(' ');
          end;
+         }
      end;
 
 
@@ -3895,6 +4060,7 @@ begin
   IQuery.Open;
   IQuery.First;
 
+
   while not IQuery.Eof do
   begin
 
@@ -3911,6 +4077,36 @@ begin
   IQuery.Next;
 
   end;
+
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT SUM(BASE_CALC_ICMS) BASE_CALC_ICMS, SUM(BASE_CALC_ST) BASE_CALC_ST, SUM(VALOR_ICMS) VALOR_ICMS, SUM(VALOR_ICMS_ST) VALOR_ICMS_ST, SUM(VR_IPI) VR_IPI , SUM(VR_TOTAL) VR_TOTAL ');
+  IQuery.Sql.Add('FROM TRANSITENS');
+  IQuery.Sql.Add('WHERE');
+  IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+
+  IQuery.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+
+  IQuery.Prepare;
+  IQuery.Open;
+
+  BASE_ICMS_NORMAL.Value := IQuery.FieldByName('BASE_CALC_ICMS').AsFloat;
+  VR_ICMS_NORMAL.Value   := IQuery.FieldByName('VALOR_ICMS').AsFloat;
+  BASE_ICMS_ST.Value     := IQuery.FieldByName('BASE_CALC_ST').AsFloat;
+  VR_ICMS_ST.Value       := IQuery.FieldByName('VALOR_ICMS_ST').AsFloat;
+  VR_IPI.Value           := IQuery.FieldByName('VR_IPI').AsFloat;
+  VALOR_PRODUTOS.VALUE   := IQuery.FieldByName('VR_TOTAL').AsFloat;
+
+
+
+
+  if NOT chk_enviarAlteracoes.Checked then
+  Begin
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('ALTER TABLE PRODUTOS ENABLE TRIGGER PRODUTOS_UP');
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+  End;
 end;
 
 
@@ -5113,7 +5309,10 @@ begin
         //ShowMessage(InfNFe.ID);
         //ShowMessage(Copy(InfNFe.ID,1,44));
 
-        Chave_Nfe.Text  := Copy(InfNFe.ID,4,44);
+        if Copy(InfNFe.ID,1,3) = 'NFe' then
+          Chave_Nfe.Text  := Copy(InfNFe.ID,4,44)
+        else
+          Chave_Nfe.Text  := Copy(InfNFe.ID,1,44);
         Num_DOC.Text    := StrZero(IntToStr(iDE.nNF),9,0);
         Serie.Text      := StrZero(IntToStr(Ide.serie),2,0);
         Modelo.Text     := IntToStr(Ide.modelo);
@@ -5627,6 +5826,17 @@ end;
 procedure TFrmTrans_Compra_Estoque.btnExecutaClick(Sender: TObject);
 begin
 
+  IQuery.Sql.Clear;
+  IQuery.Sql.Add('SELECT TRANSACAO_ID,CHAVE_NFE, DT_TRANS FROM TRANSACOES WHERE (CONDUTA  = ''02'') AND (DEPTO = ''07'')');
+  IQuery.Sql.Add('AND DT_TRANS BETWEEN :DT_INI AND :DT_FIM ORDER BY DT_ENT_SAI ');
+  IQuery.ParamByName('DT_INI').AsDate :=  dtmen.Date;
+  IQuery.ParamByName('DT_FIM').AsDate :=  dtmai.Date;
+  IQuery.Prepare;
+  IQuery.Open;
+
+
+
+
  QSearch.sql.Clear;
  QSearch.sql.add('SELECT * FROM DISTRIBUICAONOTAS WHERE dt_emissao BETWEEN :INICIO AND :FIM');
  QSearch.Params[0].AsDateTime := dtmen.Date;
@@ -5645,16 +5855,50 @@ begin
     LeitorXml.LoadFromXML(QSearch.FieldByName('ARQUIVO_XML').AsString);
     LeitorXml.Active:= True;
 
-   // showmessage(LeitorXml.DocumentElement.NodeName);
+    //showmessage(LeitorXml.DocumentElement.ChildValues['dhemi']);
 
-    if LeitorXml.DocumentElement.NodeName = 'nfeProc' then
+    if LeitorXml.DocumentElement.NodeName = 'nfeProc' Then
     Begin
+      try
 
-     QSearch.edit;
-     QSearch.FieldByName('XML').AsInteger := 1;
-     QSearch.Post;
+      QSearch.edit;
+      QSearch.FieldByName('XML').AsInteger := 1;
+      QSearch.Post;
+      Except
+
+      end;
 
     End;
+
+    if IQuery.Locate('chave_nfe;dt_trans', VarArrayOf([QSearch.FieldByName('CHAVE_NFE').AsString,QSearch.FieldByName('DT_EMISSAO').AsDateTime]), [loCaseInsensitive]) then
+    begin
+
+      // ShowMessage('nsu: ' + QSearch.FieldByName('nsu').AsString + 'chave: ' + QSearch.FieldByName('CHAVE_NFE').AsString);
+
+      TRY
+
+       QUpdate.SQL.Clear;
+       QUpdate.Sql.Add('UPDATE DISTRIBUICAONOTAS SET ENTRADA_ID = 1 WHERE CHAVE_NFE = :CHAVE_NFE AND DT_EMISSAO = :DT_EMISSAO AND ENTRADA_ID = 0');
+       QUpdate.ParamByName('CHAVE_NFE').AsString    := IQuery.FieldByName('CHAVE_NFE').AsString;
+       QUpdate.ParamByName('DT_EMISSAO').AsDateTime := IQuery.FieldByName('DT_TRANS').AsDateTime;
+       QUpdate.Prepare;
+       QUpdate.ExecSQL;
+
+      except
+        {
+        on e:Exception do
+        begin
+          Application.MessageBox(PChar('Erro:' + QSearch.FieldByName('nsu').AsString + ':' + QSearch.FieldByName('CHAVE_NFE').AsString + #13 +
+            'Erro: ' + e.Message), 'Erro', MB_ICONSTOP + MB_TASKMODAL);
+        end;
+           }
+      END;
+
+
+    end;
+
+
+
 
    EXCEPT
     {on e:Exception do
@@ -6055,6 +6299,8 @@ begin
         IQuery.Last;
 
         NFe(QTabela.FieldByName('TRANSACAO_ID').AsInteger,0,IQuery.FieldByName('CFOP').AsString);
+        QTabela.Refresh;
+        Set_Campos(False);
       end;
     //end;
 
@@ -10162,7 +10408,7 @@ begin
          VALOR.Value := VALOR_PRODUTOS.Value + VR_IPI.Value + VR_ACRESCIMO.Value + VR_FRETE.Value - VR_DESCONTO.Value;
 
 
-      if (QSub_Detail.RecordCount > 0) and (QTabela.FieldByName('TIPO_IMP').Value <> 2) and (Chk_Calculo.Checked)  then
+      if ((QSub_Detail.RecordCount > 0) and (QTabela.FieldByName('TIPO_IMP').Value <> 2) and (Chk_Calculo.Checked)) or (Nfe_propria.Checked)  then
          Calculo_Rodape;
 
       if HISTORICO.Text = '' then
@@ -10230,7 +10476,7 @@ begin
          End;
          End;
 
-      if (FrmPrincipal.Config.FieldByName('CPR_PEDV').AsString = 'True') AND ((CFOP.Text = '1933') OR (CFOP.Text = '2933') OR (TIPO_COMPRA.Text <> 'COMPRA')) then
+         if (FrmPrincipal.Config.FieldByName('CPR_PEDV').AsString = 'True') AND ((CFOP.Text = '1933') OR (CFOP.Text = '2933') OR (TIPO_COMPRA.Text <> 'COMPRA')) then
          Begin
          Grid_Itens.Columns[1].ReadOnly  := False;
          Grid_Itens.Columns[9].ReadOnly  := False;
@@ -10238,6 +10484,13 @@ begin
          Grid_Itens.Columns[14].ReadOnly := False;
          End;
 
+       if   MODELO.Text = '99' Then
+       Begin
+         Tipo_Compra.Text :=  'REMESSA';
+         Tipo_Compra.Enabled := False;
+       End
+       Else
+       Tipo_Compra.Enabled := True;
 
       if Operacao = 'Inserindo' then
       begin
@@ -11510,6 +11763,64 @@ begin
 
                        end;
 
+                       //Reforma Tributaria
+
+                       With Imposto do
+                       Begin
+
+                         //  Informações do tributo: IBS / CBS
+
+                          if IbsCbs.CST = cst000 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger  := 0
+                          Else if IbsCbs.CST = cst010 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger  := 10
+                          Else if IbsCbs.CST = cst011 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger  := 11
+                          Else if IbsCbs.CST = cst200 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 200
+                          Else if IbsCbs.CST = cst221 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 222
+                          Else if IbsCbs.CST = cst400 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 400
+                          Else if IbsCbs.CST = cst410 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 510
+                          Else if IbsCbs.CST = cst510 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 515
+                          Else if IbsCbs.CST = cst515 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 550
+                          Else if IbsCbs.CST = cst550 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 515
+                          Else if IbsCbs.CST = cst620 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 620
+                          Else if IbsCbs.CST = cst800 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 800
+                          Else if IbsCbs.CST = cst810 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 810
+                          Else if IbsCbs.CST = cst811 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 811
+                          Else if IbsCbs.CST = cst820 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 820
+                          Else if IbsCbs.CST = cst830 Then
+                          QSub_Detail.FieldByName('CST_CBSIBS').AsInteger := 830
+                          Else
+                          IbsCbs.CST := cst000 ;
+
+
+                          QSub_Detail.FieldByName('COD_CLASSTRIB').AsString     :=  Imposto.IBSCBS.cClassTrib;
+                          //IBSCBS.indDoacao := tieNenhum;
+
+
+                          QSub_Detail.FieldByName('VR_BASE_CBSIBS').AsFloat    := Imposto.IBSCBS.gIBSCBS.vBC;
+                          QSub_Detail.FieldByName('ALIQ_CBS').AsFloat          := IBSCBS.gIBSCBS.vBC;
+                          QSub_Detail.FieldByName('ALIQ_CBS').AsFloat          := Imposto.IBSCBS.gIBSCBS.gCBS.pCBS;
+                          QSub_Detail.FieldByName('ALIQ_IBSMUNIC').AsFloat     := Imposto.IBSCBS.gIBSCBS.gIBSMun.pIBSMun;
+                          QSub_Detail.FieldByName('VR_CBS').AsFloat            := Imposto.IBSCBS.gIBSCBS.gCBS.vCBS;
+                          QSub_Detail.FieldByName('VR_IBSUF').AsFloat          := Imposto.IBSCBS.gIBSCBS.gIBSUF.vIBSUF;
+                          QSub_Detail.FieldByName('VR_IBSMUNIC').AsFloat       := Imposto.IBSCBS.gIBSCBS.gIBSMun.vIBSMun;
+
+
+                       end;
+
                        with IPI do
                        Begin
                          if vIPI > 0 Then
@@ -11744,6 +12055,16 @@ begin
               VR_FCPST.VALUE         := Total.ICMSTOT.vFCPST;
               VR_FCPSTRET.VALUE      := Total.ICMSTOT.vFCPSTRET;
               VR_FCP.VALUE           := Total.ICMSTOT.vFCP;
+
+              //Reforma Tributaria
+
+              Vr_bccbsibs.Value := Total.IBSCBSTot.vBCIBSCBS;
+              Vr_cbs.value      := Total.IBSCBSTot.gCBS.vCBS;
+              Vr_IBS.value      := Total.IBSCBSTot.gIBS.gIBSUFTot.vIBSUF;
+              Vr_ibsmunic.value := Total.vNFTot;
+
+
+
 
 
 
@@ -12659,6 +12980,12 @@ begin
   if QSub_Detail.State in [dsInsert, dsEdit] then
   begin
 
+    if Grid_Itens.SelectedField.FieldName = 'tp_prod_serv' then
+    begin
+      if (QSub_Detail.FieldByName('TP_PROD_SERV').AsString <> 'P') and (QSub_Detail.FieldByName('TP_PROD_SERV').AsString <> 'S') then
+        QSub_Detail.FieldByName('TP_PROD_SERV').AsString := 'P';
+    end;
+
     if Grid_Itens.SelectedField.FieldName = 'produto_id' then
     begin
       IF (Produto_ant <> QSub_Detail.FieldByName('PRODUTO_ID').AsInteger) and (QSub_Detail.State in [dsEdit])  then
@@ -12670,6 +12997,7 @@ begin
 
       if QSub_Detail.FieldByName('TP_PROD_SERV').AsString = 'P' then
       begin
+
         ProdutoSearch;
 
         if QProduto.IsEmpty then
@@ -12754,7 +13082,42 @@ begin
           QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := QServico.FieldByName('PRECO').AsFloat;
         end;
       end;
+
+        // Reforma Tributária
+
+      if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+      begin
+        if (QProduto.FieldByName('ALIQUOTA_CBS').AsFloat > 0)   Then
+        Begin
+           if (QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0) Then
+           Begin
+           QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := 0.36;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+           QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := 0.04;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+
+           End
+           Else
+           Begin
+           QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+           QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+
+           End;
+        End
+        Else
+        Begin
+        QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+        QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+        End;
+
+        QSub_Detail.FieldByName('ALIQ_IBSMUNIC').AsFloat  := QProduto.FieldByName('ALIQUOTA_IBS_MUNIC').AsFloat;
+        QSub_Detail.FieldByName('COD_CLASSTRIB').AsString := QProduto.FieldByName('CLASSTRIBUTARIA').AsString;
+        QSub_Detail.FieldByName('CST_CBSIBS').Asinteger   := QProduto.FieldByName('CST_CBS_IBS').AsInteger;
+
+      end;
+
+
+
     end;
+
 
     {if (TIPO_COMPRA.Text = 'COMPRA') and (Grid_Itens.SelectedField.FieldName = 'conta_id') then
     begin
@@ -13983,6 +14346,12 @@ begin
    Localizacao_id.Visible := True;
   End;
 
+  if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+  TabSheet5.TabVisible := True
+  Else
+  TabSheet5.TabVisible := False;
+
+
   Dtmen.Date := StrToDate('01/' + Copy(DateToStr(date), 4, 7));
   Dtmai.Date := Ult_Dia_Mes(date);
 
@@ -14006,6 +14375,7 @@ procedure TFrmTrans_Compra_Estoque.Calculo_Rodape_ID(transacao:Integer);
 var
 Per_Rateio, Soma_Rateio, Ult_Valor , BC_ICMS_Normal,Valor_Icms_Normal,BC_ICMS_ST, Valor_icms_ST,Valor_Isento,mva,Aliquota_Inter_Estadual : Real;
 Ult_Produto: Integer;
+VALOR_CBS, VALOR_IBSUF, VALOR_IBSMUNIC, VALOR_BASE_CBS_IBS :REAL;
 
 begin
   //FrmTrans_Compra_Estoque.Top := (Screen.DesktopHeight - FrmTrans_Compra_Estoque.Height) DIV 2;
@@ -14039,6 +14409,92 @@ begin
 
   QUpdate.Prepare;
   QUpdate.ExecSQL();
+
+
+  VALOR_BASE_CBS_IBS     := 0;
+  VALOR_CBS              := 0;
+  VALOR_IBSUF            := 0;
+  VALOR_IBSMUNIC         := 0;
+
+  Vr_bccbsibs.Value      := 0;
+  Vr_cbs.value           := 0;
+  Vr_IBS.value           := 0;
+  Vr_ibsmunic.value      := 0;
+
+
+  // Reforma Tributária
+  QSub_Detail.First;
+  while not QSub_Detail.Eof do
+  begin
+    if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+    begin
+
+
+     if (QSub_Detail.FieldByName('ALIQ_CBS').AsFloat > 0)   then
+     begin
+      VALOR_BASE_CBS_IBS := ((QSub_Detail.FieldByName('VR_TOTAL').AsFloat - QSub_Detail.FieldByName('DESC_RODAPE').AsFloat) + QSub_Detail.FieldByName('VR_FRETE').AsFloat + QSub_Detail.FieldByName('VR_ACRESCIMO').AsFloat);
+      Valor_CBS      := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_CBS').AsFloat) / 100), -2);
+      VALOR_IBSUF    := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat) / 100), -2);
+      VALOR_IBSMUNIC := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_IBSMUNIC').AsFloat) / 100), -2);
+
+      Vr_bccbsibs.Value :=   Vr_bccbsibs.Value + VALOR_BASE_CBS_IBS;
+      Vr_cbs.value      := vr_cbs.value + Valor_CBS ;
+      Vr_IBS.value      := vr_IBS.value + VALOR_IBSUF ;
+      Vr_ibsmunic.value := Vr_ibsmunic.value + VALOR_IBSMUNIC;
+
+     end
+     Else
+     Begin
+
+      VALOR_BASE_CBS_IBS := 0;
+      Valor_CBS          := 0 ;
+      VALOR_IBSUF        := 0;
+      VALOR_IBSMUNIC     := 0;
+
+      Vr_bccbsibs.Value := Vr_bccbsibs.Value + VALOR_BASE_CBS_IBS;
+      Vr_cbs.value      := vr_cbs.value + Valor_CBS ;
+      Vr_IBS.value      := vr_IBS.value + VALOR_IBSUF ;
+      Vr_ibsmunic.value := Vr_ibsmunic.value + VALOR_IBSMUNIC;
+
+     End;
+
+
+    IQuery.Sql.Clear;
+    IQuery.Sql.Add('UPDATE TRANSITENS SET VR_BASE_CBSIBS = :VR_BASE_CBSIBS, VR_CBS = :VR_CBS, VR_IBSUF = :VR_IBSUF, VR_IBSMUNIC = :VR_IBSMUNIC');
+    IQuery.Sql.Add('WHERE');
+    IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+    IQuery.ParamByName('VR_BASE_CBSIBS').AsFloat := RoundTo(VALOR_BASE_CBS_IBS, -2);
+    IQuery.ParamByName('VR_CBS').AsFloat         := RoundTo(Valor_CBS, -2);
+    IQuery.ParamByName('VR_IBSUF').AsFloat       := RoundTo(VALOR_IBSUF, -2);
+    IQuery.ParamByName('VR_IBSMUNIC').AsFloat    := RoundTo(VALOR_IBSMUNIC, -2);
+
+    IQuery.ParamByName('TRANSACAO_ID').AsInteger := QSub_Detail.FieldByName('TRANSACAO_ID').AsInteger;
+    IQuery.ParamByName('PRODUTO_ID').AsInteger   := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+    IQuery.Prepare;
+    IQuery.ExecSql;
+
+
+
+
+
+
+    end;
+
+
+
+
+
+    Application.ProcessMessages;
+    QSub_Detail.Next;
+  end;
+
+
+
+
+
   {
   BASE_ICMS_NORMAL.Value := IQuery.FieldByName('BASE_CALC_ICMS').AsFloat;
   VR_ICMS_NORMAL.Value   := IQuery.FieldByName('VALOR_ICMS').AsFloat;
@@ -14591,6 +15047,7 @@ var
 Per_Rateio, Soma_Rateio, Ult_Valor , BC_ICMS_Normal,Valor_Icms_Normal,BC_ICMS_ST, Valor_icms_ST,Valor_Isento,mva,Aliquota_Inter_Estadual : Real;
 Ult_Produto: Integer;
 Obs_icmsst : String;
+VALOR_CBS, VALOR_IBSUF, VALOR_IBSMUNIC, VALOR_BASE_CBS_IBS :REAL;
 
 begin
   //FrmTrans_Compra_Estoque.Top := (Screen.DesktopHeight - FrmTrans_Compra_Estoque.Height) DIV 2;
@@ -14866,6 +15323,18 @@ begin
     VR_ICMS_ST.Value       := 0;
 
 
+
+    VALOR_BASE_CBS_IBS     := 0;
+    VALOR_CBS              := 0;
+    VALOR_IBSUF            := 0;
+    VALOR_IBSMUNIC         := 0;
+
+    Vr_bccbsibs.Value      := 0;
+    Vr_cbs.value           := 0;
+    Vr_IBS.value           := 0;
+    Vr_ibsmunic.value      := 0;
+
+
     QSub_Detail.Close;
 
     QSub_Detail.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
@@ -14974,6 +15443,62 @@ begin
       IQuery.Prepare;
       IQuery.ExecSql;
 
+      if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+      begin
+
+
+       if (QSub_Detail.FieldByName('ALIQ_CBS').AsFloat > 0)   then
+       begin
+        VALOR_BASE_CBS_IBS := ((QSub_Detail.FieldByName('VR_TOTAL').AsFloat - QSub_Detail.FieldByName('DESC_RODAPE').AsFloat) + QSub_Detail.FieldByName('VR_FRETE').AsFloat + QSub_Detail.FieldByName('VR_ACRESCIMO').AsFloat);
+        Valor_CBS      := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_CBS').AsFloat) / 100), -2);
+        VALOR_IBSUF    := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat) / 100), -2);
+        VALOR_IBSMUNIC := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_IBSMUNIC').AsFloat) / 100), -2);
+
+        Vr_bccbsibs.Value :=   Vr_bccbsibs.Value + VALOR_BASE_CBS_IBS;
+        Vr_cbs.value      := vr_cbs.value + Valor_CBS ;
+        Vr_IBS.value      := vr_IBS.value + VALOR_IBSUF ;
+        Vr_ibsmunic.value := Vr_ibsmunic.value + VALOR_IBSMUNIC;
+
+       end
+       Else
+       Begin
+
+        VALOR_BASE_CBS_IBS := 0;
+        Valor_CBS          := 0 ;
+        VALOR_IBSUF        := 0;
+        VALOR_IBSMUNIC     := 0;
+
+        Vr_bccbsibs.Value := Vr_bccbsibs.Value + VALOR_BASE_CBS_IBS;
+        Vr_cbs.value      := vr_cbs.value + Valor_CBS ;
+        Vr_IBS.value      := vr_IBS.value + VALOR_IBSUF ;
+        Vr_ibsmunic.value := Vr_ibsmunic.value + VALOR_IBSMUNIC;
+
+       End;
+
+
+      IQuery.Sql.Clear;
+      IQuery.Sql.Add('UPDATE TRANSITENS SET VR_BASE_CBSIBS = :VR_BASE_CBSIBS, VR_CBS = :VR_CBS, VR_IBSUF = :VR_IBSUF, VR_IBSMUNIC = :VR_IBSMUNIC');
+      IQuery.Sql.Add('WHERE');
+      IQuery.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+      IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+      IQuery.ParamByName('VR_BASE_CBSIBS').AsFloat := RoundTo(VALOR_BASE_CBS_IBS, -2);
+      IQuery.ParamByName('VR_CBS').AsFloat         := RoundTo(Valor_CBS, -2);
+      IQuery.ParamByName('VR_IBSUF').AsFloat       := RoundTo(VALOR_IBSUF, -2);
+      IQuery.ParamByName('VR_IBSMUNIC').AsFloat    := RoundTo(VALOR_IBSMUNIC, -2);
+
+      IQuery.ParamByName('TRANSACAO_ID').AsInteger := QSub_Detail.FieldByName('TRANSACAO_ID').AsInteger;
+      IQuery.ParamByName('PRODUTO_ID').AsInteger   := QSub_Detail.FieldByName('PRODUTO_ID').AsInteger;
+
+      IQuery.Prepare;
+      IQuery.ExecSql;
+
+
+
+
+
+
+      end;
 
       Application.ProcessMessages;
       QSub_Detail.Next;
