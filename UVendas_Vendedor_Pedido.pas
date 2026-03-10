@@ -170,14 +170,17 @@ begin
     QRel.Sql.Add('LEFT JOIN TRANSACOES ON (TRANSACOES.TRANSACAO_ID = PEDIDOS.TRANSACAO_ID)');
     QRel.Sql.Add('WHERE');
     QRel.Sql.Add('(PEDIDOS.EMPRESA_ID = :EMPRESA_ID)');
+    QRel.Sql.Add('AND (PEDIDOS.TP_PEDIDO = 1)');
 
-    if Status.Text = 'FATURADO' then
+    if (Status.Text = 'FATURADO') then
     QRel.Sql.Add('AND (TRANSACOES.DT_TRANS BETWEEN :DT_INICIAL AND :DT_FINAL)')
+
+    ELSE if (Status.Text = 'FATURADO/FAT.INTERNO/FAT.TERCEIRO/FAT.SISTEMA')  then
+     QRel.Sql.Add('AND (PEDIDOS.DT_STATUS BETWEEN :DT_INICIAL AND :DT_FINAL)')
+
     Else
     QRel.Sql.Add('AND (PEDIDOS.DT_PEDIDO BETWEEN :DT_INICIAL AND :DT_FINAL)');
 
-
-    QRel.Sql.Add('AND (PEDIDOS.TP_PEDIDO = 1)');
     //QRel.Sql.Add('AND (TRANSACOES.MODELO <> :MODELO)');
     //QRel.Sql.Add('AND (TRANSACOES.TIPO_IMP = 1)');
 
@@ -189,16 +192,28 @@ begin
       else
         QRel.Sql.Add('AND (PEDIDOS.FUNCIONARIO_ID <> 0)');
 
-      if Status.Text <> '' then
+      if (Status.Text <> '')  AND (Status.Text <> 'FATURADO/FAT.INTERNO/FAT.TERCEIRO/FAT.SISTEMA') then
       begin
         QRel.Sql.Add('AND (PEDIDOS.STATUS = :STATUS)');
 
         QRel.ParamByName('STATUS').AsString := Status.Text;
       end;
 
-      if Status.Text = 'FATURADO' then
+      if (Status.Text = 'FATURADO/FAT.INTERNO/FAT.TERCEIRO/FAT.SISTEMA') then
+      begin
+        QRel.Sql.Add('AND (PEDIDOS.STATUS IN(''FATURADO'',''FAT.INTERNO'',''FAT.TERCEIRO'',''FAT.SISTEMA''))');
+        // QRel.ParamByName('STATUS').AsString := Status.Text;
+      end;
+      {
+      if (Status.Text = 'FATURADO/FAT.INTERNO/FAT.TERCEIRO')  then
       Begin
-      QRel.Sql.Add('GROUP BY PEDIDOS.PEDIDO_ID,TRANSACOES.DT_ENT_SAI ,PEDIDOS.STATUS,FUNCIONARIOS.NOME,TRANSACOES.NUM_DOC,PEDIDOS.NOME');
+       QRel.Sql.Add('GROUP BY PEDIDOS.PEDIDO_ID,TRANSACOES.DT_ENT_SAI,PEDIDOS.STATUS,FUNCIONARIOS.NOME,TRANSACOES.NUM_DOC,PEDIDOS.NOME');
+       QRel.Sql.Add('ORDER BY FUNCIONARIOS.NOME, PEDIDOS.DT_PEDIDO,PEDIDOS.PEDIDO_ID');
+      End
+      }
+      if (Status.Text = 'FATURADO') OR (Status.Text = 'FATURADO/FAT.INTERNO/FAT.TERCEIRO/FAT.SISTEMA')   then
+      Begin
+      QRel.Sql.Add('GROUP BY PEDIDOS.PEDIDO_ID,TRANSACOES.DT_ENT_SAI,PEDIDOS.STATUS,FUNCIONARIOS.NOME,TRANSACOES.NUM_DOC,PEDIDOS.NOME');
 
        IF ORDEM.TEXT = 'DATA FATURAMENTO' tHEN
        QRel.Sql.Add('ORDER BY FUNCIONARIOS.NOME, TRANSACOES.DT_ENT_SAI,PEDIDOS.PEDIDO_ID')

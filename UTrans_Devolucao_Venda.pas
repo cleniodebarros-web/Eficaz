@@ -218,7 +218,6 @@ type
     Cancelar1: TMenuItem;
     QSearch: TFDQuery;
     BtnImprimirxml: TBitBtn;
-    BALANCO: TEdit;
     TabSheet1: TTabSheet;
     Grid_Saidas: TDBGrid;
     QSaidas_Notas: TFDQuery;
@@ -229,25 +228,28 @@ type
     TabSheet2: TTabSheet;
     Label13: TLabel;
     Label14: TLabel;
-    Label17: TLabel;
-    Label19: TLabel;
-    Label20: TLabel;
-    Label25: TLabel;
     VR_ICMS_ST: TRxCalcEdit;
     BASE_ICMS_NORMAL: TRxCalcEdit;
+    Label17: TLabel;
+    Label19: TLabel;
     VR_IPI: TRxCalcEdit;
     VR_ICMS_NORMAL: TRxCalcEdit;
+    Label20: TLabel;
+    Label25: TLabel;
     VR_ACRESCIMO: TRxCalcEdit;
     BASE_ICMS_ST: TRxCalcEdit;
     TabSheet3: TTabSheet;
     Label48: TLabel;
     Label49: TLabel;
     Label50: TLabel;
-    Label51: TLabel;
     vr_ibs: TRxCalcEdit;
     vr_ibsmunic: TRxCalcEdit;
     Vr_bccbsibs: TRxCalcEdit;
+    Label51: TLabel;
     vr_cbs: TRxCalcEdit;
+    SalvarArquivo: TMenuItem;
+    BALANCO: TEdit;
+    QClassTrib: TFDQuery;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -318,6 +320,7 @@ type
     procedure QSub_DetailAfterDelete(DataSet: TDataSet);
     procedure Grid_SaidasKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure SalvarArquivoClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -338,6 +341,7 @@ type
     procedure TributoSearch;
     procedure ContaSearch;
     procedure CFOPSearch;
+    procedure ClassTribSearch;
     procedure Estorno_Transacao;
     procedure Calculo_Rodape;
   end;
@@ -406,6 +410,45 @@ uses
   USubstituicao, UAltera_NFe, UItens_Origem, UControle_Series;
 
 {$R *.dfm}
+
+procedure TFrmTrans_Devolucao_Venda.SalvarArquivoClick(Sender: TObject);
+begin
+  if QTabela.FieldByName('MODELO').AsString = '55' then
+  begin
+    QSearch.SQL.Clear;
+    QSearch.SQL.Add('SELECT ARQUIVO_XML FROM COMPL_NFISCAL WHERE TRANSACAO_ID = :TRANSACAO_ID');
+    QSearch.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+    QSearch.Prepare;
+    QSearch.Open();
+
+    if QSearch.IsEmpty then
+    begin
+      QSearch.SQL.Clear;
+      QSearch.SQL.Add('SELECT ARQUIVO_XML FROM NOTAS_CANCELADAS WHERE TRANSACAO_ID = :TRANSACAO_ID');
+      QSearch.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+      QSearch.Prepare;
+      QSearch.Open();
+    end;
+  end
+  else
+  begin
+    Application.MessageBox('Funcionalidade apenas para NFe (modelo 55).', PChar(Msg_Title), mb_IconStop);
+    Abort;
+  end;
+
+
+  if Not QSearch.IsEmpty then
+  begin
+    FrmPrincipal.ACBrNFe1.NotasFiscais.Clear;
+    FrmPrincipal.ACBrNFe1.NotasFiscais.LoadFromString(QSearch.FieldByName('ARQUIVO_XML').AsString);
+    FrmPrincipal.SalvarXMLPDF;
+  end
+  else
+  begin
+    Application.MessageBox('É necessário transmitir a NFe antes.', PChar(Msg_Title), mb_IconStop);
+  end;
+end;
+
 
 procedure Trans_Devolucao_Venda(Transacao: Integer);
 begin
@@ -659,15 +702,27 @@ begin
 
        if (QSub_Detail.FieldByName('ALIQ_CBS').AsFloat > 0)   then
        begin
+
         VALOR_BASE_CBS_IBS := ((QSub_Detail.FieldByName('VR_TOTAL').AsFloat - QSub_Detail.FieldByName('DESC_RODAPE').AsFloat) + QSub_Detail.FieldByName('VR_FRETE').AsFloat + QSub_Detail.FieldByName('VR_ACRESCIMO').AsFloat);
+
+        if QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0 Then
+        Begin
+        Valor_CBS      := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_EF_CBS').AsFloat) / 100), -2);
+        VALOR_IBSUF    := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_EF_IBSUF').AsFloat) / 100), -2);
+        VALOR_IBSMUNIC := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_EF_IBSMUNIC').AsFloat) / 100), -2);
+        End
+        Else
+        Begin
         Valor_CBS      := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_CBS').AsFloat) / 100), -2);
         VALOR_IBSUF    := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat) / 100), -2);
         VALOR_IBSMUNIC := RoundTo(((VALOR_BASE_CBS_IBS * QSub_Detail.FieldByName('ALIQ_IBSMUNIC').AsFloat) / 100), -2);
+        End;
 
-        Vr_bccbsibs.Value :=   Vr_bccbsibs.Value + VALOR_BASE_CBS_IBS;
+        Vr_bccbsibs.Value := Vr_bccbsibs.Value + VALOR_BASE_CBS_IBS;
         Vr_cbs.value      := vr_cbs.value + Valor_CBS ;
         Vr_IBS.value      := vr_IBS.value + VALOR_IBSUF ;
         Vr_ibsmunic.value := Vr_ibsmunic.value + VALOR_IBSMUNIC;
+
 
        end
        Else
@@ -1694,7 +1749,7 @@ begin
 
   Sql := Sql + ') VALUES(' + Par + ')';
 
-  
+
 
   IQuery.Sql.Clear;
   IQuery.Sql.Add(Sql);
@@ -1796,7 +1851,7 @@ begin
 
   Sql := Sql + ' WHERE (TRANSACAO_ID = :ID)';
 
-  
+
 
   IQuery.Sql.Clear;
   IQuery.Sql.Add(Sql);
@@ -1909,6 +1964,15 @@ begin
   QConta_Estoque.Prepare;
   QConta_Estoque.Open;
 end;
+
+procedure TFrmTrans_Devolucao_Venda.ClassTribSearch;
+begin
+  QClasstrib.Close;
+  QClasstrib.ParamByName('CLASSETRIB').AsString := DataSub_Detail.DataSet.FieldByName('COD_CLASSTRIB').AsString;
+  QClasstrib.Prepare;
+  QClasstrib.Open;
+end;
+
 
 procedure TFrmTrans_Devolucao_Venda.CFOPSearch;
 begin
@@ -2260,7 +2324,7 @@ begin
     Application.MessageBox('Nota Fiscal já foi impressa. Impossível continuar', PChar(Msg_Title), mb_IconStop);
     abort;
   end;
-  
+
   if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDNO then
     abort;
 end;
@@ -2335,7 +2399,7 @@ begin
     if QSub_Detail.FieldByName('QUANTIDADE').AsFloat > IQuery.FieldByName('QUANTIDADE').AsFloat then
     begin
       Application.MessageBox('Quantidade informada maior do que a quantidade de saída', PChar(Msg_Title), mb_IconStop);
-      Grid_Itens.SelectedIndex := 8;
+      Grid_Itens.SelectedIndex := 9;
       abort;
     end;
   end;
@@ -2409,28 +2473,28 @@ begin
   if (QSub_Detail.FieldByName('QUANTIDADE').AsFloat <= 0) or (QSub_Detail.FieldByName('QUANTIDADE').AsFloat > 99999) then
   begin
     Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
-    Grid_Itens.SelectedIndex := 8;
+    Grid_Itens.SelectedIndex := 9;
     abort;
   end;
 
   if QSub_Detail.FieldByName('VR_UNITARIO').AsFloat <= 0 then
   begin
     Application.MessageBox('Vr. Unitário inválido', PChar(Msg_Title), mb_IconStop);
-    Grid_Itens.SelectedIndex := 9;
+    Grid_Itens.SelectedIndex := 10;
     abort;
   end;
 
   if (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat < 0) or (QSub_Detail.FieldByName('VR_DESCONTO').AsFloat > QSub_Detail.FieldByName('VR_UNITARIO').AsFloat) then
   begin
     Application.MessageBox('Vr. Desconto inválido', PChar(Msg_Title), mb_IconStop);
-    Grid_Itens.SelectedIndex := 10;
+    Grid_Itens.SelectedIndex := 11;
     abort;
   end;
 
   if QSub_Detail.FieldByName('VR_TOTAL').AsFloat <= 0 then
   begin
     Application.MessageBox('Vr. Total inválido', PChar(Msg_Title), mb_IconStop);
-    Grid_Itens.SelectedIndex := 11;
+    Grid_Itens.SelectedIndex := 12;
     abort;
   end;
 
@@ -2514,7 +2578,7 @@ begin
     Application.MessageBox('Cód. CST PIS diferente de CST COFINS', PChar(Msg_Title), mb_IconStop);
     abort;
   end;
-  
+
   if QSub_Detail.State = dsInsert then
   begin
     IQuery.Sql.Clear;
@@ -2801,7 +2865,7 @@ begin
 
 
     end;
-    
+
     Application.ProcessMessages;
     QTabela.Next;
   end;
@@ -2963,7 +3027,7 @@ begin
 
   if Application.MessageBox('Deseja realmente excluir?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
   begin
-    
+
 
     IQuery.Sql.Clear;
     IQuery.Sql.Add('DELETE FROM TRANSACOES');
@@ -3062,7 +3126,7 @@ begin
 
   Grid_Itens.Enabled := False;
 
-  Consulta.TabVisible := False;  
+  Consulta.TabVisible := False;
 
 
   DT_TRANS.SetFocus;
@@ -3161,7 +3225,7 @@ begin
     VR_ICMS_ST.Value       := IQuery.FieldByName('VALOR_ICMS_ST').AsFloat;
     End;
 
-    
+
     {if Desconto > 0  then
     Vr_Desconto.Value      := Desconto
     Else}
@@ -3919,12 +3983,11 @@ begin
 
         IQuery.Sql.Clear;
         IQuery.Sql.Add('INSERT INTO TRANSITENS(TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, CFOP, DESCRICAO, CONTA_ID, TRIBUTO_ID, CST, MVA, ' +
-                       'BASE_CALC_ICMS, ALIQUOTA_ICMS, VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO , VR_ACRESCIMO, DESC_RODAPE, VALOR_OUTROS, VR_TOTAL, VALOR_ICMS, BASE_CALC_ST, VALOR_ICMS_ST,VR_REDUCAO_BC, ' +
-                       'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS)');
-
+                       'BASE_CALC_ICMS, ALIQUOTA_ICMS, VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO , VR_ACRESCIMO, DESC_RODAPE, VALOR_OUTROS, VR_TOTAL, VALOR_ICMS, BASE_CALC_ST, VALOR_ICMS_ST,VR_REDUCAO_BC,' +
+                       'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC)');
         IQuery.Sql.Add('SELECT :TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, :CFOP, DESCRICAO, :CONTA_ID, TRIBUTO_ID, CST, MVA, ' +
                        'BASE_CALC_ICMS, ALIQUOTA_ICMS, VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO,VR_ACRESCIMO, DESC_RODAPE, VALOR_OUTROS, VR_TOTAL, VALOR_ICMS, BASE_CALC_ST, VALOR_ICMS_ST,VR_REDUCAO_BC,' +
-                       'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS');
+                       'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC');
 
 // A PEDIDO REGIVALDO!
 //        IQuery.Sql.Add('SELECT :TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, :CFOP, DESCRICAO, CONTA_ID, TRIBUTO_ID, CST, MVA, 0, 0, VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO, VR_TOTAL, VALOR_ICMS, BASE_CALC_ST, VALOR_ICMS_ST');
@@ -4057,10 +4120,12 @@ begin
               }
               IQuery.Sql.Clear;
               IQuery.Sql.Add('INSERT INTO TRANSITENS(TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, CFOP, DESCRICAO, CONTA_ID, TRIBUTO_ID, CST, MVA, BASE_CALC_ICMS, ALIQUOTA_ICMS,' +
-                             'VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO, DESC_RODAPE, VR_ACRESCIMO, VR_TOTAL, VALOR_ICMS, VR_REDUCAO_BC,BASE_CALC_ST, VALOR_ICMS_ST,VR_BASE_FCPST,P_FCPST,VR_FCPST,VR_BASE_FCP,VR_FCP)');
+                             'VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO, DESC_RODAPE, VR_ACRESCIMO, VR_TOTAL, VALOR_ICMS, VR_REDUCAO_BC,BASE_CALC_ST, VALOR_ICMS_ST,VR_BASE_FCPST,P_FCPST,VR_FCPST,VR_BASE_FCP,VR_FCP,' +
+                             'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC)');
               IQuery.Sql.Add('SELECT :TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, :CFOP, DESCRICAO, :CONTA_ID, TRIBUTO_ID, CST, MVA, ((BASE_CALC_ICMS / QUANTIDADE) * :QUANTIDADE) BASE_CALC_ICMS , ALIQUOTA_ICMS, ((VR_IPI  / QUANTIDADE) * :QUANTIDADE) VR_IPI, :QUANTIDADE,' +
                              'VR_UNITARIO, VR_DESCONTO, ((DESC_RODAPE / QUANTIDADE) * :QUANTIDADE) DESC_RODAPE,  ((VR_ACRESCIMO / QUANTIDADE) * :QUANTIDADE) VR_ACRESCIMO, (VR_UNITARIO * :QUANTIDADE) VR_TOTAL, ((VALOR_ICMS / QUANTIDADE) * :QUANTIDADE) VALOR_ICMS , ' +
-                             'VR_REDUCAO_BC, BASE_CALC_ST, VALOR_ICMS_ST,VR_BASE_FCPST,VR_FCPST,P_FCPST,VR_BASE_FCP,VR_FCP');
+                             'VR_REDUCAO_BC, BASE_CALC_ST, VALOR_ICMS_ST,VR_BASE_FCPST,VR_FCPST,P_FCPST,VR_BASE_FCP,VR_FCP,' +
+                             'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC');
               IQuery.Sql.Add('FROM TRANSITENS');
               IQuery.Sql.Add('WHERE');
               IQuery.Sql.Add('(TRANSACAO_ID = :SAIDA_ID)');
@@ -4222,11 +4287,16 @@ begin
 
       if Application.MessageBox('Deseja importar todos os produtos da NF de Venda?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
       begin
+
         IQuery.Sql.Clear;
-        IQuery.Sql.Add('INSERT INTO TRANSITENS(TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, CFOP, DESCRICAO, CONTA_ID, TRIBUTO_ID, CST, MVA, BASE_CALC_ICMS, ALIQUOTA_ICMS, ' +
-                       'VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO, VR_ACRESCIMO, DESC_RODAPE, VR_TOTAL, VALOR_ICMS,VR_REDUCAO_BC, BASE_CALC_ST, VALOR_ICMS_ST)');
-        IQuery.Sql.Add('SELECT :TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, :CFOP, DESCRICAO, :CONTA_ID, TRIBUTO_ID, CST, MVA, BASE_CALC_ICMS, ALIQUOTA_ICMS, VR_IPI, QUANTIDADE, ' +
-                       ' VR_UNITARIO, VR_DESCONTO,  VR_ACRESCIMO, DESC_RODAPE, VR_TOTAL, VALOR_ICMS,VR_REDUCAO_BC, BASE_CALC_ST, VALOR_ICMS_ST');
+        IQuery.Sql.Add('INSERT INTO TRANSITENS(TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, CFOP, DESCRICAO, CONTA_ID, TRIBUTO_ID, CST, MVA, ' +
+                       'BASE_CALC_ICMS, ALIQUOTA_ICMS, VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO , VR_ACRESCIMO, DESC_RODAPE, VALOR_OUTROS, VR_TOTAL, VALOR_ICMS, BASE_CALC_ST, VALOR_ICMS_ST,VR_REDUCAO_BC,' +
+                       'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC)');
+        IQuery.Sql.Add('SELECT :TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, :CFOP, DESCRICAO, :CONTA_ID, TRIBUTO_ID, CST, MVA, ' +
+                       'BASE_CALC_ICMS, ALIQUOTA_ICMS, VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO,VR_ACRESCIMO, DESC_RODAPE, VALOR_OUTROS, VR_TOTAL, VALOR_ICMS, BASE_CALC_ST, VALOR_ICMS_ST,VR_REDUCAO_BC,' +
+                       'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC');
+
+
         IQuery.Sql.Add('FROM TRANSITENS');
         IQuery.Sql.Add('WHERE');
         IQuery.Sql.Add('(TRANSACAO_ID = :SAIDA_ID)');
@@ -4298,7 +4368,7 @@ begin
           begin
             if FrmItens_Origem.DstList.Items.Strings[I] <> '' then
             begin
-
+               {
 
               IQuery.Sql.Clear;
               IQuery.Sql.Add('INSERT INTO TRANSITENS(TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, CFOP, DESCRICAO, CONTA_ID, TRIBUTO_ID, CST, MVA, BASE_CALC_ICMS, ALIQUOTA_ICMS,' +
@@ -4321,6 +4391,33 @@ begin
 
               IQuery.Prepare;
               IQuery.ExecSql;
+              }
+
+
+              IQuery.Sql.Clear;
+              IQuery.Sql.Add('INSERT INTO TRANSITENS(TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, CFOP, DESCRICAO, CONTA_ID, TRIBUTO_ID, CST, MVA, BASE_CALC_ICMS, ALIQUOTA_ICMS,' +
+                             'VR_IPI, QUANTIDADE, VR_UNITARIO, VR_DESCONTO, DESC_RODAPE, VR_ACRESCIMO, VR_TOTAL, VALOR_ICMS, VR_REDUCAO_BC,BASE_CALC_ST, VALOR_ICMS_ST,VR_BASE_FCPST,P_FCPST,VR_FCPST,VR_BASE_FCP,VR_FCP,' +
+                             'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC)');
+              IQuery.Sql.Add('SELECT :TRANSACAO_ID, PRODUTO_ID, TP_PROD_SERV, :CFOP, DESCRICAO, :CONTA_ID, TRIBUTO_ID, CST, MVA, ((BASE_CALC_ICMS / QUANTIDADE) * :QUANTIDADE) BASE_CALC_ICMS , ALIQUOTA_ICMS, ((VR_IPI  / QUANTIDADE) * :QUANTIDADE) VR_IPI, :QUANTIDADE,' +
+                             'VR_UNITARIO, VR_DESCONTO, ((DESC_RODAPE / QUANTIDADE) * :QUANTIDADE) DESC_RODAPE,  ((VR_ACRESCIMO / QUANTIDADE) * :QUANTIDADE) VR_ACRESCIMO, (VR_UNITARIO * :QUANTIDADE) VR_TOTAL, ((VALOR_ICMS / QUANTIDADE) * :QUANTIDADE) VALOR_ICMS , ' +
+                             'VR_REDUCAO_BC, BASE_CALC_ST, VALOR_ICMS_ST,VR_BASE_FCPST,VR_FCPST,P_FCPST,VR_BASE_FCP,VR_FCP,' +
+                             'ALIQ_CBS,ALIQ_IBSUF,ALIQ_IBSMUNIC,COD_CLASSTRIB,CST_CBSIBS,VR_BASE_CBSIBS,REDUCAO_CBS_IBS,ALIQ_EF_IBSUF,ALIQ_EF_CBS,ALIQ_EF_IBSMUNIC');
+              IQuery.Sql.Add('FROM TRANSITENS');
+              IQuery.Sql.Add('WHERE');
+              IQuery.Sql.Add('(TRANSACAO_ID = :SAIDA_ID)');
+              IQuery.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+
+              IQuery.ParamByName('TRANSACAO_ID').AsInteger := QTabela.FieldByName('TRANSACAO_ID').AsInteger;
+              IQuery.ParamByName('CFOP').AsString          := QTabela.FieldByName('CFOP').AsString;
+              IQuery.ParamByName('SAIDA_ID').AsInteger     := StrToInt(Saida_id.Text);
+              IQuery.ParamByName('PRODUTO_ID').AsInteger   := StrToInt(Copy(FrmItens_Origem.DstList.Items.Strings[I], 1, 6));
+              IQuery.ParamByName('CONTA_ID').AsInteger     := QTabela.FieldByName('CONTA_ID').AsInteger;
+              IQuery.ParamByName('QUANTIDADE').AsFloat     := StrToFloat(Copy(FrmItens_Origem.DstList.Items.Strings[I], LENGTH(FrmItens_Origem.DstList.Items.Strings[I]) - 2, 3));
+
+              IQuery.Prepare;
+              IQuery.ExecSql;
+
 
 
             end;
@@ -4887,10 +4984,10 @@ begin
       Grid_Itens.SelectedIndex := 4;
 
     if (Grid_Itens.SelectedField.FieldName = 'vr_unitario') and (QSub_Detail.FieldByName('QUANTIDADE').AsFloat = 0) then
-      Grid_Itens.SelectedIndex := 9;
+      Grid_Itens.SelectedIndex := 10;
 
     if (Grid_Itens.SelectedField.FieldName = 'vr_desconto') and (QSub_Detail.FieldByName('VR_UNITARIO').AsFloat = 0) then
-      Grid_Itens.SelectedIndex := 10;
+      Grid_Itens.SelectedIndex := 11;
   end;
 end;
 
@@ -4945,24 +5042,36 @@ begin
 
         QSub_Detail.FieldByName('QUANTIDADE').AsFloat := IQuery.FieldByName('QUANTIDADE').AsFloat;
       end;
+      {
       // Reforma Tributária
 
       if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
       begin
         if (QProduto.FieldByName('ALIQUOTA_CBS').AsFloat > 0)   Then
         Begin
-           if (QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0) Then
+
+          if (QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat = 60) Then
            Begin
-           QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := 0.36;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
-           QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := 0.04;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+           QSub_Detail.FieldByName('ALIQ_CBS').AsFloat        := QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+           QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat      := QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+           QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat := QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+           QSub_Detail.FieldByName('ALIQ_EF_IBSUF').AsFloat   := 0.04;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsF
+           QSub_Detail.FieldByName('ALIQ_EF_CBS').AsFloat     := 0.36;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
 
            End
-           Else
-           Begin
-           QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
-           QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
-
-           End;
+          Else if (QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat = 100) Then
+          Begin
+          QSub_Detail.FieldByName('ALIQ_CBS').AsFloat        := QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+          QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat      := QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+          QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat := QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+          QSub_Detail.FieldByName('ALIQ_EF_IBSUF').AsFloat   := 0;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+          QSub_Detail.FieldByName('ALIQ_EF_CBS').AsFloat     := 0;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+          End
+          Else
+          Begin
+          QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+          QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+          End;
         End
         Else
         Begin
@@ -4977,7 +5086,7 @@ begin
       end;
 
 
-
+     }
 
 
     end;
@@ -5007,6 +5116,109 @@ begin
         Grid_Itens.SelectedIndex := 4;
       end;
     end;
+
+      if (Grid_Itens.SelectedField.FieldName = 'cod_classtrib') or (Grid_Itens.SelectedField.FieldName = 'quantidade')then
+      Begin
+        ProdutoSearch;
+        ClassTribSearch;
+
+        if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+        begin
+
+          if not QClassTrib.IsEmpty Then
+          Begin
+            if not QProduto.IsEmpty  Then
+           Begin
+
+            if (QClassTrib.FieldByName('ALIQ_CBS').AsFloat > 0)   Then
+            Begin
+              if (QClassTrib.FieldByName('PREDUCAO').AsFloat = 60) Then
+               Begin
+
+               QSub_Detail.FieldByName('ALIQ_CBS').AsFloat        := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+               QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat      := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+               QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat := QClassTrib.FieldByName('PREDUCAO').AsFloat;
+               QSub_Detail.FieldByName('ALIQ_EF_IBSUF').AsFloat   := 0.04;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+               QSub_Detail.FieldByName('ALIQ_EF_CBS').AsFloat     := 0.36;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+
+               End
+              Else if (QClassTrib.FieldByName('PREDUCAO').AsFloat = 100) Then
+              Begin
+
+              QSub_Detail.FieldByName('ALIQ_CBS').AsFloat        := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+              QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat      := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+              QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat := QClassTrib.FieldByName('PREDUCAO').AsFloat;
+              QSub_Detail.FieldByName('ALIQ_EF_IBSUF').AsFloat   := 0;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+              QSub_Detail.FieldByName('ALIQ_EF_CBS').AsFloat     := 0;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+              End
+              Else
+              Begin
+
+              QSub_Detail.FieldByName('ALIQ_CBS').AsFloat        := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+              QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat      := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+              QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat := QClassTrib.FieldByName('PREDUCAO').AsFloat;
+              End;
+            End
+            Else
+            Begin
+            QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+            QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+            End;
+
+            QSub_Detail.FieldByName('ALIQ_IBSMUNIC').AsFloat  := QClassTrib.FieldByName('ALIQ_IBSMUNIC').AsFloat;
+            QSub_Detail.FieldByName('COD_CLASSTRIB').AsString := QClassTrib.FieldByName('CLASSETRIB').AsString;
+            QSub_Detail.FieldByName('CST_CBSIBS').Asinteger   := QClassTrib.FieldByName('CST_CBS_IBS').AsInteger;
+           end;
+
+        //if FrmPrincipal.Config.FieldByName('REFORMA_TRIBUTARIA').AsInteger = 1 then
+        //begin
+            {if not QServico.IsEmpty  Then
+            Begin
+
+              if (QClassTrib.FieldByName('ALIQUOTA_CBS').AsFloat > 0)   Then
+              Begin
+                 if (QClassTrib.FieldByName('REDUCAO_CBS_IBS').AsFloat = 60) Then
+                 Begin
+                 QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+                 QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+                 QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat := QClassTrib.FieldByName('PREDUCAO').AsFloat;
+                 QSub_Detail.FieldByName('ALIQ_EF_IBSUF').AsFloat  := 0.04;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+                 QSub_Detail.FieldByName('ALIQ_EF_CBS').AsFloat    := 0.36;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+
+                 End
+                 Else  if (QClassTrib.FieldByName('PREDUCAO').AsFloat = 100) Then
+                 Begin
+                 QSub_Detail.FieldByName('ALIQ_CBS').AsFloat        := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+                 QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat      := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+                 QSub_Detail.FieldByName('REDUCAO_CBS_IBS').AsFloat := QClassTrib.FieldByName('PREDUCAO').AsFloat;
+                 QSub_Detail.FieldByName('ALIQ_EF_IBSUF').AsFloat   := 0.04;//QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+                 QSub_Detail.FieldByName('ALIQ_EF_CBS').AsFloat     := 0.36;//QProduto.FieldByName('ALIQUOTA_CBS').AsFloat;
+                 End
+                 Else
+                 Begin
+                 QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+                 QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+                 End;
+              End
+              Else
+              Begin
+              QSub_Detail.FieldByName('ALIQ_CBS').AsFloat       := QClassTrib.FieldByName('ALIQ_CBS').AsFloat;
+              QSub_Detail.FieldByName('ALIQ_IBSUF').AsFloat     := QClassTrib.FieldByName('ALIQ_IBSUF').AsFloat;
+              End;
+
+              QSub_Detail.FieldByName('ALIQ_IBSMUNIC').AsFloat  := QClassTrib.FieldByName('ALIQ_IBSMUNIC').AsFloat;
+             //QSub_Detail.FieldByName('COD_CLASSTRIB').AsString := QClassTrib.FieldByName('CLASSETRIB').AsString;
+              QSub_Detail.FieldByName('CST_CBSIBS').Asinteger   := QClassTrib.FieldByName('CST_CBS_IBS').AsInteger;
+
+            End;
+            }
+          End
+          Else
+          Application.MessageBox('Código de classificação Tributária inexistente!', PChar(Msg_Title), mb_IconStop);
+        end;
+
+      End;
+
 
     if Grid_Itens.SelectedField.FieldName = 'tributo_id' then
     begin
@@ -5143,7 +5355,7 @@ begin
   if (Key = Vk_F6) and (QSub_Detail.State = dsBrowse) and (not QSub_Detail.IsEmpty) then
     Atualiza_Impostos(QTabela.FieldByName('TRANSACAO_ID').AsInteger, QSub_Detail.FieldByName('PRODUTO_ID').AsInteger);
 
-  if (Key = Vk_F7) and ((Grid_Itens.SelectedField.FieldName = 'produto_id') or (Grid_Itens.SelectedField.FieldName = 'tributo_id')  or (Grid_Itens.SelectedField.FieldName = 'CST')) and (QSub_Detail.State in [dsInsert, dsEdit]) then
+  if (Key = Vk_F7) and ((Grid_Itens.SelectedField.FieldName = 'cod_classtrib') or (Grid_Itens.SelectedField.FieldName = 'produto_id') or (Grid_Itens.SelectedField.FieldName = 'tributo_id')  or (Grid_Itens.SelectedField.FieldName = 'CST')) and (QSub_Detail.State in [dsInsert, dsEdit]) then
   begin
     if Grid_Itens.SelectedField.FieldName = 'produto_id' then
       QSub_Detail.FieldByName('PRODUTO_ID').AsInteger := GetConsulta('ESTOQUE', StrToInt(EMPRESA_ID.Text), 0, QSub_Detail.FieldByName('PRODUTO_ID').AsInteger);
@@ -5156,6 +5368,14 @@ begin
 
     if Grid_Itens.SelectedField.FieldName = 'cst' then
       QSub_Detail.FieldByName('CST').AsString := GetConsulta_CST('CST_ICMS', QSub_Detail.FieldByName('CST').AsString);
+
+    if Grid_Itens.SelectedField.FieldName = 'cod_classtrib' then
+      try
+        QSub_Detail.FieldByName('COD_CLASSTRIB').AsString := StrZero(IntToStr(GetConsulta('CLASSE_TRIBUTARIA_2', 0, 0, QSub_Detail.FieldByName('COD_CLASSTRIB').AsInteger)),6,0);
+      Except
+        QSub_Detail.FieldByName('COD_CLASSTRIB').AsString := StrZero(IntToStr(GetConsulta('CLASSE_TRIBUTARIA_2', 0, 0, 1)),6,0);
+      end;
+
   end;
 
 
@@ -5286,11 +5506,12 @@ begin
   Grid_Itens.Columns[5].Width  := 30;
   Grid_Itens.Columns[6].Width  := 45;
   Grid_Itens.Columns[7].Width  := 35;
-  Grid_Itens.Columns[8].Width  := 44;
-  Grid_Itens.Columns[9].Width  := 50;
-  Grid_Itens.Columns[10].Width := 54;
+  Grid_Itens.Columns[8].Width  := 75;
+  Grid_Itens.Columns[9].Width  := 44;
+  Grid_Itens.Columns[10].Width := 50;
   Grid_Itens.Columns[11].Width := 54;
   Grid_Itens.Columns[12].Width := 54;
+  Grid_Itens.Columns[13].Width := 54;
 
   CmdSelect     := QTabela.Sql.Text;
   CmdSelectNull := 'WHERE (TRANSACAO_ID IS NOT NULL) AND (DT_MOVIMENTO = :DT_MOVIMENTO) AND (CONDUTA = :CONDUTA) AND (DEPTO = :DEPTO) AND (TPCTB = :TPCTB) AND (EMPRESA_ID = :EMPRESA_ID)';

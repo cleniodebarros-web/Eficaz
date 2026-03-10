@@ -433,6 +433,10 @@ begin
 
       QRel.Sql.Clear;
 
+
+
+
+
       if chk_dt_entrada.Checked Then
       QRel.Sql.Add('SELECT TRANSACOES.DT_ENT_SAI DT_TRANS, TRANSACOES.NUM_DOC, TRANSACOES.HISTORICO, CASE')
       Else
@@ -694,7 +698,6 @@ begin
                QRel.FieldByName('CONSUMO').AsFloat     - QRel.FieldByName('S_TRANSF').AsFloat;
 
       Sd := Saldo;
-
 
 
       QRel.Sql.Clear;

@@ -1,0 +1,2790 @@
+unit UOrcamento_Rapido_2;
+
+interface             
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, DB, IBCustomDataSet, IBQuery, rxCurrEdit, Mask, rxToolEdit, StdCtrls,
+  Grids, DBGrids, Buttons, ExtCtrls, Math, ComCtrls, RDprint, DBCtrls, QRCtrls,
+  QuickRpt, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
+  FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
+  FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,
+  Vcl.Imaging.jpeg;
+
+type
+  TFrmOrcamento_Rapido_2 = class(TForm)
+    Label1: TLabel;
+    Label2: TLabel;
+    Label3: TLabel;
+    Label4: TLabel;
+    Label5: TLabel;
+    Label7: TLabel;
+    DBGrid1: TDBGrid;
+    Cod_Produto: TEdit;
+    Descricao: TEdit;
+    Quantidade: TCurrencyEdit;
+    Preco: TRxCalcEdit;
+    Desconto: TCurrencyEdit;
+    Total_Item: TRxCalcEdit;
+    DataLog_Itens: TDataSource;
+    Panel1: TPanel;
+    btnRetorna: TBitBtn;
+    Total_Orcamento: TRxCalcEdit;
+    Label6: TLabel;
+    btnProduto: TSpeedButton;
+    StatusBar1: TStatusBar;
+    Timer1: TTimer;
+    RDprint1: TRDprint;
+    lbl1: TLabel;
+    lbl2: TLabel;
+    lbl3: TLabel;
+    lbl4: TLabel;
+    lbl5: TLabel;
+    lbl6: TLabel;
+    lbl7: TLabel;
+    dbtxtNOME: TDBText;
+    btnCliente: TSpeedButton;
+    lbl8: TLabel;
+    btnVendedor: TSpeedButton;
+    lbl10: TLabel;
+    VENDEDOR_ID: TCurrencyEdit;
+    CLIENTE_ID: TCurrencyEdit;
+    ENDERECO: TEdit;
+    MUNICIPIO: TEdit;
+    CEP: TMaskEdit;
+    NOME: TEdit;
+    BAIRRO: TEdit;
+    ESTADO: TComboBox;
+    Cond_Pagto: TComboBox;
+    DataVendedor: TDataSource;
+    DataCliente: TDataSource;
+    lbl11: TLabel;
+    OBSERVACAO: TMemo;
+    lbl9: TLabel;
+    VR_DESCONTO: TRxCalcEdit;
+    btnInsert: TBitBtn;
+    Orcamento: TQuickRep;
+    QRBand1: TQRBand;
+    QRShape1: TQRShape;
+    QRLabel6: TQRLabel;
+    QRLabel11: TQRLabel;
+    QRDBText14: TQRDBText;
+    QRDBText9: TQRDBText;
+    QRDBText13: TQRDBText;
+    QRLabel10: TQRLabel;
+    QRLabel12: TQRLabel;
+    QRDBText15: TQRDBText;
+    QRShape2: TQRShape;
+    QRLabel18: TQRLabel;
+    QRLabel17: TQRLabel;
+    QRLabel16: TQRLabel;
+    QRShape3: TQRShape;
+    QRLabel15: TQRLabel;
+    QRLabel14: TQRLabel;
+    QRSysData1: TQRSysData;
+    Cabec: TQRLabel;
+    QRSysData2: TQRSysData;
+    QRLabel3: TQRLabel;
+    QRDBText1: TQRDBText;
+    QRLabel2: TQRLabel;
+    QRDBText2: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRLabel7: TQRLabel;
+    QRLabel8: TQRLabel;
+    QRLabel23: TQRLabel;
+    QRDBText17: TQRDBText;
+    QRLabel9: TQRLabel;
+    QRDBText12: TQRDBText;
+    QRLabel24: TQRLabel;
+    QRDBText18: TQRDBText;
+    DetailBand1: TQRBand;
+    QRDBText3: TQRDBText;
+    QRDBText4: TQRDBText;
+    QRDBText5: TQRDBText;
+    QRDBText6: TQRDBText;
+    QRDBText7: TQRDBText;
+    QRDBText10: TQRDBText;
+    QRBand2: TQRBand;
+    QRShape5: TQRShape;
+    QRExpr1: TQRExpr;
+    QRLabel5: TQRLabel;
+    QRDBText11: TQRDBText;
+    QRLabel22: TQRLabel;
+    QRLabel29: TQRLabel;
+    QRLabel28: TQRLabel;
+    QRLabel21: TQRLabel;
+    QRMemo1: TQRMemo;
+    QRMemo2: TQRMemo;
+    QRLabel26: TQRLabel;
+    QRLabel4: TQRLabel;
+    QRLabel25: TQRLabel;
+    QRLabel19: TQRLabel;
+    QRDBText24: TQRDBText;
+    QRDBText23: TQRDBText;
+    QRDBText8: TQRDBText;
+    lbl12: TLabel;
+    Orcamento_id: TCurrencyEdit;
+    BtnOrcamento: TSpeedButton;
+    btnNovo: TBitBtn;
+    BtnExecuta: TBitBtn;
+    btnImpOrcamento: TBitBtn;
+    Impressora_Matricial: TCheckBox;
+    lbl13: TLabel;
+    lbl14: TLabel;
+    NUMERO: TEdit;
+    lbNumOrcamento: TLabel;
+    Orcamento_Reduzido: TQuickRep;
+    QRBand3: TQRBand;
+    QRShape4: TQRShape;
+    QRLabel13: TQRLabel;
+    QRLabel20: TQRLabel;
+    QRLabel27: TQRLabel;
+    QRDBText16: TQRDBText;
+    QRDBText19: TQRDBText;
+    QRDBText20: TQRDBText;
+    QRDBText21: TQRDBText;
+    QRLabel30: TQRLabel;
+    QRLabel31: TQRLabel;
+    QRDBText22: TQRDBText;
+    QRShape6: TQRShape;
+    QRLabel32: TQRLabel;
+    QRLabel33: TQRLabel;
+    QRLabel34: TQRLabel;
+    QRShape7: TQRShape;
+    QRLabel35: TQRLabel;
+    QRLabel36: TQRLabel;
+    QRSysData3: TQRSysData;
+    QRLabel37: TQRLabel;
+    QRSysData4: TQRSysData;
+    QRLabel38: TQRLabel;
+    QRDBText25: TQRDBText;
+    QRLabel39: TQRLabel;
+    QRDBText26: TQRDBText;
+    QRLabel40: TQRLabel;
+    QRLabel41: TQRLabel;
+    QRLabel42: TQRLabel;
+    QRLabel43: TQRLabel;
+    QRDBText27: TQRDBText;
+    QRLabel44: TQRLabel;
+    QRDBText28: TQRDBText;
+    QRLabel45: TQRLabel;
+    QRDBText29: TQRDBText;
+    QRLabel46: TQRLabel;
+    QRDBText30: TQRDBText;
+    QRLabel47: TQRLabel;
+    QRDBText32: TQRDBText;
+    QRLabel48: TQRLabel;
+    QRBand4: TQRBand;
+    QRDBText33: TQRDBText;
+    QRDBText34: TQRDBText;
+    QRDBText35: TQRDBText;
+    QRDBText36: TQRDBText;
+    QRDBText37: TQRDBText;
+    QRDBText38: TQRDBText;
+    QRBand5: TQRBand;
+    QRLabel49: TQRLabel;
+    QRDBText39: TQRDBText;
+    QRLabel50: TQRLabel;
+    QRLabel51: TQRLabel;
+    QRDBText40: TQRDBText;
+    QRShape8: TQRShape;
+    QRLabel53: TQRLabel;
+    QRLabel54: TQRLabel;
+    QRLabel55: TQRLabel;
+    QRDBText42: TQRDBText;
+    QRLabel56: TQRLabel;
+    QRLabel57: TQRLabel;
+    QRMemo3: TQRMemo;
+    QRMemo4: TQRMemo;
+    DDD: TMaskEdit;
+    TELEFONE_1: TMaskEdit;
+    QRDBText43: TQRDBText;
+    QRDBText44: TQRDBText;
+    QRDBText31: TQRDBText;
+    QRDBText45: TQRDBText;
+    QLog_Orcamento: TFDQuery;
+    QProduto: TFDQuery;
+    QRel: TFDQuery;
+    QInsert: TFDQuery;
+    QLimite: TFDQuery;
+    QSaldo_Orcamento: TFDQuery;
+    QVendedor: TFDQuery;
+    Qorcamento_itens: TFDQuery;
+    IQuery3: TFDQuery;
+    QCliente: TFDQuery;
+    QGen: TFDQuery;
+    QTabela: TFDQuery;
+    QSelect: TFDQuery;
+    QDelete: TFDQuery;
+    QSearch: TFDQuery;
+    ORCAMENTO_2: TQuickRep;
+    QRBand6: TQRBand;
+    QRShape9: TQRShape;
+    QRShape10: TQRShape;
+    QRLabel52: TQRLabel;
+    QRLabel58: TQRLabel;
+    QRShape11: TQRShape;
+    QRLabel59: TQRLabel;
+    QRLabel60: TQRLabel;
+    QRSysData5: TQRSysData;
+    QRLabel61: TQRLabel;
+    QRDBText41: TQRDBText;
+    QRLabel62: TQRLabel;
+    QRDBText46: TQRDBText;
+    QRLabel63: TQRLabel;
+    QRLabel64: TQRLabel;
+    QRLabel65: TQRLabel;
+    QRLabel66: TQRLabel;
+    QRDBText47: TQRDBText;
+    QrLogo: TQRImage;
+    QRLabel77: TQRLabel;
+    QRLabel67: TQRLabel;
+    QRLabel79: TQRLabel;
+    QRLabel80: TQRLabel;
+    QRDBText59: TQRDBText;
+    QRLabel74: TQRLabel;
+    QRLabel68: TQRLabel;
+    QRLabel89: TQRLabel;
+    QRLabel69: TQRLabel;
+    QRLabel70: TQRLabel;
+    QRLabel88: TQRLabel;
+    QRDBText48: TQRDBText;
+    QRDBText49: TQRDBText;
+    QRDBText70: TQRDBText;
+    QRDBText50: TQRDBText;
+    QRLabel91: TQRLabel;
+    QRDBText72: TQRDBText;
+    QRLabel90: TQRLabel;
+    QRDBText71: TQRDBText;
+    QRLabel96: TQRLabel;
+    QRDBText73: TQRDBText;
+    QRLabel71: TQRLabel;
+    QRDBText51: TQRDBText;
+    QRLabel72: TQRLabel;
+    QRDBText52: TQRDBText;
+    QRLabel87: TQRLabel;
+    QRDBText68: TQRDBText;
+    QRDBText53: TQRDBText;
+    QRBand7: TQRBand;
+    QRDBText54: TQRDBText;
+    QRDBText55: TQRDBText;
+    QRDBText56: TQRDBText;
+    QRDBText57: TQRDBText;
+    QRDBText58: TQRDBText;
+    QRDBText60: TQRDBText;
+    QRDBText61: TQRDBText;
+    QRDBText64: TQRDBText;
+    QRBand8: TQRBand;
+    QRLabel73: TQRLabel;
+    QRDBText62: TQRDBText;
+    QRLabel75: TQRLabel;
+    QRLabel76: TQRLabel;
+    QRDBText63: TQRDBText;
+    QRDBText65: TQRDBText;
+    QRShape12: TQRShape;
+    QRExpr2: TQRExpr;
+    QRLabel78: TQRLabel;
+    QRMemo5: TQRMemo;
+    QRMemo6: TQRMemo;
+    QRLabel84: TQRLabel;
+    QRLabel81: TQRLabel;
+    QRDBText66: TQRDBText;
+    QRLabel82: TQRLabel;
+    QRLabel83: TQRLabel;
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure btnRetornaClick(Sender: TObject);
+    procedure Cod_ProdutoKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure QuantidadeKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure btnProdutoClick(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure Cod_ProdutoExit(Sender: TObject);
+    procedure DBGrid1ColEnter(Sender: TObject);
+    procedure btnInsertClick(Sender: TObject);
+    procedure QuantidadeExit(Sender: TObject);
+    procedure PrecoExit(Sender: TObject);
+    procedure DescontoExit(Sender: TObject);
+    procedure Cod_ProdutoEnter(Sender: TObject);
+    procedure DBGrid1KeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure DBGrid1KeyUp(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
+    procedure btnRetornaMouseEnter(Sender: TObject);
+    procedure btnRetornaMouseLeave(Sender: TObject);
+    procedure DescricaoEnter(Sender: TObject);
+    procedure DBGrid1Exit(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
+    procedure RDprint1NewPage(Sender: TObject; Pagina: Integer);
+    procedure RDprint1BeforeNewPage(Sender: TObject; Pagina: Integer);
+    procedure RDprint1AfterPrint(Sender: TObject);
+    procedure CLIENTE_IDExit(Sender: TObject);
+    procedure btn1Click(Sender: TObject);
+    procedure BtnExecutaClick(Sender: TObject);
+    procedure btnClienteClick(Sender: TObject);
+    procedure btnVendedorClick(Sender: TObject);
+    procedure btnImpOrcamentoClick(Sender: TObject);
+    procedure BtnOrcamentoClick(Sender: TObject);
+    procedure Orcamento_idExit(Sender: TObject);
+    procedure Qorcamento_itensAfterOpen(DataSet: TDataSet);
+    procedure Total_OrcamentoChange(Sender: TObject);
+    procedure Orcamento_idChange(Sender: TObject);
+    procedure btnNovoClick(Sender: TObject);
+    procedure Orcamento_idKeyDown(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure VENDEDOR_IDExit(Sender: TObject);
+    procedure Total_ItemExit(Sender: TObject);
+    procedure VR_DESCONTOExit(Sender: TObject);
+    function getGenerator(Gen:String): Integer;
+    procedure QLog_OrcamentoAfterOpen(DataSet: TDataSet);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+    procedure Soma;
+   // procedure Cond_Pagto;
+   procedure DetailSearch(Tabela: String);
+  end;
+
+var
+  FrmOrcamento_Rapido_2: TFrmOrcamento_Rapido_2;
+  Pode_Sair: Boolean;
+  Pagto, Autoriz_Por, Cod_Cupom: String;
+  Cliente, Linha: Integer;
+  Inserindo : Boolean;
+
+implementation
+
+uses
+  UData, UPrincipal, UConsulta, UFecha_Orcamento, UConsulta_Cliente, UPasswordDlg, UParcelas ;
+
+{$R *.dfm}
+
+
+procedure TFrmOrcamento_Rapido_2.DetailSearch(Tabela: String);
+begin
+
+  if ((Tabela = '') or (Tabela = 'Orçamento')) and (Orcamento_ID.Text <> '') then
+  begin
+    try
+    QTabela.Close;
+    QTabela.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(ORCAMENTO_ID.Text);
+    QTabela.Prepare;
+    QTabela.Open;
+
+    if not QTabela.IsEmpty then
+    begin
+      NOME.Text             := Copy(QTabela.FieldByName('NOME').AsString, 1, 40);
+      Cond_Pagto.Text       := QTabela.FieldByName('COND_PAGTO').AsString;
+      ENDERECO.Text         := Copy(QTabela.FieldByName('ENDERECO').AsString + ', ' + QTabela.FieldByName('NUMERO').AsString, 1, 40);
+      BAIRRO.Text           := Copy(QTabela.FieldByName('BAIRRO').AsString, 1, 20);
+      MUNICIPIO.Text        := Copy(QTabela.FieldByName('MUNICIPIO').AsString, 1, 30);
+      ESTADO.Text           := QTabela.FieldByName('ESTADO').AsString;
+      CEP.Text              := QTabela.FieldByName('CEP').AsString;
+      DDD.Text              := QTabela.FieldByName('DDD').AsString;
+      Telefone_1.Text       := QTabela.FieldByName('TELEFONE').AsString;
+      Numero.Text           := QTabela.FieldByName('NUMERO').AsString;
+      OBSERVACAO.Text       := QTabela.FieldByName('OBSERVACAO').AsString;
+      VR_DESCONTO.Value     := QTabela.FieldByName('VR_DESCONTO').AsFloat;
+      Total_Orcamento.Value := QTabela.FieldByName('VALOR').AsFloat;
+
+      if  QTabela.FieldByName('CLIENTE_ID').AsInteger > 0 Then
+      Begin
+      Cliente_id.Text := IntToStr(QTabela.FieldByName('CLIENTE_ID').AsInteger);
+
+        QCliente.Close;
+        QCliente.ParamByName('CLIENTE_ID').AsInteger := StrToInt(CLIENTE_ID.Text);
+        QCliente.Prepare;
+        QCliente.Open;
+
+        if not QCliente.IsEmpty then
+        begin
+          NOME.Text      := Copy(QCliente.FieldByName('NOME').AsString, 1, 40);
+          ENDERECO.Text  := Copy(QCliente.FieldByName('ENDERECO').AsString + ', ' + QCliente.FieldByName('NUMERO').AsString, 1, 40);
+          BAIRRO.Text    := Copy(QCliente.FieldByName('BAIRRO').AsString, 1, 20);
+          MUNICIPIO.Text := Copy(QCliente.FieldByName('MUNICIPIO').AsString, 1, 30);
+          ESTADO.Text    := QCliente.FieldByName('ESTADO').AsString;
+          CEP.Text       := QCliente.FieldByName('CEP').AsString;
+          DDD.Text       := QCliente.FieldByName('DDD').AsString;
+          Telefone_1.Text  :=  QCliente.FieldByName('TELEFONE_1').AsString;
+        end;
+
+
+      End;
+
+      DataLog_Itens.DataSet := Qorcamento_itens;
+
+      Qorcamento_itens.Close;
+      Qorcamento_itens.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(ORCAMENTO_ID.Text);
+      Qorcamento_itens.Prepare;
+      Qorcamento_itens.Open;
+
+    end
+    Else
+    begin
+      if NOT Inserindo then
+      Begin
+        NOME.Text             := '';
+        ENDERECO.Text         := '';
+        BAIRRO.Text           := '';
+        MUNICIPIO.Text        := '';
+        ESTADO.Text           := '';
+        CEP.Text              := '';
+        OBSERVACAO.Text       := '';
+        Telefone_1.Text       := '';
+        DDD.Text              := '';
+        NUMERO.Text           := '';
+        VR_DESCONTO.Value     := 0;
+        Total_Orcamento.Value := 0;
+        Qorcamento_itens.Close;
+
+      End;
+      if Orcamento_id.Value > 0 then
+      Application.MessageBox('Orçamento não localizado.', PChar(Msg_Title), mb_IconInformation);
+
+    end;
+    except
+
+    end;
+
+  end;
+
+ { if ((Tabela = '') or (Tabela = 'Cliente')) and (CLIENTE_ID.Text <> '') then
+  begin
+    QCliente.Close;
+    QCliente.ParamByName('CLIENTE_ID').AsInteger := StrToInt(CLIENTE_ID.Text);
+    QCliente.Prepare;
+    QCliente.Open;
+
+    if not QCliente.IsEmpty then
+    begin
+      NOME.Text      := Copy(QCliente.FieldByName('NOME').AsString, 1, 40);
+      ENDERECO.Text  := Copy(QCliente.FieldByName('ENDERECO').AsString + ', ' + QCliente.FieldByName('NUMERO').AsString, 1, 40);
+      BAIRRO.Text    := Copy(QCliente.FieldByName('BAIRRO').AsString, 1, 20);
+      MUNICIPIO.Text := Copy(QCliente.FieldByName('MUNICIPIO').AsString, 1, 30);
+      ESTADO.Text    := QCliente.FieldByName('ESTADO').AsString;
+      CEP.Text       := QCliente.FieldByName('CEP').AsString;
+    end;
+  end;  }
+
+
+  if ((Tabela = '') or (Tabela = 'Vendedor')) and (VENDEDOR_ID.Text <> '') then
+  begin
+    QVendedor.Close;
+    QVendedor.ParamByName('FUNCIONARIO_ID').AsInteger := StrToInt(VENDEDOR_ID.Text);
+    QVendedor.Prepare;
+    QVendedor.Open;
+  end;
+
+end;
+
+
+procedure TFrmOrcamento_Rapido_2.Soma;
+begin
+  if DataLog_Itens.DataSet = QLog_Orcamento then
+  BEGIN
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT SUM(VR_TOTAL) VR_TOTAL');
+    QRel.Sql.Add('FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+    QRel.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.Open;
+
+    Total_Orcamento.Value := QRel.FieldByName('VR_TOTAL').AsFloat - VR_DESCONTO.Value;
+
+    if  QRel.FieldByName('VR_TOTAL').AsFloat > 0.01 then
+    BtnExecuta.Enabled := True
+    else
+    BtnExecuta.Enabled := False;
+
+  end
+  Else
+  begin
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT SUM(VR_TOTAL) VR_TOTAL');
+    QRel.Sql.Add('FROM ORCITENS');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+    QRel.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(Orcamento_id.Text); // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.Open;
+
+    Total_Orcamento.Value := QRel.FieldByName('VR_TOTAL').AsFloat - VR_DESCONTO.Value;
+
+    if  QRel.FieldByName('VR_TOTAL').AsFloat > 0.01 then
+    BtnExecuta.Enabled := True
+    else
+    BtnExecuta.Enabled := False;
+
+  end;
+
+
+end;
+
+
+
+
+procedure TFrmOrcamento_Rapido_2.Timer1Timer(Sender: TObject);
+begin
+  Timer1.Enabled := False;
+  //Cond_Pagto;
+end;
+
+procedure TFrmOrcamento_Rapido_2.Total_ItemExit(Sender: TObject);
+begin
+btnInsertClick(Self);
+end;
+
+procedure TFrmOrcamento_Rapido_2.Total_OrcamentoChange(Sender: TObject);
+begin
+
+if Total_Orcamento.Value > 0.01 then
+BtnExecuta.Enabled := False;
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.VENDEDOR_IDExit(Sender: TObject);
+begin
+DetailSearch('Vendedor');
+end;
+
+procedure TFrmOrcamento_Rapido_2.VR_DESCONTOExit(Sender: TObject);
+begin
+Soma;
+end;
+
+{procedure TFrmOrcamento_Rapido_2.Cond_Pagto;
+var
+Saldo_Orcamento : Real;
+begin
+  if QLog_Orcamento.IsEmpty then
+  begin
+    if Pagto = '' then
+    begin
+      Application.CreateForm(TFrmConsulta_Cliente, FrmConsulta_Cliente);
+      try
+        FrmConsulta_Cliente.ShowModal;
+
+        if FrmConsulta_Cliente.Cond_Pagto.Text = 'A PRAZO' then
+        begin
+          if FrmConsulta_Cliente.QCliente.IsEmpty then
+          begin
+            Application.MessageBox('Para condição a prazo é necessário informar o cliente', PChar(Msg_Title), mb_IconStop);
+            Cod_Produto.SetFocus;
+            abort;
+          end;
+
+          if FrmConsulta_Cliente.QCliente.FieldByName('BLOQUEADO').AsString = 'SIM' then
+          begin
+            Application.MessageBox(PChar('Cliente bloqueado. Procurar a administração'), PChar(Msg_Title), mb_IconStop);
+            Cod_Produto.SetFocus;
+            abort;
+          end;
+
+          if FrmConsulta_Cliente.QCliente.FieldByName('LIMITE').AsFloat > 0 then
+          begin
+            QLimite.Close;
+
+            QLimite.ParamByName('CLIENTE_ID').AsInteger     := StrToInt(FrmConsulta_Cliente.Cliente.Text);
+            QLimite.ParamByName('DT_VENCIMENTO').AsDateTime := StrToDate('31/12/2026');
+
+            QLimite.Prepare;
+            QLimite.Open;
+
+            QSaldo_Orcamento.Close;
+
+            QSaldo_Orcamento.ParamByName('CLIENTE_ID').AsInteger     := StrToInt(FrmConsulta_Cliente.Cliente.Text);
+            QSaldo_Orcamento.ParamByName('DT_VENCIMENTO').AsDateTime := StrToDate('31/12/2026');
+
+            QSaldo_Orcamento.Prepare;
+            QSaldo_Orcamento.Open;
+
+            if LeIni(Arq_Ini, 'Sistema', 'Limite Saldo Orçamento') = 'True' then
+            Saldo_Orcamento := QSaldo_Orcamento.FieldByName('DEBITO').AsFloat
+            Else
+            Saldo_Orcamento := 0;
+
+            if (QLimite.FieldByName('DEBITO').AsFloat + Saldo_Orcamento + Total_Item.Value + Total_Orcamento.Value) > FrmConsulta_Cliente.QCliente.FieldByName('LIMITE').AsFloat then
+            begin
+              Application.MessageBox(PChar('Valor da compra maior do que o limite do cliente. Necessário autorização do supervisor' + #13 +
+                                     'Limite do Cliente: ' + FormatFloat('#,##0.00', FrmConsulta_Cliente.QCliente.FieldByName('LIMITE').AsFloat) + #13 +
+                                     'Valor da Compra: ' + FormatFloat('#,##0.00', (Total_Item.Value + Total_Orcamento.Value)) + #13 +
+                                     'Saldo Devedor: ' + FormatFloat('#,##0.00', (QLimite.FieldByName('DEBITO').AsFloat + Saldo_Orcamento))), PChar(Msg_Title), MB_IconStop + MB_OK);
+
+              Application.CreateForm(TFrmPasswordDlg, FrmPasswordDlg);
+              try
+                if FrmPasswordDlg.ShowModal = mrOk then
+                begin
+                  QInsert.Sql.Clear;
+                  QInsert.Sql.Add('SELECT * FROM OPERADORES');
+                  QInsert.Sql.Add('WHERE');
+                  QInsert.Sql.Add('(OPERADOR_ID = :OPERADOR_ID)');
+
+                  QInsert.ParamByName('OPERADOR_ID').AsString := StrZero(FrmPasswordDlg.Password.Text, 14, 0);
+
+                  QInsert.Prepare;
+                  QInsert.Open;
+
+                  if (QInsert.FieldByName('LIMITE_APROVA').AsFloat + FrmConsulta_Cliente.QCliente.FieldByName('LIMITE').AsFloat) < (QLimite.FieldByName('DEBITO').AsFloat + Saldo_Orcamento + Total_Item.Value + Total_Orcamento.Value) then
+                  begin
+                    Application.MessageBox('Supervisor sem privilégio para liberar venda', PChar(Msg_Title), mb_IconStop);
+                    abort;
+                  end
+                  else
+                    Autoriz_Por := 'VENDA AUTORIZADA POR ' + QInsert.FieldByName('NOME').AsString + #13 +
+                                   'Limite do Cliente: ' + FormatFloat('#,##0.00', FrmConsulta_Cliente.QCliente.FieldByName('LIMITE').AsFloat) + #13 +
+                                   'Valor da Compra: ' + FormatFloat('#,##0.00', (Total_Item.Value + Total_Orcamento.Value)) + #13 +
+                                   'Saldo Devedor: ' + FormatFloat('#,##0.00', (QLimite.FieldByName('DEBITO').AsFloat + Saldo_Orcamento));
+                end
+                else
+                  abort;
+              finally
+                FrmPasswordDlg.Release;
+              end;
+            end;
+          end;
+
+          Pagto   := FrmConsulta_Cliente.Cond_Pagto.Text;
+          Cliente := StrToInt(FrmConsulta_Cliente.Cliente.Text);
+        end
+        else
+        begin
+          Pagto       := 'A VISTA';
+          Cliente     := StrToInt(FrmConsulta_Cliente.Cliente.Text);
+          Autoriz_Por := '';
+        end;
+
+        Label8.Caption := 'Cond. Pagto.: ' + FrmConsulta_Cliente.Cond_Pagto.Text;
+
+        if FrmConsulta_Cliente.Cond_Pagto.Text = 'A PRAZO' then
+          Label9.Caption := 'Cliente: ' + FrmConsulta_Cliente.QCliente.FieldByName('NOME').AsString
+        else
+          Label9.Caption := '';
+      finally
+        FrmConsulta_Cliente.Release;
+      end;
+    end;
+  end;
+end; }
+
+procedure TFrmOrcamento_Rapido_2.btn1Click(Sender: TObject);
+var
+ID: Integer;
+Vr_Orcamento, Vr_Produtos: Real;
+F1: TextFile;
+begin
+// 235, 725
+  DetailSearch('');
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT GEN_ID(GEN_ORCAMENTOS, 1) FROM RDB$DATABASE');
+
+    QRel.Prepare;
+    QRel.Open;
+
+    ID := QRel.Fields[0].AsInteger;
+
+
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT SUM(VR_TOTAL) VR_TOTAL');
+    QRel.Sql.Add('FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+    QRel.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.Open;
+
+    Vr_Orcamento := (QRel.FieldByName('VR_TOTAL').AsFloat - VR_DESCONTO.Value);
+
+    QInsert.Sql.Clear;
+    QInsert.Sql.Add('INSERT INTO ORCAMENTOS(ORCAMENTO_ID,      DT_ORCAMENTO,   DT_MOVIMENTO,    EMPRESA_ID, ' +
+                                            'CLIENTE_ID,       VENDEDOR_ID,    COMISSAO,        NOME, ' +
+                                            'ENDERECO,         BAIRRO,         MUNICIPIO,       ESTADO, ' +
+                                            'CEP,              COND_PAGTO,     VALOR_PRODUTOS,  BASE_ICMS_NORMAL, ' +
+                                            'VR_ICMS_NORMAL,   BASE_ICMS_ST,   VR_ICMS_ST,      VR_IPI, ' +
+                                            'VR_FRETE,         VR_DESCONTO,    VR_ACRESCIMO,    VALOR, ' +
+                                            'AUTORIZ_ID,       OBSERVACAO) VALUES( ' +
+                                            ':ORCAMENTO_ID,    :DT_ORCAMENTO,  :DT_MOVIMENTO,   :EMPRESA_ID, ' +
+                                            ':CLIENTE_ID,      :VENDEDOR_ID,   :COMISSAO,       :NOME, ' +
+                                            ':ENDERECO,        :BAIRRO,        :MUNICIPIO,      :ESTADO, ' +
+                                            ':CEP,             :COND_PAGTO,    :VALOR_PRODUTOS, :BASE_ICMS_NORMAL, ' +
+                                            ':VR_ICMS_NORMAL,  :BASE_ICMS_ST,  :VR_ICMS_ST,     :VR_IPI, ' +
+                                            ':VR_FRETE,        :VR_DESCONTO,   :VR_ACRESCIMO,   :VALOR, ' +
+                                            ':AUTORIZ_ID,      :OBSERVACAO)');
+
+    QInsert.ParamByName('ORCAMENTO_ID').AsInteger   := ID;
+    QInsert.ParamByName('DT_ORCAMENTO').AsDateTime  := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QInsert.ParamByName('DT_MOVIMENTO').AsDateTime  := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QInsert.ParamByName('EMPRESA_ID').AsInteger     := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QInsert.ParamByName('CLIENTE_ID').AsInteger     := StrToInt(CLIENTE_ID.Text);
+    QInsert.ParamByName('VENDEDOR_ID').AsInteger    := StrToInt(VENDEDOR_ID.Text);
+    QInsert.ParamByName('COMISSAO').AsFloat         := 0;
+    QInsert.ParamByName('NOME').AsString            := NOME.Text;
+    QInsert.ParamByName('ENDERECO').AsString        := ENDERECO.Text;
+    QInsert.ParamByName('BAIRRO').AsString          := BAIRRO.Text;
+    QInsert.ParamByName('MUNICIPIO').AsString       := MUNICIPIO.Text;
+    QInsert.ParamByName('ESTADO').AsString          := ESTADO.Text;
+    QInsert.ParamByName('CEP').AsString             := CEP.Text;
+    QInsert.ParamByName('COND_PAGTO').AsString      := COND_PAGTO.Text;
+    QInsert.ParamByName('VALOR_PRODUTOS').AsFloat   := QRel.FieldByName('VR_TOTAL').AsFloat;
+    QInsert.ParamByName('BASE_ICMS_NORMAL').AsFloat := 0;
+    QInsert.ParamByName('VR_ICMS_NORMAL').AsFloat   := 0;
+    QInsert.ParamByName('BASE_ICMS_ST').AsFloat     := 0;
+    QInsert.ParamByName('VR_ICMS_ST').AsFloat       := 0;
+    QInsert.ParamByName('VR_IPI').AsFloat           := 0;
+    QInsert.ParamByName('VR_FRETE').AsFloat         := 0;
+    QInsert.ParamByName('VR_DESCONTO').AsFloat      := VR_DESCONTO.Value;
+    QInsert.ParamByName('VR_ACRESCIMO').AsFloat     := 0;
+    QInsert.ParamByName('VALOR').AsFloat            := (QRel.FieldByName('VR_TOTAL').AsFloat - VR_DESCONTO.Value);
+    QInsert.ParamByName('AUTORIZ_ID').AsInteger     := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+    QInsert.ParamByName('OBSERVACAO').AsString      := OBSERVACAO.Text;
+
+    QInsert.Prepare;
+    QInsert.ExecSql;
+
+
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+    QRel.ParamByName('CUPOM').AsString := Num_Terminal; // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QRel.First;
+    while not QRel.Eof do
+    begin
+      QInsert.Sql.Clear;
+      QInsert.Sql.Add('INSERT INTO ORCITENS(ORCAMENTO_ID,      PRODUTO_ID,     TP_PROD_SERV,    DESCRICAO, ' +
+                                            'QUANTIDADE,       VR_UNITARIO,    VR_TOTAL,        TRIBUTO_ID, ' +
+                                            'CST,              MVA,            BASE_CALC_ICMS,  ALIQUOTA_ICMS, '+
+                                            'VR_IPI,           VR_DESCONTO) VALUES( ' +
+                                            ':ORCAMENTO_ID,    :PRODUTO_ID,    :TP_PROD_SERV,   :DESCRICAO, ' +
+                                            ':QUANTIDADE,      :VR_UNITARIO,   :VR_TOTAL,       :TRIBUTO_ID, ' +
+                                            ':CST,             :MVA,           :BASE_CALC_ICMS, :ALIQUOTA_ICMS, '+
+                                            ':VR_IPI,          :VR_DESCONTO)');
+
+      QInsert.ParamByName('ORCAMENTO_ID').AsInteger := ID;
+      QInsert.ParamByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
+      QInsert.ParamByName('TP_PROD_SERV').AsString  := 'P';
+      QInsert.ParamByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
+      QInsert.ParamByName('QUANTIDADE').AsFloat     := QRel.FieldByName('QUANTIDADE').AsFloat;
+      QInsert.ParamByName('VR_UNITARIO').AsFloat    := QRel.FieldByName('VR_UNITARIO').AsFloat;
+      QInsert.ParamByName('VR_TOTAL').AsFloat       := QRel.FieldByName('VR_TOTAL').AsFloat;
+      QInsert.ParamByName('TRIBUTO_ID').AsInteger   := QRel.FieldByName('TRIBUTO_ID').AsInteger;
+      QInsert.ParamByName('CST').AsString           := QRel.FieldByName('CST').AsString;
+      QInsert.ParamByName('MVA').AsFloat            := QRel.FieldByName('MVA').AsFloat;
+      QInsert.ParamByName('BASE_CALC_ICMS').AsFloat := QRel.FieldByName('VR_TOTAL').AsFloat;
+      QInsert.ParamByName('ALIQUOTA_ICMS').AsFloat  := QRel.FieldByName('ALIQUOTA_ICMS').AsFloat;
+      QInsert.ParamByName('VR_IPI').AsFloat         := QRel.FieldByName('IPI').AsFloat;
+      QInsert.ParamByName('VR_DESCONTO').AsFloat    := QRel.FieldByName('VR_DESCONTO').AsFloat;
+
+      QInsert.Prepare;
+      QInsert.ExecSql;
+
+
+
+      Application.ProcessMessages;
+      QRel.Next;
+    end;
+
+    if COND_PAGTO.Text = 'A PRAZO' then
+      Divisao_Parcelas(ID, 'O','', True, FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime, Vr_Orcamento);
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT * FROM ORCAMENTOS');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+    QRel.ParamByName('ORCAMENTO_ID').AsInteger := ID;
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QInsert.Sql.Clear;
+    QInsert.Sql.Add('SELECT * FROM ORCITENS');
+    QInsert.Sql.Add('WHERE');
+    QInsert.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+    QInsert.ParamByName('ORCAMENTO_ID').AsInteger := ID;
+
+    QInsert.Prepare;
+    QInsert.Open;
+
+    QRLabel7.Caption   := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' +
+                          FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                          FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - CEP ' +
+                          FrmPrincipal.QEmpresa.FieldByName('CEP').AsString;
+    QRLabel8.Caption   := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - I. E. ' +
+                          FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString + ' - Fone: ' +
+                          FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+
+    if (LeIni(Arq_Ini, 'Sistema', 'Largura Papel') > '0') and (LeIni(Arq_Ini, 'Sistema', 'Altura Papel') > '0') then
+    begin
+      Orcamento.Page.Width     := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Largura Papel'));
+      Orcamento.Page.Length    := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Altura Papel'));
+    end;
+
+    if LeIni(Arq_Ini, 'Orçamento', 'Endereço Cliente') = 'False' then
+    begin
+      QRLabel9.Enabled   := False;
+      QRDBText12.Enabled := False;
+      QRLabel10.Enabled  := False;
+      QRDBText13.Enabled := False;
+      QRLabel11.Enabled  := False;
+      QRDBText14.Enabled := False;
+      QRLabel12.Enabled  := False;
+      QRDBText15.Enabled := False;
+    end;
+
+    if LeIni(Arq_Ini, 'Orçamento', 'Acréscimo/Desconto') = 'False' then
+    begin
+      QRLabel28.Enabled := False;
+      QRLabel29.Enabled := False;
+      QRBand2.Height    := 22;
+    end;
+
+    QSelect.Sql.Clear;
+    QSelect.Sql.Add('SELECT * FROM TRANSPARCELAS');
+    QSelect.Sql.Add('WHERE');
+    QSelect.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    QSelect.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+    QSelect.ParamByName('TRANSACAO_ID').AsInteger  := QRel.FieldByName('ORCAMENTO_ID').AsInteger;
+    QSelect.ParamByName('TIPO_TRANSACAO').AsString := 'O';
+
+    QSelect.Prepare;
+    QSelect.Open;
+
+    if not QSelect.IsEmpty then
+    begin
+      QRMemo2.Lines.Clear;
+      QRMemo2.Lines.Add('Parcelamento');
+      QRMemo2.Lines.Add('============');
+
+      QSelect.First;
+      while not QSelect.Eof do
+      begin
+        QRMemo2.Lines.Add('Venc.: ' + QSelect.FieldByName('DT_VENCIMENTO').AsString + ' - ' + FormatFloat('#,##0.00', QSelect.FieldByName('VALOR').AsFloat));
+
+        Application.ProcessMessages;
+        QSelect.Next;
+      end;
+    end;
+
+    QRMemo1.Lines.Clear;
+    QRMemo1.Lines.Text := QRel.FieldByName('OBSERVACAO').AsString;
+
+    if Impressora_Matricial.Checked then
+    begin
+      RDprint1.OpcoesPreview.Preview     := True;
+      RDprint1.OpcoesPreview.PreviewZoom := -1;
+      RDprint1.MostrarProgresso          := True;
+
+      RDprint1.Abrir;
+
+      if RDprint1.Setup = False then
+      begin
+        QDelete.Sql.Clear;
+        QDelete.Sql.Add('DELETE FROM ORCAMENTOS');
+        QDelete.Sql.Add('WHERE');
+        QDelete.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+        QDelete.ParamByName('ORCAMENTO_ID').AsInteger := ID;
+
+        QDelete.Prepare;
+        QDelete.ExecSql;
+
+        Application.MessageBox('Cancelado pelo usuário...', PChar(Msg_Title), mb_IconInformation);
+        exit;
+      end;
+
+      Vr_Produtos := 0;
+
+      QInsert.First;
+      while not QInsert.eof do
+      begin
+        if Linha >= 28 then
+          RDprint1.Novapagina;
+
+        RDprint1.Imp(Linha, 01, StrZero(QInsert.FieldByName('PRODUTO_ID').AsString, 6, 0));
+        RDprint1.Imp(Linha, 08, Copy(QInsert.FieldByName('DESCRICAO').AsString, 1, 40));
+        RDprint1.ImpVal(Linha, 50, '##0.00', QInsert.FieldByName('QUANTIDADE').AsFloat, []);
+        RDprint1.ImpVal(Linha, 60, '##0.00', QInsert.FieldByName('VR_UNITARIO').AsFloat, []);
+        RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QInsert.FieldByName('VR_TOTAL').AsFloat, []);
+
+        Inc(Linha);
+
+        Vr_Produtos := Vr_Produtos + QInsert.FieldByName('VR_TOTAL').AsFloat;
+
+        Application.ProcessMessages;
+        QInsert.next;
+      end;
+
+      RDprint1.Imp(Linha, 67, '--------------');
+
+      Inc(Linha);
+
+      RDprint1.Imp(Linha, 01, 'Vendedor:');
+      RDprint1.Imp(Linha, 11, QVendedor.FieldByName('NOME').AsString);
+      RDprint1.Imp(Linha, 47, 'Total dos Produtos');
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', Vr_Produtos, []);
+
+      Inc(Linha);
+
+      RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 1, 45));
+      RDprint1.Imp(Linha, 47, 'Acréscimo');
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VR_ACRESCIMO').AsFloat, []);
+
+      Inc(Linha);
+
+      RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 46, 45));
+      RDprint1.Imp(Linha, 47, 'Desconto');
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VR_DESCONTO').AsFloat, []);
+
+      Inc(Linha);
+
+      RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 99, 45));
+      RDprint1.Imp(Linha, 47, 'Total do Orçamento');
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VALOR').AsFloat, [negrito]);
+
+      RDprint1.Fechar;
+    end
+    else
+      Orcamento.PreviewModal;
+
+    if LeIni(Arq_Ini, 'Sistema', 'Path Orçamento') <> '' then
+    begin
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+      QRel.ParamByName('CUPOM').AsString := Num_Terminal; // SerialNum('C');
+
+      QRel.Prepare;
+      QRel.Open;
+
+      try
+        AssignFile(F1, LeIni(Arq_Ini, 'Sistema', 'Path Orçamento') + 'OR' + StrZero(IntToStr(ID), 6, 0) + '.Txt');
+        Rewrite(F1);
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          WriteLn(F1, '1' + ForcaComprimento(QRel.FieldByName('COD_BARRA').AsString, 14, ' ') +
+                      StrZero(QRel.FieldByName('QUANTIDADE').AsString, 12, 2) +
+                      StrZero(QRel.FieldByName('VR_UNITARIO').AsString, 12, 2) +
+                      StrZero(QRel.FieldByName('VR_DESCONTO').AsString, 12, 2));
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM TRANSPARCELAS');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(TRANSACAO_ID = :ORCAMENTO_ID)');
+        QRel.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+        QRel.Sql.Add('ORDER BY TRANSACAO_ID, PARCELA_ID');
+
+        QRel.ParamByName('ORCAMENTO_ID').AsInteger  := ID;
+        QRel.ParamByName('TIPO_TRANSACAO').AsString := 'O';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          WriteLn(F1, '2' + StrZero(Copy(QRel.FieldByName('PARCELA_ID').AsString, 4, 2), 2, 0) + StrZero(Copy(QRel.FieldByName('PARCELA_ID').AsString, 1, 2), 2, 0) +
+                      Copy(QRel.FieldByName('DT_VENCIMENTO').AsString, 1, 2) +
+                      Copy(QRel.FieldByName('DT_VENCIMENTO').AsString, 4, 2) +
+                      Copy(QRel.FieldByName('DT_VENCIMENTO').AsString, 7, 4) +
+                      StrZero(QRel.FieldByName('VALOR').AsString, 12, 2) +
+                      StrZero(QRel.FieldByName('BANCO_ID').AsString, 2, 0));
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        WriteLn(F1, '301' + 'D' + StrZero(VR_DESCONTO.Text, 12, 2) +
+                    StrZero(VENDEDOR_ID.Text, 5, 0) +
+                    StrZero(CLIENTE_ID.Text, 5, 0));
+
+        Application.MessageBox(PChar('Log ' + StrZero(IntToStr(ID), 6, 0) + ' criado com sucesso'), PChar(Msg_Title), mb_IconInformation);
+      finally
+        CloseFile(F1);
+      end;
+    end;
+      
+    QRel.Sql.Clear;
+    QRel.Sql.Add('DELETE FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+    QRel.ParamByName('CUPOM').AsString := Num_Terminal; // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.ExecSql;
+
+
+
+    ModalResult := mrOK;
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.btnClienteClick(Sender: TObject);
+begin
+  try
+    CLIENTE_ID.Value := GetConsulta('CLIENTES', 0, 0, StrToInt(CLIENTE_ID.Text));
+  except
+    CLIENTE_ID.Value := GetConsulta('CLIENTES', 0, 0, 0);
+  end;
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.BtnExecutaClick(Sender: TObject);
+var
+ID: Integer;
+Vr_Orcamento, Vr_Produtos: Real;
+F1: TextFile;
+begin
+// 235, 725
+  Inserindo := True;
+  DetailSearch('');
+
+  if DataLog_Itens.DataSet =  QLog_Orcamento then
+  Begin
+
+    QRel.SQL.Clear;
+    QRel.SQL.Add('SELECT NEXTVAL(:GEN_TRANSACOES) ID');
+    QRel.ParamByName('GEN_TRANSACOES').AsString :=  'GEN_ORCAMENTOS';
+
+    QRel.Prepare;
+    QRel.Open;
+
+
+    ID := QRel.Fields[0].AsInteger;
+
+
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT SUM(VR_TOTAL) VR_TOTAL');
+    QRel.Sql.Add('FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+    QRel.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.Open;
+
+    Vr_Orcamento := (QRel.FieldByName('VR_TOTAL').AsFloat - VR_DESCONTO.Value);
+
+    QInsert.Sql.Clear;
+    QInsert.Sql.Add('INSERT INTO ORCAMENTOS(ORCAMENTO_ID,      DT_ORCAMENTO,   DT_MOVIMENTO,    EMPRESA_ID, ' +
+                                            'CLIENTE_ID,       VENDEDOR_ID,    COMISSAO,        NOME, ' +
+                                            'ENDERECO,         BAIRRO,         MUNICIPIO,       ESTADO, ' +
+                                            'CEP,              COND_PAGTO,     VALOR_PRODUTOS,  BASE_ICMS_NORMAL, ' +
+                                            'VR_ICMS_NORMAL,   BASE_ICMS_ST,   VR_ICMS_ST,      VR_IPI, ' +
+                                            'VR_FRETE,         VR_DESCONTO,    VR_ACRESCIMO,    VALOR, ' +
+                                            'AUTORIZ_ID,       OBSERVACAO,     TELEFONE,        DDD,      NUMERO) VALUES( ' +
+                                            ':ORCAMENTO_ID,    :DT_ORCAMENTO,  :DT_MOVIMENTO,   :EMPRESA_ID, ' +
+                                            ':CLIENTE_ID,      :VENDEDOR_ID,   :COMISSAO,       :NOME, ' +
+                                            ':ENDERECO,        :BAIRRO,        :MUNICIPIO,      :ESTADO, ' +
+                                            ':CEP,             :COND_PAGTO,    :VALOR_PRODUTOS, :BASE_ICMS_NORMAL, ' +
+                                            ':VR_ICMS_NORMAL,  :BASE_ICMS_ST,  :VR_ICMS_ST,     :VR_IPI, ' +
+                                            ':VR_FRETE,        :VR_DESCONTO,   :VR_ACRESCIMO,   :VALOR, ' +
+                                            ':AUTORIZ_ID,      :OBSERVACAO,    :TELEFONE,       :DDD, :NUMERO)');
+
+    QInsert.ParamByName('ORCAMENTO_ID').AsInteger   := ID;
+    QInsert.ParamByName('DT_ORCAMENTO').AsDateTime  := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QInsert.ParamByName('DT_MOVIMENTO').AsDateTime  := FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime;
+    QInsert.ParamByName('EMPRESA_ID').AsInteger     := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QInsert.ParamByName('CLIENTE_ID').AsInteger     := StrToInt(CLIENTE_ID.Text);
+    QInsert.ParamByName('VENDEDOR_ID').AsInteger    := StrToInt(VENDEDOR_ID.Text);
+    QInsert.ParamByName('COMISSAO').AsFloat         := 0;
+    QInsert.ParamByName('NOME').AsString            := NOME.Text;
+    QInsert.ParamByName('ENDERECO').AsString        := ENDERECO.Text;
+    QInsert.ParamByName('BAIRRO').AsString          := BAIRRO.Text;
+    QInsert.ParamByName('MUNICIPIO').AsString       := MUNICIPIO.Text;
+    QInsert.ParamByName('ESTADO').AsString          := ESTADO.Text;
+    QInsert.ParamByName('CEP').AsString             := CEP.Text;
+    QInsert.ParamByName('COND_PAGTO').AsString      := COND_PAGTO.Text;
+    QInsert.ParamByName('VALOR_PRODUTOS').AsFloat   := QRel.FieldByName('VR_TOTAL').AsFloat;
+    QInsert.ParamByName('BASE_ICMS_NORMAL').AsFloat := 0;
+    QInsert.ParamByName('VR_ICMS_NORMAL').AsFloat   := 0;
+    QInsert.ParamByName('BASE_ICMS_ST').AsFloat     := 0;
+    QInsert.ParamByName('VR_ICMS_ST').AsFloat       := 0;
+    QInsert.ParamByName('VR_IPI').AsFloat           := 0;
+    QInsert.ParamByName('VR_FRETE').AsFloat         := 0;
+    QInsert.ParamByName('VR_DESCONTO').AsFloat      := VR_DESCONTO.Value;
+    QInsert.ParamByName('VR_ACRESCIMO').AsFloat     := 0;
+    QInsert.ParamByName('VALOR').AsFloat            := (QRel.FieldByName('VR_TOTAL').AsFloat - VR_DESCONTO.Value);
+    QInsert.ParamByName('AUTORIZ_ID').AsInteger     := FrmData.QAcesso.FieldByName('FUNCIONARIO_ID').AsInteger;
+    QInsert.ParamByName('OBSERVACAO').AsByteStr     := OBSERVACAO.Text;
+    QInsert.ParamByName('DDD').AsString             := DDD.Text;
+    QInsert.ParamByName('TELEFONE').AsString        := TELEFONE_1.Text;
+    QInsert.ParamByName('NUMERO').AsString          := NUMERO.Text;
+
+    QInsert.Prepare;
+    QInsert.ExecSql;
+
+
+
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+    QRel.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QRel.First;
+
+    while not QRel.Eof do
+    begin
+      QInsert.Sql.Clear;
+      QInsert.Sql.Add('INSERT INTO ORCITENS(ORCAMENTO_ID,      PRODUTO_ID,     TP_PROD_SERV,    DESCRICAO, ' +
+                                            'QUANTIDADE,       VR_UNITARIO,    VR_TOTAL,        TRIBUTO_ID, ' +
+                                            'CST,              MVA,            BASE_CALC_ICMS,  ALIQUOTA_ICMS, '+
+                                            'VR_IPI,           VR_DESCONTO) VALUES( ' +
+                                            ':ORCAMENTO_ID,    :PRODUTO_ID,    :TP_PROD_SERV,   :DESCRICAO, ' +
+                                            ':QUANTIDADE,      :VR_UNITARIO,   :VR_TOTAL,       :TRIBUTO_ID, ' +
+                                            ':CST,             :MVA,           :BASE_CALC_ICMS, :ALIQUOTA_ICMS, '+
+                                            ':VR_IPI,          :VR_DESCONTO)');
+
+      QInsert.ParamByName('ORCAMENTO_ID').AsInteger := ID;
+      QInsert.ParamByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
+      QInsert.ParamByName('TP_PROD_SERV').AsString  := 'P';
+      QInsert.ParamByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
+      QInsert.ParamByName('QUANTIDADE').AsFloat     := QRel.FieldByName('QUANTIDADE').AsFloat;
+      QInsert.ParamByName('VR_UNITARIO').AsFloat    := QRel.FieldByName('VR_UNITARIO').AsFloat;
+      QInsert.ParamByName('VR_TOTAL').AsFloat       := QRel.FieldByName('VR_TOTAL').AsFloat;
+      QInsert.ParamByName('TRIBUTO_ID').AsInteger   := QRel.FieldByName('TRIBUTO_ID').AsInteger;
+      QInsert.ParamByName('CST').AsString           := QRel.FieldByName('CST').AsString;
+      QInsert.ParamByName('MVA').AsFloat            := QRel.FieldByName('MVA').AsFloat;
+      QInsert.ParamByName('BASE_CALC_ICMS').AsFloat := QRel.FieldByName('VR_TOTAL').AsFloat;
+      QInsert.ParamByName('ALIQUOTA_ICMS').AsFloat  := QRel.FieldByName('ALIQUOTA_ICMS').AsFloat;
+      QInsert.ParamByName('VR_IPI').AsFloat         := QRel.FieldByName('IPI').AsFloat;
+      QInsert.ParamByName('VR_DESCONTO').AsFloat    := QRel.FieldByName('VR_DESCONTO').AsFloat;
+
+      QInsert.Prepare;
+      QInsert.ExecSql;
+
+
+
+      Application.ProcessMessages;
+      QRel.Next;
+    end;
+
+    if COND_PAGTO.Text = 'A PRAZO' then
+      Divisao_Parcelas(ID, 'O', '',True, FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime, Vr_Orcamento);
+
+
+    if LeIni(Arq_Ini, 'Sistema', 'Path Orçamento') <> '' then
+    begin
+      QRel.Sql.Clear;
+      QRel.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+      QRel.Sql.Add('WHERE');
+      QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+      QRel.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+      QRel.Prepare;
+      QRel.Open;
+
+      try
+        AssignFile(F1, LeIni(Arq_Ini, 'Sistema', 'Path Orçamento') + 'OR' + StrZero(IntToStr(ID), 6, 0) + '.Txt');
+        Rewrite(F1);
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          WriteLn(F1, '1' + ForcaComprimento(QRel.FieldByName('COD_BARRA').AsString, 14, ' ') +
+                      StrZero(QRel.FieldByName('QUANTIDADE').AsString, 12, 2) +
+                      StrZero(QRel.FieldByName('VR_UNITARIO').AsString, 12, 2) +
+                      StrZero(QRel.FieldByName('VR_DESCONTO').AsString, 12, 2));
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM TRANSPARCELAS');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(TRANSACAO_ID = :ORCAMENTO_ID)');
+        QRel.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+        QRel.Sql.Add('ORDER BY TRANSACAO_ID, PARCELA_ID');
+
+        QRel.ParamByName('ORCAMENTO_ID').AsInteger  := ID;
+        QRel.ParamByName('TIPO_TRANSACAO').AsString := 'O';
+
+        QRel.Prepare;
+        QRel.Open;
+
+        QRel.First;
+        while not QRel.Eof do
+        begin
+          WriteLn(F1, '2' + StrZero(Copy(QRel.FieldByName('PARCELA_ID').AsString, 4, 2), 2, 0) + StrZero(Copy(QRel.FieldByName('PARCELA_ID').AsString, 1, 2), 2, 0) +
+                      Copy(QRel.FieldByName('DT_VENCIMENTO').AsString, 1, 2) +
+                      Copy(QRel.FieldByName('DT_VENCIMENTO').AsString, 4, 2) +
+                      Copy(QRel.FieldByName('DT_VENCIMENTO').AsString, 7, 4) +
+                      StrZero(QRel.FieldByName('VALOR').AsString, 12, 2) +
+                      StrZero(QRel.FieldByName('BANCO_ID').AsString, 2, 0));
+
+          Application.ProcessMessages;
+          QRel.Next;
+        end;
+
+        WriteLn(F1, '301' + 'D' + StrZero(VR_DESCONTO.Text, 12, 2) +
+                    StrZero(VENDEDOR_ID.Text, 5, 0) +
+                    StrZero(CLIENTE_ID.Text, 5, 0));
+
+        Application.MessageBox(PChar('Log ' + StrZero(IntToStr(ID), 6, 0) + ' criado com sucesso'), PChar(Msg_Title), mb_IconInformation);
+      finally
+        CloseFile(F1);
+      end;
+    end;
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('DELETE FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+    QRel.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+    QRel.Prepare;
+    QRel.ExecSql;
+
+
+
+    Orcamento_id.Text := IntToStr(id);
+
+    ModalResult := mrOK;
+
+
+  End
+  Else
+  begin
+
+    Soma;
+
+    Vr_Orcamento := (QRel.FieldByName('VR_TOTAL').AsFloat - VR_DESCONTO.Value);
+
+
+    QInsert.SQL.Clear;
+    QInsert.SQL.Add('UPDATE ORCAMENTOS SET VALOR = :VALOR, VR_DESCONTO = :VR_DESCONTO, OBSERVACAO = :OBSERVACAO ');
+    QInsert.SQL.Add('WHERE ORCAMENTO_ID = :ORCAMENTO_ID');
+
+    QInsert.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(Orcamento_id.Text);
+    QInsert.ParamByName('VALOR').AsFloat := Total_Orcamento.Value;
+    QInsert.ParamByName('VR_DESCONTO').AsFloat := VR_DESCONTO.Value;
+    QInsert.ParamByName('OBSERVACAO').AsByteStr := OBSERVACAO.Text;
+    QInsert.Prepare;
+    QInsert.ExecSQL;
+
+
+    if Cond_Pagto.Text = 'A PRAZO' then
+    begin
+       Divisao_Parcelas(StrToInt(Orcamento_id.Text), 'O','', True, FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime, Vr_Orcamento);
+    end;
+
+
+  end;
+   Inserindo := False;
+
+   if btnImpOrcamento.CanFocus then
+   begin
+      btnImpOrcamento.SetFocus; 
+   end;
+
+   btnNovo.Enabled := True;
+
+end;
+
+
+procedure TFrmOrcamento_Rapido_2.btnInsertClick(Sender: TObject);
+var
+Promocao: Boolean;
+Vr_Produto: Real;
+Cod_Alternativo, Cod_Reduzido: String;
+ID_ITENS : Integer;
+begin
+  if Cod_Produto.Text <> '' then
+  begin
+      if DataLog_Itens.DataSet = Qorcamento_itens  then
+      begin
+        ID_ITENS := StrToInt(Orcamento_id.Text);
+
+        Promocao := False;
+
+        Cod_Alternativo := Cod_Produto.Text;
+        Cod_Reduzido    := Cod_Produto.Text;
+
+        Vr_Produto := 0;
+
+        if (Copy(Cod_Produto.Text, 1, 1) = '2') and (FrmPrincipal.Config.FieldByName('TEM_BALANCA').AsString = 'True') then
+        begin
+          Vr_Produto       := StrToFloat(Copy(Cod_Produto.Text, 8, 3) + ',' + Copy(Cod_Produto.Text, 11, 2));
+          Cod_Produto.Text := Copy(Cod_Produto.Text, 2, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger);
+
+          if FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True' then
+            Cod_Produto.Text := Dig(Cod_Produto.Text);
+
+          Cod_Produto.Text := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+        end;
+
+        Cod_Produto.Text := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+
+        QProduto.Sql.Clear;
+        QProduto.Sql.Add('SELECT PRODUTOS.*, TRIBUTOS.CODIGO_ECF, TRIBUTOS.ORIGEM, TRIBUTOS.TRIBUTACAO, TRIBUTOS.CFOP');
+        QProduto.Sql.Add('FROM PRODUTOS');
+        QProduto.Sql.Add('INNER JOIN TRIBUTOS');
+        QProduto.Sql.Add('ON (PRODUTOS.TRIBUTO_ID = TRIBUTOS.TRIBUTO_ID)');
+        QProduto.Sql.Add('WHERE');
+        QProduto.Sql.Add('(PRODUTOS.COD_BARRA = :COD_BARRA OR PRODUTOS.COD_BARRA_AUX1 = :COD_BARRA OR PRODUTOS.COD_BARRA_AUX2 = :COD_BARRA OR ' +
+                         'PRODUTOS.COD_BARRA_AUX3 = :COD_BARRA OR PRODUTOS.COD_BARRA_AUX4 = :COD_BARRA OR PRODUTOS.COD_ORIGINAL = :ALTERNATIVO OR PRODUTOS.REFERENCIA = :ALTERNATIVO OR PRODUTOS.CODRED = :CODRED)');
+        QProduto.Sql.Add('AND (PRODUTOS.EMPRESA_ID = :EMPRESA_ID)');
+        QProduto.Sql.Add('AND (PRODUTOS.STATUS = :STATUS)');
+
+        if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        begin
+          QProduto.Sql.Add('AND (PRODUTOS.LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+          QProduto.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+        end;
+
+        QProduto.ParamByName('COD_BARRA').AsString   := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+        QProduto.ParamByName('ALTERNATIVO').AsString := Cod_Alternativo;
+        QProduto.ParamByName('CODRED').AsString      := StrZero(Copy(Cod_Reduzido, 1, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger), FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger, 0);
+        QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QProduto.ParamByName('STATUS').AsString      := 'A';
+
+        QProduto.Prepare;
+        QProduto.Open;
+
+        if QProduto.IsEmpty then
+        begin
+          Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if Vr_Produto > 0 then
+        begin
+          if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QProduto.FieldByName('PROMO_INICIAL').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QProduto.FieldByName('PROMO_FINAL').AsDateTime) then
+            Quantidade.Value := (Vr_Produto / QProduto.FieldByName('PRECO_PROMOCAO').AsFloat)
+          else
+            Quantidade.Value := (Vr_Produto / QProduto.FieldByName('PRECO_VAREJO').AsFloat);
+
+          Total_Item.Value := Vr_Produto;
+        end;
+
+        if (Quantidade.Value <= 0) or (Quantidade.Value > 9999) then
+        begin
+          Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if Preco.Value <= 0 then
+        begin
+          Application.MessageBox('Vr. Unitário inválido', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QProduto.FieldByName('PROMO_INICIAL').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QProduto.FieldByName('PROMO_FINAL').AsDateTime) then
+        begin
+          Promocao := True;
+
+          if (Preco.Value <> QProduto.FieldByName('PRECO_PROMOCAO').AsFloat) then
+          begin
+            Application.MessageBox('Preço inválido. Produto em promoção', PChar(Msg_Title), mb_IconStop);
+            abort;
+          end;
+        end;
+
+        if (QProduto.FieldByName('PRECO_ATACADO').AsFloat > 0.01) and (QProduto.FieldByName('PRECO_ATACADO').AsFloat < QProduto.FieldByName('PRECO_VAREJO').AsFloat) and (LeIni(Arq_Ini, 'Sistema', 'Comparar Preço Atacado x Preço Varejo') = 'True') and (not Promocao) then
+        begin
+          if (Preco.Value < QProduto.FieldByName('PRECO_ATACADO').AsFloat) or (Preco.Value > QProduto.FieldByName('PRECO_VAREJO').AsFloat) then
+          begin
+            Application.MessageBox('Preço fora da faixa determinado pelo Sistema', PChar(Msg_Title), mb_IconStop);
+            abort;
+          end;
+        end;
+
+        if (Desconto.Value < 0) or (((Preco.Value * Desconto.Value) / 100) > Preco.Value) then
+        begin
+          Application.MessageBox('Vr. Desconto inválido', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if (Promocao) and (Desconto.Value > 0) then
+        begin
+          Application.MessageBox('Vr. Desconto inválido. Produto em promoção', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if (QProduto.FieldByName('DESC_MAXIMO').AsFloat > 0) and (((Preco.Value * Desconto.Value) / 100) > QProduto.FieldByName('DESC_MAXIMO').AsFloat) then
+        begin
+          Application.MessageBox('Vr. Desconto não pode ser maior do que o desconto máximo permitido para o item', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if Total_Item.Value <= 0 then
+        begin
+          Application.MessageBox('Vr. Total inválido', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM ORCITENS');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+        QRel.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+        QRel.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+        QRel.ParamByName('ORCAMENTO_ID').AsInteger := ID_ITENS; // SerialNum('C');
+        QRel.ParamByName('TP_PROD_SERV').AsString := 'P';
+        QRel.ParamByName('PRODUTO_ID').AsInteger  := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+
+        QRel.Prepare;
+        QRel.Open;
+
+        if QRel.IsEmpty then
+        begin
+          if Pagto = '' then
+           // Cond_Pagto;
+
+          QInsert.Sql.Clear;
+          QInsert.Sql.Add('INSERT INTO ORCITENS (ORCAMENTO_ID,             TP_PROD_SERV,   PRODUTO_ID,       ' +
+                                                     'DESCRICAO,        TRIBUTO_ID,     CST,              ' +
+                                                     'ALIQUOTA_ICMS,    VR_IPI,            MVA,             QUANTIDADE, ' +
+                                                     'VR_UNITARIO,      VR_DESCONTO,    VR_TOTAL) VALUES( ' +
+                                                     ':ORCAMENTO_ID,           :TP_PROD_SERV,  :PRODUTO_ID,      ' +
+                                                     ':DESCRICAO,       :TRIBUTO_ID,    :CST,             ' +
+                                                     ':ALIQUOTA_ICMS,   :VR_IPI,           :MVA,            :QUANTIDADE, ' +
+                                                     ':VR_UNITARIO,     :VR_DESCONTO,   :VR_TOTAL)');
+
+          QInsert.ParamByName('ORCAMENTO_ID').AsInteger := ID_ITENS; // SerialNum('C');
+          QInsert.ParamByName('TP_PROD_SERV').AsString := 'P';
+          QInsert.ParamByName('PRODUTO_ID').AsInteger  := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+          QInsert.ParamByName('DESCRICAO').AsString    := Copy(QProduto.FieldByName('DESCRICAO').AsString,1,40);
+          QInsert.ParamByName('TRIBUTO_ID').AsInteger  := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
+          QInsert.ParamByName('CST').AsString          := Copy(QProduto.FieldByName('ORIGEM').AsString, 1, 1) + Copy(QProduto.FieldByName('TRIBUTACAO').AsString, 1, 2);
+          QInsert.ParamByName('ALIQUOTA_ICMS').AsFloat := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+          QInsert.ParamByName('VR_IPI').AsFloat           := QProduto.FieldByName('IPI').AsFloat;
+          QInsert.ParamByName('MVA').AsFloat           := QProduto.FieldByName('MVA').AsFloat;
+          QInsert.ParamByName('QUANTIDADE').AsFloat    := Quantidade.Value;
+          QInsert.ParamByName('VR_UNITARIO').AsFloat   := Preco.Value;
+          QInsert.ParamByName('VR_DESCONTO').AsFloat   := RoundTo(((Preco.Value * Desconto.Value) / 100), -2);
+          QInsert.ParamByName('VR_TOTAL').AsFloat      := Total_Item.Value;
+
+          QInsert.Prepare;
+          QInsert.ExecSql;
+
+
+        end
+        else
+        begin
+          QInsert.Sql.Clear;
+          QInsert.Sql.Add('UPDATE ORCITENS SET QUANTIDADE = :QUANTIDADE, VR_DESCONTO = :VR_DESCONTO, VR_TOTAL = :VR_TOTAL');
+          QInsert.Sql.Add('WHERE');
+          QInsert.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+          QInsert.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+          QInsert.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+          QInsert.ParamByName('QUANTIDADE').AsFloat     := (QRel.FieldByName('QUANTIDADE').AsFloat +  Quantidade.Value);
+          QInsert.ParamByName('VR_DESCONTO').AsFloat    := RoundTo(((QRel.FieldByName('VR_UNITARIO').AsFloat * Desconto.Value) / 100), -2);
+          QInsert.ParamByName('VR_TOTAL').AsFloat       := ((QRel.FieldByName('QUANTIDADE').AsFloat +  Quantidade.Value) * (QRel.FieldByName('VR_UNITARIO').AsFloat - RoundTo(((QRel.FieldByName('VR_UNITARIO').AsFloat * Desconto.Value) / 100), -2)));
+          QInsert.ParamByName('ORCAMENTO_ID').AsInteger := ID_ITENS; // SerialNum('C');
+          QInsert.ParamByName('TP_PROD_SERV').AsString  := 'P';
+          QInsert.ParamByName('PRODUTO_ID').AsInteger   := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+
+          QInsert.Prepare;
+          QInsert.ExecSql;
+
+
+        end;
+
+        Soma;
+
+        Qorcamento_itens.Sql.Clear;
+        Qorcamento_itens.Sql.Add('SELECT * FROM ORCITENS');
+        Qorcamento_itens.Sql.Add('WHERE');
+        Qorcamento_itens.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+        Qorcamento_itens.ParamByName('ORCAMENTO_ID').AsInteger := ID_ITENS; // SerialNum('C');
+
+        Qorcamento_itens.Prepare;
+        Qorcamento_itens.Open;
+
+        Cod_Produto.Text := '';
+        Descricao.Text   := '';
+        Quantidade.Value := 1;
+        Preco.Value      := 0;
+        Desconto.Value   := 0;
+        Total_Item.Value := 0;
+
+        Cod_Produto.SetFocus;
+      end
+      Else
+      begin
+
+        Promocao := False;
+
+        Cod_Alternativo := Cod_Produto.Text;
+        Cod_Reduzido    := Cod_Produto.Text;
+
+        Vr_Produto := 0;
+
+        if (Copy(Cod_Produto.Text, 1, 1) = '2') and (FrmPrincipal.Config.FieldByName('TEM_BALANCA').AsString = 'True') then
+        begin
+          Vr_Produto       := StrToFloat(Copy(Cod_Produto.Text, 8, 3) + ',' + Copy(Cod_Produto.Text, 11, 2));
+          Cod_Produto.Text := Copy(Cod_Produto.Text, 2, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger);
+
+          if FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True' then
+            Cod_Produto.Text := Dig(Cod_Produto.Text);
+
+          Cod_Produto.Text := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+        end;
+
+        Cod_Produto.Text := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+
+        QProduto.Sql.Clear;
+        QProduto.Sql.Add('SELECT PRODUTOS.*, TRIBUTOS.CODIGO_ECF, TRIBUTOS.ORIGEM, TRIBUTOS.TRIBUTACAO, TRIBUTOS.CFOP');
+        QProduto.Sql.Add('FROM PRODUTOS');
+        QProduto.Sql.Add('INNER JOIN TRIBUTOS');
+        QProduto.Sql.Add('ON (PRODUTOS.TRIBUTO_ID = TRIBUTOS.TRIBUTO_ID)');
+        QProduto.Sql.Add('WHERE');
+        QProduto.Sql.Add('(PRODUTOS.COD_BARRA = :COD_BARRA OR PRODUTOS.COD_BARRA_AUX1 = :COD_BARRA OR PRODUTOS.COD_BARRA_AUX2 = :COD_BARRA OR ' +
+                         'PRODUTOS.COD_BARRA_AUX3 = :COD_BARRA OR PRODUTOS.COD_BARRA_AUX4 = :COD_BARRA OR PRODUTOS.COD_ORIGINAL = :ALTERNATIVO OR PRODUTOS.REFERENCIA = :ALTERNATIVO OR PRODUTOS.CODRED = :CODRED)');
+        QProduto.Sql.Add('AND (PRODUTOS.EMPRESA_ID = :EMPRESA_ID)');
+        QProduto.Sql.Add('AND (PRODUTOS.STATUS = :STATUS)');
+
+        if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+        begin
+          QProduto.Sql.Add('AND (PRODUTOS.LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+          QProduto.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+        end;
+
+        QProduto.ParamByName('COD_BARRA').AsString   := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+        QProduto.ParamByName('ALTERNATIVO').AsString := Cod_Alternativo;
+        QProduto.ParamByName('CODRED').AsString      := StrZero(Copy(Cod_Reduzido, 1, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger), FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger, 0);
+        QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+        QProduto.ParamByName('STATUS').AsString      := 'A';
+
+        QProduto.Prepare;
+        QProduto.Open;
+
+        if QProduto.IsEmpty then
+        begin
+          Application.MessageBox('Produto inexistente', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if Vr_Produto > 0 then
+        begin
+          if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QProduto.FieldByName('PROMO_INICIAL').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QProduto.FieldByName('PROMO_FINAL').AsDateTime) then
+            Quantidade.Value := (Vr_Produto / QProduto.FieldByName('PRECO_PROMOCAO').AsFloat)
+          else
+            Quantidade.Value := (Vr_Produto / QProduto.FieldByName('PRECO_VAREJO').AsFloat);
+
+          Total_Item.Value := Vr_Produto;
+        end;
+
+        if (Quantidade.Value <= 0) or (Quantidade.Value > 9999) then
+        begin
+          Application.MessageBox('Quantidade inválida', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if Preco.Value <= 0 then
+        begin
+          Application.MessageBox('Vr. Unitário inválido', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QProduto.FieldByName('PROMO_INICIAL').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QProduto.FieldByName('PROMO_FINAL').AsDateTime) then
+        begin
+          Promocao := True;
+
+          if (Preco.Value <> QProduto.FieldByName('PRECO_PROMOCAO').AsFloat) then
+          begin
+            Application.MessageBox('Preço inválido. Produto em promoção', PChar(Msg_Title), mb_IconStop);
+            abort;
+          end;
+        end;
+
+        if (QProduto.FieldByName('PRECO_ATACADO').AsFloat > 0.01) and (QProduto.FieldByName('PRECO_ATACADO').AsFloat < QProduto.FieldByName('PRECO_VAREJO').AsFloat) and (LeIni(Arq_Ini, 'Sistema', 'Comparar Preço Atacado x Preço Varejo') = 'True') and (not Promocao) then
+        begin
+          if (Preco.Value < QProduto.FieldByName('PRECO_ATACADO').AsFloat) or (Preco.Value > QProduto.FieldByName('PRECO_VAREJO').AsFloat) then
+          begin
+            Application.MessageBox('Preço fora da faixa determinado pelo Sistema', PChar(Msg_Title), mb_IconStop);
+            abort;
+          end;
+        end;
+
+        if (Desconto.Value < 0) or (((Preco.Value * Desconto.Value) / 100) > Preco.Value) then
+        begin
+          Application.MessageBox('Vr. Desconto inválido', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if (Promocao) and (Desconto.Value > 0) then
+        begin
+          Application.MessageBox('Vr. Desconto inválido. Produto em promoção', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if (QProduto.FieldByName('DESC_MAXIMO').AsFloat > 0) and (((Preco.Value * Desconto.Value) / 100) > QProduto.FieldByName('DESC_MAXIMO').AsFloat) then
+        begin
+          Application.MessageBox('Vr. Desconto não pode ser maior do que o desconto máximo permitido para o item', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        if Total_Item.Value <= 0 then
+        begin
+          Application.MessageBox('Vr. Total inválido', PChar(Msg_Title), mb_IconStop);
+          abort;
+        end;
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(CUPOM = :CUPOM)');
+        QRel.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+        QRel.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+        QRel.ParamByName('CUPOM').AsString        := Cod_Cupom; // SerialNum('C');
+        QRel.ParamByName('TP_PROD_SERV').AsString := 'P';
+        QRel.ParamByName('PRODUTO_ID').AsInteger  := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+
+        QRel.Prepare;
+        QRel.Open;
+
+        if QRel.IsEmpty then
+        begin
+          if Pagto = '' then
+           // Cond_Pagto;
+
+          QInsert.Sql.Clear;
+          QInsert.Sql.Add('INSERT INTO LOG_ORCAMENTO(CUPOM,             TP_PROD_SERV,   PRODUTO_ID,      COD_BARRA, ' +
+                                                     'DESCRICAO,        TRIBUTO_ID,     CST,             CFOP, ' +
+                                                     'ALIQUOTA_ICMS,    IPI,            MVA,             QUANTIDADE, ' +
+                                                     'VR_UNITARIO,      VR_DESCONTO,    VR_TOTAL) VALUES( ' +
+                                                     ':CUPOM,           :TP_PROD_SERV,  :PRODUTO_ID,     :COD_BARRA, ' +
+                                                     ':DESCRICAO,       :TRIBUTO_ID,    :CST,            :CFOP, ' +
+                                                     ':ALIQUOTA_ICMS,   :IPI,           :MVA,            :QUANTIDADE, ' +
+                                                     ':VR_UNITARIO,     :VR_DESCONTO,   :VR_TOTAL)');
+
+          QInsert.ParamByName('CUPOM').AsString        := Cod_Cupom; // SerialNum('C');
+          QInsert.ParamByName('TP_PROD_SERV').AsString := 'P';
+          QInsert.ParamByName('PRODUTO_ID').AsInteger  := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+          QInsert.ParamByName('COD_BARRA').AsString    := QProduto.FieldByName('COD_BARRA').AsString;
+          QInsert.ParamByName('DESCRICAO').AsString    := Copy(QProduto.FieldByName('DESCRICAO').AsString,1,40);
+          QInsert.ParamByName('TRIBUTO_ID').AsInteger  := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
+          QInsert.ParamByName('CST').AsString          := Copy(QProduto.FieldByName('ORIGEM').AsString, 1, 1) + Copy(QProduto.FieldByName('TRIBUTACAO').AsString, 1, 2);
+          QInsert.ParamByName('CFOP').AsString         := QProduto.FieldByName('CFOP').AsString;
+          QInsert.ParamByName('ALIQUOTA_ICMS').AsFloat := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+          QInsert.ParamByName('IPI').AsFloat           := QProduto.FieldByName('IPI').AsFloat;
+          QInsert.ParamByName('MVA').AsFloat           := QProduto.FieldByName('MVA').AsFloat;
+          QInsert.ParamByName('QUANTIDADE').AsFloat    := Quantidade.Value;
+          QInsert.ParamByName('VR_UNITARIO').AsFloat   := Preco.Value;
+          QInsert.ParamByName('VR_DESCONTO').AsFloat   := RoundTo(((Preco.Value * Desconto.Value) / 100), -2);
+          QInsert.ParamByName('VR_TOTAL').AsFloat      := Total_Item.Value;
+
+          QInsert.Prepare;
+          QInsert.ExecSql;
+
+
+        end
+        else
+        begin
+          QInsert.Sql.Clear;
+          QInsert.Sql.Add('UPDATE LOG_ORCAMENTO SET QUANTIDADE = :QUANTIDADE, VR_DESCONTO = :VR_DESCONTO, VR_TOTAL = :VR_TOTAL');
+          QInsert.Sql.Add('WHERE');
+          QInsert.Sql.Add('(CUPOM = :CUPOM)');
+          QInsert.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+          QInsert.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+          QInsert.ParamByName('QUANTIDADE').AsFloat    := (QRel.FieldByName('QUANTIDADE').AsFloat +  Quantidade.Value);
+          QInsert.ParamByName('VR_DESCONTO').AsFloat   := RoundTo(((QRel.FieldByName('VR_UNITARIO').AsFloat * Desconto.Value) / 100), -2);
+          QInsert.ParamByName('VR_TOTAL').AsFloat      := ((QRel.FieldByName('QUANTIDADE').AsFloat +  Quantidade.Value) * (QRel.FieldByName('VR_UNITARIO').AsFloat - RoundTo(((QRel.FieldByName('VR_UNITARIO').AsFloat * Desconto.Value) / 100), -2)));
+          QInsert.ParamByName('CUPOM').AsString        := Cod_Cupom; // SerialNum('C');
+          QInsert.ParamByName('TP_PROD_SERV').AsString := 'P';
+          QInsert.ParamByName('PRODUTO_ID').AsInteger  := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+
+          QInsert.Prepare;
+          QInsert.ExecSql;
+
+
+        end;
+
+        Soma;
+
+        QLog_Orcamento.Sql.Clear;
+        QLog_Orcamento.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+        QLog_Orcamento.Sql.Add('WHERE');
+        QLog_Orcamento.Sql.Add('(CUPOM = :CUPOM)');
+
+        QLog_Orcamento.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+        QLog_Orcamento.Prepare;
+        QLog_Orcamento.Open;
+
+        Cod_Produto.Text := '';
+        Descricao.Text   := '';
+        Quantidade.Value := 1;
+        Preco.Value      := 0;
+        Desconto.Value   := 0;
+        Total_Item.Value := 0;
+
+        Cod_Produto.SetFocus;
+
+      end;
+  end
+
+  else
+    Cod_Produto.SetFocus;
+end;
+
+function TFrmOrcamento_Rapido_2.getGenerator(Gen:String): Integer;
+begin
+
+    QGen.SQL.Clear;
+    QGen.SQL.Add('SELECT GEN_ID('+ Gen +', 0) FROM RDB$DATABASE');
+    QGen.Prepare;
+    QGen.Open;
+
+    if not QGen.IsEmpty then
+    begin
+      Result := QGen.Fields[0].AsInteger;
+    end;
+
+end;
+
+
+procedure TFrmOrcamento_Rapido_2.btnNovoClick(Sender: TObject);
+begin
+    Orcamento_id.Value    := 0;
+    Cond_Pagto.Text       := 'A VISTA';
+    NOME.Text             := '';
+    ENDERECO.Text         := '';
+    BAIRRO.Text           := '';
+    MUNICIPIO.Text        := '';
+    NUMERO.Text           := '';
+    ESTADO.Text           := '';
+    CEP.Text              := '';
+    VR_DESCONTO.Value     := 0;
+    Total_Orcamento.Value := 0;
+    CLIENTE_ID.Value      := 0;
+    OBSERVACAO.Text       := '';
+    VENDEDOR_ID.Value     := 0;
+    TELEFONE_1.Text       := '';
+    DDD.Text              :='(  )';
+
+    // IMPLEMENTADO DIA 10-09-2015 Wanderson - Regivaldo
+      // lbNumOrcamento.Visible := True;
+      // lbNumOrcamento.Caption := IntToStr(getGenerator('GEN_ORCAMENTOS')+1);
+    // fim 10-09-2015
+
+    Qorcamento_itens.Close;
+
+    DataLog_Itens.DataSet := QLog_Orcamento;
+
+    QLog_Orcamento.Close;
+    QLog_Orcamento.Prepare;
+    QLog_Orcamento.Open;
+
+    btnInsert.Enabled  := True;
+    BtnExecuta.Enabled := True;
+
+    Cond_Pagto.SetFocus;
+
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.BtnOrcamentoClick(Sender: TObject);
+begin
+  try
+    ORCAMENTO_ID.Value := GetConsulta('ORÇAMENTO', 0, 0, StrToInt(VENDEDOR_ID.Text));
+  except
+    ORCAMENTO_ID.Value := GetConsulta('ORÇAMENTO', 0, 0, 0);
+  end;
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.btnImpOrcamentoClick(Sender: TObject);
+var
+vr_produtos :Real;
+begin
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT * FROM ORCAMENTOS');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+    QRel.ParamByName('ORCAMENTO_ID').AsInteger  := StrToInt(Orcamento_id.Text);
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QInsert.Sql.Clear;
+    QInsert.Sql.Add('SELECT * FROM ORCITENS');
+    QInsert.Sql.Add('WHERE');
+    QInsert.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+    QInsert.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(Orcamento_id.Text);
+
+    QInsert.Prepare;
+    QInsert.Open;
+
+
+     if (LeIni(Arq_Ini, 'Sistema', 'Imp. Orçamento') = 'Normal') Then
+    Begin
+      QRLabeL64.Caption   := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' +
+                            FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                            FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - CEP ' +
+                            FrmPrincipal.QEmpresa.FieldByName('CEP').AsString;
+      QRLabeL65.Caption   := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - I. E. ' +
+                            FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString + ' - Fone: ' +
+                            FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+
+
+        QRMemo5.Lines.Clear;
+        QRMemo6.Lines.Clear;
+
+        QRLabel47.Caption  := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' +
+                              FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                              FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - CEP ' +
+                              FrmPrincipal.QEmpresa.FieldByName('CEP').AsString;
+        QRLabel48.Caption   := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - I. E. ' +
+                              FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString;
+
+        QRLabel77.Caption   :='Fone/Celular: ' +
+                              FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString + '/' + FrmPrincipal.QEmpresa.FieldByName('CELULAR').AsString ;
+    End;
+
+    {
+
+    if (LeIni(Arq_Ini, 'Sistema', 'Largura Papel') > '0') and (LeIni(Arq_Ini, 'Sistema', 'Altura Papel') > '0') then
+    begin
+      Orcamento_Reduzido.Page.Width     := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Largura Papel'));
+      Orcamento_Reduzido.Page.Length    := StrToFloat(LeIni(Arq_Ini, 'Sistema', 'Altura Papel'));
+    end;
+
+    if LeIni(Arq_Ini, 'Orçamento', 'Endereço Cliente') = 'False' then
+    begin
+      QRLabel9.Enabled   := False;
+      QRDBText12.Enabled := False;
+      QRLabel10.Enabled  := False;
+      QRDBText13.Enabled := False;
+      QRLabel11.Enabled  := False;
+      QRDBText14.Enabled := False;
+      QRLabel12.Enabled  := False;
+      QRDBText15.Enabled := False;
+    end;
+
+    if LeIni(Arq_Ini, 'Orçamento', 'Acréscimo/Desconto') = 'False' then
+    begin
+      QRLabel28.Enabled := False;
+      QRLabel29.Enabled := False;
+      QRBand2.Height    := 22;
+    end;
+
+    QSelect.Sql.Clear;
+    QSelect.Sql.Add('SELECT * FROM TRANSPARCELAS');
+    QSelect.Sql.Add('WHERE');
+    QSelect.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+    QSelect.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+    QSelect.ParamByName('TRANSACAO_ID').AsInteger  := QRel.FieldByName('ORCAMENTO_ID').AsInteger;
+    QSelect.ParamByName('TIPO_TRANSACAO').AsString := 'O';
+
+    QSelect.Prepare;
+    QSelect.Open;
+
+
+
+    if (not QSelect.IsEmpty) and (QRel.FieldByName('COND_PAGTO').AsString = 'A PRAZO') then
+    begin
+      QRMemo5.Lines.Clear;
+      QRMemo5.Lines.Add('Parcelamento');
+      QRMemo5.Lines.Add('============');
+
+      QRMemo6.Lines.Clear;
+      QRMemo6.Lines.Add('Parcelamento');
+      QRMemo6.Lines.Add('============');
+
+
+      QSelect.First;
+      while not QSelect.Eof do
+      begin
+        QRMemo5.Lines.Add('Venc.: ' + QSelect.FieldByName('DT_VENCIMENTO').AsString + ' - ' + FormatFloat('#,##0.00', QSelect.FieldByName('VALOR').AsFloat));
+        QRMemo6.Lines.Add('Venc.: ' + QSelect.FieldByName('DT_VENCIMENTO').AsString + ' - ' + FormatFloat('#,##0.00', QSelect.FieldByName('VALOR').AsFloat));
+        Application.ProcessMessages;
+        QSelect.Next;
+      end;
+    end;
+
+    QRMemo1.Lines.Clear;
+    QRMemo1.Lines.Text := QRel.FieldByName('OBSERVACAO').AsString;
+
+    QRMemo3.Lines.Clear;
+    QRMemo3.Lines.Text := QRel.FieldByName('OBSERVACAO').AsString;
+    }
+
+      QSelect.Sql.Clear;
+      QSelect.Sql.Add('SELECT * FROM TRANSPARCELAS');
+      QSelect.Sql.Add('WHERE');
+      QSelect.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID)');
+      QSelect.Sql.Add('AND (TIPO_TRANSACAO = :TIPO_TRANSACAO)');
+
+      QSelect.ParamByName('TRANSACAO_ID').AsInteger  := QRel.FieldByName('ORCAMENTO_ID').AsInteger;
+      QSelect.ParamByName('TIPO_TRANSACAO').AsString := 'O';
+
+      QSelect.Prepare;
+      QSelect.Open;
+
+     if QSelect.RecordCount > 12 Then
+     QrMemo6.Font.Size := 7
+     Else
+     QrMemo6.Font.Size := 8;
+
+      if not QSelect.IsEmpty then
+      begin
+
+        QRMemo6.Lines.Clear;
+        QRMemo6.Lines.Add('Parcelamento');
+        QRMemo6.Lines.Add('============');
+
+        QSelect.First;
+        while not QSelect.Eof do
+        begin
+          QRMemo6.Lines.Add('Venc.: ' + QSelect.FieldByName('DT_VENCIMENTO').AsString + ' - ' + FormatFloat('#,##0.00', QSelect.FieldByName('VALOR').AsFloat));
+
+          Application.ProcessMessages;
+          QSelect.Next;
+        end;
+
+      end;
+
+      QRMemo5.Lines.Clear;
+      QRMemo5.Lines.Text := 'Observação: ' + QTabela.FieldByName('OBSERVACAO').AsString;
+
+
+    if Impressora_Matricial.Checked then
+    begin
+      RDprint1.OpcoesPreview.Preview     := True;
+      RDprint1.OpcoesPreview.PreviewZoom := -1;
+      RDprint1.MostrarProgresso          := True;
+
+      RDprint1.Abrir;
+
+      if RDprint1.Setup = False then
+      begin
+        QDelete.Sql.Clear;
+        QDelete.Sql.Add('DELETE FROM ORCAMENTOS');
+        QDelete.Sql.Add('WHERE');
+        QDelete.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+        QDelete.ParamByName('ORCAMENTO_ID').AsInteger := StrToInt(Orcamento_id.Text);;
+
+        QDelete.Prepare;
+        QDelete.ExecSql;
+
+        Application.MessageBox('Cancelado pelo usuário...', PChar(Msg_Title), mb_IconInformation);
+        exit;
+      end;
+
+      Vr_Produtos := 0;
+
+      QInsert.First;
+      while not QInsert.eof do
+      begin
+        if Linha >= 28 then
+          RDprint1.Novapagina;
+
+        RDprint1.Imp(Linha, 01, StrZero(QInsert.FieldByName('PRODUTO_ID').AsString, 6, 0));
+        RDprint1.Imp(Linha, 08, Copy(QInsert.FieldByName('DESCRICAO').AsString, 1, 40));
+        RDprint1.ImpVal(Linha, 50, '##0.00', QInsert.FieldByName('QUANTIDADE').AsFloat, []);
+        RDprint1.ImpVal(Linha, 60, '##0.00', QInsert.FieldByName('VR_UNITARIO').AsFloat, []);
+        RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QInsert.FieldByName('VR_TOTAL').AsFloat, []);
+
+        Inc(Linha);
+
+        Vr_Produtos := Vr_Produtos + QInsert.FieldByName('VR_TOTAL').AsFloat;
+
+        Application.ProcessMessages;
+        QInsert.next;
+      end;
+
+      RDprint1.Imp(Linha, 67, '--------------');
+
+      Inc(Linha);
+
+      RDprint1.Imp(Linha, 01, 'Vendedor:');
+      RDprint1.Imp(Linha, 11, QVendedor.FieldByName('NOME').AsString);
+      RDprint1.ImpF(Linha, 47, 'Total dos Produtos',[negrito]);
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', Vr_Produtos, []);
+
+
+      Inc(Linha);
+
+      RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 01, 45));
+      RDprint1.ImpF(Linha, 47, 'Desconto',[negrito]);
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VR_DESCONTO').AsFloat, []);
+
+      Inc(Linha);
+
+      RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 46, 45));
+      RDprint1.ImpF(Linha, 47, 'Total do Orçamento',[negrito]);
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VALOR').AsFloat, [negrito]);
+
+       Inc(Linha);
+       Inc(Linha);
+
+      if not QSelect.IsEmpty then
+      begin
+        RDprint1.Imp(linha,47,'Parcelamento:');
+        inc(linha);
+        RDprint1.Imp(linha,47,'-------------');
+        inc(linha);
+        RDprint1.Imp(linha,47,'Vencimento:');
+        QSelect.First;
+        while not QSelect.Eof do
+        begin
+         inc(linha);
+         RDprint1.Imp(linha,47,QSelect.FieldByName('DT_VENCIMENTO').AsString);
+         RDprint1.Imp(linha,65,'-');
+         RDprint1.ImpVal(linha,66,'##,###,##0.00',QSelect.FieldByName('VALOR').AsFloat,[]);
+         QSelect.Next;
+         end;
+       end; 
+
+      RDprint1.Fechar;
+    end
+    else
+    Begin
+     if (LeIni(Arq_Ini, 'Sistema', 'Largura Papel') > '0') and (LeIni(Arq_Ini, 'Sistema', 'Altura Papel') > '0') then
+      Orcamento_Reduzido.PreviewModal
+     else
+      Orcamento_2.PreviewModal
+    End;
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.btnProdutoClick(Sender: TObject);
+begin
+  QProduto.Sql.Clear;
+  QProduto.Sql.Add('SELECT * FROM PRODUTOS');
+  QProduto.Sql.Add('WHERE');
+  QProduto.Sql.Add('(PRODUTO_ID = :PRODUTO_ID)');
+  QProduto.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+  QProduto.Sql.Add('AND (STATUS = :STATUS)');
+
+  if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+  begin
+    QProduto.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+    QProduto.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+  end;
+
+  QProduto.ParamByName('PRODUTO_ID').AsInteger := GetConsulta('ESTOQUE', FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger, 0, 0);
+  QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+  QProduto.ParamByName('STATUS').AsString      := 'A';
+
+  QProduto.Prepare;
+  QProduto.Open;
+
+  Cod_Produto.Text := QProduto.FieldByName('COD_BARRA').AsString;
+  Descricao.Text   := Copy(QProduto.FieldByName('DESCRICAO').AsString,1,40);
+  Quantidade.Value := 1;
+
+  if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QProduto.FieldByName('PROMO_INICIAL').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QProduto.FieldByName('PROMO_FINAL').AsDateTime) then
+    Preco.Value := RoundTo(QProduto.FieldByName('PRECO_PROMOCAO').AsFloat, -2)
+  else
+    Preco.Value := RoundTo(QProduto.FieldByName('PRECO_VAREJO').AsFloat, -2);
+
+  Desconto.Value   := 0;
+  Total_Item.Value := Preco.Value;
+
+  Keybd_Event(VK_RETURN, 0, 0, 0);
+end;
+
+procedure TFrmOrcamento_Rapido_2.btnRetornaClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure TFrmOrcamento_Rapido_2.btnRetornaMouseEnter(Sender: TObject);
+begin
+  Pode_Sair := True;
+end;
+
+procedure TFrmOrcamento_Rapido_2.btnRetornaMouseLeave(Sender: TObject);
+begin
+  Pode_Sair := False;
+end;
+
+procedure TFrmOrcamento_Rapido_2.btnVendedorClick(Sender: TObject);
+begin
+  try
+    VENDEDOR_ID.Value := GetConsulta('PESSOAL', 0, 0, StrToInt(VENDEDOR_ID.Text));
+  except
+    VENDEDOR_ID.Value := GetConsulta('PESSOAL', 0, 0, 0);
+  end;
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.CLIENTE_IDExit(Sender: TObject);
+begin
+//  DetailSearch('Cliente');
+
+    QCliente.Close;
+    QCliente.ParamByName('CLIENTE_ID').AsInteger := StrToInt(CLIENTE_ID.Text);
+    QCliente.Prepare;
+    QCliente.Open;
+
+    if not QCliente.IsEmpty then
+    begin
+      NOME.Text      := Copy(QCliente.FieldByName('NOME').AsString, 1, 40);
+      ENDERECO.Text  := Copy(QCliente.FieldByName('ENDERECO').AsString + ', ' + QCliente.FieldByName('NUMERO').AsString, 1, 40);
+      BAIRRO.Text    := Copy(QCliente.FieldByName('BAIRRO').AsString, 1, 20);
+      MUNICIPIO.Text := Copy(QCliente.FieldByName('MUNICIPIO').AsString, 1, 30);
+      ESTADO.Text    := QCliente.FieldByName('ESTADO').AsString;
+      CEP.Text       := QCliente.FieldByName('CEP').AsString;
+      DDD.Text       := QCliente.FieldByName('DDD').AsString;
+      Telefone_1.Text  :=  QCliente.FieldByName('TELEFONE_1').AsString;
+    end;
+end;
+
+procedure TFrmOrcamento_Rapido_2.Cod_ProdutoEnter(Sender: TObject);
+begin
+  Cod_Produto.Text := '';
+  Descricao.Text   := '';
+  Quantidade.Value := 1;
+  Preco.Value      := 0;
+  Desconto.Value   := 0;
+  Total_Item.Value := 0;
+end;
+
+procedure TFrmOrcamento_Rapido_2.Cod_ProdutoExit(Sender: TObject);
+var
+Vr_Produto, Vr_Quantidade: Real;
+Cod_Alternativo, Cod_Reduzido: String;
+begin
+  if Cod_Produto.Text <> '' then
+  begin
+    Cod_Alternativo := Cod_Produto.Text;
+    Cod_Reduzido    := Cod_Produto.Text;
+    Vr_Produto      := 0;
+    Vr_Quantidade   := 0;
+
+    if (Copy(Cod_Produto.Text, 1, 1) = '2') and (FrmPrincipal.Config.FieldByName('TEM_BALANCA').AsString = 'True') then
+    begin
+      if LeIni(Arq_Ini, 'Sistema', 'Retorno Etiqueta') = 'Peso' then
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Formato Etiqueta') = '1' then
+          Vr_Quantidade := StrToFloat(Copy(Cod_Produto.Text, 8, 3) + ',' + Copy(Cod_Produto.Text, 11, 2))
+        else
+          Vr_Quantidade := StrToFloat(Copy(Cod_Produto.Text, 8, 2) + ',' + Copy(Cod_Produto.Text, 10, 3))
+      end
+      else
+      begin
+        if LeIni(Arq_Ini, 'Sistema', 'Formato Etiqueta') = '1' then
+          Vr_Produto := StrToFloat(Copy(Cod_Produto.Text, 8, 3) + ',' + Copy(Cod_Produto.Text, 11, 2))
+        else
+          Vr_Produto := StrToFloat(Copy(Cod_Produto.Text, 8, 2) + ',' + Copy(Cod_Produto.Text, 10, 3));
+      end;
+
+      Cod_Produto.Text := Copy(Cod_Produto.Text, 2, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger);
+      Cod_Alternativo  := Copy(Cod_Produto.Text, 2, (length(Cod_Produto.Text) - 1));
+      Cod_Reduzido     := StrZero(Copy(Cod_Reduzido, 2, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger), FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger, 0);
+
+      if FrmPrincipal.Config.FieldByName('GERA_DIGITO').AsString = 'True' then
+        Cod_Produto.Text := Dig(Cod_Produto.Text);
+
+      Cod_Produto.Text := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+    end
+    else
+      Cod_Reduzido := StrZero(Copy(Cod_Reduzido, 1, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger), FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger, 0);
+
+    Cod_Produto.Text := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+
+    QProduto.Sql.Clear;
+    QProduto.Sql.Add('SELECT * FROM PRODUTOS');
+    QProduto.Sql.Add('WHERE');
+    QProduto.Sql.Add('(PRODUTO_ID = :PRODUTO_ID) OR (COD_BARRA = :COD_BARRA OR COD_BARRA_AUX1 = :COD_BARRA OR COD_BARRA_AUX2 = :COD_BARRA OR ' +
+                     'COD_BARRA_AUX3 = :COD_BARRA OR COD_BARRA_AUX4 = :COD_BARRA OR COD_ORIGINAL = :ALTERNATIVO OR REFERENCIA = :ALTERNATIVO OR CODRED = :CODRED)');
+    QProduto.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+    QProduto.Sql.Add('AND (STATUS = :STATUS)');
+
+    if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+    begin
+      QProduto.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+      QProduto.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+    end;
+
+    QProduto.ParamByName('PRODUTO_ID').AsInteger := StrToInt(Cod_Produto.Text);
+    QProduto.ParamByName('COD_BARRA').AsString   := StrZero(Cod_Produto.Text, FrmPrincipal.Config.FieldByName('TAM_BARRAS').AsInteger, 0);
+    QProduto.ParamByName('ALTERNATIVO').AsString := Cod_Alternativo;
+    QProduto.ParamByName('CODRED').AsString      := StrZero(Copy(Cod_Reduzido, 1, FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger), FrmPrincipal.Config.FieldByName('TAM_PESAVEIS').AsInteger, 0);
+    QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+    QProduto.ParamByName('STATUS').AsString      := 'A';
+
+    QProduto.Prepare;
+    QProduto.Open;
+
+    if QProduto.IsEmpty then
+    begin
+      Cod_Produto.SetFocus;
+      exit;
+    end;
+
+    Cod_Produto.Text := QProduto.FieldByName('COD_BARRA').AsString;
+    Descricao.Text   := copy(QProduto.FieldByName('DESCRICAO').AsString,1,40);
+    Quantidade.Value := 1;
+
+    if Vr_Produto = 0 then
+    begin
+      if (FrmPrincipal.Config.FieldByName('PRODUTOS_CONTRATO').AsString = 'True') and (not QCliente.IsEmpty)  Then
+      Begin
+
+        QSearch.sql.Text :=  'SELECT PRECO_VENDA FROM PRODUTOS_CONTRATO WHERE CLIENTE_ID = :CLIENTE_ID AND PRODUTO_ID = :PRODUTO_ID' ;
+        QSearch.ParamByName('CLIENTE_ID').AsInteger := QCliente.FieldByName('CLIENTE_ID').AsInteger;
+        QSearch.ParamByName('PRODUTO_ID').AsInteger := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+        QSearch.Prepare;
+        QSearch.Open;
+
+        if not QSearch.IsEmpty Then
+        Begin
+        Application.MessageBox(Pchar('Cliente: ' + QCliente.FieldByName('NOME').AsString + #13 + 'Possui preço diferenciado cadastrado!'+#13 + 'Produto: ' + Copy(QProduto.FieldByName('DESCRICAO').AsString,1,40) + #13 + 'Preço do Produto: ' + FloatToStrf(QSearch.FieldByName('PRECO_VENDA').AsFloat, ffNumber,15,2)), PChar(Msg_Title), MB_ICONINFORMATION);
+        Preco.Value := QSearch.FieldByName('PRECO_VENDA').AsFloat;
+        End
+        Else
+        Preco.Value := QProduto.FieldByName('PRECO_VAREJO').AsFloat;
+
+      End
+      Else
+      if (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime >= QProduto.FieldByName('PROMO_INICIAL').AsDateTime) and (FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsDateTime <= QProduto.FieldByName('PROMO_FINAL').AsDateTime) then
+        Preco.Value := RoundTo(QProduto.FieldByName('PRECO_PROMOCAO').AsFloat, -2)
+      else
+        Preco.Value := RoundTo(QProduto.FieldByName('PRECO_VAREJO').AsFloat, -2);
+    end
+    else
+      Preco.Value := Vr_Produto;
+
+    Desconto.Value   := 0;
+    Total_Item.Value := Preco.Value;
+
+    if Vr_Quantidade = 0 then
+    begin
+      if Vr_Produto > 0 then
+      begin
+        Quantidade.Value := (Vr_Produto / Preco.Value);
+        Total_Item.Value := Vr_Produto;
+      end;
+    end
+    else
+      Quantidade.Value := Vr_Quantidade;
+
+    Quantidade.SetFocus;
+    btnInsert.Enabled := True;
+  end;
+end;
+
+procedure TFrmOrcamento_Rapido_2.Cod_ProdutoKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+  if (Key = VK_F7) and (Sender = Cod_Produto) then
+    btnProdutoClick(Sender);
+
+  if (Key = Vk_Return) or (Key = Vk_Down) then
+    Perform(Wm_NextDlgctl, 0, 0);
+
+  if Key = Vk_Up then
+    Perform(Wm_NextDlgctl, 1, 0);
+end;
+
+procedure TFrmOrcamento_Rapido_2.DBGrid1ColEnter(Sender: TObject);
+begin
+  Cod_Produto.Text := QLog_Orcamento.FieldByName('COD_BARRA').AsString;
+  Descricao.Text   := QLog_Orcamento.FieldByName('DESCRICAO').AsString;
+  Quantidade.Value := QLog_Orcamento.FieldByName('QUANTIDADE').AsFloat;
+  Preco.Value      := QLog_Orcamento.FieldByName('VR_UNITARIO').AsFloat;
+  Desconto.Value   := RoundTo(((QLog_Orcamento.FieldByName('VR_DESCONTO').AsFloat * 100) / QLog_Orcamento.FieldByName('VR_TOTAL').AsFloat), -2);
+  Total_Item.Value := QLog_Orcamento.FieldByName('VR_TOTAL').AsFloat;
+end;
+
+procedure TFrmOrcamento_Rapido_2.DBGrid1Exit(Sender: TObject);
+begin
+  Cod_Produto.SetFocus;
+end;
+
+procedure TFrmOrcamento_Rapido_2.DBGrid1KeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  Cod_Produto.Text := QLog_Orcamento.FieldByName('COD_BARRA').AsString;
+  Descricao.Text   := QLog_Orcamento.FieldByName('DESCRICAO').AsString;
+  Quantidade.Value := QLog_Orcamento.FieldByName('QUANTIDADE').AsFloat;
+  Preco.Value      := QLog_Orcamento.FieldByName('VR_UNITARIO').AsFloat;
+  Desconto.Value   := RoundTo(((QLog_Orcamento.FieldByName('VR_DESCONTO').AsFloat * 100) / QLog_Orcamento.FieldByName('VR_TOTAL').AsFloat), -2);
+  Total_Item.Value := QLog_Orcamento.FieldByName('VR_TOTAL').AsFloat;
+
+  if (Key = VK_F4) and (not QLog_Orcamento.IsEmpty) then
+  begin
+    QRel.Sql.Clear;
+    QRel.Sql.Add('DELETE FROM LOG_ORCAMENTO');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(CUPOM = :CUPOM)');
+    QRel.Sql.Add('AND (TP_PROD_SERV = :TP_PROD_SERV)');
+    QRel.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+    QRel.ParamByName('CUPOM').AsString        := Cod_Cupom; // SerialNum('C');
+    QRel.ParamByName('TP_PROD_SERV').AsString := 'P';
+    QRel.ParamByName('PRODUTO_ID').AsInteger  := QLog_Orcamento.FieldByName('PRODUTO_ID').AsInteger;
+
+    QRel.Prepare;
+    QRel.ExecSql;
+
+
+
+    Soma;
+
+    QLog_Orcamento.Sql.Clear;
+    QLog_Orcamento.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+    QLog_Orcamento.Sql.Add('WHERE');
+    QLog_Orcamento.Sql.Add('(CUPOM = :CUPOM)');
+
+    QLog_Orcamento.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+    QLog_Orcamento.Prepare;
+    QLog_Orcamento.Open;
+
+    if QLog_Orcamento.IsEmpty then
+    begin
+      Pagto       := '';
+      Cliente     := 0;
+      Autoriz_Por := '';
+    end;
+
+    //Cond_Pagto;
+
+    Cod_Produto.SetFocus;
+  end;
+end;
+
+procedure TFrmOrcamento_Rapido_2.DBGrid1KeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  Cod_Produto.Text := QLog_Orcamento.FieldByName('COD_BARRA').AsString;
+  Descricao.Text   := QLog_Orcamento.FieldByName('DESCRICAO').AsString;
+  Quantidade.Value := QLog_Orcamento.FieldByName('QUANTIDADE').AsFloat;
+  Preco.Value      := QLog_Orcamento.FieldByName('VR_UNITARIO').AsFloat;
+  Desconto.Value   := RoundTo(((QLog_Orcamento.FieldByName('VR_DESCONTO').AsFloat * 100) / QLog_Orcamento.FieldByName('VR_TOTAL').AsFloat), -2);
+  Total_Item.Value := QLog_Orcamento.FieldByName('VR_TOTAL').AsFloat;
+end;
+
+procedure TFrmOrcamento_Rapido_2.DescontoExit(Sender: TObject);
+begin
+  Total_Item.Value := (Quantidade.Value * (Preco.Value - RoundTo(((Preco.Value * Desconto.Value) / 100), -2)));
+end;
+
+procedure TFrmOrcamento_Rapido_2.DescricaoEnter(Sender: TObject);
+begin
+  if Cod_Produto.Text = '' then
+    Cod_Produto.SetFocus;
+end;
+
+procedure TFrmOrcamento_Rapido_2.FormClose(Sender: TObject;
+  var Action: TCloseAction);
+begin
+  QRel.Sql.Clear;
+  QRel.Sql.Add('DELETE FROM LOG_ORCAMENTO');
+  QRel.Sql.Add('WHERE');
+  QRel.Sql.Add('(CUPOM = :CUPOM)');
+
+  QRel.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+  QRel.Prepare;
+  QRel.ExecSql;
+
+
+
+  Action := caFree;
+end;
+
+procedure TFrmOrcamento_Rapido_2.FormCreate(Sender: TObject);
+begin
+  QLog_Orcamento.Sql.Clear;
+  QLog_Orcamento.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+  QLog_Orcamento.Sql.Add('WHERE');
+  QLog_Orcamento.Sql.Add('(CUPOM = :CUPOM)');
+
+  QLog_Orcamento.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+  QLog_Orcamento.Prepare;
+  QLog_Orcamento.Open;
+
+  Soma;
+
+  DBGrid1.Columns[0].Width := 64;
+  DBGrid1.Columns[1].Width := 244;
+  DBGrid1.Columns[2].Width := 80;
+  DBGrid1.Columns[3].Width := 80;
+  DBGrid1.Columns[4].Width := 80;
+  DBGrid1.Columns[5].Width := 80;
+
+  Pagto       := '';
+  Cliente     := 0;
+  Autoriz_Por := '';
+  Pode_Sair   := False;
+  Inserindo   := False;
+
+  QRLabel41.Caption   := FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString + ', ' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString + ' - ' +
+                        FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString + ' - ' +
+                        FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + ' - CEP ' +
+                        FrmPrincipal.QEmpresa.FieldByName('CEP').AsString;
+  QRLabel42.Caption   := 'CNPJ: ' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString + ' - I. E. ' +
+                        FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString + ' - Fone: ' +
+                        FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString;
+  
+end;
+
+procedure TFrmOrcamento_Rapido_2.FormKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+var
+Id_Orcamento,pagina: Integer;
+Vr_Produtos: Real;
+begin
+
+  if (Key = VK_F2) then
+  Begin
+      btnNovoClick(Self);
+      CLIENTE_ID.Value  := 0;
+      OBSERVACAO.Text   := '';
+      VENDEDOR_ID.Value := 0;
+  End;
+
+ 
+
+
+  if (Key = VK_F9) then
+  begin
+    //Fecha_Orcamento(Pagto, Autoriz_Por, Cod_Cupom, Cliente);
+
+    Soma;
+
+    VR_DESCONTO.SetFocus;
+
+   { QLog_Orcamento.Sql.Clear;
+    QLog_Orcamento.Sql.Add('SELECT * FROM LOG_ORCAMENTO');
+    QLog_Orcamento.Sql.Add('WHERE');
+    QLog_Orcamento.Sql.Add('(CUPOM = :CUPOM)');
+
+    QLog_Orcamento.ParamByName('CUPOM').AsString := Cod_Cupom; // SerialNum('C');
+
+    QLog_Orcamento.Prepare;
+    QLog_Orcamento.Open;
+
+    if QLog_Orcamento.IsEmpty then
+    begin
+      Cliente     := 0;
+      Pagto       := '';
+      Autoriz_Por := '';
+    end; }
+
+    //Cond_Pagto;
+  end;
+
+ { if (Key = VK_F9) and (QLog_Orcamento.IsEmpty) then
+  begin
+    Id_Orcamento := GetConsulta('ORÇAMENTO', 0, 0, 0);
+
+    QRel.Sql.Clear;
+    QRel.Sql.Add('SELECT * FROM ORCAMENTOS');
+    QRel.Sql.Add('WHERE');
+    QRel.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+    QRel.Sql.Add('AND (ORCAMENTOS.EMPRESA_ID = :EMPRESA_ID)');
+
+    QRel.ParamByName('ORCAMENTO_ID').AsInteger := Id_Orcamento;
+    QRel.ParamByName('EMPRESA_ID').AsInteger   := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+
+    QRel.Prepare;
+    QRel.Open;
+
+    QInsert.Sql.Clear;
+    QInsert.Sql.Add('SELECT * FROM ORCITENS');
+    QInsert.Sql.Add('WHERE');
+    QInsert.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
+
+    QInsert.ParamByName('ORCAMENTO_ID').AsInteger := Id_Orcamento;
+
+    QInsert.Prepare;
+    QInsert.Open;
+
+    QVendedor.Close;
+    QVendedor.ParamByName('FUNCIONARIO_ID').AsInteger := QRel.FieldByName('VENDEDOR_ID').AsInteger;
+    QVendedor.Prepare;
+    QVendedor.Open;
+
+    RDprint1.OpcoesPreview.Preview     := True;
+    RDprint1.OpcoesPreview.PreviewZoom := -1;
+    RDprint1.MostrarProgresso          := True;
+
+    RDprint1.Abrir;
+
+    if RDprint1.Setup = False then
+    begin
+      Application.MessageBox('Cancelado pelo usuário...', PChar(Msg_Title), mb_IconInformation);
+      exit;
+    end;
+
+    Vr_Produtos := 0;
+
+    QInsert.First;
+    while not QInsert.eof do
+    begin
+  if Linha >= 28 then
+
+        RDprint1.Novapagina;
+
+      RDprint1.Imp(Linha, 01, StrZero(QInsert.FieldByName('PRODUTO_ID').AsString, 6, 0));
+      RDprint1.Imp(Linha, 08, Copy(QInsert.FieldByName('DESCRICAO').AsString, 1, 40));
+      RDprint1.ImpVal(Linha, 50, '##0.00', QInsert.FieldByName('QUANTIDADE').AsFloat, []);
+      RDprint1.ImpVal(Linha, 60, '##0.00', QInsert.FieldByName('VR_UNITARIO').AsFloat, []);
+      RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QInsert.FieldByName('VR_TOTAL').AsFloat, []);
+
+      Inc(Linha);
+
+      Vr_Produtos := Vr_Produtos + QInsert.FieldByName('VR_TOTAL').AsFloat;
+
+      Application.ProcessMessages;
+      QInsert.next;
+    end;
+
+    RDprint1.Imp(Linha, 67, '--------------');
+
+    Inc(Linha);
+
+    RDprint1.Imp(Linha, 01, 'Vendedor:');
+    RDprint1.Imp(Linha, 11, QVendedor.FieldByName('NOME').AsString);
+    RDprint1.Imp(Linha, 47, 'Total dos Produtos');
+    RDprint1.ImpVal(Linha, 67, '###,###,##0.00', Vr_Produtos, []);
+
+    Inc(Linha);
+
+    RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 1, 45));
+    RDprint1.Imp(Linha, 47, 'Acréscimo');
+    RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VR_ACRESCIMO').AsFloat, []);
+
+    Inc(Linha);
+
+    RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 46, 45));
+    RDprint1.Imp(Linha, 47, 'Desconto');
+    RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VR_DESCONTO').AsFloat, []);
+
+    Inc(Linha);
+
+    RDprint1.Imp(Linha, 01, Copy(QRel.FieldByName('OBSERVACAO').AsString, 99, 45));
+    RDprint1.Imp(Linha, 47, 'Total do Orçamento');
+    RDprint1.ImpVal(Linha, 67, '###,###,##0.00', QRel.FieldByName('VALOR').AsFloat, [negrito]);
+
+    RDprint1.TamanhoQteLinhas := 33;
+    RDprint1.Fechar;
+
+  end;}
+
+  if (Key = VK_F12) and (QLog_Orcamento.IsEmpty) then
+  begin
+    Pagto := '';
+   // Cond_Pagto;
+  end;
+end;
+
+procedure TFrmOrcamento_Rapido_2.FormShow(Sender: TObject);
+begin
+  Cod_Cupom := Copy(TimeToStr(now), 1, 2) + Copy(TimeToStr(now), 4, 2) + Copy(TimeToStr(now), 7, 2);
+  Orcamento_id.SetFocus;
+end;
+
+procedure TFrmOrcamento_Rapido_2.Orcamento_idChange(Sender: TObject);
+begin
+if Orcamento_id.Value > 0 then
+Begin
+btnImpOrcamento.Enabled := True;
+End
+Else
+begin
+btnImpOrcamento.Enabled := False;
+
+end;
+end;
+
+procedure TFrmOrcamento_Rapido_2.Orcamento_idExit(Sender: TObject);
+begin
+DetailSearch('');
+end;
+
+procedure TFrmOrcamento_Rapido_2.Orcamento_idKeyDown(Sender: TObject;
+  var Key: Word; Shift: TShiftState);
+begin
+
+  if (Key = Vk_F7) and (Sender = Orcamento_id) then
+    BtnOrcamentoClick(Self);
+
+  if (Key = Vk_F7) and (Sender = CLIENTE_ID) then
+    btnClienteClick(Self);
+
+  if (Key = Vk_F7) and (Sender = VENDEDOR_ID) then
+    btnVendedorClick(Self);
+
+  if (Key = Vk_F2) and (Sender = Orcamento_id) then
+    btnNovoClick(Self);
+
+   if Key = Vk_Return then
+    Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmOrcamento_Rapido_2.PrecoExit(Sender: TObject);
+begin
+  Total_Item.Value := (Quantidade.Value * Preco.Value);
+end;
+
+procedure TFrmOrcamento_Rapido_2.QLog_OrcamentoAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(QLog_Orcamento.FieldByName('QUANTIDADE')).DisplayFormat   := '#,##0.00';
+TFloatField(QLog_Orcamento.FieldByName('VR_UNITARIO')).DisplayFormat  := '#,##0.00';
+TFloatField(QLog_Orcamento.FieldByName('VR_TOTAL')).DisplayFormat     := '#,##0.00';
+TFloatField(QLog_Orcamento.FieldByName('VR_DESCONTO')).DisplayFormat     := '#,##0.00';
+
+end;
+
+procedure TFrmOrcamento_Rapido_2.Qorcamento_itensAfterOpen(DataSet: TDataSet);
+begin
+TFloatField(Qorcamento_itens.FieldByName('QUANTIDADE')).DisplayFormat   := '#,##0.00';
+TFloatField(Qorcamento_itens.FieldByName('VR_UNITARIO')).DisplayFormat  := '#,##0.00';
+TFloatField(Qorcamento_itens.FieldByName('VR_TOTAL')).DisplayFormat     := '#,##0.00';
+TFloatField(Qorcamento_itens.FieldByName('VR_DESCONTO')).DisplayFormat     := '#,##0.00';
+end;
+
+procedure TFrmOrcamento_Rapido_2.QuantidadeExit(Sender: TObject);
+begin
+     if LeIni(ExtractFilePath(ParamStr(0)) + 'Eficaz.Ini', 'Sistema', 'Controle de Estoque no Orçamento') = 'True' then
+      begin
+
+        QRel.Sql.Clear;
+        QRel.Sql.Add('SELECT SUM(QUANTIDADE) QUANTIDADE');
+        QRel.Sql.Add('FROM LOG_ORCAMENTO');
+        QRel.Sql.Add('WHERE');
+        QRel.Sql.Add('(CUPOM = :CUPOM)');
+        QRel.Sql.Add('AND (PRODUTO_ID = :PRODUTO_ID)');
+
+        QRel.ParamByName('CUPOM').AsString       := cod_cupom;
+        QRel.ParamByName('PRODUTO_ID').AsInteger := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+
+        QRel.Prepare;
+        QRel.Open;
+
+        if ( Quantidade.Value + QRel.FieldByName('QUANTIDADE').AsFloat ) > QProduto.FieldByName('QUANTIDADE_C').AsFloat then
+        begin
+          Application.MessageBox('Produto com estoque insuficiente'  , 'Eficaz', MB_IconInformation + MB_OK);
+          Cod_Produto.SetFocus;
+        end;
+
+      end;
+
+      Total_Item.Value := (Quantidade.Value * Preco.Value);
+end;
+
+procedure TFrmOrcamento_Rapido_2.QuantidadeKeyDown(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = Vk_Return then
+  begin
+    Perform(Wm_NextDlgctl, 0, 0);
+
+    if Sender = Desconto then
+      btnExecuta.SetFocus;
+  end;
+end;
+
+
+procedure TFrmOrcamento_Rapido_2.RDprint1AfterPrint(Sender: TObject);
+begin
+  Keybd_Event(VK_Escape, 0, 0, 0);
+end;
+
+procedure TFrmOrcamento_Rapido_2.RDprint1BeforeNewPage(Sender: TObject;
+  Pagina: Integer);
+begin
+  RDprint1.Imp(32, 01, '================================================================================');
+  RDprint1.Imp(33, 01, 'Eficaz Automação e Sistemas Ltda');
+  RDprint1.ImpDir(33, 01, 80, 'http://www.eficazautomacao.com.br', [italico]);
+end;
+
+procedure TFrmOrcamento_Rapido_2.RDprint1NewPage(Sender: TObject;
+  Pagina: Integer);
+begin
+  RDprint1.Imp(02, 01, FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString);
+  RDprint1.ImpDir(02, (length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)), 80, 'Eficaz Automação e Sistemas Ltda - ME', []);
+  RDprint1.Imp(03, 01, Copy(FrmPrincipal.QEmpresa.FieldByName('ENDERECO').AsString,1,30));
+  RDprint1.Imp(03, 30, 'Nº:' + FrmPrincipal.QEmpresa.FieldByName('NUMERO').AsString);
+  RDprint1.Imp(03, 40, Copy (FrmPrincipal.QEmpresa.FieldByName('BAIRRO').AsString,1,15));
+  RDprint1.Imp(03, 55, Copy(FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString,1,17));
+  RDprint1.Imp(03, 72, FrmPrincipal.QEmpresa.FieldByName('CEP').AsString);
+  RDprint1.Imp(04, 01, 'Cnpj.:' + FrmPrincipal.QEmpresa.FieldByName('CNPJ').AsString);
+  RDprint1.Imp(04, 30, 'I.E.: ' + FrmPrincipal.QEmpresa.FieldByName('INSCR_ESTADUAL').AsString);
+  RDprint1.Imp(04, 55, 'Fone: ' + FrmPrincipal.QEmpresa.FieldByName('TELEFONE').AsString);
+  RDprint1.Imp(05, 01, 'Data: ' + DateToStr(date) + ' - ' + TimeToStr(now));
+  RDprint1.impDir(05, 28, 80, 'Página: ' + IntToStr(Pagina), [normal]);
+  RDprint1.Imp(06, 31, '*** ORÇAMENTO ***');
+  RDprint1.Imp(07, 01, '================================================================================');
+  RDprint1.Imp(08, 01, 'Num. Orc.:');
+  RDprint1.Imp(08, 12, StrZero(QRel.FieldByName('ORCAMENTO_ID').AsString, 6, 0));
+  RDprint1.Imp(08, 34, 'Cond. Pagto.:');
+  RDprint1.Imp(08, 48, QRel.FieldByName('COND_PAGTO').AsString);
+  RDprint1.Imp(08, 65, 'Data:');
+  RDprint1.Imp(08, 71, QRel.FieldByName('DT_ORCAMENTO').AsString);
+  RDprint1.Imp(09, 01, 'Cliente/Cod.:');
+  RDprint1.Imp(09, 14, Copy(QRel.FieldByName('NOME').AsString, 1, 28) + ' / ' + QRel.FieldByName('CLIENTE_ID').AsString);
+  RDprint1.Imp(09, 48, 'Fone:');
+  RDprint1.Imp(09, 54, QRel.FieldByName('TELEFONE').AsString);
+  RDprint1.Imp(10, 01, 'Endereço:');
+  RDprint1.Imp(10, 10, Copy(QRel.FieldByName('ENDERECO').AsString, 1, 31));
+  RDprint1.Imp(10, 65, 'Nº: ' + QRel.FieldByName('NUMERO').AsString);
+  RDprint1.Imp(11, 01, 'Bairro:');
+  RDprint1.Imp(11, 09, Copy(QRel.FieldByName('BAIRRO').AsString, 1, 23));
+  RDprint1.Imp(11, 34, 'Cidade:');
+  RDprint1.Imp(11, 42, Copy(QRel.FieldByName('MUNICIPIO').AsString, 1, 23));
+  RDprint1.Imp(11, 65, 'CEP:');
+  RDprint1.Imp(11, 71, QRel.FieldByName('CEP').AsString);
+  RDprint1.Imp(12, 01, '================================================================================');
+  RDprint1.Imp(13, 01, 'Cód.   Descrição                                   Qtd.    Pr. Unit.   Pr. Total');
+  RDprint1.Imp(14, 01, '================================================================================');
+
+  Linha := 15;
+
+end;
+
+end.

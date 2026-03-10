@@ -250,6 +250,8 @@ type
     QPedido_Confere: TFDQuery;
     QArq: TFDQuery;
     QrLogo: TQRImage;
+    QRLabel95: TQRLabel;
+    QRDBText43: TQRDBText;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);

@@ -333,42 +333,42 @@ object FrmFornecedores: TFrmFornecedores
             Caption = 'Raz'#227'o Social'
           end
           object Label19: TLabel
-            Left = 435
+            Left = 414
             Top = 242
             Width = 73
             Height = 13
             Caption = 'e-mail/Empresa'
           end
           object Label17: TLabel
-            Left = 436
+            Left = 415
             Top = 219
             Width = 39
             Height = 13
             Caption = 'Contato'
           end
           object Label15: TLabel
-            Left = 438
+            Left = 417
             Top = 35
             Width = 48
             Height = 13
             Caption = 'CNPJ/CPF'
           end
           object Label11: TLabel
-            Left = 438
+            Left = 417
             Top = 191
             Width = 51
             Height = 13
             Caption = 'Telefone 2'
           end
           object Label2: TLabel
-            Left = 438
+            Left = 417
             Top = 165
             Width = 45
             Height = 13
             Caption = 'C'#243'd. Pa'#237's'
           end
           object btnPais: TSpeedButton
-            Left = 585
+            Left = 564
             Top = 162
             Width = 64
             Height = 21
@@ -403,7 +403,7 @@ object FrmFornecedores: TFrmFornecedores
             OnClick = btnPaisClick
           end
           object btnIBGE: TSpeedButton
-            Left = 585
+            Left = 564
             Top = 84
             Width = 64
             Height = 21
@@ -438,35 +438,35 @@ object FrmFornecedores: TFrmFornecedores
             OnClick = btnIBGEClick
           end
           object Label24: TLabel
-            Left = 438
+            Left = 417
             Top = 87
             Width = 49
             Height = 13
             Caption = 'C'#243'd. IBGE'
           end
           object Label8: TLabel
-            Left = 438
+            Left = 417
             Top = 139
             Width = 33
             Height = 13
             Caption = 'Estado'
           end
           object Label7: TLabel
-            Left = 438
+            Left = 417
             Top = 113
             Width = 28
             Height = 13
             Caption = 'Bairro'
           end
           object Label25: TLabel
-            Left = 437
+            Left = 416
             Top = 61
             Width = 37
             Height = 13
             Caption = 'N'#250'mero'
           end
           object Label20: TLabel
-            Left = 438
+            Left = 417
             Top = 9
             Width = 78
             Height = 13
@@ -478,6 +478,42 @@ object FrmFornecedores: TFrmFornecedores
             Width = 51
             Height = 13
             Caption = 'Telefone 1'
+          end
+          object btnCNPJ: TSpeedButton
+            Left = 631
+            Top = 32
+            Width = 64
+            Height = 21
+            Cursor = crHandPoint
+            Caption = '(F7)'
+            Flat = True
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clNavy
+            Font.Height = -11
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            Glyph.Data = {
+              06020000424D0602000000000000760000002800000028000000140000000100
+              0400000000009001000000000000000000001000000000000000000000000000
+              8000008000000080800080000000800080008080000080808000C0C0C0000000
+              FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+              FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+              FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+              333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+              333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+              777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+              FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+              FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+              333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+              88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+              F777333333333088FFF003333333333337333337733333333333088FFF033333
+              333333337F33337333333333333308FFF09333333333333378F3373333333333
+              333330FF0933333333333333378F733333333333333333003333333333333333
+              33773333333333333333}
+            NumGlyphs = 2
+            ParentFont = False
+            Visible = False
+            OnClick = btnCNPJClick
           end
           object URL: TEdit
             Left = 82
@@ -639,7 +675,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object EMAIL: TEdit
-            Left = 521
+            Left = 500
             Top = 240
             Width = 175
             Height = 21
@@ -650,7 +686,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object CONTATO: TEdit
-            Left = 521
+            Left = 500
             Top = 216
             Width = 165
             Height = 21
@@ -661,9 +697,9 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object CNPJ: TMaskEdit
-            Left = 521
-            Top = 31
-            Width = 133
+            Left = 500
+            Top = 32
+            Width = 128
             Height = 21
             CharCase = ecUpperCase
             Enabled = False
@@ -678,7 +714,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object TELEFONE_2: TMaskEdit
-            Left = 521
+            Left = 500
             Top = 189
             Width = 77
             Height = 21
@@ -697,7 +733,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object COD_PAIS: TEdit
-            Left = 521
+            Left = 500
             Top = 162
             Width = 56
             Height = 21
@@ -707,7 +743,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object IBGE: TEdit
-            Left = 521
+            Left = 500
             Top = 84
             Width = 61
             Height = 21
@@ -718,7 +754,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object ESTADO: TComboBox
-            Left = 521
+            Left = 500
             Top = 136
             Width = 56
             Height = 21
@@ -764,7 +800,7 @@ object FrmFornecedores: TFrmFornecedores
               'TO')
           end
           object BAIRRO: TEdit
-            Left = 521
+            Left = 500
             Top = 110
             Width = 175
             Height = 21
@@ -775,7 +811,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object NUMERO: TEdit
-            Left = 521
+            Left = 500
             Top = 58
             Width = 56
             Height = 21
@@ -785,7 +821,7 @@ object FrmFornecedores: TFrmFornecedores
             OnKeyDown = NOMEKeyDown
           end
           object TIPO_FORNECEDOR: TComboBox
-            Left = 521
+            Left = 500
             Top = 6
             Width = 174
             Height = 21
@@ -897,7 +933,7 @@ object FrmFornecedores: TFrmFornecedores
             ZeroEmpty = False
           end
           object btnPagamentos: TButton
-            Left = 435
+            Left = 414
             Top = 272
             Width = 75
             Height = 25
@@ -1892,16 +1928,25 @@ object FrmFornecedores: TFrmFornecedores
     Top = 395
   end
   object ACBrConsultaCNPJ1: TACBrConsultaCNPJ
+    ProxyHost = ''
     ProxyPort = '8080'
+    ProxyUser = ''
+    ProxyPass = ''
+    ContentsEncodingCompress = []
+    NivelLog = 0
     PesquisarIBGE = False
     IniServicos = 
       'C:\Program Files (x86)\Embarcadero\RAD Studio\12.0\bin\ACBrConsu' +
       'ltaCNPJServicos.ini'
+    Mei = False
+    Simples = False
     Left = 288
     Top = 170
   end
   object ACBrConsultaCPF1: TACBrConsultaCPF
     ProxyPort = '8080'
+    ContentsEncodingCompress = []
+    NivelLog = 0
     IniServicos = 
       'C:\Program Files (x86)\Embarcadero\RAD Studio\12.0\bin\ACBrConsu' +
       'ltaCPFServicos.ini'

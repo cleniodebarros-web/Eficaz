@@ -165,9 +165,10 @@ begin
         COD_VER := vlVersao117
         else if Versao.Text = '118' then
         COD_VER := vlVersao118
-
+        else if Versao.Text = '119' then
+        COD_VER := vlVersao119
       else
-        COD_VER := vlVersao118;
+        COD_VER := vlVersao119;
 
 
 
@@ -1069,7 +1070,7 @@ begin
                IND_PGTO      := tpPrazo
             else if QRel.FieldByName('cond_pagto').AsString = 'A VISTA' then
                IND_PGTO      := tpVista
-            else if QRel.FieldByName('cond_pagto').AsString = '' then
+            else if (QRel.FieldByName('cond_pagto').AsString = 'OUTROS')  OR (QRel.FieldByName('cond_pagto').AsString = '')then
                IND_PGTO      := tpOutros ; // tpSemPagamento;
 
             VL_DESC       := 0;//QRel.FieldByName('VR_DESCONTO').AsFloat;
@@ -2062,6 +2063,7 @@ begin
      IQuery.ParamByName('CLIENTE_ID').AsInteger := QRel.FieldByName('CLIENTE_ID').AsInteger;
      IQuery.Prepare;
      IQuery.Open;
+
 
 
         QDetalhe.Sql.Clear;

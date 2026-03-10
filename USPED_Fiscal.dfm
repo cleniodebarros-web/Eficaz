@@ -170,7 +170,7 @@ object FrmSPED_Fiscal: TFrmSPED_Fiscal
   end
   object btnExecuta: TBitBtn
     Left = 185
-    Top = 367
+    Top = 368
     Width = 75
     Height = 25
     Caption = '&OK'
@@ -240,7 +240,7 @@ object FrmSPED_Fiscal: TFrmSPED_Fiscal
     Font.Style = []
     ParentFont = False
     TabOrder = 3
-    Text = '118'
+    Text = '119'
     OnKeyDown = VersaoKeyDown
     Items.Strings = (
       '100'

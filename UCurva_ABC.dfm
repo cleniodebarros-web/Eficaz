@@ -172,7 +172,6 @@ object FrmCurva_ABC: TFrmCurva_ABC
     Align = alTop
     BevelOuter = bvNone
     TabOrder = 7
-    ExplicitWidth = 337
     object Label5: TLabel
       Left = 6
       Top = 11
@@ -245,8 +244,8 @@ object FrmCurva_ABC: TFrmCurva_ABC
   object Relatorio: TQuickRep
     Left = 48
     Top = 288
-    Width = 793
-    Height = 1139
+    Width = 794
+    Height = 1123
     DataSet = Table7
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -305,15 +304,16 @@ object FrmCurva_ABC: TFrmCurva_ABC
     object QRBand1: TQRBand
       Left = 48
       Top = 48
-      Width = 697
+      Width = 698
       Height = 92
       AlignToBottom = False
+      BeforePrint = QRBand1BeforePrint
       TransparentBand = False
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
         243.416666666666700000
-        1844.145833333333000000)
+        1846.791666666667000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
       BandType = rbPageHeader
@@ -344,13 +344,13 @@ object FrmCurva_ABC: TFrmCurva_ABC
         FontSize = 8
       end
       object QRLabel2: TQRLabel
-        Left = 444
+        Left = 445
         Top = 1
         Width = 253
         Height = 15
         Size.Values = (
           39.687500000000000000
-          1174.750000000000000000
+          1177.395833333333000000
           2.645833333333333000
           669.395833333333300000)
         XLColumn = 0
@@ -370,13 +370,13 @@ object FrmCurva_ABC: TFrmCurva_ABC
         FontSize = 8
       end
       object QRSysData4: TQRSysData
-        Left = 584
+        Left = 585
         Top = 16
         Width = 113
         Height = 15
         Size.Values = (
           39.687500000000000000
-          1545.166666666667000000
+          1547.812500000000000000
           42.333333333333330000
           298.979166666666700000)
         XLColumn = 0
@@ -396,13 +396,13 @@ object FrmCurva_ABC: TFrmCurva_ABC
         FontSize = 8
       end
       object QRLabel4: TQRLabel
-        Left = 281
+        Left = 282
         Top = 39
         Width = 134
         Height = 15
         Size.Values = (
           39.687500000000000000
-          743.479166666666700000
+          746.125000000000000000
           103.187500000000000000
           354.541666666666700000)
         XLColumn = 0
@@ -583,11 +583,38 @@ object FrmCurva_ABC: TFrmCurva_ABC
         WrapStyle = BreakOnSpaces
         FontSize = 8
       end
+      object QRLabel1: TQRLabel
+        Left = 531
+        Top = 69
+        Width = 79
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1404.937500000000000000
+          182.562500000000000000
+          209.020833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Valor Total'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
     end
     object QRBand2: TQRBand
       Left = 48
       Top = 140
-      Width = 697
+      Width = 698
       Height = 17
       AlignToBottom = False
       BeforePrint = QRBand2BeforePrint
@@ -596,7 +623,7 @@ object FrmCurva_ABC: TFrmCurva_ABC
       ForceNewPage = False
       Size.Values = (
         44.979166666666670000
-        1844.145833333333000000)
+        1846.791666666667000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
       BandType = rbDetail
@@ -706,6 +733,37 @@ object FrmCurva_ABC: TFrmCurva_ABC
         Color = clWhite
         DataSet = Table7
         DataField = 'VALOR'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText2: TQRDBText
+        Left = 544
+        Top = -2
+        Width = 57
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1439.333333333333000000
+          -5.291666666666667000
+          150.812500000000000000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = Table7
+        DataField = 'VR_TOTAL'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
         Font.Height = -11

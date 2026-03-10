@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, ExtCtrls, StdCtrls, Buttons;
+  Dialogs, ExtCtrls, StdCtrls, Buttons, Winspool, Printers;
 
 type
   TFrmEtiquetas_Novos = class(TForm)
@@ -57,6 +57,9 @@ begin
 
 if LeIni(Arq_Ini, 'Impressora Código Barras','Impressora') <> '' then
 Begin
+Porta.Items.Clear;
+Porta.Items.AddStrings(Printer.Printers);
+
 Impressora.Text      := LeIni(Arq_Ini, 'Impressora Código Barras','Impressora');
 Modelo.Text          := LeIni(Arq_Ini, 'Impressora Código Barras','Modelo');
 Porta.Text           := LeIni(Arq_Ini, 'Impressora Código Barras','Porta');

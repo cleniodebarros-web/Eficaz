@@ -104,7 +104,7 @@ object FrmVendas_Vendedor_Pedido: TFrmVendas_Vendedor_Pedido
     OnKeyDown = DtmenKeyDown
   end
   object Dtmai: TDateEdit
-    Left = 192
+    Left = 228
     Top = 6
     Width = 90
     Height = 21
@@ -1595,7 +1595,7 @@ object FrmVendas_Vendedor_Pedido: TFrmVendas_Vendedor_Pedido
   object Status: TComboBox
     Left = 88
     Top = 58
-    Width = 134
+    Width = 230
     Height = 21
     CharCase = ecUpperCase
     Color = clWhite
@@ -1611,12 +1611,16 @@ object FrmVendas_Vendedor_Pedido: TFrmVendas_Vendedor_Pedido
       ''
       'NORMAL'
       'CANCELADO'
-      'FATURADO')
+      'FATURADO'
+      'FAT.INTERNO'
+      'FAT.SISTEMA'
+      'FAT.TERCEIRO'
+      'FATURADO/FAT.INTERNO/FAT.TERCEIRO/FAT.SISTEMA')
   end
   object ORDEM: TComboBox
     Left = 88
     Top = 85
-    Width = 134
+    Width = 230
     Height = 21
     CharCase = ecUpperCase
     Color = clWhite

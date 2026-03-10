@@ -4,7 +4,7 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Posi'#231#227'o do Estoque'
-  ClientHeight = 184
+  ClientHeight = 213
   ClientWidth = 284
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -30,7 +30,7 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
   end
   object Bevel1: TBevel
     Left = 8
-    Top = 141
+    Top = 165
     Width = 264
     Height = 4
     Shape = bsTopLine
@@ -56,6 +56,13 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
     Height = 13
     Caption = 'Tipo Item'
   end
+  object Label4: TLabel
+    Left = 12
+    Top = 115
+    Width = 31
+    Height = 13
+    Caption = 'Status'
+  end
   object Data: TComboBox
     Left = 62
     Top = 6
@@ -67,7 +74,7 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
   end
   object Posicao: TQuickRep
     Left = 254
-    Top = 224
+    Top = 240
     Width = 794
     Height = 1123
     BeforePrint = PosicaoBeforePrint
@@ -1021,7 +1028,7 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
   end
   object btnExecuta: TBitBtn
     Left = 116
-    Top = 153
+    Top = 177
     Width = 75
     Height = 25
     Caption = '&OK'
@@ -1048,7 +1055,7 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
   end
   object btnRetorna: TBitBtn
     Left = 197
-    Top = 153
+    Top = 177
     Width = 75
     Height = 25
     Caption = '&Retorna'
@@ -1223,11 +1230,26 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
   end
   object chk_exportar: TCheckBox
     Left = 63
-    Top = 115
+    Top = 139
     Width = 130
     Height = 17
     Caption = 'Exportar para Excel'
     TabOrder = 8
+  end
+  object Status: TComboBox
+    Left = 63
+    Top = 112
+    Width = 145
+    Height = 21
+    Style = csDropDownList
+    ItemIndex = 1
+    TabOrder = 9
+    Text = 'Ativos'
+    OnKeyDown = DataKeyDown
+    Items.Strings = (
+      'Todos'
+      'Ativos'
+      'Desativados')
   end
   object IQuery: TFDQuery
     Connection = FrmData.DbF_Eficaz
@@ -1235,7 +1257,7 @@ object FrmPosicao_Estoque: TFrmPosicao_Estoque
     FetchOptions.AutoFetchAll = afTruncate
     SQL.Strings = (
       '')
-    Left = 9
-    Top = 111
+    Left = 233
+    Top = 23
   end
 end

@@ -266,7 +266,7 @@ begin
 
     if InputString <> '' then
     begin
-      CmdSelectNull := 'WHERE (DESCRICAO LIKE ' + #39 + '%' + InputString + '%' + #39 + ') AND (ST_INVENTARIO = ' + #39 + 'A' + #39 + ')';
+      CmdSelectNull := 'WHERE (DESCRICAO ILIKE ' + #39 + '%' + InputString + '%' + #39 + ') AND (ST_INVENTARIO = ' + #39 + 'A' + #39 + ')';
 
       CmdSelectNull := CmdSelectNull + ' AND (EMPRESA_ID = ' + FrmData.QAcesso.FieldByName('EMPRESA_ID').AsString + ')';
       CmdOrderBy    := 'ORDER BY DESCRICAO';

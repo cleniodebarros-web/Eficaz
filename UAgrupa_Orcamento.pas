@@ -549,15 +549,20 @@ begin
 
            VALOR_BASE_CBS_IBS := QRel.FieldByName('VALOR').AsFloat ;
 
-           if (QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0) Then
+           if (QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat = 60) Then
            Begin
            Valor_CBS      := RoundTo(((VALOR_BASE_CBS_IBS * 0.36) / 100), -2);
            VALOR_IBSUF    := RoundTo(((VALOR_BASE_CBS_IBS * 0.04) / 100), -2);
            VALOR_IBSMUNIC := RoundTo(((VALOR_BASE_CBS_IBS * QProduto.FieldByName('ALIQUOTA_IBS_MUNIC').AsFloat) / 100), -2);
            End
+           Else  if (QProduto.FieldByName('REDUCAO_CBS_IBS').AsFloat = 100) Then
+           Begin
+           Valor_CBS      := RoundTo(((VALOR_BASE_CBS_IBS * 0) / 100), -2);
+           VALOR_IBSUF    := RoundTo(((VALOR_BASE_CBS_IBS * 0) / 100), -2);
+           VALOR_IBSMUNIC := RoundTo(((VALOR_BASE_CBS_IBS * QProduto.FieldByName('ALIQUOTA_IBS_MUNIC').AsFloat) / 100), -2);
+           End
            Else
            Begin
-
            Valor_CBS      := RoundTo(((VALOR_BASE_CBS_IBS * QProduto.FieldByName('ALIQUOTA_CBS').AsFloat) / 100), -2);
            VALOR_IBSUF    := RoundTo(((VALOR_BASE_CBS_IBS * QProduto.FieldByName('ALIQUOTA_IBS_UF').AsFloat) / 100), -2);
            VALOR_IBSMUNIC := RoundTo(((VALOR_BASE_CBS_IBS * QProduto.FieldByName('ALIQUOTA_IBS_MUNIC').AsFloat) / 100), -2);

@@ -59,6 +59,8 @@ type
     QRDBText12: TQRDBText;
     QRDBText13: TQRDBText;
     QRDBText70: TQRDBText;
+    QRLabel1: TQRLabel;
+    QRDBText2: TQRDBText;
     procedure Perc_AKeyDown(Sender: TObject; var Key: Word;
       Shift: TShiftState);
     procedure btnExecutaClick(Sender: TObject);
@@ -68,6 +70,7 @@ type
     procedure btnRetornaClick(Sender: TObject);
     procedure DtmenEnter(Sender: TObject);
     procedure QRBand2BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
+    procedure QRBand1BeforePrint(Sender: TQRCustomBand; var PrintBand: Boolean);
   private
     { Private declarations }
   public
@@ -895,6 +898,7 @@ begin
           Clear;
           Add('CDEST', ftInteger, 0, False);
           Add('VALOR', ftFloat, 0, False);
+          Add('VR_TOTAL', ftFloat, 0, False);
           Add('NMEST', ftString, 40, False);
           Add('CURVA', ftString, 1, False);
         end;
@@ -903,7 +907,7 @@ begin
         begin
           Clear;
           Add('', 'CDEST', [ixPrimary, ixUnique]);
-          Add(T1, 'VALOR', [ixCaseInsensitive]);
+          Add(T1, 'VALOR;VR_TOTAL;NMEST', [ixCaseInsensitive]);
         end;
 
         IndexName := T1;
@@ -911,7 +915,7 @@ begin
       end;
 
       QRel.Sql.Clear;
-      QRel.Sql.Add('SELECT TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, SUM(TRANSITENS.QUANTIDADE) VR_TOTAL');
+      QRel.Sql.Add('SELECT TRANSITENS.PRODUTO_ID, PRODUTOS.DESCRICAO, SUM(TRANSITENS.QUANTIDADE) QTD, SUM(TRANSITENS.VR_TOTAL) VR_TOTAL');
       QRel.Sql.Add('FROM TRANSITENS');
       QRel.Sql.Add('INNER JOIN TRANSACOES');
       QRel.Sql.Add('ON (TRANSITENS.TRANSACAO_ID = TRANSACOES.TRANSACAO_ID)');
@@ -930,7 +934,7 @@ begin
       QRel.ParamByName('CONDUTA').AsString      := '01';
 
       QRel.Sql.Add('GROUP BY TRANSITENS.PRODUTO_ID,PRODUTOS.DESCRICAO');
-      QRel.Sql.Add('ORDER BY VR_TOTAL DESC');
+      QRel.Sql.Add('ORDER BY QTD DESC, VR_TOTAL DESC');
 
       QRel.Prepare;
       QRel.Open;
@@ -938,20 +942,24 @@ begin
       QRel.First;
       while not QRel.Eof do
       begin
-        VL1 := VL1 + QRel.FieldByName('VR_TOTAL').AsFloat;
+        VL1 := VL1 + QRel.FieldByName('QTD').AsFloat;
 
         if Table7.FindKey([QRel.FieldByName('PRODUTO_ID').AsInteger]) then
         begin
           Table7.Edit;
-          Table7.FieldByName('VALOR').AsFloat := Table7.FieldByName('VALOR').AsFloat +
-                                                 QRel.FieldByName('VR_TOTAL').AsFloat;
+          Table7.FieldByName('VALOR').AsFloat    := Table7.FieldByName('VALOR').AsFloat +
+                                                    QRel.FieldByName('QTD').AsFloat;
+          Table7.FieldByName('VR_TOTAL').AsFloat := Table7.FieldByName('VR_TOTAL').AsFloat +
+                                                    QRel.FieldByName('VR_TOTAL').AsFloat;
+
         end
         else
         begin
           Table7.Append;
-          Table7.FieldByName('CDEST').AsInteger := QRel.FieldByName('PRODUTO_ID').AsInteger;
-          Table7.FieldByName('VALOR').AsFloat   := QRel.FieldByName('VR_TOTAL').AsFloat;
-          Table7.FieldByName('NMEST').AsString  := QRel.FieldByName('DESCRICAO').AsString;
+          Table7.FieldByName('CDEST').AsInteger  := QRel.FieldByName('PRODUTO_ID').AsInteger;
+          Table7.FieldByName('VALOR').AsFloat    := QRel.FieldByName('QTD').AsFloat;
+          Table7.FieldByName('VR_TOTAL').AsFloat := QRel.FieldByName('VR_TOTAL').AsFloat;
+          Table7.FieldByName('NMEST').AsString   := QRel.FieldByName('DESCRICAO').AsString;
         end;
 
         Table7.Post;
@@ -1028,6 +1036,7 @@ begin
         Application.ProcessMessages;
         Table7.Prior;
       end;
+
     end;
 
 
@@ -1194,7 +1203,13 @@ begin
     end
     else
     begin
-      Table7.IndexFieldNames := 'VALOR' + ':D';
+      if Id_Opcao <> 16 then
+        Table7.IndexFieldNames := 'VALOR' + ':D'
+      else
+        Table7.IndexFieldNames := 'CURVA'    + ':A;'
+                                + 'VALOR'    + ':D;'
+                                + 'VR_TOTAL' + ':D;'
+                                + 'NMEST'    + ':A';
       QRLabel4.Caption := LABEL5.Caption;
 
       if (Id_Opcao = 6)  OR (Id_Opcao = 9)   then
@@ -1368,6 +1383,27 @@ procedure TFrmCurva_ABC.Perc_AKeyDown(Sender: TObject; var Key: Word;
 begin
   if Key = Vk_Return then
     Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmCurva_ABC.QRBand1BeforePrint(Sender: TQRCustomBand;
+  var PrintBand: Boolean);
+begin
+  if Id_Opcao = 16 then
+  begin
+    QRLabel1.Enabled   := True;
+    QRDBText2.Enabled  := True;
+    QRLabel106.Left    := 395;
+    QRDBText70.Left    := 415;
+    QRLabel106.Caption := 'Quantidade';
+  end
+  else
+  begin
+    QRLabel1.Enabled   := False;
+    QRDBText2.Enabled  := False;
+    QRLabel106.Left    := 425;
+    QRDBText70.Left    := 445;
+    QRLabel106.Caption := 'Valor/Quantidade';
+  end;
 end;
 
 procedure TFrmCurva_ABC.QRBand2BeforePrint(Sender: TQRCustomBand;

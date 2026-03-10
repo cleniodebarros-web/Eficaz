@@ -16,7 +16,7 @@ uses
 type
 
   TFrmOrcamento = class(TForm)
-    PageControl1: TPageControl;                            
+    PageControl1: TPageControl;
     Panel1: TPanel;
     Consulta: TTabSheet;
     Manutencao: TTabSheet;
@@ -3575,7 +3575,28 @@ begin
           QSub_Detail.FieldByName('DESCRICAO').AsString    := QProduto.FieldByName('DESCRICAO').AsString;
           QSub_Detail.FieldByName('TRIBUTO_ID').AsInteger  := QProduto.FieldByName('TRIBUTO_ID').AsInteger;
           QSub_Detail.FieldByName('ALIQUOTA_ICMS').AsFloat := QProduto.FieldByName('ALIQUOTA_ICMS').AsFloat;
+
+          if (FrmPrincipal.Config.FieldByName('PRODUTOS_CONTRATO').AsString = 'True') and (not QCliente.IsEmpty)  Then
+          Begin
+
+            QSearch.sql.Text :=  'SELECT PRECO_VENDA FROM PRODUTOS_CONTRATO WHERE CLIENTE_ID = :CLIENTE_ID AND PRODUTO_ID = :PRODUTO_ID' ;
+            QSearch.ParamByName('CLIENTE_ID').AsInteger := QCliente.FieldByName('CLIENTE_ID').AsInteger;
+            QSearch.ParamByName('PRODUTO_ID').AsInteger := QProduto.FieldByName('PRODUTO_ID').AsInteger;
+            QSearch.Prepare;
+            QSearch.Open;
+
+            if not QSearch.IsEmpty Then
+            Begin
+            Application.MessageBox(Pchar('Cliente: ' + QCliente.FieldByName('NOME').AsString + #13 + 'Possui preço diferenciado cadastrado!'+#13 + 'Produto: ' + Copy(QProduto.FieldByName('DESCRICAO').AsString,1,40) + #13 + 'Preço do Produto: ' + FloatToStrf(QSearch.FieldByName('PRECO_VENDA').AsFloat, ffNumber,15,2)), PChar(Msg_Title), MB_ICONINFORMATION);
+            QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := QSearch.FieldByName('PRECO_VENDA').AsFloat;
+            End
+            Else
+            QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := QProduto.FieldByName('PRECO_VAREJO').AsFloat;
+
+          End
+          Else
           QSub_Detail.FieldByName('VR_UNITARIO').AsFloat   := QProduto.FieldByName('PRECO_VAREJO').AsFloat;
+
           QSub_Detail.FieldByName('UNIDADE').AsString      := QProduto.FieldByName('UNIDADE_VENDA').AsString;
         end;
       end

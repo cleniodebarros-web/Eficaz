@@ -5,7 +5,7 @@ object FrmPedido: TFrmPedido
   BorderStyle = bsSingle
   Caption = 'Pedido de Compra'
   ClientHeight = 659
-  ClientWidth = 806
+  ClientWidth = 814
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -33,7 +33,7 @@ object FrmPedido: TFrmPedido
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 806
+    Width = 814
     Height = 621
     ActivePage = Consulta
     Align = alClient
@@ -44,7 +44,7 @@ object FrmPedido: TFrmPedido
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
-        Width = 798
+        Width = 806
         Height = 572
         Align = alClient
         Color = clInfoBk
@@ -125,7 +125,7 @@ object FrmPedido: TFrmPedido
       object Dias: TTabSet
         Left = 0
         Top = 572
-        Width = 798
+        Width = 806
         Height = 21
         Align = alBottom
         AutoScroll = False
@@ -495,7 +495,7 @@ object FrmPedido: TFrmPedido
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 798
+        Width = 806
         Height = 41
         Align = alTop
         BevelOuter = bvNone
@@ -1270,7 +1270,7 @@ object FrmPedido: TFrmPedido
   object Panel1: TPanel
     Left = 0
     Top = 621
-    Width = 806
+    Width = 814
     Height = 38
     Align = alBottom
     BevelOuter = bvNone
@@ -1400,8 +1400,8 @@ object FrmPedido: TFrmPedido
     end
   end
   object Pedido: TQuickRep
-    Left = 8
-    Top = 696
+    Left = 295
+    Top = 1000
     Width = 794
     Height = 1123
     BeforePrint = PedidoBeforePrint
@@ -1902,15 +1902,15 @@ object FrmPedido: TFrmPedido
       object QRLabel14: TQRLabel
         Left = 0
         Top = 183
-        Width = 65
+        Width = 43
         Height = 15
         Size.Values = (
           39.687500000000000000
           0.000000000000000000
           484.187500000000000000
-          171.979166666666700000)
+          113.770833333333300000)
         XLColumn = 0
-        Alignment = taRightJustify
+        Alignment = taCenter
         AlignToBand = False
         AutoSize = False
         Caption = 'ID'
@@ -2099,6 +2099,7 @@ object FrmPedido: TFrmPedido
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
+        DataSet = QTabela
         DataField = 'PEDIDO_ID'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -4053,7 +4054,7 @@ object FrmPedido: TFrmPedido
           -2.645833333333333000
           171.979166666666700000)
         XLColumn = 0
-        Alignment = taRightJustify
+        Alignment = taLeftJustify
         AlignToBand = False
         AutoSize = False
         Color = clWhite
@@ -4075,16 +4076,17 @@ object FrmPedido: TFrmPedido
       object QRDBText4: TQRDBText
         Left = 88
         Top = 0
-        Width = 64
+        Width = 300
         Height = 15
         Size.Values = (
           39.687500000000000000
           232.833333333333300000
           0.000000000000000000
-          169.333333333333300000)
+          793.750000000000000000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
+        AutoSize = False
         Color = clWhite
         DataSet = QSub_Detail
         DataField = 'DESCRICAO'
@@ -4195,13 +4197,13 @@ object FrmPedido: TFrmPedido
         FontSize = 8
       end
       object QRDBText10: TQRDBText
-        Left = 456
+        Left = 467
         Top = 0
         Width = 50
         Height = 15
         Size.Values = (
           39.687500000000000000
-          1206.500000000000000000
+          1235.604166666667000000
           0.000000000000000000
           132.291666666666700000)
         XLColumn = 0
@@ -4228,13 +4230,13 @@ object FrmPedido: TFrmPedido
       Left = 48
       Top = 268
       Width = 698
-      Height = 133
+      Height = 239
       AlignToBottom = False
       TransparentBand = False
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        351.895833333333300000
+        632.354166666666700000
         1846.791666666667000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -4242,17 +4244,17 @@ object FrmPedido: TFrmPedido
       object QRLabel19: TQRLabel
         Left = 480
         Top = 56
-        Width = 127
+        Width = 106
         Height = 15
         Size.Values = (
           39.687500000000000000
           1270.000000000000000000
           148.166666666666700000
-          336.020833333333300000)
+          280.458333333333300000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
-        Caption = 'Total do Or'#231'amento'
+        Caption = 'Total do Pedido'
         Color = clWhite
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -4482,13 +4484,13 @@ object FrmPedido: TFrmPedido
       end
       object QRLabel28: TQRLabel
         Left = 131
-        Top = 99
+        Top = 172
         Width = 435
         Height = 15
         Size.Values = (
           39.687500000000000000
           346.604166666666700000
-          261.937500000000000000
+          455.083333333333300000
           1150.937500000000000000)
         XLColumn = 0
         Alignment = taCenter
@@ -4508,13 +4510,13 @@ object FrmPedido: TFrmPedido
       end
       object QRLabel29: TQRLabel
         Left = 275
-        Top = 116
+        Top = 189
         Width = 148
         Height = 15
         Size.Values = (
           39.687500000000000000
           727.604166666666700000
-          306.916666666666700000
+          500.062500000000000000
           391.583333333333300000)
         XLColumn = 0
         Alignment = taCenter
@@ -4530,6 +4532,62 @@ object FrmPedido: TFrmPedido
         Transparent = False
         ExportAs = exptText
         WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel95: TQRLabel
+        Left = 5
+        Top = 16
+        Width = 78
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          13.229166666666670000
+          42.333333333333330000
+          206.375000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Observa'#231#227'o:'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText43: TQRDBText
+        Left = 5
+        Top = 37
+        Width = 442
+        Height = 100
+        Size.Values = (
+          264.583333333333300000
+          13.229166666666670000
+          97.895833333333330000
+          1169.458333333333000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QTabela
+        DataField = 'observacao'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
         FontSize = 8
       end
     end
@@ -6672,8 +6730,8 @@ object FrmPedido: TFrmPedido
   end
   object DataFuncionario: TDataSource
     DataSet = QFuncionario
-    Left = 552
-    Top = 480
+    Left = 480
+    Top = 576
   end
   object OpenDialog1: TOpenDialog
     DefaultExt = '*txt'
@@ -6686,8 +6744,8 @@ object FrmPedido: TFrmPedido
   end
   object Data_Confere: TDataSource
     DataSet = QPedido_Confere
-    Left = 592
-    Top = 480
+    Left = 520
+    Top = 576
   end
   object XMLDOM: TXMLDocument
     Left = 728
@@ -6759,7 +6817,8 @@ object FrmPedido: TFrmPedido
       'INNER JOIN PRODUTOS ON PRODUTOS.PRODUTO_ID = PEDITENS.PRODUTO_ID'
       ''
       'WHERE'
-      '(PEDIDO_ID = :PEDIDO_ID)')
+      '(PEDIDO_ID = :PEDIDO_ID)'
+      'ORDER BY DESCRICAO')
     Left = 152
     Top = 512
     ParamData = <

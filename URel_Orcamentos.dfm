@@ -1236,13 +1236,21 @@ object FrmRel_Orcamentos: TFrmRel_Orcamentos
       'A PRAZO'
       'A VISTA')
   end
+  object chk_exportar: TCheckBox
+    Left = 88
+    Top = 86
+    Width = 130
+    Height = 17
+    Caption = 'Exportar para Excel'
+    TabOrder = 7
+  end
   object QRel: TFDQuery
     Connection = FrmData.DbF_Eficaz
     FetchOptions.AssignedValues = [evAutoFetchAll]
     FetchOptions.AutoFetchAll = afTruncate
     SQL.Strings = (
       '')
-    Left = 128
-    Top = 90
+    Left = 48
+    Top = 114
   end
 end

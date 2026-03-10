@@ -4,8 +4,8 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSingle
   Caption = 'Etiquetas'
-  ClientHeight = 151
-  ClientWidth = 366
+  ClientHeight = 191
+  ClientWidth = 353
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -20,9 +20,9 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
   object Label4: TLabel
     Left = 6
     Top = 9
-    Width = 54
+    Width = 91
     Height = 13
-    Caption = 'Impressora'
+    Caption = 'Modelo Impressora'
   end
   object Label2: TLabel
     Left = 6
@@ -32,23 +32,23 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
     Caption = 'Modelo Etiqueta'
   end
   object Bevel1: TBevel
-    Left = 6
-    Top = 97
-    Width = 352
+    Left = 8
+    Top = 135
+    Width = 337
     Height = 10
     Shape = bsTopLine
   end
   object Label1: TLabel
-    Left = 224
+    Left = 6
     Top = 62
-    Width = 26
+    Width = 54
     Height = 13
-    Caption = 'Porta'
+    Caption = 'Impressora'
   end
   object Impressora: TComboBox
-    Left = 89
+    Left = 103
     Top = 6
-    Width = 185
+    Width = 171
     Height = 21
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -76,9 +76,9 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
       '')
   end
   object Modelo: TComboBox
-    Left = 89
+    Left = 103
     Top = 32
-    Width = 248
+    Width = 234
     Height = 21
     TabOrder = 1
     OnKeyDown = ImpressoraKeyDown
@@ -96,7 +96,7 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
   end
   object Preco: TCheckBox
     Left = 6
-    Top = 61
+    Top = 99
     Width = 75
     Height = 17
     Alignment = taLeftJustify
@@ -106,7 +106,7 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
   end
   object btnExecuta: TBitBtn
     Left = 165
-    Top = 113
+    Top = 151
     Width = 75
     Height = 25
     Caption = '&OK'
@@ -134,7 +134,7 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
   end
   object btnRetorna: TBitBtn
     Left = 262
-    Top = 113
+    Top = 151
     Width = 75
     Height = 25
     Caption = '&Retorna'
@@ -160,9 +160,9 @@ object FrmEtiquetas_Novos: TFrmEtiquetas_Novos
     TabOrder = 5
   end
   object Porta: TComboBox
-    Left = 272
+    Left = 103
     Top = 59
-    Width = 65
+    Width = 234
     Height = 21
     TabOrder = 3
     Items.Strings = (

@@ -8,7 +8,8 @@ uses
   DB, IBCustomDataSet, IBQuery, QuickRpt, QRCtrls, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client ,QRExport;
+
 
 type
   TFrmRel_Orcamentos = class(TForm)
@@ -64,6 +65,7 @@ type
     Label2: TLabel;
     COND_PAGTO: TComboBox;
     QRel: TFDQuery;
+    chk_exportar: TCheckBox;
     procedure btnRetornaClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure FormCreate(Sender: TObject);
@@ -132,6 +134,13 @@ begin
       Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
     else
       Orcamentos.PreviewModal;
+
+      if chk_exportar.Checked Then
+         Begin
+         Orcamentos.ExportToFilter(TQRXLSFilter.Create(ExtractFilePath(ParamStr(0)) + 'Exportados\Orçamento_' + QRel.FieldByName('ORCAMENTO_ID').AsString  + '.xls'));
+         Application.MessageBox(PChar('Arquivo exportado para : ' + ExtractFilePath(ParamStr(0)) + 'Exportados\Orcamento_'  + QRel.FieldByName('ORCAMENTO_ID').AsString  + '.xls') , PChar(Msg_Title), mb_IconInformation);
+         End;
+
   finally
     btnExecuta.Enabled := True;
     btnRetorna.Enabled := True;

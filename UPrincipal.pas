@@ -1061,6 +1061,8 @@ type
     Avisos: TMenuItem;
     OrcVencimentos: TMenuItem;
     PdvOffline: TMenuItem;
+    SaveDialog1: TSaveDialog;
+    InfoProdutos: TMenuItem;
     procedure FormCloseQuery(Sender: TObject; var CanClose: Boolean);
     procedure EmpresasClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -1465,6 +1467,7 @@ type
     procedure OrcVencimentosClick(Sender: TObject);
     procedure AvisosClick(Sender: TObject);
     procedure PdvOfflineClick(Sender: TObject);
+    procedure InfoProdutosClick(Sender: TObject);
 
 
   private
@@ -1479,6 +1482,7 @@ type
     procedure ListarArquivos(Diretorio: string; Sub:Boolean);
     procedure Atualiza_XML(Transacao_id: Integer);
     procedure AtualizaCertificado;
+    procedure SalvarXMLPDF;
     var AvisoOrcamento7: Boolean;
 
 
@@ -1625,7 +1629,7 @@ uses
   UDesagregacao,URelatorio_VENDAS,UAtualiz_Banco_Criptografia,UEtiquetas_Validade,UPosicao_Estoque_Filiais,UPontos_parceiro,URelatorio_Orcamento,URelAgenda_orcamento_Rdp,
   UEntregas_Futuras,URElatorio_Vendas_Realizadas,UCad_Parceiros,URelatorio_romaneio_entrega,URelatorio_Duplicatas,UOrcamento_Rapido_3,UTrans_DebitoParceiro,
   URel_Conferencia_Tributaria_Vendas,UOrcamento_4,UMovimento_Clientes,URelatorio_Auditoria,URelAgenda_Ordens_Servico_Filiais,UOrcamento_7,UFechamento_mensal,URelMovimento_Equipamentos,
-  UVendas_Vendedor2,UCadastro_Metas_Mensais,URel_Compras_Produtos_Tributados, UEstoque_G_F,UExtrato_Centro_Custo_Itens, URel_Orcamento_7_Vencimentos, UAvisos;
+  UVendas_Vendedor2,UCadastro_Metas_Mensais,URel_Compras_Produtos_Tributados, UEstoque_G_F,UExtrato_Centro_Custo_Itens, URel_Orcamento_7_Vencimentos, UAvisos, UInfo_Produtos;
 
 var
   Centavos, Centena, Milhar, Texto,SERIAL_HD: String;
@@ -5918,9 +5922,9 @@ begin
 
   //Dt_Eficaz := EncryptMsg(Copy(DateTimeToStr(SystemTimeToDateTime(lpSystemTime)),1,10),39);
 
-  Versao := '7.1.4.0';
+  Versao := '7.1.4.3';
   // Dt_Eficaz := EncryptMsg('16/04/2021',39);
-  Dt_Eficaz := EncryptMsg('28/12/2025',39);
+  Dt_Eficaz := EncryptMsg('26/02/2026',39);
   //Dt_Eficaz := EncryptMsg('20/11/2023',39);
 
  try
@@ -6298,8 +6302,6 @@ begin
         try
          DeleteFile(LeIni(Arq_Ini, 'Atualização', 'Download'));
          DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Eficaz.exe'));
-         DeleteFile(Pchar(ExtractFilePath(ParamStr(0)) + '/Atualizar/Schemas.zip'));
-         RemoveDirectory(Pchar(ExtractFilePath(ParamStr(0)) + '/Schemas'));
         except
 
         end;
@@ -6316,8 +6318,6 @@ begin
 
 
         IdFTP1.Get('Eficaz.zip', LeIni(Arq_Ini, 'Atualização', 'Download'), true, True);
-        Tipo_Atualizacao := 1;
-        IdFTP1.Get('Schemas.zip', LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'), true, True);
 
 
         IdFTP1.Disconnect();
@@ -6325,7 +6325,6 @@ begin
         ZipFile := TZipFile.Create;
 
         Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download'),ExtractFilePath(ParamStr(0)) + '/Atualizar' );
-        Zipfile.ExtractZipFile(LeIni(Arq_Ini, 'Atualização', 'Download_Schemas'),ExtractFilePath(ParamStr(0)) + '/' );
 
         FrmAguarde.Label1.Caption := 'Download concluído com sucesso!';
 
@@ -8571,7 +8570,7 @@ begin
       end;
     end;
   except
-
+      {
 
         on e:Exception do
         begin
@@ -8581,7 +8580,7 @@ begin
 
 
       // Application.Terminate;
-
+       }
 
   end;
 
@@ -9471,6 +9470,15 @@ procedure TFrmPrincipal.IndicesClick(Sender: TObject);
 begin
   if not ThereIs('Indices p/ Custo e Venda') then
     TFrmIndices.Create(Application);
+
+  if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
+    Cascade;
+end;
+
+procedure TFrmPrincipal.InfoProdutosClick(Sender: TObject);
+begin
+  if not ThereIs('Informações de Produtos') then
+    TFrmInfo_Produtos.Create(Application);
 
   if LeIni(Arq_Ini, 'Sistema', 'Organizar Janelas Automaticamente') = 'True' then
     Cascade;
@@ -19633,6 +19641,26 @@ begin
    Except
 
    end;
+end;
+
+procedure TFrmPrincipal.SalvarXMLPDF;
+begin
+  if Application.MessageBox('Salvar o XML em uma pasta de sua escolha?', PChar(Msg_Title), mb_YesNo + mb_IconQuestion + mb_DefButton2) = IDYES then
+  begin
+    FrmPrincipal.ACBrNFe1.DANFE.PathPDF := FrmPrincipal.ACBrNFe1.Configuracoes.Arquivos.GetPathNFe;
+
+    FrmPrincipal.SaveDialog1.Title      := 'Salvar a NFE';
+    FrmPrincipal.SaveDialog1.Filter     := 'Arquivos XML (*.XML)|*.XML|Todos os Arquivos (*.*)|*.*';
+    FrmPrincipal.SaveDialog1.FileName   := FrmPrincipal.ACBrNFe1.NotasFiscais.Items[0].NumID;
+
+    if FrmPrincipal.SaveDialog1.Execute then
+    begin
+      FrmPrincipal.ACBrNFe1.NotasFiscais[0].GravarXML(FrmPrincipal.SaveDialog1.FileName + '.xml');
+      FrmPrincipal.ACBrNFe1.NotasFiscais.ImprimirPDF;
+
+      CopyFile(PChar(FrmPrincipal.ACBrNFeDANFEFR1.ArquivoPDF), PChar(FrmPrincipal.SaveDialog1.FileName + '.pdf'), False)
+    end;
+  end;
 end;
 
 procedure Carga_PDV_Movimento(Transacao: Integer);

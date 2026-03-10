@@ -36,11 +36,9 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
     Font.Style = []
     ParentFont = False
     TabOrder = 0
-    ExplicitWidth = 1012
     object Consulta: TTabSheet
       Caption = '&Consulta'
       OnShow = ConsultaShow
-      ExplicitWidth = 1004
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
@@ -174,7 +172,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           'Todos')
         TabIndex = 0
         OnClick = DiasClick
-        ExplicitWidth = 1004
       end
     end
     object Manutencao: TTabSheet
@@ -187,7 +184,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       ImageIndex = 1
       ParentFont = False
       OnShow = ManutencaoShow
-      ExplicitWidth = 1004
       object DBText1: TDBText
         Left = 203
         Top = 109
@@ -2327,7 +2323,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         Align = alTop
         BevelOuter = bvNone
         TabOrder = 6
-        ExplicitWidth = 1244
         object btnPrior: TBitBtn
           Left = 6
           Top = 6
@@ -3449,6 +3444,13 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           end
           item
             Expanded = False
+            FieldName = 'COD_CLASSTRIB'
+            Title.Alignment = taCenter
+            Title.Caption = 'Classe Trib.'
+            Visible = True
+          end
+          item
+            Expanded = False
             FieldName = 'QUANTIDADE'
             Title.Alignment = taRightJustify
             Title.Caption = 'Quant.'
@@ -3585,11 +3587,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           end
           item
             Expanded = False
-            FieldName = 'COD_CLASSTRIB'
-            Visible = False
-          end
-          item
-            Expanded = False
             FieldName = 'CST_CBSIBS'
             Visible = False
           end>
@@ -3617,7 +3614,8 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
           'A PRAZO'
           'CARTAO'
           'CHEQUE'
-          'PIX')
+          'PIX'
+          'OUTROS')
       end
       object SERIE: TEdit
         Left = 681
@@ -4139,7 +4137,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       ImageIndex = 2
       ParentFont = False
       OnShow = TabSheet4Show
-      ExplicitWidth = 1244
       object Panel4: TPanel
         Left = 0
         Top = 0
@@ -4153,7 +4150,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         Font.Style = []
         ParentFont = False
         TabOrder = 0
-        ExplicitWidth = 1244
         object Label39: TLabel
           Left = 5
           Top = 54
@@ -4381,7 +4377,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         Height = 41
         Align = alBottom
         TabOrder = 1
-        ExplicitWidth = 1244
         object BitBtn1: TBitBtn
           Left = 861
           Top = 8
@@ -4425,7 +4420,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
         Font.Style = []
         ParentFont = False
         TabOrder = 2
-        ExplicitWidth = 1244
         object Grid_Dfe: TDBGrid
           Left = 1
           Top = 1
@@ -4497,7 +4491,6 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
     Align = alBottom
     BevelOuter = bvNone
     TabOrder = 1
-    ExplicitWidth = 1012
     object DBText7: TDBText
       Left = 6
       Top = 12
@@ -8803,6 +8796,10 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
       Caption = 'Manifesta'#231#227'o da Nota Fiscal'
       OnClick = M1Click
     end
+    object SalvarArquivo: TMenuItem
+      Caption = 'Salvar XML/PDF (NFe pr'#243'pria)'
+      OnClick = SalvarArquivoClick
+    end
   end
   object RDprint1: TRDprint
     ImpressoraPersonalizada.NomeImpressora = 'Modelo Personalizado - (Epson)'
@@ -9771,6 +9768,24 @@ object FrmTrans_Compra_Estoque: TFrmTrans_Compra_Estoque
     ParamData = <
       item
         Name = 'EMPRESA_ID'
+        ParamType = ptInput
+      end>
+  end
+  object QClassTrib: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM COD_CLASSTRIB'
+      'WHERE'
+      'CLASSETRIB = :CLASSETRIB'
+      'ORDER BY DESCRICAO')
+    Left = 544
+    Top = 432
+    ParamData = <
+      item
+        Name = 'CLASSETRIB'
         ParamType = ptInput
       end>
   end

@@ -185,6 +185,8 @@ type
     QRLabel21: TQRLabel;
     QRExpr3: TQRExpr;
     QRDBText27: TQRDBText;
+    QRExpr7: TQRExpr;
+    QRExpr8: TQRExpr;
     procedure FormCreate(Sender: TObject);
     procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OrdemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

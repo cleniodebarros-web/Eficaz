@@ -5,7 +5,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
   BorderStyle = bsSingle
   Caption = 'Pedido de Venda'
   ClientHeight = 650
-  ClientWidth = 863
+  ClientWidth = 855
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -33,7 +33,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
   object PageControl1: TPageControl
     Left = 0
     Top = 0
-    Width = 863
+    Width = 855
     Height = 610
     ActivePage = Manutencao
     Align = alClient
@@ -50,7 +50,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
-        Width = 855
+        Width = 847
         Height = 561
         Align = alClient
         Color = clInfoBk
@@ -136,7 +136,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
       object Dias: TTabSet
         Left = 0
         Top = 561
-        Width = 855
+        Width = 847
         Height = 21
         Align = alBottom
         AutoScroll = False
@@ -628,7 +628,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
       object Panel2: TPanel
         Left = 0
         Top = 0
-        Width = 855
+        Width = 847
         Height = 41
         Align = alTop
         BevelOuter = bvNone
@@ -1205,6 +1205,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
           'CANCELADO'
           'FATURADO'
           'FAT.INTERNO'
+          'FAT.SISTEMA'
           'FAT.TERCEIRO')
       end
       object Cancelamento: TEdit
@@ -1393,8 +1394,8 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         OnKeyDown = DT_PEDIDOKeyDown
       end
       object Pedido: TQuickRep
-        Left = 857
-        Top = 0
+        Left = 1202
+        Top = -29
         Width = 794
         Height = 1123
         Margins.Left = 2
@@ -4634,17 +4635,18 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
           end
           object QRDBText4: TQRDBText
             Left = 83
-            Top = 2
-            Width = 46
+            Top = 1
+            Width = 255
             Height = 15
             Size.Values = (
               39.687500000000000000
               219.604166666666700000
-              5.291666666666667000
-              121.708333333333300000)
+              2.645833333333333000
+              674.687500000000000000)
             XLColumn = 0
             Alignment = taLeftJustify
             AlignToBand = False
+            AutoSize = False
             Color = clWhite
             DataSet = QSub_Detail
             DataField = 'DESCRICAO'
@@ -4890,37 +4892,6 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
             Transparent = False
             ExportAs = exptText
             WrapStyle = BreakOnSpaces
-            FontSize = 8
-          end
-          object QRDBText8: TQRDBText
-            Left = 625
-            Top = 56
-            Width = 73
-            Height = 15
-            Size.Values = (
-              39.687500000000000000
-              1653.645833333333000000
-              148.166666666666700000
-              193.145833333333300000)
-            XLColumn = 0
-            Alignment = taRightJustify
-            AlignToBand = False
-            AutoSize = False
-            Color = clWhite
-            DataSet = QTabela
-            DataField = 'VALOR'
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Courier New'
-            Font.Style = [fsBold]
-            Mask = '#,##0.00'
-            ParentFont = False
-            Transparent = False
-            ExportAs = exptText
-            WrapStyle = BreakOnSpaces
-            FullJustify = False
-            MaxBreakChars = 0
             FontSize = 8
           end
           object QRLabel25: TQRLabel
@@ -5291,15 +5262,45 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
             WrapStyle = BreakOnSpaces
             FontSize = 8
           end
-          object QRDBText24: TQRDBText
-            Left = 625
-            Top = 5
+          object QRExpr5: TQRExpr
+            Left = 626
+            Top = 56
             Width = 73
             Height = 15
             Size.Values = (
               39.687500000000000000
-              1653.645833333333000000
-              13.229166666666670000
+              1656.291666666667000000
+              148.166666666666700000
+              193.145833333333300000)
+            XLColumn = 0
+            Alignment = taRightJustify
+            AlignToBand = False
+            AutoSize = False
+            Font.Charset = ANSI_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -11
+            Font.Name = 'Courier New'
+            Font.Style = []
+            Color = clWhite
+            Master = Pedido
+            ParentFont = False
+            ResetAfterPrint = False
+            Transparent = False
+            Expression = '(QTabela.Valor)'
+            Mask = '#,##0.00'
+            ExportAs = exptText
+            WrapStyle = BreakOnSpaces
+            FontSize = 8
+          end
+          object QRDBText8: TQRDBText
+            Left = 626
+            Top = 6
+            Width = 73
+            Height = 15
+            Size.Values = (
+              39.687500000000000000
+              1656.291666666667000000
+              15.875000000000000000
               193.145833333333300000)
             XLColumn = 0
             Alignment = taRightJustify
@@ -5410,7 +5411,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
   object Panel1: TPanel
     Left = 0
     Top = 610
-    Width = 863
+    Width = 855
     Height = 40
     Align = alBottom
     BevelOuter = bvNone
@@ -5540,8 +5541,8 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
     end
   end
   object Pedido_empty: TQuickRep
-    Left = 62
-    Top = 1000
+    Left = 327
+    Top = 999
     Width = 794
     Height = 1123
     DataSet = QSub_Detail
@@ -6971,8 +6972,8 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
     end
   end
   object Reduzido: TQuickRep
-    Left = -234
-    Top = 1000
+    Left = 22
+    Top = 887
     Width = 794
     Height = 1123
     DataSet = QSub_Detail
@@ -7728,7 +7729,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'MUNICIPIO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -7757,7 +7758,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'ENDERECO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -7786,7 +7787,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'NUMERO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -7867,7 +7868,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'CEP'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -7896,7 +7897,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'BAIRRO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -8108,8 +8109,8 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
     end
   end
   object reduzido1: TQuickRep
-    Left = 95
-    Top = 1000
+    Left = 723
+    Top = 957
     Width = 794
     Height = 1123
     DataSet = QSub_Detail
@@ -8836,7 +8837,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'MUNICIPIO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -8865,7 +8866,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'ENDERECO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -8894,7 +8895,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'NOME'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -8975,7 +8976,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'BAIRRO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -9004,7 +9005,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'CEP'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -9033,7 +9034,7 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
         Alignment = taLeftJustify
         AlignToBand = False
         Color = clWhite
-        DataSet = QCliente
+        DataSet = QTabela
         DataField = 'NUMERO'
         Font.Charset = ANSI_CHARSET
         Font.Color = clWindowText
@@ -9854,8 +9855,8 @@ object FrmPedido_de_venda: TFrmPedido_de_venda
     CompressionOn = False
     TextEncoding = AnsiEncoding
     Codepage = '1252'
-    Left = 732
-    Top = 344
+    Left = 556
+    Top = 368
   end
   object QControle_Registro: TFDQuery
     Connection = FrmData.DbF_Eficaz

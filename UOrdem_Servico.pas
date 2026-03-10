@@ -745,16 +745,17 @@ type
     procedure ServicoSearch;
     procedure TributoSearch;
     procedure controle_registro(tabela:STRING;chave_id,TP:Integer);
+    procedure VerificaNovaPagina;
   end;
 
 var
   FrmOrdem_Servico: TFrmOrdem_Servico;
   Operacao: String;
-  ID, ID_TRANSACAO, linha: Integer;
+  ID, ID_TRANSACAO, linha, pagina: Integer;
   Desc_por:Real;
 const
 
-  Pagamento: Array[1..10] of String = ('BOLETO 7 DIAS','BOLETO 14 DIAS','BOLETO 14/21 DIAS','BOLETO 14/21/28 DIAS','CARTÃO 1X','CARTÃO 2 X','CARTÃO 3 X','DINHEIRO','CARTÃO DEBITO','PIX');
+  Pagamento: Array[1..11] of String = ('BOLETO 7 DIAS','BOLETO 7/14 DIAS','BOLETO 14 DIAS','BOLETO 14/21 DIAS','BOLETO 14/21/28 DIAS','CARTÃO 1X','CARTÃO 2 X','CARTÃO 3 X','DINHEIRO','CARTÃO DEBITO','PIX');
 
 implementation
 
@@ -2872,9 +2873,16 @@ begin
 
 end;
 
+procedure TFrmOrdem_Servico.VerificaNovaPagina;
+begin
+  if linha > RDprint1.TamanhoQteLinhas  then
+  Begin
+    RDprint1.Novapagina;
+    Pagina := Pagina + 1;
+  End;
+end;
+
 procedure TFrmOrdem_Servico.btnOrdemClick(Sender: TObject);
-var
-pagina : integer;
 begin
   Set_Campos(False);
 
@@ -3017,14 +3025,11 @@ begin
     RDprint1.ImpVal(linha,68,'###,##0.00',QSub_Detail.FieldByName('VR_TOTAL').AsFloat,[]);
     inc(linha);
     QSub_Detail.Next;
-      if linha > RDprint1.TamanhoQteLinhas  then
-      Begin
-        RDprint1.Novapagina;
-        Pagina := Pagina + 1;
-      End;
+    VerificaNovaPagina;
     End;
     RDprint1.Imp(linha,70,'__________');
     inc(linha);
+    VerificaNovaPagina;
 
     if not QOrdem_Lacre.IsEmpty then
     Begin
@@ -3039,6 +3044,7 @@ begin
        if QOrdem_Lacre.FieldByName('L_RETIRADO2').AsString <> '' then
        Begin
        inc(linha);
+       VerificaNovaPagina;
        RDPrint1.Imp(linha,01,'Lacre Retirado 2º:');
        RDPrint1.Imp(linha,19,QOrdem_Lacre.FieldByName('L_RETIRADO2').AsString);
        RDPrint1.Imp(linha,35,'Lacre Aplicado 2º:');
@@ -3046,6 +3052,7 @@ begin
        End;
 
        inc(linha);
+       VerificaNovaPagina;
        RDPrint1.Imp(linha,01,'Etiqueta Retirada:');
        RDPrint1.Imp(linha,19,QOrdem_Lacre.FieldByName('E_RETIRADO').AsString);
        RDPrint1.Imp(linha,35,'Etiqueta Aplicada:');
@@ -3053,12 +3060,14 @@ begin
        QOrdem_lacre.Next;
       End;
        inc(linha);
+       VerificaNovaPagina;
        RDPrint1.Imp(linha,01,'Portaria         :');
        RDPrint1.Imp(linha,19,QTabela.FieldByName('PORTARIA').AsString);
        RDPrint1.Imp(linha,35,'Inmetro          :');
        RDPrint1.Imp(linha,53,QTabela.FieldByName('INMETRO').AsString);
       inc(linha);
       inc(linha);
+      VerificaNovaPagina;
     End;
 
   RDprint1.Imp(linha ,01, 'Observação:');
@@ -3066,32 +3075,44 @@ begin
   RDprint1.Imp(linha,54,'Sub-Total');
   RDprint1.ImpVal(linha,66,'###,###,##0.00',QTabela.FieldByName('VALOR_ITENS').AsFloat,[]);
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,41,52));
   RDprint1.Imp(linha,54,'Desconto');
   RDprint1.ImpVal(linha,66,'###,###,##0.00',QTabela.FieldByName('DESCONTO').AsFloat,[]);
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,93,52));
   RDprint1.Imp(linha,54,'Valor');
   RDprint1.ImpVal(linha,66,'###,###,##0.00',QTabela.FieldByName('VALOR').AsFloat,[]);
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,145,52));
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,197,52));
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,249,52));
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,301,52));
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,353,52));
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,Copy(QTabela.FieldByName('OBSERVACAO').AsString,405,52));
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,'--------------------------------------------------------------------------------');
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,'Autorizo a Execucao Desta');
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,01,'Assinatura do Cliente:_____________________________________' );
   linha := linha + 3;
+  VerificaNovaPagina;
 
    if FrmPrincipal.Config.FieldByName('OBJETO_ORDEM').AsString = 'Automóvel' then
       RDprint1.Imp(linha,01,'Assinatura do Mecânico:_____________________________________' )
@@ -3100,9 +3121,11 @@ begin
 
 
   inc(linha);
+  VerificaNovaPagina;
   RDprint1.Imp(linha,23,QVendedor.FieldByName('NOME').AsString);
   inc(linha);
   inc(linha);
+  VerificaNovaPagina;
   if (QTabela.FieldByName('STATUS').AsString = 'EXECUTADA') OR (QTabela.FieldByName('STATUS').AsString = 'ENTREGUE')  then
   Begin
   RDprint1.Imp(linha,01,'Fechamento:');

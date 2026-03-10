@@ -36,7 +36,7 @@ object FrmClientes: TFrmClientes
     Top = 0
     Width = 760
     Height = 581
-    ActivePage = Manutencao
+    ActivePage = Consulta
     Align = alClient
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -371,6 +371,42 @@ object FrmClientes: TFrmClientes
         Height = 13
         Caption = 'Cobr. Juros/Data'
       end
+      object btnCNPJ: TSpeedButton
+        Left = 672
+        Top = 78
+        Width = 64
+        Height = 21
+        Cursor = crHandPoint
+        Caption = '(F7)'
+        Flat = True
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clNavy
+        Font.Height = -11
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        Glyph.Data = {
+          06020000424D0602000000000000760000002800000028000000140000000100
+          0400000000009001000000000000000000001000000000000000000000000000
+          8000008000000080800080000000800080008080000080808000C0C0C0000000
+          FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+          FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+          FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+          333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+          333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+          777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+          FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+          FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+          333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+          88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+          F777333333333088FFF003333333333337333337733333333333088FFF033333
+          333333337F33337333333333333308FFF09333333333333378F3373333333333
+          333330FF0933333333333333378F733333333333333333003333333333333333
+          33773333333333333333}
+        NumGlyphs = 2
+        ParentFont = False
+        Visible = False
+        OnClick = btnCNPJClick
+      end
       object NOME: TEdit
         Left = 94
         Top = 48
@@ -620,7 +656,7 @@ object FrmClientes: TFrmClientes
       end
       object PageControl2: TPageControl
         Left = 3
-        Top = 241
+        Top = 240
         Width = 746
         Height = 310
         ActivePage = TabSheet1
@@ -1473,7 +1509,7 @@ object FrmClientes: TFrmClientes
           end
         end
         object TabSheet11: TTabSheet
-          Caption = 'Contratos'
+          Caption = 'Produtos Cliente'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
@@ -1511,9 +1547,9 @@ object FrmClientes: TFrmClientes
           object Label52: TLabel
             Left = 3
             Top = 72
-            Width = 132
+            Width = 94
             Height = 13
-            Caption = 'Equipamentos do Contrato:'
+            Caption = 'Produtos do Cliente'
             Font.Charset = DEFAULT_CHARSET
             Font.Color = clWindowText
             Font.Height = -11
@@ -1583,16 +1619,16 @@ object FrmClientes: TFrmClientes
           end
           object Panel4: TPanel
             Left = 3
-            Top = 90
-            Width = 505
-            Height = 189
+            Top = 66
+            Width = 720
+            Height = 213
             Caption = 'Panel4'
             TabOrder = 3
             object Grid_Produtos_Contrato: TDBGrid
               Left = 1
               Top = 1
-              Width = 503
-              Height = 168
+              Width = 718
+              Height = 192
               Align = alClient
               DataSource = DataProdutosContrato
               Enabled = False
@@ -1636,6 +1672,13 @@ object FrmClientes: TFrmClientes
                 end
                 item
                   Expanded = False
+                  FieldName = 'preco_venda'
+                  Title.Caption = 'Pre'#231'o Venda'
+                  Width = 150
+                  Visible = True
+                end
+                item
+                  Expanded = False
                   FieldName = 'dt_cadastro'
                   Title.Alignment = taCenter
                   Title.Caption = 'Data Cadastro'
@@ -1645,8 +1688,8 @@ object FrmClientes: TFrmClientes
             end
             object stat1: TStatusBar
               Left = 1
-              Top = 169
-              Width = 503
+              Top = 193
+              Width = 718
               Height = 19
               Panels = <
                 item
@@ -1662,131 +1705,6 @@ object FrmClientes: TFrmClientes
                   Width = 164
                 end>
             end
-          end
-        end
-        object TabSheet10: TTabSheet
-          Caption = 'Consulta RFB'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ImageIndex = 9
-          ParentFont = False
-          TabVisible = False
-          OnShow = TabSheet10Show
-          object Label50: TLabel
-            Left = 6
-            Top = 133
-            Width = 96
-            Height = 16
-            Caption = 'Digite o Captcha'
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -13
-            Font.Name = 'Arial'
-            Font.Style = []
-            ParentFont = False
-          end
-          object Captcha: TRichEdit
-            Left = 5
-            Top = 150
-            Width = 145
-            Height = 35
-            Enabled = False
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -20
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            Lines.Strings = (
-              '')
-            ParentFont = False
-            TabOrder = 0
-            OnKeyPress = CaptchaKeyPress
-          end
-          object Panel3: TPanel
-            Left = 5
-            Top = 3
-            Width = 292
-            Height = 127
-            BevelKind = bkTile
-            BevelOuter = bvNone
-            Color = clWhite
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentBackground = False
-            ParentFont = False
-            TabOrder = 1
-            object Image1: TImage
-              Left = 0
-              Top = 0
-              Width = 288
-              Height = 104
-              Align = alClient
-              Center = True
-              Proportional = True
-              Stretch = True
-              ExplicitLeft = 65
-              ExplicitTop = 49
-              ExplicitWidth = 290
-              ExplicitHeight = 106
-            end
-            object LabAtualizarCaptcha: TLabel
-              Left = 0
-              Top = 104
-              Width = 288
-              Height = 19
-              Cursor = crHandPoint
-              Align = alBottom
-              Alignment = taCenter
-              AutoSize = False
-              Caption = 'Atualizar Captcha'
-              Font.Charset = DEFAULT_CHARSET
-              Font.Color = clBlue
-              Font.Height = -16
-              Font.Name = 'Tahoma'
-              Font.Style = [fsBold, fsUnderline]
-              ParentFont = False
-              OnClick = LabAtualizarCaptchaClick
-              ExplicitTop = 103
-            end
-          end
-          object btnConsultar: TButton
-            Left = 178
-            Top = 150
-            Width = 120
-            Height = 35
-            Caption = 'Consultar RFB'
-            Enabled = False
-            Font.Charset = DEFAULT_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -11
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            ParentFont = False
-            TabOrder = 2
-            OnClick = btnConsultarClick
-          end
-          object Dados_Empresa: TRichEdit
-            Left = 362
-            Top = 3
-            Width = 361
-            Height = 261
-            Font.Charset = ANSI_CHARSET
-            Font.Color = clWindowText
-            Font.Height = -12
-            Font.Name = 'Tahoma'
-            Font.Style = []
-            Lines.Strings = (
-              '')
-            ParentFont = False
-            ReadOnly = True
-            TabOrder = 3
-            Visible = False
           end
         end
         object TabSheet4: TTabSheet
@@ -4618,8 +4536,8 @@ object FrmClientes: TFrmClientes
   end
   object DataSeriais: TDataSource
     DataSet = QSeriais
-    Left = 240
-    Top = 364
+    Left = 312
+    Top = 340
   end
   object OpenImage: TOpenPictureDialog
     Filter = 'JPEG Image File (*.jpg)|*.jpg'
@@ -4846,11 +4764,12 @@ object FrmClientes: TFrmClientes
     IniServicos = 
       'C:\Program Files (x86)\Embarcadero\RAD Studio\12.0\bin\ACBrConsu' +
       'ltaCNPJServicos.ini'
+    Mei = False
+    Simples = False
     Left = 536
     Top = 106
   end
   object QProdutos_Contrato: TFDQuery
-    Active = True
     AfterOpen = QProdutos_ContratoAfterOpen
     BeforeEdit = QProdutos_ContratoBeforeEdit
     BeforePost = QProdutos_ContratoBeforePost
@@ -4863,8 +4782,8 @@ object FrmClientes: TFrmClientes
     SQL.Strings = (
       'select * from produtos_contrato'
       'where cliente_id = :cliente_id')
-    Left = 424
-    Top = 358
+    Left = 544
+    Top = 334
     ParamData = <
       item
         Name = 'CLIENTE_ID'

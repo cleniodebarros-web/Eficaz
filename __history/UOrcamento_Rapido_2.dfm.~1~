@@ -1,0 +1,4670 @@
+object FrmOrcamento_Rapido_2: TFrmOrcamento_Rapido_2
+  Left = 0
+  Top = 0
+  BorderIcons = [biSystemMenu, biMinimize]
+  BorderStyle = bsSingle
+  Caption = 'Or'#231'amento'
+  ClientHeight = 601
+  ClientWidth = 684
+  Color = clBtnFace
+  Font.Charset = DEFAULT_CHARSET
+  Font.Color = clWindowText
+  Font.Height = -11
+  Font.Name = 'Tahoma'
+  Font.Style = []
+  FormStyle = fsMDIChild
+  KeyPreview = True
+  OldCreateOrder = False
+  Position = poScreenCenter
+  Scaled = False
+  Visible = True
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnKeyDown = FormKeyDown
+  OnShow = FormShow
+  PixelsPerInch = 96
+  TextHeight = 13
+  object Label1: TLabel
+    Left = 6
+    Top = 168
+    Width = 64
+    Height = 13
+    Caption = 'C'#243'd. Produto'
+  end
+  object Label2: TLabel
+    Left = 6
+    Top = 220
+    Width = 56
+    Height = 13
+    Caption = 'Quantidade'
+  end
+  object Label3: TLabel
+    Left = 161
+    Top = 220
+    Width = 67
+    Height = 13
+    Caption = 'Pre'#231'o Unit'#225'rio'
+  end
+  object Label4: TLabel
+    Left = 304
+    Top = 218
+    Width = 67
+    Height = 13
+    Caption = 'Desconto (%)'
+  end
+  object Label5: TLabel
+    Left = 450
+    Top = 220
+    Width = 64
+    Height = 13
+    Caption = 'Total do Item'
+  end
+  object Label7: TLabel
+    Left = 188
+    Top = 168
+    Width = 46
+    Height = 13
+    Caption = 'Descri'#231#227'o'
+  end
+  object Label6: TLabel
+    Left = 452
+    Top = 461
+    Width = 95
+    Height = 13
+    Caption = 'Total do Or'#231'amento'
+  end
+  object btnProduto: TSpeedButton
+    Left = 126
+    Top = 187
+    Width = 54
+    Height = 21
+    Cursor = crHandPoint
+    Caption = '(F7)'
+    Flat = True
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    Glyph.Data = {
+      06020000424D0602000000000000760000002800000028000000140000000100
+      0400000000009001000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+      FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+      FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+      333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+      333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+      777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+      FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+      FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+      333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+      88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+      F777333333333088FFF003333333333337333337733333333333088FFF033333
+      333333337F33337333333333333308FFF09333333333333378F3373333333333
+      333330FF0933333333333333378F733333333333333333003333333333333333
+      33773333333333333333}
+    NumGlyphs = 2
+    ParentFont = False
+    OnClick = btnProdutoClick
+  end
+  object lbl1: TLabel
+    Left = 8
+    Top = 40
+    Width = 64
+    Height = 13
+    Caption = 'Cond. Pagto.'
+  end
+  object lbl2: TLabel
+    Left = 6
+    Top = 145
+    Width = 19
+    Height = 13
+    Caption = 'CEP'
+  end
+  object lbl3: TLabel
+    Left = 399
+    Top = 119
+    Width = 33
+    Height = 13
+    Caption = 'Estado'
+  end
+  object lbl4: TLabel
+    Left = 6
+    Top = 119
+    Width = 43
+    Height = 13
+    Caption = 'Munic'#237'pio'
+  end
+  object lbl5: TLabel
+    Left = 399
+    Top = 93
+    Width = 28
+    Height = 13
+    Caption = 'Bairro'
+  end
+  object lbl6: TLabel
+    Left = 6
+    Top = 93
+    Width = 45
+    Height = 13
+    Caption = 'Endere'#231'o'
+  end
+  object lbl7: TLabel
+    Left = 399
+    Top = 67
+    Width = 27
+    Height = 13
+    Caption = 'Nome'
+  end
+  object dbtxtNOME: TDBText
+    Left = 576
+    Top = 40
+    Width = 62
+    Height = 13
+    AutoSize = True
+    DataField = 'NOME'
+    DataSource = DataVendedor
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object btnCliente: TSpeedButton
+    Left = 135
+    Top = 64
+    Width = 64
+    Height = 21
+    Cursor = crHandPoint
+    Caption = '(F7)'
+    Flat = True
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    Glyph.Data = {
+      06020000424D0602000000000000760000002800000028000000140000000100
+      0400000000009001000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+      FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+      FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+      333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+      333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+      777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+      FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+      FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+      333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+      88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+      F777333333333088FFF003333333333337333337733333333333088FFF033333
+      333333337F33337333333333333308FFF09333333333333378F3373333333333
+      333330FF0933333333333333378F733333333333333333003333333333333333
+      33773333333333333333}
+    NumGlyphs = 2
+    ParentFont = False
+    OnClick = btnClienteClick
+  end
+  object lbl8: TLabel
+    Left = 6
+    Top = 67
+    Width = 39
+    Height = 13
+    Caption = 'Cliente'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object btnVendedor: TSpeedButton
+    Left = 506
+    Top = 37
+    Width = 64
+    Height = 21
+    Cursor = crHandPoint
+    Caption = '(F7)'
+    Flat = True
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    Glyph.Data = {
+      06020000424D0602000000000000760000002800000028000000140000000100
+      0400000000009001000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+      FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+      FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+      333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+      333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+      777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+      FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+      FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+      333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+      88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+      F777333333333088FFF003333333333337333337733333333333088FFF033333
+      333333337F33337333333333333308FFF09333333333333378F3373333333333
+      333330FF0933333333333333378F733333333333333333003333333333333333
+      33773333333333333333}
+    NumGlyphs = 2
+    ParentFont = False
+    OnClick = btnVendedorClick
+  end
+  object lbl10: TLabel
+    Left = 399
+    Top = 40
+    Width = 54
+    Height = 13
+    Caption = 'Vendedor'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object lbl11: TLabel
+    Left = 8
+    Top = 480
+    Width = 58
+    Height = 13
+    Caption = 'Observa'#231#227'o'
+  end
+  object lbl9: TLabel
+    Left = 261
+    Top = 461
+    Width = 45
+    Height = 13
+    Caption = 'Desconto'
+  end
+  object lbl12: TLabel
+    Left = 8
+    Top = 13
+    Width = 63
+    Height = 13
+    Caption = 'Orcamento'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object BtnOrcamento: TSpeedButton
+    Left = 135
+    Top = 10
+    Width = 64
+    Height = 21
+    Cursor = crHandPoint
+    Caption = '(F7)'
+    Flat = True
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clNavy
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    Glyph.Data = {
+      06020000424D0602000000000000760000002800000028000000140000000100
+      0400000000009001000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF003333333FFFFF
+      FFF00000333333333333333777773333333BFBFBFBF0FFF03333333333333337
+      FFF73333333FFFFFFF000000333333333333337777773333333BFBFBF0FBFBFB
+      333333333FFFF733FFFF3333333F00000FF000003333333377777FF777773333
+      333B0FFF0000FFF0333333337FFF7777FFF73333333F00000FF000003333333F
+      777773F777773333330BFBFBF0FBFBFB3333337FF333373FFFFF33333010FFFF
+      FF00000033333777FF3333777777333330170BFBFBF0FFF0333337777FF33337
+      FFF73333301170FFFFF0000033333777778F3337777333330711190BFBFBFBFB
+      333377777378F3333333333308819990FFFFFFFF3333733733378F3333333330
+      88FF9999033333333337333333FF7333333333088FFFF0003333333333733333
+      F777333333333088FFF003333333333337333337733333333333088FFF033333
+      333333337F33337333333333333308FFF09333333333333378F3373333333333
+      333330FF0933333333333333378F733333333333333333003333333333333333
+      33773333333333333333}
+    NumGlyphs = 2
+    ParentFont = False
+    OnClick = BtnOrcamentoClick
+  end
+  object lbl13: TLabel
+    Left = 398
+    Top = 145
+    Width = 46
+    Height = 13
+    Caption = 'Telefone:'
+  end
+  object lbl14: TLabel
+    Left = 327
+    Top = 93
+    Width = 13
+    Height = 13
+    Caption = 'N'#186
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+  end
+  object lbNumOrcamento: TLabel
+    Left = 298
+    Top = 11
+    Width = 40
+    Height = 19
+    Caption = '0008'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clRed
+    Font.Height = -16
+    Font.Name = 'Tahoma'
+    Font.Style = [fsBold]
+    ParentFont = False
+    Visible = False
+  end
+  object DBGrid1: TDBGrid
+    Left = 8
+    Top = 265
+    Width = 665
+    Height = 161
+    Color = clInfoBk
+    DataSource = DataLog_Itens
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    Options = [dgTitles, dgIndicator, dgColLines, dgRowLines, dgTabs, dgRowSelect, dgConfirmDelete, dgCancelOnExit]
+    ParentFont = False
+    ReadOnly = True
+    TabOrder = 19
+    TitleFont.Charset = ANSI_CHARSET
+    TitleFont.Color = clBlue
+    TitleFont.Height = -11
+    TitleFont.Name = 'Tahoma'
+    TitleFont.Style = []
+    OnColEnter = DBGrid1ColEnter
+    OnExit = DBGrid1Exit
+    OnKeyDown = DBGrid1KeyDown
+    OnKeyUp = DBGrid1KeyUp
+    Columns = <
+      item
+        Expanded = False
+        FieldName = 'PRODUTO_ID'
+        Title.Alignment = taRightJustify
+        Title.Caption = 'ID'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'DESCRICAO'
+        Title.Caption = 'Descril'#231'ao'
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'QUANTIDADE'
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Quantidade'
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VR_UNITARIO'
+        ReadOnly = False
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Pr. Unit'#225'rio'
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VR_DESCONTO'
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Vr. Desconto'
+        Width = 80
+        Visible = True
+      end
+      item
+        Expanded = False
+        FieldName = 'VR_TOTAL'
+        Title.Alignment = taRightJustify
+        Title.Caption = 'Vr. Total'
+        Width = 80
+        Visible = True
+      end>
+  end
+  object Cod_Produto: TEdit
+    Left = 8
+    Top = 187
+    Width = 118
+    Height = 21
+    MaxLength = 14
+    TabOrder = 12
+    OnEnter = Cod_ProdutoEnter
+    OnExit = Cod_ProdutoExit
+    OnKeyDown = Cod_ProdutoKeyDown
+  end
+  object Descricao: TEdit
+    Left = 188
+    Top = 187
+    Width = 483
+    Height = 21
+    ReadOnly = True
+    TabOrder = 13
+    OnEnter = DescricaoEnter
+    OnKeyDown = Cod_ProdutoKeyDown
+  end
+  object Quantidade: TCurrencyEdit
+    Left = 6
+    Top = 235
+    Width = 118
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DecimalPlaces = 3
+    DisplayFormat = '0.000;-0.000'
+    MaxValue = 99999.999000000000000000
+    TabOrder = 14
+    ZeroEmpty = False
+    OnEnter = DescricaoEnter
+    OnExit = QuantidadeExit
+    OnKeyDown = QuantidadeKeyDown
+  end
+  object Preco: TRxCalcEdit
+    Left = 161
+    Top = 235
+    Width = 118
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DecimalPlaces = 3
+    DisplayFormat = 'R$ ,0.000;-R$ ,0.000'
+    MaxValue = 99999.999000000000000000
+    MinValue = 0.010000000000000000
+    NumGlyphs = 2
+    TabOrder = 15
+    Value = 0.010000000000000000
+    ZeroEmpty = False
+    OnEnter = DescricaoEnter
+    OnExit = PrecoExit
+    OnKeyDown = QuantidadeKeyDown
+  end
+  object Desconto: TCurrencyEdit
+    Left = 304
+    Top = 235
+    Width = 118
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DisplayFormat = '0.00;-0.00'
+    MaxValue = 99999.990000000000000000
+    TabOrder = 16
+    ZeroEmpty = False
+    OnEnter = DescricaoEnter
+    OnExit = DescontoExit
+    OnKeyDown = QuantidadeKeyDown
+  end
+  object Total_Item: TRxCalcEdit
+    Left = 450
+    Top = 235
+    Width = 118
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+    MaxValue = 99999.990000000000000000
+    MinValue = 0.010000000000000000
+    NumGlyphs = 2
+    ReadOnly = True
+    TabOrder = 17
+    Value = 0.010000000000000000
+    ZeroEmpty = False
+    OnEnter = DescricaoEnter
+    OnExit = Total_ItemExit
+    OnKeyDown = QuantidadeKeyDown
+  end
+  object Panel1: TPanel
+    Left = 0
+    Top = 560
+    Width = 684
+    Height = 41
+    Align = alBottom
+    BevelOuter = bvNone
+    TabOrder = 24
+    object btnRetorna: TBitBtn
+      Left = 593
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&Retorna'
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00377777777788
+        F8F878F7777777777333333F00004444400777FFF444447777777777F333FF7F
+        000033334D5008FFF4333377777777773337777F0000333345D50FFFF4333333
+        337F777F3337F33F000033334D5D0FFFF43333333377877F3337F33F00003333
+        45D50FEFE4333333337F787F3337F33F000033334D5D0FFFF43333333377877F
+        3337F33F0000333345D50FEFE4333333337F787F3337F33F000033334D5D0FFF
+        F43333333377877F3337F33F0000333345D50FEFE4333333337F787F3337F33F
+        000033334D5D0EFEF43333333377877F3337F33F0000333345D50FEFE4333333
+        337F787F3337F33F000033334D5D0EFEF43333333377877F3337F33F00003333
+        4444444444333333337F7F7FFFF7F33F00003333333333333333333333777777
+        7777333F00003333330000003333333333333FFFFFF3333F00003333330AAAA0
+        333333333333777777F3333F00003333330000003333333333337FFFF7F3333F
+        0000}
+      NumGlyphs = 2
+      TabOrder = 2
+      OnClick = btnRetornaClick
+      OnMouseEnter = btnRetornaMouseEnter
+      OnMouseLeave = btnRetornaMouseLeave
+    end
+    object BtnExecuta: TBitBtn
+      Left = 512
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = '&OK'
+      Enabled = False
+      Glyph.Data = {
+        DE010000424DDE01000000000000760000002800000024000000120000000100
+        0400000000006801000000000000000000001000000000000000000000000000
+        8000008000000080800080000000800080008080000080808000C0C0C0000000
+        FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+        3333333333333333333333330000333333333333333333333333F33333333333
+        00003333344333333333333333377F3333333333000033334224333333333333
+        337337F3333333330000333422224333333333333733337F3333333300003342
+        222224333333333373333337F3333333000034222A22224333333337F337F333
+        7F33333300003222A3A2224333333337F3737F337F33333300003A2A333A2224
+        33333337F73337F337F33333000033A33333A222433333337333337F337F3333
+        0000333333333A222433333333333337F337F33300003333333333A222433333
+        333333337F337F33000033333333333A222433333333333337F337F300003333
+        33333333A222433333333333337F337F00003333333333333A22433333333333
+        3337F37F000033333333333333A223333333333333337F730000333333333333
+        333A333333333333333337330000333333333333333333333333333333333333
+        0000}
+      NumGlyphs = 2
+      TabOrder = 0
+      OnClick = BtnExecutaClick
+    end
+    object btnImpOrcamento: TBitBtn
+      Left = 431
+      Top = 8
+      Width = 75
+      Height = 25
+      Caption = 'Impr. &Orc.'
+      Enabled = False
+      TabOrder = 1
+      OnClick = btnImpOrcamentoClick
+    end
+    object Impressora_Matricial: TCheckBox
+      Left = 301
+      Top = 13
+      Width = 124
+      Height = 17
+      Caption = 'Impressora Matricial'
+      TabOrder = 3
+    end
+  end
+  object Total_Orcamento: TRxCalcEdit
+    Left = 554
+    Top = 455
+    Width = 118
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DisplayFormat = 'R$ ,0.00;-R$ ,0.00'
+    MaxValue = 99999.990000000000000000
+    MinValue = 0.010000000000000000
+    NumGlyphs = 2
+    ReadOnly = True
+    TabOrder = 21
+    Value = 0.010000000000000000
+    ZeroEmpty = False
+    OnChange = Total_OrcamentoChange
+    OnKeyDown = QuantidadeKeyDown
+  end
+  object StatusBar1: TStatusBar
+    Left = 6
+    Top = 432
+    Width = 665
+    Height = 19
+    Align = alNone
+    Panels = <
+      item
+        Text = '<F4> - Excluir'
+        Width = 332
+      end
+      item
+        Text = '<F9> - Finalizar'
+        Width = 50
+      end>
+  end
+  object VENDEDOR_ID: TCurrencyEdit
+    Left = 456
+    Top = 37
+    Width = 47
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    AutoSize = False
+    DecimalPlaces = 0
+    DisplayFormat = '0;-0'
+    TabOrder = 3
+    ZeroEmpty = False
+    OnExit = VENDEDOR_IDExit
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object CLIENTE_ID: TCurrencyEdit
+    Left = 85
+    Top = 64
+    Width = 47
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    AutoSize = False
+    DecimalPlaces = 0
+    DisplayFormat = '0;-0'
+    TabOrder = 4
+    ZeroEmpty = False
+    OnExit = CLIENTE_IDExit
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object ENDERECO: TEdit
+    Left = 85
+    Top = 90
+    Width = 236
+    Height = 21
+    MaxLength = 40
+    TabOrder = 6
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object MUNICIPIO: TEdit
+    Left = 85
+    Top = 116
+    Width = 175
+    Height = 21
+    MaxLength = 30
+    TabOrder = 9
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object CEP: TMaskEdit
+    Left = 85
+    Top = 142
+    Width = 67
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    EditMask = '99999-999;1;_'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 9
+    ParentFont = False
+    TabOrder = 11
+    Text = '     -   '
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object NOME: TEdit
+    Left = 456
+    Top = 63
+    Width = 216
+    Height = 21
+    MaxLength = 40
+    TabOrder = 5
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object BAIRRO: TEdit
+    Left = 456
+    Top = 90
+    Width = 189
+    Height = 21
+    MaxLength = 20
+    TabOrder = 8
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object ESTADO: TComboBox
+    Left = 456
+    Top = 116
+    Width = 56
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 2
+    ParentFont = False
+    TabOrder = 10
+    OnKeyDown = Orcamento_idKeyDown
+    Items.Strings = (
+      ''
+      'AC'
+      'AL'
+      'AP'
+      'AM'
+      'BA'
+      'CE'
+      'DF'
+      'ES'
+      'GO'
+      'MA'
+      'MG'
+      'MT'
+      'MS'
+      'PA'
+      'PB'
+      'PR'
+      'PE'
+      'PI'
+      'RJ'
+      'RN'
+      'RS'
+      'RO'
+      'RR'
+      'SC'
+      'SP'
+      'SE'
+      'TO')
+  end
+  object Cond_Pagto: TComboBox
+    Left = 85
+    Top = 37
+    Width = 112
+    Height = 21
+    CharCase = ecUpperCase
+    Color = clWhite
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 2
+    ParentFont = False
+    TabOrder = 2
+    OnKeyDown = Orcamento_idKeyDown
+    Items.Strings = (
+      'A VISTA'
+      'A PRAZO')
+  end
+  object OBSERVACAO: TMemo
+    Left = 8
+    Top = 497
+    Width = 660
+    Height = 44
+    TabOrder = 22
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object VR_DESCONTO: TRxCalcEdit
+    Left = 313
+    Top = 455
+    Width = 95
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    DisplayFormat = '0.00;-0.00'
+    MaxValue = 99999.000000000000000000
+    NumGlyphs = 2
+    TabOrder = 20
+    ZeroEmpty = False
+    OnExit = VR_DESCONTOExit
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object btnInsert: TBitBtn
+    Left = 593
+    Top = 231
+    Width = 75
+    Height = 25
+    Caption = '&Inserir'
+    Enabled = False
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333333333333333333333330000333333333333333333333333F33333333333
+      00003333344333333333333333377F3333333333000033334224333333333333
+      337337F3333333330000333422224333333333333733337F3333333300003342
+      222224333333333373333337F3333333000034222A22224333333337F337F333
+      7F33333300003222A3A2224333333337F3737F337F33333300003A2A333A2224
+      33333337F73337F337F33333000033A33333A222433333337333337F337F3333
+      0000333333333A222433333333333337F337F33300003333333333A222433333
+      333333337F337F33000033333333333A222433333333333337F337F300003333
+      33333333A222433333333333337F337F00003333333333333A22433333333333
+      3337F37F000033333333333333A223333333333333337F730000333333333333
+      333A333333333333333337330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+    TabOrder = 18
+    OnClick = btnInsertClick
+  end
+  object Orcamento: TQuickRep
+    Left = -8
+    Top = 5000
+    Width = 794
+    Height = 1123
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Style = []
+    Functions.Strings = (
+      'PAGENUMBER'
+      'COLUMNNUMBER'
+      'REPORTTITLE')
+    Functions.DATA = (
+      '0'
+      '0'
+      #39#39)
+    Options = [FirstPageHeader, LastPageFooter]
+    Page.Columns = 1
+    Page.Orientation = poPortrait
+    Page.PaperSize = Custom
+    Page.Continuous = False
+    Page.Values = (
+      127.000000000000000000
+      2970.000000000000000000
+      127.000000000000000000
+      2100.000000000000000000
+      127.000000000000000000
+      127.000000000000000000
+      0.000000000000000000)
+    PrinterSettings.Copies = 1
+    PrinterSettings.OutputBin = First
+    PrinterSettings.Duplex = False
+    PrinterSettings.FirstPage = 0
+    PrinterSettings.LastPage = 0
+    PrinterSettings.UseStandardprinter = False
+    PrinterSettings.UseCustomBinCode = False
+    PrinterSettings.CustomBinCode = 0
+    PrinterSettings.ExtendedDuplex = 0
+    PrinterSettings.UseCustomPaperCode = False
+    PrinterSettings.CustomPaperCode = 0
+    PrinterSettings.PrintMetaFile = False
+    PrinterSettings.PrintQuality = 0
+    PrinterSettings.Collate = 0
+    PrinterSettings.ColorOption = 0
+    PrintIfEmpty = True
+    ReportTitle = 'Or'#231'amento'
+    SnapToGrid = True
+    Units = MM
+    Zoom = 100
+    PrevFormStyle = fsNormal
+    PreviewInitialState = wsMaximized
+    PreviewWidth = 500
+    PreviewHeight = 500
+    PrevInitialZoom = qrZoomToWidth
+    PreviewDefaultSaveType = stQRP
+    PreviewLeft = 0
+    PreviewTop = 0
+    object QRBand1: TQRBand
+      Left = 48
+      Top = 48
+      Width = 698
+      Height = 154
+      AlignToBottom = False
+      TransparentBand = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        407.458333333333300000
+        1846.791666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbPageHeader
+      object QRShape1: TQRShape
+        Left = 0
+        Top = 68
+        Width = 698
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          0.000000000000000000
+          179.916666666666700000
+          1846.791666666667000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRLabel6: TQRLabel
+        Left = 0
+        Top = 91
+        Width = 50
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          240.770833333333300000
+          132.291666666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Cliente'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel11: TQRLabel
+        Left = 324
+        Top = 108
+        Width = 43
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          285.750000000000000000
+          113.770833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Cidade'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText14: TQRDBText
+        Left = 372
+        Top = 108
+        Width = 228
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          984.250000000000000000
+          285.750000000000000000
+          603.250000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'MUNICIPIO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText9: TQRDBText
+        Left = 68
+        Top = 91
+        Width = 251
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          240.770833333333300000
+          664.104166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'NOME'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText13: TQRDBText
+        Left = 68
+        Top = 108
+        Width = 43
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          285.750000000000000000
+          113.770833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'BAIRRO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRLabel10: TQRLabel
+        Left = 0
+        Top = 108
+        Width = 43
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          285.750000000000000000
+          113.770833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Bairro'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel12: TQRLabel
+        Left = 606
+        Top = 108
+        Width = 22
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1603.375000000000000000
+          285.750000000000000000
+          58.208333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'CEP'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText15: TQRDBText
+        Left = 637
+        Top = 108
+        Width = 22
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1685.395833333333000000
+          285.750000000000000000
+          58.208333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'CEP'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRShape2: TQRShape
+        Left = 0
+        Top = 125
+        Width = 698
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          0.000000000000000000
+          330.729166666666700000
+          1846.791666666667000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRLabel18: TQRLabel
+        Left = 625
+        Top = 131
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          346.604166666666700000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Pr. Total'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel17: TQRLabel
+        Left = 464
+        Top = 131
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1227.666666666667000000
+          346.604166666666700000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Pr. Unit.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel16: TQRLabel
+        Left = 384
+        Top = 131
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          346.604166666666700000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Quantidade'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRShape3: TQRShape
+        Left = 0
+        Top = 148
+        Width = 698
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          0.000000000000000000
+          391.583333333333300000
+          1846.791666666667000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRLabel15: TQRLabel
+        Left = 88
+        Top = 131
+        Width = 64
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          232.833333333333300000
+          346.604166666666700000
+          169.333333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Descri'#231#227'o'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel14: TQRLabel
+        Left = 0
+        Top = 131
+        Width = 65
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          346.604166666666700000
+          171.979166666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'ID'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRSysData1: TQRSysData
+        Left = 606
+        Top = 74
+        Width = 92
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1603.375000000000000000
+          195.791666666666700000
+          243.416666666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = True
+        Color = clWhite
+        Data = qrsDate
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Text = 'Data : '
+        Transparent = False
+        ExportAs = exptText
+        FontSize = 8
+      end
+      object Cabec: TQRLabel
+        Left = 445
+        Top = 1
+        Width = 253
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1177.395833333333000000
+          2.645833333333333000
+          669.395833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = True
+        Caption = 'Sistema de Adm. de Empresas - Eficaz'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRSysData2: TQRSysData
+        Left = 585
+        Top = 17
+        Width = 113
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1547.812500000000000000
+          44.979166666666670000
+          298.979166666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = True
+        Color = clWhite
+        Data = qrsPageNumber
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Text = 'P'#225'gina : '
+        Transparent = False
+        ExportAs = exptText
+        FontSize = 8
+      end
+      object QRLabel3: TQRLabel
+        Left = 289
+        Top = 51
+        Width = 120
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          764.645833333333300000
+          134.937500000000000000
+          317.500000000000000000)
+        XLColumn = 0
+        Alignment = taCenter
+        AlignToBand = True
+        Caption = '*** OR'#199'AMENTO ***'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText1: TQRDBText
+        Left = 0
+        Top = 1
+        Width = 36
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          2.645833333333333000
+          95.250000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = FrmPrincipal.QEmpresa
+        DataField = 'RAZAO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRLabel2: TQRLabel
+        Left = 0
+        Top = 74
+        Width = 64
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          195.791666666666700000
+          169.333333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Num. Orc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText2: TQRDBText
+        Left = 68
+        Top = 74
+        Width = 85
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          195.791666666666700000
+          224.895833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'ORCAMENTO_ID'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRLabel1: TQRLabel
+        Left = 544
+        Top = 131
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1439.333333333333000000
+          346.604166666666700000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Vr. Desc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel7: TQRLabel
+        Left = 0
+        Top = 17
+        Width = 64
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          44.979166666666670000
+          169.333333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Num. Orc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel8: TQRLabel
+        Left = 0
+        Top = 33
+        Width = 64
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          87.312500000000000000
+          169.333333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Num. Orc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel23: TQRLabel
+        Left = 324
+        Top = 74
+        Width = 92
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          195.791666666666700000
+          243.416666666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Cond. Pagto.:'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText17: TQRDBText
+        Left = 422
+        Top = 72
+        Width = 71
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1116.541666666667000000
+          190.500000000000000000
+          187.854166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'COND_PAGTO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRLabel9: TQRLabel
+        Left = 324
+        Top = 91
+        Width = 57
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          240.770833333333300000
+          150.812500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Endere'#231'o'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText12: TQRDBText
+        Left = 384
+        Top = 91
+        Width = 216
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          240.770833333333300000
+          571.500000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'ENDERECO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRLabel24: TQRLabel
+        Left = 606
+        Top = 91
+        Width = 22
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1603.375000000000000000
+          240.770833333333300000
+          58.208333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'N'#186'.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText18: TQRDBText
+        Left = 637
+        Top = 91
+        Width = 43
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1685.395833333333000000
+          240.770833333333300000
+          113.770833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'NUMERO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+    end
+    object DetailBand1: TQRBand
+      Left = 48
+      Top = 202
+      Width = 698
+      Height = 16
+      AlignToBottom = False
+      TransparentBand = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        42.333333333333330000
+        1846.791666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbDetail
+      object QRDBText3: TQRDBText
+        Left = 0
+        Top = 0
+        Width = 65
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          0.000000000000000000
+          171.979166666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'PRODUTO_ID'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText4: TQRDBText
+        Left = 88
+        Top = 0
+        Width = 64
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          232.833333333333300000
+          0.000000000000000000
+          169.333333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'DESCRICAO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText5: TQRDBText
+        Left = 384
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'QUANTIDADE'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText6: TQRDBText
+        Left = 464
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1227.666666666667000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'VR_UNITARIO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText7: TQRDBText
+        Left = 625
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'VR_TOTAL'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText10: TQRDBText
+        Left = 544
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1439.333333333333000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'VR_DESCONTO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+    end
+    object QRBand2: TQRBand
+      Left = 48
+      Top = 218
+      Width = 698
+      Height = 319
+      AlignToBottom = False
+      TransparentBand = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        844.020833333333300000
+        1846.791666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbSummary
+      object QRShape5: TQRShape
+        Left = 625
+        Top = 1
+        Width = 73
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          1653.645833333333000000
+          2.645833333333333000
+          193.145833333333300000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRExpr1: TQRExpr
+        Left = 625
+        Top = 5
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          13.229166666666670000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Color = clWhite
+        Master = Orcamento
+        ParentFont = False
+        ResetAfterPrint = True
+        Transparent = False
+        Expression = 'Sum(VR_TOTAL)'
+        Mask = '#,##0.00'
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel5: TQRLabel
+        Left = 0
+        Top = 5
+        Width = 57
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          13.229166666666670000
+          150.812500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Vendedor'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText11: TQRDBText
+        Left = 67
+        Top = 5
+        Width = 29
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          177.270833333333300000
+          13.229166666666670000
+          76.729166666666670000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QVendedor
+        DataField = 'NOME'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRLabel22: TQRLabel
+        Left = 66
+        Top = 256
+        Width = 155
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          174.625000000000000000
+          677.333333333333300000
+          410.104166666666700000)
+        XLColumn = 0
+        Alignment = taCenter
+        AlignToBand = False
+        Caption = 'Assinatura do Vendedor'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel29: TQRLabel
+        Left = 482
+        Top = 256
+        Width = 148
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1275.291666666667000000
+          677.333333333333300000
+          391.583333333333300000)
+        XLColumn = 0
+        Alignment = taCenter
+        AlignToBand = False
+        Caption = 'Assinatura do Cliente'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel28: TQRLabel
+        Left = 415
+        Top = 239
+        Width = 281
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1098.020833333333000000
+          632.354166666666700000
+          743.479166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = '________________________________________'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel21: TQRLabel
+        Left = 2
+        Top = 239
+        Width = 281
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          5.291666666666667000
+          632.354166666666700000
+          743.479166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = '________________________________________'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRMemo1: TQRMemo
+        Left = 0
+        Top = 39
+        Width = 466
+        Height = 178
+        Size.Values = (
+          470.958333333333300000
+          0.000000000000000000
+          103.187500000000000000
+          1232.958333333333000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        Transparent = False
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+      object QRMemo2: TQRMemo
+        Left = 480
+        Top = 88
+        Width = 218
+        Height = 130
+        Size.Values = (
+          343.958333333333300000
+          1270.000000000000000000
+          232.833333333333300000
+          576.791666666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        Transparent = False
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 10
+      end
+      object QRLabel26: TQRLabel
+        Left = 480
+        Top = 5
+        Width = 127
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1270.000000000000000000
+          13.229166666666670000
+          336.020833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Total dos Produtos'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel4: TQRLabel
+        Left = 480
+        Top = 22
+        Width = 64
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1270.000000000000000000
+          58.208333333333330000
+          169.333333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Acr'#233'scimo'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel25: TQRLabel
+        Left = 480
+        Top = 39
+        Width = 57
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1270.000000000000000000
+          103.187500000000000000
+          150.812500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Desconto'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel19: TQRLabel
+        Left = 480
+        Top = 56
+        Width = 127
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1270.000000000000000000
+          148.166666666666700000
+          336.020833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Total do Or'#231'amento'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRDBText24: TQRDBText
+        Left = 625
+        Top = 22
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          58.208333333333330000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'VR_ACRESCIMO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText23: TQRDBText
+        Left = 625
+        Top = 39
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          103.187500000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'VR_DESCONTO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+      object QRDBText8: TQRDBText
+        Left = 625
+        Top = 56
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          148.166666666666700000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'VALOR'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 8
+      end
+    end
+  end
+  object Orcamento_id: TCurrencyEdit
+    Left = 85
+    Top = 10
+    Width = 47
+    Height = 21
+    Margins.Left = 4
+    Margins.Top = 1
+    AutoSize = False
+    DecimalPlaces = 0
+    DisplayFormat = '0;-0'
+    TabOrder = 1
+    ZeroEmpty = False
+    OnChange = Orcamento_idChange
+    OnExit = Orcamento_idExit
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object btnNovo: TBitBtn
+    Left = 205
+    Top = 8
+    Width = 75
+    Height = 25
+    Caption = '&Novo F2'
+    Glyph.Data = {
+      DE010000424DDE01000000000000760000002800000024000000120000000100
+      0400000000006801000000000000000000001000000000000000000000000000
+      8000008000000080800080000000800080008080000080808000C0C0C0000000
+      FF0000FF000000FFFF00FF000000FF00FF00FFFF0000FFFFFF00333333333333
+      3333333333333333333333330000333333333333333333333333F33333333333
+      00003333344333333333333333377F3333333333000033334224333333333333
+      337337F3333333330000333422224333333333333733337F3333333300003342
+      222224333333333373333337F3333333000034222A22224333333337F337F333
+      7F33333300003222A3A2224333333337F3737F337F33333300003A2A333A2224
+      33333337F73337F337F33333000033A33333A222433333337333337F337F3333
+      0000333333333A222433333333333337F337F33300003333333333A222433333
+      333333337F337F33000033333333333A222433333333333337F337F300003333
+      33333333A222433333333333337F337F00003333333333333A22433333333333
+      3337F37F000033333333333333A223333333333333337F730000333333333333
+      333A333333333333333337330000333333333333333333333333333333333333
+      0000}
+    NumGlyphs = 2
+    TabOrder = 0
+    OnClick = btnNovoClick
+  end
+  object NUMERO: TEdit
+    Left = 346
+    Top = 90
+    Width = 37
+    Height = 21
+    MaxLength = 6
+    TabOrder = 7
+    OnKeyDown = Orcamento_idKeyDown
+  end
+  object DDD: TMaskEdit
+    Left = 455
+    Top = 143
+    Width = 28
+    Height = 21
+    CharCase = ecUpperCase
+    EditMask = '(99);1;_'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 4
+    ParentFont = False
+    TabOrder = 26
+    Text = '(  )'
+  end
+  object TELEFONE_1: TMaskEdit
+    Left = 497
+    Top = 143
+    Width = 77
+    Height = 21
+    CharCase = ecUpperCase
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'Tahoma'
+    Font.Style = []
+    MaxLength = 15
+    ParentFont = False
+    TabOrder = 28
+    Text = ''
+  end
+  object Orcamento_Reduzido: TQuickRep
+    Left = 130
+    Top = 2000
+    Width = 794
+    Height = 1123
+    DataSet = QInsert
+    Font.Charset = ANSI_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -13
+    Font.Name = 'Courier New'
+    Font.Style = []
+    Functions.Strings = (
+      'PAGENUMBER'
+      'COLUMNNUMBER'
+      'REPORTTITLE')
+    Functions.DATA = (
+      '0'
+      '0'
+      #39#39)
+    Options = [FirstPageHeader, LastPageFooter]
+    Page.Columns = 1
+    Page.Orientation = poPortrait
+    Page.PaperSize = Custom
+    Page.Continuous = False
+    Page.Values = (
+      127.000000000000000000
+      2970.000000000000000000
+      127.000000000000000000
+      2100.000000000000000000
+      127.000000000000000000
+      127.000000000000000000
+      0.000000000000000000)
+    PrinterSettings.Copies = 1
+    PrinterSettings.OutputBin = First
+    PrinterSettings.Duplex = False
+    PrinterSettings.FirstPage = 0
+    PrinterSettings.LastPage = 0
+    PrinterSettings.UseStandardprinter = False
+    PrinterSettings.UseCustomBinCode = False
+    PrinterSettings.CustomBinCode = 0
+    PrinterSettings.ExtendedDuplex = 0
+    PrinterSettings.UseCustomPaperCode = False
+    PrinterSettings.CustomPaperCode = 0
+    PrinterSettings.PrintMetaFile = False
+    PrinterSettings.PrintQuality = 0
+    PrinterSettings.Collate = 0
+    PrinterSettings.ColorOption = 0
+    PrintIfEmpty = True
+    ReportTitle = 'Or'#231'amento'
+    SnapToGrid = True
+    Units = MM
+    Zoom = 100
+    PrevFormStyle = fsNormal
+    PreviewInitialState = wsMaximized
+    PreviewWidth = 500
+    PreviewHeight = 500
+    PrevInitialZoom = qrZoomToWidth
+    PreviewDefaultSaveType = stQRP
+    PreviewLeft = 0
+    PreviewTop = 0
+    object QRBand3: TQRBand
+      Left = 48
+      Top = 48
+      Width = 698
+      Height = 151
+      AlignToBottom = False
+      TransparentBand = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        399.520833333333300000
+        1846.791666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbPageHeader
+      object QRShape4: TQRShape
+        Left = 0
+        Top = 54
+        Width = 698
+        Height = 5
+        Size.Values = (
+          13.229166666666670000
+          0.000000000000000000
+          142.875000000000000000
+          1846.791666666667000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRLabel13: TQRLabel
+        Left = 0
+        Top = 75
+        Width = 36
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          198.437500000000000000
+          95.250000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Cliente'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel20: TQRLabel
+        Left = 324
+        Top = 75
+        Width = 41
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          198.437500000000000000
+          108.479166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Endere'#231'o'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel27: TQRLabel
+        Left = 324
+        Top = 104
+        Width = 31
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          275.166666666666700000
+          82.020833333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Cidade'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText16: TQRDBText
+        Left = 384
+        Top = 104
+        Width = 216
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          275.166666666666700000
+          571.500000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'MUNICIPIO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText19: TQRDBText
+        Left = 384
+        Top = 75
+        Width = 216
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          198.437500000000000000
+          571.500000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'ENDERECO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText20: TQRDBText
+        Left = 68
+        Top = 75
+        Width = 251
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          198.437500000000000000
+          664.104166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'NOME'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText21: TQRDBText
+        Left = 68
+        Top = 104
+        Width = 31
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          275.166666666666700000
+          82.020833333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'BAIRRO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel30: TQRLabel
+        Left = 2
+        Top = 102
+        Width = 31
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          5.291666666666667000
+          269.875000000000000000
+          82.020833333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Bairro'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel31: TQRLabel
+        Left = 606
+        Top = 104
+        Width = 16
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1603.375000000000000000
+          275.166666666666700000
+          42.333333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'CEP'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText22: TQRDBText
+        Left = 637
+        Top = 104
+        Width = 16
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1685.395833333333000000
+          275.166666666666700000
+          42.333333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'CEP'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRShape6: TQRShape
+        Left = 0
+        Top = 131
+        Width = 698
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          0.000000000000000000
+          346.604166666666700000
+          1846.791666666667000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRLabel32: TQRLabel
+        Left = 625
+        Top = 135
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          357.187500000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Pr. Total'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel33: TQRLabel
+        Left = 464
+        Top = 135
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1227.666666666667000000
+          357.187500000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Pr. Unit.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel34: TQRLabel
+        Left = 384
+        Top = 135
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          357.187500000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Quantidade'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRShape7: TQRShape
+        Left = 0
+        Top = 148
+        Width = 698
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          0.000000000000000000
+          391.583333333333300000
+          1846.791666666667000000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRLabel35: TQRLabel
+        Left = 88
+        Top = 135
+        Width = 46
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          232.833333333333300000
+          357.187500000000000000
+          121.708333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Descri'#231#227'o'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel36: TQRLabel
+        Left = 0
+        Top = 135
+        Width = 65
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          357.187500000000000000
+          171.979166666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'ID'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRSysData3: TQRSysData
+        Left = 632
+        Top = 61
+        Width = 66
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1672.166666666667000000
+          161.395833333333300000
+          174.625000000000000000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = True
+        Color = clWhite
+        Data = qrsDate
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Text = 'Data : '
+        Transparent = False
+        ExportAs = exptText
+        FontSize = 7
+      end
+      object QRLabel37: TQRLabel
+        Left = 517
+        Top = 1
+        Width = 181
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1367.895833333333000000
+          2.645833333333333000
+          478.895833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = True
+        Caption = 'Sistema de Adm. de Empresas - Eficaz'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRSysData4: TQRSysData
+        Left = 617
+        Top = 17
+        Width = 81
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1632.479166666667000000
+          44.979166666666670000
+          214.312500000000000000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = True
+        Color = clWhite
+        Data = qrsPageNumber
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Text = 'P'#225'gina : '
+        Transparent = False
+        ExportAs = exptText
+        FontSize = 7
+      end
+      object QRLabel38: TQRLabel
+        Left = 306
+        Top = 41
+        Width = 86
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          809.625000000000000000
+          108.479166666666700000
+          227.541666666666700000)
+        XLColumn = 0
+        Alignment = taCenter
+        AlignToBand = True
+        Caption = '*** OR'#199'AMENTO ***'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText25: TQRDBText
+        Left = 0
+        Top = 1
+        Width = 26
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          2.645833333333333000
+          68.791666666666670000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = FrmPrincipal.QEmpresa
+        DataField = 'RAZAO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel39: TQRLabel
+        Left = 0
+        Top = 61
+        Width = 46
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          161.395833333333300000
+          121.708333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Num. Orc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText26: TQRDBText
+        Left = 68
+        Top = 61
+        Width = 61
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          161.395833333333300000
+          161.395833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'ORCAMENTO_ID'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel40: TQRLabel
+        Left = 544
+        Top = 135
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1439.333333333333000000
+          357.187500000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Caption = 'Vr. Desc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel41: TQRLabel
+        Left = 0
+        Top = 13
+        Width = 46
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          34.395833333333330000
+          121.708333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Num. Orc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel42: TQRLabel
+        Left = 0
+        Top = 29
+        Width = 46
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          76.729166666666670000
+          121.708333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Num. Orc.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel43: TQRLabel
+        Left = 324
+        Top = 61
+        Width = 66
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          161.395833333333300000
+          174.625000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Cond. Pagto.:'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText27: TQRDBText
+        Left = 424
+        Top = 61
+        Width = 51
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1121.833333333333000000
+          161.395833333333300000
+          134.937500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataField = 'COND_PAGTO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel44: TQRLabel
+        Left = 606
+        Top = 75
+        Width = 16
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1603.375000000000000000
+          198.437500000000000000
+          42.333333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'N'#186'.'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText28: TQRDBText
+        Left = 637
+        Top = 75
+        Width = 31
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1685.395833333333000000
+          198.437500000000000000
+          82.020833333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'NUMERO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel45: TQRLabel
+        Left = 0
+        Top = 89
+        Width = 41
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          235.479166666666700000
+          108.479166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Fantasia'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText29: TQRDBText
+        Left = 68
+        Top = 89
+        Width = 251
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          235.479166666666700000
+          664.104166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'FANTASIA'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel46: TQRLabel
+        Left = 324
+        Top = 89
+        Width = 36
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          235.479166666666700000
+          95.250000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Contato'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText30: TQRDBText
+        Left = 384
+        Top = 89
+        Width = 216
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          235.479166666666700000
+          571.500000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'CONTATO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel47: TQRLabel
+        Left = -2
+        Top = 118
+        Width = 46
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          -5.291666666666667000
+          312.208333333333300000
+          121.708333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Telefone:'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText32: TQRDBText
+        Left = 384
+        Top = 118
+        Width = 16
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1016.000000000000000000
+          312.208333333333300000
+          42.333333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QCliente
+        DataField = 'DDD'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel48: TQRLabel
+        Left = 324
+        Top = 118
+        Width = 36
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          857.250000000000000000
+          312.208333333333300000
+          95.250000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Tel. 2:'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText43: TQRDBText
+        Left = 406
+        Top = 118
+        Width = 51
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1074.208333333333000000
+          312.208333333333300000
+          134.937500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'TELEFONE_2'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText31: TQRDBText
+        Left = 68
+        Top = 118
+        Width = 16
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          179.916666666666700000
+          312.208333333333300000
+          42.333333333333330000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataField = 'DDD'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText45: TQRDBText
+        Left = 90
+        Top = 118
+        Width = 41
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          238.125000000000000000
+          312.208333333333300000
+          108.479166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'TELEFONE'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        WordWrap = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+    end
+    object QRBand4: TQRBand
+      Left = 48
+      Top = 199
+      Width = 698
+      Height = 13
+      AlignToBottom = False
+      TransparentBand = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        34.395833333333330000
+        1846.791666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbDetail
+      object QRDBText33: TQRDBText
+        Left = 0
+        Top = 0
+        Width = 65
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          0.000000000000000000
+          0.000000000000000000
+          171.979166666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'PRODUTO_ID'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText34: TQRDBText
+        Left = 90
+        Top = 0
+        Width = 46
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          238.125000000000000000
+          0.000000000000000000
+          121.708333333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'DESCRICAO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText35: TQRDBText
+        Left = 385
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1018.645833333333000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'QUANTIDADE'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText36: TQRDBText
+        Left = 464
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1227.666666666667000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'VR_UNITARIO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText37: TQRDBText
+        Left = 625
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'VR_TOTAL'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText38: TQRDBText
+        Left = 544
+        Top = 0
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1439.333333333333000000
+          0.000000000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QInsert
+        DataField = 'VR_DESCONTO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+    end
+    object QRBand5: TQRBand
+      Left = 48
+      Top = 212
+      Width = 698
+      Height = 173
+      AlignToBottom = False
+      TransparentBand = False
+      ForceNewColumn = False
+      ForceNewPage = False
+      Size.Values = (
+        457.729166666666700000
+        1846.791666666667000000)
+      PreCaluculateBandHeight = False
+      KeepOnOnePage = False
+      BandType = rbSummary
+      object QRLabel49: TQRLabel
+        Left = 480
+        Top = 33
+        Width = 91
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1270.000000000000000000
+          87.312500000000000000
+          240.770833333333300000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Total do Or'#231'amento'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText39: TQRDBText
+        Left = 625
+        Top = 33
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          87.312500000000000000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'VALOR'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = [fsBold]
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel50: TQRLabel
+        Left = 480
+        Top = 17
+        Width = 41
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1270.000000000000000000
+          44.979166666666670000
+          108.479166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Desconto'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel51: TQRLabel
+        Left = 480
+        Top = 2
+        Width = 86
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1270.000000000000000000
+          5.291666666666667000
+          227.541666666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Total do Produtos'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText40: TQRDBText
+        Left = 625
+        Top = 17
+        Width = 73
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1653.645833333333000000
+          44.979166666666670000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'VR_DESCONTO'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRShape8: TQRShape
+        Left = 625
+        Top = 1
+        Width = 73
+        Height = 4
+        Size.Values = (
+          10.583333333333330000
+          1653.645833333333000000
+          2.645833333333333000
+          193.145833333333300000)
+        XLColumn = 0
+        Shape = qrsHorLine
+        VertAdjust = 0
+      end
+      object QRLabel53: TQRLabel
+        Left = 256
+        Top = 137
+        Width = 218
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          677.333333333333300000
+          362.479166666666700000
+          576.791666666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = '_______________________________'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel54: TQRLabel
+        Left = 257
+        Top = 158
+        Width = 106
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          679.979166666666700000
+          418.041666666666700000
+          280.458333333333300000)
+        XLColumn = 0
+        Alignment = taCenter
+        AlignToBand = False
+        Caption = 'Assinatura do Cliente'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRLabel55: TQRLabel
+        Left = -3
+        Top = 2
+        Width = 41
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          -7.937500000000000000
+          5.291666666666667000
+          108.479166666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = 'Vendedor'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRDBText42: TQRDBText
+        Left = 63
+        Top = 2
+        Width = 21
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          166.687500000000000000
+          5.291666666666667000
+          55.562500000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Color = clWhite
+        DataSet = QVendedor
+        DataField = 'NOME'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRLabel56: TQRLabel
+        Left = 4
+        Top = 137
+        Width = 218
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          10.583333333333330000
+          362.479166666666700000
+          576.791666666666700000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        Caption = '_______________________________'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRLabel57: TQRLabel
+        Left = 4
+        Top = 153
+        Width = 111
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          10.583333333333330000
+          404.812500000000000000
+          293.687500000000000000)
+        XLColumn = 0
+        Alignment = taCenter
+        AlignToBand = False
+        Caption = 'Assinatura do Vendedor'
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 7
+      end
+      object QRMemo3: TQRMemo
+        Left = -3
+        Top = 16
+        Width = 466
+        Height = 88
+        Size.Values = (
+          232.833333333333300000
+          -7.937500000000000000
+          42.333333333333330000
+          1232.958333333333000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRMemo4: TQRMemo
+        Left = 480
+        Top = 48
+        Width = 222
+        Height = 108
+        Size.Values = (
+          285.750000000000000000
+          1270.000000000000000000
+          127.000000000000000000
+          587.375000000000000000)
+        XLColumn = 0
+        Alignment = taLeftJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        ParentFont = False
+        Transparent = False
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+      object QRDBText44: TQRDBText
+        Left = 625
+        Top = 4
+        Width = 73
+        Height = 13
+        Size.Values = (
+          34.395833333333330000
+          1653.645833333333000000
+          10.583333333333330000
+          193.145833333333300000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Color = clWhite
+        DataSet = QRel
+        DataField = 'VALOR_PRODUTOS'
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -9
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Mask = '#,##0.00'
+        ParentFont = False
+        Transparent = False
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FullJustify = False
+        MaxBreakChars = 0
+        FontSize = 7
+      end
+    end
+  end
+  object DataLog_Itens: TDataSource
+    Left = 50
+    Top = 447
+  end
+  object Timer1: TTimer
+    Interval = 500
+    OnTimer = Timer1Timer
+    Left = 232
+    Top = 551
+  end
+  object RDprint1: TRDprint
+    ImpressoraPersonalizada.NomeImpressora = 'Modelo Personalizado - (Epson)'
+    ImpressoraPersonalizada.AvancaOitavos = '27 48'
+    ImpressoraPersonalizada.AvancaSextos = '27 50'
+    ImpressoraPersonalizada.SaltoPagina = '12'
+    ImpressoraPersonalizada.TamanhoPagina = '27 67 66'
+    ImpressoraPersonalizada.Negrito = '27 69'
+    ImpressoraPersonalizada.Italico = '27 52'
+    ImpressoraPersonalizada.Sublinhado = '27 45 49'
+    ImpressoraPersonalizada.Expandido = '27 14'
+    ImpressoraPersonalizada.Normal10 = '18 27 80'
+    ImpressoraPersonalizada.Comprimir12 = '18 27 77'
+    ImpressoraPersonalizada.Comprimir17 = '27 80 27 15'
+    ImpressoraPersonalizada.Comprimir20 = '27 77 27 15'
+    ImpressoraPersonalizada.Reset = '27 80 18 20 27 53 27 70 27 45 48'
+    ImpressoraPersonalizada.Inicializar = '27 64'
+    OpcoesPreview.PaginaZebrada = False
+    OpcoesPreview.Remalina = True
+    OpcoesPreview.CaptionPreview = 'Preview'
+    OpcoesPreview.PreviewZoom = 100
+    OpcoesPreview.CorPapelPreview = clWhite
+    OpcoesPreview.CorLetraPreview = clBlack
+    OpcoesPreview.Preview = False
+    OpcoesPreview.BotaoSetup = Ativo
+    OpcoesPreview.BotaoImprimir = Ativo
+    OpcoesPreview.BotaoGravar = Ativo
+    OpcoesPreview.BotaoLer = Ativo
+    OpcoesPreview.BotaoProcurar = Ativo
+    OpcoesPreview.BotaoPDF = Ativo
+    OpcoesPreview.BotaoEMAIL = Ativo
+    Margens.Left = 10
+    Margens.Right = 10
+    Margens.Top = 10
+    Margens.Bottom = 10
+    Autor = Deltress
+    RegistroUsuario.NomeRegistro = 'EFICAZ AUTOMA'#199'O E SISTEMAS LTDA '
+    RegistroUsuario.SerieProduto = 'GROUP-0214/02002'
+    RegistroUsuario.AutorizacaoKey = 'HE4F-X2AQ-8IYJ-211Q-IGUV'
+    About = 'RDprint 5.0 - Registrado'
+    Acentuacao = Transliterate
+    CaptionSetup = 'Configura'#231#227'o Impress'#227'o'
+    TitulodoRelatorio = 'Or'#231'amento'
+    UsaGerenciadorImpr = True
+    CorForm = clBtnFace
+    CorFonte = clBlack
+    Impressora = Epson
+    Mapeamento.Strings = (
+      '//--- Grafico Compativel com Windows/USB ---//'
+      '//'
+      'GRAFICO=GRAFICO'
+      'HP=GRAFICO'
+      'DESKJET=GRAFICO'
+      'LASERJET=GRAFICO'
+      'INKJET=GRAFICO'
+      'STYLUS=GRAFICO'
+      'EPL=GRAFICO'
+      'USB=GRAFICO'
+      '//'
+      '//--- Linha Epson Matricial 9 e 24 agulhas ---//'
+      '//'
+      'EPSON=EPSON'
+      'GENERICO=EPSON'
+      'LX-300=EPSON'
+      'LX-810=EPSON'
+      'FX-2170=EPSON'
+      'FX-1170=EPSON'
+      'LQ-1170=EPSON'
+      'LQ-2170=EPSON'
+      'OKIDATA=EPSON'
+      '//'
+      '//--- Rima e Emilia ---//'
+      '//'
+      'RIMA=RIMA'
+      'EMILIA=RIMA'
+      '//'
+      '//--- Linha HP/Xerox padr'#227'o PCL ---//'
+      '//'
+      'PCL=HP'
+      '//'
+      '//--- Impressoras 40 Colunas ---//'
+      '//'
+      'DARUMA=BOBINA'
+      'SIGTRON=BOBINA'
+      'SWEDA=BOBINA'
+      'BEMATECH=BOBINA')
+    MostrarProgresso = True
+    TamanhoQteLinhas = 32
+    TamanhoQteColunas = 80
+    TamanhoQteLPP = Seis
+    NumerodeCopias = 1
+    FonteTamanhoPadrao = S10cpp
+    FonteEstiloPadrao = []
+    Orientacao = poPortrait
+    OnNewPage = RDprint1NewPage
+    OnAfterPrint = RDprint1AfterPrint
+    Left = 264
+    Top = 551
+  end
+  object DataVendedor: TDataSource
+    Left = 64
+    Top = 515
+  end
+  object DataCliente: TDataSource
+    Left = 128
+    Top = 515
+  end
+  object QLog_Orcamento: TFDQuery
+    AfterOpen = QLog_OrcamentoAfterOpen
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM LOG_ORCAMENTO')
+    Left = 24
+    Top = 296
+  end
+  object QProduto: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 16
+    Top = 341
+  end
+  object QRel: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 88
+    Top = 320
+  end
+  object QInsert: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      '')
+    Left = 128
+    Top = 320
+  end
+  object QLimite: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT CLIENTES.CLIENTE_ID, SUM(TRANSPARCELAS.VALOR) AS DEBITO'
+      'FROM CLIENTES'
+      'INNER JOIN TRANSACOES'
+      'ON (CLIENTES.CLIENTE_ID = TRANSACOES.CLIENTE_ID)'
+      'INNER JOIN TRANSPARCELAS'
+      'ON (TRANSACOES.TRANSACAO_ID = TRANSPARCELAS.TRANSACAO_ID)'
+      'WHERE'
+      '(CLIENTES.CLIENTE_ID = :CLIENTE_ID)'
+      'AND (TRANSPARCELAS.DT_VENCIMENTO <= :DT_VENCIMENTO)'
+      'AND (TRANSPARCELAS.VALOR > 0)'
+      'AND (TRANSPARCELAS.BANCO_ID = 0)'
+      'AND (TRANSPARCELAS.TIPO_TRANSACAO = '#39'T'#39')'
+      'AND (TRANSACOES.COND_PAGTO = '#39'A PRAZO'#39')'
+      
+        'AND ((TRANSPARCELAS.AGRUPAMENTO = 0) OR (TRANSPARCELAS.AGRUPAMEN' +
+        'TO IS NULL))'
+      'GROUP BY CLIENTES.CLIENTE_ID')
+    Left = 160
+    Top = 320
+    ParamData = <
+      item
+        Name = 'CLIENTE_ID'
+        ParamType = ptInput
+      end
+      item
+        Name = 'DT_VENCIMENTO'
+        ParamType = ptInput
+      end>
+  end
+  object QSaldo_Orcamento: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT CLIENTES.CLIENTE_ID, SUM(TRANSPARCELAS.VALOR) AS DEBITO'
+      'FROM CLIENTES'
+      'INNER JOIN ORCAMENTOS'
+      'ON (CLIENTES.CLIENTE_ID = ORCAMENTOS.CLIENTE_ID)'
+      'INNER JOIN TRANSPARCELAS'
+      'ON (ORCAMENTOS.ORCAMENTO_ID = TRANSPARCELAS.TRANSACAO_ID)'
+      'WHERE'
+      '(CLIENTES.CLIENTE_ID = :CLIENTE_ID)'
+      'AND (TRANSPARCELAS.DT_VENCIMENTO <= :DT_VENCIMENTO)'
+      'AND (TRANSPARCELAS.VALOR > 0)'
+      'AND (TRANSPARCELAS.BANCO_ID = 0)'
+      'AND (TRANSPARCELAS.TIPO_TRANSACAO = '#39'O'#39')'
+      'AND (ORCAMENTOS.COND_PAGTO = '#39'A PRAZO'#39')'
+      
+        'AND ((ORCAMENTOS.TRANSACAO_ID = 0) OR (ORCAMENTOS.TRANSACAO_ID I' +
+        'S NULL))'
+      'GROUP BY CLIENTES.CLIENTE_ID')
+    Left = 192
+    Top = 320
+    ParamData = <
+      item
+        Name = 'CLIENTE_ID'
+        ParamType = ptInput
+        Value = Null
+      end
+      item
+        Name = 'DT_VENCIMENTO'
+        ParamType = ptInput
+        Value = Null
+      end>
+  end
+  object QVendedor: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM FUNCIONARIOS'
+      'WHERE'
+      '(FUNCIONARIO_ID = :FUNCIONARIO_ID)'
+      'AND (STATUS = '#39'A'#39')')
+    Left = 224
+    Top = 320
+    ParamData = <
+      item
+        Name = 'FUNCIONARIO_ID'
+        ParamType = ptInput
+      end>
+  end
+  object Qorcamento_itens: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      'SELECT * FROM ORCITENS'
+      'WHERE'
+      '(ORCAMENTO_ID = :ORCAMENTO_ID)')
+    Left = 192
+    Top = 376
+    ParamData = <
+      item
+        Name = 'ORCAMENTO_ID'
+        ParamType = ptInput
+      end>
+  end
+  object IQuery3: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      'SELECT * '
+      'FROM   ORCITENS'
+      'WHERE ORCAMENTO_ID = :ORCAMENTO_ID')
+    Left = 320
+    Top = 320
+    ParamData = <
+      item
+        Name = 'ORCAMENTO_ID'
+        ParamType = ptInput
+      end>
+  end
+  object QCliente: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      'SELECT * FROM CLIENTES'
+      'WHERE'
+      '(CLIENTE_ID = :CLIENTE_ID)'
+      'AND (STATUS = '#39'A'#39')'
+      '')
+    Left = 368
+    Top = 320
+    ParamData = <
+      item
+        Name = 'CLIENTE_ID'
+        ParamType = ptInput
+      end>
+  end
+  object QGen: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM FUNCIONARIOS'
+      'WHERE'
+      '(FUNCIONARIO_ID = :FUNCIONARIO_ID)'
+      'AND (STATUS = '#39'A'#39')')
+    Left = 529
+    Top = 320
+    ParamData = <
+      item
+        Name = 'FUNCIONARIO_ID'
+        ParamType = ptInput
+      end>
+  end
+  object QTabela: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      'SELECT * FROM ORCAMENTOS'
+      'WHERE'
+      '(ORCAMENTO_ID = :ORCAMENTO_ID)')
+    Left = 464
+    Top = 320
+    ParamData = <
+      item
+        Name = 'ORCAMENTO_ID'
+        ParamType = ptInput
+      end>
+  end
+  object QSelect: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM FUNCIONARIOS'
+      'WHERE'
+      '(FUNCIONARIO_ID = :FUNCIONARIO_ID)'
+      'AND (STATUS = '#39'A'#39')')
+    Left = 400
+    Top = 320
+    ParamData = <
+      item
+        Name = 'FUNCIONARIO_ID'
+        ParamType = ptInput
+      end>
+  end
+  object QDelete: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM FUNCIONARIOS'
+      'WHERE'
+      '(FUNCIONARIO_ID = :FUNCIONARIO_ID)'
+      'AND (STATUS = '#39'A'#39')')
+    Left = 432
+    Top = 320
+    ParamData = <
+      item
+        Name = 'FUNCIONARIO_ID'
+        ParamType = ptInput
+      end>
+  end
+end

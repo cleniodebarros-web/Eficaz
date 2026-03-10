@@ -33,6 +33,10 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
     object Consulta: TTabSheet
       Caption = '&Consulta'
       OnShow = ConsultaShow
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       object DBGrid1: TDBGrid
         Left = 0
         Top = 0
@@ -1128,6 +1132,10 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
           object TabSheet2: TTabSheet
             Caption = 'Ipi/Frete/Fcp'
             ImageIndex = 1
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object Label19: TLabel
               Left = 2
               Top = 12
@@ -1266,6 +1274,10 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
           object TabSheet4: TTabSheet
             Caption = 'IS/CBS/IBS'
             ImageIndex = 2
+            ExplicitLeft = 0
+            ExplicitTop = 0
+            ExplicitWidth = 0
+            ExplicitHeight = 0
             object Label48: TLabel
               Left = 12
               Top = 11
@@ -1484,6 +1496,14 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
           end
           item
             Expanded = False
+            FieldName = 'cod_classtrib'
+            Title.Alignment = taCenter
+            Title.Caption = 'Classe Trib.'
+            Width = 74
+            Visible = True
+          end
+          item
+            Expanded = False
             FieldName = 'VR_IPI'
             Title.Alignment = taRightJustify
             Title.Caption = 'Vr. IPI'
@@ -1556,17 +1576,22 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
           end
           item
             Expanded = False
-            FieldName = 'cod_classtrib'
-            Visible = False
-          end
-          item
-            Expanded = False
             FieldName = 'cst_cbsibs'
             Visible = False
           end
           item
             Expanded = False
             FieldName = 'vr_base_cbsibs'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_EF_IBSUF'
+            Visible = False
+          end
+          item
+            Expanded = False
+            FieldName = 'ALIQ_EF_CBS'
             Visible = False
           end>
       end
@@ -1806,6 +1831,10 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
           Font.Style = []
           ImageIndex = 2
           ParentFont = False
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label18: TLabel
             Left = 500
             Top = 18
@@ -2220,6 +2249,10 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
       Caption = 'Cancelar'
       OnClick = Cancelar1Click
     end
+    object SalvarArquivo: TMenuItem
+      Caption = 'Salvar XML/PDF'
+      OnClick = SalvarArquivoClick
+    end
   end
   object QTabela: TFDQuery
     AfterOpen = QTabelaAfterOpen
@@ -2576,5 +2609,23 @@ object FrmTrans_Devolucao_Compra: TFrmTrans_Devolucao_Compra
     FetchOptions.AutoFetchAll = afDisable
     Left = 472
     Top = 216
+  end
+  object QClassTrib: TFDQuery
+    Connection = FrmData.DbF_Eficaz
+    FetchOptions.AssignedValues = [evAutoFetchAll]
+    FetchOptions.AutoFetchAll = afTruncate
+    SQL.Strings = (
+      ''
+      'SELECT * FROM COD_CLASSTRIB'
+      'WHERE'
+      'CLASSETRIB = :CLASSETRIB'
+      'ORDER BY DESCRICAO')
+    Left = 544
+    Top = 432
+    ParamData = <
+      item
+        Name = 'CLASSETRIB'
+        ParamType = ptInput
+      end>
   end
 end

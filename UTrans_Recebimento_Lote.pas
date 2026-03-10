@@ -1897,6 +1897,7 @@ begin
     Writeln(MyFile, 'referente a produtos fornecidos');
     Writeln(MyFile, 'conforme notas.');
 
+
     Writeln(MyFile, '');
 
     Meio    := ((48 - Length(FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + '(' +
@@ -1904,12 +1905,18 @@ begin
            Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 1, 2) + ' de ' +
            NomeMes(StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 2))) + ' de ' +
            Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 7, 4))) / 2);
+    try
     Dividir := StrToInt(StrZero(FloatToStr(Meio), 12, 0));
+    Except
+
+    end;
+
     Writeln(MyFile,ForcaComprimento(' ', Dividir, ' ') + FrmPrincipal.QEmpresa.FieldByName('MUNICIPIO').AsString + '(' +
            FrmPrincipal.QEmpresa.FieldByName('ESTADO').AsString + '), ' +
            Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 1, 2) + ' de ' +
            NomeMes(StrToInt(Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 4, 2))) + ' de ' +
            Copy(FrmPrincipal.Abertura.FieldByName('DT_MOVIMENTO').AsString, 7, 4));
+
 
     Meio    := ((48 - Length(FrmPrincipal.QEmpresa.FieldByName('RAZAO').AsString)) / 2);
     Dividir := StrToInt(StrZero(FloatToStr(Meio), 12, 0));
@@ -1936,7 +1943,6 @@ begin
 
     for Linhas := 1 to StrToInt(LeIni(Arq_Ini, 'Sistema', 'Linhas')) do
         Writeln(MyFile, '');
-
     //Seleciona;
   end;
   {

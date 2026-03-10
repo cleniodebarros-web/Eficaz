@@ -143,6 +143,7 @@ type
     Timer1: TTimer;
     Dados_Empresa: TRichEdit;
     btnPagamentos: TButton;
+    btnCNPJ: TSpeedButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -184,6 +185,7 @@ type
     procedure CaptchaKeyPress(Sender: TObject; var Key: Char);
     procedure btnPagamentosClick(Sender: TObject);
     procedure ANOTACOESKeyPress(Sender: TObject; var Key: Char);
+    procedure btnCNPJClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -212,7 +214,7 @@ var
 implementation
 
 uses
-  UPrincipal, UData, UPesquisa, UConsulta,pngimage, UTrans_Pagamento_Lote;
+  UPrincipal, UData, UPesquisa, UConsulta,pngimage, UTrans_Pagamento_Lote, UConsultaCNPJ;
 
 {$R *.dfm}
 
@@ -1057,6 +1059,10 @@ begin
   Dados_Empresa.Clear;
   Dados_Empresa.Visible := False;
 
+  if TIPO_FORNECEDOR.Text = 'PESSOA JURÍDICA' then
+    btnCNPJ.Visible := True
+  else
+    btnCNPJ.Visible := False;
 
 end;
 
@@ -1078,9 +1084,15 @@ begin
   if (Operacao = 'Inserindo') or (Operacao = 'Alterando')  then
   Begin
   if TIPO_FORNECEDOR.Text = 'PESSOA JURÍDICA' then
-    CNPJ.EditMask := '99.999.999/9999-99;1;_'
+  begin
+    CNPJ.EditMask := '99.999.999/9999-99;1;_';
+    btnCNPJ.Visible := True;
+  end
   else
+  begin
     CNPJ.EditMask := '999.999.999-99;1;_';
+    btnCNPJ.Visible := False;
+  end;
   End;
 
 end;
@@ -1090,6 +1102,11 @@ procedure TFrmFornecedores.TIPO_FORNECEDORKeyDown(Sender: TObject;
 begin
   if Key = Vk_Return then
     Perform(Wm_NextDlgctl, 0, 0);
+end;
+
+procedure TFrmFornecedores.btnCNPJClick(Sender: TObject);
+begin
+  ConsultaCNPJ(NOME, FANTASIA, INSCRICAO, ENDERECO, NUMERO, COMPLEMENTO, IBGE, MUNICIPIO, BAIRRO, COD_PAIS, CNPJ, CEP, ESTADO, TIPO_FORNECEDOR);
 end;
 
 procedure TFrmFornecedores.btnComeca_ComClick(Sender: TObject);

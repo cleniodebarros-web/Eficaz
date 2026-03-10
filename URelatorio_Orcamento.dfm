@@ -1465,8 +1465,8 @@ object FrmRelatorio_Orcamentos: TFrmRelatorio_Orcamentos
     OnKeyDown = Funcionario_idKeyDown
   end
   object chk_agrupar: TCheckBox
-    Left = 73
-    Top = 238
+    Left = 8
+    Top = 230
     Width = 136
     Height = 17
     Caption = 'Agrupar produtos'
@@ -2573,6 +2573,14 @@ object FrmRelatorio_Orcamentos: TFrmRelatorio_Orcamentos
         FontSize = 8
       end
     end
+  end
+  object chk_exportar: TCheckBox
+    Left = 169
+    Top = 230
+    Width = 130
+    Height = 17
+    Caption = 'Exportar para Excel'
+    TabOrder = 12
   end
   object DataCliente: TDataSource
     DataSet = QCliente

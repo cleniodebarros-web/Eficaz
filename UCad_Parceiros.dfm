@@ -35,7 +35,7 @@ object FrmCad_Parceiros: TFrmCad_Parceiros
     Top = 0
     Width = 716
     Height = 254
-    ActivePage = Manutencao
+    ActivePage = Consulta
     Align = alClient
     TabOrder = 0
     object Consulta: TTabSheet
@@ -741,6 +741,10 @@ object FrmCad_Parceiros: TFrmCad_Parceiros
           Caption = 'Eficaz Web'
           ImageIndex = 1
           TabVisible = False
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label16: TLabel
             Left = 6
             Top = 22
@@ -874,6 +878,10 @@ object FrmCad_Parceiros: TFrmCad_Parceiros
           Caption = 'Sal'#227'o'
           ImageIndex = 2
           TabVisible = False
+          ExplicitLeft = 0
+          ExplicitTop = 0
+          ExplicitWidth = 0
+          ExplicitHeight = 0
           object Label29: TLabel
             Left = 22
             Top = 30

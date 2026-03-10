@@ -28,6 +28,8 @@ type
     QProduto: TFDQuery;
     QRel: TFDQuery;
     QUpdate: TFDQuery;
+    Label1: TLabel;
+    Selecao_produto: TEdit;
     procedure btnRetornaClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnProdutoClick(Sender: TObject);
@@ -132,9 +134,37 @@ begin
       QProduto.Open; 
 
     end
-    Else
+    Else  if Selecao_produto.Text <> '' Then
     begin
 
+      QProduto.Sql.Clear;
+      QProduto.Sql.Add('SELECT * FROM PRODUTOS');
+      QProduto.Sql.Add('WHERE');
+      QProduto.Sql.Add('(PRODUTO_ID in(4764	,7328	,7804	,109	,9861	,8228	,8229	,8230	,9940	,'+
+                       '230	,9939	,8228	,235	,8236	,8261	,9939	,9940	,8805	, ' +
+                       '9599	,8139	,9599	,8415	,10133	,838	,8923	,9599	,9861	))');
+      QProduto.Sql.Add('AND (EMPRESA_ID = :EMPRESA_ID)');
+      QProduto.Sql.Add('AND (STATUS = :STATUS)');
+
+      if StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização')) > 0 then
+      begin
+        QProduto.Sql.Add('AND (LOCALIZACAO_ID = :LOCALIZACAO_ID)');
+
+        QProduto.ParamByName('LOCALIZACAO_ID').AsInteger := StrToInt(LeIni(Arq_Ini, 'Sistema', 'Localização'));
+      end;
+
+      QProduto.Sql.Add('ORDER BY DESCRICAO');
+
+      //QProduto.ParamByName('SELECAO_PRODUTO').AsInteger  :=  '( + Selecao_produto.Text +)';
+      QProduto.ParamByName('EMPRESA_ID').AsInteger := FrmData.QAcesso.FieldByName('EMPRESA_ID').AsInteger;
+      QProduto.ParamByName('STATUS').AsString      := 'A';
+
+      QProduto.Prepare;
+      QProduto.Open;
+
+    end
+    Else
+    Begin
       QProduto.Sql.Clear;
       QProduto.Sql.Add('SELECT * FROM PRODUTOS');
       QProduto.Sql.Add('WHERE');
@@ -157,7 +187,7 @@ begin
       QProduto.Prepare;
       QProduto.Open;
 
-    end;
+    End;
 
     QProduto.First;
     while not QProduto.Eof do
@@ -315,6 +345,8 @@ begin
                  QRel.FieldByName('DEV_CONSUMO').AsFloat + QRel.FieldByName('E_TRANSF').AsFloat -
                  QRel.FieldByName('VENDA').AsFloat       - QRel.FieldByName('DEV_COMPRA').AsFloat -
                  QRel.FieldByName('CONSUMO').AsFloat     - QRel.FieldByName('S_TRANSF').AsFloat;
+
+
 
 
         if FrmData.QAcesso.FieldByName('TPCTB').AsString = '2' then

@@ -328,6 +328,7 @@ type
     Chk_PrecoAtacado: TCheckBox;
     chk_comissao_produto: TCheckBox;
     Chk_ReformaTributaria: TCheckBox;
+    Chk_Preco_individual_cliente: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure btnExecutaClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -1201,6 +1202,15 @@ begin
   chk_desabilitarimpostos.Checked := True
   else
   chk_desabilitarimpostos.Checked := False ;
+
+
+  if QConfig.FieldByName('PRODUTOS_CONTRATO').AsString = 'True'  then
+  Chk_Preco_individual_cliente.Checked := True
+  else
+  Chk_Preco_individual_cliente.Checked := False ;
+
+
+
 
   //Orçamento
    email.Text         := QConfig.FieldByName('WEB_EMAIL').AsString;
@@ -2685,7 +2695,7 @@ begin
         QArq.SQL.Add('DESCONTOS_PRODUTOS = :DESCONTOS_PRODUTOS,BANCO_NUVEM = :BANCO_NUVEM,IP_NUVEM = :IP_NUVEM,PORTA_NUVEM = :PORTA_NUVEM,SENHA_NUVEM = :SENHA_NUVEM,USUARIO_NUVEM = :USUARIO_NUVEM, IGNORAR_FRACIONAMENTO = :IGNORAR_FRACIONAMENTO,');
         QArq.SQL.Add('FECHAR_STREAMING = :FECHAR_STREAMING, VENDA_VEICULOS_NOVOS = :VENDA_VEICULOS_NOVOS, SERIE = :SERIE, MODELOPADRAO = :MODELOPADRAO, ALTERAR_PRECO_CUSTO = :ALTERAR_PRECO_CUSTO, HORA_CONSISTE = :HORA_CONSISTE, DESABILITAR_IMPOSTOS = :DESABILITAR_IMPOSTOS,');
         QArq.SQL.Add('REMARCA_NOVO = :REMARCA_NOVO, ESTOQUE_NEGATIVO_ORC_INTERNO = :ESTOQUE_NEGATIVO_ORC_INTERNO, NAO_EXIBIR_F_NO_G = :NAO_EXIBIR_F_NO_G, LIBERA_VALOR_UNITARIO_OS = :LIBERA_VALOR_UNITARIO_OS , VALOR_SANGRIA = :VALOR_SANGRIA, ');
-        QArq.SQL.Add('PRECO_ATACADO_LISTA_PRODUTOS = :PRECO_ATACADO_LISTA_PRODUTOS, COMISSAO_PRODUTOS = :COMISSAO_PRODUTOS, REFORMA_TRIBUTARIA = :REFORMA_TRIBUTARIA WHERE EMPRESA_ID = :EMPRESA_ID ');
+        QArq.SQL.Add('PRECO_ATACADO_LISTA_PRODUTOS = :PRECO_ATACADO_LISTA_PRODUTOS, COMISSAO_PRODUTOS = :COMISSAO_PRODUTOS, REFORMA_TRIBUTARIA = :REFORMA_TRIBUTARIA, PRODUTOS_CONTRATO = :PRODUTOS_CONTRATO WHERE EMPRESA_ID = :EMPRESA_ID ');
 
         QArq.ParamByName('CONTA_ESTOQUE').AsInteger            := StrToInt(Conta_Estoque.Text);
         QArq.ParamByName('CONTA_ESTOQUE_ENT').AsInteger        := StrToInt(Conta_Estoque_ent.Text);
@@ -3038,6 +3048,11 @@ begin
         QArq.ParamByName('DESABILITAR_IMPOSTOS').AsString    := 'True'
         Else
         QArq.ParamByName('DESABILITAR_IMPOSTOS').AsString    := 'False';
+
+        if Chk_Preco_individual_cliente.Checked then
+        QArq.ParamByName('PRODUTOS_CONTRATO').AsString    := 'True'
+        Else
+        QArq.ParamByName('PRODUTOS_CONTRATO').AsString    := 'False';
 
 
         QArq.ParamByName('CARENCIA').AsInteger       := StrToInt(Carencia.Text);

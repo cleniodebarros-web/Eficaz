@@ -2592,7 +2592,7 @@ object FrmRelatorio_Compras: TFrmRelatorio_Compras
     end
   end
   object Rel_Compras_Analitico: TQuickRep
-    Left = 644
+    Left = 688
     Top = 34
     Width = 1123
     Height = 794
@@ -3359,13 +3359,13 @@ object FrmRelatorio_Compras: TFrmRelatorio_Compras
         VertAdjust = 0
       end
       object QRLabel20: TQRLabel
-        Left = 874
+        Left = 748
         Top = 6
         Width = 36
         Height = 15
         Size.Values = (
           39.687500000000000000
-          2312.458333333333000000
+          1979.083333333333000000
           15.875000000000000000
           95.250000000000000000)
         XLColumn = 0
@@ -3409,6 +3409,36 @@ object FrmRelatorio_Compras: TFrmRelatorio_Compras
         ResetAfterPrint = True
         Transparent = False
         Expression = 'Sum(VR_TOTAL)'
+        Mask = '#,##0.00'
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRExpr8: TQRExpr
+        Left = 838
+        Top = 6
+        Width = 80
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          2217.208333333333000000
+          15.875000000000000000
+          211.666666666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Color = clWhite
+        Master = Rel_Compras_Analitico
+        ParentFont = False
+        ResetAfterPrint = True
+        Transparent = False
+        Expression = 'Sum(QTD_COMPRA)'
         Mask = '#,##0.00'
         ExportAs = exptText
         WrapStyle = BreakOnSpaces
@@ -3493,13 +3523,13 @@ object FrmRelatorio_Compras: TFrmRelatorio_Compras
         VertAdjust = 0
       end
       object QRLabel21: TQRLabel
-        Left = 874
+        Left = 748
         Top = 6
         Width = 64
         Height = 17
         Size.Values = (
           44.979166666666670000
-          2312.458333333333000000
+          1979.083333333333000000
           15.875000000000000000
           169.333333333333300000)
         XLColumn = 0
@@ -3543,6 +3573,36 @@ object FrmRelatorio_Compras: TFrmRelatorio_Compras
         ResetAfterPrint = True
         Transparent = False
         Expression = 'Sum(VR_TOTAL)'
+        Mask = '#,##0.00'
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRExpr7: TQRExpr
+        Left = 838
+        Top = 6
+        Width = 80
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          2217.208333333333000000
+          15.875000000000000000
+          211.666666666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Color = clWhite
+        Master = Rel_Compras_Analitico
+        ParentFont = False
+        ResetAfterPrint = True
+        Transparent = False
+        Expression = 'Sum(QTD_COMPRA)'
         Mask = '#,##0.00'
         ExportAs = exptText
         WrapStyle = BreakOnSpaces

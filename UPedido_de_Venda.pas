@@ -106,7 +106,6 @@ type
     QRDBText7: TQRDBText;
     QRBand2: TQRBand;
     QRLabel19: TQRLabel;
-    QRDBText8: TQRDBText;
     QRLabel25: TQRLabel;
     QRLabel26: TQRLabel;
     QRDBText23: TQRDBText;
@@ -361,7 +360,8 @@ type
     PopupMenu2: TPopupMenu;
     e1: TMenuItem;
     QOpera: TFDQuery;
-    QRDBText24: TQRDBText;
+    QRExpr5: TQRExpr;
+    QRDBText8: TQRDBText;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -1444,7 +1444,9 @@ begin
   end;
 
 
-    if (Status.Text = 'FATURADO')  then
+
+
+    if (Status.Text = 'FATURADO') OR (Status.Text = 'FAT.TERCEIRO') OR (Status.Text = 'FAT.INTERNO') OR (Status.Text = 'FAT.SISTEMA') then
     Begin
         if FrmGerente = Nil then
         begin
@@ -2189,7 +2191,7 @@ begin
     IQuery.Sql.Add('(ORCAMENTO_ID = :ORCAMENTO_ID)');
 
     IQuery.ParamByName('ORCAMENTO_ID').AsInteger := STrToInt(orcamento_id.text);
-    IQuery.ParamByName('STATUS').AsString        := 'NORMAL';
+    IQuery.ParamByName('STATUS').AsString   := 'NORMAL';
 
     IQuery.Prepare;
     IQuery.ExecSql;
@@ -2465,7 +2467,7 @@ var
 PACOTE : STRING;
 
 begin
-  {
+   {
   QSub_Detail.Close;
   QSub_Detail.ParamByName('PEDIDO_ID').AsInteger  := id_orcamento;
   QSub_Detail.Prepare;
@@ -2489,7 +2491,7 @@ begin
 
   VALOR.Value := VALOR_PRODUTOS.Value +  VR_ACRESCIMO.Value - VR_DESCONTO.Value;
 
-  edit;
+ // edit;
 
   }
 
@@ -3089,7 +3091,6 @@ begin
           QSub_Detail.Append;
 
           try
-
             QSub_Detail.FieldByName('PRODUTO_ID').AsInteger   := QRel.FieldByName('PRODUTO_ID').AsInteger;
             QSub_Detail.FieldByName('DESCRICAO').AsString     := QRel.FieldByName('DESCRICAO').AsString;
             QSub_Detail.FieldByName('CFOP').AsString          := QRel.FieldByName('CFOP').AsString;
@@ -3251,7 +3252,7 @@ procedure TFrmPedido_de_venda.DBGrid1DrawColumnCell(Sender: TObject;
 var
 OldBkMode: Integer;
 begin
- if (QTabela.FieldByName('STATUS').AsString = 'FATURADO') or  (QTabela.FieldByName('STATUS').AsString = 'FAT.TERCEIRO') OR (QTabela.FieldByName('STATUS').AsString = 'FAT.INTERNO') then
+ if (QTabela.FieldByName('STATUS').AsString = 'FATURADO') or  (QTabela.FieldByName('STATUS').AsString = 'FAT.TERCEIRO') OR (QTabela.FieldByName('STATUS').AsString = 'FAT.INTERNO') OR (QTabela.FieldByName('STATUS').AsString = 'FAT.SISTEMA') then
     TDBGrid(Sender).Canvas.Font.Color := clGreen
 
   else if  QTabela.FieldByName('STATUS').AsString = 'CANCELADO' then
@@ -3424,6 +3425,9 @@ begin
 
       end;
     end;  }
+
+
+
 
 
 
@@ -3966,8 +3970,6 @@ end;
 procedure TFrmPedido_de_venda.FormShow(Sender: TObject);
 begin
   DBGrid1.SetFocus;
-
-
 
 
 

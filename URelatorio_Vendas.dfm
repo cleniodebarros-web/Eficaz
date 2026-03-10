@@ -907,7 +907,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           0.000000000000000000
-          42.333333333333330000
+          42.333333333333340000
           428.625000000000000000)
         XLColumn = 0
         Alignment = taLeftJustify
@@ -934,7 +934,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           1177.395833333333000000
           2.645833333333333000
-          669.395833333333300000)
+          669.395833333333400000)
         XLColumn = 0
         Alignment = taRightJustify
         AlignToBand = True
@@ -959,7 +959,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           1547.812500000000000000
-          42.333333333333330000
+          42.333333333333340000
           298.979166666666700000)
         XLColumn = 0
         Alignment = taRightJustify
@@ -984,9 +984,9 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Height = 15
         Size.Values = (
           39.687500000000000000
-          672.041666666666700000
+          672.041666666666800000
           87.312500000000000000
-          502.708333333333300000)
+          502.708333333333400000)
         XLColumn = 0
         Alignment = taCenter
         AlignToBand = True
@@ -1093,7 +1093,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           0.000000000000000000
           121.708333333333300000
-          336.020833333333300000)
+          336.020833333333400000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
@@ -1397,7 +1397,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        89.958333333333330000
+        89.958333333333320000
         1846.791666666667000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -1483,7 +1483,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        89.958333333333330000
+        89.958333333333320000
         1846.791666666667000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -1531,7 +1531,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        89.958333333333330000
+        89.958333333333320000
         1846.791666666667000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -1726,7 +1726,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           0.000000000000000000
-          42.333333333333330000
+          42.333333333333340000
           428.625000000000000000)
         XLColumn = 0
         Alignment = taLeftJustify
@@ -1753,7 +1753,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           2047.875000000000000000
           2.645833333333333000
-          669.395833333333300000)
+          669.395833333333400000)
         XLColumn = 0
         Alignment = taRightJustify
         AlignToBand = True
@@ -1778,7 +1778,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           2418.291666666667000000
-          42.333333333333330000
+          42.333333333333340000
           298.979166666666700000)
         XLColumn = 0
         Alignment = taRightJustify
@@ -1804,8 +1804,8 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           1013.354166666667000000
-          82.020833333333330000
-          687.916666666666700000)
+          82.020833333333340000
+          687.916666666666800000)
         XLColumn = 0
         Alignment = taCenter
         AlignToBand = True
@@ -1886,7 +1886,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           0.000000000000000000
           121.708333333333300000
-          336.020833333333300000)
+          336.020833333333400000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
@@ -2148,7 +2148,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           635.000000000000000000
           10.583333333333330000
-          947.208333333333300000)
+          947.208333333333200000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
@@ -2334,7 +2334,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        76.729166666666670000
+        76.729166666666680000
         2717.270833333333000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -2420,7 +2420,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        89.958333333333330000
+        89.958333333333320000
         2717.270833333333000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -2466,7 +2466,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           256.645833333333300000
           23.812500000000000000
-          947.208333333333300000)
+          947.208333333333200000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
@@ -2499,7 +2499,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        74.083333333333330000
+        74.083333333333340000
         2717.270833333333000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -2577,8 +2577,8 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
     end
   end
   object Rel_Compras_Analitico: TQuickRep
-    Left = 436
-    Top = 272
+    Left = 457
+    Top = 197
     Width = 1123
     Height = 794
     DataSet = QRel
@@ -2659,7 +2659,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           0.000000000000000000
-          42.333333333333330000
+          42.333333333333340000
           428.625000000000000000)
         XLColumn = 0
         Alignment = taLeftJustify
@@ -2686,7 +2686,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           2047.875000000000000000
           2.645833333333333000
-          669.395833333333300000)
+          669.395833333333400000)
         XLColumn = 0
         Alignment = taRightJustify
         AlignToBand = True
@@ -2711,7 +2711,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           2418.291666666667000000
-          42.333333333333330000
+          42.333333333333340000
           298.979166666666700000)
         XLColumn = 0
         Alignment = taRightJustify
@@ -2737,8 +2737,8 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Size.Values = (
           39.687500000000000000
           1013.354166666667000000
-          82.020833333333330000
-          687.916666666666700000)
+          82.020833333333340000
+          687.916666666666800000)
         XLColumn = 0
         Alignment = taCenter
         AlignToBand = True
@@ -2819,7 +2819,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
           39.687500000000000000
           0.000000000000000000
           121.708333333333300000
-          336.020833333333300000)
+          336.020833333333400000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
@@ -3238,9 +3238,9 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         Height = 15
         Size.Values = (
           39.687500000000000000
-          621.770833333333300000
+          621.770833333333200000
           10.583333333333330000
-          947.208333333333300000)
+          947.208333333333200000)
         XLColumn = 0
         Alignment = taLeftJustify
         AlignToBand = False
@@ -3273,7 +3273,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewColumn = False
       ForceNewPage = False
       Size.Values = (
-        76.729166666666670000
+        76.729166666666680000
         2717.270833333333000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -3293,13 +3293,13 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         VertAdjust = 0
       end
       object QRLabel20: TQRLabel
-        Left = 874
+        Left = 666
         Top = 6
         Width = 36
         Height = 15
         Size.Values = (
           39.687500000000000000
-          2312.458333333333000000
+          1762.125000000000000000
           15.875000000000000000
           95.250000000000000000)
         XLColumn = 0
@@ -3348,6 +3348,36 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         WrapStyle = BreakOnSpaces
         FontSize = 8
       end
+      object QRExpr8: TQRExpr
+        Left = 726
+        Top = 6
+        Width = 80
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1920.875000000000000000
+          15.875000000000000000
+          211.666666666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Color = clWhite
+        Master = Rel_Compras_Analitico
+        ParentFont = False
+        ResetAfterPrint = True
+        Transparent = False
+        Expression = 'Sum(QTD_VENDA)'
+        Mask = '#,##0.00'
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
     end
     object QRGroup2: TQRGroup
       Left = 48
@@ -3365,7 +3395,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        89.958333333333330000
+        89.958333333333320000
         2717.270833333333000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -3419,7 +3449,7 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
       ForceNewPage = False
       ParentFont = False
       Size.Values = (
-        74.083333333333330000
+        74.083333333333340000
         2717.270833333333000000)
       PreCaluculateBandHeight = False
       KeepOnOnePage = False
@@ -3439,13 +3469,13 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         VertAdjust = 0
       end
       object QRLabel21: TQRLabel
-        Left = 874
+        Left = 638
         Top = 6
         Width = 64
         Height = 17
         Size.Values = (
           44.979166666666670000
-          2312.458333333333000000
+          1688.041666666667000000
           15.875000000000000000
           169.333333333333300000)
         XLColumn = 0
@@ -3489,6 +3519,36 @@ object FrmRelatorio_Vendas: TFrmRelatorio_Vendas
         ResetAfterPrint = True
         Transparent = False
         Expression = 'Sum(VR_TOTAL)'
+        Mask = '#,##0.00'
+        ExportAs = exptText
+        WrapStyle = BreakOnSpaces
+        FontSize = 8
+      end
+      object QRExpr7: TQRExpr
+        Left = 727
+        Top = 6
+        Width = 80
+        Height = 15
+        Size.Values = (
+          39.687500000000000000
+          1923.520833333334000000
+          15.875000000000000000
+          211.666666666666700000)
+        XLColumn = 0
+        Alignment = taRightJustify
+        AlignToBand = False
+        AutoSize = False
+        Font.Charset = ANSI_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -11
+        Font.Name = 'Courier New'
+        Font.Style = []
+        Color = clWhite
+        Master = Rel_Compras_Analitico
+        ParentFont = False
+        ResetAfterPrint = True
+        Transparent = False
+        Expression = 'Sum(QTD_VENDA)'
         Mask = '#,##0.00'
         ExportAs = exptText
         WrapStyle = BreakOnSpaces

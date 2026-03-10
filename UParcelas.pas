@@ -101,6 +101,7 @@ begin
 
     if FrmParcelamento.ShowModal = mrOK then
     begin
+
       Dia     := StrToInt(Copy(DateToStr(Dt_Trans), 1, 2));
       Mes     := StrToInt(Copy(DateToStr(Dt_Trans), 4, 2));
       Ano     := StrToInt(Copy(DateToStr(Dt_Trans), 7, 4));

@@ -6259,8 +6259,8 @@ object FrmOrcamento_7: TFrmOrcamento_7
     end
   end
   object Orcamento: TQuickRep
-    Left = 824
-    Top = 39
+    Left = 928
+    Top = 63
     Width = 781
     Height = 1128
     Margins.Left = 1

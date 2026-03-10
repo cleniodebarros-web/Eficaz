@@ -957,7 +957,7 @@ begin
     if ChaveConsulta = 'CLASSE_TRIBUTARIA' then
     begin
       QConsulta.Sql.Clear;
-      QConsulta.Sql.Add('SELECT COD_CLASSTRIB_ID, DESCRICAO , CST_CBS_IBS , CLASSETRIB , ALIQ_CBS , ALIQ_IBSUF, NCM  FROM COD_CLASSTRIB');
+      QConsulta.Sql.Add('SELECT COD_CLASSTRIB_ID, DESCRICAO , CST_CBS_IBS , CLASSETRIB , ALIQ_CBS , ALIQ_IBSUF, NCM,PREDUCAO  FROM COD_CLASSTRIB');
       QConsulta.Sql.Add('WHERE');
       QConsulta.Sql.Add('(DESCRICAO iLIKE :DESCRICAO) OR (TRIM(REPLACE(NCM,''.'', ''''))  ILIKE :NCM) ');
       QConsulta.Sql.Add('ORDER BY DESCRICAO ');
@@ -968,6 +968,22 @@ begin
       QConsulta.Prepare;
       QConsulta.Open;
     end;
+
+    if ChaveConsulta = 'CLASSE_TRIBUTARIA_2' then
+    begin
+      QConsulta.Sql.Clear;
+      QConsulta.Sql.Add('SELECT CLASSETRIB , DESCRICAO , CST_CBS_IBS , ALIQ_CBS , ALIQ_IBSUF, NCM,PREDUCAO  FROM COD_CLASSTRIB');
+      QConsulta.Sql.Add('WHERE');
+      QConsulta.Sql.Add('(DESCRICAO iLIKE :DESCRICAO) OR (TRIM(REPLACE(NCM,''.'', ''''))  ILIKE :NCM) ');
+      QConsulta.Sql.Add('ORDER BY CLASSETRIB,DESCRICAO ');
+
+      QConsulta.ParamByName('DESCRICAO').AsString := '%' + UpperCase(Localiz.Text) + '%' ;
+      QConsulta.ParamByName('NCM').AsString       := '%' + UpperCase(Localiz.Text) + '%' ;
+
+      QConsulta.Prepare;
+      QConsulta.Open;
+    end;
+
 
     if ChaveConsulta = 'TRIBUTOS_CBS_IBS' then
     begin
@@ -1554,8 +1570,18 @@ begin
   if ChaveConsulta = 'CLASSE_TRIBUTARIA' then
   begin
     QConsulta.Sql.Clear;
-    QConsulta.Sql.Add('SELECT COD_CLASSTRIB_ID, DESCRICAO ,CST_CBS_IBS, CLASSETRIB, ALIQ_CBS, ALIQ_IBSUF,NCM FROM COD_CLASSTRIB');
+    QConsulta.Sql.Add('SELECT COD_CLASSTRIB_ID, DESCRICAO ,CST_CBS_IBS, CLASSETRIB, ALIQ_CBS, ALIQ_IBSUF,NCM,PREDUCAO FROM COD_CLASSTRIB');
     QConsulta.Sql.Add('ORDER BY DESCRICAO');
+
+    QConsulta.Prepare;
+    QConsulta.Open;
+  end;
+
+  if ChaveConsulta = 'CLASSE_TRIBUTARIA_2' then
+  begin
+    QConsulta.Sql.Clear;
+    QConsulta.Sql.Add('SELECT CLASSETRIB, DESCRICAO ,CST_CBS_IBS,  ALIQ_CBS, ALIQ_IBSUF,NCM,PREDUCAO FROM COD_CLASSTRIB');
+    QConsulta.Sql.Add('ORDER BY CLASSETRIB,DESCRICAO');
 
     QConsulta.Prepare;
     QConsulta.Open;
@@ -2469,6 +2495,7 @@ begin
     DBGrid1.Columns.Add;
     DBGrid1.Columns.Add;
     DBGrid1.Columns.Add;
+    DBGrid1.Columns.Add;
 
 
     DBGrid1.Columns[0].FieldName := 'COD_CLASSTRIB_ID';
@@ -2477,7 +2504,8 @@ begin
     DBGrid1.Columns[3].FieldName := 'NCM';
     DBGrid1.Columns[4].FieldName := 'ALIQ_CBS';
     DBGrid1.Columns[5].FieldName := 'ALIQ_IBSUF';
-    DBGrid1.Columns[6].FieldName := 'DESCRICAO';
+    DBGrid1.Columns[6].FieldName := 'PREDUCAO';
+    DBGrid1.Columns[7].FieldName := 'DESCRICAO';
 
     DBGrid1.Columns[0].Title.Caption := 'Código';
     DBGrid1.Columns[1].Title.Caption := 'Class. Tributária';
@@ -2485,7 +2513,8 @@ begin
     DBGrid1.Columns[3].Title.Caption := 'Cód. Ncm';
     DBGrid1.Columns[4].Title.Caption := 'Aliq.Cbs';
     DBGrid1.Columns[5].Title.Caption := 'Aliq.Ibs Uf';
-    DBGrid1.Columns[6].Title.Caption := 'Descrição';
+    DBGrid1.Columns[6].Title.Caption := 'Redução';
+    DBGrid1.Columns[7].Title.Caption := 'Descrição';
 
     DBGrid1.Columns[0].Width := 64;
     DBGrid1.Columns[1].Width := 60;
@@ -2493,7 +2522,8 @@ begin
     DBGrid1.Columns[3].Width := 70;
     DBGrid1.Columns[4].Width := 70;
     DBGrid1.Columns[5].Width := 70;
-    DBGrid1.Columns[6].Width := 500;
+    DBGrid1.Columns[6].Width := 70;
+    DBGrid1.Columns[7].Width := 500;
 
     DBGrid1.Columns[0].Title.Alignment := taLeftJustify;
     DBGrid1.Columns[1].Title.Alignment := taLeftJustify;
@@ -2502,7 +2532,69 @@ begin
     DBGrid1.Columns[4].Title.Alignment := taLeftJustify;
     DBGrid1.Columns[5].Title.Alignment := taLeftJustify;
     DBGrid1.Columns[6].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[7].Title.Alignment := taLeftJustify;
 
+    DBGrid1.Columns[0].Alignment := taLeftJustify;
+    DBGrid1.Columns[1].Alignment := taLeftJustify;
+    DBGrid1.Columns[2].Alignment := taLeftJustify;
+    DBGrid1.Columns[3].Alignment := taLeftJustify;
+    DBGrid1.Columns[4].Alignment := taLeftJustify;
+    DBGrid1.Columns[5].Alignment := taLeftJustify;
+    DBGrid1.Columns[6].Alignment := taLeftJustify;
+    DBGrid1.Columns[7].Alignment := taLeftJustify;
+
+  end;
+
+  if (ChaveConsulta = 'CLASSE_TRIBUTARIA_2') then
+  begin
+    FrmConsulta.Width := 945;
+
+    DBGrid1.Columns.Add;
+    DBGrid1.Columns.Add;
+    DBGrid1.Columns.Add;
+    DBGrid1.Columns.Add;
+    DBGrid1.Columns.Add;
+    DBGrid1.Columns.Add;
+    DBGrid1.Columns.Add;
+
+
+    //DBGrid1.Columns[0].FieldName := 'COD_CLASSTRIB_ID';
+    DBGrid1.Columns[0].FieldName := 'CLASSETRIB';
+    DBGrid1.Columns[1].FieldName := 'CST_CBS_IBS';
+    DBGrid1.Columns[2].FieldName := 'NCM';
+    DBGrid1.Columns[3].FieldName := 'ALIQ_CBS';
+    DBGrid1.Columns[4].FieldName := 'ALIQ_IBSUF';
+    DBGrid1.Columns[5].FieldName := 'PREDUCAO';
+    DBGrid1.Columns[6].FieldName := 'DESCRICAO';
+
+    //DBGrid1.Columns[0].Title.Caption := 'Código';
+    DBGrid1.Columns[0].Title.Caption := 'Class. Tributária';
+    DBGrid1.Columns[1].Title.Caption := 'CST CBS/IBS';
+    DBGrid1.Columns[2].Title.Caption := 'Cód. Ncm';
+    DBGrid1.Columns[3].Title.Caption := 'Aliq.Cbs';
+    DBGrid1.Columns[4].Title.Caption := 'Aliq.Ibs Uf';
+    DBGrid1.Columns[5].Title.Caption := 'Redução';
+    DBGrid1.Columns[6].Title.Caption := 'Descrição';
+
+    //DBGrid1.Columns[0].Width := 64;
+    DBGrid1.Columns[0].Width := 60;
+    DBGrid1.Columns[1].Width := 70;
+    DBGrid1.Columns[2].Width := 70;
+    DBGrid1.Columns[3].Width := 70;
+    DBGrid1.Columns[4].Width := 70;
+    DBGrid1.Columns[5].Width := 70;
+    DBGrid1.Columns[6].Width := 500;
+
+    //DBGrid1.Columns[0].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[0].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[1].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[2].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[3].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[4].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[5].Title.Alignment := taLeftJustify;
+    DBGrid1.Columns[6].Title.Alignment := taLeftJustify;
+
+    //DBGrid1.Columns[0].Alignment := taLeftJustify;
     DBGrid1.Columns[0].Alignment := taLeftJustify;
     DBGrid1.Columns[1].Alignment := taLeftJustify;
     DBGrid1.Columns[2].Alignment := taLeftJustify;
@@ -2512,6 +2604,7 @@ begin
     DBGrid1.Columns[6].Alignment := taLeftJustify;
 
   end;
+
 
 
   Localiz.Width    := (FrmConsulta.Width - 68);

@@ -5,7 +5,7 @@ object FrmRel_Compras_Produtos_Tributados: TFrmRel_Compras_Produtos_Tributados
   BorderStyle = bsSingle
   Caption = 'Compras de Produtos Tributados'
   ClientHeight = 176
-  ClientWidth = 330
+  ClientWidth = 355
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -1076,15 +1076,15 @@ object FrmRel_Compras_Produtos_Tributados: TFrmRel_Compras_Produtos_Tributados
         FontSize = 8
       end
       object QRLabel3: TQRLabel
-        Left = 229
+        Left = 225
         Top = 31
-        Width = 260
+        Width = 267
         Height = 15
         Size.Values = (
           39.687500000000000000
-          605.895833333333300000
+          595.312500000000000000
           82.020833333333330000
-          687.916666666666700000)
+          706.437500000000000000)
         XLColumn = 0
         Alignment = taCenter
         AlignToBand = True
@@ -1722,7 +1722,7 @@ object FrmRel_Compras_Produtos_Tributados: TFrmRel_Compras_Produtos_Tributados
     end
   end
   object RadioGroup1: TRadioGroup
-    Left = 8
+    Left = 11
     Top = 74
     Width = 311
     Height = 50

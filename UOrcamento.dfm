@@ -4766,8 +4766,8 @@ object FrmOrcamento: TFrmOrcamento
         OnKeyDown = EMPRESA_IDKeyDown
       end
       object Itens: TDBGrid
-        Left = 2
-        Top = 267
+        Left = 3
+        Top = 263
         Width = 716
         Height = 130
         DataSource = DataSub_Detail

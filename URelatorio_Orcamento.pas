@@ -8,7 +8,7 @@ uses
   QuickRpt, QRCtrls, Buttons, DBCtrls, rxCurrEdit, FireDAC.Stan.Intf,
   FireDAC.Stan.Option, FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS,
   FireDAC.Phys.Intf, FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt,
-  FireDAC.Comp.DataSet, FireDAC.Comp.Client;
+  FireDAC.Comp.DataSet, FireDAC.Comp.Client,QRExport;
 
 type
   TFrmRelatorio_Orcamentos = class(TForm)
@@ -126,6 +126,7 @@ type
     QRDBText21: TQRDBText;
     QRLabel25: TQRLabel;
     QRLabel16: TQRLabel;
+    chk_exportar: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OrdemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -354,7 +355,14 @@ begin
     if QRel.IsEmpty then
       Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
     else
+
       Fim.PreviewModal;
+
+      if chk_exportar.Checked Then
+         Begin
+         Fim.ExportToFilter(TQRXLSFilter.Create(ExtractFilePath(ParamStr(0)) + 'Exportados\Orçamento_' + QRel.FieldByName('ORCAMENTO_ID').AsString  + '.xls'));
+         Application.MessageBox(PChar('Arquivo exportado para : ' + ExtractFilePath(ParamStr(0)) + 'Exportados\Orcamento_'  + QRel.FieldByName('ORCAMENTO_ID').AsString  + '.xls') , PChar(Msg_Title), mb_IconInformation);
+         End;
     End
     Else
     Begin
@@ -373,6 +381,12 @@ begin
       Application.MessageBox('Não há dados para os parâmetros informados', PChar(Msg_Title), mb_IconInformation)
     else
       Agrupado.PreviewModal;
+
+      if chk_exportar.Checked Then
+         Begin
+         Fim.ExportToFilter(TQRXLSFilter.Create(ExtractFilePath(ParamStr(0)) + 'Exportados\Orçamento_Agrupado_' + QRel.FieldByName('ORCAMENTO_ID').AsString  + '.xls'));
+         Application.MessageBox(PChar('Arquivo exportado para : ' + ExtractFilePath(ParamStr(0)) + 'Exportados\Orcamento_Agrupado_'  + QRel.FieldByName('ORCAMENTO_ID').AsString  + '.xls') , PChar(Msg_Title), mb_IconInformation);
+         End;
 
     End;
   finally

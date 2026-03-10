@@ -194,6 +194,8 @@ type
     Table_ProdutoDescricao: TStringField;
     QRLabel34: TQRLabel;
     QRDBText11: TQRDBText;
+    QRExpr7: TQRExpr;
+    QRExpr8: TQRExpr;
     procedure FormCreate(Sender: TObject);
     procedure DtmenKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure OrdemKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

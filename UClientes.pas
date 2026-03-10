@@ -280,14 +280,6 @@ type
     ACBrConsultaCPF1: TACBrConsultaCPF;
     Timer1: TTimer;
     ACBrConsultaCNPJ1: TACBrConsultaCNPJ;
-    TabSheet10: TTabSheet;
-    Captcha: TRichEdit;
-    Label50: TLabel;
-    Panel3: TPanel;
-    Image1: TImage;
-    LabAtualizarCaptcha: TLabel;
-    btnConsultar: TButton;
-    Dados_Empresa: TRichEdit;
     Btnhistorico: TBitBtn;
     BtnRecebimento: TBitBtn;
     TabSheet11: TTabSheet;
@@ -310,6 +302,7 @@ type
     SALDO_CONTA: TRxCalcEdit;
     Label55: TLabel;
     btn_add_saldo: TButton;
+    btnCNPJ: TSpeedButton;
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
     procedure btnRetornaClick(Sender: TObject);
     procedure btnInsertClick(Sender: TObject);
@@ -414,6 +407,7 @@ type
     procedure Anot_InadimplenciaKeyPress(Sender: TObject; var Key: Char);
     procedure calcula_jurosChange(Sender: TObject);
     procedure btn_add_saldoClick(Sender: TObject);
+    procedure btnCNPJClick(Sender: TObject);
 
 
   private
@@ -455,7 +449,7 @@ implementation
 
 uses
   UPrincipal, UData, USeleciona_Clientes, UPesquisa, UConsulta,UAnot_Inadimplencia,
-  pngimage,UHistorico_Clientes,UTrans_Recebimento_Lote, UInclui_Saldo;
+  pngimage,UHistorico_Clientes,UTrans_Recebimento_Lote, UInclui_Saldo, UConsultaCNPJ;
 
 {$R *.dfm}
 
@@ -528,6 +522,11 @@ if QTabela.FieldByName('BLOQ_CHEQUE').AsString = 'SIM' then
     Label63.Visible := False;
 End;
 
+procedure TFrmClientes.btnCNPJClick(Sender: TObject);
+begin
+  ConsultaCNPJ(NOME, FANTASIA, INSCRICAO, ENDERECO, NUMERO, COMPLEMENTO, IBGE, MUNICIPIO, BAIRRO, COD_PAIS, CNPJ, CEP, ESTADO, TIPO_CLIENTE);
+end;
+
 procedure TFrmClientes.LabAtualizarCaptchaClick(Sender: TObject);
 var
     Stream: TMemoryStream;
@@ -535,7 +534,7 @@ var
     png: TPngImage;
 
 begin
-
+  {
 
   if TIPO_CLIENTE.Text = 'PESSOA FÍSICA' Then
   begin
@@ -558,19 +557,7 @@ begin
   try
     ACBrConsultaCNPJ1.Captcha(Stream);
 
-  {$IFDEF DELPHI2009_UP}
-    //Use esse código quando a imagem do site for do tipo PNG
-    png:= TPngImage.Create;
-    try
-      png.LoadFromStream(Stream);
-      Image1.Picture.Assign(png);
 
-      Captcha.Clear;
-     // Captcha.SetFocus;
-    finally
-      png.Free;
-    end;
-  {$ELSE}
     ShowMessage('Atenção: Seu Delphi não dá suporte nativo a imagens PNG. Queira verificar o código fonte deste exemplo para saber como proceder.');
     // COMO PROCEDER:
     //
@@ -599,13 +586,15 @@ begin
     //  EditCaptcha.SetFocus;
     //finally
     //  Jpg.Free;
-    //end;
+   //end;
 
-  finally
-    Stream.Free;
-  end;
+ // finally
+  //  Stream.Free;
+  //end;
 
-  end;
+ // end;
+
+
 end;
 
 procedure TFrmClientes.licenca_liberada;
@@ -728,10 +717,11 @@ begin
   btn_geraron.enabled    := True;
   Btn_Incluir_Inadimplencia.enabled := True;
   btntermo.enabled       := True;
-  Captcha.enabled        := True;
-  btnConsultar.Enabled   := True;
+ // Captcha.enabled        := True;
+ // btnConsultar.Enabled   := True;
   Btnhistorico.Enabled   := True;
   BtnRecebimento.Enabled := True;
+  btnCNPJ.Enabled        := True;
   if Operacao = 'Alterando' then
     btn_add_saldo.Enabled  := True;
 end;
@@ -781,10 +771,11 @@ begin
   Comeca_Com.Enabled    := True;
   Btn_Incluir_Inadimplencia.enabled := False;
   btntermo.Enabled      := False;
-  Captcha.enabled       := False;
-  btnConsultar.Enabled  := False;
+  //Captcha.enabled       := False;
+  //btnConsultar.Enabled  := False;
   Btnhistorico.Enabled  := False;
   BtnRecebimento.Enabled := False;
+  btnCNPJ.Enabled       := False;
 
    if   Caso(Copy(FrmData.QAcesso.FieldByName('OPCOES').AsString, 66, 1))  = True Then
    Begin
@@ -795,13 +786,13 @@ begin
    btntermo.Visible       := False;
    LImite.ReadOnly        := True;
    limite_Cheque.ReadOnly := True;
-   TabSheet10.TabVisible  :=False;
-   TabSheet4.TabVisible  :=False;
+  // TabSheet10.TabVisible  :=False;
    TabSheet5.TabVisible  :=False;
    TabSheet6.TabVisible  :=False;
    TabSheet7.TabVisible  :=False;
    TabSheet8.TabVisible  :=False;
    TabSheet9.TabVisible  :=False;
+   //TabSheet10.TabVisible  :=False;
    End;
 
 
@@ -1569,22 +1560,24 @@ begin
    1 : Control.Canvas.brush.Color:=clScrollBar;
    2 : Control.Canvas.brush.Color:=clScrollBar;
    3 : Control.Canvas.brush.Color:=clScrollBar;
-   4 :
+   4 : Control.Canvas.brush.Color:=clScrollBar;
+   5 :
    Begin
     if (QTabela.FieldByName('ANOTACOES').ASSTRING <> '')  then
     Control.Canvas.brush.Color:=clred
     Else
     Control.Canvas.brush.Color:=clScrollBar;
    End;
-   5 : Control.Canvas.brush.Color:=clScrollBar;
-   6 :
+   6 : Control.Canvas.brush.Color:=clScrollBar;
+   7 :
     Begin
     if (Not QInadimplencia.IsEmpty) then
     Control.Canvas.brush.Color:=clYellow
     Else
     Control.Canvas.brush.Color:=clScrollBar;
    End;
-   7 :Control.Canvas.brush.Color:=clScrollBar;
+   8 :Control.Canvas.brush.Color:=clScrollBar;
+   9 :Control.Canvas.brush.Color:=clScrollBar;
 
   end;
 
@@ -1778,6 +1771,7 @@ end;
 procedure TFrmClientes.QProdutos_ContratoAfterOpen(DataSet: TDataSet);
 begin
  TFloatField(QProdutos_Contrato.FieldByName('DT_CADASTRO')).EditMask             :='!99/99/0000;1;_';
+ TFloatField(QProdutos_Contrato.FieldByName('PRECO_VENDA')).DisplayFormat        := '#,##0.00';
 end;
 
 procedure TFrmClientes.QProdutos_ContratoBeforeDelete(DataSet: TDataSet);
@@ -2117,8 +2111,13 @@ begin
   Else
     PageControl2.OwnerDraw := False;
 
-  Dados_Empresa.Clear;
-  Dados_Empresa.Visible := False;
+ // Dados_Empresa.Clear;
+ // Dados_Empresa.Visible := False;
+
+  if TIPO_CLIENTE.Text = 'PESSOA JURÍDICA' then
+    btnCNPJ.Visible := True
+  else
+    btnCNPJ.Visible := False;
 
 end;
 
@@ -2149,8 +2148,8 @@ End;
 
 procedure TFrmClientes.Timer1Timer(Sender: TObject);
 begin
- Timer1.Enabled := False;
- LabAtualizarCaptchaClick(LabAtualizarCaptcha);
+ //Timer1.Enabled := False;
+ //LabAtualizarCaptchaClick(LabAtualizarCaptcha);
  //Captcha.SetFocus;
 end;
 
@@ -2160,11 +2159,13 @@ begin
   begin
     CNPJ.EditMask := '99.999.999/9999-99;1;_';
     TabSheet3.TabVisible := False;
+    btnCNPJ.Visible := True;
   end
   else
   begin
     CNPJ.EditMask := '999.999.999-99;1;_';
     TabSheet3.TabVisible := True;
+    btnCNPJ.Visible := False;
   end;
 end;
 
@@ -2196,6 +2197,7 @@ end;
 
 procedure TFrmClientes.btnConsultarClick(Sender: TObject);
 begin
+  {
   if Captcha.Text <> '' then
   begin
 
@@ -2268,6 +2270,8 @@ begin
     //Captcha.SetFocus;
 
   end;
+
+  }
 end;
 
 
@@ -3192,21 +3196,21 @@ begin
     Foto.Visible := False;
     Shape1.Visible := False;
     btn_load_image.Visible := False;
-    TIPO_CLIENTE.Left := 556;
-    CNPJ.Left         := 556;
-    CONTATO.Left      := 556;
-    LIMITE.Left       := 556;
-    Tratamento.Left   := 556;
+    TIPO_CLIENTE.Left := 536;
+    CNPJ.Left         := 536;
+    CONTATO.Left      := 536;
+    LIMITE.Left       := 536;
+    Tratamento.Left   := 536;
     //DT_FICHA.Left     := 556;
-    SALDO_CONTA.Left  := 556;
-    btn_add_saldo.Left:= 652;
-    Label20.Left      := 470;
-    Label15.Left      := 470;
-    Label49.Left      := 470;
-    Label21.Left      := 470;
+    SALDO_CONTA.Left  := 536;
+    btn_add_saldo.Left:= 632;
+    Label20.Left      := 450;
+    Label15.Left      := 450;
+    Label49.Left      := 450;
+    Label21.Left      := 450;
     //Label2.Left       := 470;
-    Label17.Left      := 470;
-    Label55.Left      := 470;
+    Label17.Left      := 450;
+    Label55.Left      := 450;
   End
   else
   Begin
@@ -3307,6 +3311,7 @@ begin
   IQuery.Open;
 
   Tem_Anotacao := True;
+
   try
     IQuery.Sql.Clear;
     IQuery.Sql.Add('SELECT ANOTACOES');
@@ -3418,7 +3423,7 @@ if QProdutos_contrato.State in [dsInsert, dsEdit] then
       Begin
        
         QProdutos_contrato.FieldByName('DESCRICAO').AsString   := IQuery.FieldByName('DESCRICAO').AsString;
-        //QProdutos_contrato.FieldByName('MODELO').AsString    := IQuery.FieldByName('MODELO_POSICAO').AsString;
+        QProdutos_contrato.FieldByName('PRECO_VENDA').AsFloat  := IQuery.FieldByName('PRECO_VAREJO').AsFloat;
         //QProdutos_contrato.FieldByName('MARCA').AsString     := IQuery.FieldByName('MARCA').AsString;
         //QProdutos_contrato.FieldByName('QUANTIDADE').AsFloat := IQuery.FieldByName('QUANTIDADE_C').AsFloat;
 

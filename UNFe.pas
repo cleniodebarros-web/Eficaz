@@ -9,7 +9,7 @@ uses
   FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.Stan.Param,
   FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf, FireDAC.DApt.Intf,
   FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.DataSet, FireDAC.Comp.Client,EncdDecd,ACBrDFeUtil,ACBrUtil,
-  Vcl.ComCtrls, pcnConversao,ACBrDFe.Conversao;
+  Vcl.ComCtrls, pcnConversao,ACBrDFe.Conversao, ShellApi;
 
 type
   TFrmNFe = class(TForm)
@@ -986,7 +986,7 @@ end;
 procedure TFrmNFe.btnGeraClick(Sender: TObject);
 var
 Id_Trans,Item,Cup,I,Qt_Parc: Integer;
-Cond_origem,Dpt_origem,IniFile, edtSmtpHost, edtSmtpPort, edtSmtpUser, edtSmtpPass, edtEmailAssunto, Insc_Dest: String;
+Cond_origem,Dpt_origem,IniFile, edtSmtpHost, edtSmtpPort, edtSmtpUser, edtSmtpPass, edtEmailAssunto, Insc_Dest, origem_item: String;
 cbEmailSSL,e_mail,pessoa_juridica: Boolean;
 Ini: TIniFile;
 StreamMemo: TMemoryStream;
@@ -1102,7 +1102,8 @@ begin
       QNatoper.Open;
 
       QItens.Sql.Clear;
-      QItens.Sql.Add('SELECT * FROM TRANSITENS');
+      QItens.Sql.Add('SELECT TRANSITENS.*, SUBSTR(TRIBUTOS.ORIGEM,1,1) ORIGEM FROM TRANSITENS');
+      QItens.Sql.Add('INNER JOIN TRIBUTOS ON TRANSITENS.TRIBUTO_ID = TRIBUTOS.TRIBUTO_ID');
       QItens.Sql.Add('WHERE');
       QItens.Sql.Add('(TRANSACAO_ID = :TRANSACAO_ID) ');
       QItens.Sql.Add('ORDER BY SEQUENCIA ASC');
@@ -1624,7 +1625,7 @@ begin
          Entrega.xMun    := municipio_entrega.Text;
          Entrega.cMun    := StrToInt(IBGE_ENTREGA.Text);
          Entrega.CEP     := StrToInt(SemMascara(CEP_entrega.Text));
-         Entrega.xPais   := '01058';
+         Entrega.xPais   := '1058';
          Entrega.IE      := inscricao_entrega.Text;
          entrega.UF      := uf_entrega.Text;
          entrega.fone    := telefone_entrega.Text;
@@ -2133,24 +2134,29 @@ begin
             begin
               with ICMS do
               begin
-                if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '0' then
+                if FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL' then
+                  origem_item := QItens.FieldByName('ORIGEM').AsString
+                else
+                  origem_item := Copy(QItens.FieldByName('CST').AsString,1,1);
+
+                if origem_item = '0' then
                   orig := oeNacional
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '1' then
+                else if origem_item = '1' then
                   orig := oeEstrangeiraImportacaoDireta
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '2' then
+                else if origem_item = '2' then
                   orig := oeEstrangeiraAdquiridaBrasil
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '3' then
-                  orig  := oeNacionalConteudoImportacaoSuperior40
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '4' then
-                  orig  := oeNacionalProcessosBasicos
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '5' then
-                  orig  := oeNacionalConteudoImportacaoInferiorIgual40
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '6' then
-                  orig  := oeEstrangeiraImportacaoDiretaSemSimilar
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '7' then
-                  orig  := oeEstrangeiraAdquiridaBrasilSemSimilar
-                else if Copy(QItens.FieldByName('CST').AsString, 1, 1) = '8' then
-                  orig  := oeNacionalConteudoImportacaoSuperior70;
+                else if origem_item = '3' then
+                  orig := oeNacionalConteudoImportacaoSuperior40
+                else if origem_item = '4' then
+                  orig := oeNacionalProcessosBasicos
+                else if origem_item = '5' then
+                  orig := oeNacionalConteudoImportacaoInferiorIgual40
+                else if origem_item = '6' then
+                  orig := oeEstrangeiraImportacaoDiretaSemSimilar
+                else if origem_item = '7' then
+                  orig := oeEstrangeiraAdquiridaBrasilSemSimilar
+                else if origem_item = '8' then
+                  orig := oeNacionalConteudoImportacaoSuperior70;
 
                if FrmPrincipal.QEmpresa.FieldByName('CRT').AsString = '1 - SIMPLES NACIONAL' then
                Begin
@@ -3165,55 +3171,55 @@ begin
 
 
                 //  Informações do tributo: IBS / CBS
-                IF  (QProdutos.FieldByName('ALIQUOTA_IBS_UF').AsFloat > 0) Then
+                IF  (QItens.FieldByName('ALIQ_IBSUF').AsFloat >= 0) Then
                 begin
 
-                  if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 0 Then
+                  if QItens.FieldByName('CST_CBSIBS').AsInteger = 0 Then
                   IBSCBS.CST :=  cst000
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 10 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 10 Then
                   IBSCBS.CST :=  cst010
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 11 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 11 Then
                   IBSCBS.CST :=  cst011
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 200 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 200 Then
                   IBSCBS.CST :=  cst200
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 221 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 221 Then
                   IBSCBS.CST :=  cst221
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 222 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 222 Then
                   IBSCBS.CST :=  cst222
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 400 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 400 Then
                   IBSCBS.CST :=  cst400
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 410 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 410 Then
                   IBSCBS.CST :=  cst410
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 510 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 510 Then
                   IBSCBS.CST :=  cst510
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 515 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 515 Then
                   IBSCBS.CST :=  cst515
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 550 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 550 Then
                   IBSCBS.CST :=  cst550
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 620 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 620 Then
                   IBSCBS.CST :=  cst620
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 800 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 800 Then
                   IBSCBS.CST :=  cst800
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 810 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 810 Then
                   IBSCBS.CST :=  cst810
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 811 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 811 Then
                   IBSCBS.CST :=  cst811
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 820 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 820 Then
                   IBSCBS.CST :=  cst820
-                  Else   if QProdutos.FieldByName('CST_CBS_IBS').AsInteger = 830 Then
+                  Else   if QItens.FieldByName('CST_CBSIBS').AsInteger = 830 Then
                   IBSCBS.CST :=  cst830
                   Else
                   IBSCBS.CST :=  cst000;
 
 
-                  IBSCBS.cClassTrib := QProdutos.FieldByName('CLASSTRIBUTARIA').AsString;
+                  IBSCBS.cClassTrib := QItens.FieldByName('COD_CLASSTRIB').AsString;
                   //IBSCBS.indDoacao := tieNenhum;
 
 
 
                   IBSCBS.gIBSCBS.vBC := QItens.FieldByName('VR_BASE_CBSIBS').AsFloat;
 
-                  IBSCBS.gIBSCBS.gIBSUF.pIBSUF := QProdutos.FieldByName('ALIQUOTA_IBS_UF').AsFloat;
+                  IBSCBS.gIBSCBS.gIBSUF.pIBSUF := QItens.FieldByName('ALIQ_IBSUF').AsFloat;
                   IBSCBS.gIBSCBS.gIBSUF.vIBSUF := QItens.FieldByName('VR_IBSUF').AsFloat;
 
                   IBSCBS.gIBSCBS.gIBSUF.gDif.pDif := 0;
@@ -3221,24 +3227,25 @@ begin
 
                   IBSCBS.gIBSCBS.gIBSUF.gDevTrib.vDevTrib := 0;
 
-                    if (QProdutos.FieldByName('ALIQUOTA_IBS_UF').AsFloat > 0)  Then
+
+                    if (QItens.FieldByName('ALIQ_IBSUF').AsFloat > 0)  Then
                     begin
-                      IF (QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0) Then
+                      IF (QItens.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0) Then
                       Begin
-                      IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat;
-                      IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0.04;
+                      IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := QItens.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                      IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := QItens.FieldByName('ALIQ_EF_IBSUF').AsFloat;
                       End
                       Else
                       Begin
-                      IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := 0;
-                      IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0;
+                      IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq  := 0;//QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                      IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0;
                       End;
 
                     end
                     Else
                     Begin
-                    IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := 0;
-                    IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0;
+                    //IBSCBS.gIBSCBS.gIBSUF.gRed.pRedAliq  := 0;
+                    //IBSCBS.gIBSCBS.gIBSUF.gRed.pAliqEfet := 0;
                     End;
 
                   IBSCBS.gIBSCBS.gIBSMun.pIBSMun := 0;//QProdutos.FieldByName('ALIQUOTA_IBS_MUNIC').AsFloat;
@@ -3249,14 +3256,14 @@ begin
 
                   //IBSCBS.gIBSCBS.gIBSMun.gDevTrib.vDevTrib := 0;
 
-                  IBSCBS.gIBSCBS.gIBSMun.gRed.pRedAliq := QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                  IBSCBS.gIBSCBS.gIBSMun.gRed.pRedAliq := QItens.FieldByName('REDUCAO_CBS_IBS').AsFloat;
                   IBSCBS.gIBSCBS.gIBSMun.gRed.pAliqEfet := 0;
 
 
                   // vIBS = vIBSUF + vIBSMun
                   IBSCBS.gIBSCBS.vIBS :=  QItens.FieldByName('Vr_IBSUF').AsFloat + QItens.FieldByName('Vr_IBSMUNIC').AsFloat ;
 
-                  IBSCBS.gIBSCBS.gCBS.pCBS :=  QProdutos.FieldByName('ALIQUOTA_CBS').AsFloat;
+                  IBSCBS.gIBSCBS.gCBS.pCBS :=  QItens.FieldByName('ALIQ_CBS').AsFloat;
                   IBSCBS.gIBSCBS.gCBS.vCBS :=  QItens.FieldByName('VR_CBS').AsFloat;
 
                   IBSCBS.gIBSCBS.gCBS.gDif.pDif := 0;
@@ -3264,24 +3271,24 @@ begin
 
                   IBSCBS.gIBSCBS.gCBS.gDevTrib.vDevTrib := 0;
 
-                  if (QProdutos.FieldByName('ALIQUOTA_CBS').AsFloat > 0) Then
+                  if (QItens.FieldByName('ALIQ_CBS').AsFloat > 0) Then
                   Begin
 
-                   if (QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0)  Then
+                   if (QItens.FieldByName('REDUCAO_CBS_IBS').AsFloat > 0)  Then
                    begin
-                   IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq := QProdutos.FieldByName('REDUCAO_CBS_IBS').AsFloat;
-                   IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0.36;
+                   IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq  := QItens.FieldByName('REDUCAO_CBS_IBS').AsFloat;
+                   IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := QItens.FieldByName('ALIQ_EF_CBS').AsFloat;
                    end
                    Else
                    Begin
-                   IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq := 0;
+                   IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq  := QItens.FieldByName('REDUCAO_CBS_IBS').AsFloat;
                    IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0;
                    End;
 
                   End
                   Else
                   Begin
-                  IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq :=0;
+                  IBSCBS.gIBSCBS.gCBS.gRed.pRedAliq  := 0;
                   IBSCBS.gIBSCBS.gCBS.gRed.pAliqEfet := 0;
                   End;
 
@@ -3364,7 +3371,6 @@ begin
 
                 End
               end;
-
 
 
 
@@ -3781,6 +3787,8 @@ begin
 
           //ShowMessage('Nº do Protocolo: ' + FrmPrincipal.ACBrNFe1.WebServices.Retorno.Protocolo);
           //ShowMessage('Nº do Recibo: ' + FrmPrincipal.ACBrNFe1.WebServices.Retorno.Recibo);
+
+          FrmPrincipal.SalvarXMLPDF;
 
           Close;
         end

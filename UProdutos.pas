@@ -10,7 +10,7 @@ uses
   FireDAC.Stan.Intf, FireDAC.Stan.Option,
   FireDAC.Stan.Param, FireDAC.Stan.Error, FireDAC.DatS, FireDAC.Phys.Intf,
   FireDAC.DApt.Intf, FireDAC.Stan.Async, FireDAC.DApt, FireDAC.Comp.Client,
-  FireDAC.Comp.DataSet,BPLBOCXLib_TLB,Math,ShellApi, sMemo;
+  FireDAC.Comp.DataSet,BPLBOCXLib_TLB,Math,ShellApi, sMemo, WinSpool;
 
 type
   TFrmProdutos = class(TForm)
@@ -3340,8 +3340,12 @@ end;
 procedure TFrmProdutos.MenuItem1Click(Sender: TObject);
 var
 F, MyFile: TextFile;
-InputString, LcLinha, E1, D1, D2, D3, D4, B1, B2, B3, B4, P1, P2, P3, P4, ID1, ID2,ID3, Cod_Custo,D1b,D2B,D3B: String;
+InputString, LcLinha, E1, D1,D1_1, D2, D2_1, D3, D4, B1, B2, B3, B4, P1, P2, P3, P4, ID1, ID2,ID3, Cod_Custo,D1b,D2B,D3B, S: String;
 C, W, X, Q, Tam_Custo, Linha, Etiquetas_Impressas: Integer;
+hPrinter: THandle;
+DocInfo: TDocInfo1;
+BytesWritten: DWORD;
+Buffer: TStringList;
 
 begin
 InputString := InputBox('Digite a quantidade de etiquetas', 'Quantidade:', '');
@@ -3371,7 +3375,7 @@ IQuery.Sql.Clear;
             IQuery.First;
             while not IQuery.Eof do
             begin
-              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
               Rewrite(F);
 
               try
@@ -3425,6 +3429,34 @@ IQuery.Sql.Clear;
                 CloseFile(F);
               end;
 
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
+              end;
+
               Sleep(2000);
 
               Application.ProcessMessages;
@@ -3472,7 +3504,7 @@ IQuery.Sql.Clear;
                   B3 := IQuery.FieldByName('COD_BARRA').AsString;
                   P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
 
                   try
@@ -3534,6 +3566,34 @@ IQuery.Sql.Clear;
                     CloseFile(F);
                   end;
 
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+
                   D1 := '';
                   D2 := '';
                   D3 := '';
@@ -3555,7 +3615,7 @@ IQuery.Sql.Clear;
 
             if (Q <= 2) and ((D1 <> '') or (D2 <> '')) then
             begin
-              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
               Rewrite(F);
 
               try
@@ -3611,6 +3671,34 @@ IQuery.Sql.Clear;
                 WriteLn(F, lcLinha );
               finally
                 CloseFile(F);
+              end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
               end;
             end;
           end;
@@ -3695,10 +3783,7 @@ IQuery.Sql.Clear;
                 B2 := IQuery.FieldByName('COD_BARRA').AsString;
                 P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                 Rewrite(F);
                 try
@@ -3713,6 +3798,34 @@ IQuery.Sql.Clear;
                   WriteLn(F, 'P1');
                 finally
                   CloseFile(F);
+                end;
+
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Erro ao imprimir');
                 end;
 
                 Sleep(2000);
@@ -3755,10 +3868,7 @@ IQuery.Sql.Clear;
                   B2 := IQuery.FieldByName('COD_BARRA').AsString;
                   P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                   Rewrite(F);
                   try
@@ -3781,6 +3891,34 @@ IQuery.Sql.Clear;
                     CloseFile(F);
                   end;
 
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+
                   D1 := '';
                   D2 := '';
                   B1 := '';
@@ -3801,10 +3939,7 @@ IQuery.Sql.Clear;
 
             if Q < 2 then
             begin
-              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
               Rewrite(F);
 
@@ -3826,6 +3961,34 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                 CloseFile(F);
+              end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
               end;
             end;
            End;
@@ -3873,10 +4036,7 @@ IQuery.Sql.Clear;
                   B3 := IQuery.FieldByName('COD_BARRA').AsString;
                   P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                 if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                 else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                   Rewrite(F);
 
@@ -3936,6 +4096,34 @@ IQuery.Sql.Clear;
                     CloseFile(F);
                   end;
 
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+
                   D1 := '';
                   D2 := '';
                   D3 := '';
@@ -3959,10 +4147,7 @@ IQuery.Sql.Clear;
 
             if (Q >= 2)  then
             begin
-             if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-             else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
               Rewrite(F);
 
@@ -4021,6 +4206,34 @@ IQuery.Sql.Clear;
               finally
                 CloseFile(F);
               end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
+              end;
             end;
            End;
           end;
@@ -4073,7 +4286,7 @@ IQuery.Sql.Clear;
                   B4 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
                   P4 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
                   try
                     WriteLn(F, 'N');
@@ -4096,6 +4309,34 @@ IQuery.Sql.Clear;
                     WriteLn(F, 'P1');
                   finally
                     CloseFile(F);
+                  end;
+
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
                   end;
 
                   D1 := '';
@@ -4124,7 +4365,7 @@ IQuery.Sql.Clear;
 
             if Q < 4 then
             begin
-              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
               Rewrite(F);
               try
                 WriteLn(F, 'N');
@@ -4147,6 +4388,34 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                 CloseFile(F);
+              end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
               end;
             end;
           end;
@@ -4179,7 +4448,7 @@ IQuery.Sql.Clear;
                   B2 := IQuery.FieldByName('COD_BARRA').AsString;
                   P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
                   try
                     WriteLn(F, 'N');
@@ -4199,6 +4468,34 @@ IQuery.Sql.Clear;
                     WriteLn(F, 'P1');
                   finally
                     CloseFile(F);
+                  end;
+
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
                   end;
 
                   D1 := '';
@@ -4221,7 +4518,7 @@ IQuery.Sql.Clear;
 
             if Q < 2 then
             begin
-              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
               Rewrite(F);
               try
                 WriteLn(F, 'N');
@@ -4242,6 +4539,34 @@ IQuery.Sql.Clear;
               finally
                 CloseFile(F);
               end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
+              end;
             end;
           end;
 
@@ -4252,7 +4577,7 @@ IQuery.Sql.Clear;
             begin
               for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
               begin
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                 Rewrite(F);
                 if (FrmEtiquetas_Novos.Impressora.Text = 'Tanca')  Then
                 Begin
@@ -4292,6 +4617,34 @@ IQuery.Sql.Clear;
 
                 end;
 
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Erro ao imprimir');
+                end;
+
                 Sleep(2000);
               end;
 
@@ -4307,7 +4660,7 @@ IQuery.Sql.Clear;
             begin
               for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
               begin
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                 Rewrite(F);
                 if (FrmEtiquetas_Novos.Impressora.Text = 'Tanca')  Then
                 Begin
@@ -4349,6 +4702,34 @@ IQuery.Sql.Clear;
                     CloseFile(F);
                   end;
 
+                end;
+
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Erro ao imprimir');
                 end;
 
                 Sleep(2000);
@@ -4402,10 +4783,7 @@ IQuery.Sql.Clear;
 
                 if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
                 begin
-                  if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                  else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
                 end;
 
@@ -4423,6 +4801,34 @@ IQuery.Sql.Clear;
                 finally
                  if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
                  CloseFile(F);
+                end;
+
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Erro ao imprimir');
                 end;
 
                 Sleep(2000);
@@ -4486,10 +4892,7 @@ IQuery.Sql.Clear;
 
                   if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
                   begin
-                    if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                    AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                    else
-                    AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                    AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                     Rewrite(F);
                   end;
 
@@ -4537,10 +4940,7 @@ IQuery.Sql.Clear;
             begin
               if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
               begin
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                 Rewrite(F);
               end;
 
@@ -4563,7 +4963,36 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+               begin
                 CloseFile(F);
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Erro ao imprimir');
+                end;
+               end;
 
               end;
             end;
@@ -4634,10 +5063,7 @@ IQuery.Sql.Clear;
 
                   if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
                   begin
-                    if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                    AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                    else
-                    AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                    AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                     Rewrite(F);
                   end;
@@ -4673,7 +5099,36 @@ IQuery.Sql.Clear;
                     WriteLn(F, 'P1');
                   finally
                    if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
-                   CloseFile(F);
+                   begin
+                    CloseFile(F);
+                    Buffer := TStringList.Create;
+                    Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                    try
+                      if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                      begin
+                        DocInfo.pDocName := PChar('Delphi Raw Document');
+                        DocInfo.pOutputFile := nil;
+                        DocInfo.pDatatype := PChar('RAW');
+
+                        if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                        begin
+                          if StartPagePrinter(hPrinter) then
+                          begin
+
+                            WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                            EndPagePrinter(hPrinter);
+                          end;
+
+                          EndDocPrinter(hPrinter);
+                        end;
+                        //ShowMessage(Buffer.Text);
+                        ClosePrinter(hPrinter);
+                      end;
+                    except
+                      ShowMessage('Erro ao imprimir');
+                    end;
+                   end;
                   end;
 
                   D1 := ' ';
@@ -4704,10 +5159,7 @@ IQuery.Sql.Clear;
 
               if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
               begin
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                 Rewrite(F);
               end;
@@ -4744,7 +5196,36 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                 if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
-                CloseFile(F);
+                begin
+                  CloseFile(F);
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+                end;
               end;
 
             end;
@@ -4821,10 +5302,7 @@ IQuery.Sql.Clear;
 
                   if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
                   begin
-                    if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                    AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                    else
-                    AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                    AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                     Rewrite(F);
                   end;
 
@@ -4881,10 +5359,7 @@ IQuery.Sql.Clear;
 
               if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
               begin
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                 Rewrite(F);
               end;
 
@@ -4910,7 +5385,36 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                 if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
-                CloseFile(F);
+                begin
+                  CloseFile(F);
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+                end;
               end;
             end;
 
@@ -4966,10 +5470,7 @@ IQuery.Sql.Clear;
 
                   if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
                   begin
-                    if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                    AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                    else
-                    AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                    AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                     Rewrite(F);
                   end;
 
@@ -4991,8 +5492,37 @@ IQuery.Sql.Clear;
 
                     WriteLn(F, 'P1');
                   finally
-                   if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
-                   CloseFile(F);
+                    if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+                    begin
+                      CloseFile(F);
+                      Buffer := TStringList.Create;
+                      Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                      try
+                        if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                        begin
+                          DocInfo.pDocName := PChar('Delphi Raw Document');
+                          DocInfo.pOutputFile := nil;
+                          DocInfo.pDatatype := PChar('RAW');
+
+                          if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                          begin
+                            if StartPagePrinter(hPrinter) then
+                            begin
+
+                              WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                              EndPagePrinter(hPrinter);
+                            end;
+
+                            EndDocPrinter(hPrinter);
+                          end;
+                          //ShowMessage(Buffer.Text);
+                          ClosePrinter(hPrinter);
+                        end;
+                      except
+                        ShowMessage('Erro ao imprimir');
+                      end;
+                    end;
                   end;
 
                   D1 := '';
@@ -5018,10 +5548,7 @@ IQuery.Sql.Clear;
 
               if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
               begin
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                 Rewrite(F);
               end;
 
@@ -5044,7 +5571,36 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                 if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
-                CloseFile(F);
+                begin
+                  CloseFile(F);
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+                end;
               end;
             end;
 
@@ -5084,11 +5640,7 @@ IQuery.Sql.Clear;
 
                 if LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '' then
                 begin
-
-                  if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                  else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
                 end;
 
@@ -5103,8 +5655,37 @@ IQuery.Sql.Clear;
                   WriteLn(F, 'A'+ LeIni(Arq_Ini,'Zebra','Coluna Descricao Barras')+ ',' + LeIni(Arq_Ini, 'Zebra','Linha Descricao Barras') + ',0,1,2,2,R,"' + IQuery.FieldByName('COD_BARRA').AsString + '"');
                   WriteLn(F, 'P1');
                 finally
-                 if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
-                 CloseFile(F);
+                  if (LeIni(Arq_Ini, 'Zebra GT800', 'Ip') = '') Then
+                  begin
+                    CloseFile(F);
+                    Buffer := TStringList.Create;
+                    Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                    try
+                      if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                      begin
+                        DocInfo.pDocName := PChar('Delphi Raw Document');
+                        DocInfo.pOutputFile := nil;
+                        DocInfo.pDatatype := PChar('RAW');
+
+                        if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                        begin
+                          if StartPagePrinter(hPrinter) then
+                          begin
+
+                            WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                            EndPagePrinter(hPrinter);
+                          end;
+
+                          EndDocPrinter(hPrinter);
+                        end;
+                        //ShowMessage(Buffer.Text);
+                        ClosePrinter(hPrinter);
+                      end;
+                    except
+                      ShowMessage('Erro ao imprimir');
+                    end;
+                  end;
                 end;
 
                 Sleep(2000);
@@ -5137,10 +5718,7 @@ IQuery.Sql.Clear;
                 B2 := IQuery.FieldByName('COD_BARRA').AsString;
                 P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                 Rewrite(F);
                 try
@@ -5155,6 +5733,34 @@ IQuery.Sql.Clear;
                   WriteLn(F, 'P1');
                 finally
                   CloseFile(F);
+                end;
+
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Erro ao imprimir');
                 end;
 
                 Sleep(2000);
@@ -5197,10 +5803,10 @@ IQuery.Sql.Clear;
                   B2 := IQuery.FieldByName('COD_BARRA').AsString;
                   P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                //if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
+                //  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
+                //else
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                   Rewrite(F);
                   try
@@ -5221,6 +5827,34 @@ IQuery.Sql.Clear;
                     WriteLn(F, 'P1');
                   finally
                     CloseFile(F);
+                  end;
+
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
                   end;
 
                   D1 := '';
@@ -5244,10 +5878,7 @@ IQuery.Sql.Clear;
 
             if Q < 2 then
             begin
-              if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
               Rewrite(F);
 
@@ -5269,6 +5900,34 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                 CloseFile(F);
+              end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
               end;
             end;
            End;
@@ -5318,10 +5977,7 @@ IQuery.Sql.Clear;
                   B3 := IQuery.FieldByName('COD_BARRA').AsString;
                   P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                 if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                   Rewrite(F);
 
@@ -5361,6 +6017,34 @@ IQuery.Sql.Clear;
                     CloseFile(F);
                   end;
 
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+
                   D1 := '';
                   D2 := '';
                   D3 := '';
@@ -5384,10 +6068,7 @@ IQuery.Sql.Clear;
 
             if (Q >= 2)  then
             begin
-             if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-             else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
               Rewrite(F);
 
@@ -5425,6 +6106,34 @@ IQuery.Sql.Clear;
                 WriteLn(F, 'P1');
               finally
                 CloseFile(F);
+              end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
               end;
             end;
            End;
@@ -5476,10 +6185,7 @@ IQuery.Sql.Clear;
                   B3 := IQuery.FieldByName('COD_BARRA').AsString;
                   P3 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                 if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-                else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
                   Rewrite(F);
 
@@ -5546,6 +6252,34 @@ IQuery.Sql.Clear;
                     CloseFile(F);
                   end;
 
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+
                   D1 := '';
                   D1b:= '';
                   D2 := '';
@@ -5572,10 +6306,7 @@ IQuery.Sql.Clear;
 
             if (Q >= 2)  then
             begin
-             if LeIni(Arq_Ini, 'Sistema', 'Path Impressora') <> '' then
-                  AssignFile(F, LeIni(Arq_Ini, 'Sistema', 'Path Impressora'))
-             else
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
 
               Rewrite(F);
 
@@ -5619,6 +6350,34 @@ IQuery.Sql.Clear;
 
               finally
                 CloseFile(F);
+              end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
               end;
             end;
            End;
@@ -5672,7 +6431,7 @@ IQuery.Sql.Clear;
                   B4 := Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 1, 2) + '.' + Copy(StrZero(IQuery.FieldByName('PRODUTO_ID').AsString, 5, 0), 3, 3);
                   P4 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
                   try
                     WriteLn(F, 'I8,A,001');
@@ -5696,6 +6455,34 @@ IQuery.Sql.Clear;
                     WriteLn(F, 'P1');
                   finally
                     CloseFile(F);
+                  end;
+
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
                   end;
 
                   D1 := '';
@@ -5724,7 +6511,7 @@ IQuery.Sql.Clear;
 
             if Q < 4 then
             begin
-              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
               Rewrite(F);
               try
                 WriteLn(F, 'I8,A,001');
@@ -5749,13 +6536,43 @@ IQuery.Sql.Clear;
               finally
                 CloseFile(F);
               end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
+              end;
             end;
           end;
 
           if FrmEtiquetas_Novos.Modelo.Text = 'Gôndola (2 Colunas)' then
           begin
             D1 := '';
+            D1_1 := '';
             D2 := '';
+            D2_1 := '';
             B1 := '';
             B2 := '';
             P1 := '';
@@ -5770,6 +6587,7 @@ IQuery.Sql.Clear;
                 if Q = 1 then
                 begin
                   D1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                  D1_1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 25, 24);
                   B1 := IQuery.FieldByName('COD_BARRA').AsString;
                   P1 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
                 end;
@@ -5777,33 +6595,69 @@ IQuery.Sql.Clear;
                 if Q = 2 then
                 begin
                   D2 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 1, 24);
+                  D2_1 := Copy(IQuery.FieldByName('DESCRICAO').AsString, 25, 24);
                   B2 := IQuery.FieldByName('COD_BARRA').AsString;
                   P2 := 'R$ ' + FormatFloat('#,##0.00', IQuery.FieldByName('PRECO_VAREJO').AsFloat);
 
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
                   try
+                    WriteLn(F, 'I8,A,001');
                     WriteLn(F, 'N');
                     WriteLn(F, 'D11');
-                    WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
-                    WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+                    WriteLn(F, 'A30,20,0,3,1,2,N,"' + D1 + '"');
+                    WriteLn(F, 'A30,60,0,3,1,2,N,"' + D1_1 + '"');
+                    WriteLn(F, 'B35,110,0,1,1,2,60,N,"' + B1 + '"');
+                    WriteLn(F, 'A35,180,0,2,1,0,N,"' + B1 + '"');
 
                     if FrmEtiquetas_Novos.Preco.Checked then
-                      WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
+                      WriteLn(F, 'A180,100,0,2,2,4,N,"' + P1 + '"');
 
-                    WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
-                    WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
+                    WriteLn(F, 'A460,20,0,3,1,2,N,"' + D2 + '"');
+                    WriteLn(F, 'A460,60,0,3,1,2,N,"' + D2_1 + '"');
+                    WriteLn(F, 'B460,110,0,1,1,2,60,N,"' + B2 + '"');
+                    WriteLn(F, 'A460,180,0,2,1,0,N,"' + B2 + '"');
 
                     if FrmEtiquetas_Novos.Preco.Checked then
-                      WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+                      WriteLn(F, 'A610,100,0,2,2,4,N,"' + P2 + '"');
 
                     WriteLn(F, 'P1');
                   finally
                     CloseFile(F);
                   end;
 
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
+                  end;
+
                   D1 := '';
+                  D1_1 := '';
                   D2 := '';
+                  D2_1 := '';
                   B1 := '';
                   B2 := '';
                   P1 := '';
@@ -5820,29 +6674,53 @@ IQuery.Sql.Clear;
               IQuery.Next;
             end;
 
-            if Q < 2 then
+            if Q = 2 then
             begin
-              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
               Rewrite(F);
               try
                 WriteLn(F, 'I8,A,001');
                 WriteLn(F, 'N');
                 WriteLn(F, 'D11');
-                WriteLn(F, 'A60,20,0,3,1,2,N,"' + D1 + '"');
-                WriteLn(F, 'A65,115,0,2,1,0,N,"' + B1 + '"');
+                WriteLn(F, 'A30,20,0,3,1,2,N,"' + D1 + '"');
+                WriteLn(F, 'A30,60,0,3,1,2,N,"' + D1_1 + '"');
+                WriteLn(F, 'B35,110,0,1,1,2,60,N,"' + B1 + '"');
+                WriteLn(F, 'A35,180,0,2,1,0,N,"' + B1 + '"');
 
                 if FrmEtiquetas_Novos.Preco.Checked then
-                  WriteLn(F, 'A260,100,0,3,1,2,N,"' + P1 + '"');
-
-                WriteLn(F, 'A430,20,0,3,1,2,N,"' + D2 + '"');
-                WriteLn(F, 'A430,115,0,2,1,0,N,"' + B2 + '"');
-
-                if FrmEtiquetas_Novos.Preco.Checked then
-                  WriteLn(F, 'A610,100,0,3,1,2,N,"' + P2 + '"');
+                  WriteLn(F, 'A180,100,0,2,2,4,N,"' + P1 + '"');
 
                 WriteLn(F, 'P1');
               finally
                 CloseFile(F);
+              end;
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
               end;
             end;
           end;
@@ -5854,7 +6732,7 @@ IQuery.Sql.Clear;
             begin
               for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
               begin
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                 Rewrite(F);
                 try
 
@@ -5872,6 +6750,34 @@ IQuery.Sql.Clear;
                   CloseFile(F);
                 end;
 
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Não foi possível imprimir');
+                end;
+
                 Sleep(2000);
               end;
 
@@ -5887,7 +6793,7 @@ IQuery.Sql.Clear;
             begin
               for X := 1 to IQuery.FieldByName('QUANTIDADE').AsInteger do
               begin
-                AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                 Rewrite(F);
                 begin
                   try
@@ -5907,6 +6813,34 @@ IQuery.Sql.Clear;
 
                   finally
                     CloseFile(F);
+                  end;
+
+                  Buffer := TStringList.Create;
+                  Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                  try
+                    if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                    begin
+                      DocInfo.pDocName := PChar('Delphi Raw Document');
+                      DocInfo.pOutputFile := nil;
+                      DocInfo.pDatatype := PChar('RAW');
+
+                      if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                      begin
+                        if StartPagePrinter(hPrinter) then
+                        begin
+
+                          WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                          EndPagePrinter(hPrinter);
+                        end;
+
+                        EndDocPrinter(hPrinter);
+                      end;
+                      //ShowMessage(Buffer.Text);
+                      ClosePrinter(hPrinter);
+                    end;
+                  except
+                    ShowMessage('Erro ao imprimir');
                   end;
 
                 end;
@@ -6234,7 +7168,7 @@ IQuery.Sql.Clear;
               if C >= 5 then
               begin
                 try
-                  AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+                  AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
                   Rewrite(F);
 
                   WriteLn(F, #27#15 + D1);
@@ -6247,6 +7181,34 @@ IQuery.Sql.Clear;
                   Sleep(500);
                 except
                   CloseFile(F);
+                end;
+
+                Buffer := TStringList.Create;
+                Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+                try
+                  if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                  begin
+                    DocInfo.pDocName := PChar('Delphi Raw Document');
+                    DocInfo.pOutputFile := nil;
+                    DocInfo.pDatatype := PChar('RAW');
+
+                    if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                    begin
+                      if StartPagePrinter(hPrinter) then
+                      begin
+
+                        WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                        EndPagePrinter(hPrinter);
+                      end;
+
+                      EndDocPrinter(hPrinter);
+                    end;
+                    //ShowMessage(Buffer.Text);
+                    ClosePrinter(hPrinter);
+                  end;
+                except
+                  ShowMessage('Erro ao imprimir');
                 end;
 
                 C  := 0;
@@ -6263,7 +7225,7 @@ IQuery.Sql.Clear;
           if (C < 5) and (C > 0) then
           begin
             try
-              AssignFile(F, FrmEtiquetas_Novos.Porta.Text);
+              AssignFile(F, ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
               Rewrite(F);
 
               WriteLn(F, #27#15 + D1);
@@ -6272,6 +7234,34 @@ IQuery.Sql.Clear;
               WriteLn(F, #27#18);
 
               CloseFile(F);
+
+              Buffer := TStringList.Create;
+              Buffer.LoadFromFile(ExtractFilePath(ParamStr(0)) + 'etiqueta.txt');
+
+              try
+                if OpenPrinter(PChar(FrmEtiquetas_Novos.Porta.Text), hPrinter, nil) then
+                begin
+                  DocInfo.pDocName := PChar('Delphi Raw Document');
+                  DocInfo.pOutputFile := nil;
+                  DocInfo.pDatatype := PChar('RAW');
+
+                  if StartDocPrinter(hPrinter, 1, @DocInfo) <> 0 then
+                  begin
+                    if StartPagePrinter(hPrinter) then
+                    begin
+
+                      WritePrinter(hPrinter, PAnsiChar(AnsiString(Buffer.Text)), Length(Buffer.Text), BytesWritten);
+                      EndPagePrinter(hPrinter);
+                    end;
+
+                    EndDocPrinter(hPrinter);
+                  end;
+                  //ShowMessage(Buffer.Text);
+                  ClosePrinter(hPrinter);
+                end;
+              except
+                ShowMessage('Erro ao imprimir');
+              end;
 
               Sleep(500);
             except
@@ -8556,6 +9546,7 @@ begin
   GRUPO_ID.Text       := '1';
   SUBTIPO_ID.Text     := '1';
   LOCALIZACAO_ID.Text := '1';
+  Tributo_id_cbs_ibs.Text := '1';
 
 
 

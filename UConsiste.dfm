@@ -4,7 +4,7 @@ object FrmConsiste: TFrmConsiste
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Consiste'
-  ClientHeight = 172
+  ClientHeight = 215
   ClientWidth = 334
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -29,7 +29,7 @@ object FrmConsiste: TFrmConsiste
   end
   object Bevel1: TBevel
     Left = 2
-    Top = 122
+    Top = 169
     Width = 321
     Height = 4
     Shape = bsTopLine
@@ -71,7 +71,7 @@ object FrmConsiste: TFrmConsiste
   end
   object DBText1: TDBText
     Left = 2
-    Top = 86
+    Top = 134
     Width = 321
     Height = 13
     Alignment = taCenter
@@ -161,6 +161,14 @@ object FrmConsiste: TFrmConsiste
     ParentFont = False
     OnClick = btnProdutoClick
   end
+  object Label1: TLabel
+    Left = 8
+    Top = 81
+    Width = 103
+    Height = 13
+    Caption = 'Produtos(espec'#237'ficos)'
+    Visible = False
+  end
   object Produto: TCurrencyEdit
     Left = 71
     Top = 6
@@ -176,8 +184,8 @@ object FrmConsiste: TFrmConsiste
     OnKeyDown = ProdutoKeyDown
   end
   object btnRetorna: TBitBtn
-    Left = 248
-    Top = 138
+    Left = 255
+    Top = 182
     Width = 75
     Height = 25
     Caption = '&Retorna'
@@ -203,8 +211,8 @@ object FrmConsiste: TFrmConsiste
     OnClick = btnRetornaClick
   end
   object btnExecuta: TBitBtn
-    Left = 167
-    Top = 138
+    Left = 174
+    Top = 182
     Width = 75
     Height = 25
     Caption = '&OK'
@@ -253,6 +261,15 @@ object FrmConsiste: TFrmConsiste
     TabOrder = 4
     ZeroEmpty = False
   end
+  object Selecao_produto: TEdit
+    Left = 117
+    Top = 78
+    Width = 180
+    Height = 21
+    MaxLength = 300
+    TabOrder = 5
+    Visible = False
+  end
   object DataProduto: TDataSource
     DataSet = QProduto
     Left = 48
@@ -264,8 +281,8 @@ object FrmConsiste: TFrmConsiste
     FetchOptions.AutoFetchAll = afTruncate
     SQL.Strings = (
       '')
-    Left = 8
-    Top = 63
+    Left = 64
+    Top = 135
   end
   object QRel: TFDQuery
     Connection = FrmData.DbF_Eficaz
@@ -273,8 +290,8 @@ object FrmConsiste: TFrmConsiste
     FetchOptions.AutoFetchAll = afTruncate
     SQL.Strings = (
       '')
-    Left = 48
-    Top = 63
+    Left = 104
+    Top = 135
   end
   object QUpdate: TFDQuery
     Connection = FrmData.DbF_Eficaz
@@ -282,7 +299,7 @@ object FrmConsiste: TFrmConsiste
     FetchOptions.AutoFetchAll = afTruncate
     SQL.Strings = (
       '')
-    Left = 80
-    Top = 63
+    Left = 136
+    Top = 135
   end
 end

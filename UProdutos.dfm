@@ -1662,7 +1662,7 @@ object FrmProdutos: TFrmProdutos
         Top = 255
         Width = 501
         Height = 179
-        ActivePage = TabSheet7
+        ActivePage = TabSheet2
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -11
@@ -3837,7 +3837,7 @@ object FrmProdutos: TFrmProdutos
       end
       object PageControl3: TPageControl
         Left = 525
-        Top = 322
+        Top = 320
         Width = 461
         Height = 116
         ActivePage = TabSheet8
@@ -4303,14 +4303,14 @@ object FrmProdutos: TFrmProdutos
           Caption = 'CBS/IBS'
           ImageIndex = 3
           object Label104: TLabel
-            Left = 315
+            Left = 309
             Top = 35
             Width = 42
             Height = 13
             Caption = 'Al'#237'q. Cbs'
           end
           object Label105: TLabel
-            Left = 315
+            Left = 309
             Top = 66
             Width = 56
             Height = 13
@@ -4407,9 +4407,9 @@ object FrmProdutos: TFrmProdutos
             Caption = 'Al'#237'q. Ibs Munic.'
           end
           object ALIQUOTA_CBS: TRxCalcEdit
-            Left = 376
+            Left = 368
             Top = 32
-            Width = 61
+            Width = 69
             Height = 21
             Margins.Left = 4
             Margins.Top = 1
@@ -4422,9 +4422,9 @@ object FrmProdutos: TFrmProdutos
             OnKeyDown = EMPRESA_IDKeyDown
           end
           object REDUCAO_CBS_IBS: TRxCalcEdit
-            Left = 379
+            Left = 368
             Top = 60
-            Width = 58
+            Width = 69
             Height = 21
             Margins.Left = 4
             Margins.Top = 1
